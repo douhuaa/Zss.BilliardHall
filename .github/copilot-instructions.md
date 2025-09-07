@@ -1,7 +1,6 @@
 # Copilot Instructions for Zss.BilliardHall
 
 ## 项目概览
-# Copilot Instructions for Zss.BilliardHall
 
 目的：帮助 AI 代理快速定位本仓库的关键点并安全、可重复地执行常见 .NET 开发任务。
 
@@ -41,7 +40,7 @@ AI 代理在对仓库做大改动前，应确认是否使用了 ABP 框架。可
 
 ```powershell
 # 在仓库根目录运行（PowerShell）
-Select-String -Path "**/*.csproj","**/*.cs" -Pattern "Volo.Abp|ApplicationModule|AbpModule|Volo" -SimpleMatch -List
+Get-ChildItem -Path . -Include *.csproj,*.cs -Recurse | Select-String -Pattern "Volo.Abp|ApplicationModule|AbpModule|Volo" -SimpleMatch -List
 ```
 
 如果输出包含 `PackageReference Include="Volo.Abp`、或类名以 `*ApplicationModule` 结尾，说明仓库基于 ABP。
@@ -62,7 +61,7 @@ abp --help
 abp -v
 ```
 
-- 参考：ABP CLI 文档 https://abp.io/docs/latest/cli （在使用 CLI 执行生成/迁移前请先在本地或 CI 环境备份/分支）
+- 参考：[ABP CLI 文档](https://abp.io/docs/latest/cli)（在使用 CLI 执行生成/迁移前请先在本地或 CI 环境备份/分支）
 
 ## 安全与变更策略
 - 任何对项目结构或全局配置（如 `Directory.Build.rsp`、NuGet 源、CI 配置）的更改，都应在单独分支并附带简短说明。
