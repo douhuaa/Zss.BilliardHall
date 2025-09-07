@@ -1,6 +1,6 @@
 # ABP 专用指令（供 AI 代理和维护者）
 
-目的：为可能使用 ABP 框架的仓库提供可执行、可验的检测与操作步骤，包含常见 CLI / 数据库迁移 / 生成器使用的安全指南。
+目的：为可能使用 ABP 框架的仓库提供可执行、可验证的检测与操作步骤，包含常见 CLI / 数据库迁移 / 生成器使用的安全指南。
 
 ## 快速清单（开始前）
 
@@ -14,7 +14,7 @@
 
 ```powershell
 # 查找 ABP 相关包或代码标识
-Select-String -Path "**/*.csproj","**/*.cs" -Pattern "Volo.Abp|ApplicationModule|AbpModule|Volo" -SimpleMatch -List
+Get-ChildItem -Path . -Include *.csproj,*.cs -Recurse | Select-String -Pattern "Volo.Abp|ApplicationModule|AbpModule|Volo" -SimpleMatch -List
 ```
 
 - 常见判断依据：
@@ -67,7 +67,7 @@ dotnet ef database update -p src/YourProject.EntityFrameworkCore -s src/YourProj
 
 ## 五、常见 ABP CLI 注意点（谨慎使用）
 
-- ABP CLI 提供模板生成 / 模块添加等功能，但不同 ABP 版本命令细节可能变化。始终先运行 `abp --help` 并阅读官方文档：<https://abp.io/docs/latest/cli>
+- ABP CLI 提供模板生成 / 模块添加等功能，但不同 ABP 版本命令细节可能变化。始终先运行 `abp --help` 并阅读官方文档：[ABP CLI 文档](https://abp.io/docs/latest/cli)
 - 在使用任何 `abp` 生成命令前：备份/分支 + 本地验证 + 查看生成变更的 diff。
 
 ## 六、代码结构与约定（可在仓库中查找的典型位置）
