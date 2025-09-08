@@ -1,0 +1,427 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/douhuaa/Zss.BilliardHall/schemas/entities.json",
+  "title": "智慧台球厅业务实体架构 (Billiard Hall Business Entities Schema)",
+  "description": "定义台球厅管理系统核心业务实体的数据结构和约束",
+  
+  "definitions": {
+    "BaseEntity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "唯一标识符"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "创建时间"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "最后更新时间"
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "创建者"
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "最后更新者"
+        }
+      },
+      "required": ["id", "createdAt", "updatedAt"]
+    },
+    
+    "BilliardHall": {
+      "allOf": [
+        { "$ref": "#/definitions/BaseEntity" },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "台球厅名称"
+            },
+            "address": {
+              "$ref": "#/definitions/Address"
+            },
+            "phone": {
+              "type": "string",
+              "pattern": "^\\+?[1-9]\\d{1,14}$",
+              "description": "联系电话"
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "邮箱地址"
+            },
+            "operatingHours": {
+              "$ref": "#/definitions/OperatingHours"
+            },
+            "capacity": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "容纳人数"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["Active", "Inactive", "Maintenance"],
+              "description": "营业状态"
+            }
+          },
+          "required": ["name", "address", "operatingHours", "status"]
+        }
+      ]
+    },
+    
+    "BilliardTable": {
+      "allOf": [
+        { "$ref": "#/definitions/BaseEntity" },
+        {
+          "type": "object",
+          "properties": {
+            "number": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "台球桌编号"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["Chinese8Ball", "American9Ball", "Snooker", "Carom"],
+              "description": "台球桌类型"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["Available", "Occupied", "Reserved", "Maintenance", "OutOfOrder"],
+              "description": "台球桌状态"
+            },
+            "hourlyRate": {
+              "$ref": "#/definitions/Money"
+            },
+            "location": {
+              "$ref": "#/definitions/TableLocation"
+            },
+            "hallId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "所属台球厅ID"
+            },
+            "features": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["LED_Lighting", "Ball_Return_System", "Automatic_Scorer", "Climate_Control"]
+              },
+              "description": "台球桌特性"
+            }
+          },
+          "required": ["number", "type", "status", "hourlyRate", "hallId"]
+        }
+      ]
+    },
+    
+    "Reservation": {
+      "allOf": [
+        { "$ref": "#/definitions/BaseEntity" },
+        {
+          "type": "object",
+          "properties": {
+            "customerId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "客户ID"
+            },
+            "tableId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "台球桌ID"
+            },
+            "startTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "开始时间"
+            },
+            "endTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "结束时间"
+            },
+            "duration": {
+              "type": "integer",
+              "minimum": 30,
+              "description": "预约时长(分钟)"
+            },
+            "totalAmount": {
+              "$ref": "#/definitions/Money"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["Pending", "Confirmed", "InProgress", "Completed", "Cancelled", "NoShow"],
+              "description": "预约状态"
+            },
+            "paymentStatus": {
+              "type": "string",
+              "enum": ["Unpaid", "PartialPaid", "Paid", "Refunded"],
+              "description": "支付状态"
+            },
+            "notes": {
+              "type": "string",
+              "maxLength": 500,
+              "description": "备注"
+            }
+          },
+          "required": ["customerId", "tableId", "startTime", "endTime", "totalAmount", "status"]
+        }
+      ]
+    },
+    
+    "Customer": {
+      "allOf": [
+        { "$ref": "#/definitions/BaseEntity" },
+        {
+          "type": "object",
+          "properties": {
+            "membershipNumber": {
+              "type": "string",
+              "pattern": "^M\\d{8}$",
+              "description": "会员编号"
+            },
+            "name": {
+              "type": "string",
+              "maxLength": 50,
+              "description": "姓名"
+            },
+            "phone": {
+              "type": "string",
+              "pattern": "^\\+?[1-9]\\d{1,14}$",
+              "description": "手机号码"
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "邮箱"
+            },
+            "membershipLevel": {
+              "type": "string",
+              "enum": ["Bronze", "Silver", "Gold", "Platinum", "Diamond"],
+              "description": "会员等级"
+            },
+            "totalSpent": {
+              "$ref": "#/definitions/Money"
+            },
+            "visitCount": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "到店次数"
+            },
+            "lastVisit": {
+              "type": "string",
+              "format": "date-time",
+              "description": "最后到店时间"
+            }
+          },
+          "required": ["name", "phone", "membershipLevel"]
+        }
+      ]
+    },
+    
+    "Staff": {
+      "allOf": [
+        { "$ref": "#/definitions/BaseEntity" },
+        {
+          "type": "object",
+          "properties": {
+            "employeeId": {
+              "type": "string",
+              "pattern": "^E\\d{6}$",
+              "description": "员工编号"
+            },
+            "name": {
+              "type": "string",
+              "maxLength": 50,
+              "description": "姓名"
+            },
+            "position": {
+              "type": "string",
+              "enum": ["Manager", "Supervisor", "Cashier", "Attendant", "Maintenance", "Security"],
+              "description": "职位"
+            },
+            "phone": {
+              "type": "string",
+              "pattern": "^\\+?[1-9]\\d{1,14}$",
+              "description": "联系电话"
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "邮箱"
+            },
+            "hireDate": {
+              "type": "string",
+              "format": "date",
+              "description": "入职日期"
+            },
+            "salary": {
+              "$ref": "#/definitions/Money"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["Active", "Inactive", "Suspended", "Terminated"],
+              "description": "员工状态"
+            },
+            "shifts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/WorkShift"
+              },
+              "description": "工作班次"
+            }
+          },
+          "required": ["employeeId", "name", "position", "hireDate", "status"]
+        }
+      ]
+    },
+    
+    "Address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "街道地址"
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "城市"
+        },
+        "province": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "省份"
+        },
+        "postalCode": {
+          "type": "string",
+          "pattern": "^\\d{6}$",
+          "description": "邮政编码"
+        },
+        "country": {
+          "type": "string",
+          "default": "China",
+          "description": "国家"
+        }
+      },
+      "required": ["street", "city", "province", "postalCode"]
+    },
+    
+    "Money": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "multipleOf": 0.01,
+          "minimum": 0,
+          "description": "金额"
+        },
+        "currency": {
+          "type": "string",
+          "enum": ["CNY", "USD", "EUR"],
+          "default": "CNY",
+          "description": "货币类型"
+        }
+      },
+      "required": ["amount", "currency"]
+    },
+    
+    "TableLocation": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number",
+          "description": "X坐标"
+        },
+        "y": {
+          "type": "number",
+          "description": "Y坐标"
+        },
+        "floor": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "楼层"
+        },
+        "zone": {
+          "type": "string",
+          "maxLength": 20,
+          "description": "区域"
+        }
+      },
+      "required": ["x", "y", "floor"]
+    },
+    
+    "OperatingHours": {
+      "type": "object",
+      "properties": {
+        "monday": { "$ref": "#/definitions/DaySchedule" },
+        "tuesday": { "$ref": "#/definitions/DaySchedule" },
+        "wednesday": { "$ref": "#/definitions/DaySchedule" },
+        "thursday": { "$ref": "#/definitions/DaySchedule" },
+        "friday": { "$ref": "#/definitions/DaySchedule" },
+        "saturday": { "$ref": "#/definitions/DaySchedule" },
+        "sunday": { "$ref": "#/definitions/DaySchedule" }
+      }
+    },
+    
+    "DaySchedule": {
+      "type": "object",
+      "properties": {
+        "isOpen": {
+          "type": "boolean",
+          "description": "是否营业"
+        },
+        "openTime": {
+          "type": "string",
+          "pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "开门时间 (HH:MM)"
+        },
+        "closeTime": {
+          "type": "string",
+          "pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "关门时间 (HH:MM)"
+        }
+      },
+      "if": {
+        "properties": { "isOpen": { "const": true } }
+      },
+      "then": {
+        "required": ["openTime", "closeTime"]
+      }
+    },
+    
+    "WorkShift": {
+      "type": "object",
+      "properties": {
+        "dayOfWeek": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 6,
+          "description": "星期几 (0=周日, 1=周一, ...)"
+        },
+        "startTime": {
+          "type": "string",
+          "pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "开始时间"
+        },
+        "endTime": {
+          "type": "string",
+          "pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "结束时间"
+        }
+      },
+      "required": ["dayOfWeek", "startTime", "endTime"]
+    }
+  }
+}
