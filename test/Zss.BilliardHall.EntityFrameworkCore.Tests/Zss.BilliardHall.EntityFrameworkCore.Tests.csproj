@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props"/>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Zss.BilliardHall</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Zss.BilliardHall.EntityFrameworkCore\Zss.BilliardHall.EntityFrameworkCore.csproj"/>
+    <ProjectReference Include="..\Zss.BilliardHall.Application.Tests\Zss.BilliardHall.Application.Tests.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="9.3.2"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0"/>
+  </ItemGroup>
+
+</Project>
