@@ -272,3 +272,58 @@ src/Zss.BilliardHall.Blazor.Server.Tiered/Logs/*
 # IdentityServer temp files
 tempkey.rsa
 tempkey.jwk
+
+# Environment variables and secrets
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+**/appsettings.secrets.json
+**/appsettings.local.json
+
+# Docker local files
+**/Dockerfile.local
+docker-compose.override.yml
+docker-compose.local.yml
+.docker/
+
+# VS Code workspace files
+.vscode/
+*.code-workspace
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+
+# Linux temporary files
+*.swp
+*.swo
+*.tmp
+
+# JetBrains Rider additional
+.idea/
+*.sln.DotSettings.user
+
+# Additional .NET patterns
+*.binlog
+.dotnet/
+.nuget/
+global.json.bak
+
+# Certificate files (additional security)
+*.p12
+*.pem
+*.crt
+*.cer
+*.key
+
+# Local configuration overrides
+**/appsettings.Development.local.json
+**/appsettings.Production.local.json
