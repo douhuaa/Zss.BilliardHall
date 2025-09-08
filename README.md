@@ -478,7 +478,7 @@ spec:
 
 ---
 
-<div align="center">
+
 
 **🎱 让 AI 助力台球厅管理现代化 🤖**
 
@@ -487,4 +487,3 @@ spec:
 [演示站点](https://demo.billiard-hall.com) • 
 [视频教程](https://www.youtube.com/playlist?list=billiard-hall-tutorials)
 
-</div>

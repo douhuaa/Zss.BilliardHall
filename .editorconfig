@@ -1,0 +1,131 @@
+########################################
+# 基础配置
+########################################
+root = true # 根配置文件，停止向上查找
+
+[*]
+indent_style = space
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 120
+
+########################################
+# 项目/配置文件缩进
+########################################
+[*.{csproj,vbproj,vcxproj,proj,shproj}]
+indent_size = 2
+tab_width = 2
+
+[*.{config,props,targets,resx,xml,nuspec,vsixmanifest}]
+indent_size = 2
+tab_width = 2
+
+########################################
+# C#/VB 通用规则
+########################################
+[*.{cs,csx,vb,vbx,razor,cshtml}]
+indent_size = 4
+tab_width = 4
+charset = utf-8
+
+# Using/Imports 排序
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = true
+
+# 类型使用偏好
+dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
+dotnet_style_predefined_type_for_member_access = true:suggestion
+
+# 修饰符规则
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
+dotnet_style_readonly_field = true:warning
+
+# 表达式风格
+dotnet_style_object_initializer = true:suggestion
+dotnet_style_collection_initializer = true:suggestion
+dotnet_style_null_propagation = true:suggestion
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:warning
+
+########################################
+# 命名规范
+########################################
+# 命名风格定义
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+dotnet_naming_style.camel_case.capitalization = camel_case
+
+# 类型命名
+dotnet_naming_rule.types_should_be_pascal_case.severity = warning
+dotnet_naming_rule.types_should_be_pascal_case.symbols = types
+dotnet_naming_rule.types_should_be_pascal_case.style = pascal_case
+dotnet_naming_symbols.types.applicable_kinds = class, interface, struct, enum, delegate
+
+# 成员命名
+dotnet_naming_rule.members_should_be_pascal_case.severity = warning
+dotnet_naming_rule.members_should_be_pascal_case.symbols = members
+dotnet_naming_rule.members_should_be_pascal_case.style = pascal_case
+dotnet_naming_symbols.members.applicable_kinds = method, property, event
+
+# 参数/局部变量
+dotnet_naming_rule.locals_should_be_camel_case.severity = warning
+dotnet_naming_rule.locals_should_be_camel_case.symbols = locals
+dotnet_naming_rule.locals_should_be_camel_case.style = camel_case
+dotnet_naming_symbols.locals.applicable_kinds = parameter, local
+
+# 常量命名
+dotnet_naming_rule.constants_should_be_pascal_case.severity = warning
+dotnet_naming_rule.constants_should_be_pascal_case.symbols = constants
+dotnet_naming_rule.constants_should_be_pascal_case.style = pascal_case
+dotnet_naming_symbols.constants.applicable_kinds = field
+dotnet_naming_symbols.constants.required_modifiers = const
+
+########################################
+# C# 专项规则
+########################################
+[*.cs]
+# var 使用
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = true:suggestion
+
+# 表达式体成员
+csharp_style_expression_bodied_properties = true:suggestion
+csharp_style_expression_bodied_indexers = true:suggestion
+csharp_style_expression_bodied_methods = false:silent
+csharp_style_expression_bodied_constructors = false:silent
+
+# 模式匹配/空检查
+csharp_style_pattern_matching_over_is_with_cast_check = true:warning
+csharp_style_pattern_matching_over_as_with_null_check = true:warning
+csharp_style_throw_expression = true:suggestion
+csharp_style_conditional_delegate_call = true:suggestion
+
+# 命名空间风格
+csharp_style_namespace_declarations = file_scoped:suggestion
+
+# 修饰符顺序
+csharp_preferred_modifier_order = public, protected, internal, private, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async:suggestion
+
+# 大括号风格（Allman）
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+csharp_new_line_between_query_expression_clauses = true
+
+# 缩进
+csharp_indent_case_contents = true
+csharp_indent_switch_labels = true
+csharp_indent_labels = flush_left
+
+# 空格
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_space_around_binary_operators = before_and_after
+csharp_space_between_method_call_name_and_opening_parenthesis = false
+csharp_space_between_parentheses = false
+csharp_space_after_cast = false
+
+# 保留单行
+csharp_preserve_single_line_statements = true
+csharp_preserve_single_line_blocks = true
