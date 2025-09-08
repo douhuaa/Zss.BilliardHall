@@ -1,0 +1,320 @@
+# GitHub Copilot 配置文件 (GitHub Copilot Configuration)
+# 智慧台球厅管理系统 Copilot 指令配置
+
+name: "智慧台球厅管理系统"
+description: "智能台球厅管理系统，支持台球桌管理、预约系统、客户管理等功能"
+version: "1.0.0"
+
+# 项目元数据 (Project Metadata)
+project:
+  domain: "billiard-hall-management"
+  language: "Chinese"
+  tech_stack:
+    backend: "ASP.NET Core 8.0"
+    frontend: "React 18"
+    database: "SQL Server"
+    cache: "Redis"
+    
+# 代码生成规则 (Code Generation Rules)
+code_generation:
+  naming_convention:
+    entities: "PascalCase"
+    properties: "PascalCase" 
+    methods: "PascalCase"
+    variables: "camelCase"
+    constants: "UPPER_SNAKE_CASE"
+    
+  file_patterns:
+    entity: "src/Zss.BilliardHall.Domain/Entities/{EntityName}.cs"
+    dto: "src/Zss.BilliardHall.Application/DTOs/{EntityName}/{DtoName}Dto.cs"
+    service: "src/Zss.BilliardHall.Application/Services/{EntityName}Service.cs"
+    repository: "src/Zss.BilliardHall.Infrastructure/Repositories/{EntityName}Repository.cs"
+    controller: "src/Zss.BilliardHall.Api/Controllers/{EntityName}sController.cs"
+    
+  templates:
+    - name: "controller"
+      path: "./.copilot/templates/controller-template.md"
+      description: "标准 Web API 控制器模板"
+    - name: "service"
+      path: "./.copilot/templates/service-template.md"
+      description: "应用服务层模板"
+    - name: "entity"
+      path: "./.copilot/templates/entity-template.md"
+      description: "域实体模板"
+
+# 业务领域配置 (Business Domain Configuration)
+business_domain:
+  core_entities:
+    - name: "BilliardHall"
+      description: "台球厅"
+      properties:
+        - name: "name"
+          type: "string"
+          required: true
+        - name: "address"
+          type: "Address"
+          required: true
+        - name: "operatingHours"
+          type: "OperatingHours"
+          required: true
+          
+    - name: "BilliardTable"
+      description: "台球桌"
+      properties:
+        - name: "number"
+          type: "int"
+          required: true
+        - name: "type"
+          type: "TableType"
+          required: true
+        - name: "status"
+          type: "TableStatus"
+          required: true
+        - name: "hourlyRate"
+          type: "Money"
+          required: true
+          
+    - name: "Reservation"
+      description: "预约"
+      properties:
+        - name: "customerId"
+          type: "Guid"
+          required: true
+        - name: "tableId"
+          type: "Guid"
+          required: true
+        - name: "startTime"
+          type: "DateTime"
+          required: true
+        - name: "duration"
+          type: "int"
+          required: true
+          
+  enums:
+    - name: "TableType"
+      values: ["Chinese8Ball", "American9Ball", "Snooker", "Carom"]
+    - name: "TableStatus" 
+      values: ["Available", "Occupied", "Reserved", "Maintenance", "OutOfOrder"]
+    - name: "ReservationStatus"
+      values: ["Pending", "Confirmed", "InProgress", "Completed", "Cancelled", "NoShow"]
+
+# API 设计规范 (API Design Standards)
+api_standards:
+  base_url: "/api/v1"
+  response_format: "ApiResponse<T>"
+  error_format: "ErrorResponse"
+  
+  http_methods:
+    list: "GET /{resources}"
+    get: "GET /{resources}/{id}"
+    create: "POST /{resources}"
+    update: "PUT /{resources}/{id}"
+    patch: "PATCH /{resources}/{id}"
+    delete: "DELETE /{resources}/{id}"
+    
+  status_codes:
+    success:
+      - code: 200
+        description: "成功获取资源"
+      - code: 201
+        description: "成功创建资源"
+      - code: 204
+        description: "成功删除资源"
+    client_error:
+      - code: 400
+        description: "请求参数错误"
+      - code: 401
+        description: "未认证"
+      - code: 403
+        description: "无权限"
+      - code: 404
+        description: "资源不存在"
+      - code: 409
+        description: "资源冲突"
+
+# 数据库设计规范 (Database Design Standards)
+database_standards:
+  naming_convention:
+    tables: "PascalCase"
+    columns: "PascalCase" 
+    indexes: "IX_{TableName}_{ColumnName}"
+    foreign_keys: "FK_{TableName}_{ReferencedTable}"
+    
+  common_columns:
+    - name: "Id"
+      type: "UNIQUEIDENTIFIER"
+      default: "NEWID()"
+      primary_key: true
+    - name: "CreatedAt"
+      type: "DATETIME2"
+      default: "GETUTCDATE()"
+      required: true
+    - name: "UpdatedAt"
+      type: "DATETIME2"
+      default: "GETUTCDATE()"
+      required: true
+    - name: "CreatedBy"
+      type: "NVARCHAR(50)"
+    - name: "UpdatedBy"
+      type: "NVARCHAR(50)"
+
+# 测试规范 (Testing Standards)
+testing_standards:
+  unit_tests:
+    pattern: "**/*Tests.cs"
+    framework: "MSTest"
+    mocking: "Moq"
+    
+  integration_tests:
+    pattern: "**/*IntegrationTests.cs"
+    framework: "MSTest"
+    database: "TestContainers"
+    
+  test_categories:
+    - "Unit"
+    - "Integration"
+    - "Performance"
+    - "Security"
+
+# 代码质量规范 (Code Quality Standards)
+quality_standards:
+  complexity:
+    max_cyclomatic: 10
+    max_method_length: 50
+    max_class_length: 500
+    
+  coverage:
+    minimum: 80
+    target: 90
+    
+  documentation:
+    xml_comments: true
+    api_documentation: "Swagger/OpenAPI"
+    
+# 安全规范 (Security Standards)
+security_standards:
+  authentication: "JWT"
+  authorization: "Role-based"
+  
+  sensitive_data:
+    - "password"
+    - "secret"
+    - "key"
+    - "token"
+    
+  validation:
+    input_validation: true
+    sql_injection_prevention: true
+    xss_prevention: true
+
+# 性能规范 (Performance Standards)
+performance_standards:
+  response_time:
+    api_target: 200  # milliseconds
+    api_max: 2000
+    
+  pagination:
+    default_size: 20
+    max_size: 100
+    
+  caching:
+    strategy: "Redis"
+    ttl: 300  # seconds
+
+# 监控和日志 (Monitoring and Logging)
+monitoring:
+  logging:
+    level: "Information"
+    structured: true
+    
+  metrics:
+    - "request_duration"
+    - "request_count"
+    - "error_rate"
+    - "active_connections"
+    
+  health_checks:
+    - "database"
+    - "redis"
+    - "external_apis"
+
+# 部署配置 (Deployment Configuration)
+deployment:
+  environments:
+    - name: "development"
+      url: "https://localhost:5001"
+    - name: "staging"
+      url: "https://staging-api.billiard-hall.com"
+    - name: "production"
+      url: "https://api.billiard-hall.com"
+      
+  containerization:
+    base_image: "mcr.microsoft.com/dotnet/aspnet:8.0"
+    expose_port: 80
+    
+# GitHub Copilot 特定配置 (Copilot-Specific Configuration)
+copilot:
+  context_files:
+    - "./.github/copilot-instructions.md"
+    - "./.copilot/schemas/entities.json"
+    - "./.copilot/patterns/coding-patterns.md"
+    - "./.copilot/patterns/api-patterns.md"
+    
+  generate_examples: true
+  include_tests: true
+  include_documentation: true
+  
+  preferences:
+    language: "Chinese"
+    comment_style: "xml_docs"
+    error_handling: "comprehensive"
+    logging: "detailed"
+
+# 自动化工作流 (Automated Workflows)
+workflows:
+  ci_cd:
+    trigger: ["push", "pull_request"]
+    jobs:
+      - "build"
+      - "test" 
+      - "quality_check"
+      - "security_scan"
+      - "deploy"
+      
+  code_generation:
+    - name: "scaffold_entity"
+      description: "生成完整的实体相关代码"
+      templates: ["entity", "dto", "service", "repository", "controller"]
+      
+  maintenance:
+    - name: "database_backup"
+      schedule: "0 2 * * *"  # 每天凌晨2点
+    - name: "log_cleanup"
+      schedule: "0 3 * * 0"  # 每周日凌晨3点
+
+# 文档生成配置 (Documentation Generation)
+documentation:
+  api_docs:
+    format: "OpenAPI 3.0"
+    include_examples: true
+    
+  code_docs:
+    format: "XML Comments"
+    generate_site: true
+    
+  database_docs:
+    include_er_diagram: true
+    include_schema_docs: true
+
+# 国际化配置 (Internationalization)
+i18n:
+  default_language: "zh-CN"
+  supported_languages: ["zh-CN", "en-US"]
+  
+  message_keys:
+    validation_required: "字段 {0} 不能为空"
+    validation_range: "字段 {0} 必须在 {1} 到 {2} 之间"
+    not_found: "{0} 不存在"
+    created_success: "{0} 创建成功"
+    updated_success: "{0} 更新成功"
+    deleted_success: "{0} 删除成功"
