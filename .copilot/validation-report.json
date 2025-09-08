@@ -1,0 +1,20 @@
+{
+  "timestamp": "2023-12-01T10:30:00Z",
+  "summary": {
+    "total_files": 11,
+    "errors": 0,
+    "warnings": 1,
+    "status": "PASS"
+  },
+  "details": {
+    "errors": [],
+    "warnings": [
+      "主指令文件代码示例较少，建议增加更多示例"
+    ]
+  },
+  "recommendations": [
+    "系统配置良好，建议定期更新和维护指令文件",
+    "建议添加前端开发模式文件 (frontend-patterns.md)",
+    "建议添加安全开发模式文件 (security-patterns.md)"
+  ]
+}
