@@ -1,0 +1,620 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://zss-billiard-hall/schemas/aspire-config.json",
+  "title": ".NET Aspire Configuration Schema",
+  "description": "Schema for defining .NET Aspire orchestration and service configuration",
+  "type": "object",
+  "properties": {
+    "appHost": {
+      "type": "object",
+      "description": "Aspire Application Host configuration",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Application host name in kebab-case"
+        },
+        "environment": {
+          "type": "string",
+          "enum": ["Development", "Staging", "Production"],
+          "default": "Development"
+        },
+        "infrastructure": {
+          "type": "object",
+          "properties": {
+            "redis": {
+              "type": "object",
+              "properties": {
+                "resourceName": {
+                  "type": "string",
+                  "default": "redis"
+                },
+                "lifetime": {
+                  "type": "string",
+                  "enum": ["Session", "Persistent"],
+                  "default": "Persistent"
+                },
+                "dataVolume": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "port": {
+                  "type": "integer",
+                  "default": 6379
+                },
+                "enableManagementTools": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Enable Redis Commander in development"
+                }
+              }
+            },
+            "database": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["MySQL", "PostgreSQL", "SQLServer", "SQLite"],
+                  "default": "MySQL"
+                },
+                "resourceName": {
+                  "type": "string",
+                  "default": "mysql"
+                },
+                "databaseName": {
+                  "type": "string",
+                  "default": "BilliardHall"
+                },
+                "lifetime": {
+                  "type": "string",
+                  "enum": ["Session", "Persistent"],
+                  "default": "Persistent"
+                },
+                "dataVolume": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "port": {
+                  "type": "integer",
+                  "default": 3306
+                },
+                "enableManagementTools": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Enable phpMyAdmin in development"
+                },
+                "credentials": {
+                  "type": "object",
+                  "properties": {
+                    "rootPassword": {
+                      "type": "string",
+                      "default": "MyPassword123!"
+                    },
+                    "userName": {
+                      "type": "string",
+                      "default": "root"
+                    }
+                  }
+                }
+              },
+              "required": ["type", "resourceName"]
+            },
+            "monitoring": {
+              "type": "object",
+              "properties": {
+                "jaeger": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "resourceName": {
+                      "type": "string",
+                      "default": "jaeger"
+                    },
+                    "uiPort": {
+                      "type": "integer",
+                      "default": 16686
+                    },
+                    "otlpPort": {
+                      "type": "integer",
+                      "default": 4317
+                    }
+                  }
+                },
+                "prometheus": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "resourceName": {
+                      "type": "string",
+                      "default": "prometheus"
+                    },
+                    "port": {
+                      "type": "integer",
+                      "default": 9090
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$",
+                "description": "Service name in kebab-case"
+              },
+              "projectPath": {
+                "type": "string",
+                "pattern": "^src/.*\\.csproj$",
+                "description": "Relative path to the .csproj file"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["WebApp", "WebAPI", "BackgroundService", "ConsoleApp"],
+                "default": "WebApp"
+              },
+              "replicas": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10,
+                "default": 1
+              },
+              "dependencies": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "resourceName": {
+                      "type": "string"
+                    },
+                    "connectionName": {
+                      "type": "string",
+                      "description": "Connection string name in configuration"
+                    },
+                    "waitForResource": {
+                      "type": "boolean",
+                      "default": true,
+                      "description": "Wait for this resource to be ready before starting"
+                    }
+                  },
+                  "required": ["resourceName"]
+                }
+              },
+              "environmentVariables": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "ports": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "port": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 65535
+                    },
+                    "targetPort": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 65535
+                    },
+                    "scheme": {
+                      "type": "string",
+                      "enum": ["http", "https"],
+                      "default": "http"
+                    }
+                  },
+                  "required": ["port"]
+                }
+              },
+              "healthCheck": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "default": "/health"
+                  },
+                  "interval": {
+                    "type": "string",
+                    "pattern": "^\\d+[smh]$",
+                    "default": "30s"
+                  },
+                  "timeout": {
+                    "type": "string",
+                    "pattern": "^\\d+[smh]$",
+                    "default": "10s"
+                  },
+                  "retries": {
+                    "type": "integer",
+                    "default": 3
+                  }
+                }
+              }
+            },
+            "required": ["name", "projectPath"]
+          }
+        }
+      },
+      "required": ["name", "services"]
+    },
+    "serviceDefaults": {
+      "type": "object",
+      "description": "Service defaults configuration",
+      "properties": {
+        "openTelemetry": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "metrics": {
+              "type": "object",
+              "properties": {
+                "aspNetCore": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "httpClient": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "runtime": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "entityFramework": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "redis": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            },
+            "tracing": {
+              "type": "object",
+              "properties": {
+                "aspNetCore": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "httpClient": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "entityFramework": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "redis": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "excludePaths": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "default": ["/health", "/alive"]
+                }
+              }
+            },
+            "exporters": {
+              "type": "object",
+              "properties": {
+                "otlp": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "console": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "azureMonitor": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
+            }
+          }
+        },
+        "healthChecks": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "endpoints": {
+              "type": "object",
+              "properties": {
+                "health": {
+                  "type": "string",
+                  "default": "/health"
+                },
+                "alive": {
+                  "type": "string",
+                  "default": "/alive"
+                }
+              }
+            },
+            "checks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": ["self", "database", "redis", "url", "custom"]
+                  },
+                  "connectionString": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["name", "type"]
+              }
+            }
+          }
+        },
+        "resilience": {
+          "type": "object",
+          "properties": {
+            "httpClient": {
+              "type": "object",
+              "properties": {
+                "retry": {
+                  "type": "object",
+                  "properties": {
+                    "maxAttempts": {
+                      "type": "integer",
+                      "default": 3
+                    },
+                    "delay": {
+                      "type": "string",
+                      "pattern": "^\\d+[smh]$",
+                      "default": "1s"
+                    }
+                  }
+                },
+                "circuitBreaker": {
+                  "type": "object",
+                  "properties": {
+                    "samplingDuration": {
+                      "type": "string",
+                      "pattern": "^\\d+[smh]$",
+                      "default": "10s"
+                    },
+                    "failureThreshold": {
+                      "type": "number",
+                      "default": 0.5
+                    }
+                  }
+                },
+                "timeout": {
+                  "type": "object",
+                  "properties": {
+                    "totalRequest": {
+                      "type": "string",
+                      "pattern": "^\\d+[smh]$",
+                      "default": "30s"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "serviceDiscovery": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "allowedSchemes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["http", "https"]
+              },
+              "default": ["https", "http"]
+            }
+          }
+        }
+      }
+    },
+    "deployment": {
+      "type": "object",
+      "description": "Deployment configuration",
+      "properties": {
+        "target": {
+          "type": "string",
+          "enum": ["Docker", "Kubernetes", "AzureContainerApps", "Local"],
+          "default": "Docker"
+        },
+        "docker": {
+          "type": "object",
+          "properties": {
+            "registry": {
+              "type": "string",
+              "description": "Docker registry URL"
+            },
+            "namespace": {
+              "type": "string",
+              "default": "zss-billiard-hall"
+            },
+            "composeFile": {
+              "type": "string",
+              "default": "docker-compose.yml"
+            },
+            "networks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "kubernetes": {
+          "type": "object",
+          "properties": {
+            "namespace": {
+              "type": "string",
+              "default": "billiard-hall"
+            },
+            "ingress": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "className": {
+                  "type": "string",
+                  "default": "nginx"
+                },
+                "annotations": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "hosts": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "tls": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["appHost"],
+  "examples": [
+    {
+      "appHost": {
+        "name": "billiard-hall-app",
+        "environment": "Development",
+        "infrastructure": {
+          "redis": {
+            "resourceName": "redis",
+            "lifetime": "Persistent",
+            "dataVolume": true,
+            "enableManagementTools": true
+          },
+          "database": {
+            "type": "MySQL",
+            "resourceName": "mysql",
+            "databaseName": "BilliardHall",
+            "lifetime": "Persistent",
+            "dataVolume": true,
+            "enableManagementTools": true
+          },
+          "monitoring": {
+            "jaeger": {
+              "enabled": true,
+              "resourceName": "jaeger"
+            }
+          }
+        },
+        "services": [
+          {
+            "name": "billiard-hall-blazor",
+            "projectPath": "src/Zss.BilliardHall.Blazor/Zss.BilliardHall.Blazor.csproj",
+            "type": "WebApp",
+            "replicas": 2,
+            "dependencies": [
+              {
+                "resourceName": "redis",
+                "connectionName": "Redis"
+              },
+              {
+                "resourceName": "mysql",
+                "connectionName": "Default"
+              }
+            ],
+            "environmentVariables": {
+              "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+          },
+          {
+            "name": "billiard-hall-migrator",
+            "projectPath": "src/Zss.BilliardHall.DbMigrator/Zss.BilliardHall.DbMigrator.csproj",
+            "type": "ConsoleApp",
+            "dependencies": [
+              {
+                "resourceName": "mysql",
+                "connectionName": "Default"
+              }
+            ]
+          }
+        ]
+      },
+      "serviceDefaults": {
+        "openTelemetry": {
+          "enabled": true,
+          "metrics": {
+            "aspNetCore": true,
+            "httpClient": true,
+            "runtime": true,
+            "entityFramework": true
+          },
+          "tracing": {
+            "aspNetCore": true,
+            "httpClient": true,
+            "entityFramework": true,
+            "excludePaths": ["/health", "/alive"]
+          }
+        },
+        "healthChecks": {
+          "enabled": true,
+          "checks": [
+            {
+              "name": "self",
+              "type": "self",
+              "tags": ["live"]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

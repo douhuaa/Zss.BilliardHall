@@ -1,26 +1,336 @@
-# API 设计模式 (API Design Patterns)
+# ABP Application Service API 设计规范 (ABP Application Service API Design Patterns)
 
-## RESTful API 设计原则
+# ABP Application Service API 设计规范 (ABP Application Service API Design Patterns)
 
-### 1. 资源命名约定 (Resource Naming Conventions)
+## ABP Framework API 原则 (ABP Framework API Principles)
 
-```http
-# 好的 API 设计
-GET    /api/v1/billiard-tables              # 获取台球桌列表
-GET    /api/v1/billiard-tables/{id}         # 获取特定台球桌
-POST   /api/v1/billiard-tables              # 创建台球桌
-PUT    /api/v1/billiard-tables/{id}         # 完整更新台球桌
-PATCH  /api/v1/billiard-tables/{id}         # 部分更新台球桌
-DELETE /api/v1/billiard-tables/{id}         # 删除台球桌
+### 1. Application Service 模式
+- 所有 API 操作通过 Application Service 实现
+- 接口定义在 Application.Contracts 项目中
+- 实现在 Application 项目中
+- 自动生成 HTTP API 端点
+- 内置权限控制和多租户支持
 
-# 子资源操作
-GET    /api/v1/billiard-tables/{id}/reservations    # 获取台球桌的预约
-POST   /api/v1/billiard-tables/{id}/reservations    # 为台球桌创建预约
-PATCH  /api/v1/billiard-tables/{id}/status          # 更新台球桌状态
+### 2. ABP 约定优于配置
+- 遵循 ABP 命名约定自动生成路由
+- 使用 ABP 的 DTO 基类
+- 利用 ABP 的自动 API 控制器功能
+- 集成 ABP 的验证和异常处理
 
-# 批量操作
-POST   /api/v1/billiard-tables/batch                # 批量创建
-PATCH  /api/v1/billiard-tables/batch                # 批量更新
+### 3. 一致性和标准化
+- 统一的分页和排序模式
+- 标准化的权限验证
+- 一致的错误处理和本地化
+- 规范的审计和多租户支持
+
+## ABP Application Service 接口模式
+
+### 1. 标准 CRUD Application Service
+
+```csharp
+// IBilliardTableAppService.cs - 在 Application.Contracts 项目中
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+
+namespace Zss.BilliardHall.BilliardTables
+{
+    /// <summary>
+    /// 台球桌应用服务接口
+    /// 自动映射到 /api/app/billiard-table 路由
+    /// </summary>
+    public interface IBilliardTableAppService : IApplicationService
+    {
+        // 标准查询操作
+        Task<PagedResultDto<BilliardTableDto>> GetListAsync(GetBilliardTablesInput input);
+        Task<BilliardTableDto> GetAsync(Guid id);
+        Task<ListResultDto<BilliardTableLookupDto>> GetLookupAsync();
+        
+        // 标准写操作 (需要相应权限)
+        Task<BilliardTableDto> CreateAsync(CreateBilliardTableDto input);
+        Task<BilliardTableDto> UpdateAsync(Guid id, UpdateBilliardTableDto input);
+        Task DeleteAsync(Guid id);
+        
+        // 业务特定操作
+        Task<BilliardTableDto> ChangeStatusAsync(Guid id, ChangeBilliardTableStatusDto input);
+        Task<BilliardTableDto> UpdateLocationAsync(Guid id, UpdateBilliardTableLocationDto input);
+        
+        // 批量操作
+        Task DeleteManyAsync(IEnumerable<Guid> ids);
+        Task<ListResultDto<BilliardTableDto>> GetManyAsync(IEnumerable<Guid> ids);
+        
+        // 统计和报表
+        Task<BilliardTableStatisticsDto> GetStatisticsAsync(GetBilliardTableStatisticsInput input);
+        Task<FileDto> GetReportAsync(GetBilliardTableReportInput input);
+    }
+}
+```
+
+### 2. ABP DTO 设计模式
+
+```csharp
+// BilliardTableDto.cs - 输出 DTO
+using Volo.Abp.Application.Dtos;
+
+namespace Zss.BilliardHall.BilliardTables
+{
+    /// <summary>
+    /// 台球桌 DTO - 用于数据输出
+    /// </summary>
+    public class BilliardTableDto : FullAuditedEntityDto<Guid>
+    {
+        public int Number { get; set; }
+        public BilliardTableType Type { get; set; }
+        public BilliardTableStatus Status { get; set; }
+        public decimal HourlyRate { get; set; }
+        public float LocationX { get; set; }
+        public float LocationY { get; set; }
+        
+        // 本地化显示属性
+        public string TypeDisplayName => L[$"Enum:BilliardTableType.{Type}"];
+        public string StatusDisplayName => L[$"Enum:BilliardTableStatus.{Status}"];
+        
+        // 计算属性
+        public bool IsAvailable => Status == BilliardTableStatus.Available;
+        public TimeSpan? EstimatedWaitTime { get; set; }
+    }
+
+    /// <summary>
+    /// 创建台球桌输入 DTO
+    /// </summary>
+    public class CreateBilliardTableDto : IValidatableObject
+    {
+        [Required]
+        [Range(1, 999)]
+        public int Number { get; set; }
+        
+        [Required]
+        public BilliardTableType Type { get; set; }
+        
+        [Required]
+        [Range(0.01, 9999.99)]
+        public decimal HourlyRate { get; set; }
+        
+        public float LocationX { get; set; }
+        public float LocationY { get; set; }
+        
+        // 自定义验证逻辑
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            // 业务规则验证
+            if (Type == BilliardTableType.Snooker && HourlyRate < 80)
+            {
+                yield return new ValidationResult(
+                    "斯诺克台球桌的小时费率不能低于80元",
+                    new[] { nameof(HourlyRate) });
+            }
+        }
+    }
+
+    /// <summary>
+    /// 更新台球桌输入 DTO
+    /// </summary>
+    public class UpdateBilliardTableDto
+    {
+        [Range(0.01, 9999.99)]
+        public decimal? HourlyRate { get; set; }
+        
+        public float? LocationX { get; set; }
+        public float? LocationY { get; set; }
+        
+        // 可选更新字段使用可空类型
+    }
+
+    /// <summary>
+    /// 台球桌查询输入 DTO
+    /// </summary>
+    public class GetBilliardTablesInput : PagedAndSortedResultRequestDto
+    {
+        public BilliardTableType? Type { get; set; }
+        public BilliardTableStatus? Status { get; set; }
+        public decimal? MinHourlyRate { get; set; }
+        public decimal? MaxHourlyRate { get; set; }
+        public string Filter { get; set; }  // 通用搜索
+        
+        public GetBilliardTablesInput()
+        {
+            MaxResultCount = 20;
+            Sorting = "Number";
+        }
+    }
+
+    /// <summary>
+    /// 状态变更输入 DTO
+    /// </summary>
+    public class ChangeBilliardTableStatusDto
+    {
+        [Required]
+        public BilliardTableStatus Status { get; set; }
+        
+        [StringLength(500)]
+        public string Reason { get; set; }
+    }
+}
+```
+
+### 3. Application Service 实现模式
+
+```csharp
+// BilliardTableAppService.cs - 在 Application 项目中
+using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace Zss.BilliardHall.BilliardTables
+{
+    /// <summary>
+    /// 台球桌应用服务实现
+    /// 自动注册为 API 控制器: /api/app/billiard-table
+    /// </summary>
+    [Authorize(BilliardHallPermissions.BilliardTables.Default)]
+    [RemoteService(IsEnabled = false)] // 如果需要禁用自动 API 生成
+    public class BilliardTableAppService : BilliardHallAppService, IBilliardTableAppService
+    {
+        private readonly IRepository<BilliardTable, Guid> _billiardTableRepository;
+        private readonly BilliardTableManager _billiardTableManager;
+
+        public BilliardTableAppService(
+            IRepository<BilliardTable, Guid> billiardTableRepository,
+            BilliardTableManager billiardTableManager)
+        {
+            _billiardTableRepository = billiardTableRepository;
+            _billiardTableManager = billiardTableManager;
+        }
+
+        /// <summary>
+        /// 获取台球桌列表
+        /// GET: /api/app/billiard-table
+        /// </summary>
+        public virtual async Task<PagedResultDto<BilliardTableDto>> GetListAsync(GetBilliardTablesInput input)
+        {
+            var queryable = await _billiardTableRepository.GetQueryableAsync();
+            
+            // 应用过滤条件
+            queryable = queryable
+                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), 
+                         x => x.Number.ToString().Contains(input.Filter))
+                .WhereIf(input.Type.HasValue, x => x.Type == input.Type)
+                .WhereIf(input.Status.HasValue, x => x.Status == input.Status)
+                .WhereIf(input.MinHourlyRate.HasValue, x => x.HourlyRate >= input.MinHourlyRate)
+                .WhereIf(input.MaxHourlyRate.HasValue, x => x.HourlyRate <= input.MaxHourlyRate);
+
+            // 获取总数
+            var totalCount = await AsyncExecuter.CountAsync(queryable);
+            
+            // 应用排序和分页
+            queryable = queryable
+                .OrderBy(input.Sorting ?? nameof(BilliardTable.Number))
+                .PageBy(input.SkipCount, input.MaxResultCount);
+
+            // 执行查询
+            var tables = await AsyncExecuter.ToListAsync(queryable);
+            
+            // 转换为 DTO
+            var tableDtos = await MapToGetListOutputDtosAsync(tables);
+            
+            return new PagedResultDto<BilliardTableDto>(totalCount, tableDtos);
+        }
+
+        /// <summary>
+        /// 获取单个台球桌
+        /// GET: /api/app/billiard-table/{id}
+        /// </summary>
+        public virtual async Task<BilliardTableDto> GetAsync(Guid id)
+        {
+            var table = await _billiardTableRepository.GetAsync(id);
+            return await MapToGetOutputDtoAsync(table);
+        }
+
+        /// <summary>
+        /// 创建台球桌
+        /// POST: /api/app/billiard-table
+        /// </summary>
+        [Authorize(BilliardHallPermissions.BilliardTables.Create)]
+        public virtual async Task<BilliardTableDto> CreateAsync(CreateBilliardTableDto input)
+        {
+            // 使用领域服务创建实体
+            var table = await _billiardTableManager.CreateAsync(
+                input.Number,
+                input.Type,
+                input.HourlyRate,
+                input.LocationX,
+                input.LocationY
+            );
+
+            // 保存到仓储
+            table = await _billiardTableRepository.InsertAsync(table, autoSave: true);
+            
+            // 发布领域事件
+            await LocalEventBus.PublishAsync(new BilliardTableCreatedEto
+            {
+                Id = table.Id,
+                Number = table.Number,
+                Type = table.Type
+            });
+
+            return await MapToGetOutputDtoAsync(table);
+        }
+
+        /// <summary>
+        /// 更新台球桌
+        /// PUT: /api/app/billiard-table/{id}
+        /// </summary>
+        [Authorize(BilliardHallPermissions.BilliardTables.Edit)]
+        public virtual async Task<BilliardTableDto> UpdateAsync(Guid id, UpdateBilliardTableDto input)
+        {
+            var table = await _billiardTableRepository.GetAsync(id);
+            
+            // 使用 ABP ObjectMapper 进行映射
+            await MapToEntityAsync(input, table);
+            
+            // 业务逻辑验证
+            await _billiardTableManager.UpdateAsync(table);
+            
+            // 更新到仓储
+            table = await _billiardTableRepository.UpdateAsync(table, autoSave: true);
+
+            return await MapToGetOutputDtoAsync(table);
+        }
+
+        /// <summary>
+        /// 删除台球桌
+        /// DELETE: /api/app/billiard-table/{id}
+        /// </summary>
+        [Authorize(BilliardHallPermissions.BilliardTables.Delete)]
+        public virtual async Task DeleteAsync(Guid id)
+        {
+            // 业务规则检查
+            await _billiardTableManager.DeleteAsync(id);
+            
+            await _billiardTableRepository.DeleteAsync(id);
+            
+            // 发布删除事件
+            await LocalEventBus.PublishAsync(new BilliardTableDeletedEto { Id = id });
+        }
+
+        /// <summary>
+        /// 更改台球桌状态
+        /// POST: /api/app/billiard-table/{id}/change-status
+        /// </summary>
+        [Authorize(BilliardHallPermissions.BilliardTables.ManageStatus)]
+        public virtual async Task<BilliardTableDto> ChangeStatusAsync(Guid id, ChangeBilliardTableStatusDto input)
+        {
+            var table = await _billiardTableRepository.GetAsync(id);
+            
+            // 使用领域服务更改状态
+            await _billiardTableManager.ChangeStatusAsync(table, input.Status, input.Reason);
+            
+            table = await _billiardTableRepository.UpdateAsync(table, autoSave: true);
+
+            return await MapToGetOutputDtoAsync(table);
+        }
+    }
+}
 ```
 
 ### 2. HTTP 状态码使用规范
