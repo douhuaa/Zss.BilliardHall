@@ -1,998 +1,1499 @@
-# 测试模式 (Testing Patterns)
+# ABP 测试基础设施指导 (ABP Testing Infrastructure Guidelines)
 
-## 测试策略 (Testing Strategy)
+## 总体原则 (General Principles)
 
-### 测试金字塔 (Test Pyramid)
+### 1. ABP 测试架构
+- 使用 ABP 提供的测试基础设施
+- 遵循 ABP 的测试项目结构
+- 利用 ABP 的依赖注入和模块系统
+- 集成 ABP 的多租户和权限测试
+- 使用 ABP 的内存数据库测试
 
-```
-        /\
-       /  \  E2E Tests (少量)
-      /____\
-     /      \  Integration Tests (适量) 
-    /________\
-   /          \  Unit Tests (大量)
-  /__________\
-```
+### 2. 测试分层策略
+- **Domain.Tests**: 领域层单元测试
+- **Application.Tests**: 应用服务集成测试
+- **EntityFrameworkCore.Tests**: 数据访问层测试
+- **HttpApi.Client.ConsoleTestApp**: HTTP API 集成测试
+- **TestBase**: 共享测试基础设施
 
-### 测试分类和覆盖目标
+### 3. 测试最佳实践
+- 快速、独立、可重复的测试
+- 使用内存数据库提高测试速度
+- 模拟外部依赖
+- 测试业务规则和异常情况
+- 集成测试覆盖关键业务流程
 
-```yaml
-test_coverage_targets:
-  unit_tests:
-    coverage: 90%
-    focus: "业务逻辑、领域模型、服务层"
-    
-  integration_tests:
-    coverage: 70%
-    focus: "数据访问、外部服务、API端点"
-    
-  e2e_tests:
-    coverage: 30%
-    focus: "关键业务流程、用户场景"
-```
+## ABP 测试基类设计
 
-## 单元测试模式 (Unit Test Patterns)
-
-### 1. 实体测试 (Entity Tests)
+### 1. 测试基础设施
 
 ```csharp
-[TestClass]
-public class BilliardTableTests
+// BilliardHallTestBaseModule.cs - 测试模块基类
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
+using Volo.Abp.Authorization;
+using Volo.Abp.Autofac;
+using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
+
+namespace Zss.BilliardHall.TestBase
 {
-    [TestMethod]
-    public void Constructor_ValidInputs_CreatesBilliardTable()
+    [DependsOn(
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule),
+        typeof(AbpAuthorizationModule),
+        typeof(BilliardHallDomainModule)
+    )]
+    public class BilliardHallTestBaseModule : AbpModule
     {
-        // Arrange
-        var number = 5;
-        var type = TableType.Chinese8Ball;
-        var hourlyRate = new Money(35.00m, "CNY");
-        var location = new TableLocation(10.5f, 5.2f, 1, "A");
-        var hallId = Guid.NewGuid();
-
-        // Act
-        var table = new BilliardTable(number, type, hourlyRate, location, hallId);
-
-        // Assert
-        Assert.AreEqual(number, table.Number);
-        Assert.AreEqual(type, table.Type);
-        Assert.AreEqual(TableStatus.Available, table.Status);
-        Assert.AreEqual(hourlyRate, table.HourlyRate);
-        Assert.AreEqual(location, table.Location);
-        Assert.AreEqual(hallId, table.HallId);
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddAlwaysAllowAuthorization();
+        }
     }
+}
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
-    public void Constructor_InvalidNumber_ThrowsArgumentException()
+// BilliardHallTestBase.cs - 测试基类
+using Volo.Abp;
+using Volo.Abp.Testing;
+
+namespace Zss.BilliardHall.TestBase
+{
+    public abstract class BilliardHallTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        // Arrange & Act & Assert
-        new BilliardTable(-1, TableType.Chinese8Ball, 
-                          new Money(35, "CNY"), 
-                          new TableLocation(1, 1, 1, "A"), 
-                          Guid.NewGuid());
-    }
-
-    [TestMethod]
-    public void UpdateStatus_ValidTransition_UpdatesStatus()
-    {
-        // Arrange
-        var table = CreateValidBilliardTable();
-        var newStatus = TableStatus.Occupied;
-        var reason = "客户开始使用";
-
-        // Act
-        table.UpdateStatus(newStatus, reason);
-
-        // Assert
-        Assert.AreEqual(newStatus, table.Status);
-        Assert.IsTrue(table.UpdatedAt > DateTime.UtcNow.AddMinutes(-1));
-    }
-
-    [TestMethod]
-    [ExpectedException(typeof(InvalidOperationException))]
-    public void UpdateStatus_InvalidTransition_ThrowsException()
-    {
-        // Arrange
-        var table = CreateValidBilliardTable();
-        table.UpdateStatus(TableStatus.Occupied);
-
-        // Act & Assert - 不能从 Occupied 直接转换到 Reserved
-        table.UpdateStatus(TableStatus.Reserved);
-    }
-
-    private BilliardTable CreateValidBilliardTable()
-    {
-        return new BilliardTable(
-            1, 
-            TableType.Chinese8Ball, 
-            new Money(35, "CNY"),
-            new TableLocation(1, 1, 1, "A"),
-            Guid.NewGuid()
-        );
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }
 ```
 
-### 2. 服务层测试 (Service Layer Tests)
+### 2. Domain 层测试基类
 
 ```csharp
-[TestClass]
-public class BilliardTableServiceTests
+// BilliardHallDomainTestModule.cs
+[DependsOn(
+    typeof(BilliardHallTestBaseModule),
+    typeof(BilliardHallDomainModule)
+)]
+public class BilliardHallDomainTestModule : AbpModule
 {
-    private Mock<IBilliardTableRepository> _mockRepository;
-    private Mock<IValidator<CreateBilliardTableDto>> _mockValidator;
-    private Mock<IMapper> _mockMapper;
-    private Mock<ILogger<BilliardTableService>> _mockLogger;
-    private BilliardTableService _service;
-
-    [TestInitialize]
-    public void Setup()
-    {
-        _mockRepository = new Mock<IBilliardTableRepository>();
-        _mockValidator = new Mock<IValidator<CreateBilliardTableDto>>();
-        _mockMapper = new Mock<IMapper>();
-        _mockLogger = new Mock<ILogger<BilliardTableService>>();
-
-        _service = new BilliardTableService(
-            _mockRepository.Object,
-            _mockValidator.Object,
-            _mockMapper.Object,
-            _mockLogger.Object
-        );
-    }
-
-    [TestMethod]
-    public async Task CreateTableAsync_ValidInput_ReturnsCreatedTable()
-    {
-        // Arrange
-        var dto = CreateValidCreateTableDto();
-        var entity = CreateValidBilliardTable();
-        var expectedDto = CreateValidTableDto();
-
-        _mockValidator.Setup(v => v.ValidateAsync(dto, default))
-                     .ReturnsAsync(new ValidationResult());
-        
-        _mockRepository.Setup(r => r.GetByNumberAsync(dto.Number, dto.HallId))
-                      .ReturnsAsync((BilliardTable)null);
-        
-        _mockRepository.Setup(r => r.GetByLocationAsync(dto.LocationX, dto.LocationY, dto.Floor, dto.HallId))
-                      .ReturnsAsync((BilliardTable)null);
-        
-        _mockRepository.Setup(r => r.CreateAsync(It.IsAny<BilliardTable>()))
-                      .ReturnsAsync(entity);
-        
-        _mockMapper.Setup(m => m.Map<BilliardTableDto>(entity))
-                  .Returns(expectedDto);
-
-        // Act
-        var result = await _service.CreateTableAsync(dto);
-
-        // Assert
-        Assert.IsNotNull(result);
-        Assert.AreEqual(expectedDto.Id, result.Id);
-        
-        _mockRepository.Verify(r => r.CreateAsync(It.IsAny<BilliardTable>()), Times.Once);
-        _mockValidator.Verify(v => v.ValidateAsync(dto, default), Times.Once);
-    }
-
-    [TestMethod]
-    public async Task CreateTableAsync_DuplicateNumber_ThrowsBusinessRuleException()
-    {
-        // Arrange
-        var dto = CreateValidCreateTableDto();
-        var existingTable = CreateValidBilliardTable();
-
-        _mockValidator.Setup(v => v.ValidateAsync(dto, default))
-                     .ReturnsAsync(new ValidationResult());
-        
-        _mockRepository.Setup(r => r.GetByNumberAsync(dto.Number, dto.HallId))
-                      .ReturnsAsync(existingTable);
-
-        // Act & Assert
-        var exception = await Assert.ThrowsExceptionAsync<BusinessRuleException>(
-            () => _service.CreateTableAsync(dto));
-
-        Assert.AreEqual($"台球桌编号 {dto.Number} 已存在", exception.Message);
-    }
-
-    [TestMethod]
-    public async Task CreateTableAsync_ValidationFails_ThrowsValidationException()
-    {
-        // Arrange
-        var dto = CreateValidCreateTableDto();
-        var validationResult = new ValidationResult(new[]
-        {
-            new ValidationFailure("Number", "编号不能为空")
-        });
-
-        _mockValidator.Setup(v => v.ValidateAsync(dto, default))
-                     .ReturnsAsync(validationResult);
-
-        // Act & Assert
-        var exception = await Assert.ThrowsExceptionAsync<ValidationException>(
-            () => _service.CreateTableAsync(dto));
-
-        Assert.AreEqual("输入数据验证失败", exception.Message);
-        Assert.IsTrue(exception.Errors.Any(e => e.PropertyName == "Number"));
-    }
-
-    private CreateBilliardTableDto CreateValidCreateTableDto()
-    {
-        return new CreateBilliardTableDto
-        {
-            Number = 1,
-            Type = TableType.Chinese8Ball,
-            HourlyRate = 35.00m,
-            LocationX = 10.5f,
-            LocationY = 5.2f,
-            Floor = 1,
-            Zone = "A",
-            HallId = Guid.NewGuid()
-        };
-    }
-
-    private BilliardTable CreateValidBilliardTable()
-    {
-        return new BilliardTable(1, TableType.Chinese8Ball, 
-                                new Money(35, "CNY"),
-                                new TableLocation(1, 1, 1, "A"),
-                                Guid.NewGuid());
-    }
-
-    private BilliardTableDto CreateValidTableDto()
-    {
-        return new BilliardTableDto
-        {
-            Id = Guid.NewGuid(),
-            Number = 1,
-            Type = "Chinese8Ball",
-            Status = "Available"
-        };
-    }
+    // Domain 层特定配置
 }
-```
 
-## 集成测试模式 (Integration Test Patterns)
+// BilliardHallDomainTestBase.cs
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
 
-### 1. 仓储层集成测试
-
-```csharp
-[TestClass]
-public class BilliardTableRepositoryIntegrationTests
+namespace Zss.BilliardHall.Domain.Tests
 {
-    private BilliardHallDbContext _context;
-    private BilliardTableRepository _repository;
-
-    [TestInitialize]
-    public void Setup()
+    public abstract class BilliardHallDomainTestBase : BilliardHallTestBase<BilliardHallDomainTestModule>
     {
-        var options = new DbContextOptionsBuilder<BilliardHallDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
+        protected IRepository<BilliardHall, Guid> BilliardHallRepository { get; }
+        protected IRepository<BilliardTable, Guid> BilliardTableRepository { get; }
+        protected BilliardTableManager BilliardTableManager { get; }
 
-        _context = new BilliardHallDbContext(options);
-        _repository = new BilliardTableRepository(_context);
-
-        // 初始化测试数据
-        SeedTestData();
-    }
-
-    [TestCleanup]
-    public void Cleanup()
-    {
-        _context.Dispose();
-    }
-
-    [TestMethod]
-    public async Task CreateAsync_ValidTable_SavesSuccessfully()
-    {
-        // Arrange
-        var hallId = await CreateTestHall();
-        var table = new BilliardTable(10, TableType.Chinese8Ball, 
-                                     new Money(40, "CNY"),
-                                     new TableLocation(15, 10, 1, "B"),
-                                     hallId);
-
-        // Act
-        var result = await _repository.CreateAsync(table);
-
-        // Assert
-        Assert.IsNotNull(result);
-        Assert.AreNotEqual(Guid.Empty, result.Id);
-
-        var savedTable = await _context.BilliardTables.FindAsync(result.Id);
-        Assert.IsNotNull(savedTable);
-        Assert.AreEqual(10, savedTable.Number);
-    }
-
-    [TestMethod]
-    public async Task GetByNumberAsync_ExistingTable_ReturnsTable()
-    {
-        // Arrange
-        var hallId = await CreateTestHall();
-        var expectedNumber = 5;
-
-        // Act
-        var result = await _repository.GetByNumberAsync(expectedNumber, hallId);
-
-        // Assert
-        Assert.IsNotNull(result);
-        Assert.AreEqual(expectedNumber, result.Number);
-    }
-
-    [TestMethod]
-    public async Task GetPagedAsync_WithFilters_ReturnsFilteredResults()
-    {
-        // Arrange
-        var hallId = await CreateTestHall();
-        var filter = new BilliardTableQuery
+        protected BilliardHallDomainTestBase()
         {
-            HallId = hallId,
-            Status = TableStatus.Available,
-            Page = 1,
-            PageSize = 10
-        };
+            BilliardHallRepository = GetRequiredService<IRepository<BilliardHall, Guid>>();
+            BilliardTableRepository = GetRequiredService<IRepository<BilliardTable, Guid>>();
+            BilliardTableManager = GetRequiredService<BilliardTableManager>();
+        }
 
-        // Act
-        var result = await _repository.GetPagedAsync(filter);
-
-        // Assert
-        Assert.IsNotNull(result);
-        Assert.IsTrue(result.Items.All(t => t.Status == TableStatus.Available));
-        Assert.IsTrue(result.Items.All(t => t.HallId == hallId));
-    }
-
-    private async Task<Guid> CreateTestHall()
-    {
-        var hall = new BilliardHall
+        /// <summary>
+        /// 创建测试台球厅
+        /// </summary>
+        protected async Task<BilliardHall> CreateTestBilliardHallAsync(string name = "测试台球厅")
         {
-            Id = Guid.NewGuid(),
-            Name = "测试台球厅",
-            Address = new Address("测试街道", "测试城市", "测试省份", "100000"),
-            OperatingHours = new OperatingHours(),
-            Status = HallStatus.Active
-        };
+            var hall = new BilliardHall(
+                Guid.NewGuid(),
+                name,
+                "测试地址",
+                TimeSpan.FromHours(9),
+                TimeSpan.FromHours(23)
+            );
 
-        _context.BilliardHalls.Add(hall);
-        await _context.SaveChangesAsync();
-        return hall.Id;
-    }
+            return await BilliardHallRepository.InsertAsync(hall, autoSave: true);
+        }
 
-    private void SeedTestData()
-    {
-        // 预置一些测试数据
-        var hallId = Guid.NewGuid();
-        var hall = new BilliardHall
+        /// <summary>
+        /// 创建测试台球桌
+        /// </summary>
+        protected async Task<BilliardTable> CreateTestBilliardTableAsync(
+            Guid? hallId = null,
+            int number = 1,
+            BilliardTableType type = BilliardTableType.ChineseEightBall,
+            decimal hourlyRate = 50.0m)
         {
-            Id = hallId,
-            Name = "测试台球厅",
-            Address = new Address("测试街道", "测试城市", "测试省份", "100000"),
-            OperatingHours = new OperatingHours(),
-            Status = HallStatus.Active
-        };
-
-        var tables = new[]
-        {
-            new BilliardTable(1, TableType.Chinese8Ball, new Money(35, "CNY"), new TableLocation(1, 1, 1, "A"), hallId),
-            new BilliardTable(2, TableType.American9Ball, new Money(40, "CNY"), new TableLocation(2, 1, 1, "A"), hallId),
-            new BilliardTable(5, TableType.Snooker, new Money(50, "CNY"), new TableLocation(5, 1, 1, "A"), hallId)
-        };
-
-        _context.BilliardHalls.Add(hall);
-        _context.BilliardTables.AddRange(tables);
-        _context.SaveChanges();
-    }
-}
-```
-
-### 2. API 集成测试
-
-```csharp
-[TestClass]
-public class BilliardTablesControllerIntegrationTests
-{
-    private WebApplicationFactory<Program> _factory;
-    private HttpClient _client;
-
-    [TestInitialize]
-    public void Setup()
-    {
-        _factory = new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(builder =>
+            if (!hallId.HasValue)
             {
-                builder.ConfigureServices(services =>
-                {
-                    // 替换数据库为测试数据库
-                    services.RemoveAll(typeof(DbContextOptions<BilliardHallDbContext>));
-                    services.AddDbContext<BilliardHallDbContext>(options =>
-                        options.UseInMemoryDatabase("TestDb"));
-                });
+                var hall = await CreateTestBilliardHallAsync();
+                hallId = hall.Id;
+            }
+
+            var table = await BilliardTableManager.CreateAsync(number, type, hourlyRate);
+            return await BilliardTableRepository.InsertAsync(table, autoSave: true);
+        }
+    }
+}
+```
+
+### 3. Application 层测试基类
+
+```csharp
+// BilliardHallApplicationTestModule.cs
+[DependsOn(
+    typeof(BilliardHallDomainTestModule),
+    typeof(BilliardHallApplicationModule)
+)]
+public class BilliardHallApplicationTestModule : AbpModule
+{
+    // Application 层特定配置
+}
+
+// BilliardHallApplicationTestBase.cs
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Users;
+
+namespace Zss.BilliardHall.Application.Tests
+{
+    public abstract class BilliardHallApplicationTestBase : BilliardHallDomainTestBase
+    {
+        // Application Services
+        protected IBilliardTableAppService BilliardTableAppService { get; }
+        protected IReservationAppService ReservationAppService { get; }
+        
+        // 当前用户模拟
+        protected ICurrentUser CurrentUser { get; }
+
+        protected BilliardHallApplicationTestBase()
+        {
+            BilliardTableAppService = GetRequiredService<IBilliardTableAppService>();
+            ReservationAppService = GetRequiredService<IReservationAppService>();
+            CurrentUser = GetRequiredService<ICurrentUser>();
+        }
+
+        /// <summary>
+        /// 设置当前用户
+        /// </summary>
+        protected void SetCurrentUser(Guid userId, string userName = "testuser")
+        {
+            GetRequiredService<ICurrentUser>().Id = userId;
+            GetRequiredService<ICurrentUser>().UserName = userName;
+        }
+
+        /// <summary>
+        /// 设置当前租户
+        /// </summary>
+        protected void SetCurrentTenant(Guid tenantId)
+        {
+            GetRequiredService<ICurrentTenant>().Change(tenantId);
+        }
+    }
+}
+```
+
+## 领域层测试模式
+
+### 1. 实体测试
+
+```csharp
+// BilliardTable_Tests.cs
+using Shouldly;
+using Xunit;
+
+namespace Zss.BilliardHall.Domain.Tests
+{
+    public class BilliardTable_Tests : BilliardHallDomainTestBase
+    {
+        [Fact]
+        public void Should_Create_BilliardTable_With_Valid_Data()
+        {
+            // Arrange & Act
+            var table = new BilliardTable(
+                Guid.NewGuid(),
+                Guid.NewGuid(), // HallId
+                1,
+                BilliardTableType.ChineseEightBall,
+                50.00m,
+                100.0f,
+                200.0f
+            );
+
+            // Assert
+            table.Number.ShouldBe(1);
+            table.Type.ShouldBe(BilliardTableType.ChineseEightBall);
+            table.Status.ShouldBe(BilliardTableStatus.Available);
+            table.HourlyRate.ShouldBe(50.00m);
+            table.LocationX.ShouldBe(100.0f);
+            table.LocationY.ShouldBe(200.0f);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void Should_Not_Create_BilliardTable_With_Invalid_Number(int invalidNumber)
+        {
+            // Act & Assert
+            Should.Throw<ArgumentException>(() => new BilliardTable(
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                invalidNumber,
+                BilliardTableType.ChineseEightBall,
+                50.00m
+            ));
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-10.5)]
+        public void Should_Not_Create_BilliardTable_With_Invalid_HourlyRate(decimal invalidRate)
+        {
+            // Act & Assert
+            Should.Throw<ArgumentException>(() => new BilliardTable(
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                1,
+                BilliardTableType.ChineseEightBall,
+                invalidRate
+            ));
+        }
+
+        [Fact]
+        public void Should_Change_Status_Successfully()
+        {
+            // Arrange
+            var table = new BilliardTable(
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                1,
+                BilliardTableType.ChineseEightBall,
+                50.00m
+            );
+
+            // Act
+            table.ChangeStatus(BilliardTableStatus.Maintenance);
+
+            // Assert
+            table.Status.ShouldBe(BilliardTableStatus.Maintenance);
+        }
+
+        [Fact]
+        public void Should_Not_Change_Status_From_OutOfOrder_To_Available_Directly()
+        {
+            // Arrange
+            var table = new BilliardTable(
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                1,
+                BilliardTableType.ChineseEightBall,
+                50.00m
+            );
+            
+            table.ChangeStatus(BilliardTableStatus.OutOfOrder);
+
+            // Act & Assert
+            Should.Throw<BusinessException>(() => 
+                table.ChangeStatus(BilliardTableStatus.Available));
+        }
+
+        [Fact]
+        public void Should_Update_Location_Successfully()
+        {
+            // Arrange
+            var table = new BilliardTable(
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                1,
+                BilliardTableType.ChineseEightBall,
+                50.00m
+            );
+
+            // Act
+            table.UpdateLocation(150.5f, 250.5f);
+
+            // Assert
+            table.LocationX.ShouldBe(150.5f);
+            table.LocationY.ShouldBe(250.5f);
+        }
+    }
+}
+```
+
+### 2. 领域服务测试
+
+```csharp
+// BilliardTableManager_Tests.cs
+using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
+using Xunit;
+
+namespace Zss.BilliardHall.Domain.Tests
+{
+    public class BilliardTableManager_Tests : BilliardHallDomainTestBase
+    {
+        private readonly BilliardTableManager _billiardTableManager;
+
+        public BilliardTableManager_Tests()
+        {
+            _billiardTableManager = GetRequiredService<BilliardTableManager>();
+        }
+
+        [Fact]
+        public async Task Should_Create_BilliardTable()
+        {
+            // Act
+            var table = await _billiardTableManager.CreateAsync(
+                1,
+                BilliardTableType.ChineseEightBall,
+                50.00m,
+                100.0f,
+                200.0f
+            );
+
+            // Assert
+            table.ShouldNotBeNull();
+            table.Number.ShouldBe(1);
+            table.Type.ShouldBe(BilliardTableType.ChineseEightBall);
+            table.Status.ShouldBe(BilliardTableStatus.Available);
+            table.HourlyRate.ShouldBe(50.00m);
+        }
+
+        [Fact]
+        public async Task Should_Not_Create_BilliardTable_With_Duplicate_Number()
+        {
+            // Arrange
+            var hallId = Guid.NewGuid();
+            await BilliardTableRepository.InsertAsync(new BilliardTable(
+                Guid.NewGuid(),
+                hallId,
+                1,
+                BilliardTableType.ChineseEightBall,
+                50.00m
+            ));
+
+            // Act & Assert
+            var exception = await Should.ThrowAsync<BusinessException>(
+                async () => await _billiardTableManager.CreateAsync(1, BilliardTableType.AmericanNineBall, 60.00m)
+            );
+
+            exception.Code.ShouldBe(BilliardHallDomainErrorCodes.BilliardTableNumberAlreadyExists);
+        }
+
+        [Fact]
+        public async Task Should_Change_Status_With_Business_Rules()
+        {
+            // Arrange
+            var table = await CreateTestBilliardTableAsync();
+
+            // Act
+            await _billiardTableManager.ChangeStatusAsync(table, BilliardTableStatus.Maintenance, "定期维护");
+
+            // Assert
+            table.Status.ShouldBe(BilliardTableStatus.Maintenance);
+        }
+
+        [Fact]
+        public async Task Should_Not_Change_Status_If_Table_Has_Active_Reservation()
+        {
+            // Arrange
+            var table = await CreateTestBilliardTableAsync();
+            
+            // 创建活跃预约 (模拟)
+            var reservation = new Reservation(
+                Guid.NewGuid(),
+                table.Id,
+                Guid.NewGuid(), // CustomerId
+                DateTime.UtcNow.AddHours(1),
+                DateTime.UtcNow.AddHours(3),
+                100.00m
+            );
+
+            // Act & Assert
+            var exception = await Should.ThrowAsync<BusinessException>(
+                async () => await _billiardTableManager.ChangeStatusAsync(table, BilliardTableStatus.Maintenance)
+            );
+
+            exception.Code.ShouldBe(BilliardHallDomainErrorCodes.CannotChangeStatusWithActiveReservation);
+        }
+
+        [Theory]
+        [InlineData(BilliardTableType.ChineseEightBall, 10.0)] // 太低
+        [InlineData(BilliardTableType.Snooker, 50.0)] // 斯诺克价格太低
+        public async Task Should_Validate_Hourly_Rate_Business_Rules(BilliardTableType type, decimal rate)
+        {
+            // Act & Assert
+            await Should.ThrowAsync<BusinessException>(
+                async () => await _billiardTableManager.CreateAsync(1, type, rate)
+            );
+        }
+    }
+}
+```
+
+### 3. 聚合根测试
+
+```csharp
+// BilliardHall_Tests.cs
+using Shouldly;
+using Xunit;
+
+namespace Zss.BilliardHall.Domain.Tests
+{
+    public class BilliardHall_Tests : BilliardHallDomainTestBase
+    {
+        [Fact]
+        public void Should_Create_BilliardHall_With_Valid_Data()
+        {
+            // Arrange & Act
+            var hall = new BilliardHall(
+                Guid.NewGuid(),
+                "星际台球厅",
+                "北京市朝阳区",
+                TimeSpan.FromHours(9),
+                TimeSpan.FromHours(23)
+            );
+
+            // Assert
+            hall.Name.ShouldBe("星际台球厅");
+            hall.Address.ShouldBe("北京市朝阳区");
+            hall.OpenTime.ShouldBe(TimeSpan.FromHours(9));
+            hall.CloseTime.ShouldBe(TimeSpan.FromHours(23));
+            hall.Tables.ShouldBeEmpty();
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        public void Should_Not_Create_BilliardHall_With_Invalid_Name(string invalidName)
+        {
+            // Act & Assert
+            Should.Throw<ArgumentException>(() => new BilliardHall(
+                Guid.NewGuid(),
+                invalidName,
+                "地址"
+            ));
+        }
+
+        [Fact]
+        public void Should_Add_Table_To_Hall()
+        {
+            // Arrange
+            var hall = new BilliardHall(
+                Guid.NewGuid(),
+                "测试台球厅",
+                "测试地址"
+            );
+
+            // Act
+            var table = hall.AddTable(1, BilliardTableType.ChineseEightBall, 50.0m);
+
+            // Assert
+            hall.Tables.Count.ShouldBe(1);
+            hall.Tables.First().ShouldBe(table);
+            table.Number.ShouldBe(1);
+            table.BilliardHallId.ShouldBe(hall.Id);
+        }
+
+        [Fact]
+        public void Should_Not_Add_Table_With_Duplicate_Number()
+        {
+            // Arrange
+            var hall = new BilliardHall(Guid.NewGuid(), "测试台球厅", "测试地址");
+            hall.AddTable(1, BilliardTableType.ChineseEightBall, 50.0m);
+
+            // Act & Assert
+            var exception = Should.Throw<BusinessException>(() => 
+                hall.AddTable(1, BilliardTableType.AmericanNineBall, 60.0m));
+
+            exception.Code.ShouldBe(BilliardHallDomainErrorCodes.TableNumberAlreadyExists);
+        }
+
+        [Fact]
+        public void Should_Update_Business_Hours()
+        {
+            // Arrange
+            var hall = new BilliardHall(Guid.NewGuid(), "测试台球厅", "测试地址");
+
+            // Act
+            hall.UpdateBusinessHours(TimeSpan.FromHours(8), TimeSpan.FromHours(24));
+
+            // Assert
+            hall.OpenTime.ShouldBe(TimeSpan.FromHours(8));
+            hall.CloseTime.ShouldBe(TimeSpan.FromHours(24));
+        }
+    }
+}
+```
+
+## Application 层测试模式
+
+### 1. Application Service 测试
+
+```csharp
+// BilliardTableAppService_Tests.cs
+using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
+using Volo.Abp.Application.Dtos;
+using Xunit;
+
+namespace Zss.BilliardHall.Application.Tests
+{
+    public class BilliardTableAppService_Tests : BilliardHallApplicationTestBase
+    {
+        private readonly IBilliardTableAppService _billiardTableAppService;
+
+        public BilliardTableAppService_Tests()
+        {
+            _billiardTableAppService = GetRequiredService<IBilliardTableAppService>();
+        }
+
+        [Fact]
+        public async Task Should_Get_List_With_Paging()
+        {
+            // Arrange
+            var hall = await CreateTestBilliardHallAsync();
+            
+            // 创建多个台球桌
+            for (int i = 1; i <= 25; i++)
+            {
+                await CreateTestBilliardTableAsync(hall.Id, i);
+            }
+
+            var input = new GetBilliardTablesInput
+            {
+                MaxResultCount = 10,
+                SkipCount = 0
+            };
+
+            // Act
+            var result = await _billiardTableAppService.GetListAsync(input);
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.TotalCount.ShouldBe(25);
+            result.Items.Count.ShouldBe(10);
+        }
+
+        [Fact]
+        public async Task Should_Get_List_With_Filtering()
+        {
+            // Arrange
+            var hall = await CreateTestBilliardHallAsync();
+            await CreateTestBilliardTableAsync(hall.Id, 1, BilliardTableType.ChineseEightBall);
+            await CreateTestBilliardTableAsync(hall.Id, 2, BilliardTableType.AmericanNineBall);
+            await CreateTestBilliardTableAsync(hall.Id, 3, BilliardTableType.Snooker);
+
+            var input = new GetBilliardTablesInput
+            {
+                Type = BilliardTableType.ChineseEightBall
+            };
+
+            // Act
+            var result = await _billiardTableAppService.GetListAsync(input);
+
+            // Assert
+            result.TotalCount.ShouldBe(1);
+            result.Items.First().Type.ShouldBe(BilliardTableType.ChineseEightBall);
+        }
+
+        [Fact]
+        public async Task Should_Get_Single_Table()
+        {
+            // Arrange
+            var table = await CreateTestBilliardTableAsync();
+
+            // Act
+            var result = await _billiardTableAppService.GetAsync(table.Id);
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Id.ShouldBe(table.Id);
+            result.Number.ShouldBe(table.Number);
+            result.Type.ShouldBe(table.Type);
+        }
+
+        [Fact]
+        public async Task Should_Create_Table_With_Valid_Input()
+        {
+            // Arrange
+            var input = new CreateBilliardTableDto
+            {
+                Number = 10,
+                Type = BilliardTableType.ChineseEightBall,
+                HourlyRate = 55.00m,
+                LocationX = 100.0f,
+                LocationY = 200.0f
+            };
+
+            // Act
+            var result = await _billiardTableAppService.CreateAsync(input);
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Number.ShouldBe(input.Number);
+            result.Type.ShouldBe(input.Type);
+            result.HourlyRate.ShouldBe(input.HourlyRate);
+            result.Status.ShouldBe(BilliardTableStatus.Available);
+
+            // 验证数据库中的数据
+            var tableInDb = await BilliardTableRepository.GetAsync(result.Id);
+            tableInDb.ShouldNotBeNull();
+            tableInDb.Number.ShouldBe(input.Number);
+        }
+
+        [Fact]
+        public async Task Should_Not_Create_Table_With_Duplicate_Number()
+        {
+            // Arrange
+            await CreateTestBilliardTableAsync(number: 1);
+
+            var input = new CreateBilliardTableDto
+            {
+                Number = 1, // 重复号码
+                Type = BilliardTableType.AmericanNineBall,
+                HourlyRate = 60.00m
+            };
+
+            // Act & Assert
+            var exception = await Should.ThrowAsync<BusinessException>(
+                async () => await _billiardTableAppService.CreateAsync(input)
+            );
+
+            exception.Code.ShouldBe(BilliardHallDomainErrorCodes.BilliardTableNumberAlreadyExists);
+        }
+
+        [Fact]
+        public async Task Should_Update_Table()
+        {
+            // Arrange
+            var table = await CreateTestBilliardTableAsync();
+
+            var input = new UpdateBilliardTableDto
+            {
+                HourlyRate = 75.00m,
+                LocationX = 150.0f,
+                LocationY = 250.0f
+            };
+
+            // Act
+            var result = await _billiardTableAppService.UpdateAsync(table.Id, input);
+
+            // Assert
+            result.HourlyRate.ShouldBe(input.HourlyRate.Value);
+            result.LocationX.ShouldBe(input.LocationX.Value);
+            result.LocationY.ShouldBe(input.LocationY.Value);
+
+            // 验证数据库更新
+            var updatedTable = await BilliardTableRepository.GetAsync(table.Id);
+            updatedTable.HourlyRate.ShouldBe(input.HourlyRate.Value);
+        }
+
+        [Fact]
+        public async Task Should_Delete_Table()
+        {
+            // Arrange
+            var table = await CreateTestBilliardTableAsync();
+
+            // Act
+            await _billiardTableAppService.DeleteAsync(table.Id);
+
+            // Assert
+            var deletedTable = await BilliardTableRepository.FindAsync(table.Id);
+            deletedTable.ShouldBeNull(); // 软删除或硬删除取决于配置
+        }
+
+        [Fact]
+        public async Task Should_Change_Table_Status()
+        {
+            // Arrange
+            var table = await CreateTestBilliardTableAsync();
+
+            var input = new ChangeBilliardTableStatusDto
+            {
+                Status = BilliardTableStatus.Maintenance,
+                Reason = "定期维护"
+            };
+
+            // Act
+            var result = await _billiardTableAppService.ChangeStatusAsync(table.Id, input);
+
+            // Assert
+            result.Status.ShouldBe(BilliardTableStatus.Maintenance);
+
+            // 验证数据库更新
+            var updatedTable = await BilliardTableRepository.GetAsync(table.Id);
+            updatedTable.Status.ShouldBe(BilliardTableStatus.Maintenance);
+        }
+    }
+}
+```
+
+### 2. DTO 验证测试
+
+```csharp
+// BilliardTableDto_Validation_Tests.cs
+using System.ComponentModel.DataAnnotations;
+using Shouldly;
+using Xunit;
+
+namespace Zss.BilliardHall.Application.Tests
+{
+    public class BilliardTableDto_Validation_Tests : BilliardHallApplicationTestBase
+    {
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        [InlineData(1000)] // 超过最大值
+        public void CreateBilliardTableDto_Should_Validate_Number_Range(int invalidNumber)
+        {
+            // Arrange
+            var dto = new CreateBilliardTableDto
+            {
+                Number = invalidNumber,
+                Type = BilliardTableType.ChineseEightBall,
+                HourlyRate = 50.0m
+            };
+
+            // Act
+            var validationResults = ValidateModel(dto);
+
+            // Assert
+            validationResults.ShouldContain(vr => vr.MemberNames.Contains(nameof(dto.Number)));
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-10.5)]
+        [InlineData(10000)] // 超过最大值
+        public void CreateBilliardTableDto_Should_Validate_HourlyRate_Range(decimal invalidRate)
+        {
+            // Arrange
+            var dto = new CreateBilliardTableDto
+            {
+                Number = 1,
+                Type = BilliardTableType.ChineseEightBall,
+                HourlyRate = invalidRate
+            };
+
+            // Act
+            var validationResults = ValidateModel(dto);
+
+            // Assert
+            validationResults.ShouldContain(vr => vr.MemberNames.Contains(nameof(dto.HourlyRate)));
+        }
+
+        [Fact]
+        public void CreateBilliardTableDto_Should_Pass_Custom_Business_Validation()
+        {
+            // Arrange - 斯诺克台球桌价格应该较高
+            var dto = new CreateBilliardTableDto
+            {
+                Number = 1,
+                Type = BilliardTableType.Snooker,
+                HourlyRate = 50.0m // 太低了
+            };
+
+            // Act
+            var validationResults = ValidateModel(dto);
+
+            // Assert
+            validationResults.ShouldContain(vr => 
+                vr.ErrorMessage.Contains("斯诺克台球桌的小时费率不能低于80元"));
+        }
+
+        private List<ValidationResult> ValidateModel(object model)
+        {
+            var validationResults = new List<ValidationResult>();
+            var validationContext = new ValidationContext(model, null, null);
+            Validator.TryValidateObject(model, validationContext, validationResults, true);
+            
+            // 自定义验证
+            if (model is IValidatableObject validatableObject)
+            {
+                validationResults.AddRange(validatableObject.Validate(validationContext));
+            }
+            
+            return validationResults;
+        }
+    }
+}
+```
+
+## Entity Framework Core 测试模式
+
+### 1. 数据库集成测试
+
+```csharp
+// BilliardHallEntityFrameworkCoreTestModule.cs
+[DependsOn(
+    typeof(BilliardHallApplicationTestModule),
+    typeof(BilliardHallEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreTestModule)
+)]
+public class BilliardHallEntityFrameworkCoreTestModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddEntityFrameworkInMemoryDatabase();
+        
+        var databaseName = Guid.NewGuid().ToString();
+        
+        Configure<AbpDbContextOptions>(options =>
+        {
+            options.Configure(abpDbContextConfigurationContext =>
+            {
+                abpDbContextConfigurationContext.DbContextOptions.UseInMemoryDatabase(databaseName);
+            });
+        });
+    }
+}
+
+// BilliardHallEntityFrameworkCoreTestBase.cs
+namespace Zss.BilliardHall.EntityFrameworkCore.Tests
+{
+    public abstract class BilliardHallEntityFrameworkCoreTestBase : BilliardHallApplicationTestBase
+    {
+        protected virtual void UsingDbContext(Action<BilliardHallDbContext> action)
+        {
+            using (var context = GetRequiredService<BilliardHallDbContext>())
+            {
+                action(context);
+                context.SaveChanges();
+            }
+        }
+
+        protected virtual T UsingDbContext<T>(Func<BilliardHallDbContext, T> action)
+        {
+            using (var context = GetRequiredService<BilliardHallDbContext>())
+            {
+                var result = action(context);
+                context.SaveChanges();
+                return result;
+            }
+        }
+
+        protected virtual async Task UsingDbContextAsync(Func<BilliardHallDbContext, Task> action)
+        {
+            using (var context = GetRequiredService<BilliardHallDbContext>())
+            {
+                await action(context);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        protected virtual async Task<T> UsingDbContextAsync<T>(Func<BilliardHallDbContext, Task<T>> action)
+        {
+            using (var context = GetRequiredService<BilliardHallDbContext>())
+            {
+                var result = await action(context);
+                await context.SaveChangesAsync();
+                return result;
+            }
+        }
+    }
+}
+```
+
+### 2. 仓储测试
+
+```csharp
+// BilliardTableRepository_Tests.cs
+using Microsoft.EntityFrameworkCore;
+using Shouldly;
+using Xunit;
+
+namespace Zss.BilliardHall.EntityFrameworkCore.Tests
+{
+    public class BilliardTableRepository_Tests : BilliardHallEntityFrameworkCoreTestBase
+    {
+        private readonly IBilliardTableRepository _billiardTableRepository;
+
+        public BilliardTableRepository_Tests()
+        {
+            _billiardTableRepository = GetRequiredService<IBilliardTableRepository>();
+        }
+
+        [Fact]
+        public async Task Should_Get_Available_Tables()
+        {
+            // Arrange
+            var hall = await CreateTestBilliardHallAsync();
+            
+            await CreateTestBilliardTableAsync(hall.Id, 1, status: BilliardTableStatus.Available);
+            await CreateTestBilliardTableAsync(hall.Id, 2, status: BilliardTableStatus.Occupied);
+            await CreateTestBilliardTableAsync(hall.Id, 3, status: BilliardTableStatus.Available);
+
+            // Act
+            var availableTables = await _billiardTableRepository.GetAvailableTablesAsync();
+
+            // Assert
+            availableTables.Count.ShouldBe(2);
+            availableTables.All(t => t.Status == BilliardTableStatus.Available).ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task Should_Get_Tables_By_Type()
+        {
+            // Arrange
+            var hall = await CreateTestBilliardHallAsync();
+            
+            await CreateTestBilliardTableAsync(hall.Id, 1, BilliardTableType.ChineseEightBall);
+            await CreateTestBilliardTableAsync(hall.Id, 2, BilliardTableType.AmericanNineBall);
+            await CreateTestBilliardTableAsync(hall.Id, 3, BilliardTableType.ChineseEightBall);
+
+            // Act
+            var chineseTables = await _billiardTableRepository.GetAvailableTablesAsync(
+                type: BilliardTableType.ChineseEightBall);
+
+            // Assert
+            chineseTables.Count.ShouldBe(2);
+            chineseTables.All(t => t.Type == BilliardTableType.ChineseEightBall).ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task Should_Get_Status_Statistics()
+        {
+            // Arrange
+            var hall = await CreateTestBilliardHallAsync();
+            
+            await CreateTestBilliardTableAsync(hall.Id, 1, status: BilliardTableStatus.Available);
+            await CreateTestBilliardTableAsync(hall.Id, 2, status: BilliardTableStatus.Available);
+            await CreateTestBilliardTableAsync(hall.Id, 3, status: BilliardTableStatus.Occupied);
+            await CreateTestBilliardTableAsync(hall.Id, 4, status: BilliardTableStatus.Maintenance);
+
+            // Act
+            var statistics = await _billiardTableRepository.GetStatusStatisticsAsync(hall.Id);
+
+            // Assert
+            statistics[BilliardTableStatus.Available].ShouldBe(2);
+            statistics[BilliardTableStatus.Occupied].ShouldBe(1);
+            statistics[BilliardTableStatus.Maintenance].ShouldBe(1);
+        }
+
+        [Fact]
+        public async Task Should_Check_Number_Uniqueness()
+        {
+            // Arrange
+            var hall = await CreateTestBilliardHallAsync();
+            var existingTable = await CreateTestBilliardTableAsync(hall.Id, 1);
+
+            // Act & Assert
+            var isUnique1 = await _billiardTableRepository.IsNumberUniqueAsync(1, hall.Id);
+            isUnique1.ShouldBeFalse(); // 已存在
+
+            var isUnique2 = await _billiardTableRepository.IsNumberUniqueAsync(2, hall.Id);
+            isUnique2.ShouldBeTrue(); // 不存在
+
+            var isUnique3 = await _billiardTableRepository.IsNumberUniqueAsync(1, hall.Id, existingTable.Id);
+            isUnique3.ShouldBeTrue(); // 排除自己
+        }
+
+        [Fact]
+        public async Task Should_Include_Related_Data()
+        {
+            // Arrange
+            var hall = await CreateTestBilliardHallAsync();
+            var table = await CreateTestBilliardTableAsync(hall.Id, 1);
+
+            // Act
+            var tablesWithHall = await UsingDbContextAsync(async context =>
+            {
+                return await context.BilliardTables
+                    .Include(t => t.BilliardHall)
+                    .Where(t => t.Id == table.Id)
+                    .ToListAsync();
             });
 
-        _client = _factory.CreateClient();
-    }
-
-    [TestCleanup]
-    public void Cleanup()
-    {
-        _client.Dispose();
-        _factory.Dispose();
-    }
-
-    [TestMethod]
-    public async Task GetTables_ValidRequest_ReturnsSuccess()
-    {
-        // Arrange
-        await SeedTestData();
-
-        // Act
-        var response = await _client.GetAsync("/api/v1/billiard-tables?page=1&pageSize=10");
-
-        // Assert
-        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-
-        var content = await response.Content.ReadAsStringAsync();
-        var result = JsonSerializer.Deserialize<ApiResponse<PagedResult<BilliardTableListDto>>>(content);
-
-        Assert.IsTrue(result.Success);
-        Assert.IsNotNull(result.Data);
-        Assert.IsTrue(result.Data.Items.Count > 0);
-    }
-
-    [TestMethod]
-    public async Task CreateTable_ValidInput_ReturnsCreated()
-    {
-        // Arrange
-        var hallId = await CreateTestHall();
-        var dto = new CreateBilliardTableDto
-        {
-            Number = 10,
-            Type = TableType.Chinese8Ball,
-            HourlyRate = 35.00m,
-            LocationX = 10.5f,
-            LocationY = 5.2f,
-            Floor = 1,
-            Zone = "A",
-            HallId = hallId
-        };
-
-        var json = JsonSerializer.Serialize(dto);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        // Act
-        var response = await _client.PostAsync("/api/v1/billiard-tables", content);
-
-        // Assert
-        Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
-
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var result = JsonSerializer.Deserialize<ApiResponse<BilliardTableDto>>(responseContent);
-
-        Assert.IsTrue(result.Success);
-        Assert.AreEqual(10, result.Data.Number);
-    }
-
-    [TestMethod]
-    public async Task CreateTable_InvalidInput_ReturnsBadRequest()
-    {
-        // Arrange
-        var dto = new CreateBilliardTableDto
-        {
-            Number = -1, // 无效编号
-            Type = TableType.Chinese8Ball,
-            HourlyRate = 35.00m,
-            HallId = Guid.NewGuid()
-        };
-
-        var json = JsonSerializer.Serialize(dto);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        // Act
-        var response = await _client.PostAsync("/api/v1/billiard-tables", content);
-
-        // Assert
-        Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-    }
-
-    private async Task SeedTestData()
-    {
-        using var scope = _factory.Services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<BilliardHallDbContext>();
-
-        var hallId = Guid.NewGuid();
-        var hall = new BilliardHall
-        {
-            Id = hallId,
-            Name = "测试台球厅",
-            Address = new Address("测试街道", "测试城市", "测试省份", "100000"),
-            OperatingHours = new OperatingHours(),
-            Status = HallStatus.Active
-        };
-
-        var tables = new[]
-        {
-            new BilliardTable(1, TableType.Chinese8Ball, new Money(35, "CNY"), new TableLocation(1, 1, 1, "A"), hallId),
-            new BilliardTable(2, TableType.American9Ball, new Money(40, "CNY"), new TableLocation(2, 1, 1, "A"), hallId)
-        };
-
-        context.BilliardHalls.Add(hall);
-        context.BilliardTables.AddRange(tables);
-        await context.SaveChangesAsync();
-    }
-
-    private async Task<Guid> CreateTestHall()
-    {
-        using var scope = _factory.Services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<BilliardHallDbContext>();
-
-        var hall = new BilliardHall
-        {
-            Id = Guid.NewGuid(),
-            Name = "测试台球厅",
-            Address = new Address("测试街道", "测试城市", "测试省份", "100000"),
-            OperatingHours = new OperatingHours(),
-            Status = HallStatus.Active
-        };
-
-        context.BilliardHalls.Add(hall);
-        await context.SaveChangesAsync();
-        return hall.Id;
+            // Assert
+            var tableWithHall = tablesWithHall.First();
+            tableWithHall.BilliardHall.ShouldNotBeNull();
+            tableWithHall.BilliardHall.Name.ShouldNotBeNullOrEmpty();
+        }
     }
 }
 ```
 
-## 端到端测试模式 (E2E Test Patterns)
+## 多租户测试模式
 
-### 1. 用户场景测试
+### 1. 租户隔离测试
 
 ```csharp
-[TestClass]
-public class ReservationE2ETests
+// MultiTenant_Tests.cs
+using Shouldly;
+using Volo.Abp.MultiTenancy;
+using Xunit;
+
+namespace Zss.BilliardHall.Application.Tests
 {
-    private IWebDriver _driver;
-    private WebApplicationFactory<Program> _factory;
-
-    [TestInitialize]
-    public void Setup()
+    public class MultiTenant_Tests : BilliardHallApplicationTestBase
     {
-        _factory = new WebApplicationFactory<Program>();
-        
-        var options = new ChromeOptions();
-        options.AddArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage");
-        _driver = new ChromeDriver(options);
-    }
+        [Fact]
+        public async Task Should_Isolate_Data_By_Tenant()
+        {
+            // Arrange
+            var tenant1Id = Guid.NewGuid();
+            var tenant2Id = Guid.NewGuid();
 
-    [TestCleanup]
-    public void Cleanup()
-    {
-        _driver.Quit();
-        _factory.Dispose();
-    }
+            // 租户1的数据
+            SetCurrentTenant(tenant1Id);
+            var hall1 = await CreateTestBilliardHallAsync("租户1台球厅");
+            var table1 = await CreateTestBilliardTableAsync(hall1.Id, 1);
 
-    [TestMethod]
-    public async Task CompleteReservationFlow_ValidUser_Success()
-    {
-        // Arrange
-        var baseUrl = _factory.GetServerAddress();
-        
-        // Act & Assert
-        // 1. 用户登录
-        _driver.Navigate().GoToUrl($"{baseUrl}/login");
-        var usernameField = _driver.FindElement(By.Id("username"));
-        var passwordField = _driver.FindElement(By.Id("password"));
-        var loginButton = _driver.FindElement(By.Id("login-button"));
+            // 租户2的数据
+            SetCurrentTenant(tenant2Id);
+            var hall2 = await CreateTestBilliardHallAsync("租户2台球厅");
+            var table2 = await CreateTestBilliardTableAsync(hall2.Id, 1);
 
-        usernameField.SendKeys("testuser@example.com");
-        passwordField.SendKeys("TestPassword123");
-        loginButton.Click();
+            // Act & Assert - 租户1只能看到自己的数据
+            SetCurrentTenant(tenant1Id);
+            var tenant1Tables = await BilliardTableAppService.GetListAsync(new GetBilliardTablesInput());
+            tenant1Tables.TotalCount.ShouldBe(1);
+            tenant1Tables.Items.First().Id.ShouldBe(table1.Id);
 
-        // 2. 选择台球桌
-        _driver.Navigate().GoToUrl($"{baseUrl}/tables");
-        var availableTable = _driver.FindElement(By.CssSelector("[data-status='Available']:first-child"));
-        availableTable.Click();
+            // Act & Assert - 租户2只能看到自己的数据
+            SetCurrentTenant(tenant2Id);
+            var tenant2Tables = await BilliardTableAppService.GetListAsync(new GetBilliardTablesInput());
+            tenant2Tables.TotalCount.ShouldBe(1);
+            tenant2Tables.Items.First().Id.ShouldBe(table2.Id);
+        }
 
-        // 3. 创建预约
-        var reserveButton = _driver.FindElement(By.Id("reserve-button"));
-        reserveButton.Click();
+        [Fact]
+        public async Task Should_Not_Access_Other_Tenant_Data()
+        {
+            // Arrange
+            var tenant1Id = Guid.NewGuid();
+            var tenant2Id = Guid.NewGuid();
 
-        var startTimeField = _driver.FindElement(By.Id("start-time"));
-        var durationField = _driver.FindElement(By.Id("duration"));
-        var confirmButton = _driver.FindElement(By.Id("confirm-reservation"));
+            SetCurrentTenant(tenant1Id);
+            var table1 = await CreateTestBilliardTableAsync();
 
-        startTimeField.SendKeys(DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm"));
-        durationField.SendKeys("120"); // 2小时
-        confirmButton.Click();
+            // Act & Assert - 租户2不能访问租户1的数据
+            SetCurrentTenant(tenant2Id);
+            await Should.ThrowAsync<EntityNotFoundException>(async () =>
+            {
+                await BilliardTableAppService.GetAsync(table1.Id);
+            });
+        }
 
-        // 4. 验证预约成功
-        var successMessage = _driver.FindElement(By.CssSelector(".success-message"));
-        Assert.IsTrue(successMessage.Displayed);
-        Assert.IsTrue(successMessage.Text.Contains("预约成功"));
+        [Fact]
+        public async Task Should_Allow_Host_Access_All_Tenant_Data()
+        {
+            // Arrange
+            var tenant1Id = Guid.NewGuid();
+            
+            SetCurrentTenant(tenant1Id);
+            var table1 = await CreateTestBilliardTableAsync();
 
-        // 5. 验证预约出现在用户预约列表
-        _driver.Navigate().GoToUrl($"{baseUrl}/my-reservations");
-        var reservationItems = _driver.FindElements(By.CssSelector(".reservation-item"));
-        Assert.IsTrue(reservationItems.Count > 0);
+            // Act - Host 用户 (null tenant)
+            SetCurrentTenant(null);
+            
+            // 使用 DataFilter 访问所有租户数据
+            using (DataFilter.Disable<IMultiTenant>())
+            {
+                var allTables = await BilliardTableAppService.GetListAsync(new GetBilliardTablesInput());
+                
+                // Assert
+                allTables.TotalCount.ShouldBeGreaterThan(0);
+            }
+        }
     }
 }
 ```
 
-## 性能测试模式 (Performance Test Patterns)
-
-### 1. 负载测试
+### 2. 权限测试
 
 ```csharp
-[TestClass]
-public class BilliardTableServicePerformanceTests
+// Permission_Tests.cs
+using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
+using Volo.Abp.Authorization;
+using Xunit;
+
+namespace Zss.BilliardHall.Application.Tests
 {
-    private BilliardTableService _service;
-    private Mock<IBilliardTableRepository> _mockRepository;
-
-    [TestInitialize]
-    public void Setup()
+    public class Permission_Tests : BilliardHallApplicationTestBase
     {
-        _mockRepository = new Mock<IBilliardTableRepository>();
-        // 设置其他必要的 mocks...
-        _service = new BilliardTableService(/*...*/);
-    }
+        [Fact]
+        public async Task Should_Not_Allow_Create_Without_Permission()
+        {
+            // Arrange - 移除创建权限
+            var permissionChecker = GetRequiredService<IPermissionChecker>();
+            
+            // 模拟没有权限的用户
+            SetCurrentUser(Guid.NewGuid(), "no-permission-user");
 
-    [TestMethod]
-    public async Task GetTablesAsync_HighVolume_CompletesWithinTimeout()
-    {
-        // Arrange
-        var query = new BilliardTableQuery { Page = 1, PageSize = 100 };
-        var tables = GenerateTestTables(100);
-        
-        _mockRepository.Setup(r => r.GetPagedAsync(It.IsAny<BilliardTableQuery>()))
-                      .ReturnsAsync(new PagedResult<BilliardTable> { Items = tables });
+            var input = new CreateBilliardTableDto
+            {
+                Number = 1,
+                Type = BilliardTableType.ChineseEightBall,
+                HourlyRate = 50.0m
+            };
 
-        var stopwatch = Stopwatch.StartNew();
-        const int iterations = 1000;
+            // Act & Assert
+            await Should.ThrowAsync<AbpAuthorizationException>(async () =>
+            {
+                await BilliardTableAppService.CreateAsync(input);
+            });
+        }
 
-        // Act
-        var tasks = Enumerable.Range(0, iterations)
-            .Select(_ => _service.GetTablesAsync(query))
-            .ToArray();
+        [Fact]
+        public async Task Should_Allow_Read_With_Default_Permission()
+        {
+            // Arrange
+            var table = await CreateTestBilliardTableAsync();
+            SetCurrentUser(Guid.NewGuid(), "read-only-user");
 
-        await Task.WhenAll(tasks);
-        stopwatch.Stop();
+            // Act - 读取权限通常是默认允许的
+            var result = await BilliardTableAppService.GetAsync(table.Id);
 
-        // Assert
-        Assert.IsTrue(stopwatch.ElapsedMilliseconds < 5000, 
-                     $"操作耗时 {stopwatch.ElapsedMilliseconds}ms，超过预期的 5000ms");
-        
-        var averageTime = stopwatch.ElapsedMilliseconds / (double)iterations;
-        Assert.IsTrue(averageTime < 5, 
-                     $"平均响应时间 {averageTime}ms，超过预期的 5ms");
-    }
+            // Assert
+            result.ShouldNotBeNull();
+        }
 
-    [TestMethod]
-    public async Task CreateTableAsync_ConcurrentRequests_HandlesCorrectly()
-    {
-        // Arrange
-        const int concurrentRequests = 50;
-        var dtos = Enumerable.Range(1, concurrentRequests)
-            .Select(i => new CreateBilliardTableDto 
-            { 
-                Number = i,
-                Type = TableType.Chinese8Ball,
-                HallId = Guid.NewGuid(),
-                HourlyRate = 35.00m
-            })
-            .ToList();
+        [Fact]
+        public async Task Should_Not_Allow_Status_Change_Without_ManageStatus_Permission()
+        {
+            // Arrange
+            var table = await CreateTestBilliardTableAsync();
+            SetCurrentUser(Guid.NewGuid(), "basic-user");
 
-        _mockRepository.Setup(r => r.CreateAsync(It.IsAny<BilliardTable>()))
-                      .Returns((BilliardTable table) => Task.FromResult(table));
+            var input = new ChangeBilliardTableStatusDto
+            {
+                Status = BilliardTableStatus.Maintenance,
+                Reason = "测试"
+            };
 
-        // Act
-        var tasks = dtos.Select(dto => _service.CreateTableAsync(dto)).ToArray();
-        var results = await Task.WhenAll(tasks);
-
-        // Assert
-        Assert.AreEqual(concurrentRequests, results.Length);
-        Assert.IsTrue(results.All(r => r != null));
-    }
-
-    private List<BilliardTable> GenerateTestTables(int count)
-    {
-        var hallId = Guid.NewGuid();
-        return Enumerable.Range(1, count)
-            .Select(i => new BilliardTable(i, TableType.Chinese8Ball, 
-                                          new Money(35, "CNY"),
-                                          new TableLocation(i, 1, 1, "A"),
-                                          hallId))
-            .ToList();
+            // Act & Assert
+            await Should.ThrowAsync<AbpAuthorizationException>(async () =>
+            {
+                await BilliardTableAppService.ChangeStatusAsync(table.Id, input);
+            });
+        }
     }
 }
 ```
 
-### 2. 内存使用测试
+## 集成测试模式
+
+### 1. HTTP API 集成测试
 
 ```csharp
-[TestMethod]
-public async Task GetTablesAsync_LargeDataSet_DoesNotExceedMemoryLimit()
+// BilliardTableController_Integration_Tests.cs
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using Shouldly;
+using Xunit;
+
+namespace Zss.BilliardHall.HttpApi.Tests
 {
-    // Arrange
-    const int largeDataSetSize = 10000;
-    var initialMemory = GC.GetTotalMemory(true);
-    
-    var query = new BilliardTableQuery { Page = 1, PageSize = largeDataSetSize };
-    var tables = GenerateTestTables(largeDataSetSize);
-    
-    _mockRepository.Setup(r => r.GetPagedAsync(query))
-                  .ReturnsAsync(new PagedResult<BilliardTable> { Items = tables });
+    public class BilliardTableController_Integration_Tests : IClassFixture<WebApplicationFactory<Program>>
+    {
+        private readonly WebApplicationFactory<Program> _factory;
+        private readonly HttpClient _client;
 
-    // Act
-    var result = await _service.GetTablesAsync(query);
+        public BilliardTableController_Integration_Tests(WebApplicationFactory<Program> factory)
+        {
+            _factory = factory;
+            _client = _factory.CreateClient();
+        }
 
-    // Assert
-    var finalMemory = GC.GetTotalMemory(true);
-    var memoryIncrease = finalMemory - initialMemory;
-    var memoryLimitMB = 50; // 50MB 限制
-    
-    Assert.IsTrue(memoryIncrease < memoryLimitMB * 1024 * 1024,
-                 $"内存增长 {memoryIncrease / 1024 / 1024}MB，超过限制 {memoryLimitMB}MB");
+        [Fact]
+        public async Task Get_BilliardTables_Should_Return_Success()
+        {
+            // Act
+            var response = await _client.GetAsync("/api/app/billiard-table");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            
+            var content = await response.Content.ReadAsStringAsync();
+            content.ShouldNotBeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task Post_BilliardTable_Should_Create_Successfully()
+        {
+            // Arrange
+            var createDto = new CreateBilliardTableDto
+            {
+                Number = 99,
+                Type = BilliardTableType.ChineseEightBall,
+                HourlyRate = 50.0m,
+                LocationX = 100.0f,
+                LocationY = 200.0f
+            };
+
+            var json = JsonSerializer.Serialize(createDto);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await _client.PostAsync("/api/app/billiard-table", content);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<BilliardTableDto>(responseContent);
+            
+            result.ShouldNotBeNull();
+            result.Number.ShouldBe(createDto.Number);
+        }
+    }
 }
 ```
 
-## 测试工具和辅助类 (Test Utilities)
+### 2. 端到端测试
+
+```csharp
+// End_To_End_Tests.cs
+using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
+using Xunit;
+
+namespace Zss.BilliardHall.Application.Tests
+{
+    public class End_To_End_Tests : BilliardHallApplicationTestBase
+    {
+        [Fact]
+        public async Task Complete_Table_Lifecycle_Should_Work()
+        {
+            // 1. 创建台球桌
+            var createInput = new CreateBilliardTableDto
+            {
+                Number = 1,
+                Type = BilliardTableType.ChineseEightBall,
+                HourlyRate = 50.0m,
+                LocationX = 100.0f,
+                LocationY = 200.0f
+            };
+
+            var createdTable = await BilliardTableAppService.CreateAsync(createInput);
+            createdTable.ShouldNotBeNull();
+            createdTable.Status.ShouldBe(BilliardTableStatus.Available);
+
+            // 2. 获取台球桌列表
+            var listResult = await BilliardTableAppService.GetListAsync(new GetBilliardTablesInput());
+            listResult.Items.ShouldContain(t => t.Id == createdTable.Id);
+
+            // 3. 更新台球桌
+            var updateInput = new UpdateBilliardTableDto
+            {
+                HourlyRate = 60.0m,
+                LocationX = 150.0f
+            };
+
+            var updatedTable = await BilliardTableAppService.UpdateAsync(createdTable.Id, updateInput);
+            updatedTable.HourlyRate.ShouldBe(60.0m);
+            updatedTable.LocationX.ShouldBe(150.0f);
+
+            // 4. 更改状态
+            var statusInput = new ChangeBilliardTableStatusDto
+            {
+                Status = BilliardTableStatus.Maintenance,
+                Reason = "定期维护"
+            };
+
+            var statusUpdatedTable = await BilliardTableAppService.ChangeStatusAsync(createdTable.Id, statusInput);
+            statusUpdatedTable.Status.ShouldBe(BilliardTableStatus.Maintenance);
+
+            // 5. 删除台球桌
+            await BilliardTableAppService.DeleteAsync(createdTable.Id);
+
+            // 6. 验证删除
+            await Should.ThrowAsync<EntityNotFoundException>(async () =>
+            {
+                await BilliardTableAppService.GetAsync(createdTable.Id);
+            });
+        }
+
+        [Fact]
+        public async Task Reservation_Workflow_Should_Work()
+        {
+            // 1. 准备台球桌
+            var table = await CreateTestBilliardTableAsync();
+
+            // 2. 创建预约
+            var reservation = new CreateReservationDto
+            {
+                BilliardTableId = table.Id,
+                StartTime = DateTime.UtcNow.AddHours(1),
+                EndTime = DateTime.UtcNow.AddHours(3),
+                CustomerNotes = "生日聚会"
+            };
+
+            var createdReservation = await ReservationAppService.CreateAsync(reservation);
+
+            // 3. 验证台球桌状态变更
+            var reservedTable = await BilliardTableAppService.GetAsync(table.Id);
+            reservedTable.Status.ShouldBe(BilliardTableStatus.Reserved);
+
+            // 4. 开始使用 (签到)
+            await ReservationAppService.CheckInAsync(createdReservation.Id);
+
+            // 5. 验证状态变更
+            var occupiedTable = await BilliardTableAppService.GetAsync(table.Id);
+            occupiedTable.Status.ShouldBe(BilliardTableStatus.Occupied);
+
+            // 6. 结束使用 (签出)
+            await ReservationAppService.CheckOutAsync(createdReservation.Id);
+
+            // 7. 验证台球桌恢复可用
+            var availableTable = await BilliardTableAppService.GetAsync(table.Id);
+            availableTable.Status.ShouldBe(BilliardTableStatus.Available);
+        }
+    }
+}
+```
+
+## 测试工具和辅助方法
 
 ### 1. 测试数据构建器
 
 ```csharp
-public class BilliardTableTestBuilder
+// TestDataBuilder.cs
+namespace Zss.BilliardHall.TestBase
 {
-    private int _number = 1;
-    private TableType _type = TableType.Chinese8Ball;
-    private TableStatus _status = TableStatus.Available;
-    private Money _hourlyRate = new Money(35, "CNY");
-    private TableLocation _location = new TableLocation(1, 1, 1, "A");
-    private Guid _hallId = Guid.NewGuid();
-
-    public BilliardTableTestBuilder WithNumber(int number)
+    public class BilliardTableTestDataBuilder
     {
-        _number = number;
-        return this;
-    }
+        private int _number = 1;
+        private BilliardTableType _type = BilliardTableType.ChineseEightBall;
+        private decimal _hourlyRate = 50.0m;
+        private float _locationX = 0.0f;
+        private float _locationY = 0.0f;
+        private BilliardTableStatus _status = BilliardTableStatus.Available;
 
-    public BilliardTableTestBuilder WithType(TableType type)
-    {
-        _type = type;
-        return this;
-    }
-
-    public BilliardTableTestBuilder WithStatus(TableStatus status)
-    {
-        _status = status;
-        return this;
-    }
-
-    public BilliardTableTestBuilder WithHourlyRate(decimal amount, string currency = "CNY")
-    {
-        _hourlyRate = new Money(amount, currency);
-        return this;
-    }
-
-    public BilliardTableTestBuilder WithLocation(float x, float y, int floor = 1, string zone = "A")
-    {
-        _location = new TableLocation(x, y, floor, zone);
-        return this;
-    }
-
-    public BilliardTableTestBuilder WithHallId(Guid hallId)
-    {
-        _hallId = hallId;
-        return this;
-    }
-
-    public BilliardTable Build()
-    {
-        var table = new BilliardTable(_number, _type, _hourlyRate, _location, _hallId);
-        if (_status != TableStatus.Available)
+        public BilliardTableTestDataBuilder WithNumber(int number)
         {
-            table.UpdateStatus(_status);
+            _number = number;
+            return this;
         }
-        return table;
+
+        public BilliardTableTestDataBuilder WithType(BilliardTableType type)
+        {
+            _type = type;
+            return this;
+        }
+
+        public BilliardTableTestDataBuilder WithHourlyRate(decimal rate)
+        {
+            _hourlyRate = rate;
+            return this;
+        }
+
+        public BilliardTableTestDataBuilder WithLocation(float x, float y)
+        {
+            _locationX = x;
+            _locationY = y;
+            return this;
+        }
+
+        public BilliardTableTestDataBuilder WithStatus(BilliardTableStatus status)
+        {
+            _status = status;
+            return this;
+        }
+
+        public BilliardTable Build(Guid? id = null, Guid? hallId = null)
+        {
+            var table = new BilliardTable(
+                id ?? Guid.NewGuid(),
+                hallId ?? Guid.NewGuid(),
+                _number,
+                _type,
+                _hourlyRate,
+                _locationX,
+                _locationY
+            );
+
+            if (_status != BilliardTableStatus.Available)
+            {
+                table.ChangeStatus(_status);
+            }
+
+            return table;
+        }
+
+        public CreateBilliardTableDto BuildCreateDto()
+        {
+            return new CreateBilliardTableDto
+            {
+                Number = _number,
+                Type = _type,
+                HourlyRate = _hourlyRate,
+                LocationX = _locationX,
+                LocationY = _locationY
+            };
+        }
     }
 
-    public static BilliardTableTestBuilder Create()
+    // 使用示例
+    public class SampleTest : BilliardHallDomainTestBase
     {
-        return new BilliardTableTestBuilder();
-    }
-}
+        [Fact]
+        public async Task Sample_Test_With_Builder()
+        {
+            // Arrange
+            var table = new BilliardTableTestDataBuilder()
+                .WithNumber(5)
+                .WithType(BilliardTableType.Snooker)
+                .WithHourlyRate(80.0m)
+                .WithLocation(100.0f, 200.0f)
+                .Build();
 
-// 使用示例
-[TestMethod]
-public void TestExample()
-{
-    var table = BilliardTableTestBuilder.Create()
-        .WithNumber(5)
-        .WithType(TableType.Snooker)
-        .WithHourlyRate(50)
-        .Build();
-        
-    // 测试逻辑...
+            // Act & Assert
+            table.Number.ShouldBe(5);
+            table.Type.ShouldBe(BilliardTableType.Snooker);
+        }
+    }
 }
 ```
 
 ### 2. 断言扩展
 
 ```csharp
-public static class AssertExtensions
+// TestExtensions.cs
+namespace Zss.BilliardHall.TestBase
 {
-    public static void ShouldBeValidBilliardTable(this BilliardTable table)
+    public static class BilliardTableAssertions
     {
-        Assert.IsNotNull(table);
-        Assert.AreNotEqual(Guid.Empty, table.Id);
-        Assert.IsTrue(table.Number > 0);
-        Assert.IsNotNull(table.HourlyRate);
-        Assert.IsTrue(table.HourlyRate.Amount > 0);
-    }
+        public static void ShouldBeValidBilliardTable(this BilliardTableDto table)
+        {
+            table.ShouldNotBeNull();
+            table.Id.ShouldNotBe(Guid.Empty);
+            table.Number.ShouldBeGreaterThan(0);
+            table.HourlyRate.ShouldBeGreaterThan(0);
+            table.CreationTime.ShouldBeLessThanOrEqualTo(DateTime.UtcNow);
+        }
 
-    public static void ShouldBeValidApiResponse<T>(this ApiResponse<T> response)
-    {
-        Assert.IsNotNull(response);
-        Assert.IsTrue(response.Success);
-        Assert.IsNotNull(response.Data);
-        Assert.IsTrue(response.Timestamp > DateTime.UtcNow.AddMinutes(-1));
-    }
+        public static void ShouldBeEquivalentTo(this BilliardTableDto actual, CreateBilliardTableDto expected)
+        {
+            actual.Number.ShouldBe(expected.Number);
+            actual.Type.ShouldBe(expected.Type);
+            actual.HourlyRate.ShouldBe(expected.HourlyRate);
+            actual.LocationX.ShouldBe(expected.LocationX);
+            actual.LocationY.ShouldBe(expected.LocationY);
+        }
 
-    public static void ShouldBeValidPagedResult<T>(this PagedResult<T> result, int expectedMinCount = 0)
-    {
-        Assert.IsNotNull(result);
-        Assert.IsNotNull(result.Items);
-        Assert.IsTrue(result.Items.Count >= expectedMinCount);
-        Assert.IsNotNull(result.Pagination);
-        Assert.IsTrue(result.Pagination.TotalItems >= result.Items.Count);
+        public static void ShouldHaveValidAuditFields(this BilliardTableDto table)
+        {
+            table.CreationTime.ShouldBeLessThanOrEqualTo(DateTime.UtcNow);
+            
+            if (table.LastModificationTime.HasValue)
+            {
+                table.LastModificationTime.Value.ShouldBeLessThanOrEqualTo(DateTime.UtcNow);
+                table.LastModificationTime.Value.ShouldBeGreaterThanOrEqualTo(table.CreationTime);
+            }
+        }
     }
 }
 ```
 
-### 3. 测试配置管理
-
-```csharp
-public static class TestConfiguration
-{
-    public static IConfiguration GetConfiguration()
-    {
-        return new ConfigurationBuilder()
-            .AddJsonFile("appsettings.test.json", optional: true)
-            .AddEnvironmentVariables()
-            .Build();
-    }
-
-    public static DbContextOptions<BilliardHallDbContext> GetInMemoryDbOptions()
-    {
-        return new DbContextOptionsBuilder<BilliardHallDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-    }
-
-    public static DbContextOptions<BilliardHallDbContext> GetSqliteDbOptions()
-    {
-        var connectionString = $"DataSource=:memory:";
-        return new DbContextOptionsBuilder<BilliardHallDbContext>()
-            .UseSqlite(connectionString)
-            .Options;
-    }
-}
-```
-
-## 测试自动化 (Test Automation)
-
-### 1. 测试运行脚本
-
-```bash
-#!/bin/bash
-# scripts/run-all-tests.sh
-
-echo "🧪 运行完整测试套件..."
-
-# 环境变量
-export ASPNETCORE_ENVIRONMENT=Test
-
-# 单元测试
-echo "📝 运行单元测试..."
-dotnet test --filter "Category=Unit" \
-    --collect:"XPlat Code Coverage" \
-    --results-directory TestResults \
-    --logger "trx;LogFileName=unit-tests.trx" \
-    || exit 1
-
-# 集成测试
-echo "🔗 运行集成测试..."
-dotnet test --filter "Category=Integration" \
-    --collect:"XPlat Code Coverage" \
-    --results-directory TestResults \
-    --logger "trx;LogFileName=integration-tests.trx" \
-    || exit 1
-
-# 性能测试
-echo "⚡ 运行性能测试..."
-dotnet test --filter "Category=Performance" \
-    --logger "trx;LogFileName=performance-tests.trx" \
-    || exit 1
-
-# 生成覆盖率报告
-echo "📊 生成覆盖率报告..."
-reportgenerator \
-    -reports:"TestResults/**/coverage.cobertura.xml" \
-    -targetdir:"TestResults/Coverage" \
-    -reporttypes:"Html;Cobertura;SonarQube"
-
-# 检查覆盖率阈值
-coverage_threshold=80
-coverage=$(grep -oP 'line-rate="\K[^"]*' TestResults/Coverage/Cobertura.xml | head -1)
-coverage_percent=$(echo "$coverage * 100" | bc | cut -d. -f1)
-
-if [ $coverage_percent -lt $coverage_threshold ]; then
-    echo "❌ 代码覆盖率 $coverage_percent% 低于阈值 $coverage_threshold%"
-    exit 1
-fi
-
-echo "✅ 所有测试通过，覆盖率: $coverage_percent%"
-```
-
-### 2. 持续集成配置
-
-```yaml
-# .github/workflows/test.yml
-name: Test Suite
-
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    
-    services:
-      sqlserver:
-        image: mcr.microsoft.com/mssql/server:2022-latest
-        env:
-          SA_PASSWORD: TestPassword123!
-          ACCEPT_EULA: Y
-        options: >-
-          --health-cmd "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P TestPassword123! -Q 'SELECT 1'"
-          --health-interval 10s
-          --health-timeout 3s
-          --health-retries 3
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '8.0.x'
-        
-    - name: Restore dependencies
-      run: dotnet restore
-      
-    - name: Build
-      run: dotnet build --no-restore
-      
-    - name: Run Unit Tests
-      run: dotnet test --no-build --filter "Category=Unit" --collect:"XPlat Code Coverage"
-      
-    - name: Run Integration Tests
-      run: dotnet test --no-build --filter "Category=Integration" --collect:"XPlat Code Coverage"
-      env:
-        ConnectionStrings__DefaultConnection: "Server=localhost,1433;Database=BilliardHall_Test;User Id=sa;Password=TestPassword123!;TrustServerCertificate=true"
-        
-    - name: Generate Coverage Report
-      run: |
-        dotnet tool install -g dotnet-reportgenerator-globaltool
-        reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage" -reporttypes:"Html;Cobertura"
-        
-    - name: Upload Coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        files: ./coverage/Cobertura.xml
-```
-
----
-
-> 以上测试模式和实践应在所有测试开发中严格遵循，确保代码质量和系统稳定性。
+这些测试模式确保了完整覆盖 ABP 框架的各个层面，从领域层的业务规则到应用层的服务集成，再到数据访问层的持久化逻辑，为台球厅管理系统提供了可靠的质量保证。

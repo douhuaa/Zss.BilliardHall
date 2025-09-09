@@ -1,717 +1,844 @@
-# 数据库设计模式 (Database Design Patterns)
+# ABP Entity Framework Core + MySQL 数据库设计规范
 
-## 表结构设计原则 (Table Structure Design Principles)
+## 总体原则 (General Principles)
 
-### 1. 命名约定 (Naming Conventions)
+### 1. ABP 框架数据访问模式
+- 使用 ABP Entity Framework Core 集成
+- 遵循 ABP 实体基类和约定
+- 实现多租户数据隔离
+- 支持软删除和审计字段
+- 使用 ABP 仓储模式
 
-```sql
--- 表名：PascalCase，复数形式
-CREATE TABLE BilliardTables (...)
-CREATE TABLE Reservations (...)
-CREATE TABLE Customers (...)
+### 2. MySQL 数据库优化
+- 针对 MySQL 的字符集和排序规则
+- 合理使用 MySQL 数据类型
+- 优化索引策略
+- 考虑 MySQL 的存储引擎特性
+- 实现数据库连接池优化
 
--- 字段名：PascalCase
-CREATE TABLE BilliardTables (
-    Id UNIQUEIDENTIFIER,
-    TableNumber INT,
-    HourlyRate DECIMAL(10,2),
-    CreatedAt DATETIME2
-);
+### 3. 领域驱动设计原则
+- 聚合根和实体的正确建模
+- 值对象的恰当使用
+- 领域事件的集成
+- 仓储接口的抽象
+- 数据一致性保证
 
--- 索引命名：IX_表名_字段名
-CREATE INDEX IX_BilliardTables_Status ON BilliardTables(Status);
-CREATE INDEX IX_BilliardTables_HallId_Status ON BilliardTables(HallId, Status);
+## ABP 实体设计模式
 
--- 外键命名：FK_表名_引用表名
-ALTER TABLE BilliardTables ADD CONSTRAINT FK_BilliardTables_BilliardHalls 
-    FOREIGN KEY (HallId) REFERENCES BilliardHalls(Id);
+### 1. 聚合根实体
 
--- 唯一约束：UK_表名_字段名
-ALTER TABLE BilliardTables ADD CONSTRAINT UK_BilliardTables_HallId_Number 
-    UNIQUE (HallId, TableNumber);
-```
+```csharp
+// BilliardHall.cs - 聚合根实体
+using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
-### 2. 标准字段模式 (Standard Field Patterns)
-
-```sql
--- 基础实体表模板
-CREATE TABLE {TableName} (
-    -- 主键 (必须)
-    Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID() PRIMARY KEY,
-    
-    -- 审计字段 (必须)
-    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
-    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
-    CreatedBy NVARCHAR(50) NULL,
-    UpdatedBy NVARCHAR(50) NULL,
-    
-    -- 软删除支持 (可选)
-    IsDeleted BIT NOT NULL DEFAULT 0,
-    DeletedAt DATETIME2 NULL,
-    DeletedBy NVARCHAR(50) NULL,
-    
-    -- 版本控制 (并发控制)
-    Version ROWVERSION NOT NULL,
-    
-    -- 业务字段
-    -- ...
-    
-    -- 索引
-    INDEX IX_{TableName}_CreatedAt (CreatedAt),
-    INDEX IX_{TableName}_UpdatedAt (UpdatedAt),
-    INDEX IX_{TableName}_IsDeleted (IsDeleted)
-);
-```
-
-### 3. 数据类型选择指南
-
-```sql
--- 字符串类型
-Name NVARCHAR(100) NOT NULL,           -- 短文本，有长度限制
-Description NVARCHAR(MAX) NULL,        -- 长文本，无长度限制
-Code NVARCHAR(20) NOT NULL,            -- 代码/编号，固定格式
-
--- 数字类型
-Amount DECIMAL(18,2) NOT NULL,         -- 金额，精确计算
-Percentage DECIMAL(5,4) NULL,          -- 百分比 (0.0000-9.9999)
-Count INT NOT NULL DEFAULT 0,          -- 计数
-Id UNIQUEIDENTIFIER NOT NULL,          -- 唯一标识符
-
--- 日期时间类型
-CreatedAt DATETIME2(7) NOT NULL,       -- 精确到 100 纳秒
-BirthDate DATE NULL,                   -- 只需要日期
-StartTime TIME(0) NULL,                -- 只需要时间
-
--- 布尔类型
-IsActive BIT NOT NULL DEFAULT 1,       -- 布尔值
-Status TINYINT NOT NULL,               -- 状态枚举 (0-255)
-
--- 二进制类型
-Photo VARBINARY(MAX) NULL,             -- 文件内容
-Thumbnail VARBINARY(8000) NULL,        -- 小文件
-```
-
-## 核心业务表设计 (Core Business Table Design)
-
-### 1. 台球厅表 (BilliardHalls)
-
-```sql
-CREATE TABLE BilliardHalls (
-    Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID() PRIMARY KEY,
-    
-    -- 基本信息
-    Name NVARCHAR(100) NOT NULL,
-    Description NVARCHAR(500) NULL,
-    Phone NVARCHAR(20) NULL,
-    Email NVARCHAR(100) NULL,
-    
-    -- 地址信息
-    Street NVARCHAR(200) NOT NULL,
-    City NVARCHAR(50) NOT NULL,
-    Province NVARCHAR(50) NOT NULL,
-    PostalCode NVARCHAR(10) NULL,
-    Country NVARCHAR(50) NOT NULL DEFAULT 'China',
-    
-    -- 营业信息
-    Capacity INT NOT NULL DEFAULT 0,
-    Status TINYINT NOT NULL DEFAULT 1, -- 1: Active, 2: Inactive, 3: Maintenance
-    
-    -- 营业时间 (JSON 存储)
-    OperatingHours NVARCHAR(MAX) NULL
-        CONSTRAINT CK_BilliardHalls_OperatingHours CHECK (ISJSON(OperatingHours) = 1),
-    
-    -- 审计字段
-    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
-    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
-    CreatedBy NVARCHAR(50) NULL,
-    UpdatedBy NVARCHAR(50) NULL,
-    IsDeleted BIT NOT NULL DEFAULT 0,
-    Version ROWVERSION NOT NULL,
-    
-    -- 索引
-    INDEX IX_BilliardHalls_Status (Status) WHERE IsDeleted = 0,
-    INDEX IX_BilliardHalls_City (City) WHERE IsDeleted = 0,
-    INDEX IX_BilliardHalls_CreatedAt (CreatedAt),
-    
-    -- 约束
-    CONSTRAINT CK_BilliardHalls_Status CHECK (Status IN (1, 2, 3)),
-    CONSTRAINT CK_BilliardHalls_Capacity CHECK (Capacity >= 0)
-);
-```
-
-### 2. 台球桌表 (BilliardTables)
-
-```sql
-CREATE TABLE BilliardTables (
-    Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID() PRIMARY KEY,
-    
-    -- 关联信息
-    HallId UNIQUEIDENTIFIER NOT NULL,
-    
-    -- 基本信息
-    TableNumber INT NOT NULL,
-    Type TINYINT NOT NULL, -- 1: Chinese8Ball, 2: American9Ball, 3: Snooker, 4: Carom
-    Status TINYINT NOT NULL DEFAULT 1, -- 1: Available, 2: Occupied, 3: Reserved, 4: Maintenance, 5: OutOfOrder
-    
-    -- 价格信息
-    HourlyRateAmount DECIMAL(10,2) NOT NULL,
-    HourlyRateCurrency NVARCHAR(3) NOT NULL DEFAULT 'CNY',
-    
-    -- 位置信息
-    LocationX FLOAT NULL,
-    LocationY FLOAT NULL,
-    Floor TINYINT NOT NULL DEFAULT 1,
-    Zone NVARCHAR(20) NULL,
-    
-    -- 特性 (JSON 数组)
-    Features NVARCHAR(MAX) NULL
-        CONSTRAINT CK_BilliardTables_Features CHECK (ISJSON(Features) = 1),
-    
-    -- 审计字段
-    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
-    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
-    CreatedBy NVARCHAR(50) NULL,
-    UpdatedBy NVARCHAR(50) NULL,
-    IsDeleted BIT NOT NULL DEFAULT 0,
-    Version ROWVERSION NOT NULL,
-    
-    -- 外键
-    CONSTRAINT FK_BilliardTables_BilliardHalls 
-        FOREIGN KEY (HallId) REFERENCES BilliardHalls(Id),
-    
-    -- 唯一约束
-    CONSTRAINT UK_BilliardTables_HallId_TableNumber 
-        UNIQUE (HallId, TableNumber) WHERE IsDeleted = 0,
-    
-    -- 检查约束
-    CONSTRAINT CK_BilliardTables_Type CHECK (Type IN (1, 2, 3, 4)),
-    CONSTRAINT CK_BilliardTables_Status CHECK (Status IN (1, 2, 3, 4, 5)),
-    CONSTRAINT CK_BilliardTables_TableNumber CHECK (TableNumber > 0),
-    CONSTRAINT CK_BilliardTables_HourlyRateAmount CHECK (HourlyRateAmount > 0),
-    CONSTRAINT CK_BilliardTables_Floor CHECK (Floor > 0),
-    
-    -- 索引
-    INDEX IX_BilliardTables_HallId (HallId) WHERE IsDeleted = 0,
-    INDEX IX_BilliardTables_Status (Status) WHERE IsDeleted = 0,
-    INDEX IX_BilliardTables_Type (Type) WHERE IsDeleted = 0,
-    INDEX IX_BilliardTables_HallId_Status (HallId, Status) WHERE IsDeleted = 0,
-    INDEX IX_BilliardTables_Location (LocationX, LocationY, Floor) WHERE IsDeleted = 0
-);
-```
-
-### 3. 客户表 (Customers)
-
-```sql
-CREATE TABLE Customers (
-    Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID() PRIMARY KEY,
-    
-    -- 会员信息
-    MembershipNumber NVARCHAR(20) NOT NULL,
-    MembershipLevel TINYINT NOT NULL DEFAULT 1, -- 1: Bronze, 2: Silver, 3: Gold, 4: Platinum, 5: Diamond
-    
-    -- 基本信息
-    Name NVARCHAR(50) NOT NULL,
-    Phone NVARCHAR(20) NOT NULL,
-    Email NVARCHAR(100) NULL,
-    Gender TINYINT NULL, -- 1: Male, 2: Female, 3: Other
-    BirthDate DATE NULL,
-    
-    -- 地址信息
-    Street NVARCHAR(200) NULL,
-    City NVARCHAR(50) NULL,
-    Province NVARCHAR(50) NULL,
-    PostalCode NVARCHAR(10) NULL,
-    
-    -- 统计信息
-    TotalSpentAmount DECIMAL(18,2) NOT NULL DEFAULT 0,
-    TotalSpentCurrency NVARCHAR(3) NOT NULL DEFAULT 'CNY',
-    VisitCount INT NOT NULL DEFAULT 0,
-    LastVisitAt DATETIME2 NULL,
-    
-    -- 状态
-    Status TINYINT NOT NULL DEFAULT 1, -- 1: Active, 2: Inactive, 3: Suspended, 4: Blacklisted
-    
-    -- 备注
-    Notes NVARCHAR(MAX) NULL,
-    
-    -- 审计字段
-    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
-    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
-    CreatedBy NVARCHAR(50) NULL,
-    UpdatedBy NVARCHAR(50) NULL,
-    IsDeleted BIT NOT NULL DEFAULT 0,
-    Version ROWVERSION NOT NULL,
-    
-    -- 唯一约束
-    CONSTRAINT UK_Customers_MembershipNumber 
-        UNIQUE (MembershipNumber) WHERE IsDeleted = 0,
-    CONSTRAINT UK_Customers_Phone 
-        UNIQUE (Phone) WHERE IsDeleted = 0,
-    
-    -- 检查约束
-    CONSTRAINT CK_Customers_MembershipLevel CHECK (MembershipLevel IN (1, 2, 3, 4, 5)),
-    CONSTRAINT CK_Customers_Gender CHECK (Gender IN (1, 2, 3)),
-    CONSTRAINT CK_Customers_Status CHECK (Status IN (1, 2, 3, 4)),
-    CONSTRAINT CK_Customers_TotalSpentAmount CHECK (TotalSpentAmount >= 0),
-    CONSTRAINT CK_Customers_VisitCount CHECK (VisitCount >= 0),
-    
-    -- 索引
-    INDEX IX_Customers_MembershipNumber (MembershipNumber) WHERE IsDeleted = 0,
-    INDEX IX_Customers_Phone (Phone) WHERE IsDeleted = 0,
-    INDEX IX_Customers_Email (Email) WHERE IsDeleted = 0 AND Email IS NOT NULL,
-    INDEX IX_Customers_MembershipLevel (MembershipLevel) WHERE IsDeleted = 0,
-    INDEX IX_Customers_Status (Status) WHERE IsDeleted = 0,
-    INDEX IX_Customers_LastVisitAt (LastVisitAt) WHERE IsDeleted = 0
-);
-```
-
-### 4. 预约表 (Reservations)
-
-```sql
-CREATE TABLE Reservations (
-    Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID() PRIMARY KEY,
-    
-    -- 关联信息
-    CustomerId UNIQUEIDENTIFIER NOT NULL,
-    TableId UNIQUEIDENTIFIER NOT NULL,
-    
-    -- 时间信息
-    StartTime DATETIME2 NOT NULL,
-    EndTime DATETIME2 NOT NULL,
-    DurationMinutes AS DATEDIFF(MINUTE, StartTime, EndTime) PERSISTED,
-    
-    -- 费用信息
-    TotalAmount DECIMAL(18,2) NOT NULL,
-    Currency NVARCHAR(3) NOT NULL DEFAULT 'CNY',
-    
-    -- 状态信息
-    Status TINYINT NOT NULL DEFAULT 1, -- 1: Pending, 2: Confirmed, 3: InProgress, 4: Completed, 5: Cancelled, 6: NoShow
-    PaymentStatus TINYINT NOT NULL DEFAULT 1, -- 1: Unpaid, 2: PartialPaid, 3: Paid, 4: Refunded
-    
-    -- 附加信息
-    Notes NVARCHAR(500) NULL,
-    CancellationReason NVARCHAR(200) NULL,
-    
-    -- 审计字段
-    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
-    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
-    CreatedBy NVARCHAR(50) NULL,
-    UpdatedBy NVARCHAR(50) NULL,
-    IsDeleted BIT NOT NULL DEFAULT 0,
-    Version ROWVERSION NOT NULL,
-    
-    -- 外键
-    CONSTRAINT FK_Reservations_Customers 
-        FOREIGN KEY (CustomerId) REFERENCES Customers(Id),
-    CONSTRAINT FK_Reservations_BilliardTables 
-        FOREIGN KEY (TableId) REFERENCES BilliardTables(Id),
-    
-    -- 检查约束
-    CONSTRAINT CK_Reservations_Status CHECK (Status IN (1, 2, 3, 4, 5, 6)),
-    CONSTRAINT CK_Reservations_PaymentStatus CHECK (PaymentStatus IN (1, 2, 3, 4)),
-    CONSTRAINT CK_Reservations_TimeRange CHECK (EndTime > StartTime),
-    CONSTRAINT CK_Reservations_TotalAmount CHECK (TotalAmount >= 0),
-    CONSTRAINT CK_Reservations_DurationMinutes CHECK (DurationMinutes >= 30), -- 最少30分钟
-    
-    -- 索引
-    INDEX IX_Reservations_CustomerId (CustomerId) WHERE IsDeleted = 0,
-    INDEX IX_Reservations_TableId (TableId) WHERE IsDeleted = 0,
-    INDEX IX_Reservations_StartTime (StartTime) WHERE IsDeleted = 0,
-    INDEX IX_Reservations_EndTime (EndTime) WHERE IsDeleted = 0,
-    INDEX IX_Reservations_Status (Status) WHERE IsDeleted = 0,
-    INDEX IX_Reservations_PaymentStatus (PaymentStatus) WHERE IsDeleted = 0,
-    INDEX IX_Reservations_TableId_TimeRange (TableId, StartTime, EndTime) 
-        WHERE IsDeleted = 0 AND Status IN (1, 2, 3), -- 用于冲突检查
-    INDEX IX_Reservations_CreatedAt (CreatedAt) WHERE IsDeleted = 0
-);
-```
-
-## 关系设计模式 (Relationship Design Patterns)
-
-### 1. 一对多关系 (One-to-Many)
-
-```sql
--- 台球厅 -> 台球桌
-ALTER TABLE BilliardTables 
-ADD CONSTRAINT FK_BilliardTables_BilliardHalls 
-    FOREIGN KEY (HallId) REFERENCES BilliardHalls(Id)
-    ON DELETE RESTRICT; -- 防止意外删除
-
--- 客户 -> 预约
-ALTER TABLE Reservations 
-ADD CONSTRAINT FK_Reservations_Customers 
-    FOREIGN KEY (CustomerId) REFERENCES Customers(Id)
-    ON DELETE RESTRICT;
-```
-
-### 2. 多对多关系 (Many-to-Many)
-
-```sql
--- 客户 <-> 台球桌 (通过预约历史)
--- 使用中间表模式
-CREATE TABLE CustomerTableHistory (
-    Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID() PRIMARY KEY,
-    CustomerId UNIQUEIDENTIFIER NOT NULL,
-    TableId UNIQUEIDENTIFIER NOT NULL,
-    PlayCount INT NOT NULL DEFAULT 1,
-    TotalDurationMinutes INT NOT NULL DEFAULT 0,
-    LastPlayedAt DATETIME2 NOT NULL,
-    
-    CONSTRAINT FK_CustomerTableHistory_Customers 
-        FOREIGN KEY (CustomerId) REFERENCES Customers(Id),
-    CONSTRAINT FK_CustomerTableHistory_BilliardTables 
-        FOREIGN KEY (TableId) REFERENCES BilliardTables(Id),
+namespace Zss.BilliardHall.Domain.Entities
+{
+    /// <summary>
+    /// 台球厅聚合根
+    /// </summary>
+    public class BilliardHall : FullAuditedAggregateRoot<Guid>, IMultiTenant
+    {
+        public Guid? TenantId { get; set; }
         
-    CONSTRAINT UK_CustomerTableHistory_Customer_Table 
-        UNIQUE (CustomerId, TableId),
+        [Required]
+        [StringLength(BilliardHallConsts.MaxNameLength)]
+        public string Name { get; protected set; }
         
-    INDEX IX_CustomerTableHistory_CustomerId (CustomerId),
-    INDEX IX_CustomerTableHistory_TableId (TableId)
-);
+        [StringLength(BilliardHallConsts.MaxAddressLength)]
+        public string Address { get; set; }
+        
+        [StringLength(BilliardHallConsts.MaxPhoneLength)]
+        public string Phone { get; set; }
+        
+        // MySQL TIME 类型映射
+        public TimeSpan OpenTime { get; set; }
+        public TimeSpan CloseTime { get; set; }
+        
+        // JSON 字段 (MySQL 5.7+)
+        public BilliardHallSettings Settings { get; set; }
+        
+        // 导航属性 - 一对多关系
+        public virtual ICollection<BilliardTable> Tables { get; protected set; }
+        public virtual ICollection<Room> Rooms { get; protected set; }
+        
+        // 私有构造函数 (EF Core 需要)
+        protected BilliardHall() 
+        {
+            Tables = new List<BilliardTable>();
+            Rooms = new List<Room>();
+        }
+        
+        // 工厂方法
+        public BilliardHall(
+            Guid id,
+            string name,
+            string address = null,
+            TimeSpan? openTime = null,
+            TimeSpan? closeTime = null) : base(id)
+        {
+            SetName(name);
+            Address = address;
+            OpenTime = openTime ?? TimeSpan.FromHours(9);
+            CloseTime = closeTime ?? TimeSpan.FromHours(23);
+            Settings = new BilliardHallSettings();
+            
+            Tables = new List<BilliardTable>();
+            Rooms = new List<Room>();
+        }
+        
+        // 业务方法
+        public void SetName(string name)
+        {
+            Check.NotNullOrWhiteSpace(name, nameof(name), BilliardHallConsts.MaxNameLength);
+            Name = name;
+        }
+        
+        public BilliardTable AddTable(int number, BilliardTableType type, decimal hourlyRate)
+        {
+            Check.Condition(number > 0, nameof(number), "台球桌编号必须大于0");
+            
+            if (Tables.Any(t => t.Number == number))
+            {
+                throw new BusinessException(BilliardHallDomainErrorCodes.TableNumberAlreadyExists)
+                    .WithData("Number", number)
+                    .WithData("HallName", Name);
+            }
+            
+            var table = new BilliardTable(
+                GuidGenerator.Create(),
+                Id, // 台球厅ID
+                number,
+                type,
+                hourlyRate
+            );
+            
+            Tables.Add(table);
+            
+            // 添加领域事件
+            AddLocalEvent(new BilliardTableAddedEto
+            {
+                HallId = Id,
+                TableId = table.Id,
+                TableNumber = number,
+                TableType = type
+            });
+            
+            return table;
+        }
+    }
+}
 ```
 
-### 3. 自引用关系 (Self-Referencing)
+### 2. 子实体设计
 
-```sql
--- 员工组织架构
-CREATE TABLE Staff (
-    Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID() PRIMARY KEY,
-    Name NVARCHAR(50) NOT NULL,
-    Position NVARCHAR(50) NOT NULL,
-    ManagerId UNIQUEIDENTIFIER NULL,
+```csharp
+// BilliardTable.cs - 子实体
+using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
+
+namespace Zss.BilliardHall.Domain.Entities
+{
+    /// <summary>
+    /// 台球桌实体
+    /// </summary>
+    public class BilliardTable : FullAuditedEntity<Guid>, IMultiTenant
+    {
+        public Guid? TenantId { get; set; }
+        
+        // 基本属性
+        public int Number { get; set; }
+        public BilliardTableType Type { get; set; }
+        public BilliardTableStatus Status { get; protected set; }
+        
+        // MySQL DECIMAL 类型，精度为 10,2
+        public decimal HourlyRate { get; set; }
+        
+        // MySQL FLOAT 类型用于坐标
+        public float LocationX { get; set; }
+        public float LocationY { get; set; }
+        
+        // 外键
+        public Guid BilliardHallId { get; set; }
+        
+        // 导航属性
+        public virtual BilliardHall BilliardHall { get; set; }
+        public virtual ICollection<Reservation> Reservations { get; protected set; }
+        
+        // 私有构造函数
+        protected BilliardTable()
+        {
+            Reservations = new List<Reservation>();
+        }
+        
+        // 公共构造函数
+        internal BilliardTable(
+            Guid id,
+            Guid billiardHallId,
+            int number,
+            BilliardTableType type,
+            decimal hourlyRate,
+            float locationX = 0,
+            float locationY = 0) : base(id)
+        {
+            BilliardHallId = billiardHallId;
+            Number = number;
+            Type = type;
+            Status = BilliardTableStatus.Available;
+            HourlyRate = hourlyRate;
+            LocationX = locationX;
+            LocationY = locationY;
+            
+            Reservations = new List<Reservation>();
+        }
+        
+        // 业务方法
+        public void ChangeStatus(BilliardTableStatus newStatus, string reason = null)
+        {
+            if (Status == newStatus)
+                return;
+                
+            var oldStatus = Status;
+            Status = newStatus;
+            
+            // 添加领域事件
+            AddLocalEvent(new BilliardTableStatusChangedEto
+            {
+                TableId = Id,
+                OldStatus = oldStatus,
+                NewStatus = newStatus,
+                Reason = reason
+            });
+        }
+        
+        public void UpdateLocation(float x, float y)
+        {
+            LocationX = x;
+            LocationY = y;
+        }
+    }
+}
+```
+
+### 3. 值对象设计
+
+```csharp
+// BilliardHallSettings.cs - 值对象
+using Volo.Abp.Domain.Values;
+
+namespace Zss.BilliardHall.Domain.ValueObjects
+{
+    /// <summary>
+    /// 台球厅设置值对象 (存储为 JSON)
+    /// </summary>
+    public class BilliardHallSettings : ValueObject
+    {
+        public bool AllowOnlineReservation { get; set; } = true;
+        public int MaxAdvanceReservationDays { get; set; } = 30;
+        public decimal DepositRate { get; set; } = 0.2m; // 20% 预付款
+        public TimeSpan MaxReservationDuration { get; set; } = TimeSpan.FromHours(4);
+        public List<string> PaymentMethods { get; set; } = new();
+        
+        // 营业设置
+        public Dictionary<DayOfWeek, BusinessHours> WeeklyHours { get; set; } = new();
+        public List<Holiday> Holidays { get; set; } = new();
+        
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return AllowOnlineReservation;
+            yield return MaxAdvanceReservationDays;
+            yield return DepositRate;
+            yield return MaxReservationDuration;
+            yield return string.Join(",", PaymentMethods);
+        }
+    }
     
-    CONSTRAINT FK_Staff_Manager 
-        FOREIGN KEY (ManagerId) REFERENCES Staff(Id),
+    public class BusinessHours : ValueObject
+    {
+        public TimeSpan OpenTime { get; set; }
+        public TimeSpan CloseTime { get; set; }
+        public bool IsClosed { get; set; }
         
-    INDEX IX_Staff_ManagerId (ManagerId)
-);
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return OpenTime;
+            yield return CloseTime;
+            yield return IsClosed;
+        }
+    }
+}
 ```
 
-## 索引设计模式 (Index Design Patterns)
+## ABP DbContext 配置模式
 
-### 1. 查询优化索引
+### 1. DbContext 定义
 
-```sql
--- 复合索引 (最常用的查询组合)
-CREATE INDEX IX_Reservations_TableId_Status_TimeRange 
-ON Reservations (TableId, Status, StartTime, EndTime)
-WHERE IsDeleted = 0;
+```csharp
+// BilliardHallDbContext.cs
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Data;
+using Volo.Abp.EntityFrameworkCore;
 
--- 覆盖索引 (包含所有需要的列)
-CREATE INDEX IX_BilliardTables_HallId_Covering 
-ON BilliardTables (HallId)
-INCLUDE (TableNumber, Type, Status, HourlyRateAmount)
-WHERE IsDeleted = 0;
+namespace Zss.BilliardHall.EntityFrameworkCore
+{
+    [ReplaceDbContext(typeof(IBilliardHallDbContext))]
+    [ConnectionStringName("Default")]
+    public class BilliardHallDbContext : AbpDbContext<BilliardHallDbContext>, IBilliardHallDbContext
+    {
+        // 实体 DbSet
+        public DbSet<BilliardHall> BilliardHalls { get; set; }
+        public DbSet<BilliardTable> BilliardTables { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
--- 部分索引 (只索引有效记录)
-CREATE INDEX IX_Customers_Active_Phone 
-ON Customers (Phone)
-WHERE IsDeleted = 0 AND Status = 1;
+        public BilliardHallDbContext(DbContextOptions<BilliardHallDbContext> options)
+            : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            // 应用实体配置
+            builder.ConfigureBilliardHall();
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
+            // MySQL 特定配置
+            if (optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.EnableSensitiveDataLogging(false);
+                optionsBuilder.EnableDetailedErrors(false);
+            }
+        }
+    }
+}
 ```
 
-### 2. 唯一性约束索引
+### 2. 实体配置 (Fluent API)
 
-```sql
--- 业务唯一性
-CREATE UNIQUE INDEX UK_BilliardTables_HallId_Number_Active 
-ON BilliardTables (HallId, TableNumber)
-WHERE IsDeleted = 0;
+```csharp
+// BilliardHallDbContextModelCreatingExtensions.cs
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
--- 条件唯一性 (同一时间段同一台球桌只能有一个有效预约)
-CREATE UNIQUE INDEX UK_Reservations_TableId_TimeOverlap_Active 
-ON Reservations (TableId, StartTime, EndTime)
-WHERE IsDeleted = 0 AND Status IN (1, 2, 3); -- Pending, Confirmed, InProgress
+namespace Zss.BilliardHall.EntityFrameworkCore
+{
+    public static class BilliardHallDbContextModelCreatingExtensions
+    {
+        public static void ConfigureBilliardHall(this ModelBuilder builder)
+        {
+            Check.NotNull(builder, nameof(builder));
+
+            // 配置台球厅表
+            builder.Entity<BilliardHall>(b =>
+            {
+                b.ToTable(BilliardHallConsts.DbTablePrefix + "BilliardHalls", BilliardHallConsts.DbSchema);
+                b.ConfigureByConvention(); // ABP 约定配置
+
+                // 基本属性配置
+                b.Property(x => x.Name)
+                 .IsRequired()
+                 .HasMaxLength(BilliardHallConsts.MaxNameLength)
+                 .HasCharSet("utf8mb4")
+                 .HasCollation("utf8mb4_unicode_ci");
+
+                b.Property(x => x.Address)
+                 .HasMaxLength(BilliardHallConsts.MaxAddressLength)
+                 .HasCharSet("utf8mb4")
+                 .HasCollation("utf8mb4_unicode_ci");
+
+                b.Property(x => x.Phone)
+                 .HasMaxLength(BilliardHallConsts.MaxPhoneLength);
+
+                // MySQL TIME 类型配置
+                b.Property(x => x.OpenTime).HasColumnType("time");
+                b.Property(x => x.CloseTime).HasColumnType("time");
+
+                // JSON 字段配置 (MySQL 5.7+)
+                b.Property(x => x.Settings)
+                 .HasColumnType("json")
+                 .HasConversion(
+                     v => JsonSerializer.Serialize(v),
+                     v => JsonSerializer.Deserialize<BilliardHallSettings>(v));
+
+                // 索引配置
+                b.HasIndex(x => x.Name).HasDatabaseName("IX_BilliardHalls_Name");
+                b.HasIndex(x => x.TenantId).HasDatabaseName("IX_BilliardHalls_TenantId");
+                b.HasIndex(x => new { x.TenantId, x.Name })
+                 .IsUnique()
+                 .HasDatabaseName("UK_BilliardHalls_TenantId_Name");
+            });
+
+            // 配置台球桌表
+            builder.Entity<BilliardTable>(b =>
+            {
+                b.ToTable(BilliardHallConsts.DbTablePrefix + "BilliardTables", BilliardHallConsts.DbSchema);
+                b.ConfigureByConvention();
+
+                // 基本属性
+                b.Property(x => x.Number).IsRequired();
+                b.Property(x => x.Type).IsRequired().HasConversion<int>();
+                b.Property(x => x.Status).IsRequired().HasConversion<int>()
+                 .HasDefaultValue(BilliardTableStatus.Available);
+
+                // MySQL DECIMAL 类型
+                b.Property(x => x.HourlyRate)
+                 .IsRequired()
+                 .HasPrecision(10, 2)
+                 .HasColumnType("decimal(10,2)");
+
+                // MySQL FLOAT 类型
+                b.Property(x => x.LocationX).HasColumnType("float");
+                b.Property(x => x.LocationY).HasColumnType("float");
+
+                // 外键关系
+                b.HasOne(x => x.BilliardHall)
+                 .WithMany(x => x.Tables)
+                 .HasForeignKey(x => x.BilliardHallId)
+                 .OnDelete(DeleteBehavior.Cascade)
+                 .HasConstraintName("FK_BilliardTables_BilliardHalls");
+
+                // 唯一约束
+                b.HasIndex(x => new { x.BilliardHallId, x.Number })
+                 .IsUnique()
+                 .HasDatabaseName("UK_BilliardTables_HallId_Number");
+
+                // 性能索引
+                b.HasIndex(x => x.Status).HasDatabaseName("IX_BilliardTables_Status");
+                b.HasIndex(x => x.Type).HasDatabaseName("IX_BilliardTables_Type");
+                b.HasIndex(x => x.TenantId).HasDatabaseName("IX_BilliardTables_TenantId");
+                b.HasIndex(x => new { x.TenantId, x.Status })
+                 .HasDatabaseName("IX_BilliardTables_TenantId_Status");
+            });
+
+            // 配置预约表
+            builder.Entity<Reservation>(b =>
+            {
+                b.ToTable(BilliardHallConsts.DbTablePrefix + "Reservations", BilliardHallConsts.DbSchema);
+                b.ConfigureByConvention();
+
+                // 时间字段 - MySQL DATETIME(6) 支持微秒
+                b.Property(x => x.StartTime)
+                 .IsRequired()
+                 .HasColumnType("datetime(6)");
+
+                b.Property(x => x.EndTime)
+                 .IsRequired()
+                 .HasColumnType("datetime(6)");
+
+                // 金额字段
+                b.Property(x => x.TotalAmount)
+                 .HasPrecision(10, 2)
+                 .HasColumnType("decimal(10,2)");
+
+                b.Property(x => x.DepositAmount)
+                 .HasPrecision(10, 2)
+                 .HasColumnType("decimal(10,2)");
+
+                // 外键关系
+                b.HasOne(x => x.BilliardTable)
+                 .WithMany(x => x.Reservations)
+                 .HasForeignKey(x => x.BilliardTableId)
+                 .OnDelete(DeleteBehavior.Restrict); // 防止误删
+
+                b.HasOne<IdentityUser>()
+                 .WithMany()
+                 .HasForeignKey(x => x.CustomerId)
+                 .OnDelete(DeleteBehavior.Restrict);
+
+                // 业务索引
+                b.HasIndex(x => new { x.BilliardTableId, x.StartTime })
+                 .HasDatabaseName("IX_Reservations_TableId_StartTime");
+
+                b.HasIndex(x => new { x.CustomerId, x.Status })
+                 .HasDatabaseName("IX_Reservations_CustomerId_Status");
+
+                b.HasIndex(x => x.StartTime)
+                 .HasDatabaseName("IX_Reservations_StartTime");
+            });
+        }
+    }
+}
 ```
 
-## 触发器模式 (Trigger Patterns)
+## MySQL 数据库迁移模式
 
-### 1. 审计触发器
+### 1. Migration 创建
+
+```csharp
+// 20240909120000_AddBilliardTables.cs
+[Migration("20240909120000")]
+public partial class AddBilliardTables : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.CreateTable(
+            name: "AppBilliardHalls",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                TenantId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false, 
+                                          charset: "utf8mb4", collation: "utf8mb4_unicode_ci"),
+                Address = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true,
+                                             charset: "utf8mb4", collation: "utf8mb4_unicode_ci"),
+                Phone = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
+                OpenTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                CloseTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                Settings = table.Column<string>(type: "json", nullable: true),
+                ExtraProperties = table.Column<string>(type: "longtext", nullable: false, charset: "utf8mb4"),
+                ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false, charset: "utf8mb4"),
+                CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                CreatorId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                LastModifierId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
+                DeleterId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_AppBilliardHalls", x => x.Id);
+            })
+            .Annotation("MySQL:Charset", "utf8mb4")
+            .Annotation("MySQL:Collation", "utf8mb4_unicode_ci");
+
+        migrationBuilder.CreateTable(
+            name: "AppBilliardTables",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                TenantId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                Number = table.Column<int>(type: "int", nullable: false),
+                Type = table.Column<int>(type: "int", nullable: false),
+                Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                HourlyRate = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
+                LocationX = table.Column<float>(type: "float", nullable: false),
+                LocationY = table.Column<float>(type: "float", nullable: false),
+                BilliardHallId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                ExtraProperties = table.Column<string>(type: "longtext", nullable: false, charset: "utf8mb4"),
+                ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false, charset: "utf8mb4"),
+                CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                CreatorId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                LastModifierId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
+                DeleterId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_AppBilliardTables", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_BilliardTables_BilliardHalls",
+                    column: x => x.BilliardHallId,
+                    principalTable: "AppBilliardHalls",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+            })
+            .Annotation("MySQL:Charset", "utf8mb4");
+
+        // 创建索引
+        migrationBuilder.CreateIndex(
+            name: "IX_BilliardHalls_Name",
+            table: "AppBilliardHalls",
+            column: "Name");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_BilliardHalls_TenantId",
+            table: "AppBilliardHalls",
+            column: "TenantId");
+
+        migrationBuilder.CreateIndex(
+            name: "UK_BilliardHalls_TenantId_Name",
+            table: "AppBilliardHalls",
+            columns: new[] { "TenantId", "Name" },
+            unique: true);
+
+        migrationBuilder.CreateIndex(
+            name: "UK_BilliardTables_HallId_Number",
+            table: "AppBilliardTables",
+            columns: new[] { "BilliardHallId", "Number" },
+            unique: true);
+
+        migrationBuilder.CreateIndex(
+            name: "IX_BilliardTables_Status",
+            table: "AppBilliardTables",
+            column: "Status");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_BilliardTables_Type",
+            table: "AppBilliardTables",
+            column: "Type");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_BilliardTables_TenantId_Status",
+            table: "AppBilliardTables",
+            columns: new[] { "TenantId", "Status" });
+    }
+
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropTable(name: "AppBilliardTables");
+        migrationBuilder.DropTable(name: "AppBilliardHalls");
+    }
+}
+```
+
+### 2. 数据种子配置
+
+```csharp
+// BilliardHallDataSeeder.cs
+using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
+
+namespace Zss.BilliardHall.EntityFrameworkCore
+{
+    public class BilliardHallDataSeeder : IDataSeedContributor, ITransientDependency
+    {
+        private readonly IRepository<BilliardHall, Guid> _billiardHallRepository;
+        private readonly BilliardHallManager _billiardHallManager;
+
+        public BilliardHallDataSeeder(
+            IRepository<BilliardHall, Guid> billiardHallRepository,
+            BilliardHallManager billiardHallManager)
+        {
+            _billiardHallRepository = billiardHallRepository;
+            _billiardHallManager = billiardHallManager;
+        }
+
+        public async Task SeedAsync(DataSeedContext context)
+        {
+            // 检查是否已有数据
+            if (await _billiardHallRepository.CountAsync() > 0)
+                return;
+
+            // 创建示例台球厅
+            var hall = await _billiardHallManager.CreateAsync(
+                "星际台球厅",
+                "北京市朝阳区某某街道123号",
+                "010-12345678"
+            );
+
+            // 添加台球桌
+            hall.AddTable(1, BilliardTableType.ChineseEightBall, 50.00m);
+            hall.AddTable(2, BilliardTableType.ChineseEightBall, 50.00m);
+            hall.AddTable(3, BilliardTableType.AmericanNineBall, 60.00m);
+            hall.AddTable(4, BilliardTableType.Snooker, 80.00m);
+
+            await _billiardHallRepository.InsertAsync(hall);
+        }
+    }
+}
+```
+
+## MySQL 性能优化模式
+
+### 1. 查询优化
+
+```csharp
+// BilliardTableRepository.cs - 自定义仓储
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore;
+
+namespace Zss.BilliardHall.EntityFrameworkCore.Repositories
+{
+    public class BilliardTableRepository : EfCoreRepository<BilliardHallDbContext, BilliardTable, Guid>, 
+                                          IBilliardTableRepository
+    {
+        public BilliardTableRepository(IDbContextProvider<BilliardHallDbContext> dbContextProvider)
+            : base(dbContextProvider)
+        {
+        }
+
+        public async Task<List<BilliardTable>> GetAvailableTablesAsync(
+            BilliardTableType? type = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null)
+        {
+            var query = await GetQueryableAsync();
+
+            // 基础过滤
+            query = query.Where(t => t.Status == BilliardTableStatus.Available);
+
+            if (type.HasValue)
+            {
+                query = query.Where(t => t.Type == type.Value);
+            }
+
+            // 时间冲突检查 - 使用 SQL 优化
+            if (startTime.HasValue && endTime.HasValue)
+            {
+                query = query.Where(t => !t.Reservations.Any(r => 
+                    r.Status == ReservationStatus.Confirmed &&
+                    r.StartTime < endTime && r.EndTime > startTime));
+            }
+
+            // 包含相关数据，减少 N+1 查询
+            return await query
+                .Include(t => t.BilliardHall)
+                .OrderBy(t => t.Number)
+                .ToListAsync();
+        }
+
+        public async Task<Dictionary<BilliardTableStatus, int>> GetStatusStatisticsAsync(Guid? hallId = null)
+        {
+            var query = await GetQueryableAsync();
+
+            if (hallId.HasValue)
+            {
+                query = query.Where(t => t.BilliardHallId == hallId.Value);
+            }
+
+            // 使用 GroupBy 进行统计，生成高效 SQL
+            var result = await query
+                .GroupBy(t => t.Status)
+                .Select(g => new { Status = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            return result.ToDictionary(x => x.Status, x => x.Count);
+        }
+
+        public async Task<bool> IsNumberUniqueAsync(int number, Guid hallId, Guid? excludeId = null)
+        {
+            var query = await GetQueryableAsync();
+            
+            query = query.Where(t => t.Number == number && t.BilliardHallId == hallId);
+            
+            if (excludeId.HasValue)
+            {
+                query = query.Where(t => t.Id != excludeId.Value);
+            }
+
+            // 使用 AnyAsync 进行存在性检查，生成 EXISTS 查询
+            return !await query.AnyAsync();
+        }
+    }
+}
+```
+
+### 2. 连接池配置
+
+```csharp
+// 在 Program.cs 或 Module 中配置
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    var configuration = context.Services.GetConfiguration();
+    var connectionString = configuration.GetConnectionString("Default");
+
+    Configure<AbpDbContextOptions>(options =>
+    {
+        options.Configure<BilliardHallDbContext>(context =>
+        {
+            context.DbContextOptions.UseMySql(connectionString, 
+                ServerVersion.AutoDetect(connectionString), mySqlOptions =>
+                {
+                    // 连接池配置
+                    mySqlOptions.CommandTimeout(30);
+                    
+                    // 重试策略
+                    mySqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 3,
+                        maxRetryDelay: TimeSpan.FromSeconds(5),
+                        errorNumbersToAdd: null);
+                    
+                    // 字符集配置
+                    mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend);
+                    mySqlOptions.CharSet(CharSet.Utf8mb4);
+                });
+        });
+    });
+}
+```
+
+### 3. 索引优化策略
 
 ```sql
--- 更新时间自动维护
-CREATE TRIGGER TR_BilliardTables_UpdatedAt
-ON BilliardTables
-AFTER UPDATE
-AS
-BEGIN
-    SET NOCOUNT ON;
+-- 复合索引优化建议
+
+-- 1. 多租户 + 状态查询
+CREATE INDEX IX_BilliardTables_TenantId_Status_Type 
+ON AppBilliardTables (TenantId, Status, Type);
+
+-- 2. 预约时间查询优化
+CREATE INDEX IX_Reservations_TableId_StartTime_EndTime_Status 
+ON AppReservations (BilliardTableId, StartTime, EndTime, Status);
+
+-- 3. 客户预约查询
+CREATE INDEX IX_Reservations_CustomerId_StartTime_Status 
+ON AppReservations (CustomerId, StartTime, Status);
+
+-- 4. 覆盖索引 (包含常用字段，避免回表)
+CREATE INDEX IX_BilliardTables_Status_COVERING 
+ON AppBilliardTables (Status) 
+INCLUDE (Id, Number, Type, HourlyRate);
+
+-- 5. 全文搜索索引 (MySQL 5.7+)
+ALTER TABLE AppBilliardHalls ADD FULLTEXT INDEX FT_BilliardHalls_Name_Address (Name, Address);
+```
+
+## 多租户数据隔离模式
+
+### 1. 行级租户隔离
+
+```csharp
+// 自动租户过滤器配置
+public override void OnModelCreating(ModelBuilder builder)
+{
+    base.OnModelCreating(builder);
+
+    // ABP 自动配置多租户过滤器
+    builder.ConfigureByConvention();
     
-    UPDATE BilliardTables
-    SET UpdatedAt = GETUTCDATE(),
-        UpdatedBy = SYSTEM_USER
-    FROM BilliardTables bt
-    INNER JOIN inserted i ON bt.Id = i.Id;
-END;
+    // 手动配置全局查询过滤器
+    builder.Entity<BilliardTable>()
+           .HasQueryFilter(t => !CurrentTenant.IsAvailable || t.TenantId == CurrentTenant.Id);
+}
+
+// 在 Application Service 中使用
+public class BilliardTableAppService : BilliardHallAppService
+{
+    public async Task<PagedResultDto<BilliardTableDto>> GetListAsync(GetBilliardTablesInput input)
+    {
+        // ABP 自动应用租户过滤，无需手动添加 TenantId 条件
+        var queryable = await _billiardTableRepository.GetQueryableAsync();
+        
+        // 其他业务过滤...
+        var result = await AsyncExecuter.ToListAsync(queryable);
+        return new PagedResultDto<BilliardTableDto>(totalCount, result);
+    }
+}
 ```
 
-### 2. 业务规则触发器
+### 2. 跨租户数据访问
 
-```sql
--- 预约冲突检查
-CREATE TRIGGER TR_Reservations_ConflictCheck
-ON Reservations
-FOR INSERT, UPDATE
-AS
-BEGIN
-    SET NOCOUNT ON;
-    
-    -- 检查时间冲突
-    IF EXISTS (
-        SELECT 1
-        FROM inserted i
-        INNER JOIN Reservations r ON r.TableId = i.TableId
-        WHERE r.Id != i.Id
-          AND r.IsDeleted = 0
-          AND r.Status IN (1, 2, 3) -- Pending, Confirmed, InProgress
-          AND (
-              (i.StartTime >= r.StartTime AND i.StartTime < r.EndTime) OR
-              (i.EndTime > r.StartTime AND i.EndTime <= r.EndTime) OR
-              (i.StartTime <= r.StartTime AND i.EndTime >= r.EndTime)
-          )
-    )
-    BEGIN
-        ROLLBACK TRANSACTION;
-        THROW 50001, '预约时间冲突，该时间段台球桌已被预约', 1;
-    END;
-END;
+```csharp
+// 跨租户数据查询
+public class ReportAppService : BilliardHallAppService
+{
+    public async Task<GlobalStatisticsDto> GetGlobalStatisticsAsync()
+    {
+        // 使用 DataFilter 临时禁用多租户过滤
+        using (DataFilter.Disable<IMultiTenant>())
+        {
+            var totalTables = await _billiardTableRepository.CountAsync();
+            var totalReservations = await _reservationRepository.CountAsync();
+            
+            return new GlobalStatisticsDto
+            {
+                TotalTables = totalTables,
+                TotalReservations = totalReservations
+            };
+        }
+    }
+}
 ```
 
-## 视图模式 (View Patterns)
-
-### 1. 业务视图
-
-```sql
--- 台球桌可用性视图
-CREATE VIEW vw_TableAvailability
-AS
-SELECT 
-    bt.Id,
-    bt.HallId,
-    bh.Name AS HallName,
-    bt.TableNumber,
-    bt.Type,
-    bt.Status,
-    bt.HourlyRateAmount,
-    bt.LocationX,
-    bt.LocationY,
-    bt.Floor,
-    bt.Zone,
-    -- 当前是否有活跃预约
-    CASE 
-        WHEN EXISTS (
-            SELECT 1 FROM Reservations r 
-            WHERE r.TableId = bt.Id 
-              AND r.IsDeleted = 0 
-              AND r.Status IN (2, 3) -- Confirmed, InProgress
-              AND GETUTCDATE() BETWEEN r.StartTime AND r.EndTime
-        ) THEN 0 
-        ELSE 1 
-    END AS IsCurrentlyAvailable,
-    -- 下次可用时间
-    (
-        SELECT MIN(r.EndTime)
-        FROM Reservations r
-        WHERE r.TableId = bt.Id
-          AND r.IsDeleted = 0
-          AND r.Status IN (1, 2, 3) -- Pending, Confirmed, InProgress
-          AND r.EndTime > GETUTCDATE()
-    ) AS NextAvailableTime
-FROM BilliardTables bt
-INNER JOIN BilliardHalls bh ON bt.HallId = bh.Id
-WHERE bt.IsDeleted = 0 
-  AND bh.IsDeleted = 0
-  AND bt.Status IN (1, 3); -- Available, Reserved
-```
-
-### 2. 统计视图
-
-```sql
--- 客户统计视图
-CREATE VIEW vw_CustomerStatistics
-AS
-SELECT 
-    c.Id,
-    c.MembershipNumber,
-    c.Name,
-    c.MembershipLevel,
-    c.TotalSpentAmount,
-    c.VisitCount,
-    c.LastVisitAt,
-    -- 最近30天预约次数
-    COUNT(r30.Id) AS ReservationsLast30Days,
-    -- 最近30天消费金额
-    ISNULL(SUM(r30.TotalAmount), 0) AS SpentLast30Days,
-    -- 最喜欢的台球桌类型
-    (
-        SELECT TOP 1 bt.Type
-        FROM Reservations r
-        INNER JOIN BilliardTables bt ON r.TableId = bt.Id
-        WHERE r.CustomerId = c.Id 
-          AND r.IsDeleted = 0 
-          AND r.Status = 4 -- Completed
-        GROUP BY bt.Type
-        ORDER BY COUNT(*) DESC
-    ) AS PreferredTableType
-FROM Customers c
-LEFT JOIN Reservations r30 ON c.Id = r30.CustomerId 
-    AND r30.IsDeleted = 0 
-    AND r30.CreatedAt >= DATEADD(DAY, -30, GETUTCDATE())
-WHERE c.IsDeleted = 0
-GROUP BY c.Id, c.MembershipNumber, c.Name, c.MembershipLevel, 
-         c.TotalSpentAmount, c.VisitCount, c.LastVisitAt;
-```
-
-## 存储过程模式 (Stored Procedure Patterns)
-
-### 1. 业务流程存储过程
-
-```sql
--- 创建预约的存储过程
-CREATE PROCEDURE sp_CreateReservation
-    @CustomerId UNIQUEIDENTIFIER,
-    @TableId UNIQUEIDENTIFIER,
-    @StartTime DATETIME2,
-    @EndTime DATETIME2,
-    @Notes NVARCHAR(500) = NULL,
-    @CreatedBy NVARCHAR(50) = NULL
-AS
-BEGIN
-    SET NOCOUNT ON;
-    
-    DECLARE @ReservationId UNIQUEIDENTIFIER = NEWID();
-    DECLARE @HourlyRate DECIMAL(10,2);
-    DECLARE @DurationHours DECIMAL(10,2);
-    DECLARE @TotalAmount DECIMAL(18,2);
-    
-    BEGIN TRANSACTION;
-    
-    BEGIN TRY
-        -- 检查台球桌是否存在且可用
-        IF NOT EXISTS (
-            SELECT 1 FROM BilliardTables 
-            WHERE Id = @TableId 
-              AND IsDeleted = 0 
-              AND Status IN (1, 3) -- Available, Reserved
-        )
-        BEGIN
-            THROW 50002, '台球桌不存在或不可用', 1;
-        END;
-        
-        -- 获取小时费率
-        SELECT @HourlyRate = HourlyRateAmount 
-        FROM BilliardTables 
-        WHERE Id = @TableId;
-        
-        -- 计算费用
-        SET @DurationHours = CAST(DATEDIFF(MINUTE, @StartTime, @EndTime) AS DECIMAL(10,2)) / 60.0;
-        SET @TotalAmount = @HourlyRate * @DurationHours;
-        
-        -- 创建预约
-        INSERT INTO Reservations (
-            Id, CustomerId, TableId, StartTime, EndTime, 
-            TotalAmount, Currency, Status, PaymentStatus, 
-            Notes, CreatedBy
-        )
-        VALUES (
-            @ReservationId, @CustomerId, @TableId, @StartTime, @EndTime,
-            @TotalAmount, 'CNY', 1, 1, -- Pending, Unpaid
-            @Notes, @CreatedBy
-        );
-        
-        -- 更新台球桌状态为预约
-        UPDATE BilliardTables 
-        SET Status = 3, -- Reserved
-            UpdatedAt = GETUTCDATE(),
-            UpdatedBy = @CreatedBy
-        WHERE Id = @TableId;
-        
-        COMMIT TRANSACTION;
-        
-        -- 返回创建的预约信息
-        SELECT @ReservationId AS ReservationId, @TotalAmount AS TotalAmount;
-        
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH;
-END;
-```
-
-## 数据库函数模式 (Database Function Patterns)
-
-### 1. 标量函数
-
-```sql
--- 计算两个时间段的重叠分钟数
-CREATE FUNCTION fn_GetTimeOverlapMinutes(
-    @Start1 DATETIME2,
-    @End1 DATETIME2,
-    @Start2 DATETIME2,
-    @End2 DATETIME2
-)
-RETURNS INT
-AS
-BEGIN
-    DECLARE @OverlapStart DATETIME2 = CASE WHEN @Start1 > @Start2 THEN @Start1 ELSE @Start2 END;
-    DECLARE @OverlapEnd DATETIME2 = CASE WHEN @End1 < @End2 THEN @End1 ELSE @End2 END;
-    
-    RETURN CASE 
-        WHEN @OverlapEnd > @OverlapStart 
-        THEN DATEDIFF(MINUTE, @OverlapStart, @OverlapEnd)
-        ELSE 0
-    END;
-END;
-```
-
-### 2. 表值函数
-
-```sql
--- 获取指定日期范围内的可用时间段
-CREATE FUNCTION fn_GetAvailableTimeSlots(
-    @TableId UNIQUEIDENTIFIER,
-    @Date DATE,
-    @OpenTime TIME,
-    @CloseTime TIME,
-    @SlotDurationMinutes INT = 60
-)
-RETURNS TABLE
-AS
-RETURN
-(
-    WITH TimeSlots AS (
-        SELECT 
-            CAST(@Date AS DATETIME2) + CAST(@OpenTime AS DATETIME2) AS SlotStart,
-            DATEADD(MINUTE, @SlotDurationMinutes, 
-                CAST(@Date AS DATETIME2) + CAST(@OpenTime AS DATETIME2)) AS SlotEnd
-        
-        UNION ALL
-        
-        SELECT 
-            DATEADD(MINUTE, @SlotDurationMinutes, SlotStart),
-            DATEADD(MINUTE, @SlotDurationMinutes * 2, SlotStart)
-        FROM TimeSlots
-        WHERE DATEADD(MINUTE, @SlotDurationMinutes, SlotStart) < 
-              CAST(@Date AS DATETIME2) + CAST(@CloseTime AS DATETIME2)
-    )
-    SELECT 
-        SlotStart,
-        SlotEnd,
-        CASE WHEN EXISTS (
-            SELECT 1 FROM Reservations r
-            WHERE r.TableId = @TableId
-              AND r.IsDeleted = 0
-              AND r.Status IN (1, 2, 3) -- Pending, Confirmed, InProgress
-              AND (
-                  (SlotStart >= r.StartTime AND SlotStart < r.EndTime) OR
-                  (SlotEnd > r.StartTime AND SlotEnd <= r.EndTime) OR
-                  (SlotStart <= r.StartTime AND SlotEnd >= r.EndTime)
-              )
-        ) THEN 0 ELSE 1 END AS IsAvailable
-    FROM TimeSlots
-);
-```
-
----
-
-> 以上数据库设计模式应在所有数据库相关开发中严格遵循，确保数据一致性、性能和可维护性。
+这些数据库设计模式确保了与 ABP 框架的完美集成，同时充分利用了 MySQL 的特性和性能优化机制。

@@ -1,0 +1,285 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://zss-billiard-hall/schemas/abp-entities.json",
+  "title": "ABP Entity Schema",
+  "description": "Schema for defining ABP Framework entities in the Billiard Hall management system",
+  "type": "object",
+  "properties": {
+    "entity": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Z][a-zA-Z0-9]*$",
+          "description": "Entity name in PascalCase"
+        },
+        "namespace": {
+          "type": "string",
+          "pattern": "^Zss\\.BilliardHall\\.[A-Za-z.]*$",
+          "description": "Entity namespace following ABP conventions"
+        },
+        "baseClass": {
+          "type": "string",
+          "enum": [
+            "Entity<Guid>",
+            "AuditedEntity<Guid>",
+            "FullAuditedEntity<Guid>",
+            "AggregateRoot<Guid>",
+            "AuditedAggregateRoot<Guid>",
+            "FullAuditedAggregateRoot<Guid>"
+          ],
+          "description": "ABP base class for the entity"
+        },
+        "interfaces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "IMultiTenant",
+              "ISoftDelete",
+              "IHasCreationTime",
+              "ICreationAuditedObject",
+              "IHasModificationTime",
+              "IModificationAuditedObject",
+              "IHasDeletionTime",
+              "IDeletionAuditedObject"
+            ]
+          },
+          "description": "ABP interfaces implemented by the entity"
+        },
+        "properties": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^[A-Z][a-zA-Z0-9]*$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "string",
+                  "int",
+                  "decimal",
+                  "bool",
+                  "DateTime",
+                  "Guid",
+                  "float",
+                  "double",
+                  "TimeSpan",
+                  "byte[]",
+                  "enum"
+                ]
+              },
+              "nullable": {
+                "type": "boolean",
+                "default": false
+              },
+              "maxLength": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "required": {
+                "type": "boolean",
+                "default": false
+              },
+              "enumType": {
+                "type": "string",
+                "description": "Enum type name when type is 'enum'"
+              },
+              "description": {
+                "type": "string"
+              },
+              "validations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["Required", "StringLength", "Range", "RegularExpression", "EmailAddress", "Phone"]
+                    },
+                    "parameters": {
+                      "type": "object"
+                    },
+                    "errorMessage": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["type"]
+                }
+              }
+            },
+            "required": ["name", "type"]
+          }
+        },
+        "navigationProperties": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["OneToOne", "OneToMany", "ManyToOne", "ManyToMany"]
+              },
+              "relatedEntity": {
+                "type": "string"
+              },
+              "foreignKey": {
+                "type": "string"
+              },
+              "inverseForeignKey": {
+                "type": "string"
+              },
+              "cascadeDelete": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "required": ["name", "type", "relatedEntity"]
+          }
+        },
+        "businessMethods": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "returnType": {
+                "type": "string"
+              },
+              "parameters": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["name", "type"]
+                }
+              },
+              "domainEvents": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": ["name"]
+          }
+        },
+        "constants": {
+          "type": "object",
+          "properties": {
+            "maxNameLength": {
+              "type": "integer",
+              "default": 100
+            },
+            "maxDescriptionLength": {
+              "type": "integer", 
+              "default": 500
+            },
+            "dbTablePrefix": {
+              "type": "string",
+              "default": "App"
+            },
+            "dbSchema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": ["name", "namespace", "baseClass", "properties"]
+    }
+  },
+  "required": ["entity"],
+  "examples": [
+    {
+      "entity": {
+        "name": "BilliardTable",
+        "namespace": "Zss.BilliardHall.Domain.Entities",
+        "baseClass": "FullAuditedEntity<Guid>",
+        "interfaces": ["IMultiTenant"],
+        "properties": [
+          {
+            "name": "Number",
+            "type": "int",
+            "required": true,
+            "validations": [
+              {
+                "type": "Range",
+                "parameters": {"minimum": 1, "maximum": 999},
+                "errorMessage": "台球桌编号必须在1-999之间"
+              }
+            ]
+          },
+          {
+            "name": "Type",
+            "type": "enum",
+            "enumType": "BilliardTableType",
+            "required": true
+          },
+          {
+            "name": "Status",
+            "type": "enum",
+            "enumType": "BilliardTableStatus",
+            "required": true
+          },
+          {
+            "name": "HourlyRate",
+            "type": "decimal",
+            "required": true,
+            "validations": [
+              {
+                "type": "Range",
+                "parameters": {"minimum": 0.01, "maximum": 9999.99}
+              }
+            ]
+          }
+        ],
+        "navigationProperties": [
+          {
+            "name": "BilliardHall",
+            "type": "ManyToOne",
+            "relatedEntity": "BilliardHall",
+            "foreignKey": "BilliardHallId"
+          },
+          {
+            "name": "Reservations",
+            "type": "OneToMany",
+            "relatedEntity": "Reservation",
+            "inverseForeignKey": "BilliardTableId"
+          }
+        ],
+        "businessMethods": [
+          {
+            "name": "ChangeStatus",
+            "returnType": "void",
+            "parameters": [
+              {
+                "name": "newStatus",
+                "type": "BilliardTableStatus"
+              },
+              {
+                "name": "reason",
+                "type": "string"
+              }
+            ],
+            "domainEvents": ["BilliardTableStatusChangedEto"]
+          }
+        ]
+      }
+    }
+  ]
+}
