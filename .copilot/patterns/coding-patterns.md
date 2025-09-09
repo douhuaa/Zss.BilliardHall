@@ -1,56 +1,463 @@
-# 编码模式和约定 (Coding Patterns and Conventions)
+# ABP Framework 编码模式和约定 (ABP Framework Coding Patterns and Conventions)
 
 ## 总体原则 (General Principles)
 
-### 1. 机器可读优先 (Machine-Readable First)
-- 使用强类型定义
-- 遵循一致的命名约定
-- 提供详细的代码注释和文档
-- 实现完整的数据验证
+### 1. ABP 框架优先 (ABP Framework First)
+- 遵循 ABP 框架的 DDD 架构模式
+- 使用 ABP 提供的基类和服务
+- 遵循 ABP 的命名约定和项目结构
+- 利用 ABP 的内置功能（权限、多租户、本地化等）
 
-### 2. 人机协作优化 (Human-AI Collaboration Optimized)
-- 清晰的代码结构和分层
-- 易于理解的业务逻辑表达
-- 丰富的上下文信息
-- 标准化的错误处理
+### 2. 领域驱动设计 (Domain Driven Design)
+- 明确区分领域层、应用层、基础设施层
+- 实体、聚合根、领域服务的正确使用
+- 遵循 DDD 战术模式
+- 保持业务逻辑在领域层
 
-### 3. 自动化友好 (Automation-Friendly)
-- 可测试的代码设计
-- 配置外部化
-- 日志和监控支持
-- CI/CD 流水线兼容
+### 3. .NET Aspire 集成 (Aspire Integration)
+- 使用 Aspire 进行服务编排和配置
+- 集成 OpenTelemetry 进行监控和追踪
+- 利用 Aspire 的健康检查和服务发现
+- 遵循云原生开发实践
 
-## C# 后端编码规范
+## ABP C# 编码规范
 
 ### 命名约定 (Naming Conventions)
 
 ```csharp
-// 类名：PascalCase
-public class BilliardTableService { }
+// 实体类：PascalCase，继承 ABP 基类
+public class BilliardTable : FullAuditedEntity<Guid>, IMultiTenant
+{
+    public Guid? TenantId { get; set; }
+    // 属性使用 PascalCase
+    public string Name { get; set; }
+}
 
-// 接口名：以 I 开头的 PascalCase
-public interface IBilliardTableRepository { }
+// Application Service 接口：I + PascalCase + AppService
+public interface IBilliardTableAppService : IApplicationService
+{
+    // 方法名：PascalCase + Async 后缀
+    Task<BilliardTableDto> GetAsync(Guid id);
+    Task<BilliardTableDto> CreateAsync(CreateBilliardTableDto input);
+}
 
-// 方法名：PascalCase
-public async Task<BilliardTable> CreateTableAsync(CreateBilliardTableDto dto) { }
+// Application Service 实现：PascalCase + AppService
+public class BilliardTableAppService : BilliardHallAppService, IBilliardTableAppService
+{
+    // 私有字段：_camelCase
+    private readonly IRepository<BilliardTable, Guid> _billiardTableRepository;
+    private readonly BilliardTableManager _billiardTableManager;
+}
 
-// 属性名：PascalCase
-public string Name { get; set; }
+// DTO 类：PascalCase + Dto 后缀
+public class BilliardTableDto : FullAuditedEntityDto<Guid>
+{
+    public string Name { get; set; }
+}
 
-// 字段名：_camelCase (私有字段)
-private readonly ILogger<BilliardTableService> _logger;
+// 领域服务：PascalCase + Manager 后缀
+public class BilliardTableManager : DomainService
+{
+    // 方法名：PascalCase + Async 后缀
+    public async Task<BilliardTable> CreateAsync(string name)
+}
 
-// 常量：UPPER_SNAKE_CASE
-public const int MAX_TABLE_NUMBER = 999;
+// 权限常量：UPPER_SNAKE_CASE 或 PascalCase
+public static class BilliardHallPermissions
+{
+    public const string GroupName = "BilliardHall";
+    
+    public static class BilliardTables
+    {
+        public const string Default = GroupName + ".BilliardTables";
+        public const string Create = Default + ".Create";
+    }
+}
 
 // 枚举：PascalCase
-public enum TableStatus
+public enum BilliardTableStatus
 {
-    Available,
-    Occupied,
+    Available = 1,
+    Occupied = 2,
+    Reserved = 3
+}
+```
     Reserved,
-    Maintenance,
-    OutOfOrder
+### ABP 项目结构约定 (ABP Project Structure Conventions)
+
+```
+Zss.BilliardHall.Domain/
+├── Entities/                    # 实体
+│   ├── BilliardTable.cs
+│   └── Reservation.cs
+├── Managers/                    # 领域服务
+│   └── BilliardTableManager.cs
+├── Repositories/                # 仓储接口
+│   └── IBilliardTableRepository.cs
+├── Shared/                      # 共享常量和枚举
+│   ├── BilliardTableConsts.cs
+│   └── BilliardHallDomainErrorCodes.cs
+└── BilliardHallDomainModule.cs
+
+Zss.BilliardHall.Application.Contracts/
+├── BilliardTables/
+│   ├── IBilliardTableAppService.cs
+│   ├── BilliardTableDto.cs
+│   ├── CreateBilliardTableDto.cs
+│   └── GetBilliardTablesInput.cs
+├── Permissions/
+│   └── BilliardHallPermissions.cs
+└── BilliardHallApplicationContractsModule.cs
+
+Zss.BilliardHall.Application/
+├── BilliardTables/
+│   └── BilliardTableAppService.cs
+├── BilliardHallAppService.cs     # 基类
+├── BilliardHallAutoMapperProfile.cs
+└── BilliardHallApplicationModule.cs
+
+Zss.BilliardHall.EntityFrameworkCore/
+├── EntityFrameworkCore/
+│   ├── BilliardHallDbContext.cs
+│   ├── BilliardHallDbContextModelCreatingExtensions.cs
+│   └── IBilliardHallDbContext.cs
+├── Repositories/
+│   └── BilliardTableRepository.cs (可选)
+└── BilliardHallEntityFrameworkCoreModule.cs
+```
+
+### ABP 实体开发模式 (ABP Entity Patterns)
+
+```csharp
+// 聚合根实体
+public class BilliardHall : FullAuditedAggregateRoot<Guid>, IMultiTenant
+{
+    public Guid? TenantId { get; set; }
+    
+    [Required]
+    [StringLength(BilliardHallConsts.MaxNameLength)]
+    public string Name { get; set; }
+    
+    [StringLength(BilliardHallConsts.MaxAddressLength)]
+    public string Address { get; set; }
+    
+    // 值对象
+    public TimeSpan OpenTime { get; set; }
+    public TimeSpan CloseTime { get; set; }
+    
+    // 导航属性（集合）
+    public virtual ICollection<BilliardTable> Tables { get; set; }
+    
+    // 私有构造函数（用于 EF Core）
+    protected BilliardHall() { }
+    
+    // 公共构造函数（用于领域层）
+    public BilliardHall(
+        Guid id,
+        string name,
+        string address = null,
+        TimeSpan? openTime = null,
+        TimeSpan? closeTime = null) : base(id)
+    {
+        SetName(name);
+        Address = address;
+        OpenTime = openTime ?? TimeSpan.FromHours(9);
+        CloseTime = closeTime ?? TimeSpan.FromHours(22);
+        Tables = new List<BilliardTable>();
+    }
+    
+    // 业务方法
+    public void SetName(string name)
+    {
+        Check.NotNullOrWhiteSpace(name, nameof(name), BilliardHallConsts.MaxNameLength);
+        Name = name;
+    }
+    
+    public BilliardTable AddTable(int number, BilliardTableType type, decimal hourlyRate)
+    {
+        Check.Condition(number > 0, nameof(number), "Table number must be positive");
+        
+        if (Tables.Any(t => t.Number == number))
+        {
+            throw new BusinessException(BilliardHallDomainErrorCodes.TableNumberAlreadyExists)
+                .WithData("Number", number);
+        }
+        
+        var table = new BilliardTable(
+            GuidGenerator.Create(),
+            number,
+            type,
+            hourlyRate
+        );
+        
+        Tables.Add(table);
+        return table;
+    }
+}
+
+// 子实体
+public class BilliardTable : FullAuditedEntity<Guid>, IMultiTenant
+{
+    public Guid? TenantId { get; set; }
+    
+    public int Number { get; set; }
+    public BilliardTableType Type { get; set; }
+    public BilliardTableStatus Status { get; set; }
+    public decimal HourlyRate { get; set; }
+    public float LocationX { get; set; }
+    public float LocationY { get; set; }
+    
+    // 外键
+    public Guid BilliardHallId { get; set; }
+    public virtual BilliardHall BilliardHall { get; set; }
+    
+    protected BilliardTable() { }
+    
+    internal BilliardTable(
+        Guid id,
+        int number,
+        BilliardTableType type,
+        decimal hourlyRate,
+        float locationX = 0,
+        float locationY = 0) : base(id)
+    {
+        Check.Condition(number > 0, nameof(number));
+        Check.Condition(hourlyRate > 0, nameof(hourlyRate));
+        
+        Number = number;
+        Type = type;
+        Status = BilliardTableStatus.Available;
+        HourlyRate = hourlyRate;
+        LocationX = locationX;
+        LocationY = locationY;
+    }
+    
+    public void ChangeStatus(BilliardTableStatus newStatus)
+    {
+        // 业务规则验证
+        if (Status == BilliardTableStatus.OutOfOrder && newStatus != BilliardTableStatus.Maintenance)
+        {
+            throw new BusinessException(BilliardHallDomainErrorCodes.CannotChangeStatusFromOutOfOrder);
+        }
+        
+        Status = newStatus;
+    }
+}
+```
+
+### ABP Application Service 开发模式
+
+```csharp
+// Application Service 基类
+public abstract class BilliardHallAppService : ApplicationService
+{
+    protected BilliardHallAppService()
+    {
+        LocalizationResource = typeof(BilliardHallResource);
+    }
+}
+
+// Application Service 实现
+[Authorize(BilliardHallPermissions.BilliardTables.Default)]
+public class BilliardTableAppService : BilliardHallAppService, IBilliardTableAppService
+{
+    private readonly IRepository<BilliardTable, Guid> _billiardTableRepository;
+    private readonly BilliardTableManager _billiardTableManager;
+
+    public BilliardTableAppService(
+        IRepository<BilliardTable, Guid> billiardTableRepository,
+        BilliardTableManager billiardTableManager)
+    {
+        _billiardTableRepository = billiardTableRepository;
+        _billiardTableManager = billiardTableManager;
+    }
+
+    public virtual async Task<PagedResultDto<BilliardTableDto>> GetListAsync(GetBilliardTablesInput input)
+    {
+        var queryable = await _billiardTableRepository.GetQueryableAsync();
+        
+        queryable = queryable
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), 
+                     x => x.Number.ToString().Contains(input.Filter))
+            .WhereIf(input.Status.HasValue, x => x.Status == input.Status)
+            .WhereIf(input.Type.HasValue, x => x.Type == input.Type);
+
+        var totalCount = await AsyncExecuter.CountAsync(queryable);
+        
+        queryable = queryable
+            .OrderBy(input.Sorting ?? nameof(BilliardTable.Number))
+            .PageBy(input.SkipCount, input.MaxResultCount);
+
+        var tables = await AsyncExecuter.ToListAsync(queryable);
+        
+        return new PagedResultDto<BilliardTableDto>(
+            totalCount,
+            await MapToGetListOutputDtosAsync(tables)
+        );
+    }
+
+    [Authorize(BilliardHallPermissions.BilliardTables.Create)]
+    public virtual async Task<BilliardTableDto> CreateAsync(CreateBilliardTableDto input)
+    {
+        var table = await _billiardTableManager.CreateAsync(
+            input.Number,
+            input.Type,
+            input.HourlyRate,
+            input.LocationX,
+            input.LocationY
+        );
+
+        await _billiardTableRepository.InsertAsync(table);
+        
+        return await MapToGetOutputDtoAsync(table);
+    }
+
+    [Authorize(BilliardHallPermissions.BilliardTables.Edit)]
+    public virtual async Task<BilliardTableDto> UpdateAsync(Guid id, UpdateBilliardTableDto input)
+    {
+        var table = await _billiardTableRepository.GetAsync(id);
+        
+        // 使用 ABP 的 ObjectMapper 自动映射
+        await MapToEntityAsync(input, table);
+        
+        table = await _billiardTableRepository.UpdateAsync(table);
+        
+        return await MapToGetOutputDtoAsync(table);
+    }
+}
+```
+
+### ABP 领域服务模式 (Domain Service Pattern)
+
+```csharp
+public class BilliardTableManager : DomainService
+{
+    private readonly IRepository<BilliardTable, Guid> _billiardTableRepository;
+
+    public BilliardTableManager(IRepository<BilliardTable, Guid> billiardTableRepository)
+    {
+        _billiardTableRepository = billiardTableRepository;
+    }
+
+    public async Task<BilliardTable> CreateAsync(
+        int number,
+        BilliardTableType type,
+        decimal hourlyRate,
+        float locationX = 0,
+        float locationY = 0)
+    {
+        // 业务规则验证
+        await CheckNumberNotExistsAsync(number);
+        await CheckHourlyRateValidAsync(hourlyRate);
+
+        return new BilliardTable(
+            GuidGenerator.Create(),
+            number,
+            type,
+            hourlyRate,
+            locationX,
+            locationY
+        );
+    }
+
+    public async Task ChangeStatusAsync(BilliardTable table, BilliardTableStatus newStatus)
+    {
+        Check.NotNull(table, nameof(table));
+        
+        // 复杂业务规则
+        await ValidateStatusChangeAsync(table, newStatus);
+        
+        table.ChangeStatus(newStatus);
+        
+        // 领域事件
+        table.AddLocalEvent(new BilliardTableStatusChangedEto
+        {
+            TableId = table.Id,
+            OldStatus = table.Status,
+            NewStatus = newStatus
+        });
+    }
+
+    private async Task CheckNumberNotExistsAsync(int number)
+    {
+        var exists = await _billiardTableRepository.AnyAsync(x => x.Number == number);
+        if (exists)
+        {
+            throw new BusinessException(BilliardHallDomainErrorCodes.BilliardTableNumberAlreadyExists)
+                .WithData("Number", number);
+        }
+    }
+
+    private async Task CheckHourlyRateValidAsync(decimal hourlyRate)
+    {
+        if (hourlyRate <= 0 || hourlyRate > 999.99m)
+        {
+            throw new BusinessException(BilliardHallDomainErrorCodes.InvalidHourlyRate)
+                .WithData("Rate", hourlyRate);
+        }
+    }
+}
+```
+
+### ABP 错误处理模式 (Error Handling Pattern)
+
+```csharp
+// 领域错误代码
+public static class BilliardHallDomainErrorCodes
+{
+    public const string BilliardTableNumberAlreadyExists = "BilliardHall:BilliardTableNumberAlreadyExists";
+    public const string InvalidHourlyRate = "BilliardHall:InvalidHourlyRate";
+    public const string CannotChangeStatusFromOutOfOrder = "BilliardHall:CannotChangeStatusFromOutOfOrder";
+}
+
+// 本地化资源
+{
+  "BilliardHall:BilliardTableNumberAlreadyExists": "台球桌号码 {Number} 已存在",
+  "BilliardHall:InvalidHourlyRate": "无效的小时费率: {Rate}",
+  "BilliardHall:CannotChangeStatusFromOutOfOrder": "无法从故障状态直接更改到其他状态"
+}
+
+// 异常处理
+public class BilliardTableAppService : BilliardHallAppService
+{
+    public async Task<BilliardTableDto> CreateAsync(CreateBilliardTableDto input)
+    {
+        try
+        {
+            // 业务逻辑
+            var table = await _billiardTableManager.CreateAsync(...);
+            return await MapToGetOutputDtoAsync(table);
+        }
+        catch (BusinessException ex) when (ex.Code == BilliardHallDomainErrorCodes.BilliardTableNumberAlreadyExists)
+        {
+            // ABP 自动处理本地化和返回适当的 HTTP 状态码
+            throw;
+        }
+    }
+}
+```
+
+### ABP 自动映射配置 (AutoMapper Profile)
+
+```csharp
+public class BilliardHallAutoMapperProfile : Profile
+{
+    public BilliardHallAutoMapperProfile()
+    {
+        // Entity -> DTO
+        CreateMap<BilliardTable, BilliardTableDto>();
+        CreateMap<BilliardHall, BilliardHallDto>();
+        
+        // Input DTO -> Entity (Create)
+        CreateMap<CreateBilliardTableDto, BilliardTable>()
+            .IgnoreFullAuditedObjectProperties()
+            .IgnoreExtraProperties();
+            
+        // Input DTO -> Entity (Update)
+        CreateMap<UpdateBilliardTableDto, BilliardTable>()
+            .IgnoreFullAuditedObjectProperties()
+            .IgnoreExtraProperties();
+    }
 }
 ```
 
