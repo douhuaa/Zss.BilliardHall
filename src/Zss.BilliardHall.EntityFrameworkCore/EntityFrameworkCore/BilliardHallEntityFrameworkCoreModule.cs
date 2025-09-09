@@ -57,10 +57,7 @@ public class BilliardHallEntityFrameworkCoreModule : AbpModule
             /* The main point to change your DBMS.
              * See also BilliardHallDbContextFactory for EF Core tooling. */
 
-            options.UseMySQL(builder =>
-            {
-                builder.TranslateParameterizedCollectionsToConstants();
-            });
+            options.UseMySQL();
 
         });
 

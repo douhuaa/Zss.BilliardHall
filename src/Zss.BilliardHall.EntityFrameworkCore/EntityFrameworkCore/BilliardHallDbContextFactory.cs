@@ -17,8 +17,9 @@ public class BilliardHallDbContextFactory : IDesignTimeDbContextFactory<Billiard
 
         BilliardHallEfCoreEntityExtensionMappings.Configure();
 
-        var builder =
-            new DbContextOptionsBuilder<BilliardHallDbContext>().UseMySQL(configuration.GetConnectionString("Default"));
+        var builder = new DbContextOptionsBuilder<BilliardHallDbContext>();
+        builder.UseMySQL(configuration.GetConnectionString("Default") ?? 
+                         throw new InvalidOperationException("Connection string 'Default' not found"));
 
         return new BilliardHallDbContext(builder.Options);
     }
