@@ -3,13 +3,16 @@
 > 构建符合"机器可读优先、人机混合协作、流程自动化"目标的GitHub Copilot指令文件体系
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![.NET](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/)
-[![React](https://img.shields.io/badge/React-18.0-blue.svg)](https://reactjs.org/)
+[![.NET](https://img.shields.io/badge/.NET-9.0-purple.svg)](https://dotnet.microsoft.com/)
+[![ABP Framework](https://img.shields.io/badge/ABP-9.3.2-red.svg)](https://abp.io/)
+[![Blazor](https://img.shields.io/badge/Blazor-Server%20+%20WASM-blue.svg)](https://blazor.net/)
+[![Aspire](https://img.shields.io/badge/.NET%20Aspire-9.4.1-orange.svg)](https://learn.microsoft.com/en-us/dotnet/aspire/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-blue.svg)](https://www.mysql.com/)
 [![GitHub Copilot](https://img.shields.io/badge/GitHub-Copilot%20Optimized-green.svg)](https://copilot.github.com/)
 
 ## 项目概述 (Project Overview)
 
-智慧台球厅管理系统是一个现代化的台球厅综合管理平台，采用先进的软件架构和开发模式，专门为 GitHub Copilot 优化设计，实现高效的人机协作开发。
+智慧台球厅管理系统是一个现代化的台球厅综合管理平台，基于 **ABP Framework 9.3.2** 和 **.NET Aspire 9.4.1** 构建，采用领域驱动设计 (DDD) 和云原生架构模式，专门为 GitHub Copilot 优化设计，实现高效的人机协作开发。
 
 ### 核心特性 (Core Features)
 
@@ -24,11 +27,13 @@
 ### 技术特色 (Technical Highlights)
 
 - 🤖 **AI 驱动开发** - 专门为 GitHub Copilot 优化的代码结构
-- 🏗️ **现代架构** - 清洁架构、微服务、事件驱动
-- 🚀 **高性能** - 缓存策略、数据库优化、异步处理
-- 🔒 **安全可靠** - JWT 认证、数据加密、安全审计
-- 🐳 **容器化部署** - Docker、Kubernetes 支持
-- 📈 **可观测性** - 日志、监控、告警、追踪
+- 🏛️ **ABP Framework** - 领域驱动设计、多租户、权限管理
+- 🌐 **Blazor 混合架构** - Server + WebAssembly 双模式支持
+- ☁️ **.NET Aspire 编排** - 云原生服务发现、监控、弹性处理
+- 🎨 **现代化 UI** - Blazorise + Bootstrap 5 + LeptonX Lite 主题
+- 🔒 **企业级安全** - OpenIddict 认证、多租户隔离、权限控制
+- 🐳 **容器化部署** - Aspire 托管、Docker 支持
+- 📈 **可观测性** - OpenTelemetry 监控、健康检查、日志追踪
 
 ## GitHub Copilot 指令文件体系 (Copilot Instruction File System)
 
@@ -42,16 +47,15 @@
 │   ├── README.md                       # 指令系统说明
 │   ├── copilot.yml                     # 中央配置文件
 │   ├── schemas/                        # 机器可读架构定义
-│   │   ├── entities.json              # 业务实体架构
-│   │   ├── api-responses.json          # API 响应格式
-│   │   └── database-schema.json        # 数据库架构
+│   │   ├── abp-entities.json          # ABP 实体架构
+│   │   └── aspire-config.json         # Aspire 编排配置
 │   ├── patterns/                       # 代码模式和约定
-│   │   ├── coding-patterns.md          # 代码编写模式
-│   │   ├── api-patterns.md             # API 设计模式
-│   │   ├── database-patterns.md        # 数据库设计模式
-│   │   ├── testing-patterns.md         # 测试模式
-│   │   ├── frontend-patterns.md        # 前端开发模式
-│   │   └── security-patterns.md        # 安全模式
+│   │   ├── coding-patterns.md          # ABP 代码编写模式
+│   │   ├── api-patterns.md             # ABP Application Service 模式
+│   │   ├── database-patterns.md        # ABP + MySQL 设计模式
+│   │   ├── testing-patterns.md         # ABP 测试模式
+│   │   ├── blazor-patterns.md          # Blazor 组件开发模式
+│   │   └── aspire-patterns.md          # .NET Aspire 编排模式
 │   ├── workflows/                      # 工作流和自动化
 │   │   ├── README.md                   # 工作流说明
 │   │   ├── development.md              # 开发工作流
@@ -59,15 +63,23 @@
 │   │   ├── deployment.md               # 部署工作流
 │   │   └── maintenance.md              # 维护工作流
 │   └── templates/                      # 代码生成模板
-│       ├── controller-template.md       # 控制器模板
-│       ├── service-template.md          # 服务层模板
-│       ├── repository-template.md       # 数据访问模板
-│       └── component-template.md        # 前端组件模板
-└── src/                               # 源代码目录
-    ├── Zss.BilliardHall.Domain/      # 域模型层
-    ├── Zss.BilliardHall.Application/ # 应用服务层
-    ├── Zss.BilliardHall.Infrastructure/ # 基础设施层
-    └── Zss.BilliardHall.Api/         # API 层
+│       ├── abp-application-service-template.md  # ABP 应用服务模板
+│       ├── service-template.md          # 领域服务模板
+│       ├── repository-template.md       # 仓储模板
+│       └── component-template.md        # Blazor 组件模板
+└── src/                               # ABP 项目结构
+    ├── Zss.BilliardHall.Domain.Shared/  # 共享领域
+    ├── Zss.BilliardHall.Domain/        # 领域层
+    ├── Zss.BilliardHall.Application.Contracts/  # 应用契约
+    ├── Zss.BilliardHall.Application/   # 应用服务层
+    ├── Zss.BilliardHall.EntityFrameworkCore/  # 数据访问层
+    ├── Zss.BilliardHall.HttpApi/       # HTTP API 层
+    ├── Zss.BilliardHall.HttpApi.Client/  # API 客户端
+    ├── Zss.BilliardHall.Blazor/        # Blazor Server 主机
+    ├── Zss.BilliardHall.Blazor.Client/ # Blazor WebAssembly 客户端
+    ├── Zss.BilliardHall.DbMigrator/    # 数据库迁移工具
+    ├── Zss.BilliardHall.AppHost/       # .NET Aspire 应用主机
+    └── Zss.BilliardHall.ServiceDefaults/ # Aspire 服务默认配置
 ```
 
 ### 核心设计原则 (Core Design Principles)
@@ -94,11 +106,12 @@
 
 ### 环境要求 (Prerequisites)
 
-- .NET 8.0 SDK
-- Node.js 18.x
-- SQL Server 2022 或 LocalDB
-- Redis (可选，用于缓存)
-- Docker Desktop (可选，用于容器化部署)
+- .NET 9.0 SDK
+- MySQL 8.0 或更高版本
+- Redis (用于缓存和分布式锁)
+- Docker Desktop (可选，用于 Aspire 编排)
+- Visual Studio 2022 或 JetBrains Rider (推荐)
+- ABP CLI (可选，用于代码生成)
 
 ### 安装步骤 (Installation)
 
@@ -108,35 +121,33 @@
    cd Zss.BilliardHall
    ```
 
-2. **自动化环境设置**
+2. **使用 .NET Aspire 快速启动（推荐）**
    ```bash
-   # 使用自动化脚本设置开发环境
-   chmod +x scripts/setup-dev.sh
-   ./scripts/setup-dev.sh
+   # 确保 Docker Desktop 正在运行
+   # 运行 Aspire AppHost，将自动启动所有服务
+   dotnet run --project src/Zss.BilliardHall.AppHost
    ```
 
 3. **手动设置（可选）**
    ```bash
-   # 安装后端依赖
+   # 安装依赖包
    dotnet restore
    
-   # 安装前端依赖
-   npm install
+   # 配置数据库连接字符串（在 appsettings.json 中）
+   # "Default": "Server=localhost;Database=BilliardHall;Uid=root;Pwd=yourpassword;"
    
-   # 数据库迁移
-   dotnet ef database update --project src/Zss.BilliardHall.Infrastructure
+   # 运行数据库迁移
+   dotnet run --project src/Zss.BilliardHall.DbMigrator
    
-   # 启动后端服务
-   dotnet run --project src/Zss.BilliardHall.Api
-   
-   # 启动前端服务
-   npm run dev
+   # 启动 Blazor 应用
+   dotnet run --project src/Zss.BilliardHall.Blazor
    ```
 
 4. **访问应用**
-   - 🌐 前端应用: https://localhost:3000
-   - 📖 API 文档: https://localhost:5001/swagger
-   - 📊 健康检查: https://localhost:5001/health
+   - 🌐 Blazor 应用: https://localhost:7136
+   - 📖 Swagger API 文档: https://localhost:7136/swagger
+   - 📊 Aspire Dashboard: https://localhost:15888 (使用 Aspire 时)
+   - 🩺 健康检查: https://localhost:7136/health-ui
 
 ## GitHub Copilot 使用指南 (Copilot Usage Guide)
 
@@ -145,82 +156,96 @@
 #### 1. 创建新实体
 ```
 // Copilot 提示词
-基于 entities.json 架构为台球厅会员系统创建 Member 实体，包括会员等级、积分、有效期等属性
+基于 abp-entities.json 架构为台球厅会员系统创建 Member 实体，使用 ABP FullAuditedAggregateRoot 基类，包括会员等级、积分、有效期等属性，支持多租户
 ```
 
-#### 2. 生成 API 控制器
+#### 2. 生成 ABP Application Service
 ```
 // Copilot 提示词  
-根据 controller-template.md 为 Member 实体创建完整的 RESTful API 控制器，包括 CRUD 操作和批量处理
+根据 abp-application-service-template.md 为 Member 实体创建完整的应用服务，包括权限控制、DTO 映射、分页查询和业务逻辑
 ```
 
-#### 3. 创建前端组件
+#### 3. 创建 Blazor 组件
 ```
 // Copilot 提示词
-基于 component-template.md 创建会员管理的数据表格组件，支持搜索、分页、排序和导出功能
+基于 blazor-patterns.md 创建会员管理的 Blazorise 数据表格组件，支持搜索、分页、排序和 CRUD 操作，使用 LeptonX Lite 主题
 ```
 
 #### 4. 数据库设计
 ```
 // Copilot 提示词
-根据 database-patterns.md 为会员积分系统设计数据表结构，包括积分获取、消费、过期等业务逻辑
+根据 database-patterns.md 为会员积分系统设计 MySQL 数据表结构，使用 ABP Entity Framework Core 配置，包括索引优化和多租户支持
+```
+
+#### 5. .NET Aspire 服务配置
+```
+// Copilot 提示词
+基于 aspire-patterns.md 在 AppHost 中配置新的微服务，包括服务发现、健康检查、监控和弹性处理
 ```
 
 ### 最佳实践 (Best Practices)
 
-1. **使用结构化提示** - 引用具体的模板和模式文件
-2. **提供业务上下文** - 描述具体的业务场景和需求
-3. **遵循命名约定** - 使用项目定义的命名规范
-4. **包含测试代码** - 要求生成对应的单元测试
-5. **考虑错误处理** - 确保生成的代码包含适当的异常处理
+1. **使用结构化提示** - 引用具体的 ABP 模板和模式文件
+2. **提供业务上下文** - 描述具体的台球厅业务场景和需求
+3. **遵循 ABP 约定** - 使用 ABP 框架的命名规范和架构模式
+4. **包含权限控制** - 确保生成的代码包含 ABP 权限验证
+5. **支持多租户** - 考虑多租户隔离和数据过滤
+6. **添加相应测试** - 使用 ABP 测试基础设施编写测试
 
 ## 项目结构 (Project Structure)
 
-### 后端架构 (Backend Architecture)
+### ABP 分层架构 (ABP Layered Architecture)
 
 ```
 src/
-├── Zss.BilliardHall.Domain/           # 领域层
-│   ├── Entities/                      # 领域实体
-│   ├── ValueObjects/                  # 值对象
-│   ├── Enums/                        # 枚举类型
-│   ├── Interfaces/                   # 领域接口
-│   └── Services/                     # 领域服务
-├── Zss.BilliardHall.Application/      # 应用层
-│   ├── DTOs/                         # 数据传输对象
-│   ├── Services/                     # 应用服务
-│   ├── Validators/                   # 验证器
-│   ├── Mappers/                      # 对象映射
-│   └── Queries/                      # 查询对象
-├── Zss.BilliardHall.Infrastructure/   # 基础设施层
-│   ├── Data/                         # 数据访问
-│   ├── Repositories/                 # 仓储实现
-│   ├── ExternalServices/             # 外部服务
-│   ├── Caching/                      # 缓存实现
-│   └── Configuration/                # 配置管理
-└── Zss.BilliardHall.Api/             # API 层
-    ├── Controllers/                  # 控制器
-    ├── Middleware/                   # 中间件
-    ├── Filters/                      # 过滤器
-    ├── Models/                       # API 模型
-    └── Extensions/                   # 扩展方法
+├── Zss.BilliardHall.Domain.Shared/     # 共享领域
+│   ├── Enums/                          # 枚举定义
+│   ├── Consts/                         # 常量定义
+│   └── Localization/                   # 本地化资源
+├── Zss.BilliardHall.Domain/            # 领域层
+│   ├── Entities/                       # 领域实体 (继承 ABP 基类)
+│   ├── ValueObjects/                   # 值对象
+│   ├── Services/                       # 领域服务
+│   ├── Repositories/                   # 仓储接口
+│   └── Events/                         # 领域事件
+├── Zss.BilliardHall.Application.Contracts/  # 应用契约层
+│   ├── DTOs/                          # 数据传输对象
+│   ├── Services/                      # 应用服务接口
+│   └── Permissions/                   # 权限定义
+├── Zss.BilliardHall.Application/       # 应用层
+│   ├── Services/                       # 应用服务实现
+│   ├── AutoMapper/                     # 对象映射配置
+│   └── Validators/                     # 输入验证器
+├── Zss.BilliardHall.EntityFrameworkCore/  # 数据访问层
+│   ├── EntityConfigurations/           # 实体配置
+│   ├── Repositories/                   # 仓储实现
+│   ├── Migrations/                     # 数据库迁移
+│   └── BilliardHallDbContext.cs       # DbContext
+├── Zss.BilliardHall.HttpApi/           # HTTP API 层
+│   ├── Controllers/                    # ABP 自动 API 控制器
+│   └── BilliardHallController.cs       # 自定义控制器
+└── Zss.BilliardHall.Blazor/           # 表示层
+    ├── Components/                     # Blazor 组件
+    ├── Pages/                         # 页面组件
+    ├── Menus/                         # 菜单配置
+    └── BilliardHallComponentBase.cs   # 组件基类
 ```
 
-### 前端架构 (Frontend Architecture)
+### .NET Aspire 编排架构 (Aspire Orchestration)
 
 ```
-frontend/
-├── src/
-│   ├── components/                   # 可复用组件
-│   ├── pages/                        # 页面组件
-│   ├── hooks/                        # 自定义 Hooks
-│   ├── services/                     # API 服务
-│   ├── stores/                       # 状态管理
-│   ├── utils/                        # 工具函数
-│   ├── types/                        # TypeScript 类型定义
-│   └── styles/                       # 样式文件
-├── public/                           # 静态资源
-└── tests/                           # 测试文件
+src/
+├── Zss.BilliardHall.AppHost/          # Aspire 应用主机
+│   ├── AppHost.cs                     # 服务编排配置
+│   └── appsettings.json               # Aspire 配置
+├── Zss.BilliardHall.ServiceDefaults/  # 服务默认配置
+│   ├── Extensions.cs                  # 通用服务配置
+│   └── HealthChecks/                  # 健康检查实现
+└── Infrastructure Services/            # 基础设施服务
+    ├── MySQL Database                  # 数据库服务
+    ├── Redis Cache                     # 缓存服务
+    ├── Jaeger Tracing                  # 分布式追踪
+    └── Prometheus Metrics              # 指标收集
 ```
 
 ## 开发工作流 (Development Workflow)
@@ -239,15 +264,17 @@ frontend/
 
 3. **本地测试和验证**
    ```bash
-   # 运行单元测试
-   dotnet test --filter "Category=Unit"
+   # 运行 ABP 单元测试
+   dotnet test test/Zss.BilliardHall.Application.Tests
    
-   # 运行集成测试
-   dotnet test --filter "Category=Integration"
+   # 运行 ABP 集成测试
+   dotnet test test/Zss.BilliardHall.EntityFrameworkCore.Tests
    
-   # 代码质量检查
+   # 使用 ABP CLI 代码分析
+   abp lint
+   
+   # .NET 代码格式化
    dotnet format
-   dotnet analyzer
    ```
 
 4. **提交代码**
@@ -264,10 +291,11 @@ frontend/
 
 ### 自动化流程 (Automated Workflows)
 
-- 🔄 **持续集成** - 自动构建、测试、代码分析
-- 🚀 **持续部署** - 自动部署到各个环境
-- 📊 **质量监控** - 代码覆盖率、性能指标
-- 🔒 **安全扫描** - 依赖漏洞、代码安全检查
+- 🔄 **持续集成** - GitHub Actions + ABP 自动化测试
+- 🚀 **持续部署** - Aspire 编排自动部署到各环境
+- 📊 **质量监控** - SonarQube 代码分析、测试覆盖率
+- 🔒 **安全扫描** - Dependabot、CodeQL 安全检查
+- 📈 **性能监控** - OpenTelemetry 指标、Aspire Dashboard
 
 ## API 文档 (API Documentation)
 
@@ -275,90 +303,119 @@ frontend/
 
 | 模块 | 端点 | 描述 |
 |------|------|------|
-| 台球厅管理 | `/api/v1/billiard-halls` | 台球厅 CRUD 操作 |
-| 台球桌管理 | `/api/v1/billiard-tables` | 台球桌管理和状态监控 |
-| 客户管理 | `/api/v1/customers` | 客户信息和会员管理 |
-| 预约系统 | `/api/v1/reservations` | 预约创建、查询、管理 |
-| 计费系统 | `/api/v1/billing` | 计费规则和支付管理 |
-| 报表分析 | `/api/v1/reports` | 经营数据和分析报表 |
+| 台球厅管理 | `/api/app/billiard-halls` | ABP 应用服务自动 API |
+| 台球桌管理 | `/api/app/billiard-tables` | 台球桌管理和状态监控 |
+| 客户管理 | `/api/app/customers` | 客户信息和会员管理 |
+| 预约系统 | `/api/app/reservations` | 预约创建、查询、管理 |
+| 计费系统 | `/api/app/billing` | 计费规则和支付管理 |
+| 身份管理 | `/api/identity` | ABP Identity 模块 API |
+| 权限管理 | `/api/permission-management` | ABP 权限管理 API |
+| 租户管理 | `/api/multi-tenancy` | ABP 多租户管理 API |
 
 ### 示例请求 (Example Requests)
 
 #### 创建台球桌
 ```http
-POST /api/v1/billiard-tables
+POST /api/app/billiard-tables
 Content-Type: application/json
+Authorization: Bearer {token}
 
 {
   "number": 5,
-  "type": "Chinese8Ball",
+  "type": 0,  // BilliardTableType.ChineseEightBall
   "hourlyRate": 35.00,
   "locationX": 10.5,
   "locationY": 5.2,
-  "floor": 1,
-  "zone": "A",
-  "hallId": "123e4567-e89b-12d3-a456-426614174000"
+  "billiardHallId": "123e4567-e89b-12d3-a456-426614174000"
 }
 ```
 
-#### 查询台球桌列表
+#### 查询台球桌列表 (支持 ABP 动态查询)
 ```http
-GET /api/v1/billiard-tables?status=Available&type=Chinese8Ball&page=1&pageSize=10
+GET /api/app/billiard-tables?Status=1&Type=0&MaxResultCount=10&SkipCount=0&Sorting=Number
+Authorization: Bearer {token}
 ```
 
 #### 创建预约
 ```http
-POST /api/v1/reservations
+POST /api/app/reservations
 Content-Type: application/json
+Authorization: Bearer {token}
 
 {
   "customerId": "987fcdeb-51d2-43a1-8765-123456789abc",
-  "tableId": "123e4567-e89b-12d3-a456-426614174000",
+  "billiardTableId": "123e4567-e89b-12d3-a456-426614174000",
   "startTime": "2023-12-01T14:00:00Z",
-  "endTime": "2023-12-01T16:00:00Z",
+  "durationMinutes": 120,
   "notes": "VIP客户预约"
 }
 ```
 
+#### ABP 权限检查
+```http
+GET /api/permission-management/permissions?providerName=R&providerKey=admin
+Authorization: Bearer {token}
+```
+
 ## 测试策略 (Testing Strategy)
 
-### 测试金字塔 (Test Pyramid)
+### ABP 测试基础设施 (ABP Test Infrastructure)
 
-- **单元测试 (90% 覆盖率)** - 业务逻辑、实体、服务层测试
-- **集成测试 (70% 覆盖率)** - API、数据库、外部服务集成测试
-- **端到端测试 (关键流程)** - 用户场景和业务流程测试
+- **单元测试** - ABP 领域和应用服务测试，使用 ABP TestBase
+- **集成测试** - EF Core + MySQL 集成测试，使用 ABP 测试容器
+- **Web API 测试** - HTTP API 测试，包括权限和多租户验证
+- **Blazor 组件测试** - bUnit 组件测试框架
 
 ### 运行测试 (Running Tests)
 
 ```bash
-# 运行所有测试
-./scripts/run-all-tests.sh
+# 运行所有 ABP 测试
+dotnet test
 
-# 运行特定类型的测试
-dotnet test --filter "Category=Unit"
-dotnet test --filter "Category=Integration"
-dotnet test --filter "Category=Performance"
+# 运行特定测试项目
+dotnet test test/Zss.BilliardHall.Domain.Tests
+dotnet test test/Zss.BilliardHall.Application.Tests  
+dotnet test test/Zss.BilliardHall.EntityFrameworkCore.Tests
+dotnet test test/Zss.BilliardHall.HttpApi.Tests
 
 # 生成覆盖率报告
 dotnet test --collect:"XPlat Code Coverage"
 reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage"
+
+# 使用 ABP CLI 运行测试
+abp test
 ```
 
 ## 部署指南 (Deployment Guide)
 
-### Docker 部署 (Docker Deployment)
+### .NET Aspire 部署 (Aspire Deployment)
 
 ```bash
-# 构建镜像
-docker build -t billiard-hall-api:latest .
+# 使用 Aspire 本地开发
+dotnet run --project src/Zss.BilliardHall.AppHost
+
+# 生成 Aspire 清单文件
+dotnet run --project src/Zss.BilliardHall.AppHost -- --publisher manifest --output-path ../aspire-manifest.json
+
+# 发布到 Azure Container Apps
+azd provision
+azd deploy
+```
+
+### Docker 容器化部署 (Container Deployment)
+
+```bash
+# 构建 ABP 应用镜像
+dotnet publish src/Zss.BilliardHall.Blazor -c Release
+docker build -t billiard-hall-blazor:latest -f src/Zss.BilliardHall.Blazor/Dockerfile .
 
 # 运行容器
 docker run -d \
-  --name billiard-hall-api \
-  -p 8080:80 \
-  -e ConnectionStrings__DefaultConnection="..." \
-  -e Redis__ConnectionString="..." \
-  billiard-hall-api:latest
+  --name billiard-hall-blazor \
+  -p 8080:8080 \
+  -e ConnectionStrings__Default="Server=mysql;Database=BilliardHall;Uid=root;Pwd=yourpassword;" \
+  -e ConnectionStrings__Redis="redis:6379" \
+  billiard-hall-blazor:latest
 ```
 
 ### Kubernetes 部署 (Kubernetes Deployment)
@@ -368,56 +425,75 @@ docker run -d \
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: billiard-hall-api
+  name: billiard-hall-blazor
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: billiard-hall-api
+      app: billiard-hall-blazor
   template:
     spec:
       containers:
-      - name: api
-        image: billiard-hall-api:latest
+      - name: blazor-app
+        image: billiard-hall-blazor:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         env:
-        - name: ConnectionStrings__DefaultConnection
+        - name: ConnectionStrings__Default
           valueFrom:
             secretKeyRef:
               name: db-secret
               key: connection-string
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
 ```
 
 ## 监控和运维 (Monitoring & Operations)
 
 ### 健康检查 (Health Checks)
 
-- `/health` - 应用整体健康状态
+- `/health-ui` - ABP 健康检查 UI 界面
+- `/health` - 应用整体健康状态 (JSON)
 - `/health/ready` - 应用就绪状态
 - `/health/live` - 应用存活状态
 
 ### 监控指标 (Monitoring Metrics)
 
-- **性能指标** - 响应时间、吞吐量、错误率
+- **ABP 审计日志** - 用户操作、实体变更、异常记录
+- **性能指标** - OpenTelemetry 追踪、响应时间、吞吐量
 - **业务指标** - 预约数量、收入统计、用户活跃度
-- **基础设施指标** - CPU、内存、磁盘、网络使用情况
+- **基础设施指标** - CPU、内存、数据库连接数
+
+### Aspire 可观测性 (Aspire Observability)
+
+- **Aspire Dashboard** - 统一监控面板 (https://localhost:15888)
+- **分布式追踪** - Jaeger/OpenTelemetry 集成
+- **日志聚合** - Serilog + Aspire 日志收集
+- **指标收集** - Prometheus + Grafana 集成
 
 ### 日志管理 (Log Management)
 
 ```json
 {
   "timestamp": "2023-12-01T10:30:00Z",
-  "level": "Information",
-  "message": "创建台球桌预约",
+  "level": "Information", 
+  "template": "创建台球桌预约 {ReservationId} 用户 {UserId}",
+  "message": "创建台球桌预约 123e4567 用户 user-67890",
   "properties": {
-    "customerId": "123e4567-e89b-12d3-a456-426614174000",
-    "tableId": "987fcdeb-51d2-43a1-8765-123456789abc",
-    "duration": 120,
-    "amount": 70.00
+    "tenantId": "tenant-123",
+    "userId": "user-67890", 
+    "reservationId": "123e4567-e89b-12d3-a456-426614174000",
+    "billiardTableId": "987fcdeb-51d2-43a1-8765-123456789abc",
+    "durationMinutes": 120,
+    "totalAmount": 70.00,
+    "auditInfo": {
+      "creationTime": "2023-12-01T10:30:00Z",
+      "creatorId": "user-67890"
+    }
   },
   "requestId": "req-12345",
-  "userId": "user-67890"
+  "traceId": "trace-67890",
+  "spanId": "span-abcde"
 }
 ```
 
@@ -435,10 +511,12 @@ spec:
 
 ### 代码规范 (Code Standards)
 
-- 遵循 `.copilot/patterns/` 中定义的编码模式
-- 使用 EditorConfig 和 .NET Format 保证代码格式一致
-- 编写清晰的注释和文档
-- 为新功能添加相应的测试
+- 遵循 `.copilot/patterns/` 中定义的 ABP 编码模式
+- 使用 ABP CLI 和 ABP Suite 代码生成工具
+- 遵循 ABP Framework 命名约定和架构模式
+- 使用 EditorConfig 保证代码格式一致性
+- 编写清晰的 XML 文档注释
+- 为新功能添加相应的 ABP 测试
 
 ### 提交信息规范 (Commit Message Convention)
 
