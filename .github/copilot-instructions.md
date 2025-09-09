@@ -169,6 +169,120 @@ abp_modules:
 - **服务发现**: 自动配置服务间通信和负载均衡
 - **开发体验**: Aspire Dashboard 提供统一的开发和调试界面
 
+## 架构定义和代码模板 (Schemas & Templates)
+
+### JSON 架构文件 (JSON Schema Files)
+
+本项目使用机器可读的 JSON Schema 定义来确保代码生成的一致性和准确性。GitHub Copilot 应严格遵循这些架构规范：
+
+#### 1. ABP 实体架构 (`schemas/abp-entities.json`)
+- **用途**: 定义 ABP Framework 实体的标准结构、属性验证和业务方法
+- **适用场景**: 创建新的领域实体、聚合根或值对象
+- **使用示例**:
+  ```markdown
+  基于 schemas/abp-entities.json 架构，为台球厅管理系统创建一个 Customer 实体，
+  包含会员编号、姓名、手机、邮箱、会员等级等属性，继承 FullAuditedEntity<Guid>，
+  实现 IMultiTenant 接口，并添加升级会员等级的业务方法。
+  ```
+
+#### 2. 业务实体架构 (`schemas/entities.json`)
+- **用途**: 定义核心业务实体的数据结构、约束条件和关联关系
+- **适用场景**: 设计业务模型、数据库结构或 API 响应格式
+- **使用示例**:
+  ```markdown
+  参考 schemas/entities.json 中的 BilliardTable 定义，创建台球桌管理功能，
+  包含编号、类型、状态、小时费率、位置信息等属性，并实现状态变更业务逻辑。
+  ```
+
+#### 3. API 响应架构 (`schemas/api-responses.json`)
+- **用途**: 标准化所有 API 响应格式，包括成功响应、错误处理和分页结构
+- **适用场景**: 设计 RESTful API、处理异常响应或实现分页查询
+- **使用示例**:
+  ```markdown
+  遵循 schemas/api-responses.json 规范，为 BilliardTable 实体创建完整的 CRUD API，
+  包含标准的成功响应、验证错误响应和分页列表响应格式。
+  ```
+
+#### 4. Aspire 配置架构 (`schemas/aspire-config.json`)
+- **用途**: 定义 .NET Aspire 应用编排的配置结构和部署参数
+- **适用场景**: 配置微服务编排、设置基础设施依赖或部署容器化应用
+- **使用示例**:
+  ```markdown
+  基于 schemas/aspire-config.json 架构，为台球厅系统配置 Aspire 应用编排，
+  包含 MySQL 数据库、Redis 缓存、Jaeger 追踪和健康检查配置。
+  ```
+
+### 代码生成模板 (Code Generation Templates)
+
+#### ABP 应用服务模板 (`templates/abp-application-service-template.md`)
+- **用途**: 生成符合 ABP 框架规范的应用服务代码
+- **包含内容**:
+  - 接口定义模板
+  - 服务实现模板
+  - DTO 模板（输入/输出）
+  - 权限验证和异常处理
+  - 批量操作和统计功能
+- **使用示例**:
+  ```markdown
+  使用 templates/abp-application-service-template.md 模板，为 Reservation 实体
+  生成完整的应用服务，包含 CRUD 操作、状态变更、批量处理和统计报表功能。
+  ```
+
+### 架构使用最佳实践 (Best Practices)
+
+1. **提示词结构化引用**:
+   ```markdown
+   # 推荐的提示词格式
+   基于 schemas/{schema-file}.json 架构定义，
+   使用 templates/{template-file}.md 模板，
+   为 {业务场景} 生成 {功能描述}。
+   
+   具体要求：
+   - 严格遵循 JSON Schema 规范
+   - 继承指定的 ABP 基类
+   - 实现必要的接口和验证
+   - 包含完整的错误处理
+   ```
+
+2. **架构验证检查**:
+   - 生成的代码必须符合对应的 JSON Schema
+   - 实体属性必须包含必要的验证注解
+   - API 响应必须遵循标准格式
+   - Aspire 配置必须包含所有必需字段
+
+3. **模板定制化使用**:
+   - 根据具体业务需求调整模板变量
+   - 保持模板结构的一致性
+   - 添加必要的业务方法和验证逻辑
+
+### 实际使用示例
+
+详细的架构和模板使用示例请参考：[使用示例文档](./.copilot/usage-examples.md)
+
+包含以下场景的完整示例：
+- **实体创建** - 基于架构定义创建新的业务实体
+- **API 设计** - 遵循响应格式标准设计 RESTful API  
+- **应用服务** - 使用模板生成完整的应用服务代码
+- **基础设施** - 配置 Aspire 服务编排和监控
+- **端到端开发** - 组合使用多个架构和模板完成复杂功能
+
+### 架构文件维护和更新
+
+- **更新频率**: 当业务模型变更或发现新的最佳实践时更新
+- **版本控制**: 重大架构变更需要更新版本号
+- **验证机制**: 使用 JSON Schema 验证器确保架构正确性
+- **文档同步**: 架构更新时同步更新相关文档和示例
+
+### 优化建议和未来改进
+
+详细的架构和模板优化建议请参考：[架构优化建议文档](./.copilot/optimization-recommendations.md)
+
+主要改进方向包括：
+- **架构重组**: 按功能分类重新组织架构文件结构
+- **模板扩展**: 增加更多代码生成模板以覆盖常见开发场景
+- **集成优化**: 改善与 GitHub Copilot 和开发工作流的集成
+- **质量保证**: 建立架构版本控制和质量验证机制
+
 ## 相关指令文件 (Related Instruction Files)
 
 - [ABP 代码模式和约定](./.copilot/patterns/coding-patterns.md) - ABP Framework 编码规范
@@ -178,8 +292,18 @@ abp_modules:
 - [Blazor 组件开发模式](./.copilot/patterns/blazor-patterns.md) - Blazor Server + WASM 开发
 - [Aspire 编排模式](./.copilot/patterns/aspire-patterns.md) - .NET Aspire 服务编排
 - [ABP 工作流模板](./.copilot/workflows/README.md) - 开发工作流程
+
+### 架构和模板文件 (Schemas & Templates)
 - [ABP 实体架构](./.copilot/schemas/abp-entities.json) - ABP 实体定义架构
+- [业务实体架构](./.copilot/schemas/entities.json) - 核心业务实体数据结构
+- [API 响应架构](./.copilot/schemas/api-responses.json) - API 响应格式标准
 - [Aspire 配置架构](./.copilot/schemas/aspire-config.json) - Aspire 编排配置架构
+- [ABP 应用服务模板](./.copilot/templates/abp-application-service-template.md) - ABP 应用服务代码模板
+
+### 指导和优化文档 (Guidelines & Optimization)
+- [使用示例文档](./.copilot/usage-examples.md) - 架构和模板实际使用示例
+- [架构优化建议](./.copilot/optimization-recommendations.md) - 架构和模板优化指南
+- [架构验证脚本](./.copilot/validate-schemas.py) - JSON Schema 验证工具
 
 ---
 
