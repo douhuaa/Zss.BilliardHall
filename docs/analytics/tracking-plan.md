@@ -1,8 +1,10 @@
 # 埋点追踪方案（Tracking Plan）v0.1
 
-> 目标：覆盖 MVP ~ V0.3 的核心行为，支持获客转化、留存、运营效率、营收、设备稳定性 5 大类指标。后续可迁移至数据平台 YAML/JSON 配置化。
-
-> 相关文档： [PRD](../prd/PRD.md) · [流程与状态](../design/flow-and-states.md) · [数据库模型](../design/database-schema.md)
+> 目标：覆盖 MVP ~ V0.3 的核心行为，支持获客转化、留存、运营效率、营收、设备稳定性
+> 5 大类指标。后续可迁移至数据平台 YAML/JSON 配置化。
+>
+> 相关文档： [PRD](../prd/PRD.md) · [流程与状态](../design/flow-and-states.md) ·
+> [数据库模型](../design/database-schema.md)
 
 ## 1. 事件命名规范
 
