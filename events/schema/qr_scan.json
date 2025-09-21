@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QR Scan Event",
+  "type": "object",
+  "description": "用户扫码行为事件",
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "const": "qr_scan"
+    },
+    "event_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "事件发生时间 (ISO8601 UTC)"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "用户ID (-1表示未登录)"
+    },
+    "store_id": {
+      "type": "integer",
+      "description": "门店ID"
+    },
+    "table_id": {
+      "type": "integer", 
+      "description": "球台ID"
+    },
+    "table_code": {
+      "type": "string",
+      "description": "球台二维码"
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["h5", "mini_program", "admin", "device"],
+      "description": "扫码平台"
+    },
+    "source_channel": {
+      "type": "string",
+      "description": "来源渠道",
+      "examples": ["wechat", "alipay", "direct"]
+    },
+    "session_id": {
+      "type": "integer",
+      "description": "会话ID（若已存在）"
+    },
+    "user_type": {
+      "type": "string",
+      "enum": ["new", "active", "churn_risk", "vip"],
+      "description": "用户类型"
+    },
+    "network": {
+      "type": "string",
+      "enum": ["wifi", "5g", "4g", "other"],
+      "description": "网络类型"
+    },
+    "app_version": {
+      "type": "string",
+      "description": "应用版本号"
+    }
+  },
+  "required": [
+    "event_type",
+    "event_time", 
+    "user_id",
+    "store_id",
+    "table_id",
+    "table_code",
+    "platform"
+  ],
+  "additionalProperties": false
+}

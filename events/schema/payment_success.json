@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Payment Success Event", 
+  "type": "object",
+  "description": "支付成功事件",
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "const": "payment_success"
+    },
+    "event_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "事件发生时间 (ISO8601 UTC)"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "用户ID"
+    },
+    "session_id": {
+      "type": "integer",
+      "description": "会话ID"
+    },
+    "store_id": {
+      "type": "integer",
+      "description": "门店ID"
+    },
+    "table_id": {
+      "type": "integer",
+      "description": "球台ID"
+    },
+    "payment_no": {
+      "type": "string",
+      "description": "支付单号"
+    },
+    "amount": {
+      "type": "integer",
+      "description": "支付金额（分）"
+    },
+    "channel": {
+      "type": "string",
+      "enum": ["wechat", "alipay", "mock"],
+      "description": "支付渠道"
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "第三方交易号"
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["h5", "mini_program", "admin", "device"],
+      "description": "操作平台"
+    },
+    "duration_seconds": {
+      "type": "integer",
+      "description": "支付耗时（秒）"
+    }
+  },
+  "required": [
+    "event_type",
+    "event_time",
+    "user_id",
+    "session_id",
+    "store_id",
+    "table_id",
+    "payment_no",
+    "amount",
+    "channel",
+    "platform"
+  ],
+  "additionalProperties": false
+}

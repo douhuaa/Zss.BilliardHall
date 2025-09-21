@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Billing Frozen Event",
+  "type": "object",
+  "description": "计费金额冻结事件",
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "const": "billing_frozen"
+    },
+    "event_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "事件发生时间 (ISO8601 UTC)"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "用户ID"
+    },
+    "session_id": {
+      "type": "integer",
+      "description": "会话ID"
+    },
+    "store_id": {
+      "type": "integer",
+      "description": "门店ID"
+    },
+    "table_id": {
+      "type": "integer",
+      "description": "球台ID"
+    },
+    "amount": {
+      "type": "integer",
+      "description": "冻结金额（分）"
+    },
+    "minutes": {
+      "type": "integer",
+      "description": "使用分钟数"
+    },
+    "rules_applied_count": {
+      "type": "integer",
+      "description": "应用规则数量"
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["h5", "mini_program", "admin", "device"],
+      "description": "操作平台"
+    },
+    "billing_breakdown": {
+      "type": "object",
+      "description": "计费明细",
+      "properties": {
+        "base_amount": {
+          "type": "integer",
+          "description": "基础金额（分）"
+        },
+        "discount_amount": {
+          "type": "integer", 
+          "description": "折扣金额（分）"
+        },
+        "unit_price": {
+          "type": "integer",
+          "description": "单价（分/分钟）"
+        }
+      }
+    }
+  },
+  "required": [
+    "event_type",
+    "event_time",
+    "user_id",
+    "session_id",
+    "store_id",
+    "table_id", 
+    "amount",
+    "minutes",
+    "platform"
+  ],
+  "additionalProperties": false
+}

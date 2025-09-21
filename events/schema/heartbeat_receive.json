@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Heartbeat Receive Event",
+  "type": "object", 
+  "description": "设备心跳接收事件",
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "const": "heartbeat_receive"
+    },
+    "event_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "事件发生时间 (ISO8601 UTC)"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "用户ID（系统事件可为-1）"
+    },
+    "session_id": {
+      "type": "integer",
+      "description": "会话ID（若无关联可为空）"
+    },
+    "store_id": {
+      "type": "integer",
+      "description": "门店ID"
+    },
+    "table_id": {
+      "type": "integer",
+      "description": "球台ID"
+    },
+    "device_id": {
+      "type": "integer",
+      "description": "设备ID"
+    },
+    "device_sn": {
+      "type": "string",
+      "description": "设备序列号"
+    },
+    "platform": {
+      "type": "string",
+      "const": "device",
+      "description": "设备平台"
+    },
+    "online_status": {
+      "type": "boolean",
+      "description": "在线状态"
+    },
+    "metrics": {
+      "type": "object",
+      "description": "设备指标",
+      "properties": {
+        "cpu_usage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "memory_usage": {
+          "type": "number", 
+          "minimum": 0,
+          "maximum": 100
+        },
+        "network_signal": {
+          "type": "integer",
+          "minimum": -100,
+          "maximum": 0
+        },
+        "firmware_version": {
+          "type": "string"
+        }
+      }
+    },
+    "delay_ms": {
+      "type": "integer",
+      "description": "心跳延迟（毫秒）"
+    }
+  },
+  "required": [
+    "event_type",
+    "event_time",
+    "store_id",
+    "table_id",
+    "device_id",
+    "device_sn",
+    "platform",
+    "online_status"
+  ],
+  "additionalProperties": false
+}

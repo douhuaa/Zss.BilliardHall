@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Session End Request Event",
+  "type": "object",
+  "description": "用户提交结束请求事件",
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "const": "session_end_request"
+    },
+    "event_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "事件发生时间 (ISO8601 UTC)"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "用户ID"
+    },
+    "session_id": {
+      "type": "integer",
+      "description": "会话ID"
+    },
+    "store_id": {
+      "type": "integer",
+      "description": "门店ID"
+    },
+    "table_id": {
+      "type": "integer",
+      "description": "球台ID"
+    },
+    "duration_seconds": {
+      "type": "integer",
+      "description": "实际使用时长（秒）"
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["h5", "mini_program", "admin", "device"],
+      "description": "操作平台"
+    },
+    "end_reason": {
+      "type": "string",
+      "enum": ["user_request", "timeout", "system"],
+      "description": "结束原因"
+    }
+  },
+  "required": [
+    "event_type",
+    "event_time",
+    "user_id",
+    "session_id",
+    "store_id", 
+    "table_id",
+    "duration_seconds",
+    "platform"
+  ],
+  "additionalProperties": false
+}

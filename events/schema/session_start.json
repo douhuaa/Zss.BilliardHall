@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Session Start Event",
+  "type": "object",
+  "description": "开台成功事件",
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "const": "session_start"
+    },
+    "event_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "事件发生时间 (ISO8601 UTC)"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "用户ID"
+    },
+    "session_id": {
+      "type": "integer",
+      "description": "会话ID"
+    },
+    "store_id": {
+      "type": "integer",
+      "description": "门店ID"
+    },
+    "table_id": {
+      "type": "integer",
+      "description": "球台ID"
+    },
+    "start_type": {
+      "type": "string",
+      "enum": ["immediate", "reservation"],
+      "description": "开台类型"
+    },
+    "user_type": {
+      "type": "string",
+      "enum": ["new", "active", "churn_risk", "vip"],
+      "description": "用户类型"
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["h5", "mini_program", "admin", "device"],
+      "description": "操作平台"
+    },
+    "session_token": {
+      "type": "string",
+      "description": "会话令牌（用于幂等）"
+    },
+    "expected_duration_minutes": {
+      "type": "integer",
+      "description": "预期时长（分钟）"
+    }
+  },
+  "required": [
+    "event_type",
+    "event_time",
+    "user_id", 
+    "session_id",
+    "store_id",
+    "table_id",
+    "start_type",
+    "platform"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Payment Create Event",
+  "type": "object",
+  "description": "支付订单创建事件",
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "const": "payment_create"
+    },
+    "event_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "事件发生时间 (ISO8601 UTC)"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "用户ID"
+    },
+    "session_id": {
+      "type": "integer",
+      "description": "会话ID"
+    },
+    "store_id": {
+      "type": "integer",
+      "description": "门店ID"
+    },
+    "table_id": {
+      "type": "integer",
+      "description": "球台ID"
+    },
+    "payment_no": {
+      "type": "string",
+      "description": "支付单号"
+    },
+    "amount": {
+      "type": "integer",
+      "description": "支付金额（分）"
+    },
+    "channel": {
+      "type": "string",
+      "enum": ["wechat", "alipay", "mock"],
+      "description": "支付渠道"
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["h5", "mini_program", "admin", "device"],
+      "description": "操作平台"
+    }
+  },
+  "required": [
+    "event_type",
+    "event_time",
+    "user_id",
+    "session_id",
+    "store_id",
+    "table_id",
+    "payment_no",
+    "amount",
+    "channel",
+    "platform"
+  ],
+  "additionalProperties": false
+}
