@@ -1,0 +1,277 @@
+-- 初稿 DDL (以 MySQL 8+ 为假设, 可根据实际调整)
+-- 统一字符集与引擎
+SET NAMES utf8mb4;
+SET time_zone = '+00:00';
+
+CREATE TABLE store (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL,
+  city VARCHAR(64),
+  status TINYINT NOT NULL DEFAULT 1,
+  is_deleted TINYINT NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE billiard_table (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  store_id BIGINT NOT NULL,
+  code VARCHAR(64) NOT NULL,
+  status TINYINT NOT NULL DEFAULT 0,
+  last_session_id BIGINT NULL,
+  is_deleted TINYINT NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uk_table_code (store_id, code),
+  INDEX idx_table_store (store_id),
+  CONSTRAINT fk_table_store FOREIGN KEY (store_id) REFERENCES store(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE user (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  phone VARCHAR(32) UNIQUE,
+  nickname VARCHAR(64),
+  level INT DEFAULT 0,
+  source VARCHAR(64),
+  is_deleted TINYINT NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE table_session (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  session_no VARCHAR(64) NOT NULL UNIQUE,
+  table_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  reservation_id BIGINT NULL,
+  start_time DATETIME NOT NULL,
+  end_time DATETIME NULL,
+  status TINYINT NOT NULL DEFAULT 0,
+  total_minutes INT NULL,
+  billing_amount BIGINT NULL,
+  pay_status TINYINT NOT NULL DEFAULT 0,
+  is_deleted TINYINT NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_session_table_status (table_id, status),
+  INDEX idx_session_user (user_id),
+  CONSTRAINT fk_session_table FOREIGN KEY (table_id) REFERENCES billiard_table(id),
+  CONSTRAINT fk_session_user FOREIGN KEY (user_id) REFERENCES user(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE reservation (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  reservation_no VARCHAR(64) NOT NULL UNIQUE,
+  user_id BIGINT NOT NULL,
+  table_id BIGINT NOT NULL,
+  start_time DATETIME NOT NULL,
+  end_time DATETIME NOT NULL,
+  status TINYINT NOT NULL DEFAULT 0,
+  is_deleted TINYINT NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_res_table_time (table_id, start_time),
+  CONSTRAINT fk_res_user FOREIGN KEY (user_id) REFERENCES user(id),
+  CONSTRAINT fk_res_table FOREIGN KEY (table_id) REFERENCES billiard_table(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE pricing_rule (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  store_id BIGINT NULL,
+  name VARCHAR(100) NOT NULL,
+  priority INT NOT NULL,
+  rule_type TINYINT NOT NULL,
+  config_json JSON NOT NULL,
+  active_from DATETIME NOT NULL,
+  active_to DATETIME NOT NULL,
+  status TINYINT NOT NULL DEFAULT 1,
+  is_deleted TINYINT NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_pricing_store (store_id, status, active_from, active_to)
+) ENGINE=InnoDB;
+
+CREATE TABLE billing_snapshot (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  session_id BIGINT NOT NULL,
+  original_minutes INT NOT NULL,
+  rule_applied JSON,
+  detail_breakdown JSON,
+  final_amount BIGINT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_bs_session (session_id),
+  CONSTRAINT fk_bs_session FOREIGN KEY (session_id) REFERENCES table_session(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE payment_order (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  payment_no VARCHAR(64) NOT NULL UNIQUE,
+  session_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  amount BIGINT NOT NULL,
+  channel VARCHAR(32) NOT NULL,
+  status TINYINT NOT NULL DEFAULT 0,
+  request_payload JSON NULL,
+  notify_payload JSON NULL,
+  is_deleted TINYINT NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_pay_session_status (session_id, status),
+  CONSTRAINT fk_pay_session FOREIGN KEY (session_id) REFERENCES table_session(id),
+  CONSTRAINT fk_pay_user FOREIGN KEY (user_id) REFERENCES user(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE membership (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  user_id BIGINT NOT NULL,
+  level INT NOT NULL,
+  expire_at DATETIME NOT NULL,
+  discount_rate INT NOT NULL,
+  is_deleted TINYINT NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_member_user (user_id),
+  CONSTRAINT fk_member_user FOREIGN KEY (user_id) REFERENCES user(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE package_consumption (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  user_id BIGINT NOT NULL,
+  package_id BIGINT NOT NULL,
+  session_id BIGINT NOT NULL,
+  minutes_used INT NOT NULL,
+  value_deducted BIGINT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_pkg_user (user_id),
+  INDEX idx_pkg_session (session_id)
+) ENGINE=InnoDB;
+
+CREATE TABLE coupon (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  coupon_no VARCHAR(64) NOT NULL UNIQUE,
+  name VARCHAR(100) NOT NULL,
+  type TINYINT NOT NULL,
+  config_json JSON NOT NULL,
+  total_issue INT NOT NULL,
+  issued_count INT NOT NULL DEFAULT 0,
+  valid_from DATETIME NOT NULL,
+  valid_to DATETIME NOT NULL,
+  status TINYINT NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE user_coupon (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  user_id BIGINT NOT NULL,
+  coupon_id BIGINT NOT NULL,
+  code VARCHAR(64) NOT NULL,
+  status TINYINT NOT NULL DEFAULT 0,
+  lock_session_id BIGINT NULL,
+  used_at DATETIME NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_uc_user (user_id, status),
+  UNIQUE KEY uk_uc_code (code),
+  CONSTRAINT fk_uc_user FOREIGN KEY (user_id) REFERENCES user(id),
+  CONSTRAINT fk_uc_coupon FOREIGN KEY (coupon_id) REFERENCES coupon(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE marketing_activity (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  activity_no VARCHAR(64) NOT NULL UNIQUE,
+  name VARCHAR(100) NOT NULL,
+  type TINYINT NOT NULL,
+  config_json JSON NOT NULL,
+  active_from DATETIME NOT NULL,
+  active_to DATETIME NOT NULL,
+  status TINYINT NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_act_time (status, active_from, active_to)
+) ENGINE=InnoDB;
+
+CREATE TABLE device (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  store_id BIGINT NOT NULL,
+  table_id BIGINT NULL,
+  type TINYINT NOT NULL,
+  sn VARCHAR(64) NOT NULL UNIQUE,
+  firmware_version VARCHAR(64),
+  status TINYINT NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_dev_store (store_id),
+  CONSTRAINT fk_dev_store FOREIGN KEY (store_id) REFERENCES store(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE device_heartbeat (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  device_id BIGINT NOT NULL,
+  ts DATETIME NOT NULL,
+  metrics_json JSON NULL,
+  online TINYINT NOT NULL DEFAULT 1,
+  INDEX idx_hb_device_ts (device_id, ts DESC),
+  CONSTRAINT fk_hb_device FOREIGN KEY (device_id) REFERENCES device(id)
+) ENGINE=InnoDB PARTITION BY RANGE (YEAR(ts)) (
+  PARTITION p2025 VALUES LESS THAN (2026)
+);
+
+CREATE TABLE alarm (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  alarm_no VARCHAR(64) NOT NULL UNIQUE,
+  source_type TINYINT NOT NULL,
+  source_id BIGINT NULL,
+  level TINYINT NOT NULL,
+  category VARCHAR(64) NOT NULL,
+  message VARCHAR(255) NOT NULL,
+  status TINYINT NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE work_order (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  work_order_no VARCHAR(64) NOT NULL UNIQUE,
+  alarm_id BIGINT NULL,
+  assignee_id BIGINT NULL,
+  status TINYINT NOT NULL DEFAULT 0,
+  priority TINYINT NOT NULL DEFAULT 2,
+  description TEXT NULL,
+  resolution TEXT NULL,
+  sla_deadline DATETIME NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_wo_status (status),
+  CONSTRAINT fk_wo_alarm FOREIGN KEY (alarm_id) REFERENCES alarm(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE user_tag (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  code VARCHAR(64) NOT NULL UNIQUE,
+  name VARCHAR(100) NOT NULL,
+  category VARCHAR(64) NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE user_tag_relation (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  user_id BIGINT NOT NULL,
+  tag_id BIGINT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_tag_user (user_id, tag_id),
+  CONSTRAINT fk_tr_user FOREIGN KEY (user_id) REFERENCES user(id),
+  CONSTRAINT fk_tr_tag FOREIGN KEY (tag_id) REFERENCES user_tag(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE event_log (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  event_type VARCHAR(64) NOT NULL,
+  biz_id VARCHAR(64) NULL,
+  payload JSON NULL,
+  occurred_at DATETIME NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_event_type_time (event_type, occurred_at)
+) ENGINE=InnoDB;
+
+-- 视图/物化视图示例（可延后）：
+-- CREATE VIEW v_table_utilization AS SELECT table_id, SUM(total_minutes) / (COUNT(DISTINCT DATE(start_time))*60*12) AS utilization FROM table_session GROUP BY table_id;
