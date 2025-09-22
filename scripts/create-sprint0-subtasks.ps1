@@ -45,7 +45,7 @@ CreateIssue "S0-001: 设计并创建 C4 Level 2 容器架构图" @("task", "arch
 - [x] 完成 C4 Level 2 容器图设计
 - [x] 包含所有主要系统组件和外部依赖
 - [x] 标明数据流和通信协议
-- [x] 文档保存在 `docs/architecture/c4-level2-containers.md`
+- [x] 文档保存在 docs/architecture/c4-level2-containers.md
 
 ## 技术要求
 - 使用 Mermaid C4 语法
@@ -91,17 +91,17 @@ CreateIssue "S0-003: 设计并实现数据库Schema v1" @("task", "database", "s
 创建V0.1范围所需的核心数据表结构
 
 ## 核心表清单
-- [x] `store` - 门店信息
-- [x] `billiard_table` - 球台信息  
-- [x] `user` - 用户信息
-- [x] `table_session` - 会话记录
-- [x] `billing_snapshot` - 计费快照
-- [x] `payment_order` - 支付订单
-- [x] `device` - 设备信息
-- [x] `device_heartbeat` - 设备心跳
-- [x] `event_log` - 事件日志
-- [x] `pricing_rule` - 计费规则
-- [x] `payment_callback_idempotent` - 支付幂等控制
+- [x] store - 门店信息
+- [x] billiard_table - 球台信息  
+- [x] user - 用户信息
+- [x] table_session - 会话记录
+- [x] billing_snapshot - 计费快照
+- [x] payment_order - 支付订单
+- [x] device - 设备信息
+- [x] device_heartbeat - 设备心跳
+- [x] event_log - 事件日志
+- [x] pricing_rule - 计费规则
+- [x] payment_callback_idempotent - 支付幂等控制
 
 ## 验收标准
 - [x] 精简表结构至11个核心表
@@ -149,13 +149,13 @@ CreateIssue "S0-005: 设计P0级别事件JSON Schema" @("task", "events", "sprin
 为核心业务事件定义标准化Schema
 
 ## P0事件清单
-- [x] `qr_scan.json` - 扫码行为事件
-- [x] `session_start.json` - 开台成功事件  
-- [x] `session_end_request.json` - 结束请求事件
-- [x] `billing_frozen.json` - 计费冻结事件
-- [x] `payment_create.json` - 支付创建事件
-- [x] `payment_success.json` - 支付成功事件
-- [x] `heartbeat_receive.json` - 设备心跳事件
+- [x] qr_scan.json - 扫码行为事件
+- [x] session_start.json - 开台成功事件  
+- [x] session_end_request.json - 结束请求事件
+- [x] billing_frozen.json - 计费冻结事件
+- [x] payment_create.json - 支付创建事件
+- [x] payment_success.json - 支付成功事件
+- [x] heartbeat_receive.json - 设备心跳事件
 
 ## 通用字段标准
 - [x] event_type, event_time, user_id, store_id, platform
@@ -172,7 +172,7 @@ CreateIssue "S0-005: 设计P0级别事件JSON Schema" @("task", "events", "sprin
 
 CreateIssue "S0-006: 设计统一事件上报API契约" @("task", "events", "sprint0", "completed") @"
 ## 描述
-定义 `/api/track` 接口规范和响应格式
+定义 /api/track 接口规范和响应格式
 
 ## 验收标准
 - [x] POST /api/track 接口定义
@@ -182,14 +182,14 @@ CreateIssue "S0-006: 设计统一事件上报API契约" @("task", "events", "spr
 - [x] API文档更新
 
 ## API 契约
-\`\`\`json
+```json
 POST /api/track
 {
   "events": [
     { "event_type": "qr_scan", ... }
   ]
 }
-\`\`\`
+```
 
 ## 完成情况
 ✅ 已完成 - API契约已定义，README包含完整文档
@@ -219,9 +219,9 @@ CreateIssue "S0-007: 搭建Docker Compose开发环境" @("task", "devops", "spri
 - Redis Commander: localhost:8081 (可选)
 
 ## 启动命令
-\`\`\`bash
+```bash
 docker compose up -d
-\`\`\`
+```
 
 ## 完成情况
 ✅ 已完成 - docker-compose.yml 已创建并验证
@@ -271,13 +271,13 @@ CreateIssue "S0-009: 创建ASP.NET Core项目结构" @("task", "backend", "sprin
 - [x] NuGet包版本统一 (EF Core 8.0.2)
 
 ## 项目结构
-\`\`\`
+```
 src/
 ├── BilliardHall.sln
 ├── BilliardHall.Api/          # Web API层
 ├── BilliardHall.Domain/       # 领域层  
 └── BilliardHall.Infrastructure/ # 基础设施层
-\`\`\`
+```
 
 ## 完成情况
 ✅ 已完成 - 项目结构已创建，编译成功
@@ -525,7 +525,7 @@ CreateIssue "S0-019: 代码构建验证" @("task", "qa", "sprint0", "completed")
 验证代码编译和构建成功
 
 ## 验收标准
-- [x] `dotnet build` 编译成功
+- [x] dotnet build 编译成功
 - [x] 无编译错误和警告
 - [x] 包引用版本兼容
 - [x] 项目间依赖正确
