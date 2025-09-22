@@ -1,0 +1,102 @@
+[
+  {
+    "title": "S0-001: 设计并创建 C4 Level 2 容器架构图",
+    "body": "## 描述\n设计系统架构图，包含 Web应用、API网关、核心服务、设备服务、埋点服务等关键组件\n\n## 验收标准\n- [x] 完成 C4 Level 2 容器图设计\n- [x] 包含所有主要系统组件和外部依赖\n- [x] 标明数据流和通信协议\n- [x] 文档保存在 docs/architecture/c4-level2-containers.md\n\n## 技术要求\n- 使用 Mermaid C4 语法\n- 包含系统边界和外部依赖\n- 标注通信协议和数据流向\n\n## 完成情况\n✅ 已完成 - 包含完整的容器架构图和ADR文档\n\n**估时:** 4h\n**优先级:** P0\n**任务组:** 架构设计",
+    "labels": ["task", "architecture", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-002: 编写架构决策记录 (ADR)",
+    "body": "## 描述\n记录技术栈选择、架构模式、数据存储策略等关键决策\n\n## 验收标准\n- [x] ADR-001: 技术栈选择 (ASP.NET Core + MySQL + Redis)\n- [x] ADR-002: 分层架构设计 (DDD)\n- [x] ADR-003: 数据存储策略\n- [x] 每个ADR包含背景、决策、理由、后果\n\n## ADR 模板结构\n- 状态 (接受/拒绝/废弃)\n- 背景 (为什么需要这个决策)\n- 决策 (具体的技术选择)\n- 理由 (选择的原因)\n- 后果 (决策的影响)\n\n## 完成情况\n✅ 已完成 - 3个核心ADR已编写完成\n\n**估时:** 2h\n**优先级:** P0\n**任务组:** 架构设计",
+    "labels": ["task", "architecture", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-003: 设计并实现数据库Schema v1",
+    "body": "## 描述\n创建V0.1范围所需的核心数据表结构\n\n## 核心表清单\n- [x] store - 门店信息\n- [x] billiard_table - 球台信息\n- [x] user - 用户信息\n- [x] table_session - 会话记录\n- [x] billing_snapshot - 计费快照\n- [x] payment_order - 支付订单\n- [x] device - 设备信息\n- [x] device_heartbeat - 设备心跳\n- [x] event_log - 事件日志\n- [x] pricing_rule - 计费规则\n- [x] payment_callback_idempotent - 支付幂等控制\n\n## 验收标准\n- [x] 精简表结构至11个核心表\n- [x] 包含完整的约束、索引、外键定义\n- [x] 添加中文注释说明每个字段用途\n- [x] 支持MySQL 8+标准\n\n## 完成情况\n✅ 已完成 - schema.sql v1已创建，包含所有核心表和约束\n\n**估时:** 3h\n**优先级:** P0\n**任务组:** 数据库设计",
+    "labels": ["task", "database", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-004: 创建种子数据",
+    "body": "## 描述\n为开发和测试环境准备基础数据\n\n## 验收标准\n- [x] 测试门店数据 (2个门店)\n- [x] 测试球台数据 (每店3-5个球台)\n- [x] 测试用户数据 (包含系统用户)\n- [x] 测试设备数据 (每个球台对应设备)\n- [x] 默认计费规则数据\n\n## 数据内容\n- 测试台球厅1号店、2号店 (北京、上海)\n- 每店5个球台 (T001-T005)\n- 测试用户和系统用户\n- 对应的设备记录\n- 默认计费规则 (1-2元/分钟)\n\n## 完成情况\n✅ 已完成 - db/seed-data.sql 已创建\n\n**估时:** 1h\n**优先级:** P1\n**任务组:** 数据库设计",
+    "labels": ["task", "database", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-005: 设计P0级别事件JSON Schema",
+    "body": "## 描述\n为核心业务事件定义标准化Schema\n\n## P0事件清单\n- [x] qr_scan.json - 扫码行为事件\n- [x] session_start.json - 开台成功事件\n- [x] session_end_request.json - 结束请求事件\n- [x] billing_frozen.json - 计费冻结事件\n- [x] payment_create.json - 支付创建事件\n- [x] payment_success.json - 支付成功事件\n- [x] heartbeat_receive.json - 设备心跳事件\n\n## 通用字段标准\n- [x] event_type, event_time, user_id, store_id, platform\n- [x] JSON Schema Draft 07规范\n- [x] 支持版本控制和向后兼容\n\n## 完成情况\n✅ 已完成 - 7个P0事件Schema已定义完成\n\n**估时:** 4h\n**优先级:** P0\n**任务组:** 事件追踪",
+    "labels": ["task", "events", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-006: 设计统一事件上报API契约",
+    "body": "## 描述\n定义 /api/track 接口规范和响应格式\n\n## 验收标准\n- [x] POST /api/track 接口定义\n- [x] 批量事件上报支持\n- [x] 统一响应格式 (success, processed_count, failed_events)\n- [x] Schema验证机制\n- [x] API文档更新\n\n## API 契约\n```json\nPOST /api/track\n{\n  \"events\": [\n    { \"event_type\": \"qr_scan\", ... }\n  ]\n}\n```\n\n## 完成情况\n✅ 已完成 - API契约已定义，README包含完整文档\n\n**估时:** 2h\n**优先级:** P0\n**任务组:** 事件追踪",
+    "labels": ["task", "events", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-007: 搭建Docker Compose开发环境",
+    "body": "## 描述\n创建包含所有依赖服务的Docker环境\n\n## 验收标准\n- [x] MySQL 8.0 数据库服务\n- [x] Redis 7 缓存服务\n- [x] 自动数据库初始化 (schema.sql + seed-data.sql)\n- [x] 网络配置和端口映射\n- [x] 健康检查配置\n- [x] 可选管理工具 (phpMyAdmin, Redis Commander)\n\n## 服务配置\n- MySQL: localhost:3306 (billiard/billiard123)\n- Redis: localhost:6379\n- phpMyAdmin: localhost:8080 (可选)\n- Redis Commander: localhost:8081 (可选)\n\n## 启动命令\n```bash\ndocker compose up -d\n```\n\n## 完成情况\n✅ 已完成 - docker-compose.yml 已创建并验证\n\n**估时:** 2h\n**优先级:** P0\n**任务组:** 开发环境",
+    "labels": ["task", "devops", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-008: 设置数据库迁移工具和脚本",
+    "body": "## 描述\n建立数据库版本控制和迁移机制\n\n## 验收标准\n- [x] migrate.sh 脚本可执行\n- [x] 支持数据库连接检查\n- [x] 支持 --reset 重置选项\n- [ ] EF Core Migrations 框架配置\n- [ ] 可重复执行迁移\n\n## 当前状态\n🚧 部分完成\n- ✅ migrate.sh 脚本框架已完成\n- ⏸️ EF Core Migrations 集成待实现\n\n## 后续工作\n- 配置EF Core Migrations\n- 测试迁移的可重复执行\n- 集成到CI/CD流程\n\n**估时:** 2h\n**优先级:** P1\n**任务组:** 开发环境",
+    "labels": ["task", "devops", "sprint0", "in-progress"]
+  },
+  {
+    "title": "S0-009: 创建ASP.NET Core项目结构",
+    "body": "## 描述\n初始化后端项目和分层架构\n\n## 验收标准\n- [x] BilliardHall.sln 解决方案\n- [x] BilliardHall.Api - Web API层\n- [x] BilliardHall.Domain - 领域层\n- [x] BilliardHall.Infrastructure - 基础设施层\n- [x] 项目间引用关系正确\n- [x] NuGet包版本统一 (EF Core 8.0.2)\n\n## 项目结构\n```\nsrc/\n├── BilliardHall.sln\n├── BilliardHall.Api/          # Web API层\n├── BilliardHall.Domain/       # 领域层\n└── BilliardHall.Infrastructure/ # 基础设施层\n```\n\n## 完成情况\n✅ 已完成 - 项目结构已创建，编译成功\n\n**估时:** 3h\n**优先级:** P0\n**任务组:** 后端项目",
+    "labels": ["task", "backend", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-010: 实现核心领域实体类",
+    "body": "## 描述\n实现对应数据库表的实体类\n\n## 验收标准\n- [x] 11个核心实体类定义\n- [x] 属性映射与数据库字段对应\n- [x] 适当的数据类型和约束\n- [x] 遵循DDD实体设计原则\n\n## 实体清单\nStore, BilliardTable, User, TableSession, BillingSnapshot, PaymentOrder, Device, DeviceHeartbeat, EventLog, PricingRule\n\n## 完成情况\n✅ 已完成 - BilliardHall.Domain/Entities.cs 已实现\n\n**估时:** 2h\n**优先级:** P0\n**任务组:** 后端项目",
+    "labels": ["task", "backend", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-011: 配置EF Core DbContext",
+    "body": "## 描述\n配置DbContext和实体映射\n\n## 验收标准\n- [x] BilliardHallDbContext 类实现\n- [x] 所有实体的Fluent API配置\n- [x] 表名、字段名、约束映射正确\n- [x] MySQL连接字符串配置\n- [x] DbSet属性定义\n\n## 技术实现\n- Pomelo MySQL Provider 8.0.2\n- Fluent API 配置实体映射\n- 索引和约束正确映射\n\n## 完成情况\n✅ 已完成 - DbContext 已实现并配置\n\n**估时:** 3h\n**优先级:** P0\n**任务组:** 后端项目",
+    "labels": ["task", "backend", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-012: 实现健康检查API",
+    "body": "## 描述\n实现监控数据库和缓存连接状态的API\n\n## 验收标准\n- [x] GET /health 基础健康检查\n- [x] 数据库连接检查\n- [x] Redis连接检查 (模拟实现)\n- [x] 结构化健康检查响应\n- [x] 集成ASP.NET Core HealthChecks\n\n## API 端点\n- GET /health - 综合健康检查\n- GET /health/ready - 就绪状态检查\n\n## 完成情况\n✅ 已完成 - 健康检查API已实现\n\n**估时:** 1h\n**优先级:** P0\n**任务组:** 后端项目",
+    "labels": ["task", "backend", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-013: 实现基础CRUD API",
+    "body": "## 描述\n实现门店、球台等基础数据的查询接口\n\n## 验收标准\n- [x] GET /api/stores - 门店列表查询\n- [x] GET /api/tables - 球台列表查询 (支持门店筛选)\n- [x] 集成Swagger文档生成\n- [x] 异步数据访问实现\n- [x] 基础错误处理\n\n## API 清单\n- GET / - 服务信息\n- GET /api/stores - 门店列表\n- GET /api/tables?storeId=1 - 球台查询\n\n## 完成情况\n✅ 已完成 - 基础API已实现，Swagger文档可用\n\n**估时:** 2h\n**优先级:** P1\n**任务组:** 后端项目",
+    "labels": ["task", "backend", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-014: 实现事件追踪API",
+    "body": "## 描述\n实现统一的事件追踪接口\n\n## 验收标准\n- [x] POST /api/track 事件上报接口\n- [x] 批量事件处理\n- [x] 事件数据持久化到 event_log 表\n- [x] JSON序列化和反序列化\n- [x] 统一响应格式\n\n## 实现特性\n- 支持批量事件上报\n- 自动JSON序列化事件载荷\n- 统一错误处理和响应格式\n\n## 完成情况\n✅ 已完成 - 事件追踪API已实现\n\n**估时:** 2h\n**优先级:** P0\n**任务组:** 后端项目",
+    "labels": ["task", "backend", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-015: 创建项目根目录README",
+    "body": "## 描述\n创建完整的项目介绍和快速启动指南\n\n## 验收标准\n- [x] 项目概述和功能介绍\n- [x] 快速开始指南 (Docker + 本地开发)\n- [x] 项目结构说明\n- [x] API接口文档和示例\n- [x] 开发规范 (Git工作流、提交规范、代码风格)\n- [x] 测试和部署指南\n- [x] 监控指标定义\n- [x] 故障排除手册\n\n## 文档章节\n1. 快速开始 (Docker方式 + 本地方式)\n2. 项目结构\n3. 核心功能 (V0.1 + V0.2)\n4. API接口\n5. 开发规范\n6. 测试\n7. 部署\n8. 监控指标\n9. 故障排除\n\n## 完成情况\n✅ 已完成 - 根目录README.md已创建，内容完整\n\n**估时:** 2h\n**优先级:** P0\n**任务组:** 文档",
+    "labels": ["task", "documentation", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-016: 更新文档总览索引",
+    "body": "## 描述\n更新文档总览，加入新的架构和事件文档链接\n\n## 验收标准\n- [x] 更新 docs/README.md\n- [x] 添加架构设计文档链接\n- [x] 添加事件Schema文档链接\n- [x] 添加Backlog估点文档链接\n- [x] 保持文档分类清晰\n\n## 新增文档链接\n- 架构设计: C4 L2容器图\n- 事件Schema: P0事件定义\n- Backlog估点: 工作量估算\n\n## 完成情况\n✅ 已完成 - 文档索引已更新\n\n**估时:** 0.5h\n**优先级:** P1\n**任务组:** 文档",
+    "labels": ["task", "documentation", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-017: 完成Backlog工作量估算",
+    "body": "## 描述\n详细分解并估算后续开发工作量\n\n## 验收标准\n- [x] Sprint 0 任务完成情况统计\n- [x] V0.1 详细任务分解 (API开发、基础设施、测试、部署)\n- [x] 工时估算和优先级排序\n- [x] 风险评估和缓解措施\n- [x] 里程碑检查点定义\n\n## 估时统计\n- Sprint 0: 24h (已完成15h, 62.5%)\n- V0.1: 135h (17工作日)\n- 总计: 144h (18工作日)\n\n## 工作分解\n- 核心API开发: 62h\n- 基础设施: 26h\n- 测试: 36h\n- 部署运维: 11h\n\n## 完成情况\n✅ 已完成 - docs/backlog-estimation.md已创建\n\n**估时:** 2h\n**优先级:** P0\n**任务组:** 项目管理",
+    "labels": ["task", "management", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-018: 创建Sprint 0交付总结",
+    "body": "## 描述\n总结所有交付物和完成情况\n\n## 验收标准\n- [x] 交付物详情清单\n- [x] 技术验证结果\n- [x] 质量保证评估\n- [x] 下一步行动计划\n- [x] 团队就绪度评估\n\n## 交付总结\n- 架构设计完成 (C4图 + ADR)\n- 数据库Schema v1完成\n- 7个P0事件Schema定义\n- ASP.NET Core项目和基础API\n- Docker开发环境\n- 完整文档体系\n\n## 完成情况\n✅ 已完成 - docs/sprint0-delivery-summary.md已创建\n\n**估时:** 1h\n**优先级:** P1\n**任务组:** 项目管理",
+    "labels": ["task", "management", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-019: 代码构建验证",
+    "body": "## 描述\n验证代码编译和构建成功\n\n## 验收标准\n- [x] dotnet build 编译成功\n- [x] 无编译错误和警告\n- [x] 包引用版本兼容\n- [x] 项目间依赖正确\n\n## 验证结果\n✅ 构建成功\n- 解决方案编译通过\n- EF Core 8.0.2版本统一\n- 项目引用关系正确\n\n## 完成情况\n✅ 已完成 - 构建验证通过\n\n**估时:** 0.5h\n**优先级:** P0\n**任务组:** 质量保证",
+    "labels": ["task", "qa", "sprint0", "completed"]
+  },
+  {
+    "title": "S0-020: 环境集成测试",
+    "body": "## 描述\n测试Docker环境和数据库连接\n\n## 验收标准\n- [x] Docker Compose 成功启动\n- [ ] 数据库连接正常\n- [ ] 健康检查端点返回正常\n- [ ] API文档可访问 (Swagger)\n- [ ] 基础API接口响应正常\n\n## 当前状态\n🚧 部分完成\n- ✅ Docker Compose配置正确\n- ⏸️ 运行时集成测试待验证\n\n## 后续工作\n- 启动Docker环境测试\n- 验证健康检查API\n- 测试基础CRUD接口\n- 验证事件追踪API\n\n**估时:** 1h\n**优先级:** P0\n**任务组:** 质量保证",
+    "labels": ["task", "qa", "sprint0", "in-progress"]
+  }
+]

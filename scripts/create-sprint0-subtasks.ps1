@@ -8,6 +8,22 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$script:hasErrors = $false
+
+# Check GitHub CLI authentication
+Write-Host "🔍 Checking GitHub CLI authentication..."
+$authResult = gh auth status 2>&1
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "❌ GitHub CLI is not authenticated!"
+    Write-Host "Please run one of the following to authenticate:"
+    Write-Host "  1. gh auth login"
+    Write-Host "  2. export GH_TOKEN=your_github_token"
+    Write-Host "  3. Set GITHUB_TOKEN environment variable"
+    Write-Host ""
+    Write-Host "Alternatively, use the manual creation guide: docs/github-issues-manual-creation-guide.md"
+    Write-Host "Or use the JSON data: docs/github-issues-data.json"
+    exit 1
+}
 
 function CreateIssue($title, $labels, $body, $assignee = $null) {
     Write-Host "Creating issue: $title"
@@ -26,11 +42,17 @@ function CreateIssue($title, $labels, $body, $assignee = $null) {
     }
     
     try {
-        gh @args
-        Write-Host "  ✅ Created successfully"
+        $result = gh @args 2>&1
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  ✅ Created successfully"
+        } else {
+            Write-Host "  ❌ Failed: $result"
+            $script:hasErrors = $true
+        }
     }
     catch {
         Write-Host "  ❌ Failed: $_"
+        $script:hasErrors = $true
     }
 }
 
@@ -592,6 +614,15 @@ Write-Host ""
 if ($DryRun) {
     Write-Host "🔍 DRY RUN模式 - 未实际创建GitHub Issues"
     Write-Host "运行时去除 -DryRun 参数以实际创建Issues"
+} elseif ($script:hasErrors) {
+    Write-Host ""
+    Write-Host "⚠️  GitHub Issues创建过程中发生错误!"
+    Write-Host "请检查上面的错误信息并解决认证问题"
+    Write-Host ""
+    Write-Host "备选方案:"
+    Write-Host "1. 查看手动创建指南: docs/github-issues-manual-creation-guide.md"
+    Write-Host "2. 使用JSON数据文件: docs/github-issues-data.json"
+    Write-Host "3. 通过GitHub API创建Issues"
 } else {
     Write-Host "✅ GitHub Issues创建完成!"
     Write-Host "请在GitHub仓库中查看创建的Issues"
