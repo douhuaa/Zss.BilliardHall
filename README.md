@@ -123,9 +123,9 @@ chore: 构建/工具
 
 ## 🔧 技术栈
 
-- **后端**: ASP.NET Core 6.0 + ABP Framework
-- **数据库**: MySQL 8.0 + Redis
-- **前端**: Vue.js 3 + Vant UI (移动端)
+- **后端**: ASP.NET Core 9.0 + ABP Framework
+- **数据库**: MySQL 8.0 + Redis + EF Core
+- **前端**: Vue.js 3 + Uniapp (移动端)
 - **设备通信**: HTTP/WebSocket + MQTT
 - **部署**: Docker + Kubernetes
 - **监控**: Prometheus + Grafana
