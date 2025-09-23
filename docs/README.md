@@ -3,12 +3,12 @@
 | 分类 | 文档 | 说明 |
 |------|------|------|
 | 产品概述 | [PRD](prd/PRD.md) | 产品需求骨架 |
-| 产品故事 | [Product Story](product-story.md) | 用户与价值叙述 |
+| 产品故事 | [产品故事](product-story.md) | 用户与价值叙述 |
 | 流程与状态 | [流程与状态](design/flow-and-states.md) | 主要流程与状态机 |
 | 数据库 | [数据库模型](design/database-schema.md) | 概念模型与字段建议 |
 | 初始 DDL | [schema.sql](../db/schema.sql) | MySQL DDL 草稿 |
-| 埋点方案 | [Tracking Plan](analytics/tracking-plan.md) | 事件与指标映射 |
-| 实施路线图 | [Implementation Roadmap](implementation-roadmap.md) | 分阶段目标与退出标准 |
+| 埋点方案 | [埋点追踪方案](analytics/tracking-plan.md) | 事件与指标映射 |
+| 实施路线图 | [实施路线图](implementation-roadmap.md) | 分阶段目标与退出标准 |
 
 ## 后续建议
 

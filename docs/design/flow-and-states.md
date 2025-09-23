@@ -312,4 +312,4 @@ public async Task<Session> StartSession(int tableId, int userId)
 
 ---
 
-*Last Updated: 2024-01*
+*最后更新: 2024-01*

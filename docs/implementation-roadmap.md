@@ -200,11 +200,11 @@
 
 ## 10. 任务模板示例
 
-**Story:** Implement Session Start (Immediate Open)  
-**Acceptance:**  
+**用户故事：** 实现会话开始（即时开台）  
+**验收标准：**  
 
 - POST /api/session/start -> 200 + session_id  
-- Table Idle→InUse 原子迁移  
+- 球台状态 Idle→InUse 原子迁移  
 - billing_snapshot 初次写入（原始分钟=0）  
 - 事件 session_start 记录 event_log  
 - 并发 2 次只成功 1 条（集成测试）  
@@ -231,5 +231,5 @@
 
 ---
 
-*Last Updated: 2024-01*
-*Version: v1.0*
+*最后更新: 2024-01*
+*版本: v1.0*

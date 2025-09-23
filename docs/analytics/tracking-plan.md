@@ -227,5 +227,5 @@ public class TrackingMiddleware
 
 ---
 
-*Last Updated: 2024-01*  
-*Schema Version: v1.0*
+*最后更新: 2024-01*  
+*模式版本: v1.0*
