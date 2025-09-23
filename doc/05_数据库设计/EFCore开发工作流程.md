@@ -1,5 +1,11 @@
 # 5.6 EF Core Code First 开发工作流程
 
+<!-- Breadcrumb Navigation -->
+**导航路径**: [🏠 项目文档首页](../自助台球系统项目文档.md) > [📊 数据库设计](README.md) > ⚙️ EF Core 开发工作流程
+
+<!-- Keywords for Search -->
+**关键词**: `EF Core工作流程` `Code First开发` `实体建模` `数据种子` `环境管理` `部署策略`
+
 ## 概述
 
 本文档详细说明了基于 EF Core Code First 方式的数据库开发工作流程，包括实体建模、迁移管理、部署策略等完整流程。

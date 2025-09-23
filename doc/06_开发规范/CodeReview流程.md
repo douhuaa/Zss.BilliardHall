@@ -1,5 +1,11 @@
 # 6.5 Code Review 流程
 
+<!-- Breadcrumb Navigation -->
+**导航路径**: [🏠 项目文档首页](../自助台球系统项目文档.md) > [📝 开发规范](README.md) > 👥 Code Review 流程
+
+<!-- Keywords for Search -->
+**关键词**: `Code Review` `代码审查` `PR模板` `审查流程` `代码质量` `团队协作`
+
 ## 概述
 
 Code Review（代码审查）是保证代码质量、知识共享和团队协作的重要环节。本文档定义了自助台球系统项目的代码审查流程和标准。
