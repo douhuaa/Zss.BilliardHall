@@ -1,3 +1,24 @@
+---
+title: "Git 分支规范"
+description: "Git Flow 分支模型和中文提交信息规范"
+section: "6.4"
+version: "1.0.0"
+author: "技术负责人"
+maintainer: "开发工程师"
+created: "2024-01-01"
+updated: "2024-01-15"
+category: "开发规范"
+level: "必读"
+audience: ["全体开发人员"]
+keywords: ["Git分支", "Git Flow", "提交规范", "中文提交", "分支管理", "版本控制"]
+tags: ["git", "branching", "commit-standards", "version-control"]
+status: "完成"
+dependencies: []
+related_docs: ["06_开发规范/CodeReview流程.md", "12_版本与变更管理/README.md"]
+reading_time: "20分钟"
+difficulty: "初级"
+---
+
 # 6.4 Git 分支规范
 
 <!-- Breadcrumb Navigation -->

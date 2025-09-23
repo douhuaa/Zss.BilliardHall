@@ -1,3 +1,24 @@
+---
+title: "EF Core Code First 开发工作流程"
+description: "完整的 EF Core Code First 开发流程和最佳实践指南"
+section: "5.6"
+version: "1.0.0"
+author: "架构师"
+maintainer: "全体开发人员"
+created: "2024-01-01"
+updated: "2024-01-15"
+category: "数据库设计"
+level: "必读"
+audience: ["全体开发人员", "架构师", "运维工程师"]
+keywords: ["EF Core工作流程", "Code First开发", "实体建模", "数据种子", "环境管理", "部署策略"]
+tags: ["efcore", "workflow", "development-process", "best-practices"]
+status: "完成"
+dependencies: ["05_数据库设计/表结构定义.md", "05_数据库设计/数据迁移方案.md"]
+related_docs: ["06_开发规范/Git分支规范.md", "08_配置管理/README.md", "10_部署与运维/README.md"]
+reading_time: "45分钟"
+difficulty: "中级"
+---
+
 # 5.6 EF Core Code First 开发工作流程
 
 <!-- Breadcrumb Navigation -->

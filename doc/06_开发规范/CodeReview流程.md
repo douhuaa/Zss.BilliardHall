@@ -1,3 +1,24 @@
+---
+title: "Code Review 流程"
+description: "代码审查流程标准和中文 PR 模板指南"
+section: "6.5"
+version: "1.0.0"
+author: "技术负责人"
+maintainer: "开发工程师"
+created: "2024-01-01"
+updated: "2024-01-15"
+category: "开发规范"
+level: "必读"
+audience: ["全体开发人员", "技术负责人"]
+keywords: ["Code Review", "代码审查", "PR模板", "审查流程", "代码质量", "团队协作"]
+tags: ["code-review", "quality-assurance", "pr-template", "collaboration"]
+status: "完成"
+dependencies: ["06_开发规范/Git分支规范.md"]
+related_docs: ["06_开发规范/代码风格.md", "09_测试方案/README.md"]
+reading_time: "30分钟"
+difficulty: "中级"
+---
+
 # 6.5 Code Review 流程
 
 <!-- Breadcrumb Navigation -->

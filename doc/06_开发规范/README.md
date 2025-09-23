@@ -1,3 +1,22 @@
+---
+title: "开发规范"
+description: "项目开发规范和最佳实践指南"
+section: "6"
+version: "1.0.0"
+author: "技术负责人"
+maintainer: "全体开发人员"
+created: "2024-01-01"
+updated: "2024-01-15"
+category: "开发规范"
+level: "必读"
+audience: ["全体开发人员", "项目经理", "技术负责人"]
+keywords: ["开发规范", "代码规范", "Git规范", "Code Review", "分支管理", "团队协作"]
+tags: ["standards", "code-style", "git-workflow", "team-collaboration"]
+status: "完成"
+dependencies: []
+related_docs: ["05_数据库设计/README.md", "09_测试方案/README.md"]
+---
+
 # 6. 开发规范
 
 <!-- Breadcrumb Navigation -->

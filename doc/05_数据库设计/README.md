@@ -1,3 +1,22 @@
+---
+title: "数据库设计"
+description: "自助台球系统数据库设计文档总览，基于 EF Core Code First"
+section: "5"
+version: "1.0.0"
+author: "数据库团队"
+maintainer: "架构师"
+created: "2024-01-01"
+updated: "2024-01-15"
+category: "数据库设计"
+level: "必读"
+audience: ["开发工程师", "DBA", "架构师"]
+keywords: ["数据库设计", "EF Core", "Code First", "实体建模", "数据迁移", "表结构", "索引优化"]
+tags: ["database", "efcore", "code-first", "entity-modeling"]
+status: "完成"
+dependencies: []
+related_docs: ["05_数据库设计/数据迁移方案.md", "05_数据库设计/表结构定义.md"]
+---
+
 # 5. 数据库设计
 
 <!-- Breadcrumb Navigation -->
