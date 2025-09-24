@@ -24,7 +24,6 @@ public class BilliardHallDbContext : AbpDbContext<BilliardHallDbContext>
         builder.Entity<BilliardTable>(b =>
         {
             b.ToTable("billiard_tables");
-            b.ConfigureByConvention();
             
             b.Property(x => x.TableNumber).IsRequired().HasMaxLength(50);
             b.Property(x => x.TableName).IsRequired().HasMaxLength(100);
@@ -43,7 +42,6 @@ public class BilliardHallDbContext : AbpDbContext<BilliardHallDbContext>
         builder.Entity<TableSession>(b =>
         {
             b.ToTable("table_sessions");
-            b.ConfigureByConvention();
             
             b.Property(x => x.Remarks).HasMaxLength(500);
             b.Property(x => x.BaseHourlyRate).HasColumnType("decimal(10,2)");
