@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  # 数据库服务
+  database:
+    image: postgres:15-alpine
+    container_name: zss-billiard-db
+    environment:
+      POSTGRES_USER: billiard_user
+      POSTGRES_PASSWORD: billiard_pass
+      POSTGRES_DB: BilliardHall
+      TZ: Asia/Shanghai
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - billiard-network
+
+  # Redis缓存服务
+  redis:
+    image: redis:7-alpine
+    container_name: zss-billiard-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - billiard-network
+
+  # 后端API服务
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: zss-billiard-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Default=Host=database;Database=BilliardHall;Username=billiard_user;Password=billiard_pass
+      - Redis__Configuration=redis:6379
+    ports:
+      - "5000:80"
+      - "5001:443"
+    depends_on:
+      - database
+      - redis
+    volumes:
+      - ./backend/logs:/app/logs
+    networks:
+      - billiard-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  billiard-network:
+    driver: bridge

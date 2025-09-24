@@ -1,0 +1,13 @@
+﻿{
+  "applications": {
+    "Zss.BilliardHall.Web": {
+      "type": "dotnet-project",
+      "launchUrl": "https://localhost:44316",
+      "path": "../../../src/Zss.BilliardHall.Web/Zss.BilliardHall.Web.csproj",
+      "kubernetesService": ".*-web$",
+      "execution": {
+        "order": 2
+      }
+    }
+  }
+}
