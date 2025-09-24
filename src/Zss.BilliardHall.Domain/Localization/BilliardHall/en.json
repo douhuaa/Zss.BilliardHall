@@ -1,0 +1,33 @@
+{
+  "Culture": "en",
+  "Texts": {
+    "Menu:Home": "Home",
+    "Menu:BilliardTables": "Billiard Tables",
+    "Menu:Sessions": "Sessions",
+    "Menu:Payments": "Payments",
+    "Menu:Members": "Members",
+    "Welcome": "Welcome to Self-Service Billiard System",
+    "BilliardTable": "Billiard Table",
+    "BilliardTables": "Billiard Tables",
+    "Session": "Session",
+    "Sessions": "Sessions",
+    "Payment": "Payment",
+    "Payments": "Payments",
+    "Member": "Member",
+    "Members": "Members",
+    "TableStatus:Idle": "Idle",
+    "TableStatus:InUse": "In Use",
+    "TableStatus:Reserved": "Reserved",
+    "TableStatus:Maintenance": "Maintenance",
+    "SessionStatus:Active": "Active",
+    "SessionStatus:Completed": "Completed",
+    "SessionStatus:Cancelled": "Cancelled",
+    "PaymentStatus:Pending": "Pending",
+    "PaymentStatus:Success": "Success",
+    "PaymentStatus:Failed": "Failed",
+    "StartSession": "Start Session",
+    "EndSession": "End Session",
+    "MakePayment": "Make Payment",
+    "CreateReservation": "Create Reservation"
+  }
+}

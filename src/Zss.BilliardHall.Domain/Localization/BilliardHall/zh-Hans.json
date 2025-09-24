@@ -1,0 +1,33 @@
+{
+  "Culture": "zh-Hans",
+  "Texts": {
+    "Menu:Home": "首页",
+    "Menu:BilliardTables": "台球桌管理",
+    "Menu:Sessions": "会话管理",
+    "Menu:Payments": "支付管理",
+    "Menu:Members": "会员管理",
+    "Welcome": "欢迎使用自助台球系统",
+    "BilliardTable": "台球桌",
+    "BilliardTables": "台球桌",
+    "Session": "会话",
+    "Sessions": "会话",
+    "Payment": "支付",
+    "Payments": "支付",
+    "Member": "会员",
+    "Members": "会员",
+    "TableStatus:Idle": "空闲",
+    "TableStatus:InUse": "使用中",
+    "TableStatus:Reserved": "已预约",
+    "TableStatus:Maintenance": "维护中",
+    "SessionStatus:Active": "进行中",
+    "SessionStatus:Completed": "已完成",
+    "SessionStatus:Cancelled": "已取消",
+    "PaymentStatus:Pending": "待支付",
+    "PaymentStatus:Success": "支付成功",
+    "PaymentStatus:Failed": "支付失败",
+    "StartSession": "开台",
+    "EndSession": "关台",
+    "MakePayment": "支付",
+    "CreateReservation": "预约"
+  }
+}
