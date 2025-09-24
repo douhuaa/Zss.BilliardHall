@@ -14,6 +14,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Zss.BilliardHall.Entities;
 
 namespace Zss.BilliardHall.EntityFrameworkCore;
 
@@ -26,6 +27,12 @@ public class BilliardHallDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+    
+    // 业务实体
+    public DbSet<Store> Stores { get; set; }
+    public DbSet<BilliardTable> BilliardTables { get; set; }
+    public DbSet<TableSession> TableSessions { get; set; }
+    public DbSet<PaymentOrder> PaymentOrders { get; set; }
 
 
     #region Entities from the modules
@@ -81,11 +88,88 @@ public class BilliardHallDbContext :
         
         /* Configure your own tables/entities inside here */
 
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(BilliardHallConsts.DbTablePrefix + "YourEntities", BilliardHallConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        // 门店配置
+        builder.Entity<Store>(b =>
+        {
+            b.ToTable(BilliardHallConsts.DbTablePrefix + "Stores", BilliardHallConsts.DbSchema);
+            b.ConfigureByConvention();
+            
+            b.Property(x => x.Name).IsRequired().HasMaxLength(100);
+            b.Property(x => x.Address).HasMaxLength(500);
+            b.Property(x => x.Phone).HasMaxLength(20);
+            b.Property(x => x.BaseHourlyRate).HasPrecision(18, 2);
+            
+            b.HasIndex(x => x.Name);
+        });
+
+        // 台桌配置
+        builder.Entity<BilliardTable>(b =>
+        {
+            b.ToTable(BilliardHallConsts.DbTablePrefix + "BilliardTables", BilliardHallConsts.DbSchema);
+            b.ConfigureByConvention();
+            
+            b.Property(x => x.Number).IsRequired().HasMaxLength(50);
+            b.Property(x => x.Name).HasMaxLength(100);
+            b.Property(x => x.QrCode).HasMaxLength(500);
+            b.Property(x => x.Description).HasMaxLength(500);
+            b.Property(x => x.HourlyRate).HasPrecision(18, 2);
+            
+            b.HasIndex(x => x.StoreId);
+            b.HasIndex(x => new { x.StoreId, x.Number }).IsUnique();
+            b.HasIndex(x => x.QrCode);
+            
+            b.HasOne(x => x.Store)
+             .WithMany()
+             .HasForeignKey(x => x.StoreId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // 会话配置
+        builder.Entity<TableSession>(b =>
+        {
+            b.ToTable(BilliardHallConsts.DbTablePrefix + "TableSessions", BilliardHallConsts.DbSchema);
+            b.ConfigureByConvention();
+            
+            b.Property(x => x.SessionToken).HasMaxLength(100);
+            b.Property(x => x.Remarks).HasMaxLength(500);
+            b.Property(x => x.HourlyRateSnapshot).HasPrecision(18, 2);
+            b.Property(x => x.CalculatedAmount).HasPrecision(18, 2);
+            b.Property(x => x.PaidAmount).HasPrecision(18, 2);
+            
+            b.HasIndex(x => x.TableId);
+            b.HasIndex(x => x.UserId);
+            b.HasIndex(x => x.SessionToken).IsUnique();
+            b.HasIndex(x => x.StartTime);
+            
+            b.HasOne(x => x.Table)
+             .WithMany()
+             .HasForeignKey(x => x.TableId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // 支付订单配置
+        builder.Entity<PaymentOrder>(b =>
+        {
+            b.ToTable(BilliardHallConsts.DbTablePrefix + "PaymentOrders", BilliardHallConsts.DbSchema);
+            b.ConfigureByConvention();
+            
+            b.Property(x => x.OrderNumber).IsRequired().HasMaxLength(50);
+            b.Property(x => x.ThirdPartyTransactionId).HasMaxLength(100);
+            b.Property(x => x.CallbackData).HasMaxLength(2000);
+            b.Property(x => x.Remarks).HasMaxLength(500);
+            b.Property(x => x.Amount).HasPrecision(18, 2);
+            b.Property(x => x.PaidAmount).HasPrecision(18, 2);
+            
+            b.HasIndex(x => x.OrderNumber).IsUnique();
+            b.HasIndex(x => x.SessionId);
+            b.HasIndex(x => x.UserId);
+            b.HasIndex(x => x.Status);
+            b.HasIndex(x => x.PaymentTime);
+            
+            b.HasOne(x => x.Session)
+             .WithMany()
+             .HasForeignKey(x => x.SessionId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }
