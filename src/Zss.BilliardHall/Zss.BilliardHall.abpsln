@@ -1,0 +1,54 @@
+{
+  "id": "34fdd613-450c-4767-a23b-eb73c2ae8ed7",
+  "creationTime": "10/01/2025 03:27:20 +00:00",
+  "template": "app",
+  "versions": {
+    "AbpFramework": "9.3.4",
+    "AbpStudio": "1.3.2",
+    "TargetDotnetFramework": "net9.0"
+  },
+  "modules": {
+    "Zss.BilliardHall": {
+      "path": "Zss.BilliardHall.abpmdl"
+    }
+  },
+  "runProfiles": {
+    "Default": {
+      "path": "etc/abp-studio/run-profiles/Default.abprun.json"
+    }
+  },
+  "options": {
+    "httpRequests": {
+      "ignoredUrls": [
+      
+      ]
+    }
+  },
+  "creatingStudioConfiguration": {
+    "template": "app",
+    "createdAbpStudioVersion": "1.3.2",
+    "tiered": "false",
+    "runInstallLibs": "true",
+    "useLocalReferences": "false",
+    "multiTenancy": "true",
+    "includeTests": "true",
+    "kubernetesConfiguration": "false",
+    "uiFramework": "no-ui",
+    "mobileFramework": "none",
+    "distributedEventBus": "none",
+    "databaseProvider": "ef",
+    "runDbMigrator": "true",
+    "databaseManagementSystem": "postgresql",
+    "separateTenantSchema": "false",
+    "createInitialMigration": "true",
+    "theme": "leptonx-lite",
+    "themeStyle": "",
+    "themeMenuPlacement": "",
+    "mobileFramework": "none",
+    "publicWebsite": "false",
+    "socialLogin": "false",
+    "selectedLanguages": ["Chinese (Simplified)", "English", ],
+    "defaultLanguage": "Chinese (Simplified)",
+    "createCommand": "abp new Zss.BilliardHall -t app --database-provider ef --database-management-system postgresql --theme leptonx-lite --without-cms-kit --sample-crud-page --dont-run-bundling --no-social-logins -no-gdpr -no-openiddict-admin-ui -no-audit-logging -no-file-management -no-language-management -no-text-template-management"
+  }
+}

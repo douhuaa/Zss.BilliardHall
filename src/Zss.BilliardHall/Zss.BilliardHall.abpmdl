@@ -1,0 +1,108 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.LeptonXLiteTheme": {
+      "version": "4.3.4",
+      "isInstalled": true
+    },
+    "Volo.Abp.Account": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/01/2025 03:27:20 +00:00"
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/01/2025 03:27:20 +00:00"
+    },
+    "Volo.Abp.Identity": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/01/2025 03:27:20 +00:00"
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/01/2025 03:27:20 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/01/2025 03:27:20 +00:00"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/01/2025 03:27:20 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "9.3.4",
+      "isInstalled": true,
+      "creationTime": "10/01/2025 03:27:20 +00:00"
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "Zss.BilliardHall.Application": {
+      "path": "src/Zss.BilliardHall.Application/Zss.BilliardHall.Application.abppkg",
+      "folder": "src"
+    },
+    "Zss.BilliardHall.Application.Tests": {
+      "path": "test/Zss.BilliardHall.Application.Tests/Zss.BilliardHall.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "Zss.BilliardHall.Domain.Shared": {
+      "path": "src/Zss.BilliardHall.Domain.Shared/Zss.BilliardHall.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "Zss.BilliardHall.Application.Contracts": {
+      "path": "src/Zss.BilliardHall.Application.Contracts/Zss.BilliardHall.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Zss.BilliardHall.HttpApi": {
+      "path": "src/Zss.BilliardHall.HttpApi/Zss.BilliardHall.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "Zss.BilliardHall.HttpApi.Client": {
+      "path": "src/Zss.BilliardHall.HttpApi.Client/Zss.BilliardHall.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "Zss.BilliardHall.EntityFrameworkCore.Tests": {
+      "path": "test/Zss.BilliardHall.EntityFrameworkCore.Tests/Zss.BilliardHall.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "Zss.BilliardHall.EntityFrameworkCore": {
+      "path": "src/Zss.BilliardHall.EntityFrameworkCore/Zss.BilliardHall.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "Zss.BilliardHall.TestBase": {
+      "path": "test/Zss.BilliardHall.TestBase/Zss.BilliardHall.TestBase.abppkg",
+      "folder": "test"
+    },
+    "Zss.BilliardHall.Domain.Tests": {
+      "path": "test/Zss.BilliardHall.Domain.Tests/Zss.BilliardHall.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "Zss.BilliardHall.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/Zss.BilliardHall.HttpApi.Client.ConsoleTestApp/Zss.BilliardHall.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "Zss.BilliardHall.DbMigrator": {
+      "path": "src/Zss.BilliardHall.DbMigrator/Zss.BilliardHall.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "Zss.BilliardHall.HttpApi.Host": {
+      "path": "src/Zss.BilliardHall.HttpApi.Host/Zss.BilliardHall.HttpApi.Host.abppkg",
+      "folder": "src"
+    },
+    "Zss.BilliardHall.Domain": {
+      "path": "src/Zss.BilliardHall.Domain/Zss.BilliardHall.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}

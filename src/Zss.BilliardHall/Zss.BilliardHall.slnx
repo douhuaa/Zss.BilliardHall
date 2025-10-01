@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Zss.BilliardHall.Application.Contracts/Zss.BilliardHall.Application.Contracts.csproj" />
+    <Project Path="src/Zss.BilliardHall.Application/Zss.BilliardHall.Application.csproj" />
+    <Project Path="src/Zss.BilliardHall.DbMigrator/Zss.BilliardHall.DbMigrator.csproj" />
+    <Project Path="src/Zss.BilliardHall.Domain.Shared/Zss.BilliardHall.Domain.Shared.csproj" />
+    <Project Path="src/Zss.BilliardHall.Domain/Zss.BilliardHall.Domain.csproj" />
+    <Project Path="src/Zss.BilliardHall.EntityFrameworkCore/Zss.BilliardHall.EntityFrameworkCore.csproj" />
+    <Project Path="src/Zss.BilliardHall.HttpApi.Client/Zss.BilliardHall.HttpApi.Client.csproj" />
+    <Project Path="src/Zss.BilliardHall.HttpApi.Host/Zss.BilliardHall.HttpApi.Host.csproj" />
+    <Project Path="src/Zss.BilliardHall.HttpApi/Zss.BilliardHall.HttpApi.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Zss.BilliardHall.Application.Tests/Zss.BilliardHall.Application.Tests.csproj" />
+    <Project Path="test/Zss.BilliardHall.Domain.Tests/Zss.BilliardHall.Domain.Tests.csproj" />
+    <Project Path="test/Zss.BilliardHall.EntityFrameworkCore.Tests/Zss.BilliardHall.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/Zss.BilliardHall.HttpApi.Client.ConsoleTestApp/Zss.BilliardHall.HttpApi.Client.ConsoleTestApp.csproj" />
+    <Project Path="test/Zss.BilliardHall.TestBase/Zss.BilliardHall.TestBase.csproj" />
+  </Folder>
+</Solution>
