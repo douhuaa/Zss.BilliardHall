@@ -4,6 +4,8 @@
   "description": "Zss台球厅管理系统 - UniApp移动端",
   "main": "main.js",
   "scripts": {
+    "dev": "uni -p h5",
+    "build": "uni build -p h5",
     "dev:mp-weixin": "uni -p mp-weixin",
     "build:mp-weixin": "uni build -p mp-weixin",
     "dev:h5": "uni -p h5",
@@ -17,16 +19,19 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@dcloudio/uni-app": "^3.0.0-alpha-3090020230601001",
-    "@dcloudio/uni-app-plus": "^3.0.0-alpha-3090020230601001",
-    "@dcloudio/uni-h5": "^3.0.0-alpha-3090020230601001",
-    "@dcloudio/uni-mp-weixin": "^3.0.0-alpha-3090020230601001",
-    "vue": "^3.2.45"
+    "@dcloudio/uni-app": "3.0.0-alpha-4080220250929001",
+    "@dcloudio/uni-app-plus": "3.0.0-alpha-4080220250929001",
+    "@dcloudio/uni-h5": "3.0.0-alpha-4080220250929001",
+    "@dcloudio/uni-mp-weixin": "3.0.0-alpha-4080220250929001",
+    "vue": "^3.4.38"
   },
   "devDependencies": {
     "@dcloudio/types": "^3.0.16",
-    "@dcloudio/uni-cli-shared": "^3.0.0-alpha-3090020230601001",
-    "@dcloudio/vite-plugin-uni": "^3.0.0-alpha-3090020230601001",
-    "vite": "^4.0.0"
+    "@dcloudio/uni-cli-shared": "3.0.0-alpha-4080220250929001",
+    "@dcloudio/vite-plugin-uni": "3.0.0-alpha-4080220250929001",
+    "vite": "5.2.8"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
