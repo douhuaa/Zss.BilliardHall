@@ -1,0 +1,18 @@
+﻿{
+  "applications": {
+    "Zss.BilliardHall.HttpApi.Host": {
+      "type": "dotnet-project",
+      "launchUrl": "https://localhost:44393",
+      "path": "../../../src/Zss.BilliardHall.HttpApi.Host/Zss.BilliardHall.HttpApi.Host.csproj",
+      "kubernetesService": ".*-httpapihost$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "execution": {
+        "order": 4
+      }
+    }
+  },
+  "containers": {
+    "serviceName": "BilliardHall-Containers",
+  }
+}

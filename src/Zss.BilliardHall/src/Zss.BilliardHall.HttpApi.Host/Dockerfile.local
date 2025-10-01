@@ -1,0 +1,18 @@
+FROM mcr.microsoft.com/dotnet/aspnet:9.0  AS base
+USER $APP_UID
+EXPOSE 8080
+EXPOSE 8081
+
+COPY bin/Release/net9.0/publish/ app/
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+RUN dotnet dev-certs https -v -ep openiddict.pfx -p 18b8d840-32f5-4f5a-9aa2-4e2cf1620a97
+RUN chmod 644 openiddict.pfx
+
+FROM base AS final
+WORKDIR /app
+COPY --from=build /src .
+
+ENTRYPOINT ["dotnet", "Zss.BilliardHall.HttpApi.Host.dll"]
