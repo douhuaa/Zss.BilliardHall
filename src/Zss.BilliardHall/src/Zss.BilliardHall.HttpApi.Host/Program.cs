@@ -14,6 +14,7 @@ public class Program
     {
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Async(c => c.Console())
+            .WriteTo.Async(c => c.OpenTelemetry())  
             .CreateBootstrapLogger();
 
         try
@@ -37,6 +38,7 @@ public class Program
                         .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
                         .Enrich.FromLogContext()
                         .WriteTo.Async(c => c.Console())
+                        .WriteTo.Async(c => c.OpenTelemetry())  
                         .WriteTo.Async(c => c.AbpStudio(services));
                 });
             await builder.AddApplicationAsync<BilliardHallHttpApiHostModule>();
