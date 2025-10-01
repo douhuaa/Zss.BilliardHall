@@ -9,8 +9,13 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 const string dbConnectionName = "Default";
 
+// 参数资源：Postgres 用户/密码（可在 Aspire Dashboard 或环境中赋值）
+// 约定：开发可留空使用默认；生产通过 Secret 管理体系注入。
+var postgresUserParam = builder.AddParameter("postgres-user");
+var postgresPasswordParam = builder.AddParameter("postgres-password", secret: true);
+
 var postgres = builder
-    .AddPostgres("postgres")
+    .AddPostgres("postgres", userName: postgresUserParam, password: postgresPasswordParam)
     .WithLifetime(ContainerLifetime.Persistent)
     .WithDataVolume();
 
