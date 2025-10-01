@@ -37,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Zss.BilliardHall.ServiceDefaults\Zss.BilliardHall.ServiceDefaults.csproj" />
     <ProjectReference Include="..\Zss.BilliardHall.Application\Zss.BilliardHall.Application.csproj" />
     <ProjectReference Include="..\Zss.BilliardHall.HttpApi\Zss.BilliardHall.HttpApi.csproj" />
     <ProjectReference Include="..\Zss.BilliardHall.EntityFrameworkCore\Zss.BilliardHall.EntityFrameworkCore.csproj" />

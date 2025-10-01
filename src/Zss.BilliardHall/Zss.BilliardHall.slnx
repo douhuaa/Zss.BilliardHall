@@ -17,4 +17,6 @@
     <Project Path="test/Zss.BilliardHall.HttpApi.Client.ConsoleTestApp/Zss.BilliardHall.HttpApi.Client.ConsoleTestApp.csproj" />
     <Project Path="test/Zss.BilliardHall.TestBase/Zss.BilliardHall.TestBase.csproj" />
   </Folder>
+  <Project Path="Zss.BilliardHall.AppHost\Zss.BilliardHall.AppHost.csproj" Type="Classic C#" />
+  <Project Path="Zss.BilliardHall.ServiceDefaults\Zss.BilliardHall.ServiceDefaults.csproj" Type="Classic C#" />
 </Solution>

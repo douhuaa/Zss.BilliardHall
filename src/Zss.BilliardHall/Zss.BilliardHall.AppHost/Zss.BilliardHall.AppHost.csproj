@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Sdk Name="Aspire.AppHost.Sdk" Version="9.5.0"/>
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <UserSecretsId>95d8f46b-f0b1-42c5-8f8c-1aa5343e7469</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="9.5.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\src\Zss.BilliardHall.DbMigrator\Zss.BilliardHall.DbMigrator.csproj" />
+      <ProjectReference Include="..\src\Zss.BilliardHall.HttpApi.Host\Zss.BilliardHall.HttpApi.Host.csproj" />
+    </ItemGroup>
+
+</Project>

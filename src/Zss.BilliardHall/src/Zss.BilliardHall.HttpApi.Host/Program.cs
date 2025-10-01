@@ -20,6 +20,8 @@ public class Program
         {
             Log.Information("Starting Zss.BilliardHall.HttpApi.Host.");
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.AddServiceDefaults();
             builder.Host
                 .AddAppSettingsSecretsJson()
                 .UseAutofac()
@@ -39,6 +41,8 @@ public class Program
                 });
             await builder.AddApplicationAsync<BilliardHallHttpApiHostModule>();
             var app = builder.Build();
+
+            app.MapDefaultEndpoints();
             await app.InitializeApplicationAsync();
             await app.RunAsync();
             return 0;
