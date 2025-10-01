@@ -43,6 +43,99 @@ This is a layered monolith application that consists of the following applicatio
 
 * `Zss.BilliardHall.DbMigrator`: A console application which applies the migrations and also seeds the initial data. It is useful on development as well as on production environment.
 
+### Distributed Application (Aspire AppHost)
+
+The repository contains an `.AppHost` project leveraging .NET Aspire to orchestrate Postgres, the DbMigrator and the HttpApi Host. Typical local workflow:
+
+1. (Optional) export database credential env variables:
+
+```powershell
+$env:BH_DB_USER="billiard_dev"
+$env:BH_DB_PASSWORD="DevPassword123!"
+```
+
+1. Start the host:
+
+```powershell
+dotnet run --project src/Zss.BilliardHall.AppHost/Zss.BilliardHall.AppHost.csproj
+```
+1. Aspire dashboard will show resources (Postgres container, migrations, api).
+
+Connection string in `HttpApi.Host/appsettings.json` uses placeholders:
+
+```json
+{
+	"ConnectionStrings": {
+		"Default": "Host=localhost;Port=5432;Database=BilliardHall;Username=${BH_DB_USER};Password=${BH_DB_PASSWORD};"
+	}
+}
+```
+
+If env vars are not set, container defaults are used (development only).
+
+### Observability (Serilog + OpenTelemetry)
+
+Logging is performed via Serilog. If you set `BH_OTEL_EXPORTER_OTLP_ENDPOINT` the application will add OpenTelemetry (traces, metrics, logs) export to the specified OTLP collector.
+
+Example:
+
+```powershell
+$env:BH_OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4317"
+```
+
+### Health Checks
+
+Health endpoints are registered:
+
+* `/healthz` (liveness)
+* `/hc` (combined)
+* `/healthchecks-ui` (UI - in‑memory storage for local use)
+
+In production you should protect UI endpoint (reverse proxy auth / network ACL). See `ServiceDefaults` project for registration code.
+
+### CORS
+
+Development override located in `HttpApi.Host/appsettings.Development.json`:
+
+```json
+{
+	"App": {
+		"CorsOrigins": "https://localhost:3000"
+	}
+}
+```
+Multiple origins are comma separated. For production restrict to trusted frontends only.
+
+### Authentication / OpenIddict
+
+Current seeding registers a SPA public client and (temporarily) enables password + client_credentials grants for bootstrap convenience. A deprecation note exists in the seeder; future hardening PR will remove password grant and rotate secrets.
+
+### Secrets Management
+
+See `doc/08_配置管理/Secrets管理.md` for full guidelines. Never commit real credentials. Prefer User Secrets locally and a vault in production.
+
+### Quick Start (Developer)
+
+```powershell
+# Install JS libs (if using ABP UI packages)
+abp install-libs
+
+# Apply migrations (optional if starting through AppHost which runs migrator)
+dotnet run --project src/Zss.BilliardHall/src/Zss.BilliardHall.DbMigrator/Zss.BilliardHall.DbMigrator.csproj
+
+# Run distributed application
+dotnet run --project src/Zss.BilliardHall.AppHost/Zss.BilliardHall.AppHost.csproj
+```
+
+Navigate to the HttpApi host Swagger UI (port assigned by Aspire, typically shown in dashboard). Use seeded admin credentials to sign in if required.
+
+### Roadmap (Security / Ops Hardening)
+
+* Split DB accounts (migration vs runtime)
+* Remove password grant
+* Protect health UI & PII logging off by default in production
+* Introduce structured audit log export via OTLP
+
 
 ## Deploying the application
 

@@ -68,7 +68,11 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
     private async Task CreateApplicationsAsync()
     {
-        var commonScopes = new List<string> {
+    // NOTE: Password grant & client credentials are seeded for early-stage tooling / console test convenience.
+    // They are scheduled for removal (or to be disabled) once front-end adopts Authorization Code + PKCE and
+    // back-end service-to-service flows (if any) switch to client credential with proper confidential clients.
+    // Tracking item: SECURITY-HARDEN-TASK #password-grant-removal
+    var commonScopes = new List<string> {
             OpenIddictConstants.Permissions.Scopes.Address,
             OpenIddictConstants.Permissions.Scopes.Email,
             OpenIddictConstants.Permissions.Scopes.Phone,

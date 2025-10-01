@@ -25,7 +25,7 @@ dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;Port=5432;Da
 # 单独存放凭据（若需要分离）
 dotnet user-secrets set "Db:User" "billiard_dev"
 dotnet user-secrets set "Db:Password" "DevPassword123!"
-```
+```json
 
 > 注意：密码示例仅用于本地开发，请勿在生产重复使用。
 
@@ -75,7 +75,15 @@ env:
 
 ## 与 AppHost 的关系
 
-`AppHost.cs` 当前未强制绑定 `BH_DB_USER/BH_DB_PASSWORD`，保持默认自动生成策略，后续可演进为：
+已移除 Host 配置中的硬编码密码；`appsettings.json` 改为使用环境占位：
+
+```
+"ConnectionStrings": {
+  "Default": "Host=localhost;Port=5432;Database=BilliardHall;Username=${BH_DB_USER};Password=${BH_DB_PASSWORD};"
+}
+```
+
+`AppHost.cs` 会读取（若存在）环境变量 `BH_DB_USER` / `BH_DB_PASSWORD` 作为参数初始值；未提供则由容器默认用户或镜像策略决定。后续可以演进为 Aspire Parameter 显式管理：
 
 ```csharp
 var userParam = builder.AddParameter("postgres-user", secret: false);
@@ -83,14 +91,29 @@ var pwdParam = builder.AddParameter("postgres-password", secret: true);
 var postgres = builder.AddPostgres("postgres", userName: userParam, password: pwdParam);
 ```
 
-这样可以在 Aspire Dashboard 中直接管理参数，而无需手动导出环境变量。
+示例（本地临时设置 PowerShell）：
+```powershell
+$env:BH_DB_USER="billiard_dev"
+$env:BH_DB_PASSWORD="DevPassword123!"
+```
+
+### 计划中的账户拆分
+
+| 变量 | 用途 | 说明 |
+|------|------|------|
+| BH_DB_MIGRATION_USER | 迁移账户用户名 | 仅 DbMigrator 使用（DDL 权限） |
+| BH_DB_MIGRATION_PASSWORD | 迁移账户密码 | 与上配对 |
+| BH_DB_APP_USER | 应用运行账户用户名 | 最小 DML 权限，无 DDL |
+| BH_DB_APP_PASSWORD | 应用运行账户密码 | 定期轮换 |
+
+届时连接字符串中的 `${BH_DB_USER}` 占位会被 `${BH_DB_APP_USER}` 替换，迁移工具独立读取迁移账户凭据。
 
 ## 最佳实践摘要
 
 1. 开发：User Secrets + 局部环境变量覆写。
 2. 测试：CI 注入的临时 Secret（有效期短）。
 3. 生产：集中 Secret 服务 + 轮换制度 + 审计日志。
-4. 尽可能拆分权限（迁移账户与运行时账户）。
+4. 拆分权限（迁移账户 / 运行时账户 / 只读账户）——拆分方案已列入计划。
 5. 不在源码、镜像、日志中出现明文密码。
 
 ---
