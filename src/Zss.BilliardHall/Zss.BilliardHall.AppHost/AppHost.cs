@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Hosting;
+using Aspire.Hosting.ApplicationModel; // 访问 ParameterResource 以设置初始值
 // AppHost: 集中描述基础设施资源与内部服务编排。
 // Postgres 凭据策略（设计文档化实现）：
 //  1. Aspire 默认会为 Postgres 生成随机用户/密码并通过连接字符串引用。
@@ -10,9 +11,19 @@ var builder = DistributedApplication.CreateBuilder(args);
 const string dbConnectionName = "Default";
 
 // 参数资源：Postgres 用户/密码（可在 Aspire Dashboard 或环境中赋值）
-// 约定：开发可留空使用默认；生产通过 Secret 管理体系注入。
-var postgresUserParam = builder.AddParameter("postgres-user");
-var postgresPasswordParam = builder.AddParameter("postgres-password", secret: true);
+// 映射策略：
+//  1. 若存在环境变量 BH_DB_USER / BH_DB_PASSWORD，则作为初始值写入参数（仅在进程启动时赋值，不覆盖 Dashboard 手工修改）。
+//  2. 若不存在则留空，采用镜像/默认逻辑或在 Dashboard 中补充。
+var envUser = Environment.GetEnvironmentVariable("BH_DB_USER");
+var envPassword = Environment.GetEnvironmentVariable("BH_DB_PASSWORD");
+
+var postgresUserParam = string.IsNullOrWhiteSpace(envUser)
+    ? builder.AddParameter("postgres-user")
+    : builder.AddParameter("postgres-user", value: envUser);
+
+var postgresPasswordParam = string.IsNullOrWhiteSpace(envPassword)
+    ? builder.AddParameter("postgres-password", secret: true)
+    : builder.AddParameter("postgres-password", value: envPassword, secret: true);
 
 var postgres = builder
     .AddPostgres("postgres", userName: postgresUserParam, password: postgresPasswordParam)

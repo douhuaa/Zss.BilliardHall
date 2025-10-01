@@ -15,6 +15,8 @@ AppHost 通过 .NET Aspire 的 DistributedApplication 描述项目的基础设�
 
 - 参数资源（当前已启用）：`postgres-user` / `postgres-password` 作为 Aspire Parameter 资源被绑定到 Postgres 服务；可在 Aspire Dashboard 中填写或用环境变量注入；未填写则使用镜像默认策略（或随机）。
 
+  *启动映射逻辑*：若进程启动前已设置 `BH_DB_USER` / `BH_DB_PASSWORD`，则会作为参数初始值创建（后续在 Dashboard 中可再修改，不会被覆盖）。
+
 - 固定开发凭据（环境变量快速方式，可选）：预留 `BH_DB_USER` / `BH_DB_PASSWORD`；可在运行前导出：
 
      ```powershell
