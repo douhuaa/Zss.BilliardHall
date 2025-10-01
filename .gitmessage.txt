@@ -1,0 +1,17 @@
+# 提交说明模板 (Conventional Commits)
+# 参考: feat | fix | docs | style | refactor | perf | test | build | chore | ci | security
+# 格式: <type>(<scope>): <subject>
+# 主题 (subject) 需简洁（<= 50字），使用动词原形，首字母不大写，结尾不加句号。
+# 空一行后可写详细描述（可选）。再后面可添加关联 Issue、Breaking Changes 等。
+# 以 # 开头的行会被 Git 忽略。
+
+feat(table-session): 支持台球桌暂停与恢复
+
+详细说明（可选）：
+- 简述为什么需要这次变更
+- 概述主要修改点
+- 记录潜在影响或迁移指南
+
+关联: #123
+
+BREAKING CHANGE: 旧的计费接口已移除，请迁移到 /api/table-sessions/new-cost
