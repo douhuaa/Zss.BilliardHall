@@ -102,11 +102,13 @@ Check:
 ---
 ## 9. Commit & Conventional Messages / 提交信息
 
-Preferred types: `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `build`, `chore`, `security`.
-Examples:
+首选类型: `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `build`, `chore`, `security`.
+示例:
 - `feat(table-session): 支持台球桌暂停与恢复`
 - `fix(payment): 修正重复扣费 race condition`
 - `security(oidc): 移除 password grant`
+使用范围 (scope) 明确模块（如 `table-session`, `payment`, `auth`）。
+只用中文，但保持关键词英文，如 `fix`, `feat`。
 
 Reject if:
 - 提交信息为单字/模糊（`update`, `misc`, `tmp`）
