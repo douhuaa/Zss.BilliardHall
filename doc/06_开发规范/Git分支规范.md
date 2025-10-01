@@ -28,11 +28,10 @@ difficulty: "初级"
 **关键词**: `Git分支` `GitHub Flow` `提交规范` `中文提交` `分支管理` `版本控制`
 
 > **变更说明**  
-> 本项目原采用 Git Flow 分支模型，现切换为 GitHub Flow，主要原因是 GitHub Flow 更加简洁，适合持续集成和快速发布，能够减少分支管理的复杂度。对于习惯了 Git Flow 的开发人员，需注意：GitHub Flow 不再区分 develop、release、hotfix 等分支，所有新功能和修复均通过 feature 分支和 Pull Request 完成，主分支始终保持可部署状态。此变更有助于提升团队协作效率和代码质量。
+> 分支模型由 Git Flow 切换为 GitHub Flow，以提升持续集成效率并简化分支管理，主分支始终保持可部署状态。
 
 - **变更原因**：GitHub Flow 更简洁，适合持续集成和频繁发布，减少分支管理复杂度。
 - **影响**：开发流程更为敏捷，分支数量减少，发布流程简化。
-- **迁移建议**：原有开发人员需熟悉 GitHub Flow 工作流，功能开发统一从 main 分支创建 feature 分支，合并通过 Pull Request 完成。
 
 ## 分支模型
 
