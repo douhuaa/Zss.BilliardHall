@@ -1,0 +1,89 @@
+/* 全局通用样式 */
+
+/* 重置样式 */
+page {
+  height: 100%;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* 清除默认样式 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 布局 */
+.container {
+  padding: 20rpx;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 文本 */
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: #07c160;
+}
+
+.text-secondary {
+  color: #999;
+}
+
+.text-danger {
+  color: #fa5151;
+}
+
+/* 卡片 */
+.card {
+  background-color: #fff;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 按钮 */
+.btn-primary {
+  background-color: #07c160;
+  color: #fff;
+  border: none;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  font-size: 32rpx;
+  text-align: center;
+}
+
+.btn-secondary {
+  background-color: #fff;
+  color: #07c160;
+  border: 2rpx solid #07c160;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  font-size: 32rpx;
+  text-align: center;
+}
