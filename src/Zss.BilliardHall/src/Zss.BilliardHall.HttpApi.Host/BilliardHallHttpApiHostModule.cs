@@ -206,6 +206,7 @@ public class BilliardHallHttpApiHostModule : AbpModule
         {
             options.AddDefaultPolicy(builder =>
             {
+                // App:CorsOrigins 在 appsettings.* 中以逗号分隔。当前开发环境增加了 https://localhost:3000 以支持 Vue/Nuxt 前端 OIDC 登录与 API 调用。
                 builder
                     .WithOrigins(
                         configuration["App:CorsOrigins"]?

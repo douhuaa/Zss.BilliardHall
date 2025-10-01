@@ -111,8 +111,44 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 logoUri: "/images/clients/angular.svg"
             );
         }
+        // Vue 前端客户端（Abp_Vue）如果在配置中声明则自动创建
+        var vueClientId = configurationSection["Abp_Vue:ClientId"]; // e.g. Abp_Vue
+        if (!vueClientId.IsNullOrWhiteSpace())
+        {
+            var vueRoot = configurationSection["Abp_Vue:RootUrl"]?.TrimEnd('/'); // e.g. https://localhost:3000
+            var vueSecret = configurationSection["Abp_Vue:ClientSecret"]; // 可为空(公共)或有值(机密)
 
-        
+            var redirectUris = new List<string>
+            {
+                $"{vueRoot}/api/auth/callback/openiddict"
+            };
+            var postLogoutUris = new List<string>
+            {
+                $"{vueRoot}/api/auth/signout/callback"
+            };
+
+            // 若配置了 Secret 则视为 Confidential，否则 Public
+            var clientType = vueSecret.IsNullOrWhiteSpace() ? OpenIddictConstants.ClientTypes.Public : OpenIddictConstants.ClientTypes.Confidential;
+
+            await CreateApplicationAsync(
+                applicationType: OpenIddictConstants.ApplicationTypes.Web,
+                name: vueClientId!,
+                type: clientType,
+                consentType: OpenIddictConstants.ConsentTypes.Implicit,
+                displayName: "ABP Vue Frontend",
+                secret: vueSecret,
+                grantTypes: new List<string>
+                {
+                    OpenIddictConstants.GrantTypes.AuthorizationCode,
+                    OpenIddictConstants.GrantTypes.RefreshToken
+                },
+                scopes: commonScopes,
+                redirectUris: redirectUris,
+                postLogoutRedirectUris: postLogoutUris,
+                clientUri: vueRoot,
+                logoUri: "/images/clients/vue.svg"
+            );
+        }
         
 
 

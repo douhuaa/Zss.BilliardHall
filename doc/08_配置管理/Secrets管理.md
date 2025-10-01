@@ -37,6 +37,20 @@ dotnet user-secrets set "Db:Password" "DevPassword123!"
 | BH_DB_PASSWORD | Postgres 密码（可选） | 同上 |
 | BH_OTEL_EXPORTER_OTLP_ENDPOINT | OTLP Collector 端点 | 统一采集日志/Trace/指标 |
 
+### 前端 (Nuxt / ABP Vue) 相关环境变量
+
+| 变量名 | 用途 | 说明 | 是否敏感 |
+|--------|------|------|----------|
+| NUXT_AUTHORITY_URL | OIDC 授权服务器地址 | 指向后端 OpenIddict Host (HTTPS) | 否 |
+| NUXT_CLIENT_ID | 前端 OIDC ClientId | 需与数据种子中 Abp_Vue 匹配 | 否 |
+| NUXT_CLIENT_SECRET | OIDC ClientSecret | 若客户端机密型才需要 | 是 |
+| NUXT_SCOPE | 请求的 Scope 列表 | openid profile email BilliardHall 等 | 否 |
+| NUXT_REDIRECT_URI | 登录回调相对路径 | /api/auth/callback/openiddict | 否 |
+| NUXT_POST_LOGOUT_REDIRECT_URI | 登出回调路径 | /api/auth/signout/callback | 否 |
+| NUXT_ORIGIN | 前端站点完整基址 | <https://localhost:3000> | 否 |
+| NUXT_SESSION_SECRET | 前端 Session 加密种子 | 随机生成 Base64 | 是 |
+| NUXT_ABP_API_ENDPOINT | 后端 API 根地址 | <https://localhost:44388/api> | 否 |
+
 ## 生产环境策略
 
 1. 使用云 Secret 管理服务（Azure Key Vault / AWS Secrets Manager / HashiCorp Vault）。
