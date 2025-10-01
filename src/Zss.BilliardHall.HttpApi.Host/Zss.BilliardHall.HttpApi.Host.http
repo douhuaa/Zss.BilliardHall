@@ -1,0 +1,6 @@
+@Zss.BilliardHall.HttpApi.Host_HostAddress = http://localhost:5064
+
+GET {{Zss.BilliardHall.HttpApi.Host_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
