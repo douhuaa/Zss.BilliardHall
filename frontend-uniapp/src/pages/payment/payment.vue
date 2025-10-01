@@ -48,7 +48,8 @@
 </template>
 
 <script setup>
-import { ref, onLoad } from 'vue';
+import { ref } from 'vue';
+import { onLoad } from '@dcloudio/uni-app';
 
 const orderNo = ref('202401150001');
 const tableNumber = ref('5号台');
@@ -189,8 +190,7 @@ const balancePay = async () => {
   margin-bottom: 30rpx;
 }
 
-.method-list {
-}
+
 
 .method-item {
   display: flex;
