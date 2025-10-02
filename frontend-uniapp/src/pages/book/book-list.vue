@@ -127,7 +127,9 @@ const getBookTypeName = (type) => {
     3: '反乌托邦',
     4: '奇幻',
     5: '恐怖',
-    6: '科幻'
+    6: '科学',
+    7: '科幻',
+    8: '诗歌'
   };
   return typeMap[type] || '未知';
 };
