@@ -41,6 +41,11 @@
         <text class="menu-title">会员套餐</text>
         <text class="menu-arrow">›</text>
       </view>
+      <view class="menu-item" @click="goToBookList">
+        <text class="menu-icon">📚</text>
+        <text class="menu-title">图书列表</text>
+        <text class="menu-arrow">›</text>
+      </view>
       <view class="menu-item" @click="goToSettings">
         <text class="menu-icon">⚙️</text>
         <text class="menu-title">设置</text>
@@ -108,6 +113,12 @@ const goToMembership = () => {
   uni.showToast({
     title: '功能开发中',
     icon: 'none'
+  });
+};
+
+const goToBookList = () => {
+  uni.navigateTo({
+    url: '/pages/book/book-list'
   });
 };
 
