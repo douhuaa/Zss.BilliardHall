@@ -23,25 +23,31 @@ Review Checklist (Layering):
 ---
 ## 2. Naming & Style / 命名与风格
 
-Follow `doc/06_开发规范/代码风格.md` (summarized):
+Follow `doc/06_开发规范/代码风格.md` (已更新至 v1.0.0):
 - PascalCase: Classes / Interfaces / Public members; 接口前缀 I
 - camelCase + `_` prefix for private fields
 - Avoid 模糊命名: `DoSomething`, `Manager2`, `HelperX`
 - 只在需要保护语义时使用 `var`（类型明显 / 匿名类型 / LINQ）
 - Allman brace style; 强制使用 `async` 后缀 `Async`
+- 时间统一使用 UTC（持久化 DateTime.UtcNow，展示层本地化）
+- 公开异步方法优先接受 CancellationToken cancellationToken = default
 
 Reject / 标记风险:
 - 匈牙利命名、下划线 public 成员
 - 过长方法 > 50 行（建议拆分）
 - God Class（单类关注点过多，如 *Manager* 拥有 CRUD + 领域规则 + 整合外部）
+- 使用 DateTime.Now 而非 DateTime.UtcNow（除展示/日志场景）
+- 滥用 null-forgiving 操作符 `!`（需添加注释说明原因）
 
 ---
 ## 3. Logging & Observability / 日志与可观测性
 
-(临时规范，正式细则待 `日志规范.md` 完成)
+参考 `doc/06_开发规范/日志规范.md`，关键要点：
 - 使用 Serilog 结构化日志：`LogInformation("{Action} {Entity} {@Payload}", ...)`
-- 不记录敏感值（密码 / Secret / Token）
-- 失败路径必须包含：相关标识（EntityId, UserId, CorrelationId）
+- 标识字段统一：`{UserId}` `{TableId}` `{SessionId}` `{CorrelationId}`
+- 不记录敏感值（密码 / Secret / Token / 完整手机号）
+- 失败路径必须包含：相关标识与错误上下文
+- 金额格式化使用 `:F2`，避免直接输出浮点内部表示
 - 避免在高频循环中使用字符串拼接日志
 - 在跨服务边界前（调用外部 API / MQ）记录关键上下文
 
@@ -55,6 +61,7 @@ When reviewing changes, ensure:
 - 授权：新增 Endpoint 是否添加 `[Authorize]` 或显式 `[AllowAnonymous]`（后者需说明）
 - 防止 N+1：仓储查询是否使用 Include/Select 投影而不是多次循环查询
 - 不在日志或异常消息中输出个人隐私数据
+- 业务异常使用统一 Code 格式：`<Area>:<Key>`（如 `Billing:TableUnavailable`）
 
 ---
 ## 5. PR Scope & Structure / PR 范围与结构
@@ -81,6 +88,8 @@ Check:
 - 测试命名：`MethodName_条件_期望()` / 语义化英文均可
 - 不在测试中访问真实外部服务（使用 stub / in-memory）
 - 断言精确（避免只断言非 null）
+- Arrange / Act / Assert 清晰分段（可用空行或注释标识）
+- 针对新增公共业务规则：至少 1 个"正常路径" + 1 个"异常/边界"用例
 
 ---
 ## 7. EF Core & Data / 数据访问规范
@@ -90,6 +99,9 @@ Check:
 - 批量查询使用 `AsNoTracking()`（只读场景）
 - 更新只跟踪需要的实体，不进行全表 `UpdateRange` 无选择
 - 异常处理：数据库唯一约束 → 翻译成业务域错误而非直接抛内部异常
+- 避免 N+1：用投影（`Select(new Dto { ... })`）而不是盲目 `Include` 大图
+- 分页：先排序再分页；大页（>1000）考虑游标或时间窗口策略
+- 批量存在性校验用 `AnyAsync()` 而不是 `Count()`
 
 ---
 ## 8. Frontend (Nuxt) Integration / 前端集成
@@ -148,6 +160,10 @@ Must accompany an Issue reference once created.
 (✓) 没有无意开启的 OIDC grant / CORS 过宽 `*`
 (✓) Migration 命名合规且无示例/测试数据
 (✓) 前端环境变量未提交真实值
+(✓) 使用 UTC 时间进行持久化
+(✓) 异步方法包含 CancellationToken 参数
+(✓) 业务异常包含结构化 Code
+(✓) EF 查询使用 AsNoTracking（只读场景）
 
 ---
 ## 13. English Summary (Condensed)
@@ -160,6 +176,9 @@ Use this section if AI requires English only context:
 - Keep PR small & single-purpose; reject noisy unrelated refactors
 - Follow conventional commits; clear module scope
 - EF Core: use AsNoTracking for read, migrations properly named
+- UTC time for persistence, localization at display layer
+- CancellationToken support for async methods
+- Business exceptions with structured codes (<Area>:<Key>)
 
 ---
 ## 14. Updating This File / 更新策略
@@ -171,7 +190,11 @@ Use this section if AI requires English only context:
 ---
 ## 15. Version / 版本
 
-Current instructions version: 0.1.0 (initial)
+Current instructions version: 0.2.0 (aligned with style guide v1.0.0)
+
+Change Log (local to this file):
+- 0.1.0: Initial creation with interim logging & layering rules
+- 0.2.0: Synchronized with 代码风格.md v1.0.0, added UTC/CancellationToken/business exception codes
 
 Change Log (local to this file):
 - 0.1.0: Initial creation with interim logging & layering rules
