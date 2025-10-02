@@ -1,5 +1,12 @@
 # UniApp 快速开始指南
 
+## ⚠️ 重要提示
+
+**Book API 需要身份验证**：
+- 📌 必须先登录才能访问图书列表
+- 📌 需要 `BilliardHall.Books.Default` 权限
+- 📌 如遇到授权错误，请查看 [故障排查指南](TROUBLESHOOTING.md)
+
 ## 🚀 快速启动
 
 ### 安装依赖

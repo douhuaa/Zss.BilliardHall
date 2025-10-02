@@ -31,8 +31,20 @@ export function request(options) {
             url: '/pages/login/login'
           });
           reject(new Error('未授权，请重新登录'));
+        } else if (res.statusCode === 403) {
+          // 无权限
+          reject(new Error('无权限访问，请联系管理员'));
         } else {
-          reject(new Error(res.data.message || '请求失败'));
+          // 尝试从响应中提取错误信息
+          let errorMessage = '请求失败';
+          if (res.data) {
+            if (res.data.error && res.data.error.message) {
+              errorMessage = res.data.error.message;
+            } else if (res.data.message) {
+              errorMessage = res.data.message;
+            }
+          }
+          reject(new Error(errorMessage));
         }
       },
       fail: (err) => {

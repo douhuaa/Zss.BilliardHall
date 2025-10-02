@@ -188,6 +188,16 @@ frontend-uniapp/src/
 | 7  | ScienceFiction | 科幻 |
 | 8  | Poetry | 诗歌 |
 
+## ⚠️ 重要提示：身份验证要求
+
+**Book API 需要身份验证和权限**：
+
+1. **必须登录**: 访问 Book API 前需要先登录获取 Access Token
+2. **需要权限**: 用户必须拥有 `BilliardHall.Books.Default` 权限才能查看图书列表
+3. **Token 管理**: Token 存储在 `uni.storage` 中，会在请求头中自动携带
+
+**如果遇到"无法获得数据"错误**，请查看 [故障排查指南](frontend-uniapp/TROUBLESHOOTING.md)。
+
 ## 使用示例
 
 ### 在页面中使用
@@ -199,9 +209,16 @@ import { getBookList } from '@/api/book';
 
 const books = ref([]);
 const loading = ref(false);
+const isAuthenticated = ref(false);
 
 onMounted(() => {
-  loadBooks();
+  // 检查是否已登录
+  const token = uni.getStorageSync('token');
+  isAuthenticated.value = !!token;
+  
+  if (isAuthenticated.value) {
+    loadBooks();
+  }
 });
 
 const loadBooks = async () => {
@@ -238,7 +255,12 @@ const loadBooks = async () => {
 2. **配置数据库**：
    确保 PostgreSQL 运行并已执行迁移
 
-3. **创建测试数据**：
+3. **创建测试账号和权限**：
+   - 使用 DbMigrator 创建管理员账号
+   - 或使用默认管理员账号: `admin` / `1q2w3E*`
+   - 确保账号拥有 `BilliardHall.Books.Default` 权限
+
+4. **创建测试数据**：
    使用 Swagger UI 或 DbMigrator 创建示例图书
 
 ### 测试步骤
