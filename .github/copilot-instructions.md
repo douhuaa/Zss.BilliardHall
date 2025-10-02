@@ -196,8 +196,6 @@ Change Log (local to this file):
 - 0.1.0: Initial creation with interim logging & layering rules
 - 0.2.0: Synchronized with 代码风格.md v1.0.0, added UTC/CancellationToken/business exception codes
 
-Change Log (local to this file):
-- 0.1.0: Initial creation with interim logging & layering rules
 
 ---
 
