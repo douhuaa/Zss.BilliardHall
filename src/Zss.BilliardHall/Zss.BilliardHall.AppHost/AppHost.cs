@@ -40,10 +40,19 @@ if (builder.Environment.IsDevelopment())
         .WaitFor(postgres);
 }
 
-builder
-    .AddProject<Projects.Zss_BilliardHall_HttpApi_Host>("httpApi-host")
+var api = builder
+    .AddProject<Projects.Zss_BilliardHall_HttpApi_Host>("api")
     .WithReference(db, dbConnectionName)
     .WaitFor(postgres);
+
+// 注意：当前文件所在目录: src/Zss.BilliardHall/Zss.BilliardHall.AppHost/
+// 前端 uniapp(vite) 工程目录: <repo-root>/frontend-uniapp
+// 需要向上跳转三级 ../../../ 才能到仓库根目录；原先 ../frontend-uniapp 指向 src/Zss.BilliardHall/frontend-uniapp (不存在) 导致 npm 进程工作目录无效。
+builder
+    .AddNpmApp("viteApp", "../../../frontend-uniapp","dev")
+    .WithReference(api)
+    .WithHttpEndpoint(env:"PORT")
+    .WithExternalHttpEndpoints();
 
 builder
     .Build()

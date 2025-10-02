@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "zss-billiard-hall-uniapp": "file:../../../frontend-uniapp"
+  }
+}

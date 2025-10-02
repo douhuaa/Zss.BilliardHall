@@ -1,16 +1,21 @@
 import { defineConfig } from 'vite';
 import uni from '@dcloudio/vite-plugin-uni';
 
+const apiTarget =
+  process.env['services__api__https__0'] ||
+  process.env['services__api__http__0'] ||
+  'http://localhost:5000'
+
 export default defineConfig({
   plugins: [uni()],
   server: {
-    port: 3000,
+    port: Number(process.env.PORT) || 5173,
     proxy: {
       '/api': {
-        target: process.env.VITE_API_BASE_URL || 'http://localhost:5000',
+        target: apiTarget,
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
+        rewrite: p => p.replace(/^\/api/, '')
       }
     }
   }
-});
+})
