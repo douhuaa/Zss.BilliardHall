@@ -458,7 +458,7 @@ public class CreateOrderHandler
 {
     private readonly CreatePaymentHandler _paymentHandler;
     
-    public Task Handle(CreateOrderCommand cmd)
+    public async Task Handle(CreateOrderCommand cmd)
     {
         // 不要这样做
         await _paymentHandler.Handle(new CreatePaymentCommand());

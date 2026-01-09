@@ -158,6 +158,7 @@ public class TableSession
     public Guid Id { get; set; }
     public Table Table { get; set; }  // ❌ 循环引用
 }
+// 注意：循环引用会导致 Marten 的 JSON 序列化失败，在运行时抛出异常
 
 // ✅ 使用 ID 引用
 public class Table

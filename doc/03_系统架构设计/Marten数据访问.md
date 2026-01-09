@@ -373,7 +373,7 @@ public class MemberRepository : IMemberRepository
 }
 ```
 
-**注意**: 这种模式是可选的。在垂直切片架构中，直接在 Handler 中使用 `IDocumentSession` 更简单直接。
+**注意**: 这种模式是可选的，但不推荐。在仓储方法中调用 `SaveChangesAsync` 违反了工作单元模式。在垂直切片架构中，直接在 Handler 中使用 `IDocumentSession` 更简单直接，并且由调用者（Handler）统一管理事务边界。
 
 #### 模式 2：直接使用 IDocumentSession（推荐）
 
