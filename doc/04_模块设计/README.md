@@ -9,7 +9,7 @@ updated: "2024-01-15"
 category: "系统设计"
 level: "核心"
 audience: ["系统架构师", "后端开发工程师", "技术负责人"]
-keywords: ["模块设计", "系统架构", "业务模块", "接口设计", "ABP框架"]
+keywords: ["模块设计", "垂直切片架构", "业务功能", "Wolverine", "Marten"]
 tags: ["module-design", "architecture", "business-logic"]
 dependencies: ["需求规格说明", "系统架构设计"]
 related: ["数据库设计", "API文档"]
@@ -22,7 +22,7 @@ estimated_reading_time: "20分钟"
 **导航路径**: [🏠 项目文档](../自助台球系统项目文档.md) > 📦 模块设计
 
 <!-- Keywords for Search -->
-**关键词**: `模块设计` `系统架构` `业务模块` `接口设计` `ABP框架`
+**关键词**: `模块设计` `垂直切片架构` `业务功能` `Wolverine` `Marten`
 
 ---
 
@@ -38,7 +38,69 @@ estimated_reading_time: "20分钟"
 
 ---
 
-## 🏗️ 系统架构概览
+## 🏗️ 垂直切片架构概览
+
+### 架构理念
+
+本项目采用**垂直切片架构**（Vertical Slice Architecture），以业务功能为中心组织代码，而非传统的技术分层。每个功能切片包含从 HTTP 端点到数据访问的完整实现路径。
+
+```mermaid
+graph LR
+    subgraph "传统分层架构"
+        C1[Controller] --> A1[Application]
+        A1 --> D1[Domain]
+        D1 --> R1[Repository]
+    end
+    
+    subgraph "垂直切片架构"
+        F1[StartSession<br/>Feature] --> H1[Handler]
+        F2[EndSession<br/>Feature] --> H2[Handler]
+        F3[CreateMember<br/>Feature] --> H3[Handler]
+    end
+    
+    style F1 fill:#a8e6cf
+    style F2 fill:#ffd3b6
+    style F3 fill:#ffaaa5
+```
+
+**优势**:
+- ✅ 功能内聚：一个功能的所有代码在一起
+- ✅ 独立演化：功能之间松耦合
+- ✅ 简化测试：每个切片可独立测试
+- ✅ 并行开发：团队成员可以独立工作
+
+详见：[垂直切片架构说明](../03_系统架构设计/垂直切片架构说明.md)
+
+### 功能切片组织
+
+```
+src/Zss.BilliardHall/
+  Features/                      # 所有功能切片
+    TableSessions/               # 台球桌会话领域
+      StartSession/              # 开台功能切片
+        StartSessionCommand.cs
+        StartSessionHandler.cs
+        StartSessionValidator.cs
+      EndSession/                # 关台功能切片
+      PauseSession/              # 暂停功能切片
+      ResumeSession/             # 恢复功能切片
+    Members/                     # 会员领域
+      RegisterMember/
+      UpdateMemberProfile/
+      TopUpBalance/
+      GetMemberProfile/
+    Payments/                    # 支付领域
+      ProcessPayment/
+      RefundPayment/
+      ReconcilePayments/
+    Tables/                      # 台球桌领域
+      RegisterTable/
+      UpdateTableStatus/
+      GetTableAvailability/
+    Reports/                     # 报表领域
+      GenerateDailyReport/
+      GetRevenueStatistics/
+```
 
 ### 模块关系图
 
@@ -50,53 +112,60 @@ graph TB
         ADMIN[管理后台]
     end
     
-    subgraph "API网关层"
-        GATEWAY[API Gateway]
+    subgraph "API层 (Minimal API + Wolverine)"
+        API[HTTP Endpoints]
     end
     
-    subgraph "业务模块层"
-        USER[会员管理模块]
-        BILLING[台球桌计费模块]
-        PAYMENT[支付模块]
-        DEVICE[设备管理模块]
-        REPORT[报表统计模块]
+    subgraph "功能切片层 (Features)"
+        direction TB
+        TS[TableSessions 切片]
+        MB[Members 切片]
+        PM[Payments 切片]
+        TB[Tables 切片]
+        RP[Reports 切片]
     end
     
-    subgraph "数据访问层"
-        DB[(数据库)]
-        CACHE[(缓存)]
-        MQ[消息队列]
+    subgraph "领域层 (共享)"
+        DOM[Domain Entities<br/>Value Objects<br/>Domain Services]
     end
     
-    subgraph "外部服务"
-        PAY_GATEWAY[支付网关]
-        SMS[短信服务]
-        IOT[物联网平台]
+    subgraph "数据层"
+        MARTEN[(Marten<br/>PostgreSQL)]
     end
     
-    WEB --> GATEWAY
-    MOBILE --> GATEWAY
-    ADMIN --> GATEWAY
+    subgraph "消息总线"
+        WOLVERINE[Wolverine<br/>Message Bus]
+    end
     
-    GATEWAY --> USER
-    GATEWAY --> BILLING
-    GATEWAY --> PAYMENT
-    GATEWAY --> DEVICE
-    GATEWAY --> REPORT
+    WEB --> API
+    MOBILE --> API
+    ADMIN --> API
     
-    USER --> DB
-    BILLING --> DB
-    PAYMENT --> DB
-    DEVICE --> DB
-    REPORT --> DB
+    API --> TS
+    API --> MB
+    API --> PM
+    API --> TB
+    API --> RP
     
-    USER --> CACHE
-    BILLING --> CACHE
-    PAYMENT --> MQ
-    DEVICE --> IOT
+    TS --> DOM
+    MB --> DOM
+    PM --> DOM
+    TB --> DOM
+    RP --> DOM
     
-    PAYMENT --> PAY_GATEWAY
-    USER --> SMS
+    TS --> MARTEN
+    MB --> MARTEN
+    PM --> MARTEN
+    TB --> MARTEN
+    RP --> MARTEN
+    
+    TS -.消息.-> WOLVERINE
+    MB -.消息.-> WOLVERINE
+    PM -.消息.-> WOLVERINE
+    
+    WOLVERINE -.事件.-> TS
+    WOLVERINE -.事件.-> MB
+    WOLVERINE -.事件.-> PM
 ```
 
 ### 核心业务流程
@@ -104,105 +173,269 @@ graph TB
 ```mermaid
 sequenceDiagram
     participant U as 用户
-    participant M as 会员管理
-    participant B as 计费模块
-    participant P as 支付模块
-    participant D as 设备管理
-    participant R as 报表统计
+    participant API as API端点
+    participant StartHandler as StartSession<br/>Handler
+    participant Marten as Marten<br/>DocumentSession
+    participant Bus as Wolverine<br/>MessageBus
+    participant NotifyHandler as Notification<br/>Handler
     
-    U->>M: 用户登录/注册
-    M-->>U: 返回用户信息
+    U->>API: POST /api/sessions/start
+    API->>Bus: InvokeAsync(StartSessionCommand)
+    Bus->>StartHandler: Handle(command)
     
-    U->>B: 选择球台开始计费
-    B->>D: 控制球台灯光开启
-    D-->>B: 确认设备状态
-    B-->>U: 开始计费
+    StartHandler->>Marten: Load<Table>(tableId)
+    Marten-->>StartHandler: table
     
-    loop 计费过程
-        B->>B: 计算费用
-        B->>R: 记录使用数据
-    end
+    StartHandler->>Marten: Store(tableSession)
+    StartHandler->>Marten: SaveChangesAsync()
     
-    U->>B: 结束使用
-    B->>P: 发起支付请求
-    P-->>U: 返回支付结果
+    StartHandler->>Bus: PublishAsync(SessionStartedEvent)
+    StartHandler-->>Bus: Result<Guid>
+    Bus-->>API: sessionId
+    API-->>U: 200 OK {sessionId}
     
-    P->>M: 更新会员积分
-    P->>R: 记录交易数据
-    B->>D: 控制球台灯光关闭
+    Bus->>NotifyHandler: Handle(SessionStartedEvent)
+    NotifyHandler->>NotifyHandler: 发送通知（异步）
 ```
 
 ---
 
-## 📦 模块详细说明
+## 📦 功能领域说明
 
-### 4.1 会员管理模块
+### 4.1 TableSessions（台球桌会话领域）
 
-**功能概述**: 负责用户注册、登录、会员等级管理、积分系统等功能。
+**功能概述**: 管理台球桌的使用会话，包括开台、关台、暂停、恢复等核心业务逻辑。
 
-**核心特性**:
-- 🔐 用户身份认证与授权
-- 🏆 会员等级体系设计
-- 🎯 积分累计与消费管理
-- 👥 用户画像与行为分析
+**核心切片**:
+- **StartSession**: 开始新会话
+- **EndSession**: 结束会话并触发计费
+- **PauseSession**: 暂停会话（暂停计费）
+- **ResumeSession**: 恢复会话
+- **GetActiveSession**: 查询活动会话
 
-**技术要点**: JWT认证、Redis缓存、会员等级算法
+**技术要点**: 
+- 使用 Marten 事件溯源记录会话历史
+- 通过 Wolverine 消息总线通知其他领域
+- 乐观并发控制防止状态冲突
 
-[➡️ 查看详细设计](会员管理模块.md)
+**示例代码**:
+```csharp
+// Features/TableSessions/StartSession/StartSessionCommand.cs
+public record StartSessionCommand(
+    Guid TableId,
+    Guid? MemberId,
+    SessionType Type
+);
 
-### 4.2 台球桌计费模块
+// Features/TableSessions/StartSession/StartSessionHandler.cs
+public class StartSessionHandler
+{
+    public async Task<Result<Guid>> Handle(
+        StartSessionCommand command,
+        IDocumentSession session,
+        IMessageBus bus)
+    {
+        var table = await session.LoadAsync<Table>(command.TableId);
+        if (table?.Status != TableStatus.Available)
+            return Result.Fail<Guid>("台球桌不可用");
 
-**功能概述**: 实现台球桌的计费规则、套餐管理、计时控制等核心业务逻辑。
+        var tableSession = TableSession.Start(
+            command.TableId,
+            command.MemberId,
+            DateTime.UtcNow
+        );
+        
+        session.Store(tableSession);
+        await session.SaveChangesAsync();
 
-**核心特性**:
-- ⏰ 精确的计时计费算法
-- 📦 灵活的套餐价格体系
-- 🎲 多种计费模式支持
-- ⚠️ 异常处理与补偿机制
+        await bus.PublishAsync(new SessionStartedEvent(tableSession.Id));
 
-**技术要点**: 定时任务、价格策略模式、分布式锁
+        return Result.Ok(tableSession.Id);
+    }
+}
+```
 
 [➡️ 查看详细设计](台球桌计费模块.md)
 
-### 4.3 支付模块
+### 4.2 Members（会员领域）
 
-**功能概述**: 集成多种支付方式，确保支付流程的安全性和可靠性。
+**功能概述**: 处理会员注册、登录、资料管理、余额充值等功能。
 
-**核心特性**:
-- 💰 多支付渠道集成
-- 🔒 支付安全与风控
-- 🔄 幂等性与重试机制
-- 📋 对账与结算管理
+**核心切片**:
+- **RegisterMember**: 注册新会员
+- **UpdateMemberProfile**: 更新会员资料
+- **TopUpBalance**: 余额充值
+- **GetMemberProfile**: 查询会员信息
+- **GetMemberTransactions**: 查询交易记录
 
-**技术要点**: 支付网关集成、幂等性设计、异步处理
+**技术要点**:
+- OpenIddict 身份认证
+- 敏感信息加密存储
+- 会员等级自动升级（后台任务）
+
+**示例代码**:
+```csharp
+// Features/Members/RegisterMember/RegisterMemberCommand.cs
+public record RegisterMemberCommand(
+    string Name,
+    string Phone,
+    string Email,
+    string Password
+);
+
+// Features/Members/RegisterMember/RegisterMemberHandler.cs
+public class RegisterMemberHandler
+{
+    public async Task<Result<Guid>> Handle(
+        RegisterMemberCommand command,
+        IDocumentSession session,
+        IPasswordHasher passwordHasher)
+    {
+        // 检查手机号是否已存在
+        var existing = await session.Query<Member>()
+            .FirstOrDefaultAsync(m => m.Phone == command.Phone);
+        if (existing != null)
+            return Result.Fail<Guid>("手机号已注册");
+
+        var member = new Member
+        {
+            Id = Guid.NewGuid(),
+            Name = command.Name,
+            Phone = command.Phone,
+            Email = command.Email,
+            PasswordHash = passwordHasher.Hash(command.Password),
+            Balance = 0,
+            Level = MembershipLevel.Regular,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        session.Store(member);
+        await session.SaveChangesAsync();
+
+        return Result.Ok(member.Id);
+    }
+}
+```
+
+[➡️ 查看详细设计](会员管理模块.md)
+
+### 4.3 Payments（支付领域）
+
+**功能概述**: 集成支付网关，处理支付、退款、对账等功能。
+
+**核心切片**:
+- **ProcessPayment**: 处理支付请求
+- **RefundPayment**: 处理退款
+- **ReconcilePayments**: 对账
+- **GetPaymentStatus**: 查询支付状态
+
+**技术要点**: 
+- 支付网关集成（微信、支付宝）
+- 幂等性设计（OrderId 唯一）
+- 持久化消息队列保证不丢失
+- 自动重试机制
+
+**示例代码**:
+```csharp
+// Features/Payments/ProcessPayment/ProcessPaymentCommand.cs
+public record ProcessPaymentCommand(
+    Guid OrderId,
+    Guid MemberId,
+    decimal Amount,
+    PaymentMethod Method
+);
+
+// Features/Payments/ProcessPayment/ProcessPaymentHandler.cs
+public class ProcessPaymentHandler
+{
+    public async Task<PaymentResult> Handle(
+        ProcessPaymentCommand command,
+        IDocumentSession session,
+        IPaymentGateway gateway,
+        ILogger<ProcessPaymentHandler> logger)
+    {
+        // 幂等性检查
+        var existing = await session.Query<Payment>()
+            .FirstOrDefaultAsync(p => p.OrderId == command.OrderId);
+        if (existing != null)
+            return PaymentResult.AlreadyProcessed(existing.Id);
+
+        logger.LogInformation(
+            "开始处理支付: {OrderId}, 金额: {Amount:F2}",
+            command.OrderId, command.Amount);
+
+        try
+        {
+            // 调用支付网关
+            var gatewayResult = await gateway.ChargeAsync(
+                command.OrderId,
+                command.Amount,
+                command.Method
+            );
+
+            var payment = new Payment
+            {
+                Id = Guid.NewGuid(),
+                OrderId = command.OrderId,
+                MemberId = command.MemberId,
+                Amount = command.Amount,
+                Method = command.Method,
+                Status = PaymentStatus.Success,
+                TransactionId = gatewayResult.TransactionId,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            session.Store(payment);
+            await session.SaveChangesAsync();
+
+            logger.LogInformation(
+                "支付成功: {OrderId}, 交易ID: {TransactionId}",
+                command.OrderId, gatewayResult.TransactionId);
+
+            return PaymentResult.Success(payment.Id);
+        }
+        catch (PaymentGatewayException ex)
+        {
+            logger.LogError(ex, "支付失败: {OrderId}", command.OrderId);
+            
+            // Wolverine 会根据策略自动重试
+            throw;
+        }
+    }
+}
+```
 
 [➡️ 查看详细设计](支付模块.md)
 
-### 4.4 设备管理模块
+### 4.4 Tables（台球桌领域）
 
-**功能概述**: 管理台球桌硬件设备，实现远程控制和状态监控。
+**功能概述**: 管理台球桌信息、状态、可用性查询等。
 
-**核心特性**:
-- 🎮 设备远程控制
-- 📡 实时状态监控
-- 🔧 设备故障诊断
-- 📊 设备运行数据统计
+**核心切片**:
+- **RegisterTable**: 注册新台球桌
+- **UpdateTableStatus**: 更新台球桌状态
+- **GetTableAvailability**: 查询可用台球桌
+- **GetTableDetails**: 查询台球桌详情
 
-**技术要点**: MQTT协议、WebSocket实时通信、设备SDK
+**技术要点**:
+- 台球桌状态机
+- 实时状态查询（缓存优化）
+- 设备控制集成
 
-[➡️ 查看详细设计](设备管理模块.md)
+### 4.5 Reports（报表领域）
 
-### 4.5 报表与统计模块
+**功能概述**: 生成各类业务报表和统计数据。
 
-**功能概述**: 提供业务数据分析、报表生成和可视化展示功能。
+**核心切片**:
+- **GenerateDailyReport**: 生成日报
+- **GetRevenueStatistics**: 收入统计
+- **GetMemberStatistics**: 会员统计
+- **GetTableUsageStatistics**: 台球桌使用率统计
 
-**核心特性**:
-- 📈 实时数据统计
-- 📊 多维度报表生成
-- 🎯 业务指标监控
-- 📋 数据导出功能
-
-**技术要点**: ElasticSearch、定时任务、数据聚合算法
+**技术要点**: 
+- 定时任务（Wolverine Scheduled Jobs）
+- 数据聚合查询（Marten SQL 查询）
+- 报表缓存
 
 [➡️ 查看详细设计](报表与统计模块.md)
 
@@ -210,69 +443,165 @@ sequenceDiagram
 
 ## 🔧 技术架构要点
 
-### 基础架构原则
+### 垂直切片架构原则
 
-1. **模块化设计**: 采用领域驱动设计(DDD)思想，按业务域划分模块
-2. **微服务架构**: 支持模块独立部署和扩展
-3. **事件驱动**: 使用领域事件实现模块间解耦
-4. **CQRS模式**: 读写分离提升系统性能
+1. **功能内聚**: 每个切片包含实现该功能的所有代码
+2. **独立演化**: 切片间通过消息通信，最小化耦合
+3. **接受重复**: 优先考虑独立性而非代码复用
+4. **薄处理器**: Handler 是薄的编排层，复杂逻辑在领域层
+
+详见：[设计原则](../03_系统架构设计/设计原则.md)
 
 ### 技术栈选择
 
 ```mermaid
 graph LR
-    subgraph "后端技术栈"
-        A[ASP.NET Core 8.0]
-        B[ABP Framework]
-        C[Entity Framework Core]
-        D[AutoMapper]
-        E[Hangfire]
+    subgraph "核心框架"
+        A[.NET 9]
+        B[Wolverine 3.x]
+        C[Marten 7.x]
     end
     
     subgraph "数据存储"
-        F[SQL Server/MySQL]
+        F[PostgreSQL 16+]
         G[Redis]
-        H[ElasticSearch]
     end
     
-    subgraph "消息队列"
-        I[RabbitMQ]
-        J[SignalR]
+    subgraph "认证授权"
+        H[OpenIddict 5.x]
+    end
+    
+    subgraph "日志监控"
+        I[Serilog]
+        J[OpenTelemetry]
     end
     
     A --> B
     B --> C
     C --> F
-    A --> G
-    E --> A
+    A --> H
     A --> I
-    A --> J
 ```
 
-### 模块间通信
+**核心组件**:
+- **Wolverine**: 命令/查询处理、消息总线、后台任务
+- **Marten**: 文档数据库、事件溯源
+- **PostgreSQL**: 主数据库（JSONB 文档存储）
+- **OpenIddict**: OIDC 认证授权
+- **Serilog**: 结构化日志
 
-- **同步调用**: HTTP API + gRPC
-- **异步消息**: RabbitMQ + 领域事件
-- **实时通信**: SignalR Hub
-- **数据共享**: Redis缓存 + 数据库视图
+详见：[技术选型](../03_系统架构设计/技术选型.md)
+
+### 切片间通信模式
+
+**1. 命令调用（同步）**:
+```csharp
+// 发送命令并等待结果
+var result = await bus.InvokeAsync<Result<Guid>>(
+    new CreateMemberCommand("张三", "138...")
+);
+```
+
+**2. 事件发布（异步）**:
+```csharp
+// 发布事件，不等待
+await bus.PublishAsync(new SessionStartedEvent(sessionId));
+
+// 多个处理器可以订阅同一事件
+public class AuditLogHandler
+{
+    public Task Handle(SessionStartedEvent evt) { /* 记录审计日志 */ }
+}
+
+public class NotificationHandler
+{
+    public Task Handle(SessionStartedEvent evt) { /* 发送通知 */ }
+}
+```
+
+**3. 共享领域服务**:
+```csharp
+// 对于真正共享的领域逻辑
+public interface IPricingService
+{
+    decimal CalculatePrice(TableSession session, TableType type);
+}
+
+// 在多个处理器中注入使用
+public class CalculateBillingHandler
+{
+    public async Task<decimal> Handle(
+        CalculateBillingCommand cmd,
+        IPricingService pricingService)
+    {
+        return pricingService.CalculatePrice(session, tableType);
+    }
+}
+```
 
 ---
 
 ## 📋 开发规范
 
-### 模块开发标准
+### 切片开发标准
 
-1. **代码结构**: 遵循ABP分层架构规范
-2. **接口设计**: RESTful API + Swagger文档
-3. **错误处理**: 统一异常处理和错误码
-4. **日志记录**: 结构化日志 + 链路追踪
+1. **切片命名**: 动词 + 名词（如 CreateMember、StartSession）
+2. **文件组织**: 每个切片一个文件夹，包含 Command/Handler/Validator
+3. **处理器约定**: 方法名必须是 `Handle` 或 `HandleAsync`
+4. **测试覆盖**: 每个切片至少一个集成测试
+
+**目录结构示例**:
+```
+Features/
+  Members/
+    CreateMember/
+      CreateMemberCommand.cs       # 命令定义
+      CreateMemberHandler.cs       # 处理器实现
+      CreateMemberValidator.cs     # 验证规则
+      CreateMemberTests.cs         # 测试（可选）
+```
+
+### 代码规范
+
+```csharp
+// ✅ 好的实践
+public record CreateMemberCommand(string Name, string Phone, string Email);
+
+public class CreateMemberHandler
+{
+    public async Task<Result<Guid>> Handle(
+        CreateMemberCommand command,
+        IDocumentSession session,
+        ILogger<CreateMemberHandler> logger,
+        CancellationToken ct)
+    {
+        // 1. 验证业务规则
+        // 2. 执行业务逻辑
+        // 3. 持久化数据
+        // 4. 发布事件（如需要）
+        // 5. 返回结果
+    }
+}
+
+// ❌ 避免
+public class CreateMemberHandler
+{
+    private readonly IRepository<Member> _repository;  // ❌ 不使用仓储模式
+    
+    public CreateMemberHandler(IRepository<Member> repository)
+    {
+        _repository = repository;
+    }
+}
+```
 
 ### 质量保障
 
-- ✅ 单元测试覆盖率 > 80%
-- ✅ 集成测试覆盖核心业务流程
-- ✅ 代码审查通过后方可合并
-- ✅ 自动化部署和监控
+- ✅ 每个切片独立可测试
+- ✅ 关键切片包含单元测试和集成测试
+- ✅ 使用 FluentValidation 进行输入验证
+- ✅ 结构化日志记录关键操作
+- ✅ 代码审查确保符合架构原则
 
 ---
 
