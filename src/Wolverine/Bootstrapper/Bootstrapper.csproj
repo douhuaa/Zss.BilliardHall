@@ -10,4 +10,8 @@
 
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Aspire\Zss.BilliardHall.Wolverine.ServiceDefaults\Zss.BilliardHall.Wolverine.ServiceDefaults.csproj" />
+  </ItemGroup>
+
 </Project>
