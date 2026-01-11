@@ -46,5 +46,10 @@ builder
     .WaitFor(postgres);
 
 builder
+    .AddProject<Projects.Bootstrapper>("bootstrapper")
+    .WithReference(db, dbConnectionName)
+    .WaitFor(postgres);
+
+builder
     .Build()
     .Run();

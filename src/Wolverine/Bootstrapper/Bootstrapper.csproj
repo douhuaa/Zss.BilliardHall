@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
-
     <PackageReference Include="Marten.AspNetCore" />
-
     <PackageReference Include="Serilog.AspNetCore" />
-
     <PackageReference Include="WolverineFx.Http.FluentValidation" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Zss.BilliardHall\Zss.BilliardHall.ServiceDefaults\Zss.BilliardHall.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

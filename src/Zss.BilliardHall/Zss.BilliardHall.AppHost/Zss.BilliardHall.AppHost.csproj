@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Sdk Name="Aspire.AppHost.Sdk" Version="9.5.0"/>
+    <Sdk Name="Aspire.AppHost.Sdk" Version="13.1.0"/>
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -11,13 +11,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aspire.Hosting.AppHost" Version="9.5.0"/>
-        <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.5.0" />
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="13.1.0"/>
+        <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.1.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\src\Zss.BilliardHall.DbMigrator\Zss.BilliardHall.DbMigrator.csproj" />
       <ProjectReference Include="..\src\Zss.BilliardHall.HttpApi.Host\Zss.BilliardHall.HttpApi.Host.csproj" />
+      <ProjectReference Include="..\..\Wolverine\Bootstrapper\Bootstrapper.csproj" />
     </ItemGroup>
 
 </Project>
