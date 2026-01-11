@@ -1,7 +1,9 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+builder.AddMartenDefaults();
 builder.AddWolverineDefaults();
+
 
 var app = builder.Build();
 
