@@ -24,7 +24,7 @@ public class AppHostIntegrationTests
     /// 测试 AppHost 能够成功启动 Bootstrapper 服务
     /// Test that AppHost can successfully start the Bootstrapper service
     /// </summary>
-    [Fact(Skip = "Requires Docker and Aspire DCP. Run manually with: dotnet test --filter Category!=RequiresDocker")]
+    [Fact(Skip = "Requires Docker and Aspire DCP. To run: remove Skip attribute, then: dotnet test --filter Category=RequiresDocker")]
     public async Task AppHost_CanStartBootstrapperService()
     {
         // Arrange
@@ -44,7 +44,7 @@ public class AppHostIntegrationTests
     /// 测试 Bootstrapper 健康检查端点响应正常
     /// Test that Bootstrapper health check endpoint responds correctly
     /// </summary>
-    [Fact(Skip = "Requires Docker and Aspire DCP. Run manually with: dotnet test --filter Category!=RequiresDocker")]
+    [Fact(Skip = "Requires Docker and Aspire DCP. To run: remove Skip attribute, then: dotnet test --filter Category=RequiresDocker")]
     public async Task Bootstrapper_HealthEndpoint_ReturnsHealthy()
     {
         // Arrange
@@ -71,7 +71,7 @@ public class AppHostIntegrationTests
     /// 测试 Bootstrapper 根端点返回应用状态信息
     /// Test that Bootstrapper root endpoint returns application status information
     /// </summary>
-    [Fact(Skip = "Requires Docker and Aspire DCP. Run manually with: dotnet test --filter Category!=RequiresDocker")]
+    [Fact(Skip = "Requires Docker and Aspire DCP. To run: remove Skip attribute, then: dotnet test --filter Category=RequiresDocker")]
     public async Task Bootstrapper_RootEndpoint_ReturnsApplicationStatus()
     {
         // Arrange
