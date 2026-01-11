@@ -206,7 +206,7 @@ public static class Extensions
     /// 默认配置包括 / Default configuration includes:
     /// </para>
     /// <list type="bullet">
-    /// <item><description>HTTP 端点自动发现 / Automatic HTTP endpoint discovery</description></item>
+    /// <item><description>自动扫描入口程序集的 Handler 和 Endpoint / Automatic discovery of Handlers and Endpoints in the entry assembly</description></item>
     /// <item><description>FluentValidation 集成 / FluentValidation integration</description></item>
     /// <item><description>为未来的消息队列集成预留配置点 / Configuration point for future message queue integration (RabbitMQ/Kafka)</description></item>
     /// </list>
@@ -224,9 +224,11 @@ public static class Extensions
     {
         builder.Services.AddWolverine(opts =>
         {
-            // 启用 HTTP 端点自动发现
-            // Enable automatic HTTP endpoint discovery
-            opts.Discovery.IncludeAssembly(typeof(TBuilder).Assembly);
+            // Wolverine 默认会自动扫描入口程序集（entry assembly）查找 Handler 和 Endpoint
+            // Wolverine automatically scans the entry assembly for Handlers and Endpoints by default
+            // 如果需要扫描额外的程序集，可以使用：
+            // To scan additional assemblies, use:
+            // opts.Discovery.IncludeAssembly(typeof(SomeType).Assembly);
 
             // 集成 FluentValidation 进行输入验证
             // Integrate FluentValidation for input validation

@@ -72,7 +72,7 @@ builder.AddWolverineDefaults();
 ```
 
 **自动包含**:
-- HTTP 端点自动发现（基于约定的路由）
+- 自动扫描入口程序集的 Handler 和 Endpoint（基于约定的路由）
 - FluentValidation 集成（自动验证命令和查询）
 - 消息队列预留配置点（RabbitMQ、Kafka、Azure Service Bus）
 
