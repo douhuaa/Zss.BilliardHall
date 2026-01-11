@@ -212,7 +212,7 @@ Add TODO tags:
 ```
 // TODO(wolverine): 若需添加 Saga，参考 Saga 使用指南
 // 详细文档：doc/06_开发规范/Saga使用指南.md
-// 模块示例：doc/04_模块设计/打球时段模块.md #section-saga
+// 模块示例：doc/04_模块设计/打球时段模块.md (TableSessionSaga 部分)
 ```
 
 ### 11.2 FluentValidation 集成速查
@@ -249,7 +249,7 @@ Add TODO tags:
 ```
 // TODO(validation): 添加 FluentValidation 验证器
 // 详细文档：doc/06_开发规范/FluentValidation集成指南.md
-// 快速上手：doc/03_系统架构设计/Wolverine快速上手指南.md #section-validation
+// 快速上手：doc/03_系统架构设计/Wolverine快速上手指南.md (场景 1：带验证的 Command)
 ```
 
 Must accompany an Issue reference once created.
