@@ -183,11 +183,205 @@ When auto-generating code, enforce:
 - `doc/04_模块设计/打球时段模块.md` → Sessions 模块 + Saga 示例（v2.0.0）
 - `doc/04_模块设计/计费管理模块.md` → Billing 模块示例（v2.0.0）
 
+### 11.1 Saga 使用指南
+
+当业务流程跨越多个步骤、需要维护状态或涉及补偿逻辑时，使用 Wolverine Saga。
+
+**典型场景**：
+- 跨模块的长时间运行业务流程
+- 需要等待外部事件的流程（如支付回调）
+- 需要补偿/回滚的分布式事务
+
+**TableSessionSaga 示例**（完整实现见 `doc/04_模块设计/打球时段模块.md`）：
+```csharp
+// 位置：Modules/Sessions/Sagas/TableSessionSaga.cs
+public sealed class TableSessionSaga : Saga
+{
+    // Saga 状态
+    public Guid SessionId { get; set; }
+    public Guid TableId { get; set; }
+    public Guid? BillId { get; set; }
+    public SessionStatus Status { get; set; }
+    
+    // 步骤 1: 时段开始
+    public void Handle(SessionStarted @event)
+    {
+        SessionId = @event.SessionId;
+        TableId = @event.TableId;
+        Status = SessionStatus.Active;
+    }
+    
+    // 步骤 2: 时段结束 → 等待账单计算
+    public void Handle(SessionEnded @event)
+    {
+        Status = SessionStatus.Ended;
+    }
+    
+    // 步骤 3: 账单计算完成 → 等待支付
+    public void Handle(BillCalculated @event)
+    {
+        BillId = @event.BillId;
+    }
+    
+    // 步骤 4: 支付完成 → 时段完成
+    public void Handle(PaymentCompleted @event)
+    {
+        if (@event.SessionId == SessionId)
+        {
+            Status = SessionStatus.Completed;
+            Complete();  // 完成 Saga，自动清理状态
+        }
+    }
+}
+```
+
+**Saga 配置**（在 Program.cs 中）：
+```csharp
+builder.Services.AddMarten(marten =>
+{
+    marten.Connection(connectionString);
+    
+    // 注册 Saga，使用 SessionId 作为唯一标识
+    marten.Schema.For<TableSessionSaga>()
+        .Identity(x => x.SessionId);
+});
+```
+
+**最佳实践**：
+- Saga 只存储必要的状态标识（ID、状态枚举），不存储完整业务对象
+- 使用 `Complete()` 或 `MarkCompleted()` 显式结束 Saga
+- Saga Handler 方法应保持幂等性
+- 考虑添加超时处理（Wolverine 支持 Saga 超时）
+
 Add TODO tags:
 ```
 // TODO(wolverine): 若需添加 Saga，参考 TableSessionSaga 示例
-// TODO(validation): 添加 FluentValidation 验证器
+// 详细文档：doc/04_模块设计/打球时段模块.md #section-saga
+// 架构指南：doc/03_系统架构设计/Wolverine模块化架构蓝图.md #section-saga
 ```
+
+### 11.2 FluentValidation 集成指南
+
+所有接收外部输入的 Command/Query 都应该有 Validator，使用 FluentValidation 进行输入验证。
+
+**安装依赖**：
+```bash
+dotnet add package Wolverine.Http.FluentValidation
+```
+
+**全局配置**（在 Program.cs 中）：
+```csharp
+builder.Host.UseWolverine(opts =>
+{
+    // 启用 FluentValidation 自动验证
+    opts.UseFluentValidation();
+    
+    // 可选：配置验证失败响应格式
+    opts.Policies.AutoApplyTransactions();
+});
+```
+
+**Validator 示例**：
+```csharp
+// 位置：Modules/Members/RegisterMember/RegisterMemberValidator.cs
+public sealed class RegisterMemberValidator : AbstractValidator<RegisterMember>
+{
+    public RegisterMemberValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("会员姓名不能为空")
+            .MaximumLength(50).WithMessage("会员姓名不能超过50个字符");
+        
+        RuleFor(x => x.Phone)
+            .NotEmpty().WithMessage("手机号不能为空")
+            .Matches(@"^1[3-9]\d{9}$").WithMessage("手机号格式不正确");
+        
+        RuleFor(x => x.Email)
+            .EmailAddress().WithMessage("邮箱格式不正确")
+            .When(x => !string.IsNullOrEmpty(x.Email));  // 可选字段
+        
+        RuleFor(x => x.InitialBalance)
+            .GreaterThanOrEqualTo(0).WithMessage("初始余额不能为负数");
+    }
+}
+```
+
+**高级验证示例**（异步验证、数据库查询）：
+```csharp
+public sealed class UpdateMemberPhoneValidator : AbstractValidator<UpdateMemberPhone>
+{
+    public UpdateMemberPhoneValidator(IDocumentSession session)
+    {
+        RuleFor(x => x.Phone)
+            .NotEmpty()
+            .MustAsync(async (phone, ct) =>
+            {
+                // 异步验证：检查手机号是否已被使用
+                var exists = await session.Query<Member>()
+                    .AnyAsync(m => m.Phone == phone, ct);
+                return !exists;
+            })
+            .WithMessage("该手机号已被注册");
+    }
+}
+```
+
+**条件验证示例**：
+```csharp
+public sealed class StartSessionValidator : AbstractValidator<StartSession>
+{
+    public StartSessionValidator()
+    {
+        RuleFor(x => x.TableId)
+            .NotEmpty().WithMessage("桌台ID不能为空");
+        
+        // 条件验证：散客必须提供姓名
+        When(x => x.MemberId == null, () =>
+        {
+            RuleFor(x => x.CustomerName)
+                .NotEmpty().WithMessage("散客必须提供姓名")
+                .MaximumLength(50).WithMessage("姓名不能超过50个字符");
+        });
+        
+        // 条件验证：会员不能提供散客姓名
+        When(x => x.MemberId != null, () =>
+        {
+            RuleFor(x => x.CustomerName)
+                .Empty().WithMessage("会员不应提供散客姓名");
+        });
+    }
+}
+```
+
+**Validator 命名约定**：
+- 文件名：`{Command/Query}Validator.cs`
+- 类名：`{Command/Query}Validator`
+- 位置：与 Command/Query/Handler 在同一 UseCase 文件夹
+
+**验证失败处理**：
+Wolverine 会自动拦截验证失败，返回 400 Bad Request，包含结构化错误信息：
+```json
+{
+  "errors": {
+    "Name": ["会员姓名不能为空"],
+    "Phone": ["手机号格式不正确"]
+  }
+}
+```
+
+**最佳实践**：
+- 简单验证（非空、格式、长度）在 Validator 中处理
+- 复杂业务规则（如库存检查、状态机验证）在 Handler 中处理，使用 Result 模式返回
+- 避免在 Validator 中执行重量级操作（如外部 API 调用）
+- 使用 `When()` 进行条件验证，避免复杂的 if-else 逻辑
+
+Add TODO tags:
+```
+// TODO(validation): 添加 Wolverine.Http.FluentValidation 验证器
+// 参考示例：doc/04_模块设计/打球时段模块.md #StartSessionValidator
+// 快速上手：doc/03_系统架构设计/Wolverine快速上手指南.md #section-validation
+```
+
 Must accompany an Issue reference once created.
 
 ---
