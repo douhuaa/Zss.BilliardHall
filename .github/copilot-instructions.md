@@ -176,18 +176,82 @@ When auto-generating code, enforce:
 ## 11. Architecture Documentation / 架构文档参考
 
 请参考以下核心文档：
+
+**架构设计**:
 - `doc/03_系统架构设计/Wolverine模块化架构蓝图.md` → 完整架构实施指南（29KB）
 - `doc/03_系统架构设计/Wolverine快速上手指南.md` → 5分钟上手教程
 - `doc/03_系统架构设计/系统模块划分.md` → 6个核心模块定义
+
+**模块示例**:
 - `doc/04_模块设计/会员管理模块.md` → Members 模块完整示例（v3.0.0）
 - `doc/04_模块设计/打球时段模块.md` → Sessions 模块 + Saga 示例（v2.0.0）
 - `doc/04_模块设计/计费管理模块.md` → Billing 模块示例（v2.0.0）
 
+**开发规范**:
+- `doc/06_开发规范/Saga使用指南.md` → Wolverine Saga 完整使用指南（跨模块长事务编排）
+- `doc/06_开发规范/FluentValidation集成指南.md` → FluentValidation 集成完整指南（输入验证最佳实践）
+
+### 11.1 Saga 使用速查
+
+当业务流程跨越多个步骤、需要维护状态或涉及补偿逻辑时，使用 Wolverine Saga。
+
+**快速判定**：
+- ✅ 跨模块的长时间运行业务流程（如订单→支付→发货）
+- ✅ 需要等待外部事件的流程（如支付回调）
+- ✅ 需要补偿/回滚的分布式事务
+
+**核心原则**：
+- Saga 只存储必要的状态标识（ID、状态枚举）
+- 使用 `Complete()` 显式结束 Saga
+- Handler 方法保持幂等性
+- 考虑超时处理
+
+**详细指南**: 见 `doc/06_开发规范/Saga使用指南.md`（包含 TableSessionSaga 完整示例、配置、最佳实践）
+
 Add TODO tags:
 ```
-// TODO(wolverine): 若需添加 Saga，参考 TableSessionSaga 示例
-// TODO(validation): 添加 FluentValidation 验证器
+// TODO(wolverine): 若需添加 Saga，参考 Saga 使用指南
+// 详细文档：doc/06_开发规范/Saga使用指南.md
+// 模块示例：doc/04_模块设计/打球时段模块.md (TableSessionSaga 部分)
 ```
+
+### 11.2 FluentValidation 集成速查
+
+所有接收外部输入的 Command/Query 都应该有 Validator。
+
+**快速配置**：
+```csharp
+// Program.cs
+builder.Host.UseWolverine(opts => opts.UseFluentValidation());
+```
+
+**快速创建**：
+```csharp
+// 位置：与 Command 同文件夹
+public sealed class RegisterMemberValidator : AbstractValidator<RegisterMember>
+{
+    public RegisterMemberValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
+        RuleFor(x => x.Phone).Matches(@"^1[3-9]\d{9}$");
+    }
+}
+```
+
+**验证层级**：
+- ✅ **Validator**: 简单验证（非空、格式、长度、范围）
+- ✅ **Handler**: 复杂业务规则（库存、状态机、权限）
+- ❌ **避免**: Validator 中执行重量级操作（外部 API、复杂查询）
+
+**详细指南**: 见 `doc/06_开发规范/FluentValidation集成指南.md`（包含异步验证、条件验证、自定义规则、测试等）
+
+Add TODO tags:
+```
+// TODO(validation): 添加 FluentValidation 验证器
+// 详细文档：doc/06_开发规范/FluentValidation集成指南.md
+// 快速上手：doc/03_系统架构设计/Wolverine快速上手指南.md (场景 1：带验证的 Command)
+```
+
 Must accompany an Issue reference once created.
 
 ---
