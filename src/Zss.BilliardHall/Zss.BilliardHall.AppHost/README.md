@@ -2,12 +2,30 @@
 
 AppHost 通过 .NET Aspire 的 DistributedApplication 描述项目的基础设施与内部服务编排。
 
+## 版本信息
+
+- **Aspire 版本**: 13.1.0
+- **目标框架**: .NET 9.0
+
 ## 当前包含的资源
 
 - PostgreSQL 数据库服务器（带持久化数据卷 `postgres`）
 - `BilliardHallDb` 逻辑数据库（供 EF Core 使用）
 - HttpApi Host 服务（始终启动）
+- **Bootstrapper** 服务（Wolverine 架构的新服务，集成了 ServiceDefaults）
 - DbMigrator（仅在 Development 环境启动，用于迁移初始化）
+
+## ServiceDefaults 集成
+
+所有服务（包括 Bootstrapper）现在都集成了 Aspire ServiceDefaults，提供以下功能：
+
+- **服务发现 (Service Discovery)**: 自动发现和连接其他服务
+- **弹性处理 (Resilience)**: 使用标准的重试、熔断器等模式
+- **健康检查 (Health Checks)**: `/health` 和 `/alive` 端点
+- **OpenTelemetry**: 自动导出日志、指标和追踪数据
+  - 日志：包含格式化消息和作用域
+  - 指标：ASP.NET Core、HTTP 客户端、运行时指标
+  - 追踪：ASP.NET Core、HTTP 客户端追踪（排除健康检查端点）
 
 ## PostgreSQL 凭据与连接策略
 
