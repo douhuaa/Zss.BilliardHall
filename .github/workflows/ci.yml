@@ -36,10 +36,8 @@ jobs:
 
       - name: Run ServiceDefaults unit tests
         run: |
-          TEST_PROJECT="src/Wolverine/Aspire"
-          TEST_NAME="Zss.BilliardHall.Wolverine.ServiceDefaults.Tests"
           dotnet test \
-            ${TEST_PROJECT}/${TEST_NAME}/${TEST_NAME}.csproj \
+            src/Wolverine/Aspire/Zss.BilliardHall.Wolverine.ServiceDefaults.Tests/Zss.BilliardHall.Wolverine.ServiceDefaults.Tests.csproj \
             -c Release \
             --no-build \
             --logger "trx;LogFileName=servicedefaults-test-results.trx" \
@@ -47,10 +45,8 @@ jobs:
 
       - name: Run Bootstrapper smoke tests
         run: |
-          TEST_PROJECT="src/Wolverine/Bootstrapper.Tests"
-          TEST_NAME="Zss.BilliardHall.Wolverine.Bootstrapper.Tests"
           dotnet test \
-            ${TEST_PROJECT}/${TEST_NAME}.csproj \
+            src/Wolverine/Bootstrapper.Tests/Zss.BilliardHall.Wolverine.Bootstrapper.Tests.csproj \
             --filter "Category=Unit" \
             -c Release \
             --no-build \

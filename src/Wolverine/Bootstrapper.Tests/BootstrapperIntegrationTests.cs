@@ -59,11 +59,8 @@ public class BootstrapperIntegrationTests : IClassFixture<PostgresFixture>
         await app.StartAsync();
 
         // Act
-        var client = app.Services.GetRequiredService<IHttpClientFactory>().CreateClient();
-        client.BaseAddress = new Uri($"http://localhost:{GetRandomPort()}");
-
-        // Note: In a real test, we would need to configure Kestrel to listen on a specific port
-        // For now, we just verify the app can start with health checks registered
+        // Note: We're testing the health check service directly rather than via HTTP
+        // because configuring Kestrel to listen on a specific port in tests is complex
         var healthCheckService = app.Services.GetRequiredService<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckService>();
         var result = await healthCheckService.CheckHealthAsync();
 
@@ -160,12 +157,6 @@ public class BootstrapperIntegrationTests : IClassFixture<PostgresFixture>
 
         // Set environment to Testing
         builder.Environment.EnvironmentName = Environments.Development; // Use Development to enable health endpoints
-    }
-
-    private static int GetRandomPort()
-    {
-        // Simple random port generator for test purposes
-        return Random.Shared.Next(5000, 6000);
     }
 
     /// <summary>

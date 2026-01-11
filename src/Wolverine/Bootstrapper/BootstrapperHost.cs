@@ -39,38 +39,7 @@ public static class BootstrapperHost
     public static WebApplication BuildApp(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        // Configure Serilog from appsettings.json
-        // 从 appsettings.json 配置 Serilog
-        builder.Host.UseSerilog((context, services, configuration) => configuration
-            .ReadFrom.Configuration(context.Configuration)
-            .ReadFrom.Services(services)
-            .Enrich.FromLogContext());
-
-        // Add Aspire ServiceDefaults (OpenTelemetry, Health Checks, Service Discovery)
-        builder.AddServiceDefaults();
-
-        // Add Marten document database
-        builder.AddMartenDefaults();
-
-        // Add Wolverine command/message bus with HTTP endpoints
-        builder.AddWolverineDefaults();
-
-        var app = builder.Build();
-
-        // Map health check endpoints (/health, /alive)
-        app.MapDefaultEndpoints();
-
-        // Map root endpoint with application status
-        app.MapGet("/", () => new
-        {
-            Application = "Zss.BilliardHall.Bootstrapper",
-            Status = "Running",
-            Framework = "Wolverine + Marten",
-            Architecture = "Vertical Slice"
-        });
-
-        return app;
+        return BuildAppWithBuilder(builder);
     }
 
     /// <summary>
@@ -84,6 +53,18 @@ public static class BootstrapperHost
     /// This overload accepts a pre-configured builder, allowing tests to override configuration (like connection strings).
     /// </remarks>
     public static WebApplication BuildAppWithBuilder(WebApplicationBuilder builder)
+    {
+        ConfigureBuilder(builder);
+        var app = builder.Build();
+        ConfigureApp(app);
+        return app;
+    }
+
+    /// <summary>
+    /// 配置 WebApplicationBuilder，添加所有必需的服务
+    /// Configures WebApplicationBuilder by adding all required services
+    /// </summary>
+    private static void ConfigureBuilder(WebApplicationBuilder builder)
     {
         // Configure Serilog from appsettings.json
         // 从 appsettings.json 配置 Serilog
@@ -100,9 +81,14 @@ public static class BootstrapperHost
 
         // Add Wolverine command/message bus with HTTP endpoints
         builder.AddWolverineDefaults();
+    }
 
-        var app = builder.Build();
-
+    /// <summary>
+    /// 配置 WebApplication，映射端点和中间件
+    /// Configures WebApplication by mapping endpoints and middleware
+    /// </summary>
+    private static void ConfigureApp(WebApplication app)
+    {
         // Map health check endpoints (/health, /alive)
         app.MapDefaultEndpoints();
 
@@ -114,7 +100,5 @@ public static class BootstrapperHost
             Framework = "Wolverine + Marten",
             Architecture = "Vertical Slice"
         });
-
-        return app;
     }
 }
