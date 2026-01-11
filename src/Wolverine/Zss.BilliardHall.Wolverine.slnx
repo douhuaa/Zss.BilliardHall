@@ -1,0 +1,22 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/BuildingBlocks/">
+    <Project Path="BuildingBlocks/Behaviors/Behaviors.csproj" />
+    <Project Path="BuildingBlocks/Contracts/Contracts.csproj" />
+    <Project Path="BuildingBlocks/Exceptions/Exceptions.csproj" />
+  </Folder>
+  <Folder Name="/Modules/">
+    <Project Path="Modules/Members/Members.csproj" />
+    <Project Path="Modules/Sessions/Sessions.csproj" />
+    <Project Path="Modules/Tables/Tables.csproj" />
+  </Folder>
+  <Folder Name="/解决方案项/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="Bootstrapper/Bootstrapper.csproj" />
+</Solution>
