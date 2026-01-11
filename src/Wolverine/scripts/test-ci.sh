@@ -36,12 +36,18 @@ echo ""
 # 检查代码格式
 echo "📝 [2/4] 检查代码格式..."
 echo "📝 [2/4] Checking code formatting..."
-if dotnet format Zss.BilliardHall.Wolverine.slnx --verify-no-changes --verbosity quiet --nologo 2>/dev/null; then
+FORMAT_OUTPUT=$(dotnet format Zss.BilliardHall.Wolverine.slnx --verify-no-changes --verbosity quiet --nologo 2>&1)
+FORMAT_EXIT_CODE=$?
+if [ $FORMAT_EXIT_CODE -eq 0 ]; then
     echo "✓ 代码格式正确"
     echo "✓ Code formatting is correct"
 else
     echo "⚠️  警告：代码格式检查失败（非阻塞）"
     echo "⚠️  Warning: Code formatting check failed (non-blocking)"
+    if [ -n "$FORMAT_OUTPUT" ]; then
+        echo "格式问题详情 / Formatting issues:"
+        echo "$FORMAT_OUTPUT"
+    fi
 fi
 echo ""
 

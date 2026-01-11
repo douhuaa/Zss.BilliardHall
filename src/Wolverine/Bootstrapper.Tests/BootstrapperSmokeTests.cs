@@ -20,6 +20,10 @@ namespace Zss.BilliardHall.Wolverine.Bootstrapper.Tests;
 [Trait("Category", "Unit")]
 public class BootstrapperSmokeTests
 {
+    // 假连接字符串，用于不需要实际数据库连接的测试
+    // Fake connection string for tests that don't require actual database connection
+    private const string FakeConnectionString = "Host=localhost;Database=fake;Username=fake;Password=fake";
+
     [Fact]
     public void BuildApp_WithValidArgs_ShouldSucceed()
     {
@@ -33,10 +37,10 @@ public class BootstrapperSmokeTests
             // Provide a fake connection string to avoid Marten initialization failure
             builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
             {
-                ["ConnectionStrings:Default"] = "Host=localhost;Database=fake;Username=fake;Password=fake"
+                ["ConnectionStrings:Default"] = FakeConnectionString
             });
 
-            _ = BootstrapperHost.BuildAppWithBuilder(builder);
+            using var app = BootstrapperHost.BuildAppFromBuilder(builder);
         };
 
         // Assert
@@ -44,17 +48,17 @@ public class BootstrapperSmokeTests
     }
 
     [Fact]
-    public void BuildApp_ShouldRegisterHealthChecks()
+    public async Task BuildApp_ShouldRegisterHealthChecks()
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
-            ["ConnectionStrings:Default"] = "Host=localhost;Database=fake;Username=fake;Password=fake"
+            ["ConnectionStrings:Default"] = FakeConnectionString
         });
 
         // Act
-        var app = BootstrapperHost.BuildAppWithBuilder(builder);
+        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
 
         // Assert
         var healthCheckService = app.Services.GetService<HealthCheckService>();
@@ -68,11 +72,11 @@ public class BootstrapperSmokeTests
         var builder = WebApplication.CreateBuilder();
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
-            ["ConnectionStrings:Default"] = "Host=localhost;Database=fake;Username=fake;Password=fake"
+            ["ConnectionStrings:Default"] = FakeConnectionString
         });
 
         // Act
-        var app = BootstrapperHost.BuildAppWithBuilder(builder);
+        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
         var healthCheckService = app.Services.GetRequiredService<HealthCheckService>();
 
         // Assert
@@ -90,7 +94,7 @@ public class BootstrapperSmokeTests
         // Intentionally not providing ConnectionStrings:Default
 
         // Act
-        Action act = () => BootstrapperHost.BuildAppWithBuilder(builder);
+        Action act = () => BootstrapperHost.BuildAppFromBuilder(builder);
 
         // Assert
         act.Should().Throw<InvalidOperationException>()
@@ -99,17 +103,17 @@ public class BootstrapperSmokeTests
     }
 
     [Fact]
-    public void BuildApp_ShouldRegisterMartenServices()
+    public async Task BuildApp_ShouldRegisterMartenServices()
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
-            ["ConnectionStrings:Default"] = "Host=localhost;Database=fake;Username=fake;Password=fake"
+            ["ConnectionStrings:Default"] = FakeConnectionString
         });
 
         // Act
-        var app = BootstrapperHost.BuildAppWithBuilder(builder);
+        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
 
         // Assert
         var documentStore = app.Services.GetService<Marten.IDocumentStore>();
@@ -117,17 +121,17 @@ public class BootstrapperSmokeTests
     }
 
     [Fact]
-    public void BuildApp_ShouldRegisterWolverineServices()
+    public async Task BuildApp_ShouldRegisterWolverineServices()
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
-            ["ConnectionStrings:Default"] = "Host=localhost;Database=fake;Username=fake;Password=fake"
+            ["ConnectionStrings:Default"] = FakeConnectionString
         });
 
         // Act
-        var app = BootstrapperHost.BuildAppWithBuilder(builder);
+        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
 
         // Assert
         // Wolverine registers IMessageBus, but we just verify the app builds successfully

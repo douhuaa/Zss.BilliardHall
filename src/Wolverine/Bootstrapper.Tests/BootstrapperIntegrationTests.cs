@@ -38,7 +38,7 @@ public class BootstrapperIntegrationTests : IClassFixture<PostgresFixture>
         ConfigureTestBuilder(builder);
 
         // Act
-        var app = BootstrapperHost.BuildAppWithBuilder(builder);
+        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
         await app.StartAsync();
 
         // Assert
@@ -55,7 +55,7 @@ public class BootstrapperIntegrationTests : IClassFixture<PostgresFixture>
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
 
-        var app = BootstrapperHost.BuildAppWithBuilder(builder);
+        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
         await app.StartAsync();
 
         // Act
@@ -79,7 +79,7 @@ public class BootstrapperIntegrationTests : IClassFixture<PostgresFixture>
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
 
-        var app = BootstrapperHost.BuildAppWithBuilder(builder);
+        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
 
         // Act
         var documentStore = app.Services.GetRequiredService<IDocumentStore>();
@@ -99,7 +99,7 @@ public class BootstrapperIntegrationTests : IClassFixture<PostgresFixture>
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
 
-        var app = BootstrapperHost.BuildAppWithBuilder(builder);
+        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
         var documentStore = app.Services.GetRequiredService<IDocumentStore>();
 
         // Create test document
@@ -137,7 +137,7 @@ public class BootstrapperIntegrationTests : IClassFixture<PostgresFixture>
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
 
-        var app = BootstrapperHost.BuildAppWithBuilder(builder);
+        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
 
         // Act
         var documentStore = app.Services.GetRequiredService<IDocumentStore>();
@@ -147,6 +147,10 @@ public class BootstrapperIntegrationTests : IClassFixture<PostgresFixture>
             "Marten should use 'billiard' schema as configured");
     }
 
+    /// <summary>
+    /// 配置测试用的 WebApplicationBuilder
+    /// Configures WebApplicationBuilder for testing
+    /// </summary>
     private void ConfigureTestBuilder(WebApplicationBuilder builder)
     {
         // Override connection string with test container connection

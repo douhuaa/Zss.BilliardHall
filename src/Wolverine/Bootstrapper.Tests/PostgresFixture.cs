@@ -29,6 +29,12 @@ public sealed class PostgresFixture : IAsyncLifetime
     /// </summary>
     public async Task InitializeAsync()
     {
+        // 注意：以下用户名和密码仅用于本地/CI 集成测试的临时 PostgreSQL 容器
+        // Note: The following username and password are only for temporary PostgreSQL containers in local/CI integration tests
+        // 容器由 Testcontainers 在测试期间创建，并通过 WithCleanUp(true) 在测试结束后自动清理
+        // Containers are created by Testcontainers during tests and automatically cleaned up after tests via WithCleanUp(true)
+        // 切勿在生产或持久化环境中复用这些凭据，它们不是实际业务数据库的账号
+        // Never reuse these credentials in production or persistent environments; they are not real business database accounts
         _container = new PostgreSqlBuilder()
             .WithDatabase("billiard_test")
             .WithUsername("test_user")

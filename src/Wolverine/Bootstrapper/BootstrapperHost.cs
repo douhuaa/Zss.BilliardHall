@@ -39,20 +39,20 @@ public static class BootstrapperHost
     public static WebApplication BuildApp(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        return BuildAppWithBuilder(builder);
+        return BuildAppFromBuilder(builder);
     }
 
     /// <summary>
-    /// 构建并配置 Bootstrapper 应用程序（使用自定义 builder）
-    /// Builds and configures the Bootstrapper application (using custom builder)
+    /// 从预配置的 builder 构建并配置 Bootstrapper 应用程序
+    /// Builds and configures the Bootstrapper application from a pre-configured builder
     /// </summary>
-    /// <param name="builder">自定义的 WebApplicationBuilder 实例 / Custom WebApplicationBuilder instance</param>
+    /// <param name="builder">预配置的 WebApplicationBuilder 实例 / Pre-configured WebApplicationBuilder instance</param>
     /// <returns>配置完成的 WebApplication 实例 / Configured WebApplication instance</returns>
     /// <remarks>
-    /// 此重载方法接受预配置的 builder，允许测试覆盖配置（如连接字符串）。
-    /// This overload accepts a pre-configured builder, allowing tests to override configuration (like connection strings).
+    /// 此方法接受预配置的 builder，允许测试覆盖配置（如连接字符串）。
+    /// This method accepts a pre-configured builder, allowing tests to override configuration (like connection strings).
     /// </remarks>
-    public static WebApplication BuildAppWithBuilder(WebApplicationBuilder builder)
+    public static WebApplication BuildAppFromBuilder(WebApplicationBuilder builder)
     {
         ConfigureBuilder(builder);
         var app = builder.Build();
