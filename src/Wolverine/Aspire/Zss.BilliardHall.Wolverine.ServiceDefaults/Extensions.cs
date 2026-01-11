@@ -173,7 +173,7 @@ public static class Extensions
             // All health checks must pass for app to be considered ready to accept traffic after starting
             // Restrict to localhost to reduce information leakage risk
             var readinessEndpoint = app.MapHealthChecks(HealthEndpointPath);
-            readinessEndpoint.RequireHost("localhost", "127.0.0.1", "[::1]");
+            readinessEndpoint.RequireHost("localhost", "127.0.0.1");
 
             // Only health checks tagged with the "live" tag must pass for app to be considered alive
             // Restrict to localhost to reduce information leakage risk
@@ -181,7 +181,7 @@ public static class Extensions
             {
                 Predicate = r => r.Tags.Contains("live")
             });
-            livenessEndpoint.RequireHost("localhost", "127.0.0.1", "[::1]");
+            livenessEndpoint.RequireHost("localhost", "127.0.0.1");
         }
 
         return app;
