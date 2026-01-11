@@ -39,7 +39,6 @@ jobs:
         run: |
           TEST_PROJECT="src/Wolverine/Aspire"
           TEST_NAME="Zss.BilliardHall.Wolverine.ServiceDefaults.Tests"
-          TEST_PROJECT="${TEST_PROJECT}/${TEST_NAME}"
           dotnet test \
             ${TEST_PROJECT}/${TEST_NAME}.csproj \
             -c Release \
