@@ -1,6 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+builder.AddWolverineDefaults();
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
