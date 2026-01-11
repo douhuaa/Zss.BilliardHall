@@ -19,6 +19,9 @@
       <Build Solution="Debug|x86" Project="false" />
     </Project>
   </Folder>
+  <Folder Name="/Bootstrapper.Tests/">
+    <Project Path="Bootstrapper.Tests/Zss.BilliardHall.Wolverine.Bootstrapper.Tests.csproj" />
+  </Folder>
   <Folder Name="/BuildingBlocks/">
     <Project Path="BuildingBlocks/Behaviors/Behaviors.csproj" />
     <Project Path="BuildingBlocks/Contracts/Contracts.csproj" />

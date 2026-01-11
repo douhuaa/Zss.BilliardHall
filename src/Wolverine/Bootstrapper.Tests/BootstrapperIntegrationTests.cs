@@ -162,15 +162,15 @@ public class BootstrapperIntegrationTests : IClassFixture<PostgresFixture>
         // Set environment to Testing
         builder.Environment.EnvironmentName = Environments.Development; // Use Development to enable health endpoints
     }
+}
 
-    /// <summary>
-    /// 测试文档类型
-    /// Test document type
-    /// </summary>
-    private sealed class TestDocument
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; }
-    }
+/// <summary>
+/// 测试文档类型
+/// Test document type
+/// </summary>
+public sealed class TestDocument
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
 }
