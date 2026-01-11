@@ -43,8 +43,9 @@
 
 ```bash
 dotnet add package Wolverine.Http.FluentValidation
-dotnet add package FluentValidation
 ```
+
+> **注意**: `Wolverine.Http.FluentValidation` 包已包含 `FluentValidation` 依赖，无需单独安装。
 
 ### 2.2 全局配置
 
