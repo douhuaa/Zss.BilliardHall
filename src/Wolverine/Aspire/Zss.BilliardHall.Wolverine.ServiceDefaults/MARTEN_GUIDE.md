@@ -53,7 +53,7 @@ public class RegisterMemberHandler
         _session = session;
     }
 
-    public async Task<Member> Handle(RegisterMember command)
+    public async Task<Member> Handle(RegisterMember command, CancellationToken cancellationToken = default)
     {
         var member = new Member
         {
@@ -63,7 +63,7 @@ public class RegisterMemberHandler
         };
 
         _session.Store(member);
-        await _session.SaveChangesAsync();
+        await _session.SaveChangesAsync(cancellationToken);
 
         return member;
     }
@@ -74,17 +74,17 @@ public class RegisterMemberHandler
 
 ```csharp
 // 按 ID 加载
-var member = await _session.LoadAsync<Member>(memberId);
+var member = await _session.LoadAsync<Member>(memberId, cancellationToken);
 
 // LINQ 查询
 var members = await _session.Query<Member>()
     .Where(m => m.Name.Contains("张"))
-    .ToListAsync();
+    .ToListAsync(cancellationToken);
 
 // 投影查询
 var memberDtos = await _session.Query<Member>()
     .Select(m => new MemberDto { Id = m.Id, Name = m.Name })
-    .ToListAsync();
+    .ToListAsync(cancellationToken);
 ```
 
 ---

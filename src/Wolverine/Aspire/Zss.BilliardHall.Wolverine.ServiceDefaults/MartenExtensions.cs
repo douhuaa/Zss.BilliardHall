@@ -31,10 +31,14 @@ public static class MartenExtensions
     public static TBuilder AddMartenDefaults<TBuilder>(this TBuilder builder)
         where TBuilder : IHostApplicationBuilder
     {
-        var connectionString = builder.Configuration.GetConnectionString("Default")
-                               ?? throw new InvalidOperationException(
-                                   "Missing Default connection string. " +
-                                   "Ensure the database is referenced in AppHost and the connection string is properly injected.");
+        var connectionString = builder.Configuration.GetConnectionString("Default");
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException(
+                "Missing or empty Default connection string. " +
+                "Ensure the database is referenced in AppHost and the connection string is correctly configured and injected.");
+        }
 
         builder.Services.AddMarten(options =>
         {

@@ -55,8 +55,8 @@ public class MartenExtensionsTests
 
         // Assert
         act.Should().Throw<InvalidOperationException>()
-            .WithMessage("Missing Default connection string*")
-            .WithMessage("*Ensure the database is referenced in AppHost*");
+            .WithMessage("Missing or empty Default connection string*")
+            .WithMessage("*correctly configured and injected*");
     }
 
     [Fact]
@@ -109,7 +109,7 @@ public class MartenExtensionsTests
     }
 
     [Fact]
-    public void AddMartenDefaults_ShouldBeIdempotent()
+    public void AddMartenDefaults_WithValidConfiguration_ShouldSucceed()
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
@@ -119,11 +119,8 @@ public class MartenExtensionsTests
             ["ConnectionStrings:Default"] = "Host=localhost;Database=test;Username=test;Password=test"
         });
 
-        // Act - Call multiple times
+        // Act
         builder.AddMartenDefaults();
-        
-        // Note: Marten's AddMarten is not idempotent, so calling it twice will cause issues
-        // This test verifies that a single call works correctly
         var app = builder.Build();
 
         // Assert - Should not throw
@@ -132,7 +129,7 @@ public class MartenExtensionsTests
     }
 
     [Fact]
-    public void AddMartenDefaults_WithEmptyConnectionString_ShouldNotThrow()
+    public void AddMartenDefaults_WithEmptyConnectionString_ShouldThrowInvalidOperationException()
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
@@ -142,11 +139,38 @@ public class MartenExtensionsTests
             ["ConnectionStrings:Default"] = "" // Empty string
         });
 
-        // Act & Assert
-        // Note: GetConnectionString returns empty string as-is (not null)
-        // Marten will handle the validation of the connection string
-        // This test just ensures our extension doesn't crash with empty string
-        var result = builder.AddMartenDefaults();
-        result.Should().NotBeNull();
+        // Act
+        Action act = () => builder.AddMartenDefaults();
+
+        // Assert
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("Missing or empty Default connection string*")
+            .WithMessage("*correctly configured and injected*");
+    }
+
+    [Fact]
+    public void AddMartenDefaults_ShouldConfigureLightweightSessions()
+    {
+        // Arrange
+        var builder = WebApplication.CreateBuilder();
+        
+        builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            ["ConnectionStrings:Default"] = "Host=localhost;Database=test;Username=test;Password=test"
+        });
+
+        // Act
+        builder.AddMartenDefaults();
+        var app = builder.Build();
+
+        // Assert
+        var documentStore = app.Services.GetRequiredService<IDocumentStore>();
+        documentStore.Should().NotBeNull();
+        
+        // Verify lightweight sessions by checking that IDocumentSession is registered
+        // Lightweight sessions are the default when UseLightweightSessions() is called
+        using var scope = app.Services.CreateScope();
+        var documentSession = scope.ServiceProvider.GetService<IDocumentSession>();
+        documentSession.Should().NotBeNull("IDocumentSession should be registered for lightweight sessions");
     }
 }
