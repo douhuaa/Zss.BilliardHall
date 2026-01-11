@@ -6,6 +6,8 @@
 
 ```
 src/Wolverine/
+├── Directory.Build.props        # 通用 MSBuild 属性配置
+├── Directory.Packages.props     # 中央包版本管理（CPM）
 ├── Bootstrapper/               # 启动项目（ASP.NET Core Web）
 ├── BuildingBlocks/             # 共享基础设施
 │   ├── Contracts/              # Result、IIntegrationEvent、IClock
@@ -24,9 +26,11 @@ src/Wolverine/
 - 创建了 BuildingBlocks 基础设施项目（Contracts, Behaviors, Exceptions）
 - 创建了核心业务模块项目（Members, Tables, Sessions）
 - 创建了解决方案文件并添加了所有项目
+- **新增**：添加了 `Directory.Build.props` 统一管理项目属性
+- **新增**：添加了 `Directory.Packages.props` 实现中央包版本管理（CPM）
 
 ### 2. NuGet 包配置 ✅
-Bootstrapper 项目已添加核心依赖：
+使用中央包管理（CPM），所有包版本在 `Directory.Packages.props` 中统一管理：
 - WolverineFx.Http 4.3.0
 - Marten 7.37.0
 - Marten.AspNetCore 7.37.0
