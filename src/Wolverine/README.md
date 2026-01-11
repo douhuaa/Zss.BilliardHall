@@ -49,7 +49,7 @@ src/Wolverine/
 
 ### 5. 测试项目 ✅
 已创建测试项目：
-- `Zss.BilliardHall.Wolverine.ServiceDefaults.Tests` - ServiceDefaults 扩展方法测试（19个测试用例）
+- `Zss.BilliardHall.Wolverine.ServiceDefaults.Tests` - ServiceDefaults 扩展方法测试
 - 详细测试入口说明：参见 [测试入口说明.md](./测试入口说明.md)
 
 ## 待实现工作
