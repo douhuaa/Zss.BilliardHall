@@ -5,6 +5,7 @@ on:
     branches: [main]
   push:
     branches: [main]
+  workflow_dispatch: # 手动触发，用于 AppHost E2E 测试
 
 jobs:
   build-and-test:
@@ -33,17 +34,27 @@ jobs:
           dotnet build src/Wolverine/Zss.BilliardHall.Wolverine.slnx
           -c Release --no-restore
 
-      - name: Run unit tests
-        # Note: AppHost integration tests are skipped in CI as they require
-        # infrastructure (DCP/Aspire). Run ServiceDefaults tests only.
+      - name: Run ServiceDefaults unit tests
         run: |
           TEST_PROJECT="src/Wolverine/Aspire"
           TEST_NAME="Zss.BilliardHall.Wolverine.ServiceDefaults.Tests"
           dotnet test \
-            ${TEST_PROJECT}/${TEST_NAME}.csproj \
+            ${TEST_PROJECT}/${TEST_NAME}/${TEST_NAME}.csproj \
             -c Release \
             --no-build \
-            --logger "trx;LogFileName=test-results.trx" \
+            --logger "trx;LogFileName=servicedefaults-test-results.trx" \
+            --collect:"XPlat Code Coverage"
+
+      - name: Run Bootstrapper smoke tests
+        run: |
+          TEST_PROJECT="src/Wolverine/Bootstrapper.Tests"
+          TEST_NAME="Zss.BilliardHall.Wolverine.Bootstrapper.Tests"
+          dotnet test \
+            ${TEST_PROJECT}/${TEST_NAME}.csproj \
+            --filter "Category=Unit" \
+            -c Release \
+            --no-build \
+            --logger "trx;LogFileName=bootstrapper-smoke-test-results.trx" \
             --collect:"XPlat Code Coverage"
 
       - name: Upload test results
@@ -54,3 +65,50 @@ jobs:
           path: |
             **/TestResults/*.trx
             **/TestResults/*/coverage.cobertura.xml
+
+  # AppHost E2E 测试：仅在手动触发或 push 到 main 时运行
+  # AppHost E2E tests: Only run on manual trigger or push to main
+  apphost-e2e:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    continue-on-error: true # 允许失败但不阻塞整个 workflow
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          dotnet-quality: 'preview'
+
+      - name: Check Docker availability
+        id: docker-check
+        run: |
+          if docker info > /dev/null 2>&1; then
+            echo "docker_available=true" >> $GITHUB_OUTPUT
+            echo "✅ Docker is available"
+          else
+            echo "docker_available=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Docker is not available, skipping AppHost tests"
+          fi
+
+      - name: Restore dependencies
+        if: steps.docker-check.outputs.docker_available == 'true'
+        run: dotnet restore src/Wolverine/Zss.BilliardHall.Wolverine.slnx
+
+      - name: Build
+        if: steps.docker-check.outputs.docker_available == 'true'
+        run: >
+          dotnet build src/Wolverine/Zss.BilliardHall.Wolverine.slnx
+          -c Release --no-restore
+
+      - name: Run AppHost integration tests
+        if: steps.docker-check.outputs.docker_available == 'true'
+        run: |
+          # 注意：这些测试当前被 Skip 标记，需要手动移除 Skip 才能运行
+          # Note: These tests are currently marked as Skip, need to manually remove Skip to run
+          echo "⚠️ AppHost tests are currently skipped by default"
+          echo "To enable them, remove the Skip attribute from AppHostIntegrationTests.cs"
+        timeout-minutes: 10
