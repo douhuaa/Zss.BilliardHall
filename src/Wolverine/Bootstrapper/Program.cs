@@ -17,10 +17,7 @@ try
     builder.Host.UseSerilog((context, services, configuration) => configuration
         .ReadFrom.Configuration(context.Configuration)
         .ReadFrom.Services(services)
-        .Enrich.FromLogContext()
-        .Enrich.WithProperty("Application", "BilliardHall.Bootstrapper")
-        .WriteTo.Console(
-            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));
+        .Enrich.FromLogContext());
 
     // Add Aspire ServiceDefaults (OpenTelemetry, Health Checks, Service Discovery)
     builder.AddServiceDefaults();
