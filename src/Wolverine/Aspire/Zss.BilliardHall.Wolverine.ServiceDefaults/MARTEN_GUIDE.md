@@ -30,7 +30,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 // 添加 Marten 默认配置
-builder.Services.AddMartenDefaults(builder.Configuration);
+builder.AddMartenDefaults();
 
 var app = builder.Build();
 app.MapDefaultEndpoints();
@@ -138,7 +138,7 @@ public void Test_MartenConfiguration()
     });
 
     // Act
-    builder.Services.AddMartenDefaults(builder.Configuration);
+    builder.AddMartenDefaults();
     var app = builder.Build();
 
     // Assert
@@ -220,7 +220,7 @@ public
 如果需要自定义 Marten 配置，可以在调用 `AddMartenDefaults` 后继续配置：
 
 ```csharp
-builder.Services.AddMartenDefaults(builder.Configuration);
+builder.AddMartenDefaults();
 
 // 进一步自定义
 builder.Services.ConfigureMarten(options =>
@@ -238,7 +238,7 @@ builder.Services.ConfigureMarten(options =>
 Marten 支持多租户模式（未来可能需要）：
 
 ```csharp
-builder.Services.AddMartenDefaults(builder.Configuration);
+builder.AddMartenDefaults();
 
 builder.Services.ConfigureMarten(options =>
 {

@@ -27,7 +27,7 @@ public class MartenExtensionsTests
         });
 
         // Act
-        builder.Services.AddMartenDefaults(builder.Configuration);
+        builder.AddMartenDefaults();
         var app = builder.Build();
 
         // Assert
@@ -51,7 +51,7 @@ public class MartenExtensionsTests
         // Intentionally not adding ConnectionStrings:Default
 
         // Act
-        Action act = () => builder.Services.AddMartenDefaults(builder.Configuration);
+        Action act = () => builder.AddMartenDefaults();
 
         // Assert
         act.Should().Throw<InvalidOperationException>()
@@ -71,7 +71,7 @@ public class MartenExtensionsTests
         });
 
         // Act
-        builder.Services.AddMartenDefaults(builder.Configuration);
+        builder.AddMartenDefaults();
         var app = builder.Build();
 
         // Assert
@@ -96,7 +96,7 @@ public class MartenExtensionsTests
         });
 
         // Act
-        builder.Services.AddMartenDefaults(builder.Configuration);
+        builder.AddMartenDefaults();
         var app = builder.Build();
 
         // Assert
@@ -120,7 +120,7 @@ public class MartenExtensionsTests
         });
 
         // Act - Call multiple times
-        builder.Services.AddMartenDefaults(builder.Configuration);
+        builder.AddMartenDefaults();
         
         // Note: Marten's AddMarten is not idempotent, so calling it twice will cause issues
         // This test verifies that a single call works correctly
@@ -146,7 +146,7 @@ public class MartenExtensionsTests
         // Note: GetConnectionString returns empty string as-is (not null)
         // Marten will handle the validation of the connection string
         // This test just ensures our extension doesn't crash with empty string
-        var services = builder.Services.AddMartenDefaults(builder.Configuration);
-        services.Should().NotBeNull();
+        var result = builder.AddMartenDefaults();
+        result.Should().NotBeNull();
     }
 }

@@ -1,7 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.Services.AddMartenDefaults(builder.Configuration);
+builder.AddMartenDefaults();
 
 var app = builder.Build();
 
