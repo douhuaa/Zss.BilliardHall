@@ -20,7 +20,7 @@
 ### 注意事项
 
 - 使用 .NET 10.0 预览版
-- AppHost 集成测试在 CI 中跳过（需要 Aspire/DCP 基础设施）
+- AppHost 集成测试在 CI 中跳过（需要 Aspire/DCP（Developer Control Plane）基础设施）
 - 仅运行 ServiceDefaults 单元测试
 
 ### 相关文档
