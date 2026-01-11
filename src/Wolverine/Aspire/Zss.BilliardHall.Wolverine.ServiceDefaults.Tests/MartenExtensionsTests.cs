@@ -19,7 +19,7 @@ public class MartenExtensionsTests
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
-        
+
         // Add a test connection string
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
@@ -64,7 +64,7 @@ public class MartenExtensionsTests
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
-        
+
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["ConnectionStrings:Default"] = "Host=localhost;Database=test;Username=test;Password=test"
@@ -77,7 +77,7 @@ public class MartenExtensionsTests
         // Assert
         var documentStore = app.Services.GetRequiredService<IDocumentStore>();
         documentStore.Should().NotBeNull();
-        
+
         // Verify the schema name is set to "billiard"
         var options = documentStore.Options;
         options.DatabaseSchemaName.Should().Be("billiard", "schema name should be set to 'billiard'");
@@ -89,7 +89,7 @@ public class MartenExtensionsTests
         // Arrange
         var builder = WebApplication.CreateBuilder();
         var expectedConnectionString = "Host=test.example.com;Port=5432;Database=billiard_test;Username=admin;Password=secret";
-        
+
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["ConnectionStrings:Default"] = expectedConnectionString
@@ -102,7 +102,7 @@ public class MartenExtensionsTests
         // Assert
         var documentStore = app.Services.GetRequiredService<IDocumentStore>();
         documentStore.Should().NotBeNull();
-        
+
         // The connection string should be used (we can't directly access it, but we can verify the store was created)
         var options = documentStore.Options;
         options.Should().NotBeNull("DocumentStore options should be configured");
@@ -113,7 +113,7 @@ public class MartenExtensionsTests
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
-        
+
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["ConnectionStrings:Default"] = "Host=localhost;Database=test;Username=test;Password=test"
@@ -133,7 +133,7 @@ public class MartenExtensionsTests
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
-        
+
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["ConnectionStrings:Default"] = "" // Empty string
@@ -153,7 +153,7 @@ public class MartenExtensionsTests
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
-        
+
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["ConnectionStrings:Default"] = "Host=localhost;Database=test;Username=test;Password=test"
@@ -166,7 +166,7 @@ public class MartenExtensionsTests
         // Assert
         var documentStore = app.Services.GetRequiredService<IDocumentStore>();
         documentStore.Should().NotBeNull();
-        
+
         // Verify lightweight sessions by checking that IDocumentSession is registered
         // Lightweight sessions are the default when UseLightweightSessions() is called
         using var scope = app.Services.CreateScope();

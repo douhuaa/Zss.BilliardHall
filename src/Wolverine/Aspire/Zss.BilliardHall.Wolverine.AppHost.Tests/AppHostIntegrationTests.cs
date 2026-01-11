@@ -55,7 +55,7 @@ public class AppHostIntegrationTests
         // Assert
         response.Should().NotBeNull();
         response.IsSuccessStatusCode.Should().BeTrue(
-            "health endpoint should return success status code, but got {0}", 
+            "health endpoint should return success status code, but got {0}",
             response.StatusCode);
     }
 
@@ -82,16 +82,16 @@ public class AppHostIntegrationTests
         // Assert
         response.Should().NotBeNull();
         response.IsSuccessStatusCode.Should().BeTrue(
-            "root endpoint should return success status code, but got {0}", 
+            "root endpoint should return success status code, but got {0}",
             response.StatusCode);
 
         var content = await response.Content.ReadAsStringAsync();
         content.Should().NotBeNullOrWhiteSpace("root endpoint should return content");
-        content.Should().Contain("Zss.BilliardHall.Bootstrapper", 
+        content.Should().Contain("Zss.BilliardHall.Bootstrapper",
             "root endpoint should return application name");
-        content.Should().Contain("Wolverine", 
+        content.Should().Contain("Wolverine",
             "root endpoint should mention Wolverine framework");
-        content.Should().Contain("Marten", 
+        content.Should().Contain("Marten",
             "root endpoint should mention Marten framework");
     }
 }
