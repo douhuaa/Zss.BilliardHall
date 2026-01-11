@@ -37,9 +37,10 @@ related_docs: ["05_数据库设计/README.md", "09_测试方案/README.md"]
 | **🏗️ 切片约束** | 垂直切片架构约束 | [👆 跳转](#62-切片约束) |
 | **🔄 Saga 使用** | Wolverine Saga 编排 | [👆 跳转](#63-saga-使用指南) |
 | **✅ FluentValidation** | 输入验证集成 | [👆 跳转](#64-fluentvalidation-集成指南) |
-| **📋 日志规范** | 日志级别、格式规范 | [👆 跳转](#65-日志规范) |
-| **🌿 Git分支规范** | 分支模型、提交规范 | [👆 跳转](#66-git-分支规范) |
-| **👥 Code Review** | 审查流程、PR模板 | [👆 跳转](#67-code-review-流程) |
+| **🚀 ServiceDefaults** | Aspire 服务配置 | [👆 跳转](#65-servicedefaults-集成指南) |
+| **📋 日志规范** | 日志级别、格式规范 | [👆 跳转](#66-日志规范) |
+| **🌿 Git分支规范** | 分支模型、提交规范 | [👆 跳转](#67-git-分支规范) |
+| **👥 Code Review** | 审查流程、PR模板 | [👆 跳转](#68-code-review-流程) |
 
 ## 📋 文档导航表
 
@@ -49,9 +50,10 @@ related_docs: ["05_数据库设计/README.md", "09_测试方案/README.md"]
 | **6.2** | [切片约束](切片约束.md) | 垂直切片架构约束、通信规则 | 架构师、开发工程师 |
 | **6.3** | [Saga 使用指南](Saga使用指南.md) | Wolverine Saga 跨模块长事务编排 | 开发工程师 |
 | **6.4** | [FluentValidation 集成指南](FluentValidation集成指南.md) | 输入验证最佳实践 | 全体开发人员 |
-| **6.5** | [日志规范](日志规范.md) | 日志格式、级别定义 | 全体开发人员 |
-| **6.6** | [Git 分支规范](Git分支规范.md) | 分支模型、提交规范 | 全体开发人员 |
-| **6.7** | [Code Review 流程](CodeReview流程.md) | 代码审查流程、模板 | 全体开发人员 |
+| **6.5** | [ServiceDefaults 集成指南](ServiceDefaults集成指南.md) | Aspire 服务配置、健康检查、可观测性 | 全体开发人员 |
+| **6.6** | [日志规范](日志规范.md) | 日志格式、级别定义 | 全体开发人员 |
+| **6.7** | [Git 分支规范](Git分支规范.md) | 分支模型、提交规范 | 全体开发人员 |
+| **6.8** | [Code Review 流程](CodeReview流程.md) | 代码审查流程、模板 | 全体开发人员 |
 
 ## 文档结构
 
@@ -75,17 +77,22 @@ related_docs: ["05_数据库设计/README.md", "09_测试方案/README.md"]
 - 基础、高级、条件验证示例
 - 验证层级划分最佳实践
 
-### 6.5 [日志规范](日志规范.md)
+### 6.5 [ServiceDefaults 集成指南](ServiceDefaults集成指南.md)
+- Aspire ServiceDefaults 快速集成
+- 服务发现、健康检查、OpenTelemetry
+- HTTP 客户端弹性和最佳实践
+
+### 6.6 [日志规范](日志规范.md)
 - 日志级别定义和使用
 - 日志格式规范
 - 结构化日志实践
 
-### 6.6 [Git 分支规范](Git分支规范.md)
+### 6.7 [Git 分支规范](Git分支规范.md)
 - Git Flow 分支模型
 - 中文提交信息规范
 - PR 和代码合并流程
 
-### 6.7 [Code Review 流程](CodeReview流程.md)
+### 6.8 [Code Review 流程](CodeReview流程.md)
 - 代码审查流程和标准
 - 中文 PR 模板
 - 审查清单和反馈规范
