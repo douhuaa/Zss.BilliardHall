@@ -304,8 +304,8 @@ public static TBuilder AddCommonAuthentication<TBuilder>(this TBuilder builder)
 ## 版本
 
 - **当前版本**: 1.0.0
-- **Aspire 版本**: 9.x
-- **.NET 版本**: 9.0
+- **Aspire 版本**: 13.x
+- **.NET 版本**: 10.0
 
 ---
 

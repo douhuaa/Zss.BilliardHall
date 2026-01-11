@@ -4,7 +4,7 @@
 
 本指南帮助开发者在本地快速启动和调试台球厅管理系统的 Aspire 应用。
 
-> **前置条件**: Docker Desktop、.NET 9 SDK、IDE（Visual Studio 2022 或 Rider）
+> **前置条件**: Docker Desktop、.NET 10 SDK、IDE（Visual Studio 2022 或 Rider）
 
 ---
 
@@ -15,24 +15,24 @@
 #### Windows / macOS
 
 ```powershell
-# 1. 安装 .NET 9 SDK
-winget install Microsoft.DotNet.SDK.9
+# 1. 安装 .NET 10 SDK
+winget install Microsoft.DotNet.SDK.10
 
 # 2. 安装 Docker Desktop
 winget install Docker.DockerDesktop
 
 # 3. 验证安装
-dotnet --version  # 应显示 9.x.x
+dotnet --version  # 应显示 10.x.x
 docker --version  # 应显示 Docker version 24.x+
 ```
 
 #### Linux (Ubuntu/Debian)
 
 ```bash
-# 1. 安装 .NET 9 SDK
+# 1. 安装 .NET 10 SDK
 wget https://dot.net/v1/dotnet-install.sh
 chmod +x dotnet-install.sh
-./dotnet-install.sh --channel 9.0
+./dotnet-install.sh --channel 10.0
 
 # 2. 安装 Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
