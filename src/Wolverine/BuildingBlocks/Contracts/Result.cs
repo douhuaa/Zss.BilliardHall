@@ -24,6 +24,7 @@ public class Result
     public static Result Fail(string error) => new(false, error);
 
     public static Result<T> Success<T>(T value) => new(value, true, string.Empty);
+    // 使用 default! 是安全的：对于失败结果，访问 Value 会先抛出异常，因此底层 _value 永远不会在失败状态下被读取
     public static Result<T> Fail<T>(string error) => new(default!, false, error);
 }
 

@@ -31,10 +31,10 @@ src/Wolverine/
 
 ### 2. NuGet 包配置 ✅
 使用中央包管理（CPM），所有包版本在 `Directory.Packages.props` 中统一管理：
-- WolverineFx.Http 4.3.0
-- Marten 7.37.0
-- Marten.AspNetCore 7.37.0
-- Serilog.AspNetCore 9.0.0
+- WolverineFx.Http 5.9.2
+- Marten 8.17.0
+- Marten.AspNetCore 8.17.0
+- Serilog.AspNetCore 10.0.0
 
 ### 3. BuildingBlocks/Contracts ✅
 已实现核心契约类型：
