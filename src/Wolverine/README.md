@@ -62,8 +62,8 @@ src/Wolverine/
 
 **实现细节**：
 - Program.cs 已配置 Serilog 结构化日志，支持控制台输出
-- 集成 `UseSerilog()` 到 WebApplicationBuilder
-- 配置不同环境的日志级别（DEBUG vs RELEASE）
+- 集成 UseSerilog() 到 WebApplicationBuilder
+- 配置不同环境的日志级别（通过 appsettings 文件）
 - 使用 `AddServiceDefaults()` 配置 OpenTelemetry、健康检查、服务发现
 - 使用 `AddMartenDefaults()` 配置 Marten 文档数据库（自动连接 PostgreSQL）
 - 使用 `AddWolverineDefaults()` 配置 Wolverine 消息总线和 HTTP 端点（自动扫描）

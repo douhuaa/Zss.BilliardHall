@@ -52,5 +52,5 @@ catch (Exception ex)
 }
 finally
 {
-    await Log.CloseAndFlushAsync();
+    Log.CloseAndFlush();
 }
