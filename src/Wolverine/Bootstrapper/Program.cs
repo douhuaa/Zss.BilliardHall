@@ -1,26 +1,10 @@
 using Serilog;
-using Serilog.Events;
 
-// Configure Serilog as the logging provider
-// 配置 Serilog 作为日志提供程序
+// Create a bootstrap logger for early startup logging
+// 创建引导日志记录器用于早期启动日志
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
-#if DEBUG
-    .MinimumLevel.Override("Zss.BilliardHall", LogEventLevel.Debug)
-    .MinimumLevel.Override("Wolverine", LogEventLevel.Debug)
-    .MinimumLevel.Override("Marten", LogEventLevel.Information)
-#else
-    .MinimumLevel.Override("Zss.BilliardHall", LogEventLevel.Information)
-    .MinimumLevel.Override("Wolverine", LogEventLevel.Information)
-    .MinimumLevel.Override("Marten", LogEventLevel.Warning)
-#endif
-    .Enrich.FromLogContext()
-    .Enrich.WithProperty("Application", "BilliardHall.Bootstrapper")
-    .WriteTo.Console(
-        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
-    .CreateLogger();
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 try
 {
@@ -28,8 +12,15 @@ try
 
     var builder = WebApplication.CreateBuilder(args);
 
-    // Use Serilog for logging
-    builder.Host.UseSerilog();
+    // Configure Serilog from appsettings.json
+    // 从 appsettings.json 配置 Serilog
+    builder.Host.UseSerilog((context, services, configuration) => configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .Enrich.WithProperty("Application", "BilliardHall.Bootstrapper")
+        .WriteTo.Console(
+            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));
 
     // Add Aspire ServiceDefaults (OpenTelemetry, Health Checks, Service Discovery)
     builder.AddServiceDefaults();
@@ -53,9 +44,9 @@ try
         Architecture = "Vertical Slice"
     });
 
-    Log.Information("Application started successfully");
+    Log.Information("Application configured successfully, starting web server...");
 
-    await app.RunAsync();
+    app.Run();
 }
 catch (Exception ex)
 {
