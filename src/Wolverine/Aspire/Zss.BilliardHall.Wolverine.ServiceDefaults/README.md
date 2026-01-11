@@ -363,5 +363,5 @@ public static TBuilder AddCommonAuthentication<TBuilder>(this TBuilder builder)
 
 ---
 
-**最后更新**: 2024-01-15  
+**最后更新**: 2026-01-11  
 **维护者**: 架构团队
