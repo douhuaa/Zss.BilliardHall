@@ -103,8 +103,8 @@ jobs:
       - name: Run AppHost integration tests
         if: steps.docker-check.outputs.docker_available == 'true'
         run: |
-          # 注意：这些测试当前被 Skip 标记，需要手动移除 Skip 才能运行
-          # Note: These tests are currently marked as Skip, need to manually remove Skip to run
-          echo "⚠️ AppHost tests are currently skipped by default"
-          echo "To enable them, remove the Skip attribute from AppHostIntegrationTests.cs"
+          # 注意：这些测试当前可能被 Skip 标记，运行时会显示为 Skipped
+          # Note: These tests may currently be marked as Skip and will be reported as Skipped
+          echo "▶️ Running AppHost integration tests (skipped tests will be reported as Skipped)..."
+          dotnet test src/Wolverine/Zss.BilliardHall.Wolverine.slnx -c Release --no-build
         timeout-minutes: 10
