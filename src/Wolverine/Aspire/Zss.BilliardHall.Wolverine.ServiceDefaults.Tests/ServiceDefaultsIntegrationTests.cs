@@ -162,4 +162,66 @@ public class ServiceDefaultsIntegrationTests
         var app = builder.Build();
         app.Should().NotBeNull();
     }
+
+    [Fact]
+    public void AddWolverineDefaults_ShouldRegisterWolverineServices()
+    {
+        // Arrange
+        var builder = WebApplication.CreateBuilder();
+
+        // Act
+        builder.AddWolverineDefaults();
+
+        // Assert - Should not throw when building
+        Action act = () => builder.Build();
+        act.Should().NotThrow("Wolverine services should be properly registered");
+    }
+
+    [Fact]
+    public void AddWolverineDefaults_ShouldEnableFluentValidation()
+    {
+        // Arrange
+        var builder = WebApplication.CreateBuilder();
+
+        // Act
+        builder.AddWolverineDefaults();
+        var app = builder.Build();
+
+        // Assert - App should build successfully with FluentValidation enabled
+        app.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void AddWolverineDefaults_WithServiceDefaults_ShouldWorkTogether()
+    {
+        // Arrange
+        var builder = WebApplication.CreateBuilder();
+
+        // Act - Add both ServiceDefaults and WolverineDefaults
+        builder.AddServiceDefaults();
+        builder.AddWolverineDefaults();
+        var app = builder.Build();
+
+        // Assert - Both should be configured
+        var healthCheckService = app.Services.GetService<HealthCheckService>();
+
+        healthCheckService.Should().NotBeNull("ServiceDefaults should register health checks");
+        app.Should().NotBeNull("WolverineDefaults should register Wolverine runtime");
+    }
+
+    [Fact]
+    public void AddWolverineDefaults_CalledMultipleTimes_ShouldThrow()
+    {
+        // Arrange
+        var builder = WebApplication.CreateBuilder();
+
+        // Act - Call once successfully
+        builder.AddWolverineDefaults();
+
+        // Assert - Calling again should throw
+        Action act = () => builder.AddWolverineDefaults();
+        act.Should().Throw<InvalidOperationException>(
+            "calling AddWolverineDefaults multiple times is not supported by Wolverine framework")
+            .WithMessage("*can only be called once*");
+    }
 }

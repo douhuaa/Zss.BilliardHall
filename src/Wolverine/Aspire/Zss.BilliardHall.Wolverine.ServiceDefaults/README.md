@@ -9,6 +9,7 @@ ServiceDefaults 是台球厅管理系统所有服务共享的基础设施配置�
 - ✅ 健康检查（Health Checks）
 - ✅ OpenTelemetry 可观测性（日志、指标、追踪）
 - ✅ HTTP 客户端弹性（重试、断路器、超时）
+- ✅ Wolverine 命令总线与消息总线（Command Bus & Message Bus）
 - ✅ 标准化配置
 
 ---
@@ -33,6 +34,9 @@ var builder = WebApplication.CreateBuilder(args);
 // 一行代码启用所有 ServiceDefaults 功能
 builder.AddServiceDefaults();
 
+// 一行代码启用 Wolverine 基础设施
+builder.AddWolverineDefaults();
+
 var app = builder.Build();
 
 // 映射健康检查端点（仅开发环境，限制 localhost）
@@ -56,6 +60,45 @@ app.Run();
 **用法**:
 ```csharp
 builder.AddServiceDefaults();
+```
+
+### AddWolverineDefaults()
+
+添加 Wolverine 框架配置（命令总线、消息总线、HTTP 端点）。
+
+**用法**:
+```csharp
+builder.AddWolverineDefaults();
+```
+
+**自动包含**:
+- HTTP 端点自动发现（基于约定的路由）
+- FluentValidation 集成（自动验证命令和查询）
+- 消息队列预留配置点（RabbitMQ、Kafka、Azure Service Bus）
+
+**扩展示例**:
+```csharp
+// 未来集成 RabbitMQ
+builder.Services.AddWolverine(opts =>
+{
+    opts.UseRabbitMq(rabbitMq =>
+    {
+        rabbitMq.HostName = "localhost";
+        // ...
+    });
+});
+```
+
+**配置示例** (appsettings.json):
+```json
+{
+  "Wolverine": {
+    "Messaging": {
+      "Provider": "RabbitMQ",
+      "ConnectionString": "amqp://guest:guest@localhost:5672"
+    }
+  }
+}
 ```
 
 ### ConfigureOpenTelemetry()
@@ -241,19 +284,30 @@ public async Task AddDefaultHealthChecks_ShouldRegisterSelfCheck()
 1. **所有服务统一使用 ServiceDefaults**
    ```csharp
    builder.AddServiceDefaults(); // 第一行
+   builder.AddWolverineDefaults(); // 第二行
    ```
 
-2. **使用 IHttpClientFactory**
+2. **使用垂直切片架构组织代码**
+   ```
+   Modules/Members/
+     CreateMember/
+       CreateMember.cs           # Command
+       CreateMemberHandler.cs    # Handler
+       CreateMemberEndpoint.cs   # HTTP Endpoint
+       CreateMemberValidator.cs  # Validator (可选)
+   ```
+
+3. **使用 IHttpClientFactory**
    ```csharp
    services.AddHttpClient<IApiClient, ApiClient>(...);
    ```
 
-3. **添加依赖健康检查**
+4. **添加依赖健康检查**
    ```csharp
    builder.Services.AddHealthChecks().AddNpgSql(...);
    ```
 
-4. **结构化日志**
+5. **结构化日志**
    ```csharp
    _logger.LogInformation("处理订单 {OrderId}", orderId);
    ```
