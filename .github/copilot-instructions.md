@@ -2,23 +2,49 @@
 
 > Purpose (目的): 为本仓库的 AI 辅助代码审查（如 GitHub Copilot / 代码建议工具）提供统一上下文，保证建议符合项目规范、架构边界与安全要求。
 >
-> Scope (范围): C# 后端 (ABP + OpenIddict + EFCore + Aspire)、前端 (Nuxt SPA OIDC 集成)，以及通用 DevOps/配置文件。
+> Scope (范围): C# 后端 (Wolverine + Marten/EFCore + Vertical Slice)、前端 (Nuxt SPA OIDC 集成)，以及通用 DevOps/配置文件。
 
 ---
-## 1. Architecture & Layering / 架构与分层
+## 1. Architecture: Vertical Slice / 架构：垂直切片
 
-Backend uses ABP layers:
-- Domain: 纯领域模型与领域服务，不依赖外部基础设施；禁止直接引用 Http / EF Core 具体实现（除抽象仓储接口）。
-- Application: 用例编排（DTO ↔ Domain），不放核心业务规则；禁止直接访问 DbContext（通过仓储接口）。
-- HttpApi (Host / Controllers): 仅做 Transport 转换、授权、模型校验，不写业务逻辑。
-- EntityFrameworkCore: EF Core 上下文、仓储实现、迁移；不要混入领域策略逻辑。
-- DbMigrator / AppHost: 仅启动与编排；业务逻辑禁止进入。
+**核心原则**：100% 垂直切片架构，**拒绝传统分层**（无 Application/Domain/Infrastructure 分层）
 
-Review Checklist (Layering):
-- Domain 不引用 Application/HttpApi/EFCore 项目
-- 新增服务若跨多个聚合，应重新审视聚合边界
-- 不在 Controller 中写 if/loop 复杂规则（下沉 Application/Domain）
-- 迁移脚本/上下文不携带演示/测试数据种子（业务种子单独 Contributor）
+Backend uses Wolverine + Vertical Slice:
+- **一个 Use Case = 一个文件夹**：每个业务功能独立组织（Command + Handler + Endpoint + Validator + Event）
+- **模块边界**：按业务能力划分模块（Members/Sessions/Billing/Payments/Devices），不是技术层
+- **Handler 即 Application Service**：不再需要单独的 Service 层，Handler 是一等公民
+- **跨模块通信**：
+  - 同步调用：`IMessageBus.InvokeAsync()`
+  - 异步事件：`IMessageBus.PublishAsync()`  
+  - **禁止**：Shared Service、跨模块直接数据库访问
+- **持久化**：Marten (文档数据库) 或 EF Core，通过 `IDocumentSession` 或 `DbContext` 注入到 Handler
+
+**Vertical Slice 标准结构**：
+```
+Modules/Members/
+├── RegisterMember/
+│   ├── RegisterMember.cs           # Command (record)
+│   ├── RegisterMemberHandler.cs    # Handler with [Transactional]
+│   ├── RegisterMemberEndpoint.cs   # HTTP Endpoint with [WolverinePost]
+│   └── RegisterMemberValidator.cs  # FluentValidation (optional)
+├── TopUpBalance/
+│   ├── TopUpBalance.cs
+│   ├── TopUpBalanceHandler.cs
+│   └── TopUpBalanceEndpoint.cs
+├── Member.cs                       # 聚合根
+├── MemberTier.cs                   # 枚举/值对象
+└── MembersModule.cs                # Wolverine 模块扫描标记
+```
+
+Review Checklist (Vertical Slice):
+- ✅ UseCase 文件夹包含 Command/Handler/Endpoint，不跨文件夹复用
+- ✅ Handler 使用 `[Transactional]` 自动事务，无需手动 SaveChanges
+- ✅ 跨模块通信通过事件（PublishAsync），不直接调用其他模块 Handler
+- ✅ Endpoint 只做映射，不写业务逻辑（逻辑在 Handler）
+- ✅ 聚合根包含业务方法，不是贫血模型
+- ❌ 拒绝：创建 Shared.Core、Common.Services 等共享层
+- ❌ 拒绝：Application/Domain/Infrastructure 分层结构
+- ❌ 拒绝：Repository 接口（直接使用 IDocumentSession/DbContext）
 
 ---
 ## 2. Naming & Style / 命名与风格
@@ -57,11 +83,12 @@ Reject / 标记风险:
 When reviewing changes, ensure:
 - 未新增明文凭据（检查 appsettings / .env / docker compose）
 - OIDC 授权配置未意外重新开启 password/client_credentials（若有需标注原因）
-- 输入验证：公开 API 避免盲目接受复杂对象（必要时使用 DTO 白名单）
+- 输入验证：Wolverine Endpoint 避免盲目接受复杂对象，使用 FluentValidation
 - 授权：新增 Endpoint 是否添加 `[Authorize]` 或显式 `[AllowAnonymous]`（后者需说明）
-- 防止 N+1：仓储查询是否使用 Include/Select 投影而不是多次循环查询
+- 防止 N+1：查询使用 Include/Select 投影而不是多次循环查询
 - 不在日志或异常消息中输出个人隐私数据
 - 业务异常使用统一 Code 格式：`<Area>:<Key>`（如 `Billing:TableUnavailable`）
+- Handler 输入验证：使用 `UseFluentValidation()` 中间件或 Result 模式返回错误
 
 ---
 ## 5. PR Scope & Structure / PR 范围与结构
@@ -92,16 +119,26 @@ Check:
 - 针对新增公共业务规则：至少 1 个"正常路径" + 1 个"异常/边界"用例
 
 ---
-## 7. EF Core & Data / 数据访问规范
+## 7. Data Access: Marten / EF Core / 数据访问规范
 
-- 禁止在 Application 层直接使用 DbContext（应走仓储）
+**Marten (推荐)**:
+- Handler 直接注入 `IDocumentSession`，无需 Repository
+- 使用 `[Transactional]` 自动事务 + Outbox（自动发布事件）
+- 查询：`session.Query<T>().Where()` 或 `session.LoadAsync<T>(id)`
+- 只读查询：默认已优化，无需额外标记
+- 事件存储：聚合根修改后，事件自动持久化到 Outbox
+
+**EF Core (混合使用)**:
+- Handler 直接注入 `DbContext`（不创建 Repository）
 - 迁移命名：`yyyyMMddHHmm_<summary>`
 - 批量查询使用 `AsNoTracking()`（只读场景）
-- 更新只跟踪需要的实体，不进行全表 `UpdateRange` 无选择
-- 异常处理：数据库唯一约束 → 翻译成业务域错误而非直接抛内部异常
-- 避免 N+1：用投影（`Select(new Dto { ... })`）而不是盲目 `Include` 大图
-- 分页：先排序再分页；大页（>1000）考虑游标或时间窗口策略
+- 避免 N+1：用投影（`Select(new Dto { ... })`）或 `Include`
+- 分页：先排序再分页；大页（>1000）考虑游标策略
+
+**通用规范**:
+- 异常处理：数据库唯一约束 → 翻译成业务域错误（返回 `Result.Fail`）
 - 批量存在性校验用 `AnyAsync()` 而不是 `Count()`
+- ❌ 拒绝：创建 IRepository<T>、IUnitOfWork 等抽象
 
 ---
 ## 8. Frontend (Nuxt) Integration / 前端集成
@@ -136,49 +173,60 @@ When auto-generating code, enforce:
 - 不自动引入未批准的加密/安全库
 
 ---
-## 11. Pending Docs Placeholders / 待补文档占位
+## 11. Architecture Documentation / 架构文档参考
 
-Below documents currently placeholders; interim rules above override ambiguity:
-- `分层约束.md` → 已在本文件临时列出最小强约束
-- `日志规范.md` → 使用 Serilog 结构化 + 敏感字段脱敏
+请参考以下核心文档：
+- `doc/03_系统架构设计/Wolverine模块化架构蓝图.md` → 完整架构实施指南（29KB）
+- `doc/03_系统架构设计/Wolverine快速上手指南.md` → 5分钟上手教程
+- `doc/03_系统架构设计/系统模块划分.md` → 6个核心模块定义
+- `doc/04_模块设计/会员管理模块.md` → Members 模块完整示例（v3.0.0）
+- `doc/04_模块设计/打球时段模块.md` → Sessions 模块 + Saga 示例（v2.0.0）
+- `doc/04_模块设计/计费管理模块.md` → Billing 模块示例（v2.0.0）
 
 Add TODO tags:
 ```
-// TODO(layering): 若未来引入 Domain Events, 更新审查标准
-// TODO(logging): 添加审计事件字段规范 (UserId, Action, ResourceId)
+// TODO(wolverine): 若需添加 Saga，参考 TableSessionSaga 示例
+// TODO(validation): 添加 FluentValidation 验证器
 ```
 Must accompany an Issue reference once created.
 
 ---
 ## 12. Review Quick Checklist / 快速审查清单
 
-(✓) 分层依赖方向正确
+(✓) Vertical Slice 结构正确（UseCase 文件夹）
+(✓) Handler 使用 [Transactional] 自动事务
+(✓) 跨模块通信通过事件，不直接调用
 (✓) 没有明文/硬编码 Secret
-(✓) 公共接口/DTO 修改有版本或兼容说明
+(✓) Endpoint 只做映射，逻辑在 Handler
 (✓) 日志无敏感泄露，失败路径可追踪
 (✓) 新逻辑有测试或声明测试豁免理由
 (✓) 没有无意开启的 OIDC grant / CORS 过宽 `*`
-(✓) Migration 命名合规且无示例/测试数据
 (✓) 前端环境变量未提交真实值
 (✓) 使用 UTC 时间进行持久化
 (✓) 异步方法包含 CancellationToken 参数
-(✓) 业务异常包含结构化 Code
-(✓) EF 查询使用 AsNoTracking（只读场景）
+(✓) 业务异常包含结构化 Code 或 Result.Fail
+(✓) 查询使用 AsNoTracking（只读场景，EF Core）
+(❌) 拒绝：Application/Domain/Infrastructure 分层
+(❌) 拒绝：Repository/UnitOfWork 接口
+(❌) 拒绝：Shared Service 跨模块调用
 
 ---
 ## 13. English Summary (Condensed)
 
 Use this section if AI requires English only context:
-- Enforce clean layering (Domain isolated, no direct DbContext in Application, controllers thin)
+- **Enforce Vertical Slice Architecture**: NO traditional layering (Application/Domain/Infrastructure), organize by Use Case folders
+- **Wolverine Handlers**: Handler is the Application Service, use `[Transactional]` for auto-transactions + Outbox
+- **Module Communication**: Use `IMessageBus.PublishAsync()` for events, `InvokeAsync()` for sync calls; NO Shared Services
+- **Data Access**: Inject `IDocumentSession` (Marten) or `DbContext` (EF Core) directly into Handlers; NO Repository pattern
 - Structured Serilog logging; never log secrets
-- Security: no plaintext credentials, only Authorization Code + PKCE for SPA
-- Tests required for new logic; skip must be justified
+- Security: no plaintext credentials, only Authorization Code + PKCE for SPA, use FluentValidation for input validation
+- Tests required for new Handler logic; use in-memory Marten/EF Core
 - Keep PR small & single-purpose; reject noisy unrelated refactors
 - Follow conventional commits; clear module scope
-- EF Core: use AsNoTracking for read, migrations properly named
 - UTC time for persistence, localization at display layer
 - CancellationToken support for async methods
-- Business exceptions with structured codes (<Area>:<Key>)
+- Business exceptions with Result pattern or structured codes (<Area>:<Key>)
+- **Reject**: Creating Application Services, Repositories, UnitOfWork, Shared/Common layers
 
 ---
 ## 14. Updating This File / 更新策略
@@ -190,13 +238,15 @@ Use this section if AI requires English only context:
 ---
 ## 15. Version / 版本
 
-Current instructions version: 0.2.0 (aligned with style guide v1.0.0)
+Current instructions version: 1.0.0 (Wolverine + Vertical Slice Architecture)
 
 Change Log (local to this file):
-- 0.1.0: Initial creation with interim logging & layering rules
+- 0.1.0: Initial creation with ABP layering rules
 - 0.2.0: Synchronized with 代码风格.md v1.0.0, added UTC/CancellationToken/business exception codes
+- 1.0.0: **Major rewrite for Wolverine + Vertical Slice Architecture** - removed ABP layers, added Wolverine Handler patterns, Marten integration, module communication rules
 
 
 ---
 
-> 若 AI 建议违反任一硬性约束（安全/分层/命名），应优先提示开发者并拒绝直接生成不合规实现。
+> 若 AI 建议违反任一硬性约束（安全/垂直切片/命名），应优先提示开发者并拒绝直接生成不合规实现。
+> **核心原则**：100% 垂直切片，拒绝传统分层，Handler 即 Application Service。

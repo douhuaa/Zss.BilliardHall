@@ -69,11 +69,14 @@
 - [ ] 未记录敏感信息到日志
 - [ ] 关键失败路径有结构化日志
 
-## 分层 / 架构
+## 架构 / Wolverine 垂直切片
 
-- [ ] 无跨层引用违规
-- [ ] Application 未直接使用 DbContext
-- [ ] Controller 中无复杂业务逻辑
+- [ ] 垂直切片结构正确（UseCase = 文件夹，包含 Command/Handler/Endpoint）
+- [ ] Handler 使用 `[Transactional]` 自动事务（Marten/EF Core）
+- [ ] 跨模块通信通过事件（`PublishAsync`）或内部调用（`InvokeAsync`），无 Shared Service
+- [ ] Endpoint 只做映射，业务逻辑在 Handler
+- [ ] 直接使用 `IDocumentSession`（Marten）或 `DbContext`（EF Core），无 Repository 接口
+- [ ] 无 Application/Domain/Infrastructure 分层结构
 
 ## Issue 关联
 
