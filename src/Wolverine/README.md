@@ -87,10 +87,16 @@ src/Wolverine/
 - [ ] Sessions 模块（打球时段）
 
 ### 阶段四：测试与验证
-- [ ] 创建集成测试项目
-- [ ] 实现核心功能测试
-- [ ] 验证应用启动
+- [x] 创建集成测试项目（AppHost.Tests）
+- [x] 实现核心功能测试（AppHost 启动、健康检查、基本端点）
+- [x] 验证应用启动（自动化测试覆盖）
 - [ ] 运行 CodeQL 扫描
+
+**AppHost 集成测试**：
+- 自动启动 PostgreSQL 容器和 Bootstrapper 服务
+- 验证健康检查端点 `/health` 响应
+- 验证根端点 `/` 返回应用状态
+- 详见：`Aspire/Zss.BilliardHall.Wolverine.AppHost.Tests/README.md`
 
 ## 架构参考文档
 

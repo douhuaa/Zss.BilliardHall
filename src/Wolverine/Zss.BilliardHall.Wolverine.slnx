@@ -5,6 +5,7 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/Aspire/">
+    <Project Path="Aspire/Zss.BilliardHall.Wolverine.AppHost.Tests/Zss.BilliardHall.Wolverine.AppHost.Tests.csproj" />
     <Project Path="Aspire/Zss.BilliardHall.Wolverine.AppHost/Zss.BilliardHall.Wolverine.AppHost.csproj" Id="c1221e53-0a72-4696-b73d-8669e2232630">
       <Build Solution="Debug|x64" Project="false" />
       <Build Solution="Debug|x86" Project="false" />
