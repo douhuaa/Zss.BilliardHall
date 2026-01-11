@@ -2,6 +2,15 @@
 
 本项目包含 Aspire AppHost 的集成测试，用于验证应用编排和启动流程。
 
+## ⚠️ 重要提示
+
+**这些测试默认被跳过**，因为它们需要：
+- Docker Desktop 正在运行
+- Aspire DCP（Distributed Container Platform）支持
+- 完整的容器编排环境
+
+在 CI 环境中，这些测试会被自动跳过。
+
 ## 测试目的
 
 验证"阶段一：基础设施就绪"的核心目标：
@@ -19,13 +28,13 @@
 
 ## 测试列表
 
-### `AppHost_CanStartBootstrapperService`
+### `AppHost_CanStartBootstrapperService` ⚠️ 需要 Docker
 验证 AppHost 能够成功启动 Bootstrapper 服务而不抛出异常。
 
-### `Bootstrapper_HealthEndpoint_ReturnsHealthy`
+### `Bootstrapper_HealthEndpoint_ReturnsHealthy` ⚠️ 需要 Docker
 测试 Bootstrapper 的健康检查端点 `/health` 返回成功状态码。
 
-### `Bootstrapper_RootEndpoint_ReturnsApplicationStatus`
+### `Bootstrapper_RootEndpoint_ReturnsApplicationStatus` ⚠️ 需要 Docker
 测试根端点 `/` 返回包含应用信息的 JSON 响应：
 - 包含应用名称 `Zss.BilliardHall.Bootstrapper`
 - 提及 `Wolverine` 框架
@@ -34,32 +43,68 @@
 ## 运行测试
 
 ### 前置条件
-- Docker 已安装并运行（用于 PostgreSQL 容器）
-- .NET 10 SDK
+1. **Docker Desktop 已安装并运行**
+   ```bash
+   docker info  # 验证 Docker 可用
+   ```
+
+2. .NET 10 SDK
 
 ### 执行测试
 
+**注意**: 这些测试默认被跳过。要运行它们，您需要：
+
+1. **临时启用测试**：编辑 `AppHostIntegrationTests.cs`，移除 `[Fact(Skip = "...")]` 中的 `Skip` 参数
+
+2. **手动运行**：
+   ```bash
+   cd src/Wolverine
+   dotnet test Aspire/Zss.BilliardHall.Wolverine.AppHost.Tests
+   ```
+
+3. **详细输出**：
+   ```bash
+   dotnet test Aspire/Zss.BilliardHall.Wolverine.AppHost.Tests \
+     --logger "console;verbosity=detailed"
+   ```
+
+### 跳过这些测试（默认行为）
+
 ```bash
-# 运行所有 AppHost 测试
-cd src/Wolverine
-dotnet test Aspire/Zss.BilliardHall.Wolverine.AppHost.Tests
+# 运行所有测试，但排除需要 Docker 的测试
+dotnet test --filter "Category!=RequiresDocker"
 
-# 运行特定测试
-dotnet test Aspire/Zss.BilliardHall.Wolverine.AppHost.Tests --filter FullyQualifiedName~Bootstrapper_HealthEndpoint
-
-# 详细输出
-dotnet test Aspire/Zss.BilliardHall.Wolverine.AppHost.Tests --logger "console;verbosity=detailed"
+# 或者，在 CI 中只运行 ServiceDefaults 测试
+dotnet test src/Wolverine/Aspire/Zss.BilliardHall.Wolverine.ServiceDefaults.Tests
 ```
 
 ## CI/CD 集成
 
-这些测试适合在 CI 流程中自动运行，作为 PR 验证的一部分。
+这些测试**不会**在 CI 流程中自动运行，因为它们：
+- 需要 Docker 环境（CI 环境可能不支持）
+- 运行时间较长（容器启动需要时间）
+- 需要完整的 Aspire DCP 基础设施
 
-**建议的 CI 步骤**:
-1. 启动 Docker（如果未运行）
-2. 运行 AppHost 集成测试
-3. 验证所有测试通过
-4. 清理容器资源
+**CI 策略**:
+- ✅ 运行 ServiceDefaults 单元测试（快速、无依赖）
+- ❌ 跳过 AppHost 集成测试（需要 Docker）
+- ✅ 验证配置完整性通过代码审查
+
+## 本地开发验证
+
+对于本地开发，推荐使用手动验证方式：
+
+```bash
+# 1. 启动 AppHost（会自动启动 PostgreSQL 和 Bootstrapper）
+dotnet run --project src/Wolverine/Aspire/Zss.BilliardHall.Wolverine.AppHost
+
+# 2. 访问 Aspire Dashboard
+open https://localhost:17001
+
+# 3. 验证端点
+curl http://localhost:5000/        # 根端点
+curl http://localhost:5000/health  # 健康检查
+```
 
 ## 测试架构
 
@@ -73,15 +118,25 @@ dotnet test Aspire/Zss.BilliardHall.Wolverine.AppHost.Tests --logger "console;ve
 
 1. **测试隔离**: 每个测试独立创建 AppHost 实例
 2. **资源清理**: 使用 `await using` 确保资源正确释放
-3. **超时处理**: 长时间运行的测试可能需要调整超时设置
+3. **超时处理**: 测试默认有 20 秒超时，容器启动可能较慢
 4. **容器复用**: Docker 容器可能在测试间复用以提高速度
+5. **默认跳过**: 所有测试都标记为 `Skip`，需要手动启用
 
 ## 故障排查
+
+### 测试被跳过
+这是**预期行为**。这些测试需要完整的 Docker 环境，默认不运行。
+
+### 如果想运行这些测试
+
+1. 确认 Docker Desktop 正在运行
+2. 编辑测试文件，移除 `Skip` 参数
+3. 重新运行测试
 
 ### 测试超时
 - 检查 Docker 是否正常运行
 - 确认 PostgreSQL 容器能够成功启动
-- 增加测试超时时间
+- 第一次运行可能需要下载镜像（时间较长）
 
 ### 健康检查失败
 - 查看 Bootstrapper 启动日志
@@ -98,6 +153,7 @@ dotnet test Aspire/Zss.BilliardHall.Wolverine.AppHost.Tests --logger "console;ve
 - [Aspire Testing Documentation](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/testing)
 - [Wolverine 模块化架构蓝图](../../../../doc/03_系统架构设计/Wolverine模块化架构蓝图.md)
 - [Aspire 编排架构](../../../../doc/03_系统架构设计/Aspire编排架构.md)
+- [CI/CD 工作流说明](../../../../.github/workflows/README.md)
 
 ## 版本
 
