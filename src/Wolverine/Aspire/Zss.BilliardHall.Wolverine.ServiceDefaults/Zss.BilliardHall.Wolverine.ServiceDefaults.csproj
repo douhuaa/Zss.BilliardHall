@@ -16,6 +16,8 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
     <PackageReference Include="Marten" />
     <PackageReference Include="Marten.AspNetCore" />
+    <PackageReference Include="WolverineFx.Http" />
+    <PackageReference Include="WolverineFx.Http.FluentValidation" />
   </ItemGroup>
 
 </Project>
