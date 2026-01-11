@@ -54,11 +54,21 @@ src/Wolverine/
 
 ## 待实现工作
 
-### 阶段一：完成 Bootstrapper 配置
-- [ ] 实现 Program.cs 配置 Wolverine
-- [ ] 配置 Marten 文档数据库
-- [ ] 配置 Serilog 日志
-- [ ] 添加 Wolverine HTTP 端点扫描
+### 阶段一：完成 Bootstrapper 配置 ✅
+- [x] 实现 Program.cs 配置 Wolverine
+- [x] 配置 Marten 文档数据库
+- [x] 配置 Serilog 日志
+- [x] 添加 Wolverine HTTP 端点扫描
+
+**实现细节**：
+- Program.cs 已配置 Serilog 结构化日志，支持控制台输出
+- 集成 `UseSerilog()` 到 WebApplicationBuilder
+- 配置不同环境的日志级别（DEBUG vs RELEASE）
+- 使用 `AddServiceDefaults()` 配置 OpenTelemetry、健康检查、服务发现
+- 使用 `AddMartenDefaults()` 配置 Marten 文档数据库（自动连接 PostgreSQL）
+- 使用 `AddWolverineDefaults()` 配置 Wolverine 消息总线和 HTTP 端点（自动扫描）
+- 添加根端点 `/` 返回应用状态信息
+- 添加异常处理和日志清理逻辑
 
 ### 阶段二：实现 Members 模块示例
 参考文档：`doc/04_模块设计/会员管理模块.md`
