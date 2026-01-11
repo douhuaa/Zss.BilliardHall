@@ -15,9 +15,9 @@ var postgres = builder
     .WithLifetime(ContainerLifetime.Persistent);    // 容器持久化（开发时保留数据）
 
 // 2. 定义数据库
-// - 数据库名：billiard-hall-db
-// - 连接字符串会自动注入到引用此数据库的服务（通过 ConnectionStrings:billiard-hall-db 配置键）
-var db = postgres.AddDatabase("billiard-hall-db");
+// - 数据库名：Default（统一连接字符串键）
+// - 连接字符串会自动注入到引用此数据库的服务（通过 ConnectionStrings:Default 配置键）
+var db = postgres.AddDatabase("Default");
 
 // 3. 定义应用服务：Bootstrapper
 // - 服务名称：bootstrapper（可通过 http+https://bootstrapper 访问）
