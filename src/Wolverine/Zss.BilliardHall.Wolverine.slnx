@@ -18,5 +18,7 @@
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
   </Folder>
+  <Project Path="Aspire/Zss.BilliardHall.Wolverine.AppHost/Zss.BilliardHall.Wolverine.AppHost.csproj" Id="c1221e53-0a72-4696-b73d-8669e2232630" />
+  <Project Path="Aspire/Zss.BilliardHall.Wolverine.ServiceDefaults/Zss.BilliardHall.Wolverine.ServiceDefaults.csproj" />
   <Project Path="Bootstrapper/Bootstrapper.csproj" />
 </Solution>
