@@ -47,6 +47,11 @@ src/Wolverine/
 - `DomainException` - 领域异常基类
 - `NotFoundException` - 资源未找到异常
 
+### 5. 测试项目 ✅
+已创建测试项目：
+- `Zss.BilliardHall.Wolverine.ServiceDefaults.Tests` - ServiceDefaults 扩展方法测试（19个测试用例）
+- 详细测试入口说明：参见 [测试入口说明.md](./测试入口说明.md)
+
 ## 待实现工作
 
 ### 阶段一：完成 Bootstrapper 配置
@@ -83,6 +88,18 @@ src/Wolverine/
 - [Wolverine快速上手指南](../../doc/03_系统架构设计/Wolverine快速上手指南.md)
 - [系统模块划分](../../doc/03_系统架构设计/系统模块划分.md)
 - [会员管理模块设计](../../doc/04_模块设计/会员管理模块.md)
+- [测试入口说明](./测试入口说明.md) - **如何运行测试**
+
+## 快速开始
+
+### 运行测试
+
+```bash
+cd src/Wolverine
+dotnet test
+```
+
+查看详细测试文档：[测试入口说明.md](./测试入口说明.md)
 
 ## 核心原则
 
