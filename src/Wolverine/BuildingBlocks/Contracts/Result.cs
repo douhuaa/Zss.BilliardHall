@@ -1,0 +1,52 @@
+namespace Zss.BilliardHall.BuildingBlocks.Contracts;
+
+/// <summary>
+/// 表示操作结果，包含成功/失败状态和错误信息
+/// </summary>
+public class Result
+{
+    public bool IsSuccess { get; }
+    public bool IsFailure => !IsSuccess;
+    public string Error { get; }
+
+    protected Result(bool isSuccess, string error)
+    {
+        if (isSuccess && !string.IsNullOrEmpty(error))
+            throw new InvalidOperationException("成功的结果不能包含错误信息");
+        if (!isSuccess && string.IsNullOrEmpty(error))
+            throw new InvalidOperationException("失败的结果必须包含错误信息");
+
+        IsSuccess = isSuccess;
+        Error = error;
+    }
+
+    public static Result Success() => new(true, string.Empty);
+    public static Result Fail(string error) => new(false, error);
+
+    public static Result<T> Success<T>(T value) => new(value, true, string.Empty);
+    public static Result<T> Fail<T>(string error) => new(default!, false, error);
+}
+
+/// <summary>
+/// 表示带返回值的操作结果
+/// </summary>
+public class Result<T> : Result
+{
+    private readonly T _value;
+
+    public T Value
+    {
+        get
+        {
+            if (IsFailure)
+                throw new InvalidOperationException("失败的结果不能访问 Value");
+            return _value;
+        }
+    }
+
+    internal Result(T value, bool isSuccess, string error)
+        : base(isSuccess, error)
+    {
+        _value = value;
+    }
+}
