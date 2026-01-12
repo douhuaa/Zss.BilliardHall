@@ -81,6 +81,10 @@ public static class BootstrapperHost
 
         // Add Wolverine command/message bus with HTTP endpoints
         builder.AddWolverineDefaults();
+        
+        // Configure Wolverine to discover handlers in all module assemblies
+        // 配置 Wolverine 扫描所有模块程序集中的 Handler
+        builder.ConfigureWolverineModuleDiscovery();
     }
 
     /// <summary>

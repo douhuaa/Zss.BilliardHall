@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Aspire\Zss.BilliardHall.Wolverine.ServiceDefaults\Zss.BilliardHall.Wolverine.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Modules\Members\Members.csproj" />
   </ItemGroup>
 
 </Project>
