@@ -1,6 +1,7 @@
 using Marten;
 using Microsoft.Extensions.Logging;
 using Wolverine;
+using Wolverine.Attributes;
 using Zss.BilliardHall.BuildingBlocks.Contracts;
 using Zss.BilliardHall.Modules.Members.Events;
 
@@ -12,6 +13,7 @@ namespace Zss.BilliardHall.Modules.Members.RegisterMember;
 /// </summary>
 public sealed class RegisterMemberHandler
 {
+    [Transactional]
     public async Task<Result<Guid>> Handle(
         RegisterMember command,
         IDocumentSession session,
@@ -28,6 +30,8 @@ public sealed class RegisterMemberHandler
             return Result.Fail<Guid>("手机号已注册");
 
         // 2. 创建会员
+        // TODO: Implement password hashing and storage when authentication module is ready
+        // Password is accepted in the command but not stored yet - authentication will be handled by OpenIddict
         var member = new Member
         {
             Id = Guid.NewGuid(),
@@ -40,9 +44,8 @@ public sealed class RegisterMemberHandler
             RegisteredAt = DateTimeOffset.UtcNow
         };
 
-        // 3. 持久化
+        // 3. 持久化（[Transactional] 特性会自动调用 SaveChangesAsync）
         session.Store(member);
-        await session.SaveChangesAsync(ct);
 
         // 4. 发布事件
         await bus.PublishAsync(new MemberRegistered(
