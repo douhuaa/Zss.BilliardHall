@@ -1,6 +1,8 @@
 using Marten;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Wolverine;
+using Wolverine.Marten;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -40,12 +42,14 @@ public static class MartenExtensions
                 "Ensure the database is referenced in AppHost and the connection string is correctly configured and injected.");
         }
 
-        builder.Services.AddMarten(options =>
+        var martenConfiguration = builder.Services.AddMarten(options =>
         {
             options.Connection(connectionString);
             options.DatabaseSchemaName = "billiard";
-        })
-        .UseLightweightSessions(); // Use lightweight sessions by default (recommended for most scenarios)
+        });
+        
+        martenConfiguration.UseLightweightSessions(); // Use lightweight sessions by default (recommended for most scenarios)
+        martenConfiguration.IntegrateWithWolverine(); // Integrate with Wolverine for [Transactional] attribute and Outbox support
 
         return builder;
     }
