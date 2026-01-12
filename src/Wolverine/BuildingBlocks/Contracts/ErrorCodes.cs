@@ -33,8 +33,8 @@ public static class ErrorCodes
         public const string AlreadyEnded = "Sessions:AlreadyEnded";
         public const string AlreadyStarted = "Sessions:AlreadyStarted";
         public const string InvalidStatus = "Sessions:InvalidStatus";
-        public const string CannotPause = "Sessions:CannotPause";
-        public const string CannotResume = "Sessions:CannotResume";
+        public const string InvalidPauseStatus = "Sessions:InvalidPauseStatus";
+        public const string InvalidResumeStatus = "Sessions:InvalidResumeStatus";
     }
 
     /// <summary>
