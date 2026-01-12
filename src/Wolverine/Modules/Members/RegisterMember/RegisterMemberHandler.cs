@@ -1,6 +1,5 @@
 using Marten;
 using Microsoft.Extensions.Logging;
-using Wolverine;
 using Wolverine.Attributes;
 using Zss.BilliardHall.BuildingBlocks.Contracts;
 using Zss.BilliardHall.Modules.Members.Events;
@@ -14,10 +13,9 @@ namespace Zss.BilliardHall.Modules.Members.RegisterMember;
 public sealed class RegisterMemberHandler
 {
     [Transactional]
-    public async Task<Result<Guid>> Handle(
+    public async Task<(Result<Guid> Result, MemberRegistered? Event)> Handle(
         RegisterMember command,
         IDocumentSession session,
-        IMessageBus bus,
         ILogger<RegisterMemberHandler> logger,
         CancellationToken ct = default)
     {
@@ -27,7 +25,7 @@ public sealed class RegisterMemberHandler
             .FirstOrDefaultAsync(m => m.Phone == command.Phone, ct);
 
         if (existing != null)
-            return Result.Fail<Guid>("手机号已注册");
+            return (Result.Fail<Guid>("手机号已注册"), null);
 
         // 2. 创建会员
         // TODO: Implement password hashing and storage when authentication module is ready
@@ -47,13 +45,13 @@ public sealed class RegisterMemberHandler
         // 3. 持久化（[Transactional] 特性会自动调用 SaveChangesAsync）
         session.Store(member);
 
-        // 4. 发布事件
-        await bus.PublishAsync(new MemberRegistered(
+        // 4. 返回级联消息（Wolverine 会自动发布）
+        var @event = new MemberRegistered(
             member.Id,
             member.Name,
             member.Phone,
             member.RegisteredAt
-        ));
+        );
 
         logger.LogInformation(
             "会员注册成功: {MemberId}, 手机号: {Phone}",
@@ -61,6 +59,6 @@ public sealed class RegisterMemberHandler
             member.Phone
         );
 
-        return Result.Success(member.Id);
+        return (Result.Success(member.Id), @event);
     }
 }
