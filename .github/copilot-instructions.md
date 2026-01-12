@@ -190,6 +190,7 @@ When auto-generating code, enforce:
 **开发规范**:
 - `doc/06_开发规范/Saga使用指南.md` → Wolverine Saga 完整使用指南（跨模块长事务编排）
 - `doc/06_开发规范/FluentValidation集成指南.md` → FluentValidation 集成完整指南（输入验证最佳实践）
+- `doc/06_开发规范/级联消息与副作用.md` → 级联消息与副作用实践指南（Handler 返回值、IO 分离）
 
 ### 11.1 Saga 使用速查
 
@@ -252,6 +253,70 @@ Add TODO tags:
 // 快速上手：doc/03_系统架构设计/Wolverine快速上手指南.md (场景 1：带验证的 Command)
 ```
 
+### 11.3 级联消息与副作用速查
+
+Handler 应通过返回值驱动消息发布，将外部 IO 封装为副作用，而非在 Handler 中直接执行。
+
+**级联消息（Cascading Messages）**：
+- Handler 返回值自动被 Wolverine 视为需要发布的消息
+- 在原始消息事务提交后自动发送
+- 常见返回类型：单个事件、`(Result, Event?)` tuple、`OutgoingMessages`
+
+**推荐模式**：
+```csharp
+[Transactional]
+public async Task<(Result, BalanceToppedUp?)> Handle(
+    TopUpBalance command,
+    IDocumentSession session,
+    CancellationToken ct)
+{
+    var member = await session.LoadAsync<Member>(command.MemberId, ct);
+    if (member is null) return (Result.NotFound(...), null);
+    
+    member.TopUp(command.Amount);
+    session.Store(member);
+    
+    // Wolverine 自动发布返回的事件
+    return (Result.Success(), new BalanceToppedUp(...));
+}
+```
+
+**副作用（Side Effects）**：
+- 外部 IO（HTTP、短信、文件等）应封装为 `ISideEffect`
+- 存储副作用：`IStorageAction<T>` / `UnitOfWork<T>`
+
+**推荐模式**：
+```csharp
+// 定义副作用
+public class SendWelcomeSms : ISideEffect
+{
+    public async Task ExecuteAsync(ISmsClient smsClient, ...) { }
+}
+
+// Handler 返回副作用
+[Transactional]
+public async Task<(Result, SendWelcomeSms?)> Handle(...)
+{
+    // 业务逻辑
+    return (Result.Success(), new SendWelcomeSms(...));
+}
+```
+
+**核心原则**：
+- Handler 是"决策者"，不是"执行者"
+- 优先使用级联消息而非显式 `PublishAsync`
+- 外部 IO 必须封装为副作用，不在 Handler 中直接调用
+- 副作用类型必须是具体类（非接口）
+
+**详细指南**: 见 `doc/06_开发规范/级联消息与副作用.md`（包含完整示例、测试策略、Code Review 清单）
+
+Add TODO tags:
+```
+// TODO(cascading): 使用返回值级联消息，避免显式 PublishAsync
+// TODO(side-effect): 外部 IO 封装为 ISideEffect
+// 详细文档：doc/06_开发规范/级联消息与副作用.md
+```
+
 Must accompany an Issue reference once created.
 
 ---
@@ -260,6 +325,8 @@ Must accompany an Issue reference once created.
 (✓) Vertical Slice 结构正确（UseCase 文件夹）
 (✓) Handler 使用 [Transactional] 自动事务
 (✓) 跨模块通信通过事件，不直接调用
+(✓) 优先使用级联消息（返回值），避免显式 `PublishAsync`
+(✓) 外部 IO 封装为 ISideEffect，不在 Handler 中直接调用
 (✓) 没有明文/硬编码 Secret
 (✓) Endpoint 只做映射，逻辑在 Handler
 (✓) 日志无敏感泄露，失败路径可追踪
@@ -273,6 +340,8 @@ Must accompany an Issue reference once created.
 (❌) 拒绝：Application/Domain/Infrastructure 分层
 (❌) 拒绝：Repository/UnitOfWork 接口
 (❌) 拒绝：Shared Service 跨模块调用
+(❌) 拒绝：Handler 中显式 PublishAsync（应用级联消息）
+(❌) 拒绝：Handler 中直接调用外部 IO（应封装为 ISideEffect）
 
 ---
 ## 13. English Summary (Condensed)
@@ -281,6 +350,8 @@ Use this section if AI requires English only context:
 - **Enforce Vertical Slice Architecture**: NO traditional layering (Application/Domain/Infrastructure), organize by Use Case folders
 - **Wolverine Handlers**: Handler is the Application Service, use `[Transactional]` for auto-transactions + Outbox
 - **Module Communication**: Use `IMessageBus.PublishAsync()` for events, `InvokeAsync()` for sync calls; NO Shared Services
+- **Cascading Messages**: Prefer return values over explicit `PublishAsync`; Handler returns events as tuple `(Result, Event?)` or `OutgoingMessages`
+- **Side Effects**: Encapsulate external IO (HTTP, SMS, files) as `ISideEffect`; do NOT call external services directly in Handler
 - **Data Access**: Inject `IDocumentSession` (Marten) or `DbContext` (EF Core) directly into Handlers; NO Repository pattern
 - Structured Serilog logging; never log secrets
 - Security: no plaintext credentials, only Authorization Code + PKCE for SPA, use FluentValidation for input validation
@@ -290,7 +361,7 @@ Use this section if AI requires English only context:
 - UTC time for persistence, localization at display layer
 - CancellationToken support for async methods
 - Business exceptions with Result pattern or structured codes (<Area>:<Key>)
-- **Reject**: Creating Application Services, Repositories, UnitOfWork, Shared/Common layers
+- **Reject**: Creating Application Services, Repositories, UnitOfWork, Shared/Common layers, explicit `PublishAsync` in Handlers, direct external IO calls in Handlers
 
 ---
 ## 14. Updating This File / 更新策略
@@ -302,12 +373,13 @@ Use this section if AI requires English only context:
 ---
 ## 15. Version / 版本
 
-Current instructions version: 1.0.0 (Wolverine + Vertical Slice Architecture)
+Current instructions version: 1.1.0 (Wolverine + Vertical Slice Architecture + Cascading Messages & Side Effects)
 
 Change Log (local to this file):
 - 0.1.0: Initial creation with ABP layering rules
 - 0.2.0: Synchronized with 代码风格.md v1.0.0, added UTC/CancellationToken/business exception codes
 - 1.0.0: **Major rewrite for Wolverine + Vertical Slice Architecture** - removed ABP layers, added Wolverine Handler patterns, Marten integration, module communication rules
+- 1.1.0: Added Cascading Messages & Side Effects guidelines (section 11.3) and updated quick checklist with cascading messages and side effects items
 
 
 ---
