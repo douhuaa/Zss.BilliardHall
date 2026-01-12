@@ -24,35 +24,30 @@ public sealed class DeductBalanceHandler
             return (Result.Fail("会员不存在"), null);
 
         // 扣减（会检查余额是否足够）
-        try
-        {
-            var oldBalance = member.Balance;
-            member.Deduct(command.Amount);
+        var oldBalance = member.Balance;
+        var deductResult = member.Deduct(command.Amount);
+        if (deductResult.IsFailure)
+            return (Result.Fail(deductResult.Error), null);
 
-            session.Store(member);
+        session.Store(member);
 
-            // 返回级联消息（Wolverine 会自动发布）
-            var @event = new BalanceDeducted(
-                member.Id,
-                command.Amount,
-                oldBalance,
-                member.Balance,
-                command.Reason,
-                DateTimeOffset.UtcNow
-            );
+        // 返回级联消息（Wolverine 会自动发布）
+        var @event = new BalanceDeducted(
+            member.Id,
+            command.Amount,
+            oldBalance,
+            member.Balance,
+            command.Reason,
+            DateTimeOffset.UtcNow
+        );
 
-            logger.LogInformation(
-                "会员余额扣减成功: {MemberId}, 金额: {Amount:F2}, 原因: {Reason}",
-                member.Id,
-                command.Amount,
-                command.Reason
-            );
+        logger.LogInformation(
+            "会员余额扣减成功: {MemberId}, 金额: {Amount:F2}, 原因: {Reason}",
+            member.Id,
+            command.Amount,
+            command.Reason
+        );
 
-            return (Result.Success(), @event);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return (Result.Fail(ex.Message), null);
-        }
+        return (Result.Success(), @event);
     }
 }

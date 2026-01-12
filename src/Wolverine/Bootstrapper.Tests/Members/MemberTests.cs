@@ -21,14 +21,15 @@ public class MemberTests
         };
 
         // Act
-        member.TopUp(50m);
+        var result = member.TopUp(50m);
 
         // Assert
+        result.IsSuccess.Should().BeTrue();
         member.Balance.Should().Be(150m);
     }
 
     [Fact]
-    public void TopUp_WithZeroAmount_ShouldThrowException()
+    public void TopUp_WithZeroAmount_ShouldReturnFailure()
     {
         // Arrange
         var member = new Member
@@ -38,15 +39,16 @@ public class MemberTests
         };
 
         // Act
-        var act = () => member.TopUp(0m);
+        var result = member.TopUp(0m);
 
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage("充值金额必须大于0");
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be("充值金额必须大于0");
+        member.Balance.Should().Be(100m); // Balance unchanged
     }
 
     [Fact]
-    public void TopUp_WithNegativeAmount_ShouldThrowException()
+    public void TopUp_WithNegativeAmount_ShouldReturnFailure()
     {
         // Arrange
         var member = new Member
@@ -56,11 +58,12 @@ public class MemberTests
         };
 
         // Act
-        var act = () => member.TopUp(-50m);
+        var result = member.TopUp(-50m);
 
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage("充值金额必须大于0");
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be("充值金额必须大于0");
+        member.Balance.Should().Be(100m); // Balance unchanged
     }
 
     [Fact]
@@ -74,14 +77,15 @@ public class MemberTests
         };
 
         // Act
-        member.Deduct(30m);
+        var result = member.Deduct(30m);
 
         // Assert
+        result.IsSuccess.Should().BeTrue();
         member.Balance.Should().Be(70m);
     }
 
     [Fact]
-    public void Deduct_WithInsufficientBalance_ShouldThrowException()
+    public void Deduct_WithInsufficientBalance_ShouldReturnFailure()
     {
         // Arrange
         var member = new Member
@@ -91,15 +95,16 @@ public class MemberTests
         };
 
         // Act
-        var act = () => member.Deduct(150m);
+        var result = member.Deduct(150m);
 
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage("余额不足");
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be("余额不足");
+        member.Balance.Should().Be(100m); // Balance unchanged
     }
 
     [Fact]
-    public void Deduct_WithZeroAmount_ShouldThrowException()
+    public void Deduct_WithZeroAmount_ShouldReturnFailure()
     {
         // Arrange
         var member = new Member
@@ -109,11 +114,12 @@ public class MemberTests
         };
 
         // Act
-        var act = () => member.Deduct(0m);
+        var result = member.Deduct(0m);
 
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage("扣减金额必须大于0");
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be("扣减金额必须大于0");
+        member.Balance.Should().Be(100m); // Balance unchanged
     }
 
     [Fact]
@@ -128,14 +134,15 @@ public class MemberTests
         };
 
         // Act
-        member.AwardPoints(50);
+        var result = member.AwardPoints(50);
 
         // Assert
+        result.IsSuccess.Should().BeTrue();
         member.Points.Should().Be(150);
     }
 
     [Fact]
-    public void AwardPoints_WithZeroPoints_ShouldThrowException()
+    public void AwardPoints_WithZeroPoints_ShouldReturnFailure()
     {
         // Arrange
         var member = new Member
@@ -145,11 +152,12 @@ public class MemberTests
         };
 
         // Act
-        var act = () => member.AwardPoints(0);
+        var result = member.AwardPoints(0);
 
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage("积分必须大于0");
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be("积分必须大于0");
+        member.Points.Should().Be(100); // Points unchanged
     }
 
     [Theory]
@@ -175,9 +183,10 @@ public class MemberTests
         };
 
         // Act
-        member.AwardPoints(totalPoints);
+        var result = member.AwardPoints(totalPoints);
 
         // Assert
+        result.IsSuccess.Should().BeTrue();
         member.Points.Should().Be(totalPoints);
         member.Tier.Should().Be(expectedTier);
     }
@@ -194,9 +203,10 @@ public class MemberTests
         };
 
         // Act - award only a few points (still in Gold range)
-        member.AwardPoints(100);
+        var result = member.AwardPoints(100);
 
         // Assert - tier should remain Gold
+        result.IsSuccess.Should().BeTrue();
         member.Points.Should().Be(5100);
         member.Tier.Should().Be(MemberTier.Gold);
     }
@@ -213,9 +223,10 @@ public class MemberTests
         };
 
         // Act - award enough points to jump to Platinum
-        member.AwardPoints(10000);
+        var result = member.AwardPoints(10000);
 
         // Assert
+        result.IsSuccess.Should().BeTrue();
         member.Points.Should().Be(10000);
         member.Tier.Should().Be(MemberTier.Platinum);
     }

@@ -26,7 +26,9 @@ public sealed class TopUpBalanceHandler
 
         // 2. 充值
         var oldBalance = member.Balance;
-        member.TopUp(command.Amount);
+        var topUpResult = member.TopUp(command.Amount);
+        if (topUpResult.IsFailure)
+            return (Result.Fail(topUpResult.Error), null);
 
         // 3. 持久化（[Transactional] 特性会自动调用 SaveChangesAsync）
         session.Store(member);

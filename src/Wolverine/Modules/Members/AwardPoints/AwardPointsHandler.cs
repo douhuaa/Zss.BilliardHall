@@ -23,32 +23,27 @@ public sealed class AwardPointsHandler
         if (member == null)
             return (Result.Fail("会员不存在"), null);
 
-        try
-        {
-            member.AwardPoints(command.Points);
+        var awardResult = member.AwardPoints(command.Points);
+        if (awardResult.IsFailure)
+            return (Result.Fail(awardResult.Error), null);
 
-            session.Store(member);
+        session.Store(member);
 
-            // 返回级联消息（Wolverine 会自动发布）
-            var @event = new PointsAwarded(
-                member.Id,
-                command.Points,
-                command.Reason,
-                DateTimeOffset.UtcNow
-            );
+        // 返回级联消息（Wolverine 会自动发布）
+        var @event = new PointsAwarded(
+            member.Id,
+            command.Points,
+            command.Reason,
+            DateTimeOffset.UtcNow
+        );
 
-            logger.LogInformation(
-                "积分赠送成功: {MemberId}, 积分: {Points}, 原因: {Reason}",
-                member.Id,
-                command.Points,
-                command.Reason
-            );
+        logger.LogInformation(
+            "积分赠送成功: {MemberId}, 积分: {Points}, 原因: {Reason}",
+            member.Id,
+            command.Points,
+            command.Reason
+        );
 
-            return (Result.Success(), @event);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return (Result.Fail(ex.Message), null);
-        }
+        return (Result.Success(), @event);
     }
 }

@@ -1,3 +1,5 @@
+using Zss.BilliardHall.BuildingBlocks.Contracts;
+
 namespace Zss.BilliardHall.Modules.Members;
 
 /// <summary>
@@ -20,40 +22,43 @@ public class Member
     /// 充值余额
     /// Top up balance
     /// </summary>
-    public void TopUp(decimal amount)
+    public Result TopUp(decimal amount)
     {
         if (amount <= 0)
-            throw new InvalidOperationException("充值金额必须大于0");
+            return Result.Fail("充值金额必须大于0");
 
         Balance += amount;
+        return Result.Success();
     }
 
     /// <summary>
     /// 扣减余额
     /// Deduct balance
     /// </summary>
-    public void Deduct(decimal amount)
+    public Result Deduct(decimal amount)
     {
         if (amount <= 0)
-            throw new InvalidOperationException("扣减金额必须大于0");
+            return Result.Fail("扣减金额必须大于0");
 
         if (Balance < amount)
-            throw new InvalidOperationException("余额不足");
+            return Result.Fail("余额不足");
 
         Balance -= amount;
+        return Result.Success();
     }
 
     /// <summary>
     /// 赠送积分
     /// Award points
     /// </summary>
-    public void AwardPoints(int points)
+    public Result AwardPoints(int points)
     {
         if (points <= 0)
-            throw new InvalidOperationException("积分必须大于0");
+            return Result.Fail("积分必须大于0");
 
         Points += points;
         CheckTierUpgrade();
+        return Result.Success();
     }
 
     /// <summary>
