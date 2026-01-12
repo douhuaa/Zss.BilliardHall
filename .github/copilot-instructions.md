@@ -15,7 +15,7 @@ Backend uses Wolverine + Vertical Slice:
 - **Handler 即 Application Service**：不再需要单独的 Service 层，Handler 是一等公民
 - **跨模块通信**：
   - 同步调用：`IMessageBus.InvokeAsync()`
-  - 异步事件：`IMessageBus.PublishAsync()`  
+  - 异步事件：优先使用级联消息（Handler 返回值），避免显式 `PublishAsync`
   - **禁止**：Shared Service、跨模块直接数据库访问
 - **持久化**：Marten (文档数据库) 或 EF Core，通过 `IDocumentSession` 或 `DbContext` 注入到 Handler
 
@@ -39,7 +39,7 @@ Modules/Members/
 Review Checklist (Vertical Slice):
 - ✅ UseCase 文件夹包含 Command/Handler/Endpoint，不跨文件夹复用
 - ✅ Handler 使用 `[Transactional]` 自动事务，无需手动 SaveChanges
-- ✅ 跨模块通信通过事件（PublishAsync），不直接调用其他模块 Handler
+- ✅ 跨模块通信通过事件（优先级联消息），不直接调用其他模块 Handler
 - ✅ Endpoint 只做映射，不写业务逻辑（逻辑在 Handler）
 - ✅ 聚合根包含业务方法，不是贫血模型
 - ❌ 拒绝：创建 Shared.Core、Common.Services 等共享层
@@ -349,7 +349,7 @@ Must accompany an Issue reference once created.
 Use this section if AI requires English only context:
 - **Enforce Vertical Slice Architecture**: NO traditional layering (Application/Domain/Infrastructure), organize by Use Case folders
 - **Wolverine Handlers**: Handler is the Application Service, use `[Transactional]` for auto-transactions + Outbox
-- **Module Communication**: Use `IMessageBus.PublishAsync()` for events, `InvokeAsync()` for sync calls; NO Shared Services
+- **Module Communication**: Prefer cascading messages (return values) for events; use `InvokeAsync()` for sync calls; NO Shared Services
 - **Cascading Messages**: Prefer return values over explicit `PublishAsync`; Handler returns events as tuple `(Result, Event?)` or `OutgoingMessages`
 - **Side Effects**: Encapsulate external IO (HTTP, SMS, files) as `ISideEffect`; do NOT call external services directly in Handler
 - **Data Access**: Inject `IDocumentSession` (Marten) or `DbContext` (EF Core) directly into Handlers; NO Repository pattern
