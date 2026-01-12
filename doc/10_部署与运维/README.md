@@ -6,7 +6,9 @@ TODO: Docker Compose / Kubernetes 部署架构说明。
 
 ## 10.2 部署流程（CI/CD）
 
-TODO: CI/CD Pipeline、Release 流程示例。
+已完成 GitHub Actions CI 工作流配置，详见 [部署流程.md](部署流程.md)。
+
+TODO: CD (持续部署) Pipeline、Release 流程示例。
 
 ## 10.3 依赖服务
 
