@@ -85,14 +85,14 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         // Create existing member
         using (var session = documentStore.LightweightSession())
         {
-            var existingMember = new Member
-            {
-                Id = Guid.NewGuid(),
-                Phone = "13800138000",
-                Name = "已存在的会员",
-                Tier = MemberTier.Regular,
-                RegisteredAt = DateTimeOffset.UtcNow
-            };
+            var existingMember = Member.CreateInstance(
+                Guid.NewGuid(),
+                "已存在的会员",
+                "13800138000",
+                string.Empty,
+                MemberTier.Regular,
+                registeredAt: DateTimeOffset.UtcNow
+            );
             session.Store(existingMember);
             await session.SaveChangesAsync();
         }
@@ -131,15 +131,17 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         var memberId = Guid.NewGuid();
         using (var session = documentStore.LightweightSession())
         {
-            var member = new Member
-            {
-                Id = memberId,
-                Phone = "13800138001",
-                Name = "测试会员",
-                Balance = 100m,
-                Tier = MemberTier.Regular,
-                RegisteredAt = DateTimeOffset.UtcNow
-            };
+            var member = Member.CreateInstance(
+                memberId,
+                "测试会员",
+                "13800138001",
+                string.Empty,
+                MemberTier.Regular,
+                100m,
+                0,
+                DateTimeOffset.UtcNow
+            );
+
             session.Store(member);
             await session.SaveChangesAsync();
         }
@@ -180,15 +182,16 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         var memberId = Guid.NewGuid();
         using (var session = documentStore.LightweightSession())
         {
-            var member = new Member
-            {
-                Id = memberId,
-                Phone = "13800138002",
-                Name = "测试会员",
-                Balance = 100m,
-                Tier = MemberTier.Regular,
-                RegisteredAt = DateTimeOffset.UtcNow
-            };
+            var member = Member.CreateInstance(
+                memberId,
+                "测试会员",
+                "13800138002",
+                string.Empty,
+                MemberTier.Regular,
+                100m,
+                0,
+                DateTimeOffset.UtcNow
+            );
             session.Store(member);
             await session.SaveChangesAsync();
         }
@@ -229,15 +232,16 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         var memberId = Guid.NewGuid();
         using (var session = documentStore.LightweightSession())
         {
-            var member = new Member
-            {
-                Id = memberId,
-                Phone = "13800138003",
-                Name = "测试会员",
-                Balance = 30m,
-                Tier = MemberTier.Regular,
-                RegisteredAt = DateTimeOffset.UtcNow
-            };
+            var member = Member.CreateInstance(
+                memberId,
+                "测试会员",
+                "13800138003",
+                string.Empty,
+                MemberTier.Regular,
+                30m,
+                0,
+                DateTimeOffset.UtcNow
+            );
             session.Store(member);
             await session.SaveChangesAsync();
         }

@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Zss.BilliardHall.BuildingBlocks.$(MSBuildProjectName)</RootNamespace>
+  </PropertyGroup>
+</Project>

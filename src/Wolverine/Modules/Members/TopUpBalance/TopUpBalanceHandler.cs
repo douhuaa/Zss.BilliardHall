@@ -22,11 +22,22 @@ public sealed class TopUpBalanceHandler
         // 1. 加载会员
         var member = await session.LoadAsync<Member>(command.MemberId, ct);
         if (member == null)
-            return (Result.Fail("会员不存在"), null);
+            return (Result.Fail("会员不存在", "Member.NotFound"), null);
 
-        // 2. 充值
         var oldBalance = member.Balance;
-        member.TopUp(command.Amount);
+
+        // 2. 调用领域方法并检查结果
+        var domainResult = member.TopUp(command.Amount);
+        if (!domainResult.IsSuccess)
+        {
+            var message = domainResult.Error?.Code switch
+            {
+                "Member.InvalidTopUpAmount" => "充值金额必须大于0",
+                _ => "充值失败"
+            };
+
+            return (Result.Fail(message, domainResult.Error?.Code ?? string.Empty), null);
+        }
 
         // 3. 持久化（[Transactional] 特性会自动调用 SaveChangesAsync）
         session.Store(member);

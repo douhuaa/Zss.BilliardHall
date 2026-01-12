@@ -1,5 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>Zss.BilliardHall.Modules.$(MSBuildProjectName)</RootNamespace>
+	</PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Marten" />
     <PackageReference Include="WolverineFx.Http" />
@@ -8,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Core\Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

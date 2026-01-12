@@ -25,6 +25,7 @@
   <Folder Name="/BuildingBlocks/">
     <Project Path="BuildingBlocks/Behaviors/Behaviors.csproj" />
     <Project Path="BuildingBlocks/Contracts/Contracts.csproj" />
+    <Project Path="BuildingBlocks/Core/Core.csproj" Id="a6568aeb-22a1-4280-ba96-a11bc358ce20" />
     <Project Path="BuildingBlocks/Exceptions/Exceptions.csproj" />
   </Folder>
   <Folder Name="/Modules/">

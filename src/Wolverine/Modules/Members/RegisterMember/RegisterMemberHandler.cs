@@ -25,22 +25,13 @@ public sealed class RegisterMemberHandler
             .FirstOrDefaultAsync(m => m.Phone == command.Phone, ct);
 
         if (existing != null)
-            return (Result.Fail<Guid>("手机号已注册"), null);
+            return (Result.Fail<Guid>("手机号已注册", "Member.DuplicatePhone"), null);
 
         // 2. 创建会员
         // TODO: Implement password hashing and storage when authentication module is ready
         // Password is accepted in the command but not stored yet - authentication will be handled by OpenIddict
-        var member = new Member
-        {
-            Id = Guid.NewGuid(),
-            Name = command.Name,
-            Phone = command.Phone,
-            Email = command.Email,
-            Tier = MemberTier.Regular,
-            Balance = 0,
-            Points = 0,
-            RegisteredAt = DateTimeOffset.UtcNow
-        };
+        var member = Member.CreateInstance(command);
+  
 
         // 3. 持久化（[Transactional] 特性会自动调用 SaveChangesAsync）
         session.Store(member);
