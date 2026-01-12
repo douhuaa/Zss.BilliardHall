@@ -153,6 +153,17 @@ src/
 2. **跨模块不可避免**（不能通过消息通信解决）
 3. **没有业务语义**（纯技术设施）
 4. **不会频繁变更**（稳定的契约）
+5. **抽象后修改成本真的降低**（隐含条件，见下方说明）
+
+> ⚠️ **残酷的真相**: "3 个模块使用" ≠ "值得抽象"
+> 
+> 如果 3 个模块都 copy 了同一段**烂设计**，抽取后的结果是：
+> - 谁都不敢改（变成祖宗牌位）
+> - 业务一变，BuildingBlocks 反而成为枷锁
+> 
+> **判断标准**：抽象之后，修改成本是否真的下降？
+> - 如果答案是否定的，哪怕 5 个模块在用，也不要抽
+> - 宁可重复，不要错误的抽象
 
 ❌ **禁止进入的示例**:
 - 只有 1-2 个模块使用的工具类
@@ -199,6 +210,43 @@ internal static class PriceEstimator
 - [ ] 证明无法通过消息通信解决
 - [ ] 确认不包含业务语义
 - [ ] 评估变更频率（每月 < 1 次）
+- [ ] 评估抽象后是否真的降低修改成本
+
+**⚠️ ErrorCodes 的高级陷阱**:
+
+`ErrorCodes` 是最容易被滥用的 BuildingBlocks 组件，因为它**太好用**。
+
+**风险**: 一旦 ErrorCodes 开始承载业务语义，就等于把业务规则偷偷搬进 BuildingBlocks。
+
+**铁律**: ErrorCodes 只允许表达"失败类型"，不允许表达"业务决策原因"
+
+```csharp
+// ✅ 好的：表达失败类型
+ErrorCodes.Tables.NotFound
+ErrorCodes.Tables.InvalidStatus
+ErrorCodes.Tables.Conflict
+ErrorCodes.Tables.Forbidden
+
+// ❌ 危险的：表达业务决策原因
+ErrorCodes.Tables.CannotReserveAtNight      // 业务规则！
+ErrorCodes.Members.MemberLevelTooLow        // 业务规则！
+ErrorCodes.Billing.PromotionExpired         // 业务规则！
+```
+
+**正确做法**: 业务决策相关的错误码必须在模块内定义
+
+```csharp
+// Modules/Tables/ErrorCodes.cs (模块内部)
+internal static class TableErrorCodes
+{
+    public const string CannotReserveAtNight = "Tables:CannotReserveAtNight";
+}
+```
+
+**防护建议**:
+- Code Review 时严格审查 ErrorCodes 新增项
+- 问自己：这是"技术失败"还是"业务决策"？
+- 即使字符串重复，也认了（重复好过错误的抽象）
 
 ### 2.4 事件分类与边界管理 ⚠️
 
@@ -240,6 +288,49 @@ Module Event (跨模块)
     ↓ 需要通知外部服务
 Integration Event (跨服务)
 ```
+
+**⚠️ Module Event 的特殊风险**:
+
+> **现实真相**: Module Event 是最容易被"随便用"的事件层级
+
+原因：
+- 不用管版本
+- 不用管外部系统
+- "反正都在一个进程里"
+
+结果：
+- A 模块偷偷监听 B 的内部演进事件
+- B 模块一改，A 爆炸
+
+**强制要求**: Module Event 必须被显式声明为"对外事件"
+
+**推荐做法**:
+
+1. **文件夹命名区分**:
+```text
+Modules/Sessions/
+├── Events/                    # 内部事件（Domain Event）
+│   └── SessionStateChanged.cs
+└── PublicEvents/              # 对外事件（Module Event）
+    ├── SessionStarted.cs
+    └── SessionEnded.cs
+```
+
+2. **或使用注释/Attribute 标记**:
+```csharp
+/// <summary>
+/// 会话开始事件（Module Event - 对外契约）
+/// </summary>
+/// <remarks>
+/// 消费者：
+/// - Billing 模块（计费开始）
+/// - Devices 模块（设备控制）
+/// 修改此事件需通知所有消费方
+/// </remarks>
+public sealed record SessionStarted(...);
+```
+
+**目的**: 让作者在创建时意识到——这是契约，不是内部玩具
 
 **反模式与风险**:
 
@@ -311,6 +402,44 @@ Integration Event 修改
   → 影响范围：所有服务
   → 风险等级：高
   → 审批要求：版本升级 + 兼容性保证
+  
+**⚠️ Integration Event 不可修改铁律**:
+
+> **一旦发布，视为"只增不改"**
+
+现实规则：
+- ❌ **不改**字段含义
+- ❌ **不删**字段
+- ✅ **只能加**字段（可选）
+- ⚠️ **老字段哪怕废弃也要留**
+
+否则后续会反噬：
+- Kafka / RabbitMQ 历史消息
+- Outbox 重放
+- 跨服务版本不一致
+- 回滚困难
+
+**正确的演进方式**:
+```csharp
+// V1 - 初始版本
+public sealed record PaymentCompletedIntegrationEvent(
+    Guid PaymentId,
+    decimal Amount
+) : IIntegrationEvent;
+
+// V2 - 新增字段（向后兼容）
+public sealed record PaymentCompletedIntegrationEvent(
+    Guid PaymentId,
+    decimal Amount,
+    string? Currency = "CNY"  // 新增可选字段
+) : IIntegrationEvent;
+
+// ❌ 错误：删除或修改字段含义
+public sealed record PaymentCompletedIntegrationEvent(
+    Guid PaymentId,
+    decimal Amount  // 改为含税金额 - 破坏兼容性！
+) : IIntegrationEvent;
+```
 ```
 
 **检查清单**:
@@ -701,6 +830,8 @@ public sealed class TableReservedHandler
 ## 五、Saga（跨步骤业务流程）
 
 > **⚠️ 警告**: Saga 是重武器，不是常规武器！误用会导致"状态机地狱"
+
+> **💡 心理刹车**: 如果你在犹豫要不要用 Saga，答案通常是：**不要**
 
 ### 5.1 何时使用 Saga（收紧标准）
 
@@ -1431,14 +1562,21 @@ public class MemberRegisteredHandler
 
 > **核心原则**: 行数限制不是为了代码好看，是为了防止业务逻辑失控
 
+> **认知负债真相**: Handler 超行数，本质上是"认知负债"，不是代码问题
+
 **严格的三级行数限制**:
 
-| 行数范围 | 处理策略 | 严重程度 |
-|---------|---------|---------|
-| ≤ 40 行 | ✅ 通过审查 | 正常 |
-| 41-60 行 | ⚠️ Code Review 重点检查 | 警告 |
-| 61-80 行 | ❌ 禁止合并（除非有充分理由） | 阻断 |
-| > 80 行 | 🚨 架构问题，必须重构 | 严重 |
+| 行数范围 | 处理策略 | 严重程度 | 认知状态 |
+|---------|---------|---------|---------|
+| ≤ 40 行 | ✅ 通过审查 | 正常 | 业务语义清晰 |
+| 41-60 行 | ⚠️ Code Review 重点检查 | 警告 | **作者已经 hold 不住完整业务语义** |
+| 61-80 行 | ❌ 禁止合并（除非有充分理由） | 阻断 | **这个人已经在靠意志力写代码** |
+| > 80 行 | 🚨 架构问题，必须重构 | 严重 | 必须强制拆分 |
+
+**现实判断标准**:
+- Handler > 60 行 → 作者无法在脑海中维护完整业务流程
+- Handler > 80 行 → 编码依靠毅力而非理解
+- 这时候再讨论领域服务/Saga/重构已经晚了，**必须强制拆**
 
 **行数计算规则**:
 - 只计算 Handler 方法内的有效代码行
@@ -1871,7 +2009,94 @@ public class SessionSummaryView
 
 ---
 
-## 十一、关键要点速查表
+## 十一、何时可以打破这些规则 ⚠️
+
+> **前瞻性说明**: 所有铁律都有一个问题——新手会把规则当信仰，老手需要知道何时叛教
+
+### 11.1 规则不是绝对真理
+
+本文档的规则设计用于：
+- 防止架构腐烂
+- 降低认知负担
+- 保证长期可维护性
+
+但它们**不是为了制造教条**。
+
+### 11.2 可以破例的场景（示例）
+
+**场景 1：小模块（< 5 个 UseCase）是否一定要 Module Marker？**
+
+- ❌ 教条：必须实现，否则不规范
+- ✅ 务实：如果模块确实很小且不会扩展，可以暂缓
+- ⚠️ 但必须：在文档中说明原因
+
+**场景 2：内部工具模块要不要 Vertical Slice？**
+
+- ❌ 教条：必须垂直切片，否则不符合架构
+- ✅ 务实：内部工具（如数据迁移、管理脚本）可以更灵活
+- ⚠️ 但必须：与业务模块明确隔离
+
+**场景 3：管理后台是否可以放松行数限制？**
+
+- ❌ 教条：后台也必须 40 行以内
+- ✅ 务实：CRUD 密集的后台可以放宽到 60 行
+- ⚠️ 但必须：不能放松到 100+ 行（认知崩溃阈值）
+
+**场景 4：原型阶段是否需要严格遵守？**
+
+- ❌ 教条：原型也要完全合规
+- ✅ 务实：原型可以快速验证，但需要在正式开发前重构
+- ⚠️ 但必须：明确标记为"原型代码"，设定重构 deadline
+
+### 11.3 破例的铁律
+
+**可以破例，但必须**:
+
+1. **写清楚理由**（在代码注释或文档中）
+2. **评估影响范围**（只影响局部 vs 影响架构）
+3. **设定归还债务的时间**（技术债必须有还款计划）
+4. **团队达成共识**（不能个人私自决定）
+
+**示例**:
+```csharp
+// ⚠️ 架构破例说明
+// 原因：此模块为临时数据迁移工具，生命周期 < 1 个月
+// 破例内容：不实现 IWolverineModule，不使用垂直切片
+// 归还计划：迁移完成后删除此模块
+// 批准人：@架构组 2026-01-12
+namespace Zss.BilliardHall.Tools.DataMigration;
+```
+
+### 11.4 绝对不能破例的红线
+
+以下规则**无论如何都不能破**:
+
+- ❌ 在 BuildingBlocks 中放业务规则
+- ❌ 跨服务使用 InvokeAsync
+- ❌ 创建 Application/Domain/Infrastructure 分层
+- ❌ 创建 Shared Service 跨模块直接调用
+- ❌ Integration Event 破坏兼容性
+
+这些是"架构的生命线"，一旦破例，架构会快速腐烂。
+
+### 11.5 平衡原则
+
+**终极判断标准**:
+
+> 破例之后，是否让**三年后的团队**更难维护？
+
+- 如果答案是"是" → 不能破例
+- 如果答案是"不会" → 可以评估破例
+- 如果答案是"不确定" → 默认不破例
+
+**记住**: 
+- 架构规范的目的是避免"全盘重写"
+- 不是为了写"优雅代码"
+- 也不是为了炫技
+
+---
+
+## 十二、关键要点速查表
 
 ### 核心架构原则
 
@@ -1967,7 +2192,7 @@ public class SessionSummaryView
 
 ---
 
-## 十二、参考资源
+## 十三、参考资源
 
 ### 官方文档
 - [Wolverine Documentation](https://wolverine.netlify.app/)
@@ -1990,15 +2215,17 @@ public class SessionSummaryView
 
 ---
 
-## 十三、版本历史
+## 十四、版本历史
 
 | 版本 | 日期 | 变更说明 |
 |------|------|----------|
 | 1.0.0 | 2024-01-15 | 初始版本，完整蓝图 |
 | 1.1.0 | 2026-01-12 | **重大强化**：添加 4 大隐藏风险缓解措施和 3 大架构升级建议<br/>- ⚠️ 事件分类边界管理（Domain/Module/Integration）<br/>- ⚠️ 收紧 Saga 使用标准（3 条铁律）<br/>- ⚠️ Result<T> 错误码支持（防止错误模型失控）<br/>- ⚠️ BuildingBlocks 防污染铁律（3 模块规则）<br/>- 🔧 显式 Module Marker 设计<br/>- 🔧 禁止跨进程同步命令（InvokeAsync 限制）<br/>- 🔧 Handler 行数限制团队规范（40/60/80）<br/>- 📝 关键要点速查表<br/>- 📝 Code Review 检查清单 |
+| 1.2.0 | 2026-01-12 | **架构师反馈强化**：基于资深架构师深度评审，加强防护栏<br/>- 🛡️ BuildingBlocks 第 5 条隐含规则（抽象后修改成本必须降低）<br/>- 🛡️ ErrorCodes 高级陷阱警告（禁止承载业务语义）<br/>- 🛡️ Module Event 显式声明要求（PublicEvents 文件夹或注释标记）<br/>- 🛡️ Integration Event 不可修改铁律强化（只增不改，包含演进示例）<br/>- 💡 Saga 心理刹车（犹豫时默认不用）<br/>- 💡 Handler 认知负债说明（> 60 行 = 认知崩溃）<br/>- 📖 新增第十一章：何时可以打破这些规则<br/>- 📖 破例铁律、红线清单、平衡原则 |
 
 ---
 
 **最后更新**: 2026-01-12  
 **负责人**: 架构团队  
-**审核状态**: ✅ 已审核
+**审核状态**: ✅ 已审核  
+**社区反馈**: 已整合资深架构师深度评审意见
