@@ -56,7 +56,7 @@ public static class ErrorCodes
         public const string NotFound = "Payments:NotFound";
         public const string InvalidStatus = "Payments:InvalidStatus";
         public const string PaymentFailed = "Payments:PaymentFailed";
-        public const string RefundNotAllowed = "Payments:RefundNotAllowed";
+        public const string RefundFailed = "Payments:RefundFailed";
         public const string AmountMismatch = "Payments:AmountMismatch";
     }
 
