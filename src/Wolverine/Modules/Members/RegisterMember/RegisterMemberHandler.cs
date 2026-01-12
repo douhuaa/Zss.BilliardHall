@@ -46,6 +46,8 @@ public sealed class RegisterMemberHandler
         session.Store(member);
 
         // 4. 返回级联消息（Wolverine 会自动发布）
+        // TODO(correlation): 后续可从 HTTP Context / IMessageContext 获取请求级 CorrelationId
+        // 当前使用 MemberId 作为 CorrelationId（注册场景）
         var @event = new MemberRegistered(
             member.Id,
             member.Name,

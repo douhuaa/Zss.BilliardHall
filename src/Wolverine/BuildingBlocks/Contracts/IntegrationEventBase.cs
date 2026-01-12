@@ -29,8 +29,12 @@ public abstract record IntegrationEventBase : IIntegrationEvent
     /// Constructor: automatically sets event ID and occurred time
     /// </summary>
     /// <param name="correlationId">关联 ID，用于跟踪业务流程</param>
+    /// <exception cref="ArgumentException">当 correlationId 为空时抛出</exception>
     protected IntegrationEventBase(Guid correlationId)
     {
+        if (correlationId == Guid.Empty)
+            throw new ArgumentException("CorrelationId 不能为空", nameof(correlationId));
+
         CorrelationId = correlationId;
         OccurredAt = DateTimeOffset.UtcNow;
     }

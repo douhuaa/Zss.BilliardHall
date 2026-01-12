@@ -34,6 +34,7 @@ public sealed class TopUpBalanceHandler
         session.Store(member);
 
         // 4. 返回级联消息（Wolverine 会自动发布）
+        // TODO(correlation): 后续可从 HTTP Context / IMessageContext 获取请求级 CorrelationId
         var @event = new BalanceToppedUp(
             member.Id,
             command.Amount,

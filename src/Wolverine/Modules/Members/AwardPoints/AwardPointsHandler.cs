@@ -30,6 +30,7 @@ public sealed class AwardPointsHandler
         session.Store(member);
 
         // 返回级联消息（Wolverine 会自动发布）
+        // TODO(correlation): 后续可从 HTTP Context / IMessageContext 获取请求级 CorrelationId
         var @event = new PointsAwarded(
             member.Id,
             command.Points,
