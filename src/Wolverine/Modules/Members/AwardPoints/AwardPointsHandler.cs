@@ -34,7 +34,8 @@ public sealed class AwardPointsHandler
             member.Id,
             command.Points,
             command.Reason,
-            DateTimeOffset.UtcNow
+            DateTimeOffset.UtcNow,
+            command.MemberId  // 使用 MemberId 作为 CorrelationId
         );
 
         logger.LogInformation(

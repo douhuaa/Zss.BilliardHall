@@ -50,7 +50,8 @@ public sealed class RegisterMemberHandler
             member.Id,
             member.Name,
             member.Phone,
-            member.RegisteredAt
+            member.RegisteredAt,
+            member.Id  // 使用 MemberId 作为 CorrelationId（注册场景）
         );
 
         logger.LogInformation(

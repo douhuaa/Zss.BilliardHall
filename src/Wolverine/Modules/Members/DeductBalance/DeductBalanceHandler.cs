@@ -38,7 +38,8 @@ public sealed class DeductBalanceHandler
             oldBalance,
             member.Balance,
             command.Reason,
-            DateTimeOffset.UtcNow
+            DateTimeOffset.UtcNow,
+            command.MemberId  // 使用 MemberId 作为 CorrelationId
         );
 
         logger.LogInformation(

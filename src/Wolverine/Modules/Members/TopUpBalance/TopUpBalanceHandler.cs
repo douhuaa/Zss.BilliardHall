@@ -39,7 +39,8 @@ public sealed class TopUpBalanceHandler
             command.Amount,
             oldBalance,
             member.Balance,
-            DateTimeOffset.UtcNow
+            DateTimeOffset.UtcNow,
+            command.MemberId  // 使用 MemberId 作为 CorrelationId
         );
 
         logger.LogInformation(
