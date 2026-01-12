@@ -55,9 +55,9 @@ public sealed class RegisterMemberHandler
         );
 
         logger.LogInformation(
-            "会员注册成功: {MemberId}, 手机号: {Phone}",
+            "会员注册成功: {MemberId}, 手机号: {MaskedPhone}",
             member.Id,
-            member.Phone
+            PhoneMasker.Mask(member.Phone)
         );
 
         return (Result.Success(member.Id), @event);
