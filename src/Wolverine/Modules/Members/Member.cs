@@ -198,7 +198,7 @@ public class Member : IFullAuditedEntity
     public void UpdateAuditInfo(string? userId = null)
     {
         UpdatedAt = DateTimeOffset.UtcNow;
-        if (userId != null)
+        if (!string.IsNullOrEmpty(userId))
         {
             UpdatedBy = userId;
         }
