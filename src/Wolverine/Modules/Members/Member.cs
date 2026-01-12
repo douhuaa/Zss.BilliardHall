@@ -7,7 +7,7 @@ namespace Zss.BilliardHall.Modules.Members;
 /// 会员聚合根
 /// Member aggregate root
 /// </summary>
-public class Member
+public class Member : IFullAuditedEntity
 {
     public Guid Id { get; private set; }
     public string Name { get; private set; } = string.Empty;
@@ -21,6 +21,12 @@ public class Member
     public DateTimeOffset RegisteredAt { get; private set; }
     public DateTimeOffset? LastActiveAt { get; private set; }
 
+    // 审计字段 (Audit Fields)
+    public DateTimeOffset CreatedAt { get; private set; }
+    public DateTimeOffset? UpdatedAt { get; private set; }
+    public string? CreatedBy { get; private set; }
+    public string? UpdatedBy { get; private set; }
+
     private Member() { }
     [JsonConstructor] // 显式告诉 System.Text.Json 用这个构造函数
     private Member(
@@ -32,7 +38,11 @@ public class Member
         decimal balance,
         int points,
         DateTimeOffset registeredAt,
-        DateTimeOffset? lastActiveAt)
+        DateTimeOffset? lastActiveAt,
+        DateTimeOffset createdAt,
+        DateTimeOffset? updatedAt,
+        string? createdBy,
+        string? updatedBy)
     {
         Id = id;
         Name = name;
@@ -43,14 +53,58 @@ public class Member
         Points = points;
         RegisteredAt = registeredAt == default ? DateTimeOffset.UtcNow : registeredAt;
         LastActiveAt = lastActiveAt;
+        CreatedAt = createdAt == default ? DateTimeOffset.UtcNow : createdAt;
+        UpdatedAt = updatedAt;
+        CreatedBy = createdBy;
+        UpdatedBy = updatedBy;
     }
     internal static Member CreateInstance(RegisterMember.RegisterMember command)
     {
-        return new Member { Id = Guid.CreateVersion7(),Name = command.Name, Phone = command.Phone, Email = command.Email, Tier = MemberTier.Regular, Balance = 0, Points = 0, RegisteredAt = DateTimeOffset.UtcNow };
+        var now = DateTimeOffset.UtcNow;
+        return new Member 
+        { 
+            Id = Guid.CreateVersion7(),
+            Name = command.Name, 
+            Phone = command.Phone, 
+            Email = command.Email, 
+            Tier = MemberTier.Regular, 
+            Balance = 0, 
+            Points = 0, 
+            RegisteredAt = now,
+            CreatedAt = now
+        };
     }
-    public static Member CreateInstance(Guid id, string name, string phone, string email, MemberTier tier = MemberTier.Regular, decimal balance=0, int points=0, DateTimeOffset registeredAt = default, DateTimeOffset? lastActiveAt = null)
+    public static Member CreateInstance(
+        Guid id, 
+        string name, 
+        string phone, 
+        string email, 
+        MemberTier tier = MemberTier.Regular, 
+        decimal balance = 0, 
+        int points = 0, 
+        DateTimeOffset registeredAt = default, 
+        DateTimeOffset? lastActiveAt = null,
+        DateTimeOffset createdAt = default,
+        DateTimeOffset? updatedAt = null,
+        string? createdBy = null,
+        string? updatedBy = null)
     {
-        return new Member { Id = id, Name = name, Phone = phone, Email = email, Tier = tier, Balance = balance, Points = points, RegisteredAt = registeredAt, LastActiveAt = lastActiveAt };
+        return new Member 
+        { 
+            Id = id, 
+            Name = name, 
+            Phone = phone, 
+            Email = email, 
+            Tier = tier, 
+            Balance = balance, 
+            Points = points, 
+            RegisteredAt = registeredAt == default ? DateTimeOffset.UtcNow : registeredAt, 
+            LastActiveAt = lastActiveAt,
+            CreatedAt = createdAt == default ? DateTimeOffset.UtcNow : createdAt,
+            UpdatedAt = updatedAt,
+            CreatedBy = createdBy,
+            UpdatedBy = updatedBy
+        };
     }
     // EF
 
@@ -64,6 +118,7 @@ public class Member
             return DomainResult.Fail(MemberErrorCodes.InvalidTopUpAmount);
 
         Balance += amount;
+        UpdateAuditInfo();
         return DomainResult.Success();
     }
 
@@ -81,6 +136,7 @@ public class Member
 
         Balance -= amount;
         Touch();
+        UpdateAuditInfo();
 
         return DomainResult.Success();
     }
@@ -98,6 +154,7 @@ public class Member
 
         Points += points;
         CheckTierUpgrade();
+        UpdateAuditInfo();
 
         if (Tier != previousTier)
         {   // TODO(cascading): Emit MemberTierUpgraded event via Wolverine cascading messages
@@ -131,6 +188,30 @@ public class Member
     private void Touch()
     {
         LastActiveAt = DateTimeOffset.UtcNow;
+    }
+
+    /// <summary>
+    /// 更新审计信息
+    /// Update audit information
+    /// </summary>
+    /// <param name="userId">当前用户ID（可选）</param>
+    public void UpdateAuditInfo(string? userId = null)
+    {
+        UpdatedAt = DateTimeOffset.UtcNow;
+        if (userId != null)
+        {
+            UpdatedBy = userId;
+        }
+    }
+
+    /// <summary>
+    /// 设置创建人信息（在创建时使用）
+    /// Set creator information (used during creation)
+    /// </summary>
+    /// <param name="userId">创建人ID</param>
+    public void SetCreator(string userId)
+    {
+        CreatedBy = userId;
     }
 }
 

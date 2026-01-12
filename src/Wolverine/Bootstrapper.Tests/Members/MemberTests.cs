@@ -15,6 +15,7 @@ public class MemberTests
         int points = 0,
         MemberTier tier = MemberTier.Regular)
     {
+        var now = DateTimeOffset.UtcNow;
         return Member.CreateInstance(
             Guid.NewGuid(),
             "测试会员",
@@ -23,7 +24,9 @@ public class MemberTests
             tier,
             balance,
             points,
-            DateTimeOffset.UtcNow
+            registeredAt: now,
+            lastActiveAt: null,
+            createdAt: now
         );
     }
 
@@ -203,4 +206,104 @@ public class MemberTests
         member.Points.Should().Be(10000);
         member.Tier.Should().Be(MemberTier.Platinum);
     }
+
+    #region Audit Tests
+
+    [Fact]
+    public void CreateInstance_ShouldSetCreatedAt()
+    {
+        // Arrange & Act
+        var beforeCreate = DateTimeOffset.UtcNow;
+        var member = CreateDefaultMember();
+        var afterCreate = DateTimeOffset.UtcNow;
+
+        // Assert
+        member.CreatedAt.Should().BeOnOrAfter(beforeCreate);
+        member.CreatedAt.Should().BeOnOrBefore(afterCreate);
+    }
+
+    [Fact]
+    public void TopUp_ShouldUpdateAuditInfo()
+    {
+        // Arrange
+        var member = CreateDefaultMember(balance: 100m);
+        var beforeUpdate = DateTimeOffset.UtcNow;
+
+        // Act
+        var result = member.TopUp(50m);
+        var afterUpdate = DateTimeOffset.UtcNow;
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        member.UpdatedAt.Should().NotBeNull();
+        member.UpdatedAt.Should().BeOnOrAfter(beforeUpdate);
+        member.UpdatedAt.Should().BeOnOrBefore(afterUpdate);
+    }
+
+    [Fact]
+    public void Deduct_ShouldUpdateAuditInfo()
+    {
+        // Arrange
+        var member = CreateDefaultMember(balance: 100m);
+        var beforeUpdate = DateTimeOffset.UtcNow;
+
+        // Act
+        var result = member.Deduct(30m);
+        var afterUpdate = DateTimeOffset.UtcNow;
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        member.UpdatedAt.Should().NotBeNull();
+        member.UpdatedAt.Should().BeOnOrAfter(beforeUpdate);
+        member.UpdatedAt.Should().BeOnOrBefore(afterUpdate);
+    }
+
+    [Fact]
+    public void AwardPoints_ShouldUpdateAuditInfo()
+    {
+        // Arrange
+        var member = CreateDefaultMember(points: 100);
+        var beforeUpdate = DateTimeOffset.UtcNow;
+
+        // Act
+        var result = member.AwardPoints(50);
+        var afterUpdate = DateTimeOffset.UtcNow;
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        member.UpdatedAt.Should().NotBeNull();
+        member.UpdatedAt.Should().BeOnOrAfter(beforeUpdate);
+        member.UpdatedAt.Should().BeOnOrBefore(afterUpdate);
+    }
+
+    [Fact]
+    public void UpdateAuditInfo_WithUserId_ShouldSetUpdatedBy()
+    {
+        // Arrange
+        var member = CreateDefaultMember();
+        const string userId = "user-123";
+
+        // Act
+        member.UpdateAuditInfo(userId);
+
+        // Assert
+        member.UpdatedAt.Should().NotBeNull();
+        member.UpdatedBy.Should().Be(userId);
+    }
+
+    [Fact]
+    public void SetCreator_ShouldSetCreatedBy()
+    {
+        // Arrange
+        var member = CreateDefaultMember();
+        const string userId = "creator-456";
+
+        // Act
+        member.SetCreator(userId);
+
+        // Assert
+        member.CreatedBy.Should().Be(userId);
+    }
+
+    #endregion
 }
