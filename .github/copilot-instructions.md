@@ -14,10 +14,16 @@ Backend uses Wolverine + Vertical Slice:
 - **模块边界**：按业务能力划分模块（Members/Sessions/Billing/Payments/Devices），不是技术层
 - **Handler 即 Application Service**：不再需要单独的 Service 层，Handler 是一等公民
 - **跨模块通信**：
-  - 同步调用：`IMessageBus.InvokeAsync()`
+  - 同步调用：`IMessageBus.InvokeAsync()`（**仅限进程内模块**）
   - 异步事件：优先使用级联消息（Handler 返回值），避免显式 `PublishAsync`
-  - **禁止**：Shared Service、跨模块直接数据库访问
+  - **禁止**：Shared Service、跨模块直接数据库访问、跨服务使用 InvokeAsync
 - **持久化**：Marten (文档数据库) 或 EF Core，通过 `IDocumentSession` 或 `DbContext` 注入到 Handler
+- **BuildingBlocks 准入**：必须同时满足 5 条（3+ 模块真实使用、跨模块不可避免、无业务语义、稳定契约、**抽象后修改成本真的降低**）
+
+> **Copilot 使用指引**：
+> - 用户请求将代码移到 BuildingBlocks 时，必须逐条验证 5 个准入条件
+> - 如果不满足任一条件，建议保留在模块内或通过消息通信解决
+> - 特别注意：如果代码包含业务语义（如特定业务规则、领域逻辑），即使被多个模块使用，也**禁止**放入 BuildingBlocks
 
 **Vertical Slice 标准结构**：
 ```
@@ -40,11 +46,20 @@ Review Checklist (Vertical Slice):
 - ✅ UseCase 文件夹包含 Command/Handler/Endpoint，不跨文件夹复用
 - ✅ Handler 使用 `[Transactional]` 自动事务，无需手动 SaveChanges
 - ✅ 跨模块通信通过事件（优先级联消息），不直接调用其他模块 Handler
+- ✅ 跨服务通信使用事件或 HTTP，**禁止**跨服务使用 InvokeAsync
 - ✅ Endpoint 只做映射，不写业务逻辑（逻辑在 Handler）
 - ✅ 聚合根包含业务方法，不是贫血模型
+- ✅ Handler 行数 ≤ 40 行（41-60 需 Review，> 60 禁止合并）
 - ❌ 拒绝：创建 Shared.Core、Common.Services 等共享层
 - ❌ 拒绝：Application/Domain/Infrastructure 分层结构
 - ❌ 拒绝：Repository 接口（直接使用 IDocumentSession/DbContext）
+- ❌ 拒绝：BuildingBlocks 中放业务规则（如 ErrorCodes.Tables.CannotReserveAtNight）
+
+> **Copilot 使用指引**：
+> - 生成 Handler 时，目标行数应在 30-40 行之间
+> - 如果 Handler 超过 40 行，建议拆分：提取领域服务、使用 Saga 编排、或拆分成多个 Handler
+> - 不要建议创建 Service 层、Repository 接口或传统分层结构
+> - 跨服务通信时，**禁止**使用 `IMessageBus.InvokeAsync()`，应建议使用事件发布或 HTTP API
 
 ---
 ## 2. Naming & Style / 命名与风格
@@ -88,7 +103,14 @@ When reviewing changes, ensure:
 - 防止 N+1：查询使用 Include/Select 投影而不是多次循环查询
 - 不在日志或异常消息中输出个人隐私数据
 - 业务异常使用统一 Code 格式：`<Area>:<Key>`（如 `Billing:TableUnavailable`）
+  - ⚠️ **ErrorCodes 陷阱**：ErrorCodes 只表达"失败类型"（NotFound/InvalidStatus），不表达"业务决策原因"（CannotReserveAtNight）
+  - 业务决策相关错误码必须在模块内定义，不放入 BuildingBlocks
 - Handler 输入验证：使用 `UseFluentValidation()` 中间件或 Result 模式返回错误
+
+> **Copilot 使用指引（ErrorCodes）**：
+> - 建议 ErrorCodes 时，只能使用表达"技术失败"的类别：NotFound、InvalidStatus、Conflict、Forbidden、ValidationFailed
+> - 如果用户请求的错误码看起来更像业务规则（如"不能在夜间预订"、"会员等级不足"），**必须**建议放到模块内而不是 BuildingBlocks/ErrorCodes
+> - 示例：`ErrorCodes.Tables.NotFound` ✅  vs  `ErrorCodes.Tables.CannotReserveAtNight` ❌（后者是业务决策）
 
 ---
 ## 5. PR Scope & Structure / PR 范围与结构
@@ -173,216 +195,117 @@ When auto-generating code, enforce:
 - 不自动引入未批准的加密/安全库
 
 ---
-## 11. Architecture Documentation / 架构文档参考
+## 11. Key Patterns / 关键模式
 
-请参考以下核心文档：
+> 详细文档见 `docs/03_系统架构设计/Wolverine模块化架构蓝图.md` 和 `docs/06_开发规范/`
 
-**架构设计**:
-- `docs/03_系统架构设计/Wolverine模块化架构蓝图.md` → 完整架构实施指南（29KB）
-- `docs/03_系统架构设计/Wolverine快速上手指南.md` → 5分钟上手教程
-- `docs/03_系统架构设计/系统模块划分.md` → 6个核心模块定义
+**Saga 使用（跨模块长事务）**:
+- ⚠️ **心理刹车**: 犹豫时默认不用 Saga（重武器，误用会导致状态机地狱）
+- 必须**全部满足** 3 条：跨模块 + 跨时间（> 1分钟）+ 需补偿
+- 详见 `docs/06_开发规范/Saga使用指南.md`
 
-**模块示例**:
-- `docs/04_模块设计/会员管理模块.md` → Members 模块完整示例（v3.0.0）
-- `docs/04_模块设计/打球时段模块.md` → Sessions 模块 + Saga 示例（v2.0.0）
-- `docs/04_模块设计/计费管理模块.md` → Billing 模块示例（v2.0.0）
+> **Copilot 使用指引（Saga）**：
+> - 用户请求编排跨模块流程时，首先询问：是否跨时间（> 1分钟）、是否需要补偿
+> - 如果不满足 3 条铁律中的任一条，建议使用普通 Handler + 事件，不要建议 Saga
+> - 默认立场：**不建议使用 Saga**，除非用户明确说明满足所有 3 条铁律
 
-**开发规范**:
-- `docs/06_开发规范/Saga使用指南.md` → Wolverine Saga 完整使用指南（跨模块长事务编排）
-- `docs/06_开发规范/FluentValidation集成指南.md` → FluentValidation 集成完整指南（输入验证最佳实践）
-- `docs/06_开发规范/级联消息与副作用.md` → 级联消息与副作用实践指南（Handler 返回值、IO 分离）
+**FluentValidation（输入验证）**:
+- 所有外部输入 Command/Query 都应有 Validator
+- Validator 做简单验证（非空、格式），Handler 做业务规则
+- 详见 `docs/06_开发规范/FluentValidation集成指南.md`
 
-### 11.1 Saga 使用速查
+**级联消息与副作用**:
+- 优先用返回值级联消息，避免显式 `PublishAsync`
+- 外部 IO 封装为 `ISideEffect`，不在 Handler 中直接调用
+- Handler 是"决策者"不是"执行者"
+- 详见 `docs/06_开发规范/级联消息与副作用.md`
 
-当业务流程跨越多个步骤、需要维护状态或涉及补偿逻辑时，使用 Wolverine Saga。
+---
+## 12. Event Classification & Boundaries / 事件分类与边界
 
-**快速判定**：
-- ✅ 跨模块的长时间运行业务流程（如订单→支付→发货）
-- ✅ 需要等待外部事件的流程（如支付回调）
-- ✅ 需要补偿/回滚的分布式事务
+| 事件类型 | 范围 | 存放位置 | 可修改性 |
+|---------|------|---------|---------|
+| **Domain Event** | 模块内 | `Modules/{Module}/Events/` | ✅ 可自由修改 |
+| **Module Event** | 跨模块 | `Modules/{Module}/PublicEvents/` | ⚠️ 需考虑消费者 |
+| **Integration Event** | 跨服务 | `BuildingBlocks/Contracts/` | ❌ 只增不改 |
 
-**核心原则**：
-- Saga 只存储必要的状态标识（ID、状态枚举）
-- 使用 `Complete()` 显式结束 Saga
-- Handler 方法保持幂等性
-- 考虑超时处理
+**Module Event**: 必须显式声明（`PublicEvents/` 文件夹或注释标记消费者）  
+**Integration Event**: ❌ 不改字段含义、不删字段，✅ 只能加可选字段
 
-**详细指南**: 见 `docs/06_开发规范/Saga使用指南.md`（包含 TableSessionSaga 完整示例、配置、最佳实践）
-
-Add TODO tags:
-```
-// TODO(wolverine): 若需添加 Saga，参考 Saga 使用指南
-// 详细文档：docs/06_开发规范/Saga使用指南.md
-// 模块示例：docs/04_模块设计/打球时段模块.md (TableSessionSaga 部分)
-```
-
-### 11.2 FluentValidation 集成速查
-
-所有接收外部输入的 Command/Query 都应该有 Validator。
-
-**快速配置**：
 ```csharp
-// Program.cs
-builder.Host.UseWolverine(opts => opts.UseFluentValidation());
+// ✅ V2: 新增可选字段
+public record PaymentCompleted(Guid Id, decimal Amount, string? Currency = "CNY");
+// ❌ 错误: 修改字段含义
+public record PaymentCompleted(Guid Id, decimal TaxIncludedAmount); // 破坏兼容性！
 ```
 
-**快速创建**：
-```csharp
-// 位置：与 Command 同文件夹
-public sealed class RegisterMemberValidator : AbstractValidator<RegisterMember>
-{
-    public RegisterMemberValidator()
-    {
-        RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
-        RuleFor(x => x.Phone).Matches(@"^1[3-9]\d{9}$");
-    }
-}
-```
-
-**验证层级**：
-- ✅ **Validator**: 简单验证（非空、格式、长度、范围）
-- ✅ **Handler**: 复杂业务规则（库存、状态机、权限）
-- ❌ **避免**: Validator 中执行重量级操作（外部 API、复杂查询）
-
-**详细指南**: 见 `docs/06_开发规范/FluentValidation集成指南.md`（包含异步验证、条件验证、自定义规则、测试等）
-
-Add TODO tags:
-```
-// TODO(validation): 添加 FluentValidation 验证器
-// 详细文档：docs/06_开发规范/FluentValidation集成指南.md
-// 快速上手：docs/03_系统架构设计/Wolverine快速上手指南.md (场景 1：带验证的 Command)
-```
-
-### 11.3 级联消息与副作用速查
-
-Handler 应通过返回值驱动消息发布，将外部 IO 封装为副作用，而非在 Handler 中直接执行。
-
-**级联消息（Cascading Messages）**：
-- Handler 返回值自动被 Wolverine 视为需要发布的消息
-- 在原始消息事务提交后自动发送
-- 常见返回类型：单个事件、`(Result, Event?)` tuple、`OutgoingMessages`
-
-**推荐模式**：
-```csharp
-[Transactional]
-public async Task<(Result, BalanceToppedUp?)> Handle(
-    TopUpBalance command,
-    IDocumentSession session,
-    CancellationToken ct)
-{
-    var member = await session.LoadAsync<Member>(command.MemberId, ct);
-    if (member is null) return (Result.NotFound(...), null);
-    
-    member.TopUp(command.Amount);
-    session.Store(member);
-    
-    // Wolverine 自动发布返回的事件
-    return (Result.Success(), new BalanceToppedUp(...));
-}
-```
-
-**副作用（Side Effects）**：
-- 外部 IO（HTTP、短信、文件等）应封装为 `ISideEffect`
-- 存储副作用：`IStorageAction<T>` / `UnitOfWork<T>`
-
-**推荐模式**：
-```csharp
-// 定义副作用
-public class SendWelcomeSms : ISideEffect
-{
-    public async Task ExecuteAsync(ISmsClient smsClient, ...) { }
-}
-
-// Handler 返回副作用
-[Transactional]
-public async Task<(Result, SendWelcomeSms?)> Handle(...)
-{
-    // 业务逻辑
-    return (Result.Success(), new SendWelcomeSms(...));
-}
-```
-
-**核心原则**：
-- Handler 是"决策者"，不是"执行者"
-- 优先使用级联消息而非显式 `PublishAsync`
-- 外部 IO 必须封装为副作用，不在 Handler 中直接调用
-- 副作用类型必须是具体类（非接口）
-
-**详细指南**: 见 `docs/06_开发规范/级联消息与副作用.md`（包含完整示例、测试策略、Code Review 清单）
-
-Add TODO tags:
-```
-// TODO(cascading): 使用返回值级联消息，避免显式 PublishAsync
-// TODO(side-effect): 外部 IO 封装为 ISideEffect
-// 详细文档：docs/06_开发规范/级联消息与副作用.md
-```
-
-Must accompany an Issue reference once created.
+> **Copilot 使用指引（Event）**：
+> - 创建事件时，询问用户：该事件是否会被其他模块消费？如果是，必须放在 `PublicEvents/` 文件夹
+> - 修改 Integration Event 时，**禁止**修改或删除现有字段，只能添加可选字段（带默认值）
+> - 如果用户要求修改 Integration Event 的字段含义，建议创建新版本事件（如 `PaymentCompletedV2`）
 
 ---
-## 12. Review Quick Checklist / 快速审查清单
+## 13. Breaking Rules / 何时打破规则
 
-(✓) Vertical Slice 结构正确（UseCase 文件夹）
-(✓) Handler 使用 [Transactional] 自动事务
-(✓) 跨模块通信通过事件，不直接调用
-(✓) 优先使用级联消息（返回值），避免显式 `PublishAsync`
-(✓) 外部 IO 封装为 ISideEffect，不在 Handler 中直接调用
-(✓) 没有明文/硬编码 Secret
-(✓) Endpoint 只做映射，逻辑在 Handler
-(✓) 日志无敏感泄露，失败路径可追踪
-(✓) 新逻辑有测试或声明测试豁免理由
-(✓) 没有无意开启的 OIDC grant / CORS 过宽 `*`
-(✓) 前端环境变量未提交真实值
-(✓) 使用 UTC 时间进行持久化
-(✓) 异步方法包含 CancellationToken 参数
-(✓) 业务异常包含结构化 Code 或 Result.Fail
-(✓) 查询使用 AsNoTracking（只读场景，EF Core）
-(❌) 拒绝：Application/Domain/Infrastructure 分层
-(❌) 拒绝：Repository/UnitOfWork 接口
-(❌) 拒绝：Shared Service 跨模块调用
-(❌) 拒绝：Handler 中显式 PublishAsync（应用级联消息）
-(❌) 拒绝：Handler 中直接调用外部 IO（应封装为 ISideEffect）
+**可破例场景**: 小模块（< 5 UseCase）、内部工具、管理后台 CRUD（60 行）、原型  
+**破例铁律**: 写理由、评估影响、设还款计划、团队共识  
+**绝对红线**: BuildingBlocks 放业务规则、跨服务 InvokeAsync、传统分层、Shared Service、破坏 Integration Event 兼容性
+
+> **终极判断**: 破例后，三年后的团队是否更难维护？
+
+> **Copilot 使用指引（Breaking Rules）**：
+> - 用户请求违反规则时，首先说明该规则及其原因
+> - 如果用户坚持，询问是否属于可破例场景（小模块、内部工具、原型等）
+> - 如果是绝对红线（5 条），**必须拒绝**并解释风险，不要提供违反红线的代码
+> - 如果是可破例场景，建议添加注释说明破例原因和技术债还款计划
 
 ---
-## 13. English Summary (Condensed)
+## 14. Review Quick Checklist / 快速审查清单
 
-Use this section if AI requires English only context:
-- **Enforce Vertical Slice Architecture**: NO traditional layering (Application/Domain/Infrastructure), organize by Use Case folders
-- **Wolverine Handlers**: Handler is the Application Service, use `[Transactional]` for auto-transactions + Outbox
-- **Module Communication**: Prefer cascading messages (return values) for events; use `InvokeAsync()` for sync calls; NO Shared Services
-- **Cascading Messages**: Prefer return values over explicit `PublishAsync`; Handler returns events as tuple `(Result, Event?)` or `OutgoingMessages`
-- **Side Effects**: Encapsulate external IO (HTTP, SMS, files) as `ISideEffect`; do NOT call external services directly in Handler
-- **Data Access**: Inject `IDocumentSession` (Marten) or `DbContext` (EF Core) directly into Handlers; NO Repository pattern
-- Structured Serilog logging; never log secrets
-- Security: no plaintext credentials, only Authorization Code + PKCE for SPA, use FluentValidation for input validation
-- Tests required for new Handler logic; use in-memory Marten/EF Core
-- Keep PR small & single-purpose; reject noisy unrelated refactors
-- Follow conventional commits; clear module scope
-- UTC time for persistence, localization at display layer
-- CancellationToken support for async methods
-- Business exceptions with Result pattern or structured codes (<Area>:<Key>)
-- **Reject**: Creating Application Services, Repositories, UnitOfWork, Shared/Common layers, explicit `PublishAsync` in Handlers, direct external IO calls in Handlers
+**架构 & Handler**:
+- (✓) Vertical Slice 结构、Handler ≤ 40 行（> 60 = 认知崩溃）
+- (✓) Handler 用 [Transactional]、跨模块通过事件、跨服务禁 InvokeAsync
+- (✓) 级联消息（返回值）、外部 IO 封装 ISideEffect
+- (✓) Endpoint 只映射、聚合根有业务方法
 
----
-## 14. Updating This File / 更新策略
+**事件 & 错误码**:
+- (✓) Module Event 显式声明（PublicEvents/）、Integration Event 只增不改
+- (✓) ErrorCodes 只表达失败类型（非业务决策）
+- (✓) BuildingBlocks 满足 5 条（含修改成本降低）、无业务规则
+- (✓) Saga 满足 3 条铁律或避免使用
 
-- 小改动 (补充条目) → 直接 PR 修改
-- 结构性变更 → 需在 PR 描述写“Update Copilot Instructions”并说明动机
-- 合并后记得同步在团队群/文档公告
+**安全 & 质量**:
+- (✓) 无明文 Secret、日志无敏感数据、UTC 时间、CancellationToken
+- (✓) 业务异常结构化 Code、AsNoTracking（只读 EF）
+- (✓) 测试或豁免理由、无意外 OIDC grant/CORS
+
+**拒绝**:
+- (❌) 传统分层、Repository/UnitOfWork、Shared Service
+- (❌) Handler 显式 PublishAsync、Handler 直接外部 IO
+- (❌) BuildingBlocks 放业务规则、跨服务 InvokeAsync
 
 ---
-## 15. Version / 版本
+## 15. English Summary
 
-Current instructions version: 1.1.0 (Wolverine + Vertical Slice Architecture + Cascading Messages & Side Effects)
+- **Vertical Slice**: NO layering, organize by Use Case
+- **Handlers**: `[Transactional]`, max 40 lines (> 60 = collapse), cascading messages
+- **Communication**: InvokeAsync **within process only**, NO cross-service
+- **Events**: Domain (internal), Module (explicit PublicEvents/), Integration (immutable)
+- **ErrorCodes**: Failure types only, NOT business decisions
+- **BuildingBlocks**: 5 criteria (cost reduction), NO business rules
+- **Saga**: Use only if ALL 3 met; default NO
+- **Reject**: Layering, Repositories, Shared Services, explicit PublishAsync, direct IO
 
-Change Log (local to this file):
-- 0.1.0: Initial creation with ABP layering rules
-- 0.2.0: Synchronized with 代码风格.md v1.0.0, added UTC/CancellationToken/business exception codes
-- 1.0.0: **Major rewrite for Wolverine + Vertical Slice Architecture** - removed ABP layers, added Wolverine Handler patterns, Marten integration, module communication rules
-- 1.1.0: Added Cascading Messages & Side Effects guidelines (section 11.3) and updated quick checklist with cascading messages and side effects items
+---
+## 16. Version / 版本
 
+**Current**: 1.2.0 (Wolverine + Vertical Slice + v1.2.0 强化)
+
+**v1.2.0** (2026-01-13): 
+- 🛡️ BuildingBlocks 第 5 条、ErrorCodes 陷阱、Module/Integration Event 规范、跨服务禁 InvokeAsync
+- 💡 Saga 心理刹车、Handler 认知负债
+- 📖 事件分类、破例机制、**压缩整理（489→270 行，-45%）**
 
 ---
 
-> 若 AI 建议违反任一硬性约束（安全/垂直切片/命名），应优先提示开发者并拒绝直接生成不合规实现。
-> **核心原则**：100% 垂直切片，拒绝传统分层，Handler 即 Application Service。
+> **核心**：100% 垂直切片，Handler 即 Application Service。
