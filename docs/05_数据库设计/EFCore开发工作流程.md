@@ -22,7 +22,7 @@ difficulty: "中级"
 # 5.6 EF Core Code First 开发工作流程
 
 <!-- Breadcrumb Navigation -->
-**导航路径**: [🏠 项目文档首页](../自助台球系统项目文档.md) > [📊 数据库设计](README.md) > ⚙️ EF Core 开发工作流程
+**导航路径**: [🏠 项目首页](../../README.md) > [📊 数据库设计](README.md) > ⚙️ EF Core 开发工作流程
 
 <!-- Keywords for Search -->
 **关键词**: `EF Core工作流程` `Code First开发` `实体建模` `数据种子` `环境管理` `部署策略`
@@ -772,7 +772,7 @@ jobs:
 
 ### 返回上级
 - [🔙 数据库设计总览](README.md)
-- [🏠 项目文档首页](../自助台球系统项目文档.md)
+- [🏠 项目首页](../../README.md)
 
 ### 相关章节
 - [3. 系统架构设计](../03_系统架构设计/README.md)

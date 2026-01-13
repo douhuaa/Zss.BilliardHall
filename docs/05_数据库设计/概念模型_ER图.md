@@ -22,7 +22,7 @@ difficulty: "中级"
 # 5.1 概念模型 (ER 图)
 
 <!-- Breadcrumb Navigation -->
-**导航路径**: [🏠 项目文档首页](../自助台球系统项目文档.md) > [📊 数据库设计](README.md) > 📊 概念模型 (ER 图)
+**导航路径**: [🏠 项目首页](../../README.md) > [📊 数据库设计](README.md) > 📊 概念模型 (ER 图)
 
 <!-- Keywords for Search -->
 **关键词**: `ER图` `实体关系` `数据建模` `概念设计` `数据库架构`
@@ -344,7 +344,7 @@ CREATE INDEX IX_BilliardTables_Store_Status_Online
 
 ### 返回上级
 - [🔙 数据库设计总览](README.md)
-- [🏠 项目文档首页](../自助台球系统项目文档.md)
+- [🏠 项目首页](../../README.md)
 
 ### 相关章节
 - [2. 需求规格说明](../02_需求规格说明/README.md)

@@ -21,7 +21,7 @@ difficulty: "中级"
 
 # 6.5 Code Review 流程
 
-**导航路径**: [🏠 项目文档首页](../自助台球系统项目文档.md) > [📝 开发规范](README.md) > 👥 Code Review 流程
+**导航路径**: [🏠 项目首页](../../README.md) > [📝 开发规范](README.md) > 👥 Code Review 流程
 
 **关键词**: `Code Review` `质量` `协作` `PR模板` `审查流程`
 

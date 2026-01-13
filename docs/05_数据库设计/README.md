@@ -20,7 +20,7 @@ related_docs: ["05_数据库设计/数据迁移方案.md", "05_数据库设计/�
 # 5. 数据库设计
 
 <!-- Breadcrumb Navigation -->
-**导航路径**: [🏠 项目文档首页](../自助台球系统项目文档.md) > 📊 数据库设计
+**导航路径**: [🏠 项目首页](../../README.md) > 📊 数据库设计
 
 <!-- Keywords for Search -->
 **关键词**: `数据库设计` `EF Core` `Code First` `实体建模` `数据迁移` `表结构` `索引优化`
@@ -199,7 +199,7 @@ dotnet ef migrations add OptimizeTableSessionIndexes
 - [🏗️ 系统架构设计](../03_系统架构设计/README.md)
 - [📝 开发规范](../06_开发规范/README.md)
 - [🔧 API 文档](../07_API文档/README.md)
-- [🏠 返回项目文档首页](../自助台球系统项目文档.md)
+- [🏠 返回项目首页](../../README.md)
 
 ---
 

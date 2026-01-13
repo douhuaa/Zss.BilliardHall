@@ -22,7 +22,7 @@ difficulty: "初级"
 # 6.4 Git 分支规范
 
 <!-- Breadcrumb Navigation -->
-**导航路径**: [🏠 项目文档首页](../自助台球系统项目文档.md) > [📝 开发规范](README.md) > 🌿 Git 分支规范
+**导航路径**: [🏠 项目首页](../../README.md) > [📝 开发规范](README.md) > 🌿 Git 分支规范
 
 <!-- Keywords for Search -->
 **关键词**: `Git分支` `GitHub Flow` `提交规范` `中文提交` `分支管理` `版本控制`
@@ -322,7 +322,7 @@ git log --follow --patch -- 文件名
 ### 返回上级
 
 - [🔙 开发规范总览](README.md)
-- [🏠 项目文档首页](../自助台球系统项目文档.md)
+- [🏠 项目首页](../../README.md)
 
 ### 相关章节
 
