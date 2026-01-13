@@ -101,7 +101,7 @@ public class Member
 
         if (Tier != previousTier)
         {   // TODO(cascading): Emit MemberTierUpgraded event via Wolverine cascading messages
-            // when wiring Members module handlers. See doc/06_开发规范/级联消息与副作用.md
+            // when wiring Members module handlers. See docs/06_开发规范/级联消息与副作用.md
             // and the corresponding Members module issue tracking event integration.
             // RaiseDomainEvent(new MemberTierUpgraded(Id, previousTier, Tier));
         }

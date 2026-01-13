@@ -257,9 +257,9 @@ builder.Services.ConfigureMarten(options =>
 - [Event Store](https://martendb.io/events/)
 
 ### 项目文档
-- [Wolverine 模块化架构蓝图](../../../../doc/03_系统架构设计/Wolverine模块化架构蓝图.md)
-- [会员管理模块设计](../../../../doc/04_模块设计/会员管理模块.md)
-- [Aspire 编排架构](../../../../doc/03_系统架构设计/Aspire编排架构.md)
+- [Wolverine 模块化架构蓝图](../../../../docs/03_系统架构设计/Wolverine模块化架构蓝图.md)
+- [会员管理模块设计](../../../../docs/04_模块设计/会员管理模块.md)
+- [Aspire 编排架构](../../../../docs/03_系统架构设计/Aspire编排架构.md)
 
 ---
 

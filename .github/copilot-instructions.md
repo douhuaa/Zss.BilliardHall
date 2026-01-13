@@ -49,7 +49,7 @@ Review Checklist (Vertical Slice):
 ---
 ## 2. Naming & Style / 命名与风格
 
-Follow `doc/06_开发规范/代码风格.md` (已更新至 v1.0.0):
+Follow `docs/06_开发规范/代码风格.md` (已更新至 v1.0.0):
 - PascalCase: Classes / Interfaces / Public members; 接口前缀 I
 - camelCase + `_` prefix for private fields
 - Avoid 模糊命名: `DoSomething`, `Manager2`, `HelperX`
@@ -68,7 +68,7 @@ Reject / 标记风险:
 ---
 ## 3. Logging & Observability / 日志与可观测性
 
-参考 `doc/06_开发规范/日志规范.md`，关键要点：
+参考 `docs/06_开发规范/日志规范.md`，关键要点：
 - 使用 Serilog 结构化日志：`LogInformation("{Action} {Entity} {@Payload}", ...)`
 - 标识字段统一：`{UserId}` `{TableId}` `{SessionId}` `{CorrelationId}`
 - 不记录敏感值（密码 / Secret / Token / 完整手机号）
@@ -178,19 +178,19 @@ When auto-generating code, enforce:
 请参考以下核心文档：
 
 **架构设计**:
-- `doc/03_系统架构设计/Wolverine模块化架构蓝图.md` → 完整架构实施指南（29KB）
-- `doc/03_系统架构设计/Wolverine快速上手指南.md` → 5分钟上手教程
-- `doc/03_系统架构设计/系统模块划分.md` → 6个核心模块定义
+- `docs/03_系统架构设计/Wolverine模块化架构蓝图.md` → 完整架构实施指南（29KB）
+- `docs/03_系统架构设计/Wolverine快速上手指南.md` → 5分钟上手教程
+- `docs/03_系统架构设计/系统模块划分.md` → 6个核心模块定义
 
 **模块示例**:
-- `doc/04_模块设计/会员管理模块.md` → Members 模块完整示例（v3.0.0）
-- `doc/04_模块设计/打球时段模块.md` → Sessions 模块 + Saga 示例（v2.0.0）
-- `doc/04_模块设计/计费管理模块.md` → Billing 模块示例（v2.0.0）
+- `docs/04_模块设计/会员管理模块.md` → Members 模块完整示例（v3.0.0）
+- `docs/04_模块设计/打球时段模块.md` → Sessions 模块 + Saga 示例（v2.0.0）
+- `docs/04_模块设计/计费管理模块.md` → Billing 模块示例（v2.0.0）
 
 **开发规范**:
-- `doc/06_开发规范/Saga使用指南.md` → Wolverine Saga 完整使用指南（跨模块长事务编排）
-- `doc/06_开发规范/FluentValidation集成指南.md` → FluentValidation 集成完整指南（输入验证最佳实践）
-- `doc/06_开发规范/级联消息与副作用.md` → 级联消息与副作用实践指南（Handler 返回值、IO 分离）
+- `docs/06_开发规范/Saga使用指南.md` → Wolverine Saga 完整使用指南（跨模块长事务编排）
+- `docs/06_开发规范/FluentValidation集成指南.md` → FluentValidation 集成完整指南（输入验证最佳实践）
+- `docs/06_开发规范/级联消息与副作用.md` → 级联消息与副作用实践指南（Handler 返回值、IO 分离）
 
 ### 11.1 Saga 使用速查
 
@@ -207,13 +207,13 @@ When auto-generating code, enforce:
 - Handler 方法保持幂等性
 - 考虑超时处理
 
-**详细指南**: 见 `doc/06_开发规范/Saga使用指南.md`（包含 TableSessionSaga 完整示例、配置、最佳实践）
+**详细指南**: 见 `docs/06_开发规范/Saga使用指南.md`（包含 TableSessionSaga 完整示例、配置、最佳实践）
 
 Add TODO tags:
 ```
 // TODO(wolverine): 若需添加 Saga，参考 Saga 使用指南
-// 详细文档：doc/06_开发规范/Saga使用指南.md
-// 模块示例：doc/04_模块设计/打球时段模块.md (TableSessionSaga 部分)
+// 详细文档：docs/06_开发规范/Saga使用指南.md
+// 模块示例：docs/04_模块设计/打球时段模块.md (TableSessionSaga 部分)
 ```
 
 ### 11.2 FluentValidation 集成速查
@@ -244,13 +244,13 @@ public sealed class RegisterMemberValidator : AbstractValidator<RegisterMember>
 - ✅ **Handler**: 复杂业务规则（库存、状态机、权限）
 - ❌ **避免**: Validator 中执行重量级操作（外部 API、复杂查询）
 
-**详细指南**: 见 `doc/06_开发规范/FluentValidation集成指南.md`（包含异步验证、条件验证、自定义规则、测试等）
+**详细指南**: 见 `docs/06_开发规范/FluentValidation集成指南.md`（包含异步验证、条件验证、自定义规则、测试等）
 
 Add TODO tags:
 ```
 // TODO(validation): 添加 FluentValidation 验证器
-// 详细文档：doc/06_开发规范/FluentValidation集成指南.md
-// 快速上手：doc/03_系统架构设计/Wolverine快速上手指南.md (场景 1：带验证的 Command)
+// 详细文档：docs/06_开发规范/FluentValidation集成指南.md
+// 快速上手：docs/03_系统架构设计/Wolverine快速上手指南.md (场景 1：带验证的 Command)
 ```
 
 ### 11.3 级联消息与副作用速查
@@ -308,13 +308,13 @@ public async Task<(Result, SendWelcomeSms?)> Handle(...)
 - 外部 IO 必须封装为副作用，不在 Handler 中直接调用
 - 副作用类型必须是具体类（非接口）
 
-**详细指南**: 见 `doc/06_开发规范/级联消息与副作用.md`（包含完整示例、测试策略、Code Review 清单）
+**详细指南**: 见 `docs/06_开发规范/级联消息与副作用.md`（包含完整示例、测试策略、Code Review 清单）
 
 Add TODO tags:
 ```
 // TODO(cascading): 使用返回值级联消息，避免显式 PublishAsync
 // TODO(side-effect): 外部 IO 封装为 ISideEffect
-// 详细文档：doc/06_开发规范/级联消息与副作用.md
+// 详细文档：docs/06_开发规范/级联消息与副作用.md
 ```
 
 Must accompany an Issue reference once created.

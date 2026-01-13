@@ -151,8 +151,8 @@ curl http://localhost:5000/health  # 健康检查
 ## 相关文档
 
 - [Aspire Testing Documentation](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/testing)
-- [Wolverine 模块化架构蓝图](../../../../doc/03_系统架构设计/Wolverine模块化架构蓝图.md)
-- [Aspire 编排架构](../../../../doc/03_系统架构设计/Aspire编排架构.md)
+- [Wolverine 模块化架构蓝图](../../../../docs/03_系统架构设计/Wolverine模块化架构蓝图.md)
+- [Aspire 编排架构](../../../../docs/03_系统架构设计/Aspire编排架构.md)
 - [CI/CD 工作流说明](../../../../.github/workflows/README.md)
 
 ## 版本

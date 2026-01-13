@@ -247,9 +247,9 @@ docker ps
 
 ## 📚 相关文档
 
-- [Wolverine 模块化架构蓝图](../../../doc/03_系统架构设计/Wolverine模块化架构蓝图.md)
-- [Wolverine 快速上手指南](../../../doc/03_系统架构设计/Wolverine快速上手指南.md)
-- [ServiceDefaults 集成指南](../../../doc/06_开发规范/ServiceDefaults集成指南.md)
+- [Wolverine 模块化架构蓝图](../../../docs/03_系统架构设计/Wolverine模块化架构蓝图.md)
+- [Wolverine 快速上手指南](../../../docs/03_系统架构设计/Wolverine快速上手指南.md)
+- [ServiceDefaults 集成指南](../../../docs/06_开发规范/ServiceDefaults集成指南.md)
 - [测试入口说明](../测试入口说明.md)
 - [AppHost.Tests README](../Aspire/Zss.BilliardHall.Wolverine.AppHost.Tests/README.md)
 
