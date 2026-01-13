@@ -159,8 +159,7 @@ public class BootstrapperIntegrationTests : IClassFixture<PostgresFixture>
             ["ConnectionStrings:Default"] = _fixture.ConnectionString
         });
 
-        // Set environment to Testing
-        builder.Environment.EnvironmentName = Environments.Development; // Use Development to enable health endpoints
+        builder.Environment.EnvironmentName = "Testing";
     }
 }
 

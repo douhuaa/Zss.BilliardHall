@@ -1,6 +1,7 @@
 using Marten;
 using Microsoft.Extensions.Logging;
 using Wolverine.Attributes;
+using Zss.BilliardHall.BuildingBlocks.Contracts;
 using Zss.BilliardHall.BuildingBlocks.Exceptions;
 using Zss.BilliardHall.Modules.Members.Events;
 
@@ -13,7 +14,7 @@ namespace Zss.BilliardHall.Modules.Members.TopUpBalance;
 public sealed class TopUpBalanceHandler
 {
     [Transactional]
-    public async Task<(Guid memberId, BalanceToppedUp Event)> Handle(
+    public async Task<(Guid memberId, BalanceToppedUp Event)> HandleWithCascading(
         TopUpBalance command,
         IDocumentSession session,
         ILogger<TopUpBalanceHandler> logger,
@@ -41,5 +42,16 @@ public sealed class TopUpBalanceHandler
         );
 
         return (member.Id, @event);
+    }
+
+    [Transactional]
+    public async Task<Result> Handle(
+        TopUpBalance command,
+        IDocumentSession session,
+        ILogger<TopUpBalanceHandler> logger,
+        CancellationToken ct = default)
+    {
+        await HandleWithCascading(command, session, logger, ct);
+        return Result.Success();
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wolverine;
 using Xunit;
+using Zss.BilliardHall.BuildingBlocks.Exceptions;
 using Zss.BilliardHall.Modules.Members;
 using Zss.BilliardHall.Modules.Members.RegisterMember;
 using Zss.BilliardHall.Modules.Members.TopUpBalance;
@@ -19,6 +20,7 @@ namespace Zss.BilliardHall.Wolverine.Bootstrapper.Tests.Members;
 /// </summary>
 [Trait("Category", "Integration")]
 [Trait("Category", "RequiresDocker")]
+[Collection("MembersModuleTests")]
 public class MembersModuleTests : IClassFixture<PostgresFixture>
 {
     private readonly PostgresFixture _fixture;
@@ -39,9 +41,10 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         await app.StartAsync();
 
         var bus = app.Services.GetRequiredService<IMessageBus>();
+        var uniquePhone = $"13800138{Random.Shared.Next(1000, 9999)}";
         var command = new RegisterMember(
             "张三",
-            "13800138000",
+            uniquePhone,
             "zhangsan@example.com",
             "password123"
         );
@@ -60,7 +63,7 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         
         member.Should().NotBeNull();
         member!.Name.Should().Be("张三");
-        member.Phone.Should().Be("13800138000");
+        member.Phone.Should().Be(uniquePhone);
         member.Email.Should().Be("zhangsan@example.com");
         member.Tier.Should().Be(MemberTier.Regular);
         member.Balance.Should().Be(0);
@@ -75,7 +78,7 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         // Arrange
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
-        
+
         await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
         await app.StartAsync();
 
@@ -106,11 +109,11 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         );
 
         // Act
-        var result = await bus.InvokeAsync<BuildingBlocks.Contracts.Result<Guid>>(command);
+        var act = async () => await bus.InvokeAsync<BuildingBlocks.Contracts.Result<Guid>>(command);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.Error.Should().Contain("已注册");
+        var ex = await act.Should().ThrowAsync<DomainException>();
+        ex.Which.Message.Should().Contain("已注册");
 
         await app.StopAsync();
     }
@@ -152,7 +155,8 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         var result = await bus.InvokeAsync<BuildingBlocks.Contracts.Result>(command);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.Should().NotBeNull("InvokeAsync 应返回 Result；若为 null，通常代表没有匹配的处理器返回值或无路由");
+        result!.IsSuccess.Should().BeTrue();
 
         // Verify balance was updated
         using (var session = documentStore.LightweightSession())
@@ -201,7 +205,8 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         var result = await bus.InvokeAsync<BuildingBlocks.Contracts.Result>(command);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.Should().NotBeNull("InvokeAsync 应返回 Result；若为 null，通常代表没有匹配的处理器返回值或无路由");
+        result!.IsSuccess.Should().BeTrue();
 
         // Verify balance was deducted
         using (var session = documentStore.LightweightSession())
@@ -220,7 +225,7 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         // Arrange
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
-        
+
         await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
         await app.StartAsync();
 
@@ -247,11 +252,11 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         var command = new DeductBalance(memberId, 50m, "支付订单");
 
         // Act
-        var result = await bus.InvokeAsync<BuildingBlocks.Contracts.Result>(command);
+        var act = async () => await bus.InvokeAsync<BuildingBlocks.Contracts.Result>(command);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.Error.Should().Contain("余额不足");
+        var ex = await act.Should().ThrowAsync<DomainException>();
+        ex.Which.Message.Should().Contain("余额不足");
 
         await app.StopAsync();
     }
@@ -262,6 +267,6 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         {
             ["ConnectionStrings:Default"] = _fixture.ConnectionString
         });
-        builder.Environment.EnvironmentName = Environments.Development;
+        builder.Environment.EnvironmentName = "Testing";
     }
 }

@@ -1,6 +1,7 @@
 using Marten;
 using Microsoft.Extensions.Logging;
 using Wolverine.Attributes;
+using Zss.BilliardHall.BuildingBlocks.Contracts;
 using Zss.BilliardHall.BuildingBlocks.Exceptions;
 using Zss.BilliardHall.Modules.Members.Events;
 
@@ -13,7 +14,7 @@ namespace Zss.BilliardHall.Modules.Members.RegisterMember;
 public sealed class RegisterMemberHandler
 {
     [Transactional]
-    public async Task<(Guid MemberId, MemberRegistered Event)> Handle(
+    public async Task<(Guid MemberId, MemberRegistered Event)> HandleWithCascading(
         RegisterMember command,
         IDocumentSession session,
         ILogger<RegisterMemberHandler> logger,
@@ -28,7 +29,7 @@ public sealed class RegisterMemberHandler
         // Aggregate 不被污染（对的）
         // 👉 这是Vertical Slice 下“跨聚合规则”的标准位置。
         if (exists)
-            throw new DomainException(MemberErrorCodes.DuplicatePhone.Code);
+            throw new DomainException(MemberErrorCodes.DuplicatePhone);
 
         // 2. 创建会员
         // TODO: Implement password hashing and storage when authentication module is ready
@@ -44,5 +45,17 @@ public sealed class RegisterMemberHandler
 
         // ✅ 成功 = 返回结果 + 事件 ❌ 失败 = DomainException
         return (member.Id, @event);
+    }
+
+    [Transactional]
+    public async Task<Result<Guid>> Handle(
+        RegisterMember command,
+        IDocumentSession session,
+        ILogger<RegisterMemberHandler> logger,
+        CancellationToken ct = default
+    )
+    {
+        var (memberId, _) = await HandleWithCascading(command, session, logger, ct);
+        return Result.Success(memberId);
     }
 }

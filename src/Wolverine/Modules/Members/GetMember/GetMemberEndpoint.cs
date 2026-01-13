@@ -13,8 +13,6 @@ namespace Zss.BilliardHall.Modules.Members.GetMember;
 public sealed class GetMemberEndpoint
 {
     [WolverineGet("/api/members/{memberId:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public static async Task<IResult> Get(
         Guid memberId,
         IMessageBus bus)
@@ -23,8 +21,6 @@ public sealed class GetMemberEndpoint
             new GetMember(memberId)
         );
 
-        return result.IsSuccess
-            ? Results.Ok(result.Value)
-            : Results.NotFound(new { error = result.Error });
+        return Results.Ok(result.Value);
     }
 }

@@ -10,9 +10,9 @@ namespace Zss.BilliardHall.Modules.Members;
 public class Member
 {
     public Guid Id { get; private set; }
-    public string Name { get; private set; } = null!;
-    public string Phone { get; private set; } = null!;
-    public string Email { get; private set; } = null!;
+    public string Name { get; private set; }
+    public string Phone { get; private set; }
+    public string Email { get; private set; }
 
     public MemberTier Tier { get; private set; }
     public decimal Balance { get; private set; }
@@ -32,27 +32,11 @@ public class Member
         Points = points;
     }
 
-    private Member(Guid id, string name, string phone, string email)
-    {
-        Id = id;
-        Name = name;
-        Phone = phone;
-        Email = email;
-
-        Tier = MemberTier.Regular;
-        Balance = 0;
-        Points = 0;
-    }
 
     public static Member Register(string name, string phone, string email, MemberTier tier = MemberTier.Regular, decimal balance = 0, int points = 0)
     {
         // 聚合内部可以做最基本的不变量校验
-        return new Member(Guid.CreateVersion7(), name, phone, email)
-        {
-            Tier = tier,
-            Balance = balance,
-            Points = points
-        };
+        return new Member(Guid.CreateVersion7(), name, phone, email, tier, balance, points);
     }
     
     /// <summary>

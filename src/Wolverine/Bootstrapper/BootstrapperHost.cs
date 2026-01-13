@@ -57,6 +57,12 @@ public static class BootstrapperHost
     public static WebApplication BuildAppFromBuilder(WebApplicationBuilder builder)
     {
         ConfigureBuilder(builder);
+
+        if (builder.Environment.IsEnvironment("Testing"))
+        {
+            builder.WebHost.UseUrls("http://127.0.0.1:0");
+        }
+
         var app = builder.Build();
         ConfigureApp(app);
         return app;
