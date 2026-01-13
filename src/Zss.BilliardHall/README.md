@@ -112,7 +112,7 @@ Current seeding registers a SPA public client and (temporarily) enables password
 
 ### Secrets Management
 
-See `doc/08_配置管理/Secrets管理.md` for full guidelines. Never commit real credentials. Prefer User Secrets locally and a vault in production.
+See `docs/08_配置管理/Secrets管理.md` for full guidelines. Never commit real credentials. Prefer User Secrets locally and a vault in production.
 
 ### Quick Start (Developer)
 

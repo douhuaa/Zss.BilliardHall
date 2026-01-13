@@ -125,4 +125,4 @@ public sealed record PaymentCompletedIntegrationEventV2(
 
 ## 参考
 
-详见：`doc/03_系统架构设计/Wolverine模块化架构蓝图.md` - 2.4 事件分类与边界管理
+详见：`docs/03_系统架构设计/Wolverine模块化架构蓝图.md` - 2.4 事件分类与边界管理

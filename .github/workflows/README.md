@@ -25,5 +25,5 @@
 
 ### 相关文档
 
-- [部署流程](../../doc/10_部署与运维/部署流程.md) - CI/CD 详细说明
-- [CodeReview 流程](../../doc/06_开发规范/CodeReview流程.md) - PR 审查标准
+- [部署流程](../../docs/10_部署与运维/部署流程.md) - CI/CD 详细说明
+- [CodeReview 流程](../../docs/06_开发规范/CodeReview流程.md) - PR 审查标准

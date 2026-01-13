@@ -348,9 +348,9 @@ public static TBuilder AddCommonAuthentication<TBuilder>(this TBuilder builder)
 
 ## 相关文档
 
-- [Aspire 编排架构](../../../doc/03_系统架构设计/Aspire编排架构.md) - Aspire 整体架构
-- [ServiceDefaults 集成指南](../../../doc/06_开发规范/ServiceDefaults集成指南.md) - 详细使用说明
-- [Aspire 本地开发指南](../../../doc/10_部署与运维/Aspire本地开发指南.md) - 本地运行指南
+- [Aspire 编排架构](../../../docs/03_系统架构设计/Aspire编排架构.md) - Aspire 整体架构
+- [ServiceDefaults 集成指南](../../../docs/06_开发规范/ServiceDefaults集成指南.md) - 详细使用说明
+- [Aspire 本地开发指南](../../../docs/10_部署与运维/Aspire本地开发指南.md) - 本地运行指南
 - [Microsoft Docs](https://aka.ms/dotnet/aspire/service-defaults) - 官方文档
 
 ---
