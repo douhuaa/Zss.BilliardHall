@@ -14,7 +14,7 @@ namespace Zss.BilliardHall.Modules.Members.AwardPoints;
 public sealed class AwardPointsHandler
 {
     [Transactional]
-    public async Task<PointsAwarded> Handle(
+    public async Task<PointsAwarded> HandleWithCascading(
         AwardPoints command,
         IDocumentSession session,
         ILogger<AwardPointsHandler> logger,
@@ -45,5 +45,17 @@ public sealed class AwardPointsHandler
         );
 
         return @event;
+    }
+
+    [Transactional]
+    public async Task<Result> Handle(
+        AwardPoints command,
+        IDocumentSession session,
+        ILogger<AwardPointsHandler> logger,
+        CancellationToken ct = default
+    )
+    {
+        await HandleWithCascading(command, session, logger, ct);
+        return Result.Success();
     }
 }

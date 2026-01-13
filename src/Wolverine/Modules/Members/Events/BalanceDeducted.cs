@@ -1,5 +1,3 @@
-using System.Collections;
-
 namespace Zss.BilliardHall.Modules.Members.Events;
 
 /// <summary>
@@ -11,10 +9,4 @@ public sealed record BalanceDeducted(
     decimal Amount,
     string? Reason = null,
     DateTimeOffset DeductedAt = default
-) : IEnumerable
-{
-    public IEnumerator GetEnumerator()
-    {
-        throw new NotImplementedException();
-    }
-}
+);

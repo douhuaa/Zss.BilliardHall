@@ -1,5 +1,6 @@
 using Marten;
 using Zss.BilliardHall.BuildingBlocks.Contracts;
+using Zss.BilliardHall.BuildingBlocks.Exceptions;
 
 namespace Zss.BilliardHall.Modules.Members.GetMember;
 
@@ -17,7 +18,7 @@ public sealed class GetMemberHandler
         var member = await session.LoadAsync<Member>(query.MemberId, ct);
 
         if (member == null)
-            return Result.Fail<MemberDto>("会员不存在");
+            throw new DomainException(MemberErrorCodes.NotFound);
 
         var dto = new MemberDto(
             member.Id,
