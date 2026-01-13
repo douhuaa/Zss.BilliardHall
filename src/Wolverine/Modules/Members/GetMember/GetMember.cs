@@ -17,6 +17,5 @@ public sealed record MemberDto(
     string Email,
     MemberTier Tier,
     decimal Balance,
-    int Points,
-    DateTimeOffset RegisteredAt
+    int Points
 );

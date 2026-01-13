@@ -10,6 +10,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Wolverine;
 using Wolverine.FluentValidation;
+using Wolverine.Http;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -222,6 +223,8 @@ public static class Extensions
     public static TBuilder AddWolverineDefaults<TBuilder>(this TBuilder builder)
         where TBuilder : IHostApplicationBuilder
     {
+        builder.Services.AddWolverineHttp();
+
         builder.Services.AddWolverine(opts =>
         {
             // Wolverine 默认会自动扫描入口程序集（entry assembly）查找 Handler 和 Endpoint

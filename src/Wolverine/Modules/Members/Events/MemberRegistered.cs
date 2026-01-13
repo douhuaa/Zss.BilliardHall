@@ -8,5 +8,5 @@ public sealed record MemberRegistered(
     Guid MemberId,
     string Name,
     string Phone,
-    DateTimeOffset RegisteredAt
+    DateTimeOffset RegisteredAt = default
 );

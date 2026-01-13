@@ -26,8 +26,7 @@ public sealed class GetMemberHandler
             member.Email,
             member.Tier,
             member.Balance,
-            member.Points,
-            member.RegisteredAt
+            member.Points
         );
 
         return Result.Success(dto);

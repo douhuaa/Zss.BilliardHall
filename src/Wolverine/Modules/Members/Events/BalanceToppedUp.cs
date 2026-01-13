@@ -7,7 +7,5 @@ namespace Zss.BilliardHall.Modules.Members.Events;
 public sealed record BalanceToppedUp(
     Guid MemberId,
     decimal Amount,
-    decimal OldBalance,
-    decimal NewBalance,
-    DateTimeOffset ToppedUpAt
+    DateTimeOffset ToppedUpAt = default
 );

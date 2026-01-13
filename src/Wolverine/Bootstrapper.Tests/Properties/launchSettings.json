@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Zss.BilliardHall.Wolverine.Bootstrapper.Tests": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:16031;http://localhost:16032"
+    }
+  }
+}

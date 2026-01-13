@@ -2,6 +2,7 @@ using Marten;
 using Microsoft.Extensions.Logging;
 using Wolverine.Attributes;
 using Zss.BilliardHall.BuildingBlocks.Contracts;
+using Zss.BilliardHall.BuildingBlocks.Exceptions;
 using Zss.BilliardHall.Modules.Members.Events;
 
 namespace Zss.BilliardHall.Modules.Members.DeductBalance;
@@ -13,31 +14,18 @@ namespace Zss.BilliardHall.Modules.Members.DeductBalance;
 public sealed class DeductBalanceHandler
 {
     [Transactional]
-    public async Task<(Result Result, BalanceDeducted? Event)> Handle(
+    public async Task<BalanceDeducted> Handle(
         DeductBalance command,
         IDocumentSession session,
         ILogger<DeductBalanceHandler> logger,
-        CancellationToken ct = default)
+        CancellationToken ct = default
+    )
     {
         var member = await session.LoadAsync<Member>(command.MemberId, ct);
         if (member == null)
-            return (Result.Fail("会员不存在", "Member.NotFound"), null);
+            throw new DomainException(MemberErrorCodes.NotFound);
 
-        var oldBalance = member.Balance;
-
-        // 使用领域结果模式处理业务规则
-        var domainResult = member.Deduct(command.Amount);
-        if (!domainResult.IsSuccess)
-        {
-            var message = domainResult.Error?.Code switch
-            {
-                "Member.InvalidDeductAmount" => "扣减金额必须大于0",
-                "Member.InsufficientBalance" => "余额不足",
-                _ => "余额扣减失败"
-            };
-
-            return (Result.Fail(message, domainResult.Error?.Code ?? string.Empty), null);
-        }
+        member.Deduct(command.Amount);
 
         session.Store(member);
 
@@ -45,8 +33,6 @@ public sealed class DeductBalanceHandler
         var @event = new BalanceDeducted(
             member.Id,
             command.Amount,
-            oldBalance,
-            member.Balance,
             command.Reason,
             DateTimeOffset.UtcNow
         );
@@ -58,6 +44,6 @@ public sealed class DeductBalanceHandler
             command.Reason
         );
 
-        return (Result.Success(), @event);
+        return @event;
     }
 }

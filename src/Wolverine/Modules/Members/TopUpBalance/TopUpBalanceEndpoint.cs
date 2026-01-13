@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Wolverine;
 using Wolverine.Http;
 using Zss.BilliardHall.BuildingBlocks.Contracts;
+using Zss.BilliardHall.Modules.Members.Events;
 
 namespace Zss.BilliardHall.Modules.Members.TopUpBalance;
 
@@ -13,12 +13,11 @@ namespace Zss.BilliardHall.Modules.Members.TopUpBalance;
 public sealed class TopUpBalanceEndpoint
 {
     [WolverinePost("/api/members/{memberId:guid}/topup")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public static async Task<IResult> Post(
         Guid memberId,
         TopUpBalanceRequest request,
-        IMessageBus bus)
+        IMessageBus bus,
+        CancellationToken cancellationToken)
     {
         var command = new TopUpBalance(
             memberId,
@@ -26,11 +25,9 @@ public sealed class TopUpBalanceEndpoint
             request.PaymentMethod
         );
 
-        var result = await bus.InvokeAsync<Result>(command);
-
-        return result.IsSuccess
-            ? Results.Ok(new { message = "充值成功" })
-            : Results.BadRequest(new { error = result.Error });
+        var result = await bus.InvokeAsync<(Guid memberId, BalanceToppedUp Event)>(command, cancellationToken);
+        
+        return Results.Ok(result.memberId);
     }
 
     public sealed record TopUpBalanceRequest(

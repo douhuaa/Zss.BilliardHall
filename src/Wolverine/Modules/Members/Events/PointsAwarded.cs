@@ -7,6 +7,6 @@ namespace Zss.BilliardHall.Modules.Members.Events;
 public sealed record PointsAwarded(
     Guid MemberId,
     int Points,
-    string Reason,
-    DateTimeOffset AwardedAt
+    string? Reason = null,
+    DateTimeOffset AwardedAt = default
 );

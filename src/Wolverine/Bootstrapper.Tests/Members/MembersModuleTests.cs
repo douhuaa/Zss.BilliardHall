@@ -85,14 +85,15 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         // Create existing member
         using (var session = documentStore.LightweightSession())
         {
-            var existingMember = Member.CreateInstance(
-                Guid.NewGuid(),
+            var existingMember = Member.Register(
                 "已存在的会员",
                 "13800138000",
                 string.Empty,
                 MemberTier.Regular,
-                registeredAt: DateTimeOffset.UtcNow
+                balance: 0,
+                points: 0
             );
+
             session.Store(existingMember);
             await session.SaveChangesAsync();
         }
@@ -131,19 +132,18 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         var memberId = Guid.NewGuid();
         using (var session = documentStore.LightweightSession())
         {
-            var member = Member.CreateInstance(
-                memberId,
+            var member = Member.Register(
                 "测试会员",
                 "13800138001",
                 string.Empty,
                 MemberTier.Regular,
-                100m,
-                0,
-                DateTimeOffset.UtcNow
+                balance: 100m,
+                points: 0
             );
 
             session.Store(member);
             await session.SaveChangesAsync();
+            memberId = member.Id;
         }
 
         var command = new TopUpBalance(memberId, 200m, "支付宝");
@@ -182,18 +182,17 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         var memberId = Guid.NewGuid();
         using (var session = documentStore.LightweightSession())
         {
-            var member = Member.CreateInstance(
-                memberId,
+            var member = Member.Register(
                 "测试会员",
                 "13800138002",
                 string.Empty,
                 MemberTier.Regular,
-                100m,
-                0,
-                DateTimeOffset.UtcNow
+                balance: 100m,
+                points: 0
             );
             session.Store(member);
             await session.SaveChangesAsync();
+            memberId = member.Id;
         }
 
         var command = new DeductBalance(memberId, 50m, "支付订单");
@@ -232,18 +231,17 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         var memberId = Guid.NewGuid();
         using (var session = documentStore.LightweightSession())
         {
-            var member = Member.CreateInstance(
-                memberId,
+            var member = Member.Register(
                 "测试会员",
                 "13800138003",
                 string.Empty,
                 MemberTier.Regular,
-                30m,
-                0,
-                DateTimeOffset.UtcNow
+                balance: 30m,
+                points: 0
             );
             session.Store(member);
             await session.SaveChangesAsync();
+            memberId = member.Id;
         }
 
         var command = new DeductBalance(memberId, 50m, "支付订单");

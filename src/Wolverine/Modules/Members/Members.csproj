@@ -4,13 +4,12 @@
 	</PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Marten" />
-    <PackageReference Include="WolverineFx.Http" />
-    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="WolverineFx.Http.FluentValidation" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\Contracts\Contracts.csproj" />
-    <ProjectReference Include="..\..\BuildingBlocks\Core\Core.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Exceptions\Exceptions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

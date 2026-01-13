@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Wolverine.Http;
+using Zss.BilliardHall.BuildingBlocks.Exceptions;
 
 namespace Zss.BilliardHall.Wolverine.Bootstrapper;
 
@@ -95,6 +97,9 @@ public static class BootstrapperHost
     {
         // Map health check endpoints (/health, /alive)
         app.MapDefaultEndpoints();
+
+        app.UseMiddleware<DomainExceptionMiddleware>();
+        app.MapWolverineEndpoints();
 
         // Map root endpoint with application status
         app.MapGet("/", () => new
