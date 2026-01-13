@@ -20,6 +20,11 @@ Backend uses Wolverine + Vertical Slice:
 - **持久化**：Marten (文档数据库) 或 EF Core，通过 `IDocumentSession` 或 `DbContext` 注入到 Handler
 - **BuildingBlocks 准入**：必须同时满足 5 条（3+ 模块真实使用、跨模块不可避免、无业务语义、稳定契约、**抽象后修改成本真的降低**）
 
+> **Copilot 使用指引**：
+> - 用户请求将代码移到 BuildingBlocks 时，必须逐条验证 5 个准入条件
+> - 如果不满足任一条件，建议保留在模块内或通过消息通信解决
+> - 特别注意：如果代码包含业务语义（如特定业务规则、领域逻辑），即使被多个模块使用，也**禁止**放入 BuildingBlocks
+
 **Vertical Slice 标准结构**：
 ```
 Modules/Members/
@@ -49,6 +54,12 @@ Review Checklist (Vertical Slice):
 - ❌ 拒绝：Application/Domain/Infrastructure 分层结构
 - ❌ 拒绝：Repository 接口（直接使用 IDocumentSession/DbContext）
 - ❌ 拒绝：BuildingBlocks 中放业务规则（如 ErrorCodes.Tables.CannotReserveAtNight）
+
+> **Copilot 使用指引**：
+> - 生成 Handler 时，目标行数应在 30-40 行之间
+> - 如果 Handler 超过 40 行，建议拆分：提取领域服务、使用 Saga 编排、或拆分成多个 Handler
+> - 不要建议创建 Service 层、Repository 接口或传统分层结构
+> - 跨服务通信时，**禁止**使用 `IMessageBus.InvokeAsync()`，应建议使用事件发布或 HTTP API
 
 ---
 ## 2. Naming & Style / 命名与风格
@@ -95,6 +106,11 @@ When reviewing changes, ensure:
   - ⚠️ **ErrorCodes 陷阱**：ErrorCodes 只表达"失败类型"（NotFound/InvalidStatus），不表达"业务决策原因"（CannotReserveAtNight）
   - 业务决策相关错误码必须在模块内定义，不放入 BuildingBlocks
 - Handler 输入验证：使用 `UseFluentValidation()` 中间件或 Result 模式返回错误
+
+> **Copilot 使用指引（ErrorCodes）**：
+> - 建议 ErrorCodes 时，只能使用表达"技术失败"的类别：NotFound、InvalidStatus、Conflict、Forbidden、ValidationFailed
+> - 如果用户请求的错误码看起来更像业务规则（如"不能在夜间预订"、"会员等级不足"），**必须**建议放到模块内而不是 BuildingBlocks/ErrorCodes
+> - 示例：`ErrorCodes.Tables.NotFound` ✅  vs  `ErrorCodes.Tables.CannotReserveAtNight` ❌（后者是业务决策）
 
 ---
 ## 5. PR Scope & Structure / PR 范围与结构
@@ -188,6 +204,11 @@ When auto-generating code, enforce:
 - 必须**全部满足** 3 条：跨模块 + 跨时间（> 1分钟）+ 需补偿
 - 详见 `docs/06_开发规范/Saga使用指南.md`
 
+> **Copilot 使用指引（Saga）**：
+> - 用户请求编排跨模块流程时，首先询问：是否跨时间（> 1分钟）、是否需要补偿
+> - 如果不满足 3 条铁律中的任一条，建议使用普通 Handler + 事件，不要建议 Saga
+> - 默认立场：**不建议使用 Saga**，除非用户明确说明满足所有 3 条铁律
+
 **FluentValidation（输入验证）**:
 - 所有外部输入 Command/Query 都应有 Validator
 - Validator 做简单验证（非空、格式），Handler 做业务规则
@@ -218,6 +239,11 @@ public record PaymentCompleted(Guid Id, decimal Amount, string? Currency = "CNY"
 public record PaymentCompleted(Guid Id, decimal TaxIncludedAmount); // 破坏兼容性！
 ```
 
+> **Copilot 使用指引（Event）**：
+> - 创建事件时，询问用户：该事件是否会被其他模块消费？如果是，必须放在 `PublicEvents/` 文件夹
+> - 修改 Integration Event 时，**禁止**修改或删除现有字段，只能添加可选字段（带默认值）
+> - 如果用户要求修改 Integration Event 的字段含义，建议创建新版本事件（如 `PaymentCompletedV2`）
+
 ---
 ## 13. Breaking Rules / 何时打破规则
 
@@ -226,6 +252,12 @@ public record PaymentCompleted(Guid Id, decimal TaxIncludedAmount); // 破坏兼
 **绝对红线**: BuildingBlocks 放业务规则、跨服务 InvokeAsync、传统分层、Shared Service、破坏 Integration Event 兼容性
 
 > **终极判断**: 破例后，三年后的团队是否更难维护？
+
+> **Copilot 使用指引（Breaking Rules）**：
+> - 用户请求违反规则时，首先说明该规则及其原因
+> - 如果用户坚持，询问是否属于可破例场景（小模块、内部工具、原型等）
+> - 如果是绝对红线（5 条），**必须拒绝**并解释风险，不要提供违反红线的代码
+> - 如果是可破例场景，建议添加注释说明破例原因和技术债还款计划
 
 ---
 ## 14. Review Quick Checklist / 快速审查清单
