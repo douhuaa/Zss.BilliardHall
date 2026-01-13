@@ -340,7 +340,7 @@ CREATE INDEX IX_BilliardTables_Store_Status_Online
 - [5.3 关键表说明](关键表说明.md)
 - [5.4 索引与优化](索引与优化.md)
 - [5.5 数据迁移方案](数据迁移方案.md)
-- [5.6 EF Core 开发工作流程](EFCore开发工作流程.md)
+- [5.6 数据访问最佳实践](数据访问最佳实践.md)
 
 ### 返回上级
 - [🔙 数据库设计总览](README.md)
