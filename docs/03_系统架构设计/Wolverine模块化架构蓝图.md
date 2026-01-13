@@ -5,6 +5,75 @@
 > **适用场景**: 自助台球系统等业务能力清晰的中小型应用
 >
 > **核心观点**: Wolverine ≠ MediatR 替代品。它是 HTTP + Command Bus + Message Bus + Workflow 引擎的融合体
+>
+> **框架简介**: Wolverine 是现代化的 .NET 应用框架，专注于简化消息处理、命令处理和后台任务，是 [JasperFx](https://github.com/JasperFx) 生态系统的一部分，与 Marten 紧密集成。[官方文档](https://wolverine.netlify.app/)
+
+---
+
+## 序章：垂直切片架构理念
+
+### 什么是垂直切片架构？
+
+垂直切片架构（Vertical Slice Architecture）是一种以功能特性为中心的软件架构模式，每个功能切片包含从 UI 到数据库的完整实现路径。与传统的水平分层架构（如 ABP 的 Domain/Application/HttpApi/Infrastructure）不同，垂直切片架构强调**按业务功能组织代码，而非技术层次**。
+
+### 核心理念对比
+
+```
+传统分层架构：              垂直切片架构：
+Controller/                Modules/
+  UserController             Members/
+  TableController              RegisterMember/
+Application/                     RegisterMember.cs (Command)
+  UserService                    RegisterMemberHandler.cs
+  TableService                   RegisterMemberValidator.cs
+Domain/                          RegisterMemberEndpoint.cs
+  User                         TopUpBalance/
+  Table                          TopUpBalance.cs
+Infrastructure/                  TopUpBalanceHandler.cs
+  UserRepository              Tables/
+  TableRepository               ReserveTable/
+                                  ReserveTableCommand.cs
+                                  ReserveTableHandler.cs
+                                ReleaseTable/
+                                  ReleaseTableCommand.cs
+                                  ReleaseTableHandler.cs
+```
+
+### 为什么选择垂直切片？
+
+**高内聚、低耦合**:
+- **每个切片独立**: 一个业务功能的所有代码（处理器、验证、数据访问）都在同一个切片中
+- **最小化跨切片依赖**: 不同切片之间通过消息、事件通信
+- **独立演化**: 每个切片可以独立修改、测试和部署
+
+**以业务为中心**:
+- 按业务能力组织代码（Members/Tables/Billing），而非技术层次
+- 新人只需打开一个切片文件夹即可理解完整业务流程
+- 功能变更限制在单个切片内，降低影响范围
+
+### 与传统分层架构的对比
+
+| 维度 | 传统分层架构 | 垂直切片架构 |
+|------|-------------|-------------|
+| 代码组织 | 按技术层次（Controller/Service/Repository） | 按业务功能（Features/Users/Tables） |
+| 依赖方向 | 单向向下（UI → Application → Domain → Infrastructure） | 每个切片独立，通过消息通信 |
+| 变更影响 | 一个功能改动可能涉及多层 | 功能改动集中在单个切片内 |
+| 测试策略 | 需要 Mock 多层依赖 | 切片可独立集成测试 |
+| 新人理解 | 需要理解完整分层结构 | 只需理解单个切片即可开始 |
+| 代码复用 | 通过共享服务层实现 | 接受适度重复，共享真正通用的 |
+| 学习曲线 | 需要理解分层边界和职责 | 聚焦业务流程，技术细节透明 |
+
+### Wolverine 与垂直切片的完美结合
+
+Wolverine 的**约定优于配置**理念与垂直切片架构天然契合：
+
+1. **自动发现机制**: Wolverine 自动发现和注册 Handler，无需手动配置
+2. **方法参数注入**: 依赖直接注入到 Handler 方法参数，无需构造函数注入
+3. **级联消息**: Handler 返回值自动作为消息发布，简化跨切片通信
+4. **事务管理**: `[Transactional]` 特性自动管理事务，无需手动 SaveChanges
+5. **Outbox 模式**: 与 Marten 集成，保证消息和数据的一致性
+
+这些特性使得在垂直切片架构中，每个切片的代码更加简洁、独立和易于理解。
 
 ---
 
@@ -2192,6 +2261,946 @@ namespace Zss.BilliardHall.Tools.DataMigration;
 
 ---
 
+## 附录 A：Wolverine 框架核心特性详解
+
+### A.1 基于约定的消息处理
+
+Wolverine 使用**约定优于配置**的理念，自动发现和注册处理器：
+
+```csharp
+// 定义命令 - 普通 record 即可
+public record CreateMemberCommand(
+    string Name,
+    string Phone,
+    string Email
+);
+
+// 定义处理器 - 无需接口或基类
+public class CreateMemberHandler
+{
+    // Wolverine 自动注入依赖到方法参数
+    public async Task<MemberCreated> Handle(
+        CreateMemberCommand command,
+        IDocumentSession session,
+        ILogger<CreateMemberHandler> logger,
+        CancellationToken ct)
+    {
+        var member = new Member
+        {
+            Id = Guid.NewGuid(),
+            Name = command.Name,
+            Phone = command.Phone,
+            Email = command.Email,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        session.Store(member);
+        await session.SaveChangesAsync(ct);
+
+        logger.LogInformation("创建会员成功: {MemberId}", member.Id);
+
+        // 返回值自动作为级联消息发布
+        return new MemberCreated(member.Id);
+    }
+}
+```
+
+**约定规则**:
+- 方法名必须是 `Handle` 或 `HandleAsync`
+- 第一个参数是消息/命令/查询
+- 其他参数由 Wolverine 自动注入（服务、上下文等）
+- 返回值可以是 `void`、`Task`、结果对象或事件
+
+### A.2 消息总线使用
+
+Wolverine 提供了轻量级的消息总线，支持进程内和跨进程通信：
+
+```csharp
+public class SomeService
+{
+    private readonly IMessageBus _bus;
+
+    // 发送命令（同步等待结果）- 进程内
+    public async Task<MemberCreated> CreateMember()
+    {
+        var result = await _bus.InvokeAsync<MemberCreated>(
+            new CreateMemberCommand("张三", "13800138000", "zhang@example.com")
+        );
+        return result;
+    }
+
+    // 发布事件（异步，不等待）- 进程内或跨进程
+    public async Task NotifyMemberRegistered(Guid memberId)
+    {
+        await _bus.PublishAsync(new MemberRegisteredEvent(memberId));
+    }
+
+    // 发送到特定端点（跨进程）- 外部队列
+    public async Task SendPaymentCommand(Guid orderId)
+    {
+        await _bus.SendAsync(
+            new ProcessPaymentCommand(orderId),
+            new Uri("rabbitmq://queue/payments")
+        );
+    }
+}
+```
+
+**消息类型区别**:
+- **Command**: 有且仅有一个处理器，期望得到响应（InvokeAsync）
+- **Event**: 可以有多个订阅者，通常无响应（PublishAsync）
+- **Query**: 专门用于查询，返回数据（InvokeAsync）
+
+### A.3 中间件和生命周期
+
+Wolverine 支持在消息处理前后执行中间件：
+
+```csharp
+// 全局中间件 - 所有消息都会经过
+public class LoggingMiddleware
+{
+    public static async Task Handle(
+        IMessageContext context,
+        ILogger logger,
+        Func<Task> next)
+    {
+        logger.LogInformation("处理消息: {MessageType}", context.Envelope.MessageType);
+        
+        var sw = Stopwatch.StartNew();
+        await next(); // 调用下一个中间件或 Handler
+        sw.Stop();
+        
+        logger.LogInformation("消息处理完成，耗时: {ElapsedMs}ms", sw.ElapsedMilliseconds);
+    }
+}
+
+// 特定于 Handler 的特性
+[WolverineIgnore]      // 跳过自动发现
+[Transactional]        // 自动事务管理
+[MaximumAttempts(3)]   // 最大重试次数
+public class CreateOrderHandler
+{
+    public Task Handle(CreateOrderCommand command) { /* ... */ }
+}
+```
+
+### A.4 HTTP 端点集成
+
+Wolverine 可以将 Handler 直接暴露为 HTTP 端点：
+
+```csharp
+// 在 Program.cs 中启用
+app.MapWolverineEndpoints();
+
+// 使用特性标记端点
+public class GetMemberHandler
+{
+    [WolverineGet("/api/members/{id}")]
+    public async Task<Member?> Handle(
+        Guid id,
+        IDocumentSession session)
+    {
+        return await session.LoadAsync<Member>(id);
+    }
+}
+
+// POST 端点示例
+public class CreateMemberEndpoint
+{
+    [WolverinePost("/api/members")]
+    public async Task<IResult> Handle(
+        CreateMemberCommand command,
+        IMessageBus bus)
+    {
+        var result = await bus.InvokeAsync<Result<Guid>>(command);
+        return result.IsSuccess
+            ? Results.Created($"/api/members/{result.Value}", result.Value)
+            : Results.BadRequest(result.Error);
+    }
+}
+```
+
+### A.5 后台任务和定时任务
+
+```csharp
+// 延迟执行
+await _bus.ScheduleAsync(
+    new SendWelcomeEmailCommand(memberId),
+    TimeSpan.FromMinutes(5)
+);
+
+// 定时任务（Cron 表达式）
+[WolverineHandler]
+public static class DailyReportJob
+{
+    [Schedule("0 0 * * *")] // 每天午夜执行
+    public static async Task Execute(
+        IDocumentSession session,
+        ILogger logger)
+    {
+        logger.LogInformation("开始生成日报");
+        // 生成日报逻辑
+    }
+}
+
+// 或使用更易读的表达式
+[Schedule("daily at 0:00")]
+[Schedule("hourly")]
+[Schedule("every 5 minutes")]
+```
+
+### A.6 持久化 Outbox 模式
+
+Wolverine 与 Marten 集成，提供持久化的消息处理，保证消息不丢失：
+
+```csharp
+// 在 Program.cs 中配置
+builder.Services.AddMarten(opts =>
+{
+    opts.Connection(connectionString);
+    // 启用 Wolverine 的 Outbox 集成
+    opts.IntegrateWithWolverine();
+});
+
+builder.Host.UseWolverine(opts =>
+{
+    // 使用 Marten 作为消息持久化层
+    opts.PersistMessagesWithMarten();
+    
+    // 配置持久化本地队列
+    opts.LocalQueue("important")
+        .UseDurableInbox(); // 持久化收件箱
+});
+```
+
+**Outbox 优势**:
+- 消息和数据在同一事务中提交，保证一致性
+- 消息持久化到数据库，保证至少被处理一次
+- 自动重试失败的消息
+- 防止消息丢失
+
+### A.7 错误处理和重试策略
+
+```csharp
+// 在 Program.cs 中配置全局重试策略
+builder.Host.UseWolverine(opts =>
+{
+    // 对特定异常进行重试
+    opts.Policies.OnException<HttpRequestException>()
+        .RetryWithCooldown(50.Milliseconds(), 100.Milliseconds(), 250.Milliseconds());
+    
+    // 对特定消息类型配置策略
+    opts.Policies.ForMessagesOfType<ProcessPaymentCommand>()
+        .MaximumAttempts(5)
+        .OnException<PaymentGatewayException>()
+        .RetryWithCooldown(1.Seconds(), 5.Seconds(), 10.Seconds());
+    
+    // 死信队列配置
+    opts.Policies.OnException<InvalidOperationException>()
+        .MoveToErrorQueue(); // 移到死信队列，不再重试
+});
+
+// Handler 中的错误处理
+public class ProcessPaymentHandler
+{
+    public async Task<PaymentResult> Handle(
+        ProcessPaymentCommand command,
+        IPaymentGateway gateway,
+        ILogger logger)
+    {
+        try
+        {
+            var result = await gateway.ChargeAsync(command.Amount);
+            return PaymentResult.Success(result.TransactionId);
+        }
+        catch (PaymentGatewayException ex)
+        {
+            logger.LogError(ex, "支付失败: {OrderId}", command.OrderId);
+            
+            // Wolverine 会根据配置的策略自动重试
+            throw;
+        }
+    }
+}
+```
+
+### A.8 监控和诊断
+
+Wolverine 提供了丰富的诊断功能：
+
+```csharp
+// 启用详细日志
+builder.Logging.AddConsole()
+    .SetMinimumLevel(LogLevel.Debug);
+
+// OpenTelemetry 集成
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing =>
+    {
+        tracing.AddWolverineInstrumentation();
+        tracing.AddAspNetCoreInstrumentation();
+    });
+
+// 健康检查
+builder.Services.AddHealthChecks()
+    .AddWolverine(); // 检查消息队列健康状态
+```
+
+**查看消息状态** (Wolverine + Marten):
+```sql
+-- 查看收件箱消息
+SELECT * FROM wolverine_incoming_messages;
+
+-- 查看发件箱消息
+SELECT * FROM wolverine_outgoing_messages;
+
+-- 查看死信（失败的消息）
+SELECT * FROM wolverine_dead_letters;
+```
+
+---
+
+## 附录 B：Wolverine 与 MediatR 深度对比
+
+### B.1 特性对比表
+
+| 特性 | Wolverine | MediatR | 说明 |
+|------|-----------|---------|------|
+| **配置方式** | 约定优于配置 | 显式注册 | Wolverine 自动发现，MediatR 需手动注册 |
+| **依赖注入** | 方法参数注入 | 构造函数注入 | Wolverine 更灵活，MediatR 更传统 |
+| **Handler 接口** | 无需接口 | 需实现 IRequestHandler | Wolverine 更简洁 |
+| **中间件** | 内置，基于约定 | Pipeline Behaviors | Wolverine 内置更强大 |
+| **消息传输** | 进程内 + 跨进程 | 仅进程内 | Wolverine 支持队列、HTTP 等 |
+| **持久化** | Outbox 与 Marten 集成 | 需自行实现 | Wolverine 开箱即用 |
+| **事务管理** | `[Transactional]` 特性 | 需手动管理 | Wolverine 自动化 |
+| **重试策略** | 内置可配置 | 需自行实现 | Wolverine 强大的重试机制 |
+| **后台任务** | 内置调度器 | 需集成 Hangfire 等 | Wolverine 原生支持 |
+| **HTTP 集成** | `[WolverineGet/Post]` | 需手动映射 | Wolverine 更便捷 |
+| **性能** | 高（编译时代码生成） | 中等（反射） | Wolverine 性能更优 |
+| **学习曲线** | 中等（约定较多） | 较低（模式简单） | MediatR 更容易上手 |
+| **社区支持** | 中等 | 非常活跃 | MediatR 更成熟 |
+| **适用场景** | 复杂业务 + 消息驱动 | 简单 CQRS | 根据需求选择 |
+
+### B.2 代码对比示例
+
+**场景：创建订单并发送通知**
+
+#### MediatR 实现
+
+```csharp
+// 1. 定义命令
+public class CreateOrderCommand : IRequest<Guid>
+{
+    public string ProductName { get; set; }
+    public decimal Amount { get; set; }
+}
+
+// 2. 定义处理器（需要接口）
+public class CreateOrderHandler : IRequestHandler<CreateOrderCommand, Guid>
+{
+    private readonly DbContext _context;
+    private readonly IMediator _mediator;
+    private readonly ILogger<CreateOrderHandler> _logger;
+
+    // 构造函数注入所有依赖
+    public CreateOrderHandler(
+        DbContext context,
+        IMediator mediator,
+        ILogger<CreateOrderHandler> logger)
+    {
+        _context = context;
+        _mediator = mediator;
+        _logger = logger;
+    }
+
+    public async Task<Guid> Handle(
+        CreateOrderCommand request,
+        CancellationToken cancellationToken)
+    {
+        var order = new Order
+        {
+            Id = Guid.NewGuid(),
+            ProductName = request.ProductName,
+            Amount = request.Amount
+        };
+
+        _context.Orders.Add(order);
+        
+        // 手动管理事务
+        await _context.SaveChangesAsync(cancellationToken);
+
+        // 手动发送通知
+        await _mediator.Publish(
+            new OrderCreatedNotification(order.Id),
+            cancellationToken
+        );
+
+        return order.Id;
+    }
+}
+
+// 3. 定义通知
+public class OrderCreatedNotification : INotification
+{
+    public Guid OrderId { get; }
+    public OrderCreatedNotification(Guid orderId) => OrderId = orderId;
+}
+
+// 4. 定义通知处理器
+public class OrderCreatedNotificationHandler 
+    : INotificationHandler<OrderCreatedNotification>
+{
+    private readonly IEmailService _emailService;
+
+    public OrderCreatedNotificationHandler(IEmailService emailService)
+    {
+        _emailService = emailService;
+    }
+
+    public async Task Handle(
+        OrderCreatedNotification notification,
+        CancellationToken cancellationToken)
+    {
+        await _emailService.SendOrderConfirmationAsync(notification.OrderId);
+    }
+}
+
+// 5. 注册服务
+services.AddMediatR(cfg => 
+    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+```
+
+#### Wolverine 实现
+
+```csharp
+// 1. 定义命令（普通 record）
+public record CreateOrderCommand(string ProductName, decimal Amount);
+
+// 2. 定义处理器（无需接口，自动事务）
+public class CreateOrderHandler
+{
+    // 方法参数注入，无需构造函数
+    [Transactional] // 自动事务管理
+    public async Task<OrderCreated> Handle(
+        CreateOrderCommand command,
+        IDocumentSession session, // Wolverine 自动注入
+        ILogger logger)
+    {
+        var order = new Order
+        {
+            Id = Guid.NewGuid(),
+            ProductName = command.ProductName,
+            Amount = command.Amount
+        };
+
+        session.Store(order);
+        // 无需手动 SaveChanges，[Transactional] 自动处理
+
+        logger.LogInformation("订单创建成功: {OrderId}", order.Id);
+
+        // 返回值自动作为级联消息发布（Outbox 模式）
+        return new OrderCreated(order.Id);
+    }
+}
+
+// 3. 定义事件（普通 record）
+public record OrderCreated(Guid OrderId);
+
+// 4. 定义事件处理器（无需接口，自动并发）
+public class OrderCreatedHandler
+{
+    public async Task Handle(
+        OrderCreated evt,
+        IEmailService emailService)
+    {
+        await emailService.SendOrderConfirmationAsync(evt.OrderId);
+    }
+}
+
+// 5. 配置服务（自动发现）
+builder.Host.UseWolverine(opts =>
+{
+    opts.Discovery.IncludeAssembly(typeof(Program).Assembly);
+    opts.PersistMessagesWithMarten(); // Outbox 模式
+});
+```
+
+**对比总结**:
+- **Wolverine**: 5 个文件，无接口，自动事务，级联消息，Outbox 保证一致性
+- **MediatR**: 5 个文件，需接口，手动事务，手动发布，无持久化保证
+
+### B.3 选择建议
+
+**选择 Wolverine 的场景**:
+- ✅ 需要消息持久化（Outbox 模式）
+- ✅ 需要跨进程通信（RabbitMQ、Kafka）
+- ✅ 需要后台任务和定时任务
+- ✅ 追求高性能（编译时代码生成）
+- ✅ 希望减少样板代码（无需接口）
+- ✅ 使用 Marten 作为数据访问层
+
+**选择 MediatR 的场景**:
+- ✅ 只需要简单的 CQRS 模式
+- ✅ 团队已熟悉 MediatR
+- ✅ 项目规模较小，不需要复杂功能
+- ✅ 希望有更成熟的社区支持
+- ✅ 使用 EF Core（Wolverine 更适合 Marten）
+
+**本项目选择 Wolverine 的原因**:
+1. 需要 Outbox 模式保证消息和数据一致性
+2. 与 Marten 紧密集成，简化开发
+3. 垂直切片架构与 Wolverine 约定机制完美契合
+4. 需要跨模块异步通信和后台任务
+5. 追求更高的开发效率和代码简洁性
+
+---
+
+## 附录 C：测试支持与最佳实践
+
+### C.1 单元测试
+
+```csharp
+public class CreateMemberHandlerTests
+{
+    [Fact]
+    public async Task Should_Create_Member_Successfully()
+    {
+        // Arrange
+        var store = DocumentStore.For(opts =>
+        {
+            opts.Connection(Servers.PostgresConnectionString);
+            opts.DatabaseSchemaName = "test";
+        });
+
+        await using var session = store.LightweightSession();
+        var handler = new CreateMemberHandler();
+        var command = new CreateMemberCommand("张三", "13800138000", "zhang@test.com");
+
+        // Act
+        var result = await handler.Handle(command, session, CancellationToken.None);
+
+        // Assert
+        result.Should().NotBeNull();
+        var member = await session.LoadAsync<Member>(result.MemberId);
+        member.Should().NotBeNull();
+        member.Name.Should().Be("张三");
+    }
+}
+```
+
+### C.2 集成测试
+
+使用 Wolverine 提供的测试工具：
+
+```csharp
+public class OrderWorkflowTests : IAsyncLifetime
+{
+    private IAlbaHost _host;
+
+    public async Task InitializeAsync()
+    {
+        // 启动测试主机
+        _host = await AlbaHost.For<Program>(builder =>
+        {
+            builder.ConfigureServices(services =>
+            {
+                // 配置测试数据库
+                services.AddMarten(opts =>
+                {
+                    opts.Connection(Servers.PostgresConnectionString);
+                    opts.DatabaseSchemaName = $"test_{Guid.NewGuid():N}";
+                });
+            });
+        });
+    }
+
+    [Fact]
+    public async Task Should_Complete_Order_Workflow()
+    {
+        // 1. 发送命令并等待结果
+        var orderId = await _host.InvokeMessageAndWaitAsync<Guid>(
+            new CreateOrderCommand("Product A", 100m)
+        );
+
+        // 2. 验证订单创建
+        var session = _host.Services.GetRequiredService<IDocumentSession>();
+        var order = await session.LoadAsync<Order>(orderId);
+        order.Should().NotBeNull();
+
+        // 3. 验证事件发布（等待事件处理完成）
+        await _host.WaitForMessageToBeReceivedAsync<OrderCreated>();
+
+        // 4. 验证副作用（如邮件发送）
+        var emailService = _host.Services.GetRequiredService<IEmailService>();
+        // 验证邮件已发送...
+    }
+
+    public async Task DisposeAsync()
+    {
+        await _host.DisposeAsync();
+    }
+}
+```
+
+### C.3 测试最佳实践
+
+**AAA 模式** (Arrange-Act-Assert):
+```csharp
+[Fact]
+public async Task Should_Fail_When_Table_Not_Available()
+{
+    // Arrange - 准备测试数据
+    var table = new Table { Id = tableId, Status = TableStatus.Occupied };
+    session.Store(table);
+    await session.SaveChangesAsync();
+    
+    var command = new StartSessionCommand(tableId, memberId);
+
+    // Act - 执行操作
+    var result = await handler.Handle(command, session);
+
+    // Assert - 验证结果
+    result.IsFailure.Should().BeTrue();
+    result.Error.Should().Contain("不可用");
+}
+```
+
+**测试隔离**:
+```csharp
+// 每个测试使用独立的数据库 schema
+public class TestBase : IAsyncLifetime
+{
+    protected IDocumentStore Store { get; private set; }
+    private string _schemaName;
+
+    public async Task InitializeAsync()
+    {
+        _schemaName = $"test_{Guid.NewGuid():N}";
+        Store = DocumentStore.For(opts =>
+        {
+            opts.Connection(TestConfig.ConnectionString);
+            opts.DatabaseSchemaName = _schemaName;
+            opts.CreateDatabasesForTenants(c => c.ForTenant());
+        });
+        
+        await Store.Advanced.Clean.CompletelyRemoveAllAsync();
+    }
+
+    public async Task DisposeAsync()
+    {
+        await Store.Advanced.Clean.DeleteAllDocumentsAsync();
+        Store?.Dispose();
+    }
+}
+```
+
+---
+
+## 附录 D：从 ABP 分层架构迁移指南
+
+### D.1 迁移步骤
+
+**第一步：识别现有功能**
+```
+列出所有 Use Case:
+- CreateUser
+- UpdateUserProfile
+- StartSession
+- EndSession
+- ProcessPayment
+- ...
+```
+
+**第二步：创建切片目录**
+```
+为每个 Use Case 创建独立目录:
+Modules/
+  Members/
+    RegisterMember/
+    UpdateMemberProfile/
+    TopUpBalance/
+  Tables/
+    ReserveTable/
+    ReleaseTable/
+```
+
+**第三步：迁移代码**
+
+**迁移前（ABP 分层）**:
+```csharp
+// HttpApi/TableController.cs
+public class TableController : AbpController
+{
+    private readonly ITableAppService _tableService;
+    
+    [HttpPost]
+    public async Task<TableSessionDto> StartSession(StartSessionDto dto)
+    {
+        return await _tableService.StartSessionAsync(dto);
+    }
+}
+
+// Application/TableAppService.cs
+public class TableAppService : ApplicationService
+{
+    private readonly ITableSessionRepository _sessionRepo;
+    private readonly ITableRepository _tableRepo;
+    
+    public async Task<TableSessionDto> StartSessionAsync(StartSessionDto dto)
+    {
+        var table = await _tableRepo.GetAsync(dto.TableId);
+        var session = new TableSession(/* ... */);
+        await _sessionRepo.InsertAsync(session);
+        return ObjectMapper.Map<TableSessionDto>(session);
+    }
+}
+
+// Domain/ITableSessionRepository.cs
+public interface ITableSessionRepository : IRepository<TableSession, Guid>
+{
+    // ...
+}
+```
+
+**迁移后（Wolverine + Vertical Slice）**:
+```csharp
+// Modules/Tables/StartSession/StartSessionCommand.cs
+public record StartSessionCommand(Guid TableId, Guid? MemberId);
+
+// Modules/Tables/StartSession/StartSessionHandler.cs
+public class StartSessionHandler
+{
+    [Transactional]
+    public async Task<Result<Guid>> Handle(
+        StartSessionCommand command,
+        IDocumentSession session)
+    {
+        var table = await session.LoadAsync<Table>(command.TableId);
+        if (table?.Status != TableStatus.Available)
+            return Result.Fail<Guid>("台球桌不可用");
+
+        var tableSession = TableSession.Start(command.TableId, command.MemberId);
+        session.Store(tableSession);
+        
+        return Result.Ok(tableSession.Id);
+    }
+}
+
+// Modules/Tables/StartSession/StartSessionEndpoint.cs
+public class StartSessionEndpoint
+{
+    [WolverinePost("/api/tables/sessions")]
+    public async Task<IResult> Handle(
+        StartSessionCommand command,
+        IMessageBus bus)
+    {
+        var result = await bus.InvokeAsync<Result<Guid>>(command);
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : Results.BadRequest(result.Error);
+    }
+}
+```
+
+**第四步：提取共享逻辑**
+
+只提取**真正需要共享**的逻辑：
+```csharp
+// BuildingBlocks/Domain/IPricingService.cs
+public interface IPricingService
+{
+    decimal CalculatePrice(TimeSpan duration, TableType type);
+}
+
+// 在多个 Handler 中使用
+public class CalculateBillingHandler
+{
+    public async Task Handle(
+        CalculateBillingCommand command,
+        IPricingService pricingService)
+    {
+        var price = pricingService.CalculatePrice(
+            command.Duration,
+            command.TableType
+        );
+        // ...
+    }
+}
+```
+
+**第五步：重构通信方式**
+
+**迁移前（直接调用）**:
+```csharp
+public class EndSessionHandler
+{
+    private readonly IBillingService _billingService;
+    
+    public async Task Handle(EndSessionCommand cmd)
+    {
+        // 直接调用其他服务
+        await _billingService.CalculateBillingAsync(cmd.SessionId);
+    }
+}
+```
+
+**迁移后（消息通信）**:
+```csharp
+public class EndSessionHandler
+{
+    public async Task<SessionEnded> Handle(
+        EndSessionCommand cmd,
+        IDocumentSession session)
+    {
+        // 完成会话
+        var tableSession = await session.LoadAsync<TableSession>(cmd.SessionId);
+        tableSession.End(DateTime.UtcNow);
+        
+        // 返回事件，Wolverine 自动发布
+        return new SessionEnded(cmd.SessionId, tableSession.Duration);
+    }
+}
+
+// 计费模块监听事件
+public class SessionEndedHandler
+{
+    public async Task Handle(SessionEnded evt, IDocumentSession session)
+    {
+        // 自动触发计费
+        var billing = Billing.Calculate(evt.SessionId, evt.Duration);
+        session.Store(billing);
+    }
+}
+```
+
+### D.2 迁移检查清单
+
+- [ ] 所有 Controller → Endpoint 已迁移
+- [ ] 所有 AppService → Handler 已迁移
+- [ ] Repository 已移除（使用 IDocumentSession）
+- [ ] DTO Mapping 已移除（直接使用 Command/Query）
+- [ ] 跨层调用已改为消息通信
+- [ ] 单元测试已更新
+- [ ] 集成测试已更新
+- [ ] 文档已更新
+
+---
+
+## 附录 E：命名约定与代码组织
+
+### E.1 命名规范
+
+**消息命名**:
+```csharp
+// Command: 动词 + 名词 + Command
+CreateMemberCommand
+UpdateTableStatusCommand
+ProcessPaymentCommand
+CancelOrderCommand
+
+// Event: 名词 + 动词过去式 + Event（或直接过去式）
+MemberCreatedEvent  // 或 MemberCreated
+SessionStartedEvent // 或 SessionStarted
+PaymentProcessedEvent
+OrderCancelled
+
+// Query: Get/Find/Search + 名词 + Query
+GetMemberByIdQuery
+SearchTablesQuery
+FindActiveSessionsQuery
+ListRecentOrdersQuery
+```
+
+**Handler 命名**:
+```csharp
+// 与消息同名 + Handler
+CreateMemberHandler
+UpdateTableStatusHandler
+MemberCreatedEventHandler  // 或 MemberCreatedHandler
+GetMemberByIdHandler
+```
+
+**文件夹命名**:
+```csharp
+// 与 Use Case 对应，使用 PascalCase
+RegisterMember/
+TopUpBalance/
+StartSession/
+ProcessPayment/
+```
+
+### E.2 文件组织模板
+
+**标准切片结构**:
+```
+Modules/
+  Members/
+    RegisterMember/
+      RegisterMember.cs              # Command 定义
+      RegisterMemberHandler.cs       # Handler
+      RegisterMemberValidator.cs     # FluentValidation（可选）
+      RegisterMemberEndpoint.cs      # HTTP 端点（可选）
+      MemberRegistered.cs            # 领域事件
+    Member.cs                        # 聚合根
+    MemberTier.cs                    # 枚举/值对象
+    MembersModule.cs                 # 模块标记
+```
+
+**最小化切片**:
+```
+Modules/
+  Members/
+    GetMember/
+      GetMember.cs                   # Query
+      GetMemberHandler.cs            # Handler
+```
+
+### E.3 代码风格示例
+
+```csharp
+// ✅ 推荐：简洁的 record 定义
+public record CreateMemberCommand(
+    string Name,
+    string Phone,
+    string Email
+);
+
+// ✅ 推荐：方法参数注入
+public class CreateMemberHandler
+{
+    [Transactional]
+    public async Task<MemberCreated> Handle(
+        CreateMemberCommand command,
+        IDocumentSession session,
+        ILogger<CreateMemberHandler> logger,
+        CancellationToken ct = default)
+    {
+        // 业务逻辑
+    }
+}
+
+// ❌ 避免：构造函数注入（Wolverine 不推荐）
+public class CreateMemberHandler
+{
+    private readonly IDocumentSession _session;
+    private readonly ILogger _logger;
+    
+    public CreateMemberHandler(IDocumentSession session, ILogger logger)
+    {
+        _session = session;
+        _logger = logger;
+    }
+}
+
+// ❌ 避免：实现接口（不需要）
+public class CreateMemberHandler : IRequestHandler<CreateMemberCommand>
+{
+    // ...
+}
+```
+
+---
+
 ## 十三、参考资源
 
 ### 官方文档
@@ -2222,10 +3231,12 @@ namespace Zss.BilliardHall.Tools.DataMigration;
 | 1.0.0 | 2024-01-15 | 初始版本，完整蓝图 |
 | 1.1.0 | 2026-01-12 | **重大强化**：添加 4 大隐藏风险缓解措施和 3 大架构升级建议<br/>- ⚠️ 事件分类边界管理（Domain/Module/Integration）<br/>- ⚠️ 收紧 Saga 使用标准（3 条铁律）<br/>- ⚠️ Result<T> 错误码支持（防止错误模型失控）<br/>- ⚠️ BuildingBlocks 防污染铁律（3 模块规则）<br/>- 🔧 显式 Module Marker 设计<br/>- 🔧 禁止跨进程同步命令（InvokeAsync 限制）<br/>- 🔧 Handler 行数限制团队规范（40/60/80）<br/>- 📝 关键要点速查表<br/>- 📝 Code Review 检查清单 |
 | 1.2.0 | 2026-01-12 | **架构师反馈强化**：基于资深架构师深度评审，加强防护栏<br/>- 🛡️ BuildingBlocks 第 5 条隐含规则（抽象后修改成本必须降低）<br/>- 🛡️ ErrorCodes 高级陷阱警告（禁止承载业务语义）<br/>- 🛡️ Module Event 显式声明要求（PublicEvents 文件夹或注释标记）<br/>- 🛡️ Integration Event 不可修改铁律强化（只增不改，包含演进示例）<br/>- 💡 Saga 心理刹车（犹豫时默认不用）<br/>- 💡 Handler 认知负债说明（> 60 行 = 认知崩溃）<br/>- 📖 新增第十一章：何时可以打破这些规则<br/>- 📖 破例铁律、红线清单、平衡原则 |
+| 1.3.0 | 2026-01-13 | **文档归并强化**：整合垂直切片和框架介绍文档，建立单一真相源<br/>- 📚 新增序章：垂直切片架构理念（整合自《垂直切片架构说明》）<br/>- 📚 新增附录 A：Wolverine 框架核心特性详解（整合自《Wolverine 框架介绍》）<br/>- 📚 新增附录 B：Wolverine 与 MediatR 深度对比<br/>- 📚 新增附录 C：测试支持与最佳实践<br/>- 📚 新增附录 D：从 ABP 分层架构迁移指南<br/>- 📚 新增附录 E：命名约定与代码组织<br/>- ✅ 完成文档瘦身建议 #5（P1 优先级）：归并 3 个 Wolverine 相关文档为 1 个<br/>- ✅ 建立架构知识的单一真相源（SSOT）<br/>- ✅ 保持内容完整性，无信息丢失 |
 
 ---
 
-**最后更新**: 2026-01-12  
+**最后更新**: 2026-01-13  
 **负责人**: 架构团队  
 **审核状态**: ✅ 已审核  
+**文档归并**: ✅ 已完成（归并《垂直切片架构说明》和《Wolverine 框架介绍》）  
 **社区反馈**: 已整合资深架构师深度评审意见
