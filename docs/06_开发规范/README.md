@@ -20,7 +20,7 @@ related_docs: ["05_数据库设计/README.md", "09_测试方案/README.md"]
 # 6. 开发规范
 
 <!-- Breadcrumb Navigation -->
-**导航路径**: [🏠 项目文档首页](../自助台球系统项目文档.md) > 📝 开发规范
+**导航路径**: [🏠 项目首页](../../README.md) > 📝 开发规范
 
 <!-- Keywords for Search -->
 **关键词**: `开发规范` `代码规范` `Git规范` `Code Review` `分支管理` `团队协作`
@@ -133,7 +133,7 @@ git commit -m "feat(数据库): 添加会员管理相关表结构"
 - [🔧 API 文档](../07_API文档/README.md)
 - [🧪 测试方案](../09_测试方案/README.md)
 - [🚀 部署与运维](../10_部署与运维/README.md)
-- [🏠 返回项目文档首页](../自助台球系统项目文档.md)
+- [🏠 返回项目首页](../../README.md)
 
 ---
 

@@ -20,7 +20,7 @@ migration_status: "核心模块已完整重写为独立文档"
 # 4. 模块设计
 
 <!-- Breadcrumb Navigation -->
-**导航路径**: [🏠 项目文档](../自助台球系统项目文档.md) > 📦 模块设计
+**导航路径**: [🏠 项目文档](../../README.md) > 📦 模块设计
 
 <!-- Keywords for Search -->
 **关键词**: `模块设计` `垂直切片架构` `业务功能` `Wolverine` `Marten`
@@ -652,7 +652,7 @@ public class CreateMemberHandler
 - **上级文档**: [系统架构设计](../03_系统架构设计/README.md)
 - **关联文档**: [数据库设计](../05_数据库设计/README.md)
 - **下级文档**: [API文档](../07_API文档/README.md)
-- **返回**: [项目文档首页](../自助台球系统项目文档.md)
+- **返回**: [项目首页](../../README.md)
 
 ---
 
