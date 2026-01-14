@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Xunit;
+using Zss.BilliardHall.BuildingBlocks.Core;
 using Zss.BilliardHall.Modules.Members;
 
 namespace Zss.BilliardHall.Wolverine.Bootstrapper.Tests.Members;
@@ -52,7 +53,9 @@ public class MemberTests
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.Error!.Code.Should().Be("Member.InvalidTopUpAmount");
+        result.ErrorDescriptor.Should().NotBeNull();
+        result.ErrorDescriptor!.Code.Should().Be("Members:Validation.InvalidTopUpAmount");
+        result.ErrorDescriptor.Category.Should().Be(ErrorCategory.Validation);
         member.Balance.Should().Be(100m);
     }
 
@@ -67,7 +70,8 @@ public class MemberTests
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.Error!.Code.Should().Be("Member.InvalidTopUpAmount");
+        result.ErrorDescriptor.Should().NotBeNull();
+        result.ErrorDescriptor!.Code.Should().Be("Members:Validation.InvalidTopUpAmount");
         member.Balance.Should().Be(100m);
     }
 
@@ -96,7 +100,9 @@ public class MemberTests
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.Error!.Code.Should().Be("Member.InsufficientBalance");
+        result.ErrorDescriptor.Should().NotBeNull();
+        result.ErrorDescriptor!.Code.Should().Be("Members:Business.InsufficientBalance");
+        result.ErrorDescriptor.Category.Should().Be(ErrorCategory.Business);
         member.Balance.Should().Be(100m);
     }
 
@@ -111,7 +117,8 @@ public class MemberTests
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.Error!.Code.Should().Be("Member.InvalidDeductAmount");
+        result.ErrorDescriptor.Should().NotBeNull();
+        result.ErrorDescriptor!.Code.Should().Be("Members:Validation.InvalidDeductAmount");
         member.Balance.Should().Be(100m);
     }
 
@@ -140,7 +147,8 @@ public class MemberTests
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.Error!.Code.Should().Be("Member.InvalidAwardPoints");
+        result.ErrorDescriptor.Should().NotBeNull();
+        result.ErrorDescriptor!.Code.Should().Be("Members:Validation.InvalidAwardPoints");
         member.Points.Should().Be(100);
     }
 

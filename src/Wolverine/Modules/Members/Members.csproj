@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\Behaviors\Behaviors.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\Core\Core.csproj" />
   </ItemGroup>

@@ -61,7 +61,7 @@ public class Member
     public DomainResult TopUp(decimal amount)
     {
         if (amount <= 0)
-            return DomainResult.Fail(MemberErrorCodes.InvalidTopUpAmount);
+            return DomainResult.Fail(MemberErrorDescriptors.InvalidTopUpAmount(amount));
 
         Balance += amount;
         return DomainResult.Success();
@@ -74,10 +74,10 @@ public class Member
     public DomainResult Deduct(decimal amount)
     {
         if (amount <= 0)
-            return DomainResult.Fail(MemberErrorCodes.InvalidDeductAmount);
+            return DomainResult.Fail(MemberErrorDescriptors.InvalidDeductAmount(amount));
 
         if (Balance < amount)
-            return DomainResult.Fail(MemberErrorCodes.InsufficientBalance);
+            return DomainResult.Fail(MemberErrorDescriptors.InsufficientBalance(amount, Balance));
 
         Balance -= amount;
         Touch();
@@ -92,7 +92,7 @@ public class Member
     public DomainResult AwardPoints(int points)
     {
         if (points <= 0)
-            return DomainResult.Fail(MemberErrorCodes.InvalidAwardPoints);
+            return DomainResult.Fail(MemberErrorDescriptors.InvalidAwardPoints(points));
 
         var previousTier = Tier;
 

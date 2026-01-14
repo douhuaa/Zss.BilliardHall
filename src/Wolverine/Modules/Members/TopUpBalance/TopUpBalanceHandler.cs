@@ -1,6 +1,7 @@
 using Marten;
 using Microsoft.Extensions.Logging;
 using Wolverine.Attributes;
+using Zss.BilliardHall.BuildingBlocks.Behaviors;
 using Zss.BilliardHall.BuildingBlocks.Contracts;
 using Zss.BilliardHall.Modules.Members.Events;
 
@@ -22,7 +23,15 @@ public sealed class TopUpBalanceHandler
         // 1. 加载会员
         var member = await session.LoadAsync<Member>(command.MemberId, ct);
         if (member == null)
-            return (Result.Fail("会员不存在", "Member.NotFound"), null);
+        {
+            var error = MemberErrorDescriptors.MemberNotFound(command.MemberId);
+            logger.LogWarning(
+                "充值失败: {ErrorCode}, {Message}",
+                error.Code,
+                error.FormatMessage()
+            );
+            return (Result.Fail(error.FormatMessage(), error.Code), null);
+        }
 
         var oldBalance = member.Balance;
 
@@ -30,13 +39,9 @@ public sealed class TopUpBalanceHandler
         var domainResult = member.TopUp(command.Amount);
         if (!domainResult.IsSuccess)
         {
-            var message = domainResult.Error?.Code switch
-            {
-                "Member.InvalidTopUpAmount" => "充值金额必须大于0",
-                _ => "充值失败"
-            };
-
-            return (Result.Fail(message, domainResult.Error?.Code ?? string.Empty), null);
+            // 使用统一的异常处理器转换 DomainResult
+            var (result, _) = DomainExceptionHandler.ToResult(domainResult, logger);
+            return (result, null);
         }
 
         // 3. 持久化（[Transactional] 特性会自动调用 SaveChangesAsync）

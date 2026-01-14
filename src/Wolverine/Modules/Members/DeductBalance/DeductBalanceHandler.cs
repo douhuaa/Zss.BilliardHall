@@ -1,6 +1,7 @@
 using Marten;
 using Microsoft.Extensions.Logging;
 using Wolverine.Attributes;
+using Zss.BilliardHall.BuildingBlocks.Behaviors;
 using Zss.BilliardHall.BuildingBlocks.Contracts;
 using Zss.BilliardHall.Modules.Members.Events;
 
@@ -21,7 +22,15 @@ public sealed class DeductBalanceHandler
     {
         var member = await session.LoadAsync<Member>(command.MemberId, ct);
         if (member == null)
-            return (Result.Fail("会员不存在", "Member.NotFound"), null);
+        {
+            var error = MemberErrorDescriptors.MemberNotFound(command.MemberId);
+            logger.LogWarning(
+                "扣减余额失败: {ErrorCode}, {Message}",
+                error.Code,
+                error.FormatMessage()
+            );
+            return (Result.Fail(error.FormatMessage(), error.Code), null);
+        }
 
         var oldBalance = member.Balance;
 
@@ -29,14 +38,9 @@ public sealed class DeductBalanceHandler
         var domainResult = member.Deduct(command.Amount);
         if (!domainResult.IsSuccess)
         {
-            var message = domainResult.Error?.Code switch
-            {
-                "Member.InvalidDeductAmount" => "扣减金额必须大于0",
-                "Member.InsufficientBalance" => "余额不足",
-                _ => "余额扣减失败"
-            };
-
-            return (Result.Fail(message, domainResult.Error?.Code ?? string.Empty), null);
+            // 使用统一的异常处理器转换 DomainResult
+            var (result, _) = DomainExceptionHandler.ToResult(domainResult, logger);
+            return (result, null);
         }
 
         session.Store(member);
