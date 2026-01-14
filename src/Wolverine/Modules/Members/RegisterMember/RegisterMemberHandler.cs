@@ -13,7 +13,7 @@ namespace Zss.BilliardHall.Modules.Members.RegisterMember;
 public sealed class RegisterMemberHandler
 {
     [Transactional]
-    public async Task<(Guid MemberId, MemberRegistered Event)> HandleWithCascading(
+    public async Task<(Member MemberId, MemberRegistered Event)> Handle(
         RegisterMember command,
         IDocumentSession session,
         ILogger<RegisterMemberHandler> logger,
@@ -43,18 +43,17 @@ public sealed class RegisterMemberHandler
         logger.LogInformation("会员注册成功: {MemberId}, 手机号: {Phone}", member.Id, member.Phone);
 
         // ✅ 成功 = 返回结果 + 事件 ❌ 失败 = DomainException
-        return (member.Id, @event);
+        return (member, @event);
     }
 
-    [Transactional]
-    public async Task<Result<Guid>> Handle(
-        RegisterMember command,
-        IDocumentSession session,
-        ILogger<RegisterMemberHandler> logger,
-        CancellationToken ct = default
-    )
-    {
-        var (memberId, _) = await HandleWithCascading(command, session, logger, ct);
-        return Result.Success(memberId);
-    }
+    // public async Task<Result<Guid>> Handle(
+    //     RegisterMember command,
+    //     IDocumentSession session,
+    //     ILogger<RegisterMemberHandler> logger,
+    //     CancellationToken ct = default
+    // )
+    // {
+    //     var (memberId, _) = await HandleWithCascading(command, session, logger, ct);
+    //     return Result.Success(memberId);
+    // }
 }

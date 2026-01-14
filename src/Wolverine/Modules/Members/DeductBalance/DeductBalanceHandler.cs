@@ -22,7 +22,7 @@ public sealed class DeductBalanceHandler
     {
         var member = await session.LoadAsync<Member>(command.MemberId, ct);
         if (member == null)
-            throw MembersDomainErrors.NotFound(command.MemberId);
+            throw MembersDomainErrors.NotFound();
 
         member.Deduct(command.Amount);
 

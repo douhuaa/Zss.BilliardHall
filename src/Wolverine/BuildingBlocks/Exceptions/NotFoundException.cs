@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace Zss.BilliardHall.BuildingBlocks.Exceptions;
 
 /// <summary>
@@ -6,12 +8,12 @@ namespace Zss.BilliardHall.BuildingBlocks.Exceptions;
 public class NotFoundException : DomainException
 {
     public NotFoundException(string resourceName, object key)
-        : base("NotFound", $"{resourceName} with key '{key}' was not found.")
+        : base(new ErrorCode("Common:NotFound", StatusCodes.Status404NotFound, $"{resourceName} with key '{key}' was not found."))
     {
     }
 
     public NotFoundException(string message)
-        : base("NotFound", message)
+        : base(new ErrorCode("Common:NotFound", StatusCodes.Status404NotFound, message))
     {
     }
 }

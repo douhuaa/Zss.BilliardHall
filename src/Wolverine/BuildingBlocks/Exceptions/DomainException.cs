@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace Zss.BilliardHall.BuildingBlocks.Exceptions;
 
@@ -8,84 +10,80 @@ namespace Zss.BilliardHall.BuildingBlocks.Exceptions;
 public class DomainException : Exception
 {
     public string Code { get; }
+    public int StatusCode { get; }
 
-    public DomainException(string code, string? message = null)
+    // ② 标准路径：用 ErrorCode 的默认 message
+    public DomainException(ErrorCode error)
+        : base(error.Message)
+    {
+        Code = error.Code;
+        StatusCode = error.StatusCode;
+    }
+
+    // ✅ ③ 正确姿势：ErrorCode + 运行时上下文 message
+    public DomainException(ErrorCode error, string message)
         : base(message)
     {
-        Code = code;
-    }
-
-    public DomainException(ErrorCode code)
-        : base(code.Message)
-    {
-        Code = code.Code;
-    }
-
-    public DomainException(string code, string message, Exception innerException)
-        : base(message, innerException)
-    {
-        Code = code;
+        Code = error.Code;
+        StatusCode = error.StatusCode;
     }
 }
 
-public record ErrorCode(string Code, string Message);
-
-public sealed record ErrorResponse(string Code, string Message);
-
-public static class DomainExceptionHttpMapper
-{
-    public static int MapStatusCode(DomainException ex) => ex.Code switch
-    {
-        "Payment.Failed" => StatusCodes.Status402PaymentRequired,
-        // 资源状态不满足（余额不足/库存不足等）→ 409
-        _ when ex.Code.Contains("Insufficient", StringComparison.OrdinalIgnoreCase) =>
-            StatusCodes.Status409Conflict,
-
-        // 重复（手机号已存在、记录已存在）→ 409（与现有状态冲突）
-        _ when ex.Code.Contains("Duplicate", StringComparison.OrdinalIgnoreCase) =>
-            StatusCodes.Status409Conflict,
-
-        // 明确的“禁止访问/操作”→ 403
-        _ when ex.Code.Contains("Forbidden", StringComparison.OrdinalIgnoreCase) =>
-            StatusCodes.Status403Forbidden,
-
-        // 典型资源未找到 → 404
-        _ when ex.Code.Contains("NotFound", StringComparison.OrdinalIgnoreCase) =>
-            StatusCodes.Status404NotFound,
-
-        // 显式 Conflict 关键字 → 409
-        _ when ex.Code.Contains("Conflict", StringComparison.OrdinalIgnoreCase) =>
-            StatusCodes.Status409Conflict,
-
-        // 其余都按 BadRequest 处理
-        _ => StatusCodes.Status400BadRequest,
-    };
-}
+public record ErrorCode(string Code, int StatusCode, string Message);
 
 public sealed class DomainExceptionMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly ILogger<DomainExceptionMiddleware> _logger;
 
-    public DomainExceptionMiddleware(RequestDelegate next)
+    public DomainExceptionMiddleware(
+        RequestDelegate next,
+        ILogger<DomainExceptionMiddleware> logger)
     {
         _next = next;
+        _logger = logger;
     }
 
     public async Task Invoke(HttpContext context)
     {
+        var traceId = Activity.Current?.Id ?? context.TraceIdentifier;
+
         try
         {
             await _next(context);
         }
         catch (DomainException ex)
         {
-            context.Response.StatusCode = DomainExceptionHttpMapper.MapStatusCode(ex);
+            _logger.LogWarning(ex,
+                "DomainException {Code}, TraceId={TraceId}",
+                ex.Code,
+                traceId);
 
+            context.Response.StatusCode = ex.StatusCode;
             context.Response.ContentType = "application/json";
 
-            var response = new ErrorResponse(ex.Code, ex.Message ?? ex.Code);
+            await context.Response.WriteAsJsonAsync(new
+            {
+                code = ex.Code,
+                message = ex.Message, // 可切换为 ErrorCode.Message
+                traceId
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex,
+                "Unhandled exception, TraceId={TraceId}",
+                traceId);
 
-            await context.Response.WriteAsJsonAsync(response);
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            context.Response.ContentType = "application/json";
+
+            await context.Response.WriteAsJsonAsync(new
+            {
+                code = "System.Unhandled",
+                message = "系统错误",
+                traceId
+            });
         }
     }
 }

@@ -1,0 +1,34 @@
+@baseUrl = https://localhost:7176
+@contentType = application/json
+
+### Register a member
+# @name register
+POST {{baseUrl}/api/members/register
+Content-Type: {{contentType}}
+
+{
+  "name": "张三",
+  "phone": "13800138{{$randomInt 1000 9999}}",
+  "email": "zhangsan@example.com",
+  "password": "password123"
+}
+
+### Get member by id (use the memberId from the previous response)
+# If your REST client supports JSONPath:
+# @memberId = {{register.response.body.$.memberId}}
+# Otherwise, copy the memberId and set @memberId manually below.
+@memberId = 019bbd27-4d3c-7c35-b06e-b013ab966fad
+
+GET {{baseUrl}}/api/members/{{memberId}}
+
+### Top up member balance
+POST {{baseUrl}}/api/members/{{memberId}}/topup
+Content-Type: {{contentType}}
+
+{
+  "amount": 200,
+  "paymentMethod": "支付宝"
+}
+
+### Deduct member balance (no HTTP endpoint exists for DeductBalance as it is an internal command)
+# If you need an HTTP test for deduct, add a dedicated endpoint or use an internal test via IMessageBus.

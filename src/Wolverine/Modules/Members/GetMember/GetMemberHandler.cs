@@ -1,4 +1,6 @@
 using Marten;
+using Microsoft.Extensions.Logging;
+using Zss.BilliardHall.BuildingBlocks.Contracts;
 
 namespace Zss.BilliardHall.Modules.Members.GetMember;
 
@@ -11,12 +13,13 @@ public sealed class GetMemberHandler
     public async Task<MemberDto> Handle(
         GetMember query,
         IDocumentSession session,
+        ILogger<GetMemberHandler> logger,
         CancellationToken ct = default)
     {
         var member = await session.LoadAsync<Member>(query.MemberId, ct);
 
         if (member == null)
-            throw MembersDomainErrors.NotFound(query.MemberId);
+            throw MembersDomainErrors.NotFound();
 
         var dto = new MemberDto(
             member.Id,
@@ -27,7 +30,7 @@ public sealed class GetMemberHandler
             member.Balance,
             member.Points
         );
-
+        logger.LogInformation("{member.Name}", member.Name);
         return dto;
     }
 }

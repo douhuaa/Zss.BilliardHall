@@ -21,9 +21,9 @@ public sealed class RegisterMemberEndpoint
             request.Password
         );
 
-        var (memberId, _) = await bus.InvokeAsync<(Guid, MemberRegistered)>(command);
+        var memberId = await bus.InvokeAsync<MemberRegistered>(command);
 
-        return Results.Ok(new { memberId });
+        return Results.Ok(memberId);
     }
 
     public sealed record RegisterMemberRequest(

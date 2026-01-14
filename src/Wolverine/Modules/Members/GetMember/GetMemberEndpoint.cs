@@ -17,10 +17,10 @@ public sealed class GetMemberEndpoint
         Guid memberId,
         IMessageBus bus)
     {
-        var result = await bus.InvokeAsync<Result<MemberDto>>(
+        var result = await bus.InvokeAsync<MemberDto>(
             new GetMember(memberId)
         );
 
-        return Results.Ok(result.Value);
+        return Results.Ok(result);
     }
 }

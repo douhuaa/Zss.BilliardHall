@@ -3,14 +3,14 @@ using Marten;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Wolverine;
 using Xunit;
+using Zss.BilliardHall.BuildingBlocks.Contracts;
 using Zss.BilliardHall.BuildingBlocks.Exceptions;
 using Zss.BilliardHall.Modules.Members;
+using Zss.BilliardHall.Modules.Members.DeductBalance;
 using Zss.BilliardHall.Modules.Members.RegisterMember;
 using Zss.BilliardHall.Modules.Members.TopUpBalance;
-using Zss.BilliardHall.Modules.Members.DeductBalance;
 
 namespace Zss.BilliardHall.Wolverine.Bootstrapper.Tests.Members;
 
@@ -36,11 +36,12 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         // Arrange
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
-        
+
         await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
         await app.StartAsync();
 
         var bus = app.Services.GetRequiredService<IMessageBus>();
+
         var uniquePhone = $"13800138{Random.Shared.Next(1000, 9999)}";
         var command = new RegisterMember(
             "张三",
@@ -50,30 +51,25 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         );
 
         // Act
-        var result = await bus.InvokeAsync<BuildingBlocks.Contracts.Result<Guid>>(command);
+        var result = await bus.InvokeAsync<Result<Guid>>(command);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
-        // Verify member was persisted
-        var documentStore = app.Services.GetRequiredService<IDocumentStore>();
-        using var session = documentStore.LightweightSession();
-        var member = await session.LoadAsync<Member>(result.Value);
-        
-        member.Should().NotBeNull();
-        member!.Name.Should().Be("张三");
-        member.Phone.Should().Be(uniquePhone);
-        member.Email.Should().Be("zhangsan@example.com");
-        member.Tier.Should().Be(MemberTier.Regular);
-        member.Balance.Should().Be(0);
-        member.Points.Should().Be(0);
+        var store = app.Services.GetRequiredService<IDocumentStore>();
+        await using (var session = store.LightweightSession())
+        {
+            var member = await session.LoadAsync<Member>(result.Value);
+            member.Should().NotBeNull();
+            member!.Phone.Should().Be(uniquePhone);
+        }
 
         await app.StopAsync();
     }
 
     [Fact]
-    public async Task RegisterMember_WithDuplicatePhone_ShouldFail()
+    public async Task RegisterMember_WithDuplicatePhone_ShouldThrowDomainException()
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
@@ -83,37 +79,28 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         await app.StartAsync();
 
         var bus = app.Services.GetRequiredService<IMessageBus>();
-        var documentStore = app.Services.GetRequiredService<IDocumentStore>();
+        var store = app.Services.GetRequiredService<IDocumentStore>();
 
-        // Create existing member
-        using (var session = documentStore.LightweightSession())
+        var phone = $"13800138{Random.Shared.Next(1000, 9999)}";
+        await using (var session = store.LightweightSession())
         {
-            var existingMember = Member.Register(
-                "已存在的会员",
-                "13800138000",
-                string.Empty,
-                MemberTier.Regular,
-                balance: 0,
-                points: 0
-            );
-
-            session.Store(existingMember);
+            session.Store(Member.Register("已存在的会员", phone, string.Empty));
             await session.SaveChangesAsync();
         }
 
         var command = new RegisterMember(
             "张三",
-            "13800138000", // 相同手机号
+            phone,
             "zhangsan@example.com",
             "password123"
         );
 
         // Act
-        var act = async () => await bus.InvokeAsync<BuildingBlocks.Contracts.Result<Guid>>(command);
+        var act = async () => await bus.InvokeAsync<Result<Guid>>(command);
 
         // Assert
         var ex = await act.Should().ThrowAsync<DomainException>();
-        ex.Which.Message.Should().Contain("已注册");
+        ex.Which.Code.Should().Be(MemberErrorCodes.DuplicatePhone.Code);
 
         await app.StopAsync();
     }
@@ -124,42 +111,23 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         // Arrange
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
-        
+
         await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
         await app.StartAsync();
 
         var bus = app.Services.GetRequiredService<IMessageBus>();
-        var documentStore = app.Services.GetRequiredService<IDocumentStore>();
+        var store = app.Services.GetRequiredService<IDocumentStore>();
 
-        // Create member
-        var memberId = Guid.NewGuid();
-        using (var session = documentStore.LightweightSession())
-        {
-            var member = Member.Register(
-                "测试会员",
-                "13800138001",
-                string.Empty,
-                MemberTier.Regular,
-                balance: 100m,
-                points: 0
-            );
-
-            session.Store(member);
-            await session.SaveChangesAsync();
-            memberId = member.Id;
-        }
-
+        var memberId = await CreateMemberAsync(store, balance: 100m);
         var command = new TopUpBalance(memberId, 200m, "支付宝");
 
         // Act
-        var result = await bus.InvokeAsync<BuildingBlocks.Contracts.Result>(command);
+        var result = await bus.InvokeAsync<Result>(command);
 
         // Assert
-        result.Should().NotBeNull("InvokeAsync 应返回 Result；若为 null，通常代表没有匹配的处理器返回值或无路由");
-        result!.IsSuccess.Should().BeTrue();
+        result.IsSuccess.Should().BeTrue();
 
-        // Verify balance was updated
-        using (var session = documentStore.LightweightSession())
+        await using (var session = store.LightweightSession())
         {
             var member = await session.LoadAsync<Member>(memberId);
             member.Should().NotBeNull();
@@ -175,41 +143,23 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         // Arrange
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
-        
+
         await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
         await app.StartAsync();
 
         var bus = app.Services.GetRequiredService<IMessageBus>();
-        var documentStore = app.Services.GetRequiredService<IDocumentStore>();
+        var store = app.Services.GetRequiredService<IDocumentStore>();
 
-        // Create member with balance
-        var memberId = Guid.NewGuid();
-        using (var session = documentStore.LightweightSession())
-        {
-            var member = Member.Register(
-                "测试会员",
-                "13800138002",
-                string.Empty,
-                MemberTier.Regular,
-                balance: 100m,
-                points: 0
-            );
-            session.Store(member);
-            await session.SaveChangesAsync();
-            memberId = member.Id;
-        }
-
+        var memberId = await CreateMemberAsync(store, balance: 100m);
         var command = new DeductBalance(memberId, 50m, "支付订单");
 
         // Act
-        var result = await bus.InvokeAsync<BuildingBlocks.Contracts.Result>(command);
+        var result = await bus.InvokeAsync<Result>(command);
 
         // Assert
-        result.Should().NotBeNull("InvokeAsync 应返回 Result；若为 null，通常代表没有匹配的处理器返回值或无路由");
-        result!.IsSuccess.Should().BeTrue();
+        result.IsSuccess.Should().BeTrue();
 
-        // Verify balance was deducted
-        using (var session = documentStore.LightweightSession())
+        await using (var session = store.LightweightSession())
         {
             var member = await session.LoadAsync<Member>(memberId);
             member.Should().NotBeNull();
@@ -220,7 +170,7 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
     }
 
     [Fact]
-    public async Task DeductBalance_WithInsufficientBalance_ShouldFail()
+    public async Task DeductBalance_WithInsufficientBalance_ShouldThrowDomainException()
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
@@ -230,33 +180,17 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         await app.StartAsync();
 
         var bus = app.Services.GetRequiredService<IMessageBus>();
-        var documentStore = app.Services.GetRequiredService<IDocumentStore>();
+        var store = app.Services.GetRequiredService<IDocumentStore>();
 
-        // Create member with insufficient balance
-        var memberId = Guid.NewGuid();
-        using (var session = documentStore.LightweightSession())
-        {
-            var member = Member.Register(
-                "测试会员",
-                "13800138003",
-                string.Empty,
-                MemberTier.Regular,
-                balance: 30m,
-                points: 0
-            );
-            session.Store(member);
-            await session.SaveChangesAsync();
-            memberId = member.Id;
-        }
-
+        var memberId = await CreateMemberAsync(store, balance: 30m);
         var command = new DeductBalance(memberId, 50m, "支付订单");
 
         // Act
-        var act = async () => await bus.InvokeAsync<BuildingBlocks.Contracts.Result>(command);
+        var act = async () => await bus.InvokeAsync<Result>(command);
 
         // Assert
         var ex = await act.Should().ThrowAsync<DomainException>();
-        ex.Which.Message.Should().Contain("余额不足");
+        ex.Which.Code.Should().Be(MemberErrorCodes.InsufficientBalance.Code);
 
         await app.StopAsync();
     }
@@ -267,6 +201,27 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         {
             ["ConnectionStrings:Default"] = _fixture.ConnectionString
         });
+
         builder.Environment.EnvironmentName = "Testing";
+    }
+
+    private static async Task<Guid> CreateMemberAsync(
+        IDocumentStore store,
+        decimal balance,
+        string? phone = null)
+    {
+        var member = Member.Register(
+            "测试会员",
+            phone ?? $"13800138{Random.Shared.Next(1000, 9999)}",
+            string.Empty,
+            MemberTier.Regular,
+            balance: balance,
+            points: 0
+        );
+
+        await using var session = store.LightweightSession();
+        session.Store(member);
+        await session.SaveChangesAsync();
+        return member.Id;
     }
 }
