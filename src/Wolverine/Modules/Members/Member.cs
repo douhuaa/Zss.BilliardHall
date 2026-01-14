@@ -58,41 +58,38 @@ public class Member
     /// 充值余额
     /// Top up balance
     /// </summary>
-    public DomainResult TopUp(decimal amount)
+    public void TopUp(decimal amount)
     {
         if (amount <= 0)
-            return DomainResult.Fail(MemberErrorDescriptors.InvalidTopUpAmount(amount));
+            throw new MembersDomainException(MemberErrorDescriptors.InvalidTopUpAmount(amount));
 
         Balance += amount;
-        return DomainResult.Success();
     }
 
     /// <summary>
     /// 扣减余额
     /// Deduct balance
     /// </summary>
-    public DomainResult Deduct(decimal amount)
+    public void Deduct(decimal amount)
     {
         if (amount <= 0)
-            return DomainResult.Fail(MemberErrorDescriptors.InvalidDeductAmount(amount));
+            throw new MembersDomainException(MemberErrorDescriptors.InvalidDeductAmount(amount));
 
         if (Balance < amount)
-            return DomainResult.Fail(MemberErrorDescriptors.InsufficientBalance(amount, Balance));
+            throw new MembersDomainException(MemberErrorDescriptors.InsufficientBalance(amount, Balance));
 
         Balance -= amount;
         Touch();
-
-        return DomainResult.Success();
     }
 
     /// <summary>
     /// 赠送积分
     /// Award points
     /// </summary>
-    public DomainResult AwardPoints(int points)
+    public void AwardPoints(int points)
     {
         if (points <= 0)
-            return DomainResult.Fail(MemberErrorDescriptors.InvalidAwardPoints(points));
+            throw new MembersDomainException(MemberErrorDescriptors.InvalidAwardPoints(points));
 
         var previousTier = Tier;
 
@@ -105,7 +102,6 @@ public class Member
             // and the corresponding Members module issue tracking event integration.
             // RaiseDomainEvent(new MemberTierUpgraded(Id, previousTier, Tier));
         }
-        return DomainResult.Success();
     }
 
     /// <summary>

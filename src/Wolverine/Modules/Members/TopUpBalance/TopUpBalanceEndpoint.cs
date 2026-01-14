@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Wolverine;
 using Wolverine.Http;
-using Zss.BilliardHall.BuildingBlocks.Contracts;
+using Zss.BilliardHall.BuildingBlocks.Behaviors;
+using Zss.BilliardHall.BuildingBlocks.Core;
 
 namespace Zss.BilliardHall.Modules.Members.TopUpBalance;
 
@@ -15,22 +17,34 @@ public sealed class TopUpBalanceEndpoint
     [WolverinePost("/api/members/{memberId:guid}/topup")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public static async Task<IResult> Post(
         Guid memberId,
         TopUpBalanceRequest request,
-        IMessageBus bus)
+        IMessageBus bus,
+        ILogger<TopUpBalanceEndpoint> logger)
     {
-        var command = new TopUpBalance(
-            memberId,
-            request.Amount,
-            request.PaymentMethod
-        );
+        try
+        {
+            var command = new TopUpBalance(
+                memberId,
+                request.Amount,
+                request.PaymentMethod
+            );
 
-        var result = await bus.InvokeAsync<Result>(command);
+            await bus.InvokeAsync(command);
 
-        return result.IsSuccess
-            ? Results.Ok(new { message = "充值成功" })
-            : Results.BadRequest(new { error = result.Error });
+            return Results.Ok(new { message = "充值成功" });
+        }
+        catch (MembersDomainException ex)
+        {
+            var (result, statusCode) = DomainExceptionHandler.ToResult(ex, logger);
+            return Results.Json(
+                new { error = result.Error, code = result.ErrorCode },
+                statusCode: statusCode
+            );
+        }
     }
 
     public sealed record TopUpBalanceRequest(

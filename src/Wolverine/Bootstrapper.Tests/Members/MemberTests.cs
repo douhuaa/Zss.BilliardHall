@@ -35,43 +35,42 @@ public class MemberTests
         var member = CreateDefaultMember(balance: 100m);
 
         // Act
-        var result = member.TopUp(50m);
+        member.TopUp(50m);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
         member.Balance.Should().Be(150m);
     }
 
     [Fact]
-    public void TopUp_WithZeroAmount_ShouldFail()
+    public void TopUp_WithZeroAmount_ShouldThrowException()
     {
         // Arrange
         var member = CreateDefaultMember(balance: 100m);
 
         // Act
-        var result = member.TopUp(0m);
+        var act = () => member.TopUp(0m);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.ErrorDescriptor.Should().NotBeNull();
-        result.ErrorDescriptor!.Code.Should().Be("Members:Validation.InvalidTopUpAmount");
-        result.ErrorDescriptor.Category.Should().Be(ErrorCategory.Validation);
+        var exception = act.Should().Throw<MembersDomainException>().Which;
+        exception.ErrorDescriptor.Should().NotBeNull();
+        exception.ErrorDescriptor.Code.Should().Be("Members:Validation.InvalidTopUpAmount");
+        exception.ErrorDescriptor.Category.Should().Be(ErrorCategory.Validation);
         member.Balance.Should().Be(100m);
     }
 
     [Fact]
-    public void TopUp_WithNegativeAmount_ShouldFail()
+    public void TopUp_WithNegativeAmount_ShouldThrowException()
     {
         // Arrange
         var member = CreateDefaultMember(balance: 100m);
 
         // Act
-        var result = member.TopUp(-50m);
+        var act = () => member.TopUp(-50m);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.ErrorDescriptor.Should().NotBeNull();
-        result.ErrorDescriptor!.Code.Should().Be("Members:Validation.InvalidTopUpAmount");
+        var exception = act.Should().Throw<MembersDomainException>().Which;
+        exception.ErrorDescriptor.Should().NotBeNull();
+        exception.ErrorDescriptor.Code.Should().Be("Members:Validation.InvalidTopUpAmount");
         member.Balance.Should().Be(100m);
     }
 
@@ -82,43 +81,42 @@ public class MemberTests
         var member = CreateDefaultMember(balance: 100m);
 
         // Act
-        var result = member.Deduct(30m);
+        member.Deduct(30m);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
         member.Balance.Should().Be(70m);
     }
 
     [Fact]
-    public void Deduct_WithInsufficientBalance_ShouldFail()
+    public void Deduct_WithInsufficientBalance_ShouldThrowException()
     {
         // Arrange
         var member = CreateDefaultMember(balance: 100m);
 
         // Act
-        var result = member.Deduct(150m);
+        var act = () => member.Deduct(150m);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.ErrorDescriptor.Should().NotBeNull();
-        result.ErrorDescriptor!.Code.Should().Be("Members:Business.InsufficientBalance");
-        result.ErrorDescriptor.Category.Should().Be(ErrorCategory.Business);
+        var exception = act.Should().Throw<MembersDomainException>().Which;
+        exception.ErrorDescriptor.Should().NotBeNull();
+        exception.ErrorDescriptor.Code.Should().Be("Members:Business.InsufficientBalance");
+        exception.ErrorDescriptor.Category.Should().Be(ErrorCategory.Business);
         member.Balance.Should().Be(100m);
     }
 
     [Fact]
-    public void Deduct_WithZeroAmount_ShouldFail()
+    public void Deduct_WithZeroAmount_ShouldThrowException()
     {
         // Arrange
         var member = CreateDefaultMember(balance: 100m);
 
         // Act
-        var result = member.Deduct(0m);
+        var act = () => member.Deduct(0m);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.ErrorDescriptor.Should().NotBeNull();
-        result.ErrorDescriptor!.Code.Should().Be("Members:Validation.InvalidDeductAmount");
+        var exception = act.Should().Throw<MembersDomainException>().Which;
+        exception.ErrorDescriptor.Should().NotBeNull();
+        exception.ErrorDescriptor.Code.Should().Be("Members:Validation.InvalidDeductAmount");
         member.Balance.Should().Be(100m);
     }
 
@@ -129,26 +127,25 @@ public class MemberTests
         var member = CreateDefaultMember(points: 100);
 
         // Act
-        var result = member.AwardPoints(50);
+        member.AwardPoints(50);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
         member.Points.Should().Be(150);
     }
 
     [Fact]
-    public void AwardPoints_WithZeroPoints_ShouldFail()
+    public void AwardPoints_WithZeroPoints_ShouldThrowException()
     {
         // Arrange
         var member = CreateDefaultMember(points: 100);
 
         // Act
-        var result = member.AwardPoints(0);
+        var act = () => member.AwardPoints(0);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.ErrorDescriptor.Should().NotBeNull();
-        result.ErrorDescriptor!.Code.Should().Be("Members:Validation.InvalidAwardPoints");
+        var exception = act.Should().Throw<MembersDomainException>().Which;
+        exception.ErrorDescriptor.Should().NotBeNull();
+        exception.ErrorDescriptor.Code.Should().Be("Members:Validation.InvalidAwardPoints");
         member.Points.Should().Be(100);
     }
 
@@ -170,10 +167,9 @@ public class MemberTests
         var member = CreateDefaultMember(points: 0, tier: MemberTier.Regular);
 
         // Act
-        var result = member.AwardPoints(totalPoints);
+        member.AwardPoints(totalPoints);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
         member.Points.Should().Be(totalPoints);
         member.Tier.Should().Be(expectedTier);
     }
@@ -189,10 +185,9 @@ public class MemberTests
         );
 
         // Act - award only a few points (still in Gold range)
-        var result = member.AwardPoints(100);
+        member.AwardPoints(100);
 
         // Assert - tier should remain Gold
-        result.IsSuccess.Should().BeTrue();
         member.Points.Should().Be(5100);
         member.Tier.Should().Be(MemberTier.Gold);
     }
@@ -204,10 +199,9 @@ public class MemberTests
         var member = CreateDefaultMember(points: 0, tier: MemberTier.Regular);
 
         // Act - award enough points to jump to Platinum
-        var result = member.AwardPoints(10000);
+        member.AwardPoints(10000);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
         member.Points.Should().Be(10000);
         member.Tier.Should().Be(MemberTier.Platinum);
     }
