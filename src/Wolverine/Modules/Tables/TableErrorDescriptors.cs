@@ -10,10 +10,14 @@ internal static class TableErrorDescriptors
 {
     private const string ModuleName = "Tables";
 
+    // Helper method for consistent error code formatting
+    private static string ErrorCode(string category, string specific) => 
+        $"{ModuleName}:{category}.{specific}";
+
     // NotFound errors
     public static ErrorDescriptor TableNotFound(Guid tableId) =>
         ErrorCodeBuilder.ForModule(ModuleName)
-            .WithCode($"{ModuleName}:NotFound.Table")
+            .WithCode(ErrorCode("NotFound", "Table"))
             .WithCategory(ErrorCategory.NotFound)
             .WithMessage("台球桌不存在: {TableId}")
             .AddContext("TableId", tableId)
@@ -22,7 +26,7 @@ internal static class TableErrorDescriptors
     // Validation errors
     public static ErrorDescriptor InvalidCapacity(int capacity) =>
         ErrorCodeBuilder.ForModule(ModuleName)
-            .WithCode($"{ModuleName}:Validation.InvalidCapacity")
+            .WithCode(ErrorCode("Validation", "InvalidCapacity"))
             .WithCategory(ErrorCategory.Validation)
             .WithMessage("台球桌容量无效，必须在 1-6 之间，实际: {Capacity}")
             .AddContext("Capacity", capacity)
@@ -30,7 +34,7 @@ internal static class TableErrorDescriptors
 
     public static ErrorDescriptor InvalidTableNumber(string number) =>
         ErrorCodeBuilder.ForModule(ModuleName)
-            .WithCode($"{ModuleName}:Validation.InvalidTableNumber")
+            .WithCode(ErrorCode("Validation", "InvalidTableNumber"))
             .WithCategory(ErrorCategory.Validation)
             .WithMessage("台球桌编号无效: {Number}")
             .AddContext("Number", number)
@@ -39,7 +43,7 @@ internal static class TableErrorDescriptors
     // Business rule errors
     public static ErrorDescriptor TableOccupied(Guid tableId, Guid sessionId) =>
         ErrorCodeBuilder.ForModule(ModuleName)
-            .WithCode($"{ModuleName}:Business.TableOccupied")
+            .WithCode(ErrorCode("Business", "TableOccupied"))
             .WithCategory(ErrorCategory.Business)
             .WithMessage("台球桌已被占用: {TableId}, 会话: {SessionId}")
             .AddContext("TableId", tableId)
@@ -48,7 +52,7 @@ internal static class TableErrorDescriptors
 
     public static ErrorDescriptor TableUnderMaintenance(Guid tableId) =>
         ErrorCodeBuilder.ForModule(ModuleName)
-            .WithCode($"{ModuleName}:Business.TableUnderMaintenance")
+            .WithCode(ErrorCode("Business", "TableUnderMaintenance"))
             .WithCategory(ErrorCategory.Business)
             .WithMessage("台球桌维护中，暂不可用: {TableId}")
             .AddContext("TableId", tableId)
@@ -57,7 +61,7 @@ internal static class TableErrorDescriptors
     // InvalidStatus errors
     public static ErrorDescriptor InvalidTableStatus(Guid tableId, string currentStatus, string expectedStatus) =>
         ErrorCodeBuilder.ForModule(ModuleName)
-            .WithCode($"{ModuleName}:InvalidStatus.Table")
+            .WithCode(ErrorCode("InvalidStatus", "Table"))
             .WithCategory(ErrorCategory.InvalidStatus)
             .WithMessage("台球桌状态不符，当前: {CurrentStatus}, 期望: {ExpectedStatus}")
             .AddContext("TableId", tableId)
@@ -68,7 +72,7 @@ internal static class TableErrorDescriptors
     // Conflict errors
     public static ErrorDescriptor DuplicateTableNumber(string number) =>
         ErrorCodeBuilder.ForModule(ModuleName)
-            .WithCode($"{ModuleName}:Conflict.DuplicateTableNumber")
+            .WithCode(ErrorCode("Conflict", "DuplicateTableNumber"))
             .WithCategory(ErrorCategory.Conflict)
             .WithMessage("台球桌编号已存在: {Number}")
             .AddContext("Number", number)

@@ -76,12 +76,29 @@ public sealed record ErrorDescriptor
         if (Context == null || Context.Count == 0)
             return DefaultMessage;
 
-        var message = DefaultMessage;
-        foreach (var (key, value) in Context)
+        var result = DefaultMessage;
+        
+        // 优化：避免在循环中多次调用 String.Replace
+        if (Context.Count <= 3)
         {
-            message = message.Replace($"{{{key}}}", value?.ToString() ?? string.Empty);
+            // 少量参数：直接替换
+            foreach (var (key, value) in Context)
+            {
+                result = result.Replace($"{{{key}}}", value?.ToString() ?? string.Empty);
+            }
         }
-        return message;
+        else
+        {
+            // 多参数：使用 StringBuilder 优化性能
+            var sb = new System.Text.StringBuilder(result);
+            foreach (var (key, value) in Context)
+            {
+                sb.Replace($"{{{key}}}", value?.ToString() ?? string.Empty);
+            }
+            result = sb.ToString();
+        }
+        
+        return result;
     }
 }
 

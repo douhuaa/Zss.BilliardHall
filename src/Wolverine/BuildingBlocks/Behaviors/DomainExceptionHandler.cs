@@ -12,6 +12,18 @@ namespace Zss.BilliardHall.BuildingBlocks.Behaviors;
 public static class DomainExceptionHandler
 {
     /// <summary>
+    /// 旧版错误码到消息的映射（向后兼容）
+    /// Legacy error code to message mapping (backward compatibility)
+    /// </summary>
+    private static readonly Dictionary<string, string> LegacyErrorMessages = new()
+    {
+        ["Member.InvalidTopUpAmount"] = "充值金额必须大于0",
+        ["Member.InvalidDeductAmount"] = "扣减金额必须大于0",
+        ["Member.InsufficientBalance"] = "余额不足",
+        ["Member.InvalidAwardPoints"] = "赠送积分必须大于0"
+    };
+
+    /// <summary>
     /// 将 ModuleDomainException 转换为 Result 和 HTTP 状态码
     /// Convert ModuleDomainException to Result and HTTP status code
     /// </summary>
@@ -113,15 +125,10 @@ public static class DomainExceptionHandler
                 errorCode
             );
 
-            // 简单的错误码到消息的映射（旧版兼容）
-            var message = errorCode switch
-            {
-                "Member.InvalidTopUpAmount" => "充值金额必须大于0",
-                "Member.InvalidDeductAmount" => "扣减金额必须大于0",
-                "Member.InsufficientBalance" => "余额不足",
-                "Member.InvalidAwardPoints" => "赠送积分必须大于0",
-                _ => "操作失败"
-            };
+            // 使用字典映射（提取到 LegacyErrorMessages）
+            var message = LegacyErrorMessages.TryGetValue(errorCode, out var msg)
+                ? msg
+                : "操作失败";
 
             var result = Result.Fail(message, errorCode);
             return (result, StatusCodes.Status400BadRequest);
