@@ -2,7 +2,6 @@ using Marten;
 using Microsoft.Extensions.Logging;
 using Wolverine.Attributes;
 using Zss.BilliardHall.BuildingBlocks.Contracts;
-using Zss.BilliardHall.BuildingBlocks.Exceptions;
 using Zss.BilliardHall.Modules.Members.Events;
 
 namespace Zss.BilliardHall.Modules.Members.RegisterMember;
@@ -29,7 +28,7 @@ public sealed class RegisterMemberHandler
         // Aggregate 不被污染（对的）
         // 👉 这是Vertical Slice 下“跨聚合规则”的标准位置。
         if (exists)
-            throw new DomainException(MemberErrorCodes.DuplicatePhone);
+            throw MembersDomainErrors.DuplicatePhone(command.Phone);
 
         // 2. 创建会员
         // TODO: Implement password hashing and storage when authentication module is ready
