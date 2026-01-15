@@ -30,7 +30,7 @@ public sealed class GetMemberHandler
             member.Balance,
             member.Points
         );
-        logger.LogInformation("{member.Name}", member.Name);
+        logger.LogInformation("查询会员信息: ID:{MemberId}, Name:{member.Name}", member.Id, member.Name);
         return dto;
     }
 }

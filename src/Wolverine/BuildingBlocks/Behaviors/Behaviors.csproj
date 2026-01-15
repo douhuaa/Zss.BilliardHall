@@ -1,3 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>Zss.BilliardHall.BuildingBlocks.$(MSBuildProjectName)</RootNamespace>
+	</PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="WolverineFx.Http" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Exceptions\Exceptions.csproj" />
+	</ItemGroup>
 </Project>

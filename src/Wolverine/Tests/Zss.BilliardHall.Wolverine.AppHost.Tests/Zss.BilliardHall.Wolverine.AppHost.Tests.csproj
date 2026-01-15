@@ -1,9 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -16,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Zss.BilliardHall.Wolverine.AppHost\Zss.BilliardHall.Wolverine.AppHost.csproj" />
+    <ProjectReference Include="..\..\Aspire\Zss.BilliardHall.Wolverine.AppHost\Zss.BilliardHall.Wolverine.AppHost.csproj" />
   </ItemGroup>
 
   <ItemGroup>
