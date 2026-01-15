@@ -1,7 +1,6 @@
 using Marten;
 using Microsoft.Extensions.Logging;
 using Wolverine.Attributes;
-using Zss.BilliardHall.BuildingBlocks.Contracts;
 using Zss.BilliardHall.Modules.Members.Events;
 
 namespace Zss.BilliardHall.Modules.Members.RegisterMember;
@@ -45,15 +44,4 @@ public sealed class RegisterMemberHandler
         // ✅ 成功 = 返回结果 + 事件 ❌ 失败 = DomainException
         return (member, @event);
     }
-
-    // public async Task<Result<Guid>> Handle(
-    //     RegisterMember command,
-    //     IDocumentSession session,
-    //     ILogger<RegisterMemberHandler> logger,
-    //     CancellationToken ct = default
-    // )
-    // {
-    //     var (memberId, _) = await HandleWithCascading(command, session, logger, ct);
-    //     return Result.Success(memberId);
-    // }
 }

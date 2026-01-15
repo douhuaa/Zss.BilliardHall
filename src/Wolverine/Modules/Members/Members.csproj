@@ -12,8 +12,8 @@
     <ProjectReference Include="..\..\BuildingBlocks\Exceptions\Exceptions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
+  <!-- <ItemGroup> -->
+  <!--   <FrameworkReference Include="Microsoft.AspNetCore.App" /> -->
+  <!-- </ItemGroup> -->
 
 </Project>

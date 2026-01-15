@@ -1,7 +1,5 @@
 using Marten;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Wolverine;
 using Wolverine.Marten;
 
 namespace Microsoft.Extensions.Hosting;
