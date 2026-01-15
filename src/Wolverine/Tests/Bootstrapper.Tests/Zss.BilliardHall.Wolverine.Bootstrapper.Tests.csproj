@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Bootstrapper\Bootstrapper.csproj" />
-    <ProjectReference Include="..\Aspire\Zss.BilliardHall.Wolverine.ServiceDefaults\Zss.BilliardHall.Wolverine.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\Aspire\Zss.BilliardHall.Wolverine.ServiceDefaults\Zss.BilliardHall.Wolverine.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>
