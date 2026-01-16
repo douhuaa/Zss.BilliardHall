@@ -1,6 +1,7 @@
 using Marten;
 using Microsoft.Extensions.Logging;
 using Wolverine.Attributes;
+using Zss.BilliardHall.BuildingBlocks.Contracts;
 using Zss.BilliardHall.Modules.Members.Events;
 
 namespace Zss.BilliardHall.Modules.Members.DeductBalance;
@@ -12,7 +13,7 @@ namespace Zss.BilliardHall.Modules.Members.DeductBalance;
 public sealed class DeductBalanceHandler
 {
     [Transactional]
-    public async Task<BalanceDeducted> Handle(
+    public async Task<BalanceDeducted> HandleWithCascading(
         DeductBalance command,
         IDocumentSession session,
         ILogger<DeductBalanceHandler> logger,
@@ -43,5 +44,17 @@ public sealed class DeductBalanceHandler
         );
 
         return @event;
+    }
+
+    [Transactional]
+    public async Task<Result> Handle(
+        DeductBalance command,
+        IDocumentSession session,
+        ILogger<DeductBalanceHandler> logger,
+        CancellationToken ct = default
+    )
+    {
+        await HandleWithCascading(command, session, logger, ct);
+        return Result.Success();
     }
 }

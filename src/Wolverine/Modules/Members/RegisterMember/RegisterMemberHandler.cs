@@ -1,6 +1,7 @@
 using Marten;
 using Microsoft.Extensions.Logging;
 using Wolverine.Attributes;
+using Zss.BilliardHall.BuildingBlocks.Contracts;
 using Zss.BilliardHall.Modules.Members.Events;
 
 namespace Zss.BilliardHall.Modules.Members.RegisterMember;
@@ -12,7 +13,7 @@ namespace Zss.BilliardHall.Modules.Members.RegisterMember;
 public sealed class RegisterMemberHandler
 {
     [Transactional]
-    public async Task<(Member MemberId, MemberRegistered Event)> Handle(
+    public async Task<(Member Member, MemberRegistered Event)> HandleWithCascading(
         RegisterMember command,
         IDocumentSession session,
         ILogger<RegisterMemberHandler> logger,
@@ -43,5 +44,17 @@ public sealed class RegisterMemberHandler
 
         // ✅ 成功 = 返回结果 + 事件 ❌ 失败 = DomainException
         return (member, @event);
+    }
+
+    [Transactional]
+    public async Task<Result<Guid>> Handle(
+        RegisterMember command,
+        IDocumentSession session,
+        ILogger<RegisterMemberHandler> logger,
+        CancellationToken ct = default
+    )
+    {
+        var (member, _) = await HandleWithCascading(command, session, logger, ct);
+        return Result.Success(member.Id);
     }
 }
