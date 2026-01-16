@@ -1,0 +1,68 @@
+chore(platform): 重构平台与模块集成，强化分层边界与日志
+
+重构 Marten/Wolverine 配置扩展，统一平台默认配置，日志支持 OpenTelemetry。
+模块程序集扫描移至模块注册点，避免基础库依赖。新增基于 NetArchTest 的
+架构分层约束测试，移除集成/烟雾测试。优化项目引用与日志参数，提升架构
+纯净性和可观测性，为模块化演进奠定基础。
+
+## 主要变更 Main Changes
+
+### 1. 项目文档 Project Documentation
+- 新增完整的项目概述和需求规格说明
+- 建立系统架构设计文档体系
+- 添加模块设计和数据库设计文档
+- 创建开发规范和 API 文档
+
+### 2. GitHub 配置 GitHub Configuration
+- 配置 GitHub Actions CI/CD 工作流
+- 添加 PR 模板和 Copilot 指令
+- 建立 Git 提交规范
+
+### 3. 开发规范 Development Standards
+- 代码风格规范
+- Wolverine 端点约定
+- FluentValidation 集成指南
+- Saga 使用指南
+- 级联消息与副作用规范
+
+### 4. 基础设施 Infrastructure
+- Git 配置文件 (.gitignore, .gitmessage.txt)
+- 项目 README
+- 文档改进总结
+
+## 文件统计 File Statistics
+
+- 新增文件: 110+ 个
+- 文档总行数: ~29,000 行
+- 主要目录:
+  - docs/01_项目概述
+  - docs/02_需求规格说明
+  - docs/03_系统架构设计
+  - docs/04_模块设计
+  - docs/05_数据库设计
+  - docs/06_开发规范
+  - docs/07_API文档
+  - docs/08_配置管理
+  - docs/09_测试方案
+  - .github/workflows
+  - .github/ (Copilot 相关文档)
+
+## 验证清单 Verification Checklist
+
+- [x] 所有文档文件已添加
+- [x] GitHub Actions 配置完整
+- [x] 开发规范文档齐全
+- [x] PR 模板和 Git 规范已建立
+- [x] 无敏感信息泄露
+- [x] 符合 Conventional Commits 规范
+- [x] 准备好合并到 main 分支
+
+## 后续步骤 Next Steps
+
+1. 在 GitHub PR 中使用 "Squash and merge" 功能
+2. 合并时使用本文件的内容作为提交信息
+3. 删除本地的 copilot/compress-commit-history 分支
+
+---
+生成日期: 2026-01-16
+分支: copilot/compress-commit-history → main
