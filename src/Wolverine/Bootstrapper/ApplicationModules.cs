@@ -1,4 +1,7 @@
 
+using Wolverine;
+using Zss.BilliardHall.Modules.Members;
+
 namespace Zss.BilliardHall.Wolverine.Bootstrapper;
 
 /// <summary>
@@ -13,6 +16,7 @@ namespace Zss.BilliardHall.Wolverine.Bootstrapper;
 /// </summary>
 public static class ApplicationModules
 {
+    // .net 10+ 支持在静态类中定义扩展方法
     extension<TBuilder>(TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         /// <summary>
@@ -22,27 +26,20 @@ public static class ApplicationModules
         {
             // Marker registration: application projects can consume ApplicationOptions from DI
             builder.Services.AddSingleton(new ApplicationOptions { IsWorker = false });
+            builder.AddWolverineModuleDiscovery();
             return builder;
         }
 
-        /// <summary>
-        /// Configure the host as an HTTP application.
-        /// This method does not map endpoints or reference endpoint types (Platform constraint).
-        /// It only registers a marker indicating HTTP mode.
-        /// </summary>
-        public TBuilder AddHttpApplication()
+        private TBuilder AddWolverineModuleDiscovery()
         {
-            builder.Services.AddSingleton(new ApplicationOptions { IsWorker = false });
-            return builder;
-        }
+            builder.Services.ConfigureWolverine(opts =>
+            {
+                // 扫描 Members 模块程序集
+                opts.Discovery.IncludeAssembly(typeof(Member).Assembly);
 
-        /// <summary>
-        /// Configure the host as a Worker (background) application.
-        /// This method sets a marker indicating worker mode. No endpoints or middleware are added here.
-        /// </summary>
-        public TBuilder AddWorkerApplication()
-        {
-            builder.Services.AddSingleton(new ApplicationOptions { IsWorker = true });
+                // 未来添加其他模块时，在此处添加：
+                // opts.Discovery.IncludeAssembly(typeof(SomeOtherModule).Assembly);
+            });
             return builder;
         }
     }

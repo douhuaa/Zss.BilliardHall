@@ -6,6 +6,7 @@ Console.OutputEncoding = Encoding.UTF8;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
+    .WriteTo.OpenTelemetry()
     .CreateBootstrapLogger();
 
 try

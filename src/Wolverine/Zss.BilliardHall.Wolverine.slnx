@@ -25,12 +25,12 @@
     <Project Path="Modules/Tables/Tables.csproj" />
   </Folder>
   <Folder Name="/Tests/">
+    <Project Path="Tests/Bootstrapper.Tests/Zss.BilliardHall.Wolverine.Bootstrapper.Tests.csproj" />
     <Project Path="Tests/Zss.BilliardHall.Wolverine.AppHost.Tests/Zss.BilliardHall.Wolverine.AppHost.Tests.csproj" />
     <Project Path="Tests/Zss.BilliardHall.Wolverine.ServiceDefaults.Tests/Zss.BilliardHall.Wolverine.ServiceDefaults.Tests.csproj">
       <Build Solution="Debug|x64" Project="false" />
       <Build Solution="Debug|x86" Project="false" />
     </Project>
-    <Project Path="Tests/Bootstrapper.Tests/Zss.BilliardHall.Wolverine.Bootstrapper.Tests.csproj" />
   </Folder>
   <Folder Name="/解决方案项/">
     <File Path="Directory.Build.props" />

@@ -1,6 +1,6 @@
 using Marten;
 using Microsoft.Extensions.Logging;
-using Zss.BilliardHall.BuildingBlocks.Contracts;
+using Wolverine.Attributes;
 
 namespace Zss.BilliardHall.Modules.Members.GetMember;
 
@@ -10,6 +10,7 @@ namespace Zss.BilliardHall.Modules.Members.GetMember;
 /// </summary>
 public sealed class GetMemberHandler
 {
+    [Transactional]
     public async Task<MemberDto> Handle(
         GetMember query,
         IDocumentSession session,
@@ -30,7 +31,7 @@ public sealed class GetMemberHandler
             member.Balance,
             member.Points
         );
-        logger.LogInformation("查询会员信息: ID:{MemberId}, Name:{member.Name}", member.Id, member.Name);
+        logger.LogInformation("查询会员信息: ID:{MemberId}, Name:{MemberName}", member.Id, member.Name);
         return dto;
     }
 }

@@ -28,13 +28,7 @@ public static class HttpHost
         app.UseMiddleware<DomainExceptionMiddleware>();
         app.MapWolverineEndpoints();
 
-        app.MapGet("/", () => new
-        {
-            Application = "Zss.BilliardHall.Bootstrapper",
-            Status = "Running",
-            Framework = "Wolverine + Marten",
-            Architecture = "Vertical Slice"
-        });
+        app.MapGet("/", () => Results.Ok());
 
         return app;
     }

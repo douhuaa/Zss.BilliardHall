@@ -17,16 +17,18 @@ public static class PlatformDefaults
 {
     public static void AddPlatformDefaults(this WebApplicationBuilder builder)
     {
+        if (builder.Environment.IsEnvironment("Testing"))
+        {
+            builder.WebHost.UseUrls("http://127.0.0.1:0");
+        }
         builder.Host.UseSerilog((context, services, configuration) =>
             configuration
                 .ReadFrom.Configuration(context.Configuration)
                 .ReadFrom.Services(services)
                 .Enrich.FromLogContext());
 
-
         builder.AddServiceDefaults();
         builder.AddMartenDefaults();
         builder.AddWolverineDefaults();
-        builder.ConfigureWolverineModuleDiscovery();
     }
 }

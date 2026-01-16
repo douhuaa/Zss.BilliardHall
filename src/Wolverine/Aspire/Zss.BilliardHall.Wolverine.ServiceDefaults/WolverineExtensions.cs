@@ -43,18 +43,15 @@ public static class WolverineExtensions
 
         builder.Services.AddWolverine(opts =>
         {
-            // Wolverine 默认会自动扫描入口程序集（entry assembly）查找 Handler 和 Endpoint
-            // Wolverine automatically scans the entry assembly for Handlers and Endpoints by default
-            // 如果需要扫描额外的程序集，可以使用：
-            // To scan additional assemblies, use:
-            // opts.Discovery.IncludeAssembly(typeof(SomeType).Assembly);
-
+            // 不要在通用的 ServiceDefaults 中直接 IncludeAssembly，以避免把模块依赖扯入基础库。
+            // 如果需要扫描额外的程序集，会引入对这些模块的依赖。
+            // 为了把依赖控制在模块边界内，请在相应的 `ApplicationModules`（或模块注册点）中配置额外的程序集扫描，
+            // 例如在模块侧调用ConfigureModuleDiscovery：opts.Discovery.IncludeAssembly(typeof(SomeModule.Marker).Assembly);
+            
             // 集成 FluentValidation 进行输入验证
-            // Integrate FluentValidation for input validation
             opts.UseFluentValidation();
 
             // 预留配置点：未来可以在此集成消息队列
-            // Configuration placeholder: Future message queue integration
             // 示例 / Examples:
             // - RabbitMQ: opts.UseRabbitMq(...)
             // - Kafka: opts.UseKafka(...)
@@ -66,7 +63,6 @@ public static class WolverineExtensions
             if (messagingSection.Exists())
             {
                 // 未来可以根据配置动态加载传输层
-                // Future: Dynamically load transport based on configuration
                 // var provider = messagingSection["Provider"]; // "RabbitMQ", "Kafka", etc.
             }
         });
