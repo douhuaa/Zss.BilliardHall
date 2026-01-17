@@ -36,8 +36,11 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         // Arrange
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
+        
+        builder.AddPlatformDefaults();
+        builder.AddApplicationModules();
 
-        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
+        await using var app = builder.Build();
         await app.StartAsync();
 
         var bus = app.Services.GetRequiredService<IMessageBus>();
@@ -74,8 +77,11 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         // Arrange
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
+        
+        builder.AddPlatformDefaults();
+        builder.AddApplicationModules();
 
-        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
+        await using var app = builder.Build();
         await app.StartAsync();
 
         var bus = app.Services.GetRequiredService<IMessageBus>();
@@ -111,8 +117,11 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         // Arrange
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
+        
+        builder.AddPlatformDefaults();
+        builder.AddApplicationModules();
 
-        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
+        await using var app = builder.Build();
         await app.StartAsync();
 
         var bus = app.Services.GetRequiredService<IMessageBus>();
@@ -143,8 +152,11 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         // Arrange
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
+        
+        builder.AddPlatformDefaults();
+        builder.AddApplicationModules();
 
-        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
+        await using var app = builder.Build();
         await app.StartAsync();
 
         var bus = app.Services.GetRequiredService<IMessageBus>();
@@ -175,8 +187,11 @@ public class MembersModuleTests : IClassFixture<PostgresFixture>
         // Arrange
         var builder = WebApplication.CreateBuilder();
         ConfigureTestBuilder(builder);
+        
+        builder.AddPlatformDefaults();
+        builder.AddApplicationModules();
 
-        await using var app = BootstrapperHost.BuildAppFromBuilder(builder);
+        await using var app = builder.Build();
         await app.StartAsync();
 
         var bus = app.Services.GetRequiredService<IMessageBus>();
