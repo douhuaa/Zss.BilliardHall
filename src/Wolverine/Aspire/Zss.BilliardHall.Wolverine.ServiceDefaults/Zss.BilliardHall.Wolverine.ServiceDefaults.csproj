@@ -16,6 +16,8 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
     <PackageReference Include="Marten" />
     <PackageReference Include="Marten.AspNetCore" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Sinks.OpenTelemetry" />
     <PackageReference Include="WolverineFx.Http" />
     <PackageReference Include="WolverineFx.Http.FluentValidation" />
     <PackageReference Include="WolverineFx.Marten" />
