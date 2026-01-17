@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Wolverine;
 using Wolverine.Http;
-using Zss.BilliardHall.BuildingBlocks.Contracts;
 using Zss.BilliardHall.Modules.Members.Events;
 
 namespace Zss.BilliardHall.Modules.Members.TopUpBalance;

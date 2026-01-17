@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Wolverine;
 using Wolverine.Http;
-using Zss.BilliardHall.BuildingBlocks.Contracts;
 
 namespace Zss.BilliardHall.Modules.Members.GetMember;
 
@@ -17,10 +15,10 @@ public sealed class GetMemberEndpoint
         Guid memberId,
         IMessageBus bus)
     {
-        var result = await bus.InvokeAsync<Result<MemberDto>>(
+        var result = await bus.InvokeAsync<MemberDto>(
             new GetMember(memberId)
         );
 
-        return Results.Ok(result.Value);
+        return Results.Ok(result);
     }
 }

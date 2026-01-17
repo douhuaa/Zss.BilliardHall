@@ -3,6 +3,8 @@
 // 启动方式：设为启动项目，按 F5 运行，或命令行 `dotnet run`
 // Dashboard：自动启动在 https://localhost:17001（可在 Resources、Logs、Traces、Metrics 查看监控）
 
+using Microsoft.Extensions.Hosting;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 // 1. 定义 PostgreSQL 容器
@@ -10,7 +12,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 // - 数据持久化：使用 Docker Volume，避免重启丢失数据
 // - 容器生命周期：Persistent（持久化，不随 AppHost 退出而销毁）
 var postgres = builder
-    .AddPostgres("postgres")
+    .AddPostgres("postgres",port:41913)
     .WithDataVolume()                               // 数据存储到本地 Docker Volume
     .WithLifetime(ContainerLifetime.Persistent);    // 容器持久化（开发时保留数据）
 
@@ -32,3 +34,4 @@ builder.AddProject<Projects.Bootstrapper>("bootstrapper")
 // - 启动 Aspire Dashboard（监控面板）
 // - 配置服务发现（自动解析 http+https://service-name）
 builder.Build().Run();
+// Host = localhost; Port = 41913; Username = postgres; Password = (pkrY + MNmD + 1z6ECCb(CG}; Database = Default

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 
 namespace Zss.BilliardHall.BuildingBlocks.Exceptions;
 
@@ -8,84 +8,28 @@ namespace Zss.BilliardHall.BuildingBlocks.Exceptions;
 public class DomainException : Exception
 {
     public string Code { get; }
+    public int StatusCode { get; }
+    public object? Metadata { get; }
 
-    public DomainException(string code, string? message = null)
-        : base(message)
+    // 标准路径：用 ErrorCode 的默认 message
+    public DomainException(ErrorCode error)
+        : base(error.Message)
     {
-        Code = code;
+        Code = error.Code;
+        StatusCode = error.StatusCode;
     }
 
-    public DomainException(ErrorCode code)
-        : base(code.Message)
+    // ✅ 正确姿势：message 永远来自 ErrorCode
+    // 运行时上下文进 Metadata
+    // Middleware 永不序列化 Metadata
+    public DomainException(ErrorCode error, object? metadata = null)
+        : base(error.Message)
     {
-        Code = code.Code;
-    }
-
-    public DomainException(string code, string message, Exception innerException)
-        : base(message, innerException)
-    {
-        Code = code;
-    }
-}
-
-public record ErrorCode(string Code, string Message);
-
-public sealed record ErrorResponse(string Code, string Message);
-
-public static class DomainExceptionHttpMapper
-{
-    public static int MapStatusCode(DomainException ex) => ex.Code switch
-    {
-        "Payment.Failed" => StatusCodes.Status402PaymentRequired,
-        // 资源状态不满足（余额不足/库存不足等）→ 409
-        _ when ex.Code.Contains("Insufficient", StringComparison.OrdinalIgnoreCase) =>
-            StatusCodes.Status409Conflict,
-
-        // 重复（手机号已存在、记录已存在）→ 409（与现有状态冲突）
-        _ when ex.Code.Contains("Duplicate", StringComparison.OrdinalIgnoreCase) =>
-            StatusCodes.Status409Conflict,
-
-        // 明确的“禁止访问/操作”→ 403
-        _ when ex.Code.Contains("Forbidden", StringComparison.OrdinalIgnoreCase) =>
-            StatusCodes.Status403Forbidden,
-
-        // 典型资源未找到 → 404
-        _ when ex.Code.Contains("NotFound", StringComparison.OrdinalIgnoreCase) =>
-            StatusCodes.Status404NotFound,
-
-        // 显式 Conflict 关键字 → 409
-        _ when ex.Code.Contains("Conflict", StringComparison.OrdinalIgnoreCase) =>
-            StatusCodes.Status409Conflict,
-
-        // 其余都按 BadRequest 处理
-        _ => StatusCodes.Status400BadRequest,
-    };
-}
-
-public sealed class DomainExceptionMiddleware
-{
-    private readonly RequestDelegate _next;
-
-    public DomainExceptionMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
-    public async Task Invoke(HttpContext context)
-    {
-        try
-        {
-            await _next(context);
-        }
-        catch (DomainException ex)
-        {
-            context.Response.StatusCode = DomainExceptionHttpMapper.MapStatusCode(ex);
-
-            context.Response.ContentType = "application/json";
-
-            var response = new ErrorResponse(ex.Code, ex.Message ?? ex.Code);
-
-            await context.Response.WriteAsJsonAsync(response);
-        }
+        Code = error.Code;
+        StatusCode = error.StatusCode;
+        Metadata = metadata;
     }
 }
+
+// ErrorCode.Code 采用三段式：{Module}.{ Category}.{ Key}
+public record ErrorCode(string Code, int StatusCode, string Message);

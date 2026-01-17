@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Zss.BilliardHall.BuildingBlocks.Exceptions;
 
 namespace Zss.BilliardHall.Modules.Members;
 
@@ -46,7 +45,7 @@ public class Member
     public void TopUp(decimal amount)
     {
         if (amount <= 0)
-            throw new DomainException(MemberErrorCodes.InvalidTopUpAmount);
+            throw MembersDomainErrors.InvalidTopUpAmount(amount);
         Balance += amount;
     }
 
@@ -57,10 +56,10 @@ public class Member
     public void Deduct(decimal amount)
     {
         if (amount <= 0)
-            throw new DomainException(MemberErrorCodes.InvalidDeductAmount);
+            throw MembersDomainErrors.InvalidDeductAmount(amount);
 
         if (Balance < amount)
-            throw new DomainException(MemberErrorCodes.InsufficientBalance);
+            throw MembersDomainErrors.InsufficientBalance(Id, amount, Balance);
         
         Balance -= amount;
     }
@@ -72,7 +71,7 @@ public class Member
     public void AwardPoints(int points)
     {
         if (points <= 0)
-            throw new DomainException(MemberErrorCodes.InvalidAwardPoints);
+            throw MembersDomainErrors.InvalidAwardPoints(points);
 
         var previousTier = Tier;
 

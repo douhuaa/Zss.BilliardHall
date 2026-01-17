@@ -1,17 +1,19 @@
+using System.Text;
 using Serilog;
 using Zss.BilliardHall.Wolverine.Bootstrapper;
 
-// Create a bootstrap logger for early startup logging
-// 创建引导日志记录器用于早期启动日志
+Console.OutputEncoding = Encoding.UTF8;
+
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
+    .WriteTo.OpenTelemetry()
     .CreateBootstrapLogger();
 
 try
 {
     Log.Information("Starting Billiard Hall application...");
 
-    var app = BootstrapperHost.BuildApp(args);
+    var app = HttpHost.Build(args);
 
     Log.Information("Application configured successfully, starting web server...");
 
@@ -20,7 +22,6 @@ try
 catch (Exception ex)
 {
     Log.Fatal(ex, "Application terminated unexpectedly");
-    throw;
 }
 finally
 {

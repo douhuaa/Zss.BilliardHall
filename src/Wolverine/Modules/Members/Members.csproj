@@ -7,13 +7,8 @@
     <PackageReference Include="WolverineFx.Http.FluentValidation" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\BuildingBlocks\Contracts\Contracts.csproj" />
-    <ProjectReference Include="..\..\BuildingBlocks\Exceptions\Exceptions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<ProjectReference Include="..\..\BuildingBlocks\Contracts\Contracts.csproj" />
+		<ProjectReference Include="..\..\BuildingBlocks\Exceptions\Exceptions.csproj" />
+	</ItemGroup>
 </Project>

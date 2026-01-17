@@ -147,4 +147,53 @@ public class MemberTests
         member.Points.Should().Be(10000);
         member.Tier.Should().Be(MemberTier.Platinum);
     }
+
+    [Fact]
+    public void Register_ShouldCreateMemberWithProvidedInitialValues()
+    {
+        var member = Member.Register(
+            "测试会员",
+            "13800138003",
+            "test@example.com",
+            tier: MemberTier.Gold,
+            balance: 12.34m,
+            points: 567
+        );
+
+        member.Id.Should().NotBeEmpty();
+        member.Name.Should().Be("测试会员");
+        member.Phone.Should().Be("13800138003");
+        member.Email.Should().Be("test@example.com");
+        member.Tier.Should().Be(MemberTier.Gold);
+        member.Balance.Should().Be(12.34m);
+        member.Points.Should().Be(567);
+    }
+
+    [Theory]
+    [InlineData(999, MemberTier.Regular)]
+    [InlineData(1000, MemberTier.Silver)]
+    [InlineData(4999, MemberTier.Silver)]
+    [InlineData(5000, MemberTier.Gold)]
+    [InlineData(9999, MemberTier.Gold)]
+    [InlineData(10000, MemberTier.Platinum)]
+    public void AwardPoints_Boundaries_ShouldSetExpectedTier(int startingPoints, MemberTier expectedTier)
+    {
+        var member = CreateDefaultMember(points: 0, tier: MemberTier.Regular);
+
+        member.AwardPoints(startingPoints);
+
+        member.Points.Should().Be(startingPoints);
+        member.Tier.Should().Be(expectedTier);
+    }
+
+    [Fact]
+    public void AwardPoints_WhenAlreadyPlatinum_ShouldRemainPlatinum()
+    {
+        var member = CreateDefaultMember(points: 10000, tier: MemberTier.Platinum);
+
+        member.AwardPoints(1);
+
+        member.Tier.Should().Be(MemberTier.Platinum);
+        member.Points.Should().Be(10001);
+    }
 }

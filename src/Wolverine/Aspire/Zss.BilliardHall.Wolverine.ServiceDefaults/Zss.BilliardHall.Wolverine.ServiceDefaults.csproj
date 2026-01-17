@@ -1,4 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>Microsoft.Extensions.Hosting</RootNamespace>
+	</PropertyGroup>
 
   <PropertyGroup>
     <IsAspireSharedProject>true</IsAspireSharedProject>
@@ -14,9 +17,7 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
-    <PackageReference Include="Marten" />
-    <PackageReference Include="Marten.AspNetCore" />
-    <PackageReference Include="WolverineFx.Http" />
+
     <PackageReference Include="WolverineFx.Http.FluentValidation" />
     <PackageReference Include="WolverineFx.Marten" />
   </ItemGroup>

@@ -2,7 +2,6 @@ using Marten;
 using Microsoft.Extensions.Logging;
 using Wolverine.Attributes;
 using Zss.BilliardHall.BuildingBlocks.Contracts;
-using Zss.BilliardHall.BuildingBlocks.Exceptions;
 using Zss.BilliardHall.Modules.Members.Events;
 
 namespace Zss.BilliardHall.Modules.Members.DeductBalance;
@@ -23,7 +22,7 @@ public sealed class DeductBalanceHandler
     {
         var member = await session.LoadAsync<Member>(command.MemberId, ct);
         if (member == null)
-            throw new DomainException(MemberErrorCodes.NotFound);
+            throw MembersDomainErrors.NotFound();
 
         member.Deduct(command.Amount);
 

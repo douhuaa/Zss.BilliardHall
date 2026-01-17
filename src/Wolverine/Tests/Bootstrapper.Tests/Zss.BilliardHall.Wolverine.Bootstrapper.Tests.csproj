@@ -15,11 +15,12 @@
     <PackageReference Include="WolverineFx.Http" />
     <PackageReference Include="Testcontainers" />
     <PackageReference Include="Testcontainers.PostgreSql" />
+    <PackageReference Include="NetArchTest.Rules" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bootstrapper\Bootstrapper.csproj" />
-    <ProjectReference Include="..\Aspire\Zss.BilliardHall.Wolverine.ServiceDefaults\Zss.BilliardHall.Wolverine.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\Bootstrapper\Bootstrapper.csproj" />
+    <ProjectReference Include="..\..\Aspire\Zss.BilliardHall.Wolverine.ServiceDefaults\Zss.BilliardHall.Wolverine.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>
