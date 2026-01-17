@@ -1,5 +1,4 @@
 using Marten;
-using Zss.BilliardHall.BuildingBlocks.Contracts;
 
 namespace Zss.BilliardHall.Modules.Members.GetMember;
 
@@ -9,7 +8,7 @@ namespace Zss.BilliardHall.Modules.Members.GetMember;
 /// </summary>
 public sealed class GetMemberHandler
 {
-    public async Task<Result<MemberDto>> Handle(
+    public async Task<MemberDto> Handle(
         GetMember query,
         IDocumentSession session,
         CancellationToken ct = default)
@@ -17,7 +16,7 @@ public sealed class GetMemberHandler
         var member = await session.LoadAsync<Member>(query.MemberId, ct);
 
         if (member == null)
-            return Result.Fail<MemberDto>("会员不存在");
+            throw MembersDomainErrors.MemberNotFound();
 
         var dto = new MemberDto(
             member.Id,
@@ -30,6 +29,6 @@ public sealed class GetMemberHandler
             member.RegisteredAt
         );
 
-        return Result.Success(dto);
+        return dto;
     }
 }

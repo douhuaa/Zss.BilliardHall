@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Zss.BilliardHall.BuildingBlocks.Core;
 
 namespace Zss.BilliardHall.Modules.Members;
 
@@ -58,41 +57,38 @@ public class Member
     /// 充值余额
     /// Top up balance
     /// </summary>
-    public DomainResult TopUp(decimal amount)
+    public void TopUp(decimal amount)
     {
         if (amount <= 0)
-            return DomainResult.Fail(MemberErrorCodes.InvalidTopUpAmount);
+            throw MembersDomainErrors.InvalidAmount(amount);
 
         Balance += amount;
-        return DomainResult.Success();
     }
 
     /// <summary>
     /// 扣减余额
     /// Deduct balance
     /// </summary>
-    public DomainResult Deduct(decimal amount)
+    public void Deduct(decimal amount)
     {
         if (amount <= 0)
-            return DomainResult.Fail(MemberErrorCodes.InvalidDeductAmount);
+            throw MembersDomainErrors.InvalidAmount(amount);
 
         if (Balance < amount)
-            return DomainResult.Fail(MemberErrorCodes.InsufficientBalance);
+            throw MembersDomainErrors.InsufficientBalance(amount, Balance);
 
         Balance -= amount;
         Touch();
-
-        return DomainResult.Success();
     }
 
     /// <summary>
     /// 赠送积分
     /// Award points
     /// </summary>
-    public DomainResult AwardPoints(int points)
+    public void AwardPoints(int points)
     {
         if (points <= 0)
-            return DomainResult.Fail(MemberErrorCodes.InvalidAwardPoints);
+            throw MembersDomainErrors.InvalidAmount(points);
 
         var previousTier = Tier;
 
@@ -105,7 +101,6 @@ public class Member
             // and the corresponding Members module issue tracking event integration.
             // RaiseDomainEvent(new MemberTierUpgraded(Id, previousTier, Tier));
         }
-        return DomainResult.Success();
     }
 
     /// <summary>
