@@ -26,18 +26,8 @@ public sealed class TopUpBalanceHandler
 
         var oldBalance = member.Balance;
 
-        // 2. 调用领域方法并检查结果
-        var domainResult = member.TopUp(command.Amount);
-        if (!domainResult.IsSuccess)
-        {
-            var message = domainResult.Error?.Code switch
-            {
-                "Member.InvalidTopUpAmount" => "充值金额必须大于0",
-                _ => "充值失败"
-            };
-
-            return (Result.Fail(message, domainResult.Error?.Code ?? string.Empty), null);
-        }
+        // 2. 调用领域方法（异常会由 DomainExceptionMiddleware 处理）
+        member.TopUp(command.Amount);
 
         // 3. 持久化（[Transactional] 特性会自动调用 SaveChangesAsync）
         session.Store(member);

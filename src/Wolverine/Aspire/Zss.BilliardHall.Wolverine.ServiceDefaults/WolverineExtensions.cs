@@ -1,6 +1,9 @@
 using Marten;
-using Oakton.Resources;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Wolverine;
+using Wolverine.FluentValidation;
+using Wolverine.Marten;
 
 namespace Zss.BilliardHall.Wolverine.ServiceDefaults;
 
@@ -27,9 +30,6 @@ public static class WolverineExtensions
             // 3. 自定义配置回调
             configure?.Invoke(options);
         });
-
-        // 4. Wolverine 资源注册（用于 Oakton 启动检查）
-        builder.Services.AddResourceSetupOnStartup();
 
         return builder;
     }

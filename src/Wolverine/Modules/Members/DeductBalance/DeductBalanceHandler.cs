@@ -25,18 +25,15 @@ public sealed class DeductBalanceHandler
 
         var oldBalance = member.Balance;
 
-        // 使用领域结果模式处理业务规则
-        var domainResult = member.Deduct(command.Amount);
-        if (!domainResult.IsSuccess)
+        try
         {
-            var message = domainResult.Error?.Code switch
-            {
-                "Member.InvalidDeductAmount" => "扣减金额必须大于0",
-                "Member.InsufficientBalance" => "余额不足",
-                _ => "余额扣减失败"
-            };
-
-            return (Result.Fail(message, domainResult.Error?.Code ?? string.Empty), null);
+            // 领域方法现在直接抛出异常
+            member.Deduct(command.Amount);
+        }
+        catch (Exception)
+        {
+            // 异常会由 DomainExceptionMiddleware 统一处理
+            throw;
         }
 
         session.Store(member);
