@@ -9,10 +9,12 @@ var builder = DistributedApplication.CreateBuilder(args);
 // - 服务名称：postgres（可通过 http+https://postgres 访问）
 // - 数据持久化：使用 Docker Volume，避免重启丢失数据
 // - 容器生命周期：Persistent（持久化，不随 AppHost 退出而销毁）
+// - 固定端口：5432（便于本地工具连接）
 var postgres = builder
     .AddPostgres("postgres")
     .WithDataVolume()                               // 数据存储到本地 Docker Volume
-    .WithLifetime(ContainerLifetime.Persistent);    // 容器持久化（开发时保留数据）
+    .WithLifetime(ContainerLifetime.Persistent)     // 容器持久化（开发时保留数据）
+    .WithPgAdmin();                                 // 添加 pgAdmin 管理工具
 
 // 2. 定义数据库
 // - 数据库名：Default（统一连接字符串键）

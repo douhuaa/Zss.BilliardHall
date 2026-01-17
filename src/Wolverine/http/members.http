@@ -1,0 +1,42 @@
+### Members API 测试文件
+### 使用 VS Code REST Client 或 JetBrains HTTP Client
+
+@baseUrl = http://localhost:5000
+@memberId = {{$guid}}
+
+### 注册新会员
+POST {{baseUrl}}/api/members
+Content-Type: application/json
+
+{
+  "name": "张三",
+  "phone": "13800138000",
+  "email": "zhangsan@example.com"
+}
+
+### 查询会员信息
+GET {{baseUrl}}/api/members/{{memberId}}
+
+### 充值余额
+POST {{baseUrl}}/api/members/{{memberId}}/topup-balance
+Content-Type: application/json
+
+{
+  "amount": 100.00
+}
+
+### 扣减余额
+POST {{baseUrl}}/api/members/{{memberId}}/deduct-balance
+Content-Type: application/json
+
+{
+  "amount": 20.00
+}
+
+### 赠送积分
+POST {{baseUrl}}/api/members/{{memberId}}/award-points
+Content-Type: application/json
+
+{
+  "points": 50
+}
