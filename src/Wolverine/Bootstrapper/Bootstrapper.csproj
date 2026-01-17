@@ -5,6 +5,8 @@
     <PackageReference Include="Marten.AspNetCore" />
 
     <PackageReference Include="Serilog.AspNetCore" />
+    
+    <PackageReference Include="WolverineFx.Marten" />
 
     <PackageReference Include="WolverineFx.Http.FluentValidation" />
 
@@ -12,7 +14,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Aspire\Zss.BilliardHall.Wolverine.ServiceDefaults\Zss.BilliardHall.Wolverine.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\Behaviors\Behaviors.csproj" />
     <ProjectReference Include="..\Modules\Members\Members.csproj" />
+    <ProjectReference Include="..\Modules\Sessions\Sessions.csproj" />
+    <ProjectReference Include="..\Modules\Tables\Tables.csproj" />
   </ItemGroup>
 
 </Project>

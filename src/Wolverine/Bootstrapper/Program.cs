@@ -11,7 +11,7 @@ try
 {
     Log.Information("Starting Billiard Hall application...");
 
-    var app = BootstrapperHost.BuildApp(args);
+    var app = HttpHost.Build(args);
 
     Log.Information("Application configured successfully, starting web server...");
 
