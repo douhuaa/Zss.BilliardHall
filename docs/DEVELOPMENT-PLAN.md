@@ -8,14 +8,35 @@ Zss.BilliardHall is a modern billiard hall management system built on a Modular 
 ### 1.2 Core Architectural Principles
 - **Module Isolation**: Strict isolation between business modules to prevent tight coupling
 - **Vertical Slices**: Each module contains its complete business logic, avoiding layered architecture
+- **Message-Driven**: Use Wolverine framework for asynchronous message communication between modules
 - **Platform Sharing**: Common capabilities are consolidated in the Platform layer for module consumption
 - **Architectural Constraints**: Architecture rules are enforced through automated tests
 
 ### 1.3 Technology Stack
 - **Runtime**: .NET 10.0
 - **Web Framework**: ASP.NET Core
+- **Messaging Framework**: Wolverine (In-process message bus + CQRS)
+- **Data Storage**: Marten (PostgreSQL document database) / EF Core
 - **Testing**: xUnit + NetArchTest
 - **Build Tools**: MSBuild / .NET CLI
+
+### 1.4 Why Wolverine?
+
+Wolverine is a modern messaging framework designed specifically for modular monolith architectures with the following advantages:
+
+**Core Benefits**:
+- **Low Code Ceremony**: No need to define interfaces or register services, convention-based auto-discovery
+- **In-Process Message Bus**: Modules communicate through messages, avoiding direct references
+- **Native CQRS Support**: Clear separation of commands, events, and queries
+- **Durable Messaging**: Inbox/Outbox Pattern ensures message reliability
+- **Smooth Evolution Path**: Easy transition from monolith to distributed systems (RabbitMQ/Azure Service Bus)
+
+**Alignment with This Project**:
+- ✅ Module Isolation: Orders and Members communicate via events, no direct dependencies
+- ✅ Vertical Slices: One command/event handler per feature, clear code organization
+- ✅ Testability: Handlers are pure functions, easy to unit test
+- ✅ High Performance: In-process communication, no network overhead
+- ✅ Observability: Built-in diagnostics, tracing, and logging integration
 
 ---
 
@@ -66,18 +87,51 @@ Zss.BilliardHall/
   - Member activity analysis
   - Churn prediction and alerts
 
-#### 3.1.2 Technical Implementation
+#### 3.1.2 Technical Implementation (Wolverine Vertical Slice Architecture)
 ```csharp
-// Recommended domain model structure
+// Wolverine modular architecture recommended structure
 Modules/Members/
-  ├── Features/              # Organized by feature
+  ├── Features/              # Vertical slices by feature
   │   ├── Registration/      # Member registration
+  │   │   ├── RegisterMember.cs        # Command
+  │   │   ├── RegisterMemberHandler.cs # Command Handler
+  │   │   └── MemberRegistered.cs      # Domain Event
   │   ├── Cards/            # Membership card management
+  │   │   ├── IssueCard.cs
+  │   │   ├── RechargeCard.cs
+  │   │   └── CardHandlers.cs
   │   ├── Loyalty/          # Points and tiers
+  │   │   ├── AddPoints.cs
+  │   │   ├── UpgradeTier.cs
+  │   │   └── LoyaltyHandlers.cs
   │   └── Analytics/        # Statistics and analysis
-  ├── Events/               # Domain events
+  │       └── MemberStatisticsQuery.cs
+  ├── Events/               # Domain events (published across modules)
+  │   ├── MemberRegistered.cs
+  │   ├── CardRecharged.cs
+  │   └── TierUpgraded.cs
   ├── Contracts/            # Public contracts (for other modules)
+  │   └── IMemberQueries.cs
   └── Members.csproj
+
+// Wolverine command handler example
+public record RegisterMember(string Name, string Phone);
+
+public static class RegisterMemberHandler
+{
+    // Wolverine auto-discovers and registers this handler
+    public static async Task<MemberRegistered> Handle(
+        RegisterMember command, 
+        IDocumentSession session)
+    {
+        var member = new Member(command.Name, command.Phone);
+        session.Store(member);
+        await session.SaveChangesAsync();
+        
+        // Return event, Wolverine auto-publishes it
+        return new MemberRegistered(member.Id, member.Name);
+    }
+}
 ```
 
 #### 3.1.3 Data Model Design
@@ -116,17 +170,44 @@ Modules/Members/
   - Revenue statistics
   - Peak hour analysis
 
-#### 3.2.2 Technical Implementation
+#### 3.2.2 Technical Implementation (Wolverine Vertical Slice Architecture)
 ```csharp
 Modules/Orders/
   ├── Features/
   │   ├── Tables/           # Table management
+  │   │   ├── ReserveTable.cs
+  │   │   └── TableHandlers.cs
   │   ├── Pricing/          # Pricing rules
+  │   │   ├── ConfigurePricing.cs
+  │   │   └── PricingHandlers.cs
   │   ├── Sessions/         # Session & checkout
+  │   │   ├── StartSession.cs          # Command
+  │   │   ├── EndSession.cs            # Command
+  │   │   ├── SessionHandlers.cs       # Handlers
+  │   │   └── SessionStarted.cs        # Event
   │   └── Reporting/        # Reports and statistics
-  ├── Events/
+  │       └── OrderStatisticsQuery.cs
+  ├── Events/               # Domain events
+  │   ├── SessionStarted.cs
+  │   ├── SessionEnded.cs
+  │   └── PaymentCompleted.cs
   ├── Contracts/
   └── Orders.csproj
+
+// Cross-module communication example: Update member points after payment
+// Orders module publishes event
+public record PaymentCompleted(Guid MemberId, decimal Amount);
+
+// Members module subscribes to event (Wolverine auto-routes)
+public static class PaymentCompletedHandler
+{
+    public static AddPoints Handle(PaymentCompleted evt)
+    {
+        // Earn 1 point per dollar spent
+        var points = (int)evt.Amount;
+        return new AddPoints(evt.MemberId, points, "Purchase Points");
+    }
+}
 ```
 
 #### 3.2.3 Data Model Design
@@ -167,16 +248,25 @@ Modules/Orders/
 
 ### 4.1 Infrastructure Capabilities
 
-- [ ] **Data Access**
-  - Entity Framework Core configuration
-  - Repository pattern encapsulation
+- [ ] **Wolverine Messaging Framework Integration**
+  - In-process message bus configuration
+  - Command/event routing rules
+  - Message handling pipeline (middleware)
+  - Message persistence (Inbox/Outbox Pattern)
+  - Delayed messages and retry strategies
+  - Future support for external message queues (RabbitMQ/Azure Service Bus)
+
+- [ ] **Data Access (Recommended: Marten + PostgreSQL)**
+  - Marten as document database + event store
+  - Entity Framework Core (optional, for relational scenarios)
   - Unit of Work
   - Database migration management
 
-- [ ] **Domain Events**
-  - Event Bus implementation
-  - Module decoupling through events
-  - Event persistence and retry
+- [ ] **Domain Events (via Wolverine)**
+  - Use Wolverine's event publish/subscribe
+  - Module decoupling through asynchronous messages
+  - Durable messaging
+  - Event versioning
 
 - [ ] **Authentication & Authorization**
   - JWT Token generation and validation
@@ -185,6 +275,7 @@ Modules/Orders/
 
 - [ ] **Logging & Monitoring**
   - Structured logging (Serilog)
+  - Wolverine diagnostics and tracing
   - Performance metrics collection
   - Exception tracking
 
@@ -195,18 +286,45 @@ Modules/Orders/
 
 - [ ] **Validation & Error Handling**
   - FluentValidation integration
+  - Wolverine middleware for validation
   - Unified exception handling
   - Standardized error responses
 
 ### 4.2 Technical Structure
 ```csharp
 Platform/
-  ├── Data/                 # Data access
-  ├── Events/               # Event bus
+  ├── Messaging/            # Wolverine configuration & extensions
+  │   ├── WolverineConfiguration.cs
+  │   ├── MessageHandlerConventions.cs
+  │   └── OutboxConfiguration.cs
+  ├── Data/                 # Data access (Marten/EF Core)
+  │   ├── MartenConfiguration.cs
+  │   └── Repositories/
+  ├── Events/               # Event-related infrastructure
+  │   ├── EventMetadata.cs
+  │   └── EventSerializer.cs
   ├── Auth/                 # Authentication & authorization
   ├── Logging/              # Logging
   ├── Caching/              # Caching
   ├── Validation/           # Validation
+  └── Platform.csproj
+
+// Wolverine configuration example
+builder.Host.UseWolverine(opts =>
+{
+    // Configure message routing
+    opts.PublishAllMessages()
+        .ToLocalQueue("events")
+        .UseDurableInbox();
+    
+    // Auto-discover handlers from all modules
+    opts.Discovery.IncludeAssembly(typeof(Members.Module).Assembly);
+    opts.Discovery.IncludeAssembly(typeof(Orders.Module).Assembly);
+    
+    // Persistence configuration (Marten)
+    opts.UseMarten(connectionString);
+});
+```
   └── Platform.csproj
 ```
 
@@ -433,10 +551,14 @@ Use Conventional Commits:
 - [Modular Monolith: A Primer](https://www.kamilgrzybek.com/design/modular-monolith-primer/)
 - [Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html)
 - [Vertical Slice Architecture](https://jimmybogard.com/vertical-slice-architecture/)
+- [Wolverine Modular Monolith Tutorial](https://wolverinefx.net/tutorials/modular-monolith.html)
+- [Wolverine 3.6 Modular Architecture Features](https://jeremydmiller.com/2025/01/12/wolverine-3-6-modular-monolith-and-vertical-slice-architecture-goodies/)
 
 ### 13.2 Technical Documentation
 - [.NET 10.0 Documentation](https://learn.microsoft.com/en-us/dotnet/)
 - [ASP.NET Core Documentation](https://learn.microsoft.com/en-us/aspnet/core/)
+- [Wolverine Official Documentation](https://wolverinefx.net/)
+- [Marten Document Database](https://martendb.io/)
 - [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)
 
 ### 13.3 Testing
