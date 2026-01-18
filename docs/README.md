@@ -1,89 +1,193 @@
-# Zss.BilliardHall Documentation
+# Zss.BilliardHall 项目文档
 
-This directory contains comprehensive documentation for the Zss.BilliardHall project.
-
-## 📚 Documentation Index
-
-### Development Planning
-- **[开发计划.md](./开发计划.md)** (Chinese) - 详细的项目开发计划，包含架构设计、模块规划和开发路线图
-- **[DEVELOPMENT-PLAN.md](./DEVELOPMENT-PLAN.md)** (English) - Comprehensive development plan including architecture design, module planning, and development roadmap
-
-## 🎯 Quick Links
-
-### For Developers
-- **Getting Started**: See the Quick Start Guide in the development plan
-- **Architecture Tests**: [../src/tests/ArchitectureTests/README.md](../src/tests/ArchitectureTests/README.md)
-- **Project Structure**: Refer to "Current Project Structure" section in the development plan
-
-### Key Topics
-
-#### Architecture
-- Modular Monolith design principles
-- Module isolation and boundaries
-- Platform layer shared capabilities
-- Vertical slice architecture
-
-#### Modules
-- **Members Module**: Member management, membership cards, loyalty system
-- **Orders Module**: Table management, billing, session checkout
-
-#### Infrastructure
-- Platform layer design
-- Application layer orchestration
-- Host layer configuration
-- Testing strategy
-
-## 📖 Reading Guide
-
-### For New Team Members
-1. Start with the Project Overview section
-2. Review the Current Project Structure
-3. Understand Core Architectural Principles
-4. Read the Module Development Plans for your assigned module
-
-### For Architects
-1. Review Core Architectural Principles
-2. Study the Platform Layer Development Plan
-3. Review the Architecture Optimization Directions
-4. Check the Technical Risks and Mitigation Strategies
-
-### For Project Managers
-1. Review the Development Phases & Milestones
-2. Check the Team Collaboration Standards
-3. Understand the Risks & Challenges
-4. Monitor progress against the phase deliverables
-
-## 🔄 Document Updates
-
-These documents are living documents and should be updated as the project evolves:
-- When new modules are added
-- When architectural decisions change
-- When new phases are planned
-- When milestones are completed
-
-## 📝 Contributing to Documentation
-
-When contributing to documentation:
-1. Follow the existing document structure
-2. Keep both Chinese and English versions in sync (when applicable)
-3. Use clear, concise language
-4. Include code examples where helpful
-5. Update the README when adding new documents
-
-## 🏗️ Project Status
-
-Current Phase: **Phase 1 - Infrastructure Setup**
-
-Key Achievements:
-- ✅ Project structure established
-- ✅ Architecture constraint tests implemented
-- ⏳ Platform layer development in progress
-- ⏳ Module implementation pending
-
-## 📞 Contact
-
-For questions about the documentation or development plan, please contact the development team.
+本目录包含 Zss.BilliardHall 台球厅管理系统的完整文档。
 
 ---
 
-**Last Updated**: 2026-01-18
+## 📚 文档索引
+
+### 核心文档（按阅读顺序）
+
+1. **[架构原则与约束.md](./架构原则与约束.md)** ⭐ **必读**
+   - 模块化单体架构原则
+   - 模块隔离铁律（3 条硬性约束）
+   - Wolverine 使用约定
+   - 架构测试规则
+   - 演进路径（单体 → 微服务）
+   - **性质：** 长期稳定，几乎不改
+
+2. **[MVP开发计划.md](./MVP开发计划.md)** ⭐ **当前工作指南**
+   - 6 周迭代计划（Week 1 ~ Week 6）
+   - 10-15 个垂直切片清单
+   - 每周任务与验收标准
+   - 跨模块事件流
+   - 技术约束与风险应对
+   - **性质：** 作战计划，每周更新
+
+3. **[未来演进蓝图.md](./未来演进蓝图.md)**
+   - Phase 2: 生产就绪（Week 7-12）
+   - Phase 3: 扩展模块（Month 4-6）
+   - Phase 4: 高级特性（Month 7-12）
+   - Phase 5: 微服务演进
+   - **性质：** 长期规划，非当前阶段
+
+---
+
+## 🎯 快速导航
+
+### 👨‍💻 开发人员
+
+**今天该做什么？**
+→ 查看 [MVP开发计划.md](./MVP开发计划.md)，找到当前周的任务清单
+
+**如何保证不违反架构约束？**
+→ 查看 [架构原则与约束.md](./架构原则与约束.md) 的"铁律"部分
+
+**如何写 Wolverine Handler？**
+→ 查看 [架构原则与约束.md](./架构原则与约束.md) 的"Wolverine 使用约定"
+
+**架构测试失败了怎么办？**
+→ 查看 [架构原则与约束.md](./架构原则与约束.md) 的"架构测试"部分
+
+**其他参考：**
+- 架构测试详细说明：[../src/tests/ArchitectureTests/README.md](../src/tests/ArchitectureTests/README.md)
+
+---
+
+### 🏗️ 架构师
+
+**系统架构是什么？**
+→ 阅读 [架构原则与约束.md](./架构原则与约束.md) 全文
+
+**为什么选择这个技术栈？**
+→ 查看 [架构原则与约束.md](./架构原则与约束.md) 的 ADR 部分
+
+**未来如何演进到微服务？**
+→ 查看 [未来演进蓝图.md](./未来演进蓝图.md) 的 Phase 5
+
+---
+
+### 📊 项目经理
+
+**当前进度？**
+→ 查看 [MVP开发计划.md](./MVP开发计划.md) 的"每周检查点"
+
+**MVP 什么时候完成？**
+→ 6 周（参见 [MVP开发计划.md](./MVP开发计划.md)）
+
+**MVP 包含哪些功能？**
+→ 查看 [MVP开发计划.md](./MVP开发计划.md) 的"垂直切片清单"
+
+**Phase 2 做什么？**
+→ 查看 [未来演进蓝图.md](./未来演进蓝图.md) 的 Phase 2
+
+---
+
+## 🏗️ 当前项目状态
+
+**阶段：** MVP（6 周计划）
+
+**本周重点：** Week 1 - 基础设施 + 会员注册
+
+**已完成：**
+- ✅ 项目结构搭建
+- ✅ 架构约束测试框架
+
+**进行中：**
+- ⏳ Platform 层基础能力
+- ⏳ Members.RegisterMember 垂直切片
+- ⏳ Wolverine + Marten 配置
+
+**计划中：**
+- 📅 Week 2: 开台与结账
+- 📅 Week 3: 最小计费引擎
+- 📅 Week 4: API 完善
+- 📅 Week 5: 测试补齐
+- 📅 Week 6: 整体验收
+
+---
+
+## 📖 阅读建议
+
+### 新加入的开发者
+
+**第一天：**
+1. 阅读 [架构原则与约束.md](./架构原则与约束.md) 的"核心架构决策"和"模块隔离原则"
+2. 理解 3 条铁律（绝对不能违反）
+
+**第二天：**
+1. 阅读 [MVP开发计划.md](./MVP开发计划.md) 的当前周任务
+2. 看懂"垂直切片清单"和"跨模块事件流"
+
+**第三天：**
+1. 运行架构测试：`dotnet test ./src/tests/ArchitectureTests/`
+2. 阅读一个已实现的垂直切片代码（如果有）
+
+---
+
+### 架构 Review 时
+
+**检查清单：**
+- [ ] 是否违反了 3 条铁律？
+- [ ] 跨模块通信是否用了事件？
+- [ ] 模块内是否出现了 Repository/Service 命名？
+- [ ] Handler 签名是否符合约定？
+- [ ] 架构测试是否通过？
+
+---
+
+## 🔄 文档维护规则
+
+### 何时更新文档？
+
+**[架构原则与约束.md](./架构原则与约束.md)：** 几乎不改
+- 只有架构决策变更时才修改
+- 修改需要团队讨论
+
+**[MVP开发计划.md](./MVP开发计划.md)：** 每周更新
+- 每周五更新下周任务
+- 检查点完成时打勾
+
+**[未来演进蓝图.md](./未来演进蓝图.md)：** 按需更新
+- Phase 切换时调整
+- 技术选型变化时调整
+
+---
+
+### 文档规范
+
+- ✅ 只使用中文
+- ✅ 代码示例要可运行
+- ✅ 使用 Markdown 格式
+- ✅ 简洁明了，避免废话
+
+---
+
+## ⚠️ 重要提醒
+
+### 不要过度设计
+
+> **[未来演进蓝图.md](./未来演进蓝图.md) 的内容都是未来的事**  
+> **现在只需要专注 [MVP开发计划.md](./MVP开发计划.md)**
+
+### MVP 阶段禁止做的事
+
+- ❌ 会员卡充值（Phase 2）
+- ❌ 复杂计费规则（Phase 2）
+- ❌ 统计分析（Phase 3）
+- ❌ 后台任务（Phase 3）
+- ❌ 商品/员工/营销模块（Phase 3）
+- ❌ 微服务拆分（Phase 5）
+
+---
+
+## 📞 联系方式
+
+**遇到问题？**
+- 架构相关：查看 [架构原则与约束.md](./架构原则与约束.md) 或提 Issue
+- 开发相关：查看 [MVP开发计划.md](./MVP开发计划.md) 或找团队讨论
+
+---
+
+**最后更新：** 2026-01-18  
+**文档版本：** v2.0（重构版）
