@@ -325,8 +325,6 @@ builder.Host.UseWolverine(opts =>
     opts.UseMarten(connectionString);
 });
 ```
-  └── Platform.csproj
-```
 
 ---
 
