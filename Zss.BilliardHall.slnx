@@ -17,5 +17,8 @@
   <Folder Name="/src/Tests/">
     <Project Path="src/tests/ArchitectureTests/ArchitectureTests.csproj" />
   </Folder>
+  <Folder Name="/docs/">
+    <Project Path="docs/Docs.csproj" />
+  </Folder>
 
 </Solution>
