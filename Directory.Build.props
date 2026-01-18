@@ -1,0 +1,106 @@
+<Project>
+	<!-- ============================= -->
+	<!-- 基础配置（保留你原有的） -->
+	<!-- ============================= -->
+	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<TargetFramework>net10.0</TargetFramework>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<NoWarn>$(NoWarn);CS1591</NoWarn>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<CompanyNamespace>Zss</CompanyNamespace>
+		<ProductNamespace>BilliardHall</ProductNamespace>
+		<BaseNamespace>$(CompanyNamespace).$(ProductNamespace)</BaseNamespace>
+	</PropertyGroup>
+
+	<!-- ============================= -->
+	<!-- 规范化路径与根目录推导（增加 SolutionDir 回退与尾斜杠规范化） -->
+	<!-- ============================= -->
+	<PropertyGroup>
+		<!-- 优先使用 SolutionDir（当通过解决方案构建时），否则回退到当前 props/targets 所在目录 -->
+		<_RootDir Condition="'$(SolutionDir)' != ''">$([System.IO.Path]::GetFullPath('$(SolutionDir)').Replace('\','/'))</_RootDir>
+		<_RootDir Condition="'$(_RootDir)' == ''">$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)').Replace('\','/'))</_RootDir>
+
+		<!-- 统一以 / 结尾，便于拼接前缀 -->
+		<_RootDirSlash>$([System.String]::Format('{0}/', $(_RootDir.TrimEnd('/'))))</_RootDirSlash>
+
+		<!-- 当前项目目录 -->
+		<_ProjDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)').Replace('\','/'))</_ProjDir>
+		<_ProjDirSlash>$([System.String]::Format('{0}/', $(_ProjDir.TrimEnd('/'))))</_ProjDirSlash>
+	</PropertyGroup>
+
+	<!-- ============================= -->
+	<!-- 层级前缀（使用规范化的 _RootDirSlash） -->
+	<!-- ============================= -->
+	<PropertyGroup>
+		<_PlatformPrefix>$(_RootDirSlash)src/Platform/</_PlatformPrefix>
+		<_ApplicationPrefix>$(_RootDirSlash)src/Application/</_ApplicationPrefix>
+		<_ModulesPrefix>$(_RootDirSlash)src/Modules/</_ModulesPrefix>
+		<_HostPrefix>$(_RootDirSlash)src/Host/</_HostPrefix>
+	</PropertyGroup>
+
+	<!-- ============================= -->
+	<!-- Platform -->
+	<!-- ============================= -->
+	<PropertyGroup Condition="$([System.String]::Copy('$(_ProjDirSlash)').StartsWith('$(_PlatformPrefix)', System.StringComparison.OrdinalIgnoreCase))">
+		<RootNamespace>$(BaseNamespace).Platform</RootNamespace>
+	</PropertyGroup>
+
+	<!-- ============================= -->
+	<!-- Application -->
+	<!-- ============================= -->
+	<PropertyGroup Condition="$([System.String]::Copy('$(_ProjDirSlash)').StartsWith('$(_ApplicationPrefix)', System.StringComparison.OrdinalIgnoreCase))">
+		<RootNamespace>$(BaseNamespace).Application</RootNamespace>
+	</PropertyGroup>
+
+	<!-- ============================= -->
+	<!-- Modules（最后一层目录作为模块名） -->
+	<!-- ============================= -->
+	<PropertyGroup Condition="$([System.String]::Copy('$(_ProjDirSlash)').StartsWith('$(_ModulesPrefix)', System.StringComparison.OrdinalIgnoreCase))">
+		<_ModuleName>$([System.IO.Path]::GetFileName($(_ProjDirSlash.TrimEnd('/'))))</_ModuleName>
+		<RootNamespace>$(BaseNamespace).Modules.$(_ModuleName)</RootNamespace>
+	</PropertyGroup>
+
+	<!-- ============================= -->
+	<!-- Host（最后一层目录作为 host 名） -->
+	<!-- ============================= -->
+	<PropertyGroup Condition="$([System.String]::Copy('$(_ProjDirSlash)').StartsWith('$(_HostPrefix)', System.StringComparison.OrdinalIgnoreCase))">
+		<_HostName>$([System.IO.Path]::GetFileName($(_ProjDirSlash.TrimEnd('/'))))</_HostName>
+		<RootNamespace>$(BaseNamespace).Host.$(_HostName)</RootNamespace>
+	</PropertyGroup>
+
+	<!-- ============================= -->
+	<!-- Tests（最后一层目录作为 Tests 名） -->
+	<!-- ============================= -->
+	<PropertyGroup Condition="$([System.String]::Copy('$(_ProjDirSlash)').StartsWith('$(_RootDirSlash)src/Tests/', System.StringComparison.OrdinalIgnoreCase))">
+		<_TestsName>$([System.IO.Path]::GetFileName($(_ProjDirSlash.TrimEnd('/'))))</_TestsName>
+		<RootNamespace>$(BaseNamespace).Tests.$(_TestsName)</RootNamespace>
+	</PropertyGroup>
+	
+	<!-- ============================= -->
+	<!-- 防御性校验：如果未推导出 RootNamespace 则失败 -->
+	<!-- ============================= -->
+	<Target Name="FailIfRootNamespaceNotSet" BeforeTargets="PrepareForBuild" Condition="'$(RootNamespace)'==''">
+		<Error Text="❌ RootNamespace 未能根据目录结构推导。
+项目路径: $(_ProjDir)
+请将项目放入 src/Platform / src/Application / src/Modules / src/Host 之一。" />
+	</Target>
+
+	<!-- ============================= -->
+	<!-- 调试输出（仅在非 CI 环境时打印） -->
+	<!-- ============================= -->
+	<Target Name="DebugRootNamespace" BeforeTargets="PrepareForBuild" Condition="'$(CI)'==''">
+		<Message Importance="High" Text="RootDir        = $(_RootDir)" />
+		<Message Importance="High" Text="RootDirSlash   = $(_RootDirSlash)" />
+		<Message Importance="High" Text="ProjDir        = $(_ProjDir)" />
+		<Message Importance="High" Text="ProjDirSlash   = $(_ProjDirSlash)" />
+		<Message Importance="High" Text="PlatformPrefix = $(_PlatformPrefix)" />
+		<Message Importance="High" Text="Namespace      = $(RootNamespace)" />
+	</Target>
+</Project>

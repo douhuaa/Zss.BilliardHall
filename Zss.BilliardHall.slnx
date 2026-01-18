@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Application/">
+    <Project Path="src/Application/Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Host/">
+    <Project Path="src/Host/WebHost/WebHost.csproj" />
+    <Project Path="src/Host/Worker/Worker.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/">
+    <Project Path="src/Modules/Members/Members.csproj" />
+    <Project Path="src/Modules/Orders/Orders.csproj" />
+  </Folder>
+  <Folder Name="/src/Platform/">
+    <Project Path="src/Platform/Platform.csproj" />
+  </Folder>
+  <Folder Name="/src/Tests/">
+    <Project Path="src/tests/ArchitectureTests/ArchitectureTests.csproj" />
+  </Folder>
+
+</Solution>
