@@ -100,7 +100,7 @@ public class CreateOrderHandler
 
 以下架构测试确保契约使用规则被遵守：
 
-1. `CommandHandlers_Should_Not_Depend_On_Contracts` - 防止 Command Handler 依赖契约查询
+1. `CommandHandlers_Should_Not_Depend_On_IQuery_Interfaces` - 防止 Command Handler 依赖契约查询
 2. `Platform_Should_Not_Depend_On_Module_Contracts` - 防止 Platform 依赖业务契约
 3. 允许 Query Handler、Endpoint、ReadModel 使用契约
 
