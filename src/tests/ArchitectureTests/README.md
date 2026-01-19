@@ -88,6 +88,41 @@ dotnet test .\src\tests\ArchitectureTests\ArchitectureTests.csproj -c Release
 ### E. csproj 依赖约束（ProjectReference）
 - Modules 的 csproj 不允许引用其他模块或非白名单项目
 
+### F. 基础设施约束（Infrastructure）
+- 仓库根目录必须存在 `Directory.Packages.props`（CPM 启用）
+- 所有类型的命名空间必须以 `Zss.BilliardHall` 开头（RootNamespace 约定）
+- 项目命名必须遵循 `Zss.BilliardHall.*` 约定
+
+---
+
+## CI 集成
+
+架构测试已集成到 GitHub Actions CI 流程中（`.github/workflows/architecture-tests.yml`）：
+
+- **触发条件**：Push 或 Pull Request 到 main 分支
+- **测试环境**：Ubuntu Latest + .NET 10.0.x
+- **失败阻断**：如果任何架构测试失败，CI 将返回非 0 退出码，阻止 PR 合并
+
+CI 工作流程：
+1. Checkout 代码
+2. 设置 .NET SDK
+3. 恢复依赖 (`dotnet restore`)
+4. 构建所有项目（排除 docs）
+5. 运行架构测试 (`dotnet test`)
+
+你可以在本地模拟 CI 环境：
+```bash
+dotnet restore
+dotnet build src/Platform/Platform.csproj
+dotnet build src/Application/Application.csproj
+dotnet build src/Modules/Members/Members.csproj
+dotnet build src/Modules/Orders/Orders.csproj
+dotnet build src/Host/Web/Web.csproj
+dotnet build src/Host/Worker/Worker.csproj
+dotnet build src/tests/ArchitectureTests/ArchitectureTests.csproj
+dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj --no-build --verbosity normal
+```
+
 ---
 
 ## 为什么不用硬编码 `bin/Debug/netX.Y` 路径？
