@@ -329,6 +329,7 @@ A: 在垂直切片架构中，**模块独立性优先于代码复用**。适度�
 - [ADR-0002: Platform / Application / Host 三层启动体系](/docs/adr/ADR-0002-platform-application-host-bootstrap.md)
 - [ADR-0003: 命名空间与项目边界规范](/docs/adr/ADR-0003-namespace-rules.md)
 - [ADR-0004: 中央包管理规范](/docs/adr/ADR-0004-Cpm-Final.md)
+- [ADR-0005:应用内交互模型与执行边界](/docs/adr/ADR-0005-Application-Interaction-Model-Final.md)
 - [Vertical Slice Architecture - Jimmy Bogard](https://www.jimmybogard.com/vertical-slice-architecture/)
 - [Modular Monolith - Kamil Grzybek](https://www.kamilgrzybek.com/blog/posts/modular-monolith-primer)
 - [Architecture Tests README](/src/tests/ArchitectureTests/README.md)

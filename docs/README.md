@@ -11,6 +11,7 @@
 - [ADR-0002: 平台、应用与主机启动器架构决策](adr/ADR-0002-platform-application-host-bootstrap.md)
 - [ADR-0003: 命名空间与项目结构规范](adr/ADR-0003-namespace-rules.md)
 - [ADR-0004: 中央包管理与层级依赖规则](adr/ADR-0004-Cpm-Final.md)
+- [ADR-0005: 应用内交互模型与执行边界](adr/ADR-0005-Application-Interaction-Model-Final.md)
 
 ## 模块文档
 

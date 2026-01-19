@@ -170,3 +170,4 @@ public class GetMemberQueryHandler
 - [ADR-0002 Platform / Application / Host 三层启动体系](ADR-0002-platform-application-host-bootstrap.md)
 - [ADR-0003 命名空间与项目边界规范](ADR-0003-namespace-rules.md)
 - [ADR-0004 中央包管理与层级依赖规则](ADR-0004-Cpm-Final.md)
+- [ADR-0005 应用内交互模型与执行边界](ADR-0005-Application-Interaction-Model-Final.md)
