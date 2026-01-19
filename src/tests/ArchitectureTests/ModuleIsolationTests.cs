@@ -103,7 +103,7 @@ public class ModuleIsolationTests
                     continue;
                 if (allowedProjectNames.Contains(refName))
                     continue;
-                Assert.True(false, $"模块 {projectName} 不应引用其他模块或非白名单项目: {refName}（{csproj} -> {include}）。修复建议：将共享代码移至 Platform/BuildingBlocks，或改用消息通信（Publish/Invoke）。");
+                Assert.Fail($"模块 {projectName} 不应引用其他模块或非白名单项目: {refName}（{csproj} -> {include}）。修复建议：将共享代码移至 Platform/BuildingBlocks，或改用消息通信（Publish/Invoke）。");
             }
         }
     }
@@ -225,7 +225,7 @@ public class ModuleAssemblyData : IEnumerable<object[]>
         Debug.WriteLine($"[ArchitectureTests] Loaded module assemblies count={ModuleAssemblies.Count}");
         if (ModuleAssemblies.Count == 0)
         {
-            Assert.True(false, "❌ 未加载任何 Modules 程序集，架构测试失效。请先运行 `dotnet build` 或检查模块输出路径/命名约定。");
+            Assert.Fail("❌ 未加载任何 Modules 程序集，架构测试失效。请先运行 `dotnet build` 或检查模块输出路径/命名约定。");
         }
         foreach (var module in ModuleAssemblies)
         {
