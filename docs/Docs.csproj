@@ -1,3 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  <ItemGroup>
+    <Compile Include="adr\ADR-0004-Cpm-Final.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="examples\" />
+  </ItemGroup>
 </Project>

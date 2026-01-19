@@ -1,8 +1,13 @@
-# ADR-0001：模块化单体与垂直切片架构决策（Vertical Slice + Module Isolation）
+# ADR-0001
+
+## 模块化单体与垂直切片架构决策（Vertical Slice + Module Isolation）
 
 ## 状态
 
-已采纳
+**状态**：✅ 已采纳（Final，不可随意修改）
+**级别**：架构约束（Architectural Contract）
+**适用范围**：所有 Host、模块、测试、未来子系统
+**生效时间**：即刻
 
 ## 背景
 
@@ -13,9 +18,9 @@
 - 架构约束缺乏自动化校验，易随时间腐化
 - 架构原则仅靠文档难以约束工程实践，回溯困难
 
-本项目目标：构建长期可演进、易扩展、边界清晰的业务系统。
+目标：构建长期可演进、易扩展、边界清晰的业务系统。
 
-选择方案：
+方案：
 
 - 功能组织采用 **垂直切片架构**（Vertical Slice）
 - 系统级约束强调 **模块隔离**（Module Isolation）
@@ -97,13 +102,13 @@ Module Assembly
 
 **示例代码：**
 ```csharp
-// 违规示例
+// 违规
 public class CreateOrderHandler
 {
     public CreateOrderHandler(IMemberQueries queries) { ... } // ❌ 不允许
 }
 
-// 合规示例
+// 合规
 public class GetMemberQueryHandler
 {
     public async Task<MemberDto> Handle(GetMemberById query) { ... } // ✅ 只读查询
@@ -133,23 +138,6 @@ public class GetMemberQueryHandler
 
 ---
 
-## 影响
-
-**正面影响：**
-- 功能修改局部化，回归风险低
-- 模块边界清晰，可并行开发
-- 架构规则自动验证
-- 新人成长路径清晰
-
-**负面成本：**
-- 初期代码量上升
-- 团队须避免过度抽象
-- 架构评审及测试负担增加
-
-这些成本为提升系统长期健康刻意接受。
-
----
-
 ## 不可协商条款
 
 1. 禁止模块直接引用其他模块实现
@@ -165,8 +153,7 @@ public class GetMemberQueryHandler
 目标：
 - 降低架构腐化与熵增速度
 - 架构决策可审核、可追溯、工程级可执行
-
-> 以长期可演进为核心设计原则
+- 以长期可演进为核心设计原则
 
 ---
 
@@ -175,3 +162,11 @@ public class GetMemberQueryHandler
 - [Vertical Slice Architecture](https://www.jimmybogard.com/vertical-slice-architecture/)
 - [NetArchTest.Rules](https://github.com/BenMorris/NetArchTest)
 - [Modular Monolith Architecture](https://www.kamilgrzybek.com/blog/posts/modular-monolith-primer)
+
+---
+
+## 附录
+
+- [ADR-0002 Platform / Application / Host 三层启动体系](ADR-0002-platform-application-host-bootstrap.md)
+- [ADR-0003 命名空间与项目边界规范](ADR-0003-namespace-rules.md)
+- [ADR-0004 中央包管理与层级依赖规则](ADR-0004-Cpm-Final.md)

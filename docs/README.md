@@ -8,6 +8,9 @@
 
 ### 架构决策记录 (ADR)
 - [ADR-0001: 模块化单体与垂直切片架构决策](adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-0002: 平台、应用与主机启动器架构决策](adr/ADR-0002-platform-application-host-bootstrap.md)
+- [ADR-0003: 命名空间与项目结构规范](adr/ADR-0003-namespace-rules.md)
+- [ADR-0004: 中央包管理与层级依赖规则](adr/ADR-0004-Cpm-Final.md)
 
 ## 模块文档
 
@@ -26,6 +29,7 @@
 ### 理解架构
 1. 阅读 [架构指南](architecture-guide.md) 了解整体架构
 2. 阅读 [ADR-0001](adr/ADR-0001-modular-monolith-vertical-slice-architecture.md) 了解架构决策背景
+3. 阅读 [ADR-0002](adr/ADR-0002-platform-application-host-bootstrap.md) 了解启动器架构决策
 
 ### 开发新功能
 1. 参考 [架构指南 - 开发指南](architecture-guide.md#开发指南)

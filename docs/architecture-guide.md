@@ -13,6 +13,7 @@
 
 所有重要的架构决策都记录在 [ADR 文档](/docs/adr/) 中：
 
+- [ADR-0001: 模块化单体与垂直切片架构决策](/docs/adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 
 ## 项目结构
 
@@ -325,7 +326,7 @@ A: 在垂直切片架构中，**模块独立性优先于代码复用**。适度�
 ## 参考资料
 
 - [ADR-0001: 模块化单体与垂直切片架构决策](/docs/adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-0002 Platform / Application / Host 三层启动体系](/docs/adr/ADR-0002-platform-application-host-bootstrap.md)
+- [ADR-0002: Platform / Application / Host 三层启动体系](/docs/adr/ADR-0002-platform-application-host-bootstrap.md)
 - [ADR-0003: 命名空间与项目边界规范](/docs/adr/ADR-0003-namespace-rules.md)
 - [ADR-0004: 中央包管理规范](/docs/adr/ADR-0004-Cpm-Final.md)
 - [Vertical Slice Architecture - Jimmy Bogard](https://www.jimmybogard.com/vertical-slice-architecture/)
