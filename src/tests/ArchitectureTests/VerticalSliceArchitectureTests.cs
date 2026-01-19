@@ -122,4 +122,48 @@ public class VerticalSliceArchitectureTests
                 $"或将共享逻辑提取为独立的领域服务或辅助方法。");
         }
     }
+
+    // 新增：Handlers 不应依赖 ASP.NET Core 类型/包
+    [Theory]
+    [ClassData(typeof(ModuleAssemblyData))]
+    public void Handlers_Should_Not_Depend_On_AspNet(Assembly moduleAssembly)
+    {
+        // 通过 NetArchTest 检查程序集依赖
+        var forbiddenDeps = new[] { "Microsoft.AspNetCore", "Microsoft.AspNetCore.Http", "Microsoft.AspNetCore.Mvc" };
+        var result = Types.InAssembly(moduleAssembly)
+            .That().HaveNameEndingWith("Handler")
+            .ShouldNot().HaveDependencyOnAny(forbiddenDeps)
+            .GetResult();
+
+        Assert.True(result.IsSuccessful,
+            $"模块 {moduleAssembly.GetName().Name} 中的 Handler 不应依赖 ASP.NET Core 包/程序集。违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? System.Array.Empty<string>())}。");
+
+        // 额外的反射检查：构造函数参数或属性类型来自 ASP.NET 命名空间
+        var handlers = Types.InAssembly(moduleAssembly)
+            .That().HaveNameEndingWith("Handler")
+            .GetTypes();
+
+        var forbiddenNamespaces = new[] { "Microsoft.AspNetCore", "Microsoft.AspNetCore.Http", "Microsoft.AspNetCore.Mvc" };
+
+        foreach (var handler in handlers)
+        {
+            var ctorDeps = handler.GetConstructors()
+                .SelectMany(c => c.GetParameters())
+                .Select(p => p.ParameterType)
+                .Where(t => t?.Namespace != null && forbiddenNamespaces.Any(ns => t.Namespace.StartsWith(ns)))
+                .ToList();
+
+            Assert.True(ctorDeps.Count == 0,
+                $"Handler {handler.FullName} 的构造函数参数依赖 ASP.NET 类型: {string.Join(", ", ctorDeps.Select(t => t.FullName))}。请把 Web/HTTP 相关类型保持在 WebHost 层。");
+
+            // 可选：检查公共属性（如果团队使用属性注入）
+            var propDeps = handler.GetProperties()
+                .Select(p => p.PropertyType)
+                .Where(t => t?.Namespace != null && forbiddenNamespaces.Any(ns => t.Namespace.StartsWith(ns)))
+                .ToList();
+
+            Assert.True(propDeps.Count == 0,
+                $"Handler {handler.FullName} 的公共属性依赖 ASP.NET 类型: {string.Join(", ", propDeps.Select(t => t.FullName))}。请把 Web/HTTP 相关类型保持在 WebHost 层。");
+        }
+    }
 }

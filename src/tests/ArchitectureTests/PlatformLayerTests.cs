@@ -10,7 +10,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests;
 /// </summary>
 public class PlatformLayerTests
 {
-    private static readonly Assembly PlatformAssembly = typeof(Platform.PlatformDefaults).Assembly;
+    private static readonly Assembly PlatformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
 
     [Fact]
     public void Platform_Should_Not_Contain_Business_Named_Types()

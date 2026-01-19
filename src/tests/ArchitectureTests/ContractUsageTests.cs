@@ -10,7 +10,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests;
 /// </summary>
 public class ContractUsageTests
 {
-    private static readonly Assembly PlatformAssembly = typeof(Platform.PlatformDefaults).Assembly;
+    private static readonly Assembly PlatformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
 
     [Theory]
     [ClassData(typeof(ModuleAssemblyData))]

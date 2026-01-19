@@ -13,7 +13,6 @@
 
 所有重要的架构决策都记录在 [ADR 文档](/docs/adr/) 中：
 
-- [ADR-0001: 模块化单体与垂直切片架构决策](/docs/adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 
 ## 项目结构
 
@@ -36,8 +35,8 @@ Zss.BilliardHall/
 │   │       └── README.md
 │   ├── Application/               # 应用层（模块编排）
 │   └── Host/                      # 宿主程序
-│       ├── WebHost/               # Web API
-│       └── Worker/                # 后台任务
+│       ├── Web/Web.csproj         # Web API
+│       └── Worker/Worker.csproj   # 后台任务
 └── tests/
     └── ArchitectureTests/         # 架构约束测试
 ```
@@ -47,11 +46,13 @@ Zss.BilliardHall/
 ### 1. 模块隔离规则
 
 **✅ 允许：**
+
 - 模块可以依赖 `Platform`
 - 模块可以通过领域事件通信
 - 模块可以使用 `Platform.Contracts` 中定义的数据契约
 
 **❌ 禁止：**
+
 - 模块之间直接相互引用
 - 共享聚合根、实体或值对象
 - 跨模块调用 Handler
@@ -59,11 +60,13 @@ Zss.BilliardHall/
 ### 2. 垂直切片规则
 
 每个功能切片（Feature）应该：
+
 - 包含该用例的所有逻辑（端点、命令/查询、Handler、验证等）
 - 自包含，不依赖横向的 Service
 - 命名清晰，反映业务意图
 
 **目录结构示例：**
+
 ```
 Features/
 └── CreateMember/                      # 创建会员功能
@@ -74,6 +77,7 @@ Features/
 ```
 
 **❌ 禁止的组织方式：**
+
 ```
 Members/
 ├── Application/       # 传统分层
@@ -127,11 +131,13 @@ public class CreateOrderCommandHandler
 Platform 层只能包含技术能力，不能包含业务逻辑。
 
 **✅ 允许：**
+
 - 日志、事务、序列化等技术组件
 - 契约定义（IContract、IQuery）
 - 基础设施抽象
 
 **❌ 禁止：**
+
 - 业务规则或判断
 - 包含 `if (业务状态)` 的代码
 - 依赖业务模块
@@ -172,6 +178,7 @@ Platform 层只能包含技术能力，不能包含业务逻辑。
 **场景：Orders 模块需要验证会员状态**
 
 **方案 1：维护本地副本（推荐）**
+
 ```csharp
 // 1. 订阅 Members 模块的事件
 public class MemberActivatedHandler
@@ -203,6 +210,7 @@ public class CreateOrderCommandHandler
 ```
 
 **方案 2：发布验证命令**
+
 ```csharp
 public class CreateOrderCommandHandler
 {
@@ -275,11 +283,13 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 ### Q: 为什么不能使用 Service 层？
 
 A: 在垂直切片架构中，每个用例应该是自包含的。横向的 Service 会导致：
+
 - 功能之间产生隐式依赖
 - 业务逻辑分散
 - 难以独立演进
 
 如果多个切片有相似逻辑，优先考虑：
+
 1. 复制代码（保持独立性）
 2. 使用领域事件解耦
 3. 提取辅助方法（谨慎使用）
@@ -287,6 +297,7 @@ A: 在垂直切片架构中，每个用例应该是自包含的。横向的 Serv
 ### Q: 什么时候应该提取到 Platform？
 
 A: 只有满足以下条件时才应该提取到 Platform：
+
 - 纯技术能力（日志、序列化等）
 - 没有业务语义
 - 可被所有模块复用
@@ -296,6 +307,7 @@ A: 只有满足以下条件时才应该提取到 Platform：
 ### Q: 如何处理跨模块的数据查询？
 
 A: 三种方式：
+
 1. **本地副本** - 通过订阅事件维护（推荐）
 2. **查询契约** - 定义在 Platform.Contracts，但只用于只读查询
 3. **命令编排** - 在 Application 层编排多个模块的命令
@@ -303,6 +315,7 @@ A: 三种方式：
 ### Q: DRY（Don't Repeat Yourself）怎么办？
 
 A: 在垂直切片架构中，**模块独立性优先于代码复用**。适度的代码重复是可以接受的，因为：
+
 - 切片之间保持独立
 - 可以独立演进
 - 不会因为"共享"而产生耦合
@@ -312,6 +325,9 @@ A: 在垂直切片架构中，**模块独立性优先于代码复用**。适度�
 ## 参考资料
 
 - [ADR-0001: 模块化单体与垂直切片架构决策](/docs/adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-0002 Platform / Application / Host 三层启动体系](/docs/adr/ADR-0002-platform-application-host-bootstrap.md)
+- [ADR-0003: 命名空间与项目边界规范](/docs/adr/ADR-0003-namespace-rules.md)
+- [ADR-0004: 中央包管理规范](/docs/adr/ADR-0004-Cpm-Final.md)
 - [Vertical Slice Architecture - Jimmy Bogard](https://www.jimmybogard.com/vertical-slice-architecture/)
 - [Modular Monolith - Kamil Grzybek](https://www.kamilgrzybek.com/blog/posts/modular-monolith-primer)
 - [Architecture Tests README](/src/tests/ArchitectureTests/README.md)
