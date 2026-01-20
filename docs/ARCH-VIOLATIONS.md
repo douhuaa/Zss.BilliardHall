@@ -103,10 +103,19 @@ Members 模块的 CreateOrderHandler 中直接注入了 Orders 模块的 IPoints
 ## 被拒绝的破例申请（Rejected Exceptions）
 
 > 这些破例申请被拒绝，记录在此作为决策参考
+> 
+> **重要**：公开拒绝案例是防止"违规白名单"的关键机制。
+> 不是所有申请都会通过，这个列表让团队看到架构委员会的决策标准。
 
 | ID | 违反的 ADR | 申请描述 | 申请人 | 申请日期 | 拒绝理由 | 替代方案 |
 |----|-----------|---------|--------|---------|---------|---------|
 | ARCH-REJ-001 | ADR-0005 | [示例] 请求允许 Endpoint 直接查询数据库 | @developer | 2026-01-10 | 违反职责分离原则 | 创建 QueryHandler |
+| ARCH-REJ-002 | ADR-0001 | [示例] 请求 Members 模块直接引用 Orders 模块 | @developer | 2026-01-12 | 破坏模块隔离 | 通过 Platform.Contracts |
+| ARCH-REJ-003 | ADR-0002 | [示例] 请求在 Program.cs 中添加环境判断逻辑 | @developer | 2026-01-15 | Program.cs 应保持简洁 | 移到 Bootstrapper |
+
+---
+
+### 详细案例
 
 **ID**: ARCH-REJ-001  
 **违反的 ADR**: ADR-0005（Endpoint 不应包含业务逻辑）  
@@ -123,6 +132,54 @@ Members 模块的 CreateOrderHandler 中直接注入了 Orders 模块的 IPoints
 
 **拒绝人**：@architect  
 **拒绝日期**：2026-01-10
+
+---
+
+**ID**: ARCH-REJ-002  
+**违反的 ADR**: ADR-0001（模块隔离）  
+**申请描述**：  
+希望 Members 模块直接引用 Orders 模块以获取会员订单统计，理由是"只读取数据，不修改"。
+
+**拒绝理由**：
+1. 只读引用仍然是依赖，会造成模块耦合
+2. 未来 Orders 模块的变更会影响 Members 模块
+3. 违反了模块隔离的核心原则
+
+**替代方案**：
+1. 将共享的查询 DTO 移到 `Platform.Contracts.Orders`
+2. Orders 模块实现查询接口，Members 通过契约调用
+3. 或者 Orders 发布领域事件，Members 维护本地投影
+
+**拒绝人**：@architect  
+**拒绝日期**：2026-01-12
+
+---
+
+**ID**: ARCH-REJ-003  
+**违反的 ADR**: ADR-0002（Program.cs 简洁性）  
+**申请描述**：  
+希望在 Program.cs 中添加 `if (env.IsDevelopment())` 判断以加载开发环境专用配置。
+
+**拒绝理由**：
+1. 环境判断逻辑应该封装在 Bootstrapper 内部
+2. Program.cs 应该只是"启动入口"，不包含任何业务判断
+3. 允许这种做法会导致 Program.cs 逐渐膨胀
+
+**替代方案**：
+在 `PlatformBootstrapper.Configure()` 方法内部进行环境判断：
+```csharp
+public static void Configure(IServiceCollection services, IConfiguration config)
+{
+    var env = services.BuildServiceProvider().GetRequiredService<IHostEnvironment>();
+    if (env.IsDevelopment())
+    {
+        // 开发环境配置
+    }
+}
+```
+
+**拒绝人**：@architect  
+**拒绝日期**：2026-01-15
 
 ---
 
