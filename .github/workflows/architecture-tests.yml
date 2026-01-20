@@ -2,17 +2,20 @@ name: Architecture Tests
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  test:
+  architecture-tests:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -21,15 +24,10 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       
-      - name: Build all projects except docs
-        run: |
-          dotnet build src/Platform/Platform.csproj --no-restore
-          dotnet build src/Application/Application.csproj --no-restore
-          dotnet build src/Modules/Members/Members.csproj --no-restore
-          dotnet build src/Modules/Orders/Orders.csproj --no-restore
-          dotnet build src/Host/Web/Web.csproj --no-restore
-          dotnet build src/Host/Worker/Worker.csproj --no-restore
-          dotnet build src/tests/ArchitectureTests/ArchitectureTests.csproj --no-restore
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
       
       - name: Run architecture tests
-        run: dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj --no-build --verbosity normal
+        run: dotnet test src/tests/ArchitectureTests --no-build --configuration Release --verbosity normal
+        env:
+          Configuration: Release

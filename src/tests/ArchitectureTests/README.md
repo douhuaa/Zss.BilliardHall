@@ -1,92 +1,105 @@
-﻿# ArchitectureTests（架构约束测试）
+# ArchitectureTests（架构自动化测试）
 
-这组测试的目的不是“测试业务逻辑”，而是把**架构纪律**写成可执行规则：
-- 防止模块之间互相引用导致耦合爆炸
-- 防止在模块里回到传统三层（Application/Domain/Infrastructure）命名
-- 防止出现“Repository/Service/Manager”等会鼓励贫血模型/分层思维的语义
-- 明确 Modules 只能依赖 Platform（而不是 Host / Application）
+## 目的
+
+这组测试的目的是把 **ADR-0001 至 ADR-0005 的核心静态约束** 写成可执行规则，确保架构规范能够被自动化检查并在 CI 中执行：
+
+- **Platform 层约束**：确保 Platform 不依赖 Application；Application 不依赖 Host
+- **模块隔离**：防止模块之间互相引用导致耦合爆炸
+- **命名空间规范**：确保所有类型命名空间以 Zss.BilliardHall 开头
+- **依赖方向**：明确 Modules 只能依赖 Platform（而不是 Host / Application）
+- **中央包管理**：检查 Directory.Packages.props 在仓库根目录存在
 
 > 这些测试要做到两件事：**有杀伤力**（能抓到违规）+ **低维护**（不依赖 bin 固定路径、不依赖开发机目录）。
 
 ---
 
-## 运行方式
+## 本地运行
 
 在解决方案根目录运行：
 
-```powershell
+```bash
 # 先编译（保证模块程序集存在）
 dotnet build
 
 # 再跑架构测试
-dotnet test .\src\tests\ArchitectureTests\ArchitectureTests.csproj
+dotnet test src/tests/ArchitectureTests
 ```
 
-如需指定配置（CI 常用 Release）：
+如需指定配置（CI 使用 Release）：
 
-```powershell
+```bash
 dotnet build -c Release
-$env:Configuration = "Release"
-dotnet test .\src\tests\ArchitectureTests\ArchitectureTests.csproj -c Release
+export Configuration=Release
+dotnet test src/tests/ArchitectureTests -c Release
 ```
 
----
+## CI 集成
 
-## 常见失败与排查
+架构测试已集成到 GitHub Actions 工作流中（`.github/workflows/architecture-tests.yml`），在以下情况自动运行：
 
-### 1) `System.InvalidOperationException: No data found for ...`
-**含义**：xUnit 的数据源（ClassData/MemberData）在 Discover 阶段没有产出任何行。
+- Push 到 `main` 分支
+- 针对 `main` 分支的 Pull Request
 
-在本项目里，最常见原因是：
-- Modules 程序集没有被构建出来（`src/Modules/*/bin/.../*.dll` 不存在）
-- 测试进程的工作目录找不到 `Zss.BilliardHall.slnx`，导致解决方案根目录识别失败
+如果架构测试失败，CI 将阻断合并，确保架构规范得到严格执行。
+
+## 测试清单
+
+### 1. PlatformDependencyTests.cs
+验证平台层和应用层的依赖约束：
+- Platform 不依赖 Application
+- Application 不依赖 Host
+- Platform 不依赖 Host
+- Platform 不依赖 Modules
+- Application 不依赖 Modules
+
+### 2. ModuleIsolationTests.cs
+验证模块隔离规则：
+- 模块不相互依赖
+- 模块不包含传统分层命名空间（Application/Domain/Infrastructure 等）
+- 模块不包含 Repository/Service/Manager 等语义
+- 模块只依赖 Platform
+
+### 3. NamespaceTests.cs
+验证命名空间规范：
+- 所有类型命名空间以 Zss.BilliardHall 开头
+- Platform 类型在 Zss.BilliardHall.Platform 命名空间
+- Application 类型在 Zss.BilliardHall.Application 命名空间
+- Module 类型在 Zss.BilliardHall.Modules.{ModuleName} 命名空间
+- Directory.Packages.props 存在于仓库根目录
+- Directory.Build.props 存在于仓库根目录
+
+## 常见问题
+
+### 问题：测试失败提示"未找到模块程序集"
+
+**原因**：模块尚未构建，测试无法加载 DLL。
+
+**解决方法**：
+```bash
+dotnet build
+dotnet test src/tests/ArchitectureTests
+```
+
+### 问题：本地通过但 CI 失败
+
+**原因**：本地使用 Debug 配置，CI 使用 Release 配置。
+
+**解决方法**：
+```bash
+dotnet build -c Release
+export Configuration=Release
+dotnet test src/tests/ArchitectureTests -c Release
+```
+
+### 问题：架构测试报告违规
 
 **处理步骤**：
-1. 先跑 `dotnet build`（或 `dotnet build -c Release`）。
-2. 确认存在类似文件：`src/Modules/Members/bin/Debug/net10.0/Members.dll`（具体 TFM 可能不同）。
-3. 如果你在 Rider/VS 里运行，确保测试工作目录是解决方案根目录（或至少能够向上找到 `Zss.BilliardHall.slnx`）。
+1. 查看测试输出，了解违规类型和位置
+2. 根据修复建议调整代码结构
+3. 重新运行测试验证修复
 
-> 备注：如果你希望测试在“没构建模块 dll”时也能跑，可以将数据源改成“用 ProjectReference 直接加载”，但成本更高且会增加测试时间。当前策略是：明确失败并提示先 build。
-
-### 2) “订单引用了会员，为什么测试能成功？”
-这通常是**假绿**：例如只扫描 namespace / 只扫描某个程序集，但实际引用发生在另一个模块 dll 里。
-
-本项目的做法是：
-- 对每个 Modules 程序集逐个检查：**不允许依赖任何其他 Modules.
-- 再用 csproj 层面补一道：`ProjectReference` 不允许跨模块。
-
-因此，只要：
-- 你确实构建了最新 dll
-- 并且 Orders/Members 的程序集都被加载
-
-跨模块引用就会被抓到。
-
-### 3) CI 上通过，本地失败（或反过来）
-大概率是配置不同（Debug/Release）或 TFM 不一致。
-
-建议：
-- CI 里显式设置 `Configuration=Release`
-- 本地想复现 CI 就用 `dotnet test -c Release`
-
----
-
-## 规则总览（当前约束）
-
-### A. 模块隔离（程序集级）
-- `Zss.BilliardHall.Modules.*` **不得依赖**其他 `Zss.BilliardHall.Modules.*`
-
-### B. 模块内命名空间约束（仅作用于 Modules）
-- 禁止出现：`.Application/.Domain/.Infrastructure/.Repository/.Service/.Shared/.Common`
-
-### C. 模块内“语义禁令”（仅作用于 Modules）
-- 类型名禁止包含：`Repository/Service/Manager/Store`
-
-### D. 模块依赖边界
-- Modules 不得依赖 `Zss.BilliardHall.Application` 或 `Zss.BilliardHall.Host`
-- 允许依赖 `Zss.BilliardHall.Platform`（以及未来可能的 BuildingBlocks）
-
-### E. csproj 依赖约束（ProjectReference）
-- Modules 的 csproj 不允许引用其他模块或非白名单项目
+## 扩展建议
 
 ### F. 基础设施约束（Infrastructure）
 - 仓库根目录必须存在 `Directory.Packages.props`（CPM 启用）
@@ -125,14 +138,13 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj --no-build --ve
 
 ---
 
-## 为什么不用硬编码 `bin/Debug/netX.Y` 路径？
-因为：
-- CI/Release 会变
-- 多 TFM 会变
-- IDE/命令行工作目录会变
+后续可以增强架构测试：
 
-测试只能依赖：
-- 解决方案结构（`src/Modules`）
-- 或已加载程序集
+1. **引入 Roslyn Analyzer**：做语义级别的静态检查
+2. **添加更多规则**：如异步方法命名约定、异常处理规范等
+3. **格式化失败信息**：在 PR 模板中强制 ARCH-VIOLATION 字段
+4. **性能测试**：确保架构测试运行时间控制在合理范围内
 
-本项目采用折中：**从 solution root 出发定位 Modules 的输出 dll，并提供 Debug/Release + 多 TFM 的 fallback 扫描**。
+---
+
+**注意**：这是一个 MVP 实现，用以把 ADR 的静态规则尽快纳入 CI，阻断大多数常见的架构违规。
