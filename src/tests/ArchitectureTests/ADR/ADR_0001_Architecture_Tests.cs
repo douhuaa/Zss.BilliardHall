@@ -73,7 +73,7 @@ public sealed class ADR_0001_Architecture_Tests
 
     public static IEnumerable<object[]> GetModuleProjectFiles()
     {
-        var root = ModuleIsolationTests.GetSolutionRoot();
+        var root = ModuleAssemblyData.GetSolutionRoot();
         var modulesDir = Path.Combine(root, "src", "Modules");
         if (!Directory.Exists(modulesDir)) yield break;
 

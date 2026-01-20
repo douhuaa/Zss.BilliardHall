@@ -71,25 +71,22 @@
   - Command/Query 分离
   - Endpoint 业务逻辑检查
 
-### 传统测试类（向后兼容）
-
-以下测试类继续存在，与 ADR 测试类互补：
-- **PlatformDependencyTests.cs**: 验证 Platform/Application 依赖约束
-- **ModuleIsolationTests.cs**: 验证模块隔离规则
-- **NamespaceTests.cs**: 验证命名空间规范
-- **ContractUsageTests.cs**: 验证契约使用规则
-- **VerticalSliceArchitectureTests.cs**: 验证垂直切片架构
-- **HostIsolationTests.cs**: 验证 Host 隔离约束
-- **InfrastructureTests.cs**: 验证基础设施约束
-
 ---
 
 ## 测试统计
 
-- **总测试数**: 137 个
 - **ADR 测试类**: 6 个（ADR-0000 至 ADR-0005）
-- **传统测试类**: 7 个
 - **覆盖率**: 100% ADR 约束覆盖
+
+### 架构演进说明
+
+传统测试类（PlatformDependencyTests、ModuleIsolationTests、NamespaceTests、ContractUsageTests、VerticalSliceArchitectureTests、HostIsolationTests、InfrastructureTests、PlatformLayerTests）已被淘汰，理由如下：
+
+1. **重复覆盖**：ADR 测试已完整覆盖模块隔离、命名空间、契约、Platform/Host/Module 依赖等所有核心约束
+2. **维护成本**：单一测试套件降低了维护负担，架构约束变更时只需修改 ADR 测试
+3. **CI 效率**：减少冗余测试执行，降低 CI 时间和误报风险
+
+所有架构约束现在通过 ADR 测试统一执行和维护。
 
 ---
 
@@ -122,31 +119,7 @@ dotnet test src/tests/ArchitectureTests -c Release
 
 如果架构测试失败，CI 将阻断合并，确保架构规范得到严格执行。
 
-## 测试清单
 
-### 1. PlatformDependencyTests.cs
-验证平台层和应用层的依赖约束：
-- Platform 不依赖 Application
-- Application 不依赖 Host
-- Platform 不依赖 Host
-- Platform 不依赖 Modules
-- Application 不依赖 Modules
-
-### 2. ModuleIsolationTests.cs
-验证模块隔离规则：
-- 模块不相互依赖
-- 模块不包含传统分层命名空间（Application/Domain/Infrastructure 等）
-- 模块不包含 Repository/Service/Manager 等语义
-- 模块只依赖 Platform
-
-### 3. NamespaceTests.cs
-验证命名空间规范：
-- 所有类型命名空间以 Zss.BilliardHall 开头
-- Platform 类型在 Zss.BilliardHall.Platform 命名空间
-- Application 类型在 Zss.BilliardHall.Application 命名空间
-- Module 类型在 Zss.BilliardHall.Modules.{ModuleName} 命名空间
-- Directory.Packages.props 存在于仓库根目录
-- Directory.Build.props 存在于仓库根目录
 
 ## 常见问题
 
