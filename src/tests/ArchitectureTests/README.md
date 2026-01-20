@@ -123,19 +123,6 @@ CI 工作流程：
 4. 构建所有项目（排除 docs）
 5. 运行架构测试 (`dotnet test`)
 
-你可以在本地模拟 CI 环境：
-```bash
-dotnet restore
-dotnet build src/Platform/Platform.csproj
-dotnet build src/Application/Application.csproj
-dotnet build src/Modules/Members/Members.csproj
-dotnet build src/Modules/Orders/Orders.csproj
-dotnet build src/Host/Web/Web.csproj
-dotnet build src/Host/Worker/Worker.csproj
-dotnet build src/tests/ArchitectureTests/ArchitectureTests.csproj
-dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj --no-build --verbosity normal
-```
-
 ---
 
 后续可以增强架构测试：
