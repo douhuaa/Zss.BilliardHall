@@ -101,6 +101,30 @@ dotnet test src/tests/ArchitectureTests -c Release
 
 ## 扩展建议
 
+### F. 基础设施约束（Infrastructure）
+- 仓库根目录必须存在 `Directory.Packages.props`（CPM 启用）
+- 所有类型的命名空间必须以 `Zss.BilliardHall` 开头（RootNamespace 约定）
+- 项目命名必须遵循 `Zss.BilliardHall.*` 约定
+
+---
+
+## CI 集成
+
+架构测试已集成到 GitHub Actions CI 流程中（`.github/workflows/architecture-tests.yml`）：
+
+- **触发条件**：Push 或 Pull Request 到 main 分支
+- **测试环境**：Ubuntu Latest + .NET 10.0.x
+- **失败阻断**：如果任何架构测试失败，CI 将返回非 0 退出码，阻止 PR 合并
+
+CI 工作流程：
+1. Checkout 代码
+2. 设置 .NET SDK
+3. 恢复依赖 (`dotnet restore`)
+4. 构建所有项目（排除 docs）
+5. 运行架构测试 (`dotnet test`)
+
+---
+
 后续可以增强架构测试：
 
 1. **引入 Roslyn Analyzer**：做语义级别的静态检查
