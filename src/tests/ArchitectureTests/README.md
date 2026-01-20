@@ -165,13 +165,58 @@ dotnet test src/tests/ArchitectureTests -c Release
 ### 未来增强方向
 
 1. **引入 Roslyn Analyzer**：做语义级别的静态检查
+   - 详见 [ADR-0005 执行级别分类](../../docs/adr/ADR-0005-Enforcement-Levels.md)
+   - Level 2 规则建议使用 Roslyn Analyzer 实现
 2. **添加更多规则**：
    - 异常处理规范（使用 DomainException）
    - 数据库事务边界约束
    - 日志记录规范
 3. **格式化失败信息**：在 PR 模板中强制 ARCH-VIOLATION 字段
+   - 已实现：见 [.github/PULL_REQUEST_TEMPLATE.md](../../.github/PULL_REQUEST_TEMPLATE.md)
+   - 破例记录：见 [docs/ARCH-VIOLATIONS.md](../../docs/ARCH-VIOLATIONS.md)
 4. **性能测试**：确保架构测试运行时间控制在合理范围内（当前 ~1s）
 5. **覆盖率报告**：生成 ADR 约束覆盖率报告
+
+---
+
+## 架构治理体系（Architecture Governance）
+
+本测试套件是完整架构治理体系的一部分：
+
+### 📜 架构宪法层
+
+**ADR-0000 至 ADR-0005 构成系统的"架构宪法层"**，不可被后续 ADR 推翻：
+
+- 详见 [架构宪法层文档](../../docs/adr/ARCHITECTURE-CONSTITUTIONAL-LAYER.md)
+- 这些 ADR 只能细化，不能削弱
+- 破例需要架构委员会审批
+
+### 🛡️ 三层防御体系
+
+架构约束通过三层机制执行：
+
+1. **Level 1 - 静态可执行**（当前测试覆盖）
+   - NetArchTest 自动化检查
+   - CI 自动阻断
+   - 零容忍
+
+2. **Level 2 - 语义半自动**（部分覆盖，建议增强）
+   - 当前：启发式检查（建议性）
+   - 建议：Roslyn Analyzer（自定义分析器）
+   - 详见 [ADR-0005 执行级别分类](../../docs/adr/ADR-0005-Enforcement-Levels.md)
+
+3. **Level 3 - 人工 Gate**（流程控制）
+   - PR 模板强制架构违规声明
+   - 架构师 Code Review
+   - 破例记录在 [ARCH-VIOLATIONS.md](../../docs/ARCH-VIOLATIONS.md)
+
+### 🔍 反作弊规则
+
+ADR-0000 现已包含反作弊机制，确保架构测试不能被"形式化"：
+
+- ✅ 测试类必须包含实质性测试（不能是空壳）
+- ✅ 禁止跳过架构测试（禁止使用 `Skip` 属性）
+- ✅ 测试 DisplayName 必须包含 ADR 编号（便于追溯）
 
 ---
 

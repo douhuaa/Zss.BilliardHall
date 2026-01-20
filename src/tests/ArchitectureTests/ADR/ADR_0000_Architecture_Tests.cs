@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Xunit;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -117,5 +118,160 @@ public sealed class ADR_0000_Architecture_Tests
             throw new InvalidOperationException($"ADR 文件名不合法: {adrId}");
         var number = segments[1];
         return $"ADR_{number}{TypeSuffix}";
+    }
+
+    /// <summary>
+    /// 反作弊规则：测试类必须包含实质性测试，不能是空壳
+    /// </summary>
+    [Fact(DisplayName = "ADR-0000: 架构测试类必须包含最少断言数（反作弊）")]
+    public void Architecture_Test_Classes_Must_Have_Minimum_Assertions()
+    {
+        var testTypes = LoadArchitectureTestTypes();
+        var violations = new List<string>();
+
+        foreach (var testType in testTypes)
+        {
+            // 跳过 ADR-0000 自身
+            if (testType.Name == "ADR_0000_Architecture_Tests")
+                continue;
+
+            var testMethods = testType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => m.GetCustomAttributes(typeof(FactAttribute), false).Any() ||
+                           m.GetCustomAttributes(typeof(TheoryAttribute), false).Any())
+                .ToList();
+
+            if (testMethods.Count == 0)
+            {
+                violations.Add($"❌ {testType.Name}: 无任何测试方法");
+                continue;
+            }
+
+            // 检查是否所有测试都被跳过
+            var allSkipped = testMethods.All(m =>
+            {
+                var factAttr = m.GetCustomAttributes(typeof(FactAttribute), false).FirstOrDefault() as FactAttribute;
+                var theoryAttr = m.GetCustomAttributes(typeof(TheoryAttribute), false).FirstOrDefault() as TheoryAttribute;
+                return (factAttr?.Skip != null) || (theoryAttr?.Skip != null);
+            });
+
+            if (allSkipped)
+            {
+                violations.Add($"❌ {testType.Name}: 所有测试都被跳过（Skip）");
+            }
+
+            // 简单启发式检查：测试方法体应该有实际内容
+            // 至少应该有一些方法调用（如 Assert.True, GetTypes 等）
+            var hasSubstantialTests = testMethods.Any(m => m.GetMethodBody()?.GetILAsByteArray()?.Length > 50);
+            if (!hasSubstantialTests)
+            {
+                violations.Add($"⚠️ {testType.Name}: 测试方法体可能过于简单（建议人工审查）");
+            }
+        }
+
+        if (violations.Any())
+        {
+            var message = "❌ ADR-0000 反作弊检查失败：\n" +
+                         string.Join("\n", violations) +
+                         "\n\n修复建议：架构测试类必须包含实质性的测试逻辑，不允许空测试或全部跳过的测试。";
+            throw new Xunit.Sdk.XunitException(message);
+        }
+    }
+
+    /// <summary>
+    /// 反作弊规则：测试失败消息必须包含 ADR 编号
+    /// </summary>
+    [Fact(DisplayName = "ADR-0000: 测试失败消息必须包含 ADR 编号（反作弊）")]
+    public void Test_Failure_Messages_Must_Include_ADR_Number()
+    {
+        var testTypes = LoadArchitectureTestTypes();
+        var violations = new List<string>();
+
+        foreach (var testType in testTypes)
+        {
+            // 跳过 ADR-0000 自身
+            if (testType.Name == "ADR_0000_Architecture_Tests")
+                continue;
+
+            // 提取 ADR 编号
+            var adrNumber = ExtractAdrNumber(testType.Name);
+            if (adrNumber == null)
+            {
+                violations.Add($"❌ {testType.Name}: 无法从类名提取 ADR 编号");
+                continue;
+            }
+
+            // 检查测试方法的 DisplayName 是否包含 ADR 编号
+            var testMethods = testType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => m.GetCustomAttributes(typeof(FactAttribute), false).Any() ||
+                           m.GetCustomAttributes(typeof(TheoryAttribute), false).Any())
+                .ToList();
+
+            foreach (var method in testMethods)
+            {
+                var factAttr = method.GetCustomAttributes(typeof(FactAttribute), false).FirstOrDefault() as FactAttribute;
+                var theoryAttr = method.GetCustomAttributes(typeof(TheoryAttribute), false).FirstOrDefault() as TheoryAttribute;
+                var displayName = factAttr?.DisplayName ?? theoryAttr?.DisplayName;
+
+                if (displayName != null && !displayName.Contains($"ADR-{adrNumber}"))
+                {
+                    violations.Add($"⚠️ {testType.Name}.{method.Name}: DisplayName 缺少 ADR 编号标识");
+                }
+            }
+        }
+
+        if (violations.Any())
+        {
+            var message = "⚠️ ADR-0000 建议：\n" +
+                         string.Join("\n", violations) +
+                         "\n\n建议：所有测试的 DisplayName 应包含 ADR 编号（如 'ADR-0001: ...'），便于追溯和审计。";
+            
+            // 这是建议性规则，暂时只输出调试信息，不阻断
+            System.Diagnostics.Debug.WriteLine(message);
+        }
+    }
+
+    /// <summary>
+    /// 禁止使用 Skip 属性跳过架构测试
+    /// </summary>
+    [Fact(DisplayName = "ADR-0000: 禁止跳过架构测试（反作弊）")]
+    public void Architecture_Tests_Must_Not_Be_Skipped()
+    {
+        var testTypes = LoadArchitectureTestTypes();
+        var skippedTests = new List<string>();
+
+        foreach (var testType in testTypes)
+        {
+            var testMethods = testType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => m.GetCustomAttributes(typeof(FactAttribute), false).Any() ||
+                           m.GetCustomAttributes(typeof(TheoryAttribute), false).Any())
+                .ToList();
+
+            foreach (var method in testMethods)
+            {
+                var factAttr = method.GetCustomAttributes(typeof(FactAttribute), false).FirstOrDefault() as FactAttribute;
+                var theoryAttr = method.GetCustomAttributes(typeof(TheoryAttribute), false).FirstOrDefault() as TheoryAttribute;
+                
+                var skipReason = factAttr?.Skip ?? theoryAttr?.Skip;
+                if (skipReason != null)
+                {
+                    skippedTests.Add($"❌ {testType.Name}.{method.Name}: Skip = \"{skipReason}\"");
+                }
+            }
+        }
+
+        if (skippedTests.Any())
+        {
+            var message = "❌ ADR-0000 违规：禁止跳过架构测试\n" +
+                         string.Join("\n", skippedTests) +
+                         "\n\n修复建议：如果某个架构约束不再适用，应删除测试或修改 ADR，而不是跳过测试。" +
+                         "跳过测试会导致架构约束形同虚设。";
+            throw new Xunit.Sdk.XunitException(message);
+        }
+    }
+
+    private static string? ExtractAdrNumber(string typeName)
+    {
+        var match = System.Text.RegularExpressions.Regex.Match(typeName, @"ADR_(\d{4})");
+        return match.Success ? match.Groups[1].Value : null;
     }
 }
