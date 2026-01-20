@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>  <ItemGroup>
+  <ItemGroup>
     <None Include="**\*.md" />
     <Compile Include="**\*.cs" />
   </ItemGroup>
