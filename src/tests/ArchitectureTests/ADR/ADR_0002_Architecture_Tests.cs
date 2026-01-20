@@ -201,7 +201,7 @@ public sealed class ADR_0002_Architecture_Tests
     [MemberData(nameof(GetHostProjectFiles))]
     public void Host_Csproj_Should_Not_Reference_Modules(string csprojPath)
     {
-        var root = ModuleIsolationTests.GetSolutionRoot();
+        var root = ModuleAssemblyData.GetSolutionRoot();
         var modulesDir = Path.Combine(root, "src", "Modules");
         var moduleProjFiles = Directory.Exists(modulesDir)
             ? Directory.GetFiles(modulesDir, "*.csproj", SearchOption.AllDirectories).Select(Path.GetFullPath).ToHashSet(StringComparer.OrdinalIgnoreCase)
@@ -232,7 +232,7 @@ public sealed class ADR_0002_Architecture_Tests
 
     public static IEnumerable<object[]> GetHostProjectFiles()
     {
-        var root = ModuleIsolationTests.GetSolutionRoot();
+        var root = ModuleAssemblyData.GetSolutionRoot();
         var hostDir = Path.Combine(root, "src", "Host");
         if (!Directory.Exists(hostDir)) yield break;
 
@@ -246,7 +246,7 @@ public sealed class ADR_0002_Architecture_Tests
     [Fact(DisplayName = "ADR-0002.12: Program.cs 应该保持简洁（建议 ≤ 50 行）")]
     public void Program_Cs_Should_Be_Concise()
     {
-        var root = ModuleIsolationTests.GetSolutionRoot();
+        var root = ModuleAssemblyData.GetSolutionRoot();
         var hostDir = Path.Combine(root, "src", "Host");
         if (!Directory.Exists(hostDir)) return;
 
