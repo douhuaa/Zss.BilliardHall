@@ -1,4 +1,6 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+﻿using System.Reflection;
+
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
 /// ADR-0000
