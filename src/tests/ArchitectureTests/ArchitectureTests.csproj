@@ -24,6 +24,10 @@
     
     <ItemGroup>
         <ProjectReference Include="..\..\Platform\Platform.csproj" />
+        <ProjectReference Include="..\..\Application\Application.csproj" />
+        <ProjectReference Include="..\..\Modules\Members\Members.csproj" />
+        <ProjectReference Include="..\..\Modules\Orders\Orders.csproj" />
+        <ProjectReference Include="..\..\Host\Web\Web.csproj" />
     </ItemGroup>
     
 </Project>
