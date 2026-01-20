@@ -13,6 +13,11 @@ public sealed class ADR_0000_Architecture_Tests
     private const string AdrFilePattern = "ADR-*.md";
     private const string TestNamespacePrefix = "Zss.BilliardHall.Tests.ArchitectureTests.ADR";
     private const string TypeSuffix = "_Architecture_Tests";
+    
+    // 最小 IL 字节数阈值：用于启发式判断测试方法是否包含实质内容
+    // 这是一个经验值，基于简单测试方法的典型 IL 大小
+    // 注意：这不是严格的验证，只是启发式检查
+    private const int MinimumILBytesForSubstantialTest = 50;
 
     /// <summary>
     /// 只以 ADR 编号作为测试类绑定依据：
@@ -161,7 +166,8 @@ public sealed class ADR_0000_Architecture_Tests
 
             // 简单启发式检查：测试方法体应该有实际内容
             // 至少应该有一些方法调用（如 Assert.True, GetTypes 等）
-            var hasSubstantialTests = testMethods.Any(m => m.GetMethodBody()?.GetILAsByteArray()?.Length > 50);
+            var hasSubstantialTests = testMethods.Any(m => 
+                m.GetMethodBody()?.GetILAsByteArray()?.Length > MinimumILBytesForSubstantialTest);
             if (!hasSubstantialTests)
             {
                 violations.Add($"⚠️ {testType.Name}: 测试方法体可能过于简单（建议人工审查）");

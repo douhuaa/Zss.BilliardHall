@@ -266,6 +266,24 @@ public sealed class ADR_0002_Architecture_Tests
         }
     }
 
+    // Compiled regex patterns for performance
+    private static readonly System.Text.RegularExpressions.Regex AddModulePattern = 
+        new System.Text.RegularExpressions.Regex(@"\.Add\w+Module\(", System.Text.RegularExpressions.RegexOptions.Compiled);
+    private static readonly System.Text.RegularExpressions.Regex AddFeaturePattern = 
+        new System.Text.RegularExpressions.Regex(@"\.Add\w+Feature\(", System.Text.RegularExpressions.RegexOptions.Compiled);
+    private static readonly System.Text.RegularExpressions.Regex UsePattern = 
+        new System.Text.RegularExpressions.Regex(@"\.Use\w+\(", System.Text.RegularExpressions.RegexOptions.Compiled);
+    private static readonly System.Text.RegularExpressions.Regex ServiceRegistrationPattern = 
+        new System.Text.RegularExpressions.Regex(@"services\.(AddScoped|AddSingleton|AddTransient)", System.Text.RegularExpressions.RegexOptions.Compiled);
+    private static readonly System.Text.RegularExpressions.Regex MapEndpointPattern = 
+        new System.Text.RegularExpressions.Regex(@"app\.Map\w+\(", System.Text.RegularExpressions.RegexOptions.Compiled);
+    private static readonly System.Text.RegularExpressions.Regex IfPattern = 
+        new System.Text.RegularExpressions.Regex(@"if\s*\(", System.Text.RegularExpressions.RegexOptions.Compiled);
+    private static readonly System.Text.RegularExpressions.Regex SwitchPattern = 
+        new System.Text.RegularExpressions.Regex(@"switch\s*\(", System.Text.RegularExpressions.RegexOptions.Compiled);
+    private static readonly System.Text.RegularExpressions.Regex TernaryPattern = 
+        new System.Text.RegularExpressions.Regex(@"\?\s*.*\s*:", System.Text.RegularExpressions.RegexOptions.Compiled);
+
     [Fact(DisplayName = "ADR-0002.13: Program.cs 只应调用 Bootstrapper（语义检查）")]
     public void Program_Cs_Should_Only_Call_Bootstrapper()
     {
@@ -276,30 +294,33 @@ public sealed class ADR_0002_Architecture_Tests
         var programFiles = Directory.GetFiles(hostDir, "Program.cs", SearchOption.AllDirectories);
         var violations = new List<string>();
 
+        var suspiciousPatterns = new[]
+        {
+            (AddModulePattern, @"\.Add\w+Module\("),
+            (AddFeaturePattern, @"\.Add\w+Feature\("),
+            (UsePattern, @"\.Use\w+\("),
+            (ServiceRegistrationPattern, @"services\.Add(Scoped|Singleton|Transient)"),
+            (MapEndpointPattern, @"app\.Map\w+\("),
+        };
+
+        var conditionalPatterns = new[]
+        {
+            (IfPattern, "if"),
+            (SwitchPattern, "switch"),
+            (TernaryPattern, "ternary operator"),
+        };
+
+        var allowedPatterns = new[]
+        {
+            "Bootstrapper",
+            "WebApplication",
+            "builder.Build()",
+            "app.Run()",
+        };
+
         foreach (var programFile in programFiles)
         {
-            var content = File.ReadAllText(programFile);
             var lines = File.ReadAllLines(programFile);
-
-            // 检查是否存在非 Bootstrapper 的扩展方法调用模式
-            var suspiciousPatterns = new[]
-            {
-                @"\.Add\w+Module\(",      // AddXxxModule 模式
-                @"\.Add\w+Feature\(",     // AddXxxFeature 模式
-                @"\.Use\w+\(",            // UseXxx 模式（除了 UseBootstrapper 等）
-                @"services\.AddScoped",   // 直接注册服务
-                @"services\.AddSingleton",
-                @"services\.AddTransient",
-                @"app\.Map\w+\(",         // 直接配置端点
-            };
-
-            var allowedPatterns = new[]
-            {
-                "Bootstrapper",
-                "WebApplication",
-                "builder.Build()",
-                "app.Run()",
-            };
 
             for (int i = 0; i < lines.Length; i++)
             {
@@ -309,9 +330,8 @@ public sealed class ADR_0002_Architecture_Tests
                 if (string.IsNullOrWhiteSpace(line) || line.StartsWith("//"))
                     continue;
 
-                foreach (var pattern in suspiciousPatterns)
+                foreach (var (regex, patternName) in suspiciousPatterns)
                 {
-                    var regex = new System.Text.RegularExpressions.Regex(pattern);
                     if (regex.IsMatch(line))
                     {
                         // 检查是否在允许的上下文中
@@ -321,35 +341,17 @@ public sealed class ADR_0002_Architecture_Tests
                             violations.Add(
                                 $"❌ {Path.GetFileName(programFile)} (第 {i + 1} 行): 检测到非 Bootstrapper 扩展调用\n" +
                                 $"   代码: {line}\n" +
-                                $"   匹配模式: {pattern}");
+                                $"   匹配模式: {patternName}");
                         }
                     }
                 }
-            }
 
-            // 检查是否存在条件分支（环境/Host 判断）
-            var conditionalPatterns = new[]
-            {
-                @"if\s*\(",
-                @"switch\s*\(",
-                @"\?\s*.*\s*:",  // 三元运算符
-            };
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                var line = lines[i].Trim();
-                
-                // 跳过注释和空行
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("//"))
-                    continue;
-
-                foreach (var pattern in conditionalPatterns)
+                foreach (var (regex, patternName) in conditionalPatterns)
                 {
-                    var regex = new System.Text.RegularExpressions.Regex(pattern);
                     if (regex.IsMatch(line))
                     {
                         violations.Add(
-                            $"⚠️ {Path.GetFileName(programFile)} (第 {i + 1} 行): 检测到条件分支逻辑\n" +
+                            $"⚠️ {Path.GetFileName(programFile)} (第 {i + 1} 行): 检测到条件分支逻辑 ({patternName})\n" +
                             $"   代码: {line}\n" +
                             $"   建议: 环境判断应在 Bootstrapper 内部处理，而非 Program.cs");
                     }
@@ -357,18 +359,19 @@ public sealed class ADR_0002_Architecture_Tests
             }
         }
 
+        // 这是建议性检查，记录但不阻断（当前 Program.cs 简单，未来可能需要）
         if (violations.Any())
         {
-            var message = "❌ ADR-0002 语义检查失败：\n" +
+            var message = "⚠️ ADR-0002 语义检查建议：\n" +
                          string.Join("\n\n", violations) +
-                         "\n\n修复建议：\n" +
+                         "\n\n建议：\n" +
                          "1. Program.cs 应该只调用 Bootstrapper.Configure() 等入口方法\n" +
                          "2. 所有 AddXxxModule/AddXxxFeature 调用应封装在 Bootstrapper 中\n" +
                          "3. 环境判断（Development/Production）应在 Bootstrapper 内部处理\n" +
                          "4. 直接的服务注册和端点配置应移到对应的 Bootstrapper";
             
-            // 暂时作为警告，不阻断
-            System.Diagnostics.Debug.WriteLine(message);
+            // 记录为建议，不阻断构建
+            System.Diagnostics.Trace.WriteLine(message);
         }
     }
 
