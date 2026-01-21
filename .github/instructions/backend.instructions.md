@@ -1,52 +1,52 @@
-# Backend Development Instructions
+# 后端开发指令
 
-## Specific to: Backend/Business Logic Development
+## 适用场景：后端/业务逻辑开发
 
-When assisting with backend development, apply these additional constraints on top of `base.instructions.md`.
+在协助后端开发时，在 `base.instructions.md` 的基础上应用这些额外约束。
 
-## Vertical Slice Organization
+## 垂直切片组织
 
-Every business use case MUST be organized as a complete vertical slice:
+每个业务用例必须组织为完整的垂直切片：
 
 ```
 UseCases/
   CreateOrder/
-    CreateOrder.cs              ← Command/Query
-    CreateOrderHandler.cs        ← Handler (THE authority for this use case)
-    CreateOrderEndpoint.cs       ← Optional: HTTP adapter
-    CreateOrderTests.cs          ← Tests
+    CreateOrder.cs              ← 命令/查询
+    CreateOrderHandler.cs        ← Handler（此用例的权威）
+    CreateOrderEndpoint.cs       ← 可选：HTTP 适配器
+    CreateOrderTests.cs          ← 测试
 ```
 
-**Never suggest**:
-- ❌ Horizontal Service layers (e.g., `OrderService`)
-- ❌ Shared business logic across use cases
-- ❌ Generic `Manager` or `Helper` classes with business logic
+**绝不建议**：
+- ❌ 水平 Service 层（如 `OrderService`）
+- ❌ 跨用例共享业务逻辑
+- ❌ 包含业务逻辑的通用 `Manager` 或 `Helper` 类
 
-## Handler Rules (ADR-0005)
+## Handler 规则（ADR-0005）
 
-### Command Handlers
-- MUST return `void` or ID only (Guid, int, string)
-- MUST NOT return business data (use separate Query for that)
-- MUST NOT depend on Contracts (DTOs) for business decisions
-- MUST load domain models, execute business logic, save state
-- CAN publish domain events
+### Command Handler
+- 必须返回 `void` 或仅返回 ID（Guid、int、string）
+- 不得返回业务数据（使用单独的 Query）
+- 不得依赖契约（DTO）进行业务决策
+- 必须加载领域模型、执行业务逻辑、保存状态
+- 可以发布领域事件
 
-**Correct Command Handler**:
+**正确的 Command Handler**：
 ```csharp
 public class CreateOrderHandler : ICommandHandler<CreateOrder>
 {
     public async Task<Guid> Handle(CreateOrder command)
     {
-        // ✅ Load/create aggregate
+        // ✅ 加载/创建聚合
         var order = new Order(command.MemberId, command.Items);
         
-        // ✅ Execute business logic (in domain model)
+        // ✅ 执行业务逻辑（在领域模型中）
         order.Calculate();
         
-        // ✅ Save
+        // ✅ 保存
         await _repository.SaveAsync(order);
         
-        // ✅ Publish event (optional)
+        // ✅ 发布事件（可选）
         await _eventBus.Publish(new OrderCreated(order.Id));
         
         return order.Id;
@@ -54,26 +54,26 @@ public class CreateOrderHandler : ICommandHandler<CreateOrder>
 }
 ```
 
-**Incorrect patterns to BLOCK**:
+**必须阻止的模式**：
 ```csharp
-// ❌ Command Handler returning business data
+// ❌ Command Handler 返回业务数据
 public async Task<OrderDto> Handle(CreateOrder command) { ... }
 
-// ❌ Command Handler depending on Contracts
+// ❌ Command Handler 依赖契约
 var memberDto = await _queryBus.Send(new GetMemberById(...));
-if (memberDto.Balance > 1000) { ... } // ❌ Business decision based on DTO
+if (memberDto.Balance > 1000) { ... } // ❌ 基于 DTO 的业务决策
 ```
 
-### Query Handlers
-- MUST return Contracts (DTOs)
-- MUST NOT modify state
-- MUST NOT publish events
-- CAN optimize for read performance
-- CAN query across module boundaries (via Contracts)
+### Query Handler
+- 必须返回契约（DTO）
+- 不得修改状态
+- 不得发布事件
+- 可以优化读取性能
+- 可以跨模块边界查询（通过契约）
 
-## Endpoint Rules
+## Endpoint 规则
 
-Endpoints MUST be thin adapters:
+Endpoint 必须是薄适配器：
 
 ```csharp
 public class CreateOrderEndpoint : IEndpoint
@@ -84,76 +84,76 @@ public class CreateOrderEndpoint : IEndpoint
             CreateOrderRequest request, 
             IMessageBus bus) =>
         {
-            // ✅ Map to Command
+            // ✅ 映射到命令
             var command = new CreateOrder(request.MemberId, request.Items);
             
-            // ✅ Delegate to Handler
+            // ✅ 委托给 Handler
             var orderId = await bus.InvokeAsync(command);
             
-            // ✅ Return HTTP response
+            // ✅ 返回 HTTP 响应
             return Results.Created($"/orders/{orderId}", orderId);
         });
     }
 }
 ```
 
-**Never allow in Endpoints**:
-- ❌ Business logic or validation
-- ❌ Direct database access
-- ❌ Direct domain model manipulation
+**Endpoint 中绝不允许**：
+- ❌ 业务逻辑或验证
+- ❌ 直接访问数据库
+- ❌ 直接操作领域模型
 
-## Module Communication
+## 模块通信
 
-When one module needs data/notification from another:
+当一个模块需要来自另一个模块的数据/通知时：
 
-### ✅ DO: Use Domain Events (Async)
+### ✅ 使用：领域事件（异步）
 ```csharp
-// In Orders module
+// 在 Orders 模块中
 await _eventBus.Publish(new OrderCreated(orderId, memberId));
 
-// In Members module (subscriber)
+// 在 Members 模块中（订阅者）
 public class OrderCreatedHandler : IEventHandler<OrderCreated>
 {
     public async Task Handle(OrderCreated @event)
     {
-        // Update member statistics
+        // 更新会员统计
     }
 }
 ```
 
-### ✅ DO: Use Contracts for Queries
+### ✅ 使用：契约查询
 ```csharp
-// Query another module's data
+// 查询另一个模块的数据
 var memberDto = await _queryBus.Send(new GetMemberById(memberId));
-// Use memberDto.Name, memberDto.Email, etc. (read-only)
+// 使用 memberDto.Name、memberDto.Email 等（只读）
 ```
 
-### ✅ DO: Use Primitive Types
+### ✅ 使用：原始类型
 ```csharp
-// Just pass the ID
+// 只传递 ID
 var orderId = Guid.NewGuid();
-var command = new NotifyMember(memberId); // Guid, not Member object
+var command = new NotifyMember(memberId); // Guid，而非 Member 对象
 ```
 
-### ❌ DON'T: Direct References
+### ❌ 禁止：直接引用
 ```csharp
-// ❌ NEVER reference other module's internals
+// ❌ 永远不要引用其他模块的内部实现
 using Zss.BilliardHall.Modules.Members.Domain;
 var member = await _memberRepository.GetByIdAsync(id);
 ```
 
-### ❌ DON'T: Synchronous Cross-Module Commands
+### ❌ 禁止：同步跨模块命令
 ```csharp
-// ❌ Don't call another module's Command synchronously
+// ❌ 不要同步调用另一个模块的命令
 await _commandBus.Send(new UpdateMemberStatistics(memberId));
 ```
 
-## Domain Model Guidelines
+## 领域模型指南
 
-Place business logic in domain models, not in Handlers or Services:
+将业务逻辑放在领域模型中，而非 Handler 或 Service：
 
 ```csharp
-// ✅ Correct: Business logic in domain model
+// ✅ 正确：业务逻辑在领域模型中
 public class Order
 {
     public void ApplyDiscount(decimal percentage)
@@ -166,39 +166,39 @@ public class Order
     }
 }
 
-// Handler just orchestrates
+// Handler 只是编排
 public class ApplyDiscountHandler
 {
     public async Task Handle(ApplyDiscount command)
     {
         var order = await _repository.GetByIdAsync(command.OrderId);
-        order.ApplyDiscount(command.Percentage); // ✅ Logic in domain model
+        order.ApplyDiscount(command.Percentage); // ✅ 逻辑在领域模型中
         await _repository.SaveAsync(order);
     }
 }
 ```
 
-## What to Suggest When
+## 何时建议什么
 
-| Developer says... | Suggest checking... |
+| 开发者说... | 建议检查... |
 |-------------------|---------------------|
-| "I need to call another module's logic" | ADR-0001 (use events), `docs/copilot/adr-0001.prompts.md` |
-| "I need to share code between modules" | Is it technical (→ BuildingBlocks) or business (→ rethink design)? |
-| "I need to return data from a Command" | ADR-0005 (Commands return ID, use separate Query) |
-| "I need to validate using another module's data" | Query via Contract (read-only), don't use for business decisions |
+| "我需要调用另一个模块的逻辑" | ADR-0001（使用事件），`docs/copilot/adr-0001.prompts.md` |
+| "我需要在模块间共享代码" | 是技术性的（→ BuildingBlocks）还是业务性的（→ 重新思考设计）？ |
+| "我需要从命令返回数据" | ADR-0005（命令返回 ID，使用单独的查询） |
+| "我需要使用另一个模块的数据进行验证" | 通过契约查询（只读），不要用于业务决策 |
 
-## Quick Red Flags
+## 快速危险信号
 
-Stop and warn if you see:
-- 🚩 `using Zss.BilliardHall.Modules.X` in another module
-- 🚩 `class OrderService` or any `*Service` in modules
-- 🚩 Command Handler returning DTOs
-- 🚩 Query Handler modifying state
-- 🚩 Business logic in Endpoints
-- 🚩 Shared domain models between modules
+发现以下情况时停止并警告：
+- 🚩 在另一个模块中出现 `using Zss.BilliardHall.Modules.X`
+- 🚩 模块中出现 `class OrderService` 或任何 `*Service`
+- 🚩 Command Handler 返回 DTO
+- 🚩 Query Handler 修改状态
+- 🚩 Endpoint 中的业务逻辑
+- �� 模块间共享的领域模型
 
-## Reference
+## 参考
 
-For detailed scenarios and examples:
-- `docs/copilot/adr-0001.prompts.md` - Module isolation
-- `docs/copilot/adr-0005.prompts.md` - Handler patterns and CQRS
+详细场景和示例：
+- `docs/copilot/adr-0001.prompts.md` - 模块隔离
+- `docs/copilot/adr-0005.prompts.md` - Handler 模式和 CQRS

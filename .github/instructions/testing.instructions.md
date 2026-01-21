@@ -1,12 +1,12 @@
-# Testing Instructions
+# 测试编写指令
 
-## Specific to: Writing and Maintaining Tests
+## 适用场景：编写和维护测试
 
-When assisting with testing, apply these additional constraints on top of `base.instructions.md`.
+在协助测试时，在 `base.instructions.md` 的基础上应用这些额外约束。
 
-## Test Organization
+## 测试组织
 
-Tests MUST mirror the source structure:
+测试必须镜像源代码结构：
 
 ```
 src/
@@ -22,35 +22,35 @@ tests/
         CreateOrderHandlerTests.cs
 ```
 
-## Architecture Tests (Critical)
+## 架构测试（关键）
 
-### Location
-All architecture tests are in: `src/tests/ArchitectureTests/ADR/`
+### 位置
+所有架构测试位于：`src/tests/ArchitectureTests/ADR/`
 
-### Structure
-Each ADR has a corresponding test class:
-- `ADR_0001_Architecture_Tests.cs` - Module isolation
-- `ADR_0002_Architecture_Tests.cs` - Platform/Application/Host boundaries
-- `ADR_0003_Architecture_Tests.cs` - Namespace rules
-- `ADR_0004_Architecture_Tests.cs` - Package management
-- `ADR_0005_Architecture_Tests.cs` - CQRS and Handler patterns
+### 结构
+每个 ADR 都有对应的测试类：
+- `ADR_0001_Architecture_Tests.cs` - 模块隔离
+- `ADR_0002_Architecture_Tests.cs` - Platform/Application/Host 边界
+- `ADR_0003_Architecture_Tests.cs` - 命名空间规则
+- `ADR_0004_Architecture_Tests.cs` - 包管理
+- `ADR_0005_Architecture_Tests.cs` - CQRS 和 Handler 模式
 
-### Never Suggest
+### 绝不建议
 
-❌ **Do NOT suggest**:
-- Modifying architecture tests to make code pass
-- Commenting out failing architecture tests
-- Adding exceptions/exclusions to architecture tests without strong justification
+❌ **不要建议**：
+- 修改架构测试以使代码通过
+- 注释掉失败的架构测试
+- 在没有充分理由的情况下为架构测试添加例外/排除
 
-✅ **Instead, suggest**:
-- Fix the code to comply with architecture
-- Refer to the relevant ADR for correct pattern
-- Consult `docs/copilot/adr-XXXX.prompts.md` for guidance
+✅ **应该建议**：
+- 修复代码以符合架构
+- 参考相关 ADR 以了解正确模式
+- 查阅 `docs/copilot/adr-XXXX.prompts.md` 获取指导
 
-## Unit Tests
+## 单元测试
 
-### Handler Tests
-Test Handlers in isolation:
+### Handler 测试
+独立测试 Handler：
 
 ```csharp
 public class CreateOrderHandlerTests
@@ -74,8 +74,8 @@ public class CreateOrderHandlerTests
 }
 ```
 
-### Domain Model Tests
-Test business logic in domain models:
+### 领域模型测试
+测试领域模型中的业务逻辑：
 
 ```csharp
 public class OrderTests
@@ -108,9 +108,9 @@ public class OrderTests
 }
 ```
 
-## Integration Tests
+## 集成测试
 
-Use actual dependencies but isolated database:
+使用实际依赖但隔离数据库：
 
 ```csharp
 [Collection("Integration")]
@@ -134,77 +134,77 @@ public class CreateOrderIntegrationTests
 }
 ```
 
-## Test Patterns to Follow
+## 要遵循的测试模式
 
-### ✅ Good Patterns
+### ✅ 好的模式
 ```csharp
-// Clear test names describing behavior
+// 描述行为的清晰测试名称
 [Fact]
 public async Task Handle_InactiveMember_ThrowsException()
 
-// Use FluentAssertions for readability
+// 使用 FluentAssertions 提高可读性
 result.Should().NotBeNull();
 result.Orders.Should().HaveCount(3);
 
-// Test one thing per test
+// 每个测试测试一件事
 [Fact]
-public async Task Handle_ValidInput_CreatesOrder() // One behavior
+public async Task Handle_ValidInput_CreatesOrder() // 一个行为
 
-// Arrange-Act-Assert structure
+// Arrange-Act-Assert 结构
 var command = new CreateOrder(...); // Arrange
 var result = await handler.Handle(command); // Act
 result.Should().NotBeEmpty(); // Assert
 ```
 
-### ❌ Bad Patterns
+### ❌ 坏的模式
 ```csharp
-// ❌ Vague test names
+// ❌ 模糊的测试名称
 [Fact]
 public async Task Test1()
 
-// ❌ Multiple assertions unrelated to main behavior
+// ❌ 与主要行为无关的多个断言
 [Fact]
 public async Task Handle_Test()
 {
-    // Tests 5 different things
+    // 测试 5 个不同的东西
 }
 
-// ❌ Testing implementation details instead of behavior
+// ❌ 测试实现细节而非行为
 [Fact]
-public async Task Handle_CallsRepository() // Too implementation-focused
+public async Task Handle_CallsRepository() // 过于关注实现
 ```
 
-## When Tests Fail
+## 测试失败时
 
-### If Architecture Tests Fail
-1. **DO NOT modify the test**
-2. Copy the failure message
-3. Suggest: "Please refer to `docs/copilot/architecture-test-failures.md` and paste this error to me for diagnosis"
-4. Explain the ADR violation in plain language
-5. Suggest correct implementation
+### 如果架构测试失败
+1. **不要修改测试**
+2. 复制失败消息
+3. 建议："请参考 `docs/copilot/architecture-test-failures.md` 并将此错误粘贴给我进行诊断"
+4. 用通俗语言解释 ADR 违规
+5. 建议正确实现
 
-### If Unit/Integration Tests Fail
-1. Analyze the failure reason
-2. Determine if it's a legitimate bug or test issue
-3. Fix the bug, not the test (unless test is actually wrong)
-4. Ensure all related tests pass
+### 如果单元/集成测试失败
+1. 分析失败原因
+2. 确定是合法的 bug 还是测试问题
+3. 修复 bug，而非测试（除非测试确实有问题）
+4. 确保所有相关测试通过
 
-## Coverage Guidelines
+## 覆盖率指南
 
-Don't chase coverage percentage. Focus on:
-- ✅ All business logic in domain models
-- ✅ All Handler orchestration flows
-- ✅ All edge cases and validations
-- ✅ Critical integration paths
+不要追求覆盖率百分比。专注于：
+- ✅ 领域模型中的所有业务逻辑
+- ✅ 所有 Handler 编排流程
+- ✅ 所有边界情况和验证
+- ✅ 关键的集成路径
 
-Can skip:
-- ⏭️ Simple DTOs/Contracts (no logic)
-- ⏭️ Trivial property getters/setters
-- ⏭️ Infrastructure boilerplate
+可以跳过：
+- ⏭️ 简单的 DTO/契约（无逻辑）
+- ⏭️ 琐碎的属性 getter/setter
+- ⏭️ 基础设施样板代码
 
-## Test Data Builders
+## 测试数据构建器
 
-Prefer builders for complex setup:
+对于复杂的设置，优先使用构建器：
 
 ```csharp
 public class OrderBuilder
@@ -227,32 +227,32 @@ public class OrderBuilder
     public Order Build() => new Order(_memberId, _items);
 }
 
-// Usage
+// 使用
 var order = new OrderBuilder()
     .WithMember(memberId)
     .WithItem("product1", 2)
     .Build();
 ```
 
-## Running Tests Locally
+## 本地运行测试
 
-Suggest this workflow:
+建议这个工作流程：
 ```bash
-# Run all architecture tests
+# 运行所有架构测试
 dotnet test src/tests/ArchitectureTests/
 
-# Run specific ADR tests
+# 运行特定 ADR 测试
 dotnet test --filter "FullyQualifiedName~ADR_0001"
 
-# Run module tests
+# 运行模块测试
 dotnet test src/tests/Modules.Orders.Tests/
 
-# Run all tests
+# 运行所有测试
 dotnet test
 ```
 
-## Reference
+## 参考
 
-For architecture test failures:
-- `docs/copilot/architecture-test-failures.md` - Diagnostic guide
-- `docs/copilot/adr-XXXX.prompts.md` - Specific ADR guidance
+对于架构测试失败：
+- `docs/copilot/architecture-test-failures.md` - 诊断指南
+- `docs/copilot/adr-XXXX.prompts.md` - 特定 ADR 指导
