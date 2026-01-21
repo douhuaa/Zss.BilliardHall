@@ -1,5 +1,9 @@
 # ADR-0005 执行级别分类（Enforcement Level Classification）
 
+> **注意**：本文档是 [ADR-0005：应用内交互模型与执行边界](ADR-0005-Application-Interaction-Model-Final.md) 的补充文档。  
+> 主 ADR 定义"是什么"，本文档定义"如何验证"。  
+> 同时参见：[ADR-0000：架构测试与 CI 治理](ADR-0000-architecture-tests.md)  
+
 **状态**：✅ Active  
 **关联 ADR**：ADR-0005 应用内交互模型与执行边界  
 **目的**：明确定义 ADR-0005 各项规则的可执行性边界  
