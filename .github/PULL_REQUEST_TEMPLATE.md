@@ -140,4 +140,4 @@
 1. **架构测试失败但声明"无违规"**：PR 将被自动拒绝
 2. **引入架构破例但未填写详情**：PR 将被自动拒绝
 3. **长期破例未提供归还计划**：需要在架构会议上讨论
-4. **所有破例将被记录在 `docs/ARCH-VIOLATIONS.md` 中以备审计**
+4. **所有破例将被记录在 [`docs/summaries/governance/arch-violations.md`](../docs/summaries/governance/arch-violations.md) 中以备审计**
