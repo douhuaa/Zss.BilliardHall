@@ -152,6 +152,62 @@ Zss.BilliardHall/
 
 ### 1. 模块隔离规则
 
+#### 🔒 模块通信规则可视化
+
+```mermaid
+graph TB
+    subgraph Allowed[✅ 允许的通信方式]
+        direction TB
+        
+        subgraph M1[Module A]
+            A1[Handler A]
+        end
+        
+        subgraph M2[Module B]
+            B1[Handler B]
+        end
+        
+        subgraph PL[Platform Layer]
+            PC[Contracts<br/>数据契约]
+            EV[Event Bus<br/>领域事件]
+        end
+        
+        A1 -.发布事件.-> EV
+        EV -.订阅事件.-> B1
+        A1 --> PC
+        B1 --> PC
+        
+        style M1 fill:#c8e6c9
+        style M2 fill:#c8e6c9
+        style PL fill:#fff3e0
+    end
+    
+    subgraph Forbidden[❌ 禁止的通信方式]
+        direction TB
+        
+        subgraph M3[Module A]
+            A2[Handler A]
+            E1[Entity A]
+        end
+        
+        subgraph M4[Module B]
+            B2[Handler B]
+            E2[Entity B]
+        end
+        
+        A2 -.❌直接引用.-> B2
+        A2 -.❌共享实体.-> E1
+        E1 -.❌共享实体.-> E2
+        E2 -.❌共享实体.-> B2
+        
+        style M3 fill:#ffcdd2
+        style M4 fill:#ffcdd2
+    end
+    
+    style Allowed fill:#e8f5e9
+    style Forbidden fill:#ffebee
+```
+
 **✅ 允许：**
 
 - 模块可以依赖 `Platform`
@@ -339,6 +395,74 @@ Platform 层只能包含技术能力，不能包含业务逻辑。
      3. 提取辅助方法（仅在必要时）
 
 ### 模块间通信
+
+#### 📡 模块间通信方式对比
+
+```mermaid
+sequenceDiagram
+    participant OE as Orders Endpoint
+    participant OH as Orders Handler
+    participant MB as Message Bus
+    participant MH as Members Handler
+    participant LP as Local Projection
+    
+    Note over OE,LP: 方案1：本地副本（推荐）
+    
+    rect rgb(200, 230, 201)
+        Note right of MH: Members 模块发布事件
+        MH->>MB: 发布 MemberActivated 事件
+        MB->>LP: 订阅并更新本地投影
+        Note over LP: Orders 模块维护<br/>会员状态副本
+        
+        OE->>OH: CreateOrderCommand
+        OH->>LP: 查询本地会员状态
+        LP-->>OH: 返回状态
+        OH-->>OE: 创建订单
+    end
+    
+    Note over OE,LP: 方案2：跨模块命令（需审批）
+    
+    rect rgb(255, 205, 210)
+        OE->>OH: CreateOrderCommand
+        OH->>MB: ValidateMemberCommand
+        MB->>MH: 路由到 Members 模块
+        MH-->>MB: ValidationResult
+        MB-->>OH: 返回验证结果
+        OH-->>OE: 创建订单或拒绝
+    end
+```
+
+#### 🔄 事件驱动架构流程
+
+```mermaid
+graph LR
+    subgraph Members[Members 模块]
+        MA[MemberActivated<br/>事件发布]
+    end
+    
+    subgraph EventBus[事件总线]
+        EB[Wolverine<br/>Message Bus]
+    end
+    
+    subgraph Orders[Orders 模块]
+        OL[本地投影<br/>MemberStatus]
+        OH[OrderHandler<br/>使用投影]
+    end
+    
+    subgraph Notifications[Notifications 模块]
+        NH[发送通知<br/>Handler]
+    end
+    
+    MA -->|发布| EB
+    EB -->|订阅| OL
+    EB -->|订阅| NH
+    OL -.查询.-> OH
+    
+    style Members fill:#c8e6c9
+    style Orders fill:#bbdefb
+    style Notifications fill:#f8bbd0
+    style EventBus fill:#fff3e0
+```
 
 **场景：Orders 模块需要验证会员状态**
 
