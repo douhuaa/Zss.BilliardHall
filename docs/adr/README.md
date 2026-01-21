@@ -35,6 +35,7 @@ graph TB
     
     subgraph Governance[🛡️ 架构治理层 GUARDRAIL]
         ADR0[ADR-0000<br/>架构测试]
+        ADR0A[ADR-0000A<br/>ADR 流程]
         AUX[辅助文档<br/>Levels/Layer]
     end
     
@@ -129,6 +130,7 @@ graph LR
 | 依赖包如何管理                 | ADR-0004            | 中央包管理（CPM）                 |
 | 业务用例如何执行               | ADR-0005            | 应用内运行模型                    |
 | 架构如何自动化校验             | ADR-0000            | 架构测试与 CI 治理                |
+| **如何新增和修订 ADR**         | **ADR-0000A**       | **ADR 新增与修订流程**            |
 | 完整的自动化验证体系           | [架构自动化验证系统](../architecture-automation-verification.md) | 三层防御体系、工具、本地开发流程 |
 
 ---
@@ -247,6 +249,24 @@ graph LR
 - ✅ 每条 ADR 必须有对应测试
 - ✅ 测试失败 = 构建失败
 - ✅ 破例必须显式记录
+
+---
+
+### [ADR-0000A：ADR 新增与修订流程](ADR-0000A-adr-process.md)
+
+**主轴**：ADR 生命周期管理  
+**聚焦内容**：
+- ADR 层级与修订权限（流程层/宪法层/普通）
+- 新增 ADR 的完整流程（9 个步骤）
+- 修订和废弃 ADR 的流程
+- Copilot 在 ADR 流程中的参与方式
+- RFC、架构测试、Prompts 的创建要求
+
+**核心原则**：
+- ✅ 每个 ADR 必须有架构测试
+- ✅ 每个 ADR 必须有 Copilot Prompts
+- ✅ 宪法层修订需全体一致同意
+- ✅ 废弃的 ADR 保留不删除
 
 ---
 
