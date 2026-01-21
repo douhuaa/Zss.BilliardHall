@@ -66,11 +66,107 @@ jobs:
             **/TestResults/
       
       - name: Check architecture compliance
-        if: always()
+        if: failure()
         run: |
-          echo "::group::Architecture Compliance Summary"
-          if find . -name "architecture-test-results.trx" 2>/dev/null | grep -q .; then
-            echo "✅ Architecture tests executed successfully"
-            echo "📊 Test results available in artifacts"
-          fi
+          echo "::group::❌ Architecture Tests Failed"
+          echo ""
+          echo "⚠️ 架构测试失败检测到违规行为"
+          echo ""
+          echo "📋 如何使用 Copilot 诊断和修复："
+          echo ""
+          echo "1️⃣ 查看详细的测试失败日志（在上方 'Run architecture tests' 步骤中）"
+          echo ""
+          echo "2️⃣ 将失败日志复制给 GitHub Copilot，并询问："
+          echo "   \"请根据以下架构测试失败日志，解释违规原因并提供修复建议\""
+          echo ""
+          echo "3️⃣ Copilot 会参考以下资源提供解释："
+          echo "   - docs/copilot/README.md - Copilot 角色定位"
+          echo "   - docs/copilot/adr-XXXX.prompts.md - 各 ADR 的提示词库"
+          echo "   - docs/copilot/architecture-test-failures.md - 失败解释指南"
+          echo ""
+          echo "4️⃣ 根据 Copilot 的建议修复代码"
+          echo ""
+          echo "5️⃣ 本地验证修复："
+          echo "   dotnet test src/tests/ArchitectureTests/"
+          echo ""
+          echo "📚 相关资源："
+          echo "   - Copilot 治理体系：https://github.com/${{ github.repository }}/blob/main/docs/copilot/README.md"
+          echo "   - 架构测试失败指南：https://github.com/${{ github.repository }}/blob/main/docs/copilot/architecture-test-failures.md"
+          echo "   - PR 模板：https://github.com/${{ github.repository }}/blob/main/.github/PULL_REQUEST_TEMPLATE.md"
+          echo ""
+          echo "::endgroup::"
+          exit 1
+      
+      - name: Comment on PR with Copilot guidance
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `## ❌ 架构测试失败
+
+⚠️ 本 PR 的架构测试未通过，检测到架构违规行为。
+
+### 📋 使用 Copilot 诊断和修复
+
+#### 1️⃣ 查看失败日志
+点击上方 "Run architecture tests" 步骤查看详细的失败信息。
+
+#### 2️⃣ 询问 Copilot
+将失败日志复制给 GitHub Copilot，并询问：
+
+\`\`\`
+请根据以下架构测试失败日志，解释违规原因并提供修复建议
+
+[粘贴失败日志]
+\`\`\`
+
+#### 3️⃣ Copilot 参考资源
+Copilot 会基于以下资源为你提供详细解释：
+- [Copilot 治理体系](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/copilot/README.md)
+- [ADR 提示词库](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/main/docs/copilot)
+- [架构测试失败解释指南](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/copilot/architecture-test-failures.md)
+
+#### 4️⃣ 修复并验证
+根据 Copilot 的建议修复代码后，在本地运行：
+
+\`\`\`bash
+dotnet test src/tests/ArchitectureTests/
+\`\`\`
+
+### 📚 相关 ADR
+
+- [ADR-0001: 模块化单体与垂直切片架构](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-0002: Platform / Application / Host 三层启动体系](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/ADR-0002-platform-application-host-bootstrap.md)
+- [ADR-0003: 命名空间与项目边界规范](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/ADR-0003-namespace-rules.md)
+- [ADR-0004: 中央包管理（CPM）规范](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/ADR-0004-Cpm-Final.md)
+- [ADR-0005: 应用内交互模型与执行边界](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/ADR-0005-Application-Interaction-Model-Final.md)
+
+---
+
+💡 **提示**：记得在 PR 描述中完成 "Copilot 参与检查清单"。
+`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+      
+      - name: Architecture compliance summary
+        if: success()
+        run: |
+          echo "::group::✅ Architecture Compliance Summary"
+          echo ""
+          echo "🎉 所有架构测试通过！"
+          echo ""
+          echo "✅ 本 PR 符合以下架构决策记录（ADR）："
+          echo "   - ADR-0001: 模块化单体与垂直切片架构"
+          echo "   - ADR-0002: Platform / Application / Host 三层启动体系"
+          echo "   - ADR-0003: 命名空间与项目边界规范"
+          echo "   - ADR-0004: 中央包管理（CPM）规范"
+          echo "   - ADR-0005: 应用内交互模型与执行边界"
+          echo ""
+          echo "💡 提示：在 PR 中勾选 'Copilot 参与检查清单'"
+          echo ""
           echo "::endgroup::"
