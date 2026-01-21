@@ -92,11 +92,11 @@ graph LR
 
 ### 架构决策记录 (ADR)
 - [ADR 目录](adr/README.md) - ADR 完整索引和导航
-- [ADR-0001: 模块化单体与垂直切片架构决策](adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-0002: 平台、应用与主机启动器架构决策](adr/ADR-0002-platform-application-host-bootstrap.md)
-- [ADR-0003: 命名空间与项目结构规范](adr/ADR-0003-namespace-rules.md)
-- [ADR-0004: 中央包管理与层级依赖规则](adr/ADR-0004-Cpm-Final.md)
-- [ADR-0005: 应用内交互模型与执行边界](adr/ADR-0005-Application-Interaction-Model-Final.md)
+  - [ADR-0001: 模块化单体与垂直切片架构决策](adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+  - [ADR-0002: 平台、应用与主机启动器架构决策](adr/ADR-0002-platform-application-host-bootstrap.md)
+  - [ADR-0003: 命名空间与项目结构规范](adr/ADR-0003-namespace-rules.md)
+  - [ADR-0004: 中央包管理与层级依赖规则](adr/ADR-0004-Cpm-Final.md)
+  - [ADR-0005: 应用内交互模型与执行边界](adr/ADR-0005-Application-Interaction-Model-Final.md)
 
 ### 改进总结
 - **[改进总结目录](summaries/README.md)** - 项目改进历程和经验总结
