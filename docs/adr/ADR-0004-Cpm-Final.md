@@ -1,11 +1,39 @@
-# ADR-0004
+# ADR-0004：中央包管理（CPM）规范
 
-## 中央包管理 (CPM) 规范（Final）
+**状态**：✅ 已采纳（Final，不可随意修改）  
+**级别**：架构约束（Architectural Contract）  
+**适用范围**：所有 Platform / Application / Modules / Host / Tests 项目  
+**生效时间**：即刻  
 
-**状态**：✅ 已采纳（Final，不可随意修改）
-**级别**：架构约束（Architectural Contract）
-**适用范围**：所有 Platform / Application / Modules / Host / Tests 项目
-**生效时间**：即刻
+---
+
+## 本章聚焦内容（Focus）
+
+本 ADR 是**静态结构层**的核心文档，聚焦于：
+
+1. **Directory.Packages.props 集中管理**：如何统一管理所有包版本
+2. **层级依赖规则**：各层允许和禁止的依赖包类型
+3. **包分组策略**：如何组织和管理包列表
+4. **防御性规则**：如何防止手动覆盖包版本
+5. **架构测试映射**：如何自动化校验依赖规则
+
+**不涉及**：
+- ❌ 启动体系职责（见 ADR-0002）
+- ❌ 命名空间规范（见 ADR-0003）
+- ❌ 运行时交互模型（见 ADR-0005）
+- ❌ 模块内部组织（见 ADR-0001）
+
+---
+
+## 术语表（Glossary）
+
+| 术语                              | 定义                                                                 |
+|-----------------------------------|----------------------------------------------------------------------|
+| CPM（Central Package Management） | 中央包管理，统一管理所有项目的包版本                                 |
+| Directory.Packages.props          | NuGet 中央包管理配置文件，定义所有包版本                             |
+| 传递依赖固定                      | CentralPackageTransitivePinningEnabled，固定传递依赖版本             |
+| 层级依赖规则                      | 各层（Platform/Application/Modules/Host）允许的依赖包类型            |
+| 包分组                            | 按功能或技术栈对包进行逻辑分组                                       |
 
 ---
 
@@ -82,23 +110,19 @@
 
 ---
 
-## 3️⃣ 架构测试建议
+## 3️⃣ 强化与测试
 
-使用 NetArchTest / Roslyn Analyzer：
+所有依赖规则必须通过自动化架构测试验证。
 
-* Platform 层项目不依赖 Application/Modules/Host 的业务包
-* Application 层项目只依赖 Platform + 自身模块
-* Modules 层项目不依赖其他模块业务逻辑
-* Host 层项目只依赖 Platform + Application，不依赖业务模块 Handler
-* Tests 层项目只依赖被测模块 + Platform / Application
+**架构测试详见**：[ADR-0000：架构测试与 CI 治理](ADR-0000-architecture-tests.md)
 
-示例伪代码：
-
-```csharp
-Types.InAssembly(typeof(SomeType).Assembly)
-    .ShouldNot().HaveDependencyOn("Zss.BilliardHall.Modules.OtherModule")
-    .GetResult().IsSuccessful.ShouldBeTrue();
-```
+**核心测试用例**：
+- Platform 层不依赖 Application/Modules/Host 的业务包
+- Application 层只依赖 Platform + 自身模块
+- Modules 层不依赖其他模块业务逻辑
+- Host 层只依赖 Platform + Application
+- Tests 层只依赖被测模块 + Platform / Application
+- 所有项目未手动指定包版本
 
 ---
 
@@ -127,3 +151,50 @@ Types.InAssembly(typeof(SomeType).Assembly)
 4. 将包管理规则写入团队 onboarding 文档
 
 ✅ ADR-0004 Final 完整版完毕
+
+---
+
+## 与其他 ADR 关系（Related ADRs）
+
+| ADR        | 关系                                           |
+|------------|------------------------------------------------|
+| ADR-0000   | 定义本 ADR 的自动化测试机制                    |
+| ADR-0001   | 定义模块组织，本 ADR 定义模块依赖规则          |
+| ADR-0002   | 配合定义层级依赖方向                           |
+| ADR-0003   | 定义命名空间规范                               |
+| ADR-0005   | 定义运行时交互模型                             |
+
+**依赖关系**：
+- 本 ADR 定义依赖包管理规范
+- ADR-0002 的层级约束需要本 ADR 的依赖规则支撑
+- 所有层级的包依赖必须符合本 ADR 的规则
+
+---
+
+## 快速参考（Quick Reference）
+
+### CPM 配置检查清单
+
+- [ ] 是否启用了 `ManagePackageVersionsCentrally`？
+- [ ] 是否启用了 `CentralPackageTransitivePinningEnabled`？
+- [ ] 所有包版本是否在 Directory.Packages.props 中定义？
+- [ ] 项目文件是否未手动指定版本号？
+
+### 层级依赖检查清单
+
+| 层级        | 允许依赖的包类型                              |
+|-------------|-----------------------------------------------|
+| Platform    | Logging、Tracing、OpenTelemetry、ErrorModel   |
+| Application | Wolverine、Marten、Pipeline、Policy           |
+| Modules     | 业务依赖、Application 服务                    |
+| Host        | Platform / Application（只调用 Bootstrapper） |
+| Tests       | 被测模块 + Platform / Application             |
+
+### 常见错误
+
+| 错误                              | 正确做法                          |
+|-----------------------------------|-----------------------------------|
+| 项目中指定 Version                | 删除 Version，使用 CPM            |
+| Platform 依赖 Application 的包    | 移除违规依赖                      |
+| Module 直接依赖其他 Module        | 通过契约或事件通信                |
+| Host 直接依赖 Module Handler      | 只依赖 Platform + Application     |

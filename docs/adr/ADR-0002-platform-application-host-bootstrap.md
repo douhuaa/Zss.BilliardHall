@@ -1,11 +1,41 @@
-# ADR-0002
+# ADR-0002：Platform / Application / Host 三层启动体系
 
-## Platform / Application / Host 三层启动体系（Final）
+**状态**：✅ 已采纳（Final，不可随意修改）  
+**级别**：架构约束（Architectural Contract）  
+**适用范围**：所有 Host、模块、测试、未来子系统  
+**生效时间**：即刻  
 
-**状态**：✅ 已采纳（Final，不可随意修改）
-**级别**：架构约束（Architectural Contract）
-**适用范围**：所有 Host、模块、测试、未来子系统
-**生效时间**：即刻
+---
+
+## 本章聚焦内容（Focus）
+
+本 ADR 是**静态结构层**的核心文档，聚焦于：
+
+1. **三层装配模型**：Platform / Application / Host 的职责划分
+2. **层级依赖方向**：单向依赖规则（Host → Application → Platform）
+3. **唯一入口规范**：Bootstrapper 作为各层的唯一装配入口
+4. **目录结构标准**：支持多 Host 实例的标准目录组织
+5. **命名与结构规则**：Host 项目的命名和 Program.cs 的规范
+
+**不涉及**：
+- ❌ 命名空间自动推导（见 ADR-0003）
+- ❌ 依赖包管理（见 ADR-0004）
+- ❌ 运行时交互模型（见 ADR-0005）
+- ❌ 架构测试机制（见 ADR-0000）
+- ❌ 模块内部组织（见 ADR-0001）
+
+---
+
+## 术语表（Glossary）
+
+| 术语                  | 定义                                                                 |
+|-----------------------|----------------------------------------------------------------------|
+| Platform              | 技术基座，提供日志、追踪、异常等基础技术能力，不感知业务             |
+| Application           | 应用装配层，定义"系统是什么"，负责模块扫描和用例注册                 |
+| Host                  | 进程外壳，决定"怎么跑"，如 Web / Worker / Test                       |
+| Bootstrapper          | 各层的唯一装配入口，负责注册服务和配置                               |
+| 单向依赖              | Host → Application → Platform，禁止反向依赖                          |
+| 三权分立              | 三层各司其职，互不干涉                                               |
 
 ---
 
@@ -259,6 +289,10 @@ app.Run();
 
 ## 8. 命名空间约束（BaseNamespace）
 
+命名空间的详细规则请参阅：[ADR-0003：命名空间与项目边界规范](ADR-0003-namespace-rules.md)
+
+**本节仅说明与启动体系相关的命名空间约束**：
+
 ### 8.1 Directory.Build.props 全局定义
 
 ```xml
@@ -291,42 +325,21 @@ app.Run();
 
 **禁止在单个项目中覆盖 BaseNamespace**
 
-> 可用 MSBuild Target 强制拦截
+> 详细的 MSBuild 推导逻辑和防御规则见 ADR-0003
 
 ---
 
-## 9. 架构测试（CI 级铁律）
+## 9. 强化与测试
 
-### 9.1 层级依赖约束
+所有层级依赖规则必须通过自动化架构测试验证。
 
-```csharp
-[Fact]
-public void Platform_Should_Not_Depend_On_Application() { ... }
+**架构测试详见**：[ADR-0000：架构测试与 CI 治理](ADR-0000-architecture-tests.md)
 
-[Fact]
-public void Application_Should_Not_Depend_On_Host() { ... }
-```
-
-### 9.2 Host 边界约束
-
-```csharp
-[Fact]
-public void Host_Should_Not_Contain_Business_Types() { ... }
-```
-
-### 9.3 Handler 约束
-
-```csharp
-[Fact]
-public void Handlers_Should_Not_Depend_On_AspNet() { ... }
-```
-
-### 9.4 Host 注册服务约束（最终防线）
-
-```csharp
-[Fact]
-public void Host_Should_Not_Register_Services_Directly() { ... }
-```
+**核心测试用例**：
+- Platform 不应依赖 Application
+- Application 不应依赖 Host
+- Host 不应包含业务类型
+- Host 不应直接注册服务（只能调用 Bootstrapper）
 
 ---
 
@@ -347,3 +360,46 @@ public void Host_Should_Not_Register_Services_Directly() { ... }
 * 固化 `ApplicationBootstrapper` 为唯一入口
 * 后续 ADR 禁止推翻本 ADR，只允许补充
 * 可考虑将此体系模板化 (`dotnet new`)
+
+---
+
+## 与其他 ADR 关系（Related ADRs）
+
+| ADR        | 关系                                           |
+|------------|------------------------------------------------|
+| ADR-0000   | 定义本 ADR 的自动化测试机制                    |
+| ADR-0001   | 定义模块的组织方式，本 ADR 定义模块的装配方式  |
+| ADR-0003   | 定义命名空间自动推导规则                       |
+| ADR-0004   | 定义依赖包管理规则                             |
+| ADR-0005   | 定义运行时交互模型                             |
+
+**依赖关系**：
+- 本 ADR 定义静态启动结构
+- ADR-0003 补充命名空间规则
+- ADR-0004 补充依赖管理规则
+- ADR-0005 定义运行时行为
+
+---
+
+## 快速参考（Quick Reference）
+
+### Platform 层检查清单
+
+- [ ] 是否只提供技术能力？
+- [ ] 是否不感知业务？
+- [ ] 是否不依赖 Application？
+- [ ] 是否提供了标准入口 PlatformBootstrapper？
+
+### Application 层检查清单
+
+- [ ] 是否只做模块装配？
+- [ ] 是否不依赖 Host？
+- [ ] 是否提供了标准入口 ApplicationBootstrapper？
+- [ ] 是否避免了 HttpContext 等 Host 特定类型？
+
+### Host 层检查清单
+
+- [ ] Program.cs 是否少于 30 行？
+- [ ] 是否只调用 Platform 和 Application 的 Bootstrapper？
+- [ ] 是否不包含业务逻辑？
+- [ ] 是否不直接注册服务？

@@ -1,8 +1,40 @@
-# ADR-0000：架构测试（Architecture Tests）作为一等公民
+# ADR-0000：架构测试与 CI 治理宪法
 
-## 状态
+**状态**：✅ 已采纳（Final，不可随意修改）  
+**级别**：架构治理根约束（Governance Constitutional Rule）  
+**适用范围**：所有 Platform / Application / Modules / Host / Tests 项目  
+**生效时间**：即刻  
 
-已采纳（Adopted）
+---
+
+## 本章聚焦内容（Focus）
+
+本 ADR 是**架构治理层**的核心文档，聚焦于：
+
+1. **架构测试的定义与边界**：什么是架构测试，什么不是
+2. **ADR 与测试的映射关系**：每条 ADR 如何对应到可执行测试
+3. **自动化校验机制**：如何通过 CI 自动化执行架构测试
+4. **破例流程与治理**：如何处理架构违规和例外情况
+5. **各 ADR 的测试映射表**：快速查询每条 ADR 对应的测试类
+
+**不涉及**：
+- ❌ 具体业务逻辑的测试
+- ❌ 单元测试或集成测试
+- ❌ 代码风格或命名规范
+
+---
+
+## 术语表（Glossary）
+
+| 术语                  | 定义                                                                 |
+|-----------------------|----------------------------------------------------------------------|
+| 架构测试              | 验证架构约束的自动化测试，关注结构性规则而非实现细节                 |
+| NetArchTest           | .NET 架构测试库，用于验证程序集依赖、命名空间等静态约束              |
+| Roslyn Analyzer       | C# 代码分析器，用于验证语义级规则                                    |
+| CI 阻断               | 架构测试失败时，阻止 PR 合并和代码发布                               |
+| 破例（Exception）     | 经过审批的临时性架构违规，必须记录在案                               |
+| 宪法层 ADR            | ADR-0000 至 ADR-0005，构成系统的不可协商约束                          |
+| 三级执行分类          | Level 1（静态可执行）、Level 2（语义半自动）、Level 3（人工 Gate）   |
 
 ---
 
@@ -11,24 +43,25 @@
 随着系统采用 **模块化单体（Modular Monolith）+ 垂直切片（Vertical Slice）** 架构，
 仅靠代码评审和文档已无法长期、稳定地约束架构边界：
 
-- 架构规则容易被“无意破坏”（尤其在多人协作、快速迭代时）
-- ADR 文档一旦脱离代码，极易沦为“历史说明书”
+- 架构规则容易被"无意破坏"（尤其在多人协作、快速迭代时）
+- ADR 文档一旦脱离代码，极易沦为"历史说明书"
 - 依赖方向、模块边界、启动职责等问题，往往在系统后期才暴露，修复成本极高
 
 因此需要一种机制，使**架构决策具备可执行性、可验证性和可持续性**。
 
 ---
 
-## 决策（Decision）
+## 核心决策（Decision）
 
 **将架构测试（Architecture Tests）确立为架构治理的强制手段，并与 ADR 形成一一对应关系。**
 
 具体决策如下：
 
 1. **每一条 ADR 必须映射为至少一条可执行的架构测试**
-2. 架构测试失败 = 架构决策被违反（而不是“某个测试没过”）
-3. 架构测试属于“系统宪法”，其失败应阻断 CI / PR 合并
+2. 架构测试失败 = 架构决策被违反（而不是"某个测试没过"）
+3. 架构测试属于"系统宪法"，其失败应阻断 CI / PR 合并
 4. 架构测试关注**结构性约束**，而非实现细节或代码风格
+5. 采用**三级执行分类**：静态可执行、语义半自动、人工 Gate
 
 ---
 
@@ -39,12 +72,15 @@
 - **程序集 / 模块之间的依赖方向是否符合 ADR**
 - **启动职责、运行边界是否被破坏**
 - **模块隔离是否仍然成立**
+- **命名空间与物理结构的映射是否正确**
+- **包依赖是否符合层级规则**
 
 架构测试**不用于**：
 
 - 校验代码风格或命名优雅性
-- 判断某段逻辑是否“像业务”或“像技术”
+- 判断某段逻辑是否"像业务"或"像技术"
 - 替代单元测试或集成测试
+- 验证业务逻辑的正确性
 
 ---
 
@@ -58,11 +94,13 @@
 示例：
 
 ```
-Architecture/
-└── ADR/
-    ├── ADR_0001_Modular_Monolith_Tests.cs
-    ├── ADR_0002_Three_Layer_Bootstrap_Tests.cs
-    └── ADR_0005_Dependency_Direction_Tests.cs
+src/tests/ArchitectureTests/ADR/
+├── ADR_0000_Architecture_Tests.cs  # 架构测试元规则
+├── ADR_0001_Architecture_Tests.cs  # 模块化单体与垂直切片
+├── ADR_0002_Architecture_Tests.cs  # 三层启动体系
+├── ADR_0003_Architecture_Tests.cs  # 命名空间规范
+├── ADR_0004_Architecture_Tests.cs  # 中央包管理
+└── ADR_0005_Architecture_Tests.cs  # 应用内交互模型
 ```
 
 > 目的：任何一次测试失败，都可以直接定位到被破坏的架构决策。
@@ -72,6 +110,7 @@ Architecture/
 ### 2️⃣ 测试名称必须显式标明 ADR 编号
 
 - 测试类名
+- 测试方法名
 - 断言失败信息
 
 都必须包含 ADR 编号，例如：
@@ -93,6 +132,8 @@ Architecture/
 - 模块之间是否存在直接引用
 - 是否违反启动模型（非 Host 出现入口点）
 - 是否违反集中式依赖治理（CPM）
+- 命名空间是否符合规范
+- Handler 是否依赖 ASP.NET 类型
 
 这些规则一旦被破坏，系统架构将**结构性退化**。
 
@@ -102,7 +143,7 @@ Architecture/
 
 以下内容**不得写成架构测试**：
 
-- 基于“类名 / 关键字”的业务语义推断
+- 基于"类名 / 关键字"的业务语义推断
 - 通过前缀 / 后缀判断技术属性
 - 对模块内部实现方式的强制约束
 - 对未来可能演进方向的主观假设
@@ -111,12 +152,171 @@ Architecture/
 
 ---
 
+## ADR 与测试映射表
+
+| ADR 编号  | ADR 主题                           | 测试类                             | 核心测试用例                                    |
+|-----------|------------------------------------|------------------------------------|------------------------------------------------|
+| ADR-0000  | 架构测试与 CI 治理                 | `ADR_0000_Architecture_Tests.cs`   | 每个 ADR 都有对应测试类                         |
+| ADR-0001  | 模块化单体与垂直切片               | `ADR_0001_Architecture_Tests.cs`   | 模块隔离、契约使用规则、垂直切片                |
+| ADR-0002  | 三层启动体系                       | `ADR_0002_Architecture_Tests.cs`   | 层级依赖方向、Host 边界约束                     |
+| ADR-0003  | 命名空间与项目边界                 | `ADR_0003_Architecture_Tests.cs`   | 命名空间映射、防御性规则                        |
+| ADR-0004  | 中央包管理                         | `ADR_0004_Architecture_Tests.cs`   | CPM 使用、层级依赖规则                          |
+| ADR-0005  | 应用内交互模型                     | `ADR_0005_Architecture_Tests.cs`   | Handler 约束、同步异步规则、CQRS               |
+
+---
+
+## 三级执行分类（Enforcement Levels）
+
+详见 [ADR-0005-Enforcement-Levels.md](ADR-0005-Enforcement-Levels.md)
+
+### Level 1: 静态可执行（Static Enforceable）
+
+**定义**：可以通过 NetArchTest 等静态分析工具完全自动化检查的规则。
+
+**特征**：
+- 基于类型、命名空间、依赖关系的静态约束
+- 测试失败 = 绝对违规
+- CI 阻断
+
+**工具**：NetArchTest
+
+**示例规则**：
+- Platform 不应依赖 Application
+- Modules 之间不应有直接引用
+- Handler 不应依赖 ASP.NET 类型
+- 命名空间必须符合映射规则
+
+---
+
+### Level 2: 语义半自动（Semantic Semi-Auto）
+
+**定义**：需要语义分析的规则，建议通过 Roslyn Analyzer 检查，当前测试只能做启发式检查。
+
+**特征**：
+- 需要理解代码语义（如方法调用链、业务逻辑复杂度）
+- 当前测试是"建议性"而非"强制性"
+- 测试失败 = 需要人工审查
+
+**工具**：
+- 当前：NetArchTest（启发式检查）
+- 建议：Roslyn Analyzer（自定义分析器）
+
+**示例规则**：
+- Endpoint 不应包含业务逻辑
+- Handler 应使用结构化异常
+- Command Handler 不应返回业务数据
+
+---
+
+### Level 3: 人工 Gate（Manual Gate）
+
+**定义**：无法（或不应该）完全自动化的规则，需要人工审查和决策。
+
+**特征**：
+- 涉及业务语义、设计意图、架构权衡
+- 测试无法覆盖，或覆盖成本过高
+- 依赖 PR Review + ARCH-VIOLATION 标记
+
+**工具**：
+- PR Checklist
+- 架构师 Code Review
+- ARCH-VIOLATION 记录表
+
+**示例规则**：
+- 模块间同步调用破例审批
+- 跨模块事务与 Saga
+- Handler 职责划分
+
+---
+
+## 自动化校验机制
+
+### 1. CI 集成
+
+架构测试必须集成到 CI 流程中：
+
+```yaml
+# CI 配置示例
+- name: Run Architecture Tests
+  run: dotnet test src/tests/ArchitectureTests --no-build --verbosity normal
+  
+# 架构测试失败 = 构建失败 = PR 阻断
+```
+
+### 2. 测试执行策略
+
+- **每次 PR 提交**：执行所有架构测试
+- **每次合并到主分支**：执行所有架构测试
+- **定期扫描**：每日执行架构测试，检测潜在腐化
+
+### 3. 失败处理
+
+架构测试失败时：
+
+1. **CI 自动阻断**：PR 无法合并
+2. **失败消息**：必须包含 ADR 编号和违规详情
+3. **修复或破例**：
+   - 修复代码，使其符合架构约束
+   - 或申请破例（见破例流程）
+
+---
+
+## 破例流程与治理（Exception Handling）
+
+### 1. 破例申请条件
+
+破例必须满足以下条件之一：
+
+- **技术限制**：当前技术栈无法满足架构约束
+- **性能需求**：严格遵守架构约束会导致严重性能问题
+- **遗留系统**：迁移成本过高，需要临时绕过
+- **外部依赖**：第三方库或框架的限制
+
+### 2. 破例申请流程
+
+1. **提交 PR**：在 PR 描述中明确声明破例
+2. **填写破例表单**：
+   - 破例理由
+   - 影响范围
+   - 预期持续时间
+   - 归还计划
+3. **架构审查**：由架构师或 Tech Lead 审批
+4. **记录归档**：在 `ARCH-VIOLATIONS.md` 中记录
+
+### 3. 破例记录格式
+
+```markdown
+## ARCH-VIOLATION-001
+
+**ADR 编号**：ADR-0005  
+**违规内容**：Modules.Orders 同步调用 Modules.Members  
+**理由**：订单创建需要实时验证会员状态  
+**批准人**：@architect-name  
+**批准日期**：2026-01-21  
+**失效期**：2026-03-31  
+**归还计划**：重构为异步事件驱动模式  
+**状态**：⚠️ Active  
+```
+
+### 4. 破例审计
+
+- **季度审计**：每季度检查所有活跃破例
+- **到期处理**：破例到期后，必须修复或续期
+- **强制归还**：连续续期超过 3 次的破例，必须归还
+
+---
+
 ## 技术选型（Implementation）
 
-- 当前阶段：
-  - 使用 **NetArchTest** 实现基于程序集与依赖的结构性约束
-- 未来演进方向：
-  - 对更细粒度规则（如方法级、构造函数注入）逐步引入 **Roslyn Analyzer**
+### 当前阶段
+
+- 使用 **NetArchTest** 实现基于程序集与依赖的结构性约束
+- 使用 **xUnit** 作为测试框架
+
+### 未来演进方向
+
+- 对更细粒度规则（如方法级、构造函数注入）逐步引入 **Roslyn Analyzer**
+- 考虑引入 **ArchUnit**（如果需要更强大的规则表达）
 
 NetArchTest 被视为：
 
@@ -124,20 +324,151 @@ NetArchTest 被视为：
 
 ---
 
+## 各 ADR 核心约束总结
+
+### ADR-0001：模块化单体与垂直切片
+
+**核心约束**：
+- ✅ 模块隔离（模块间不能互相引用）
+- ✅ 垂直切片组织（禁止传统分层命名空间）
+- ✅ 契约使用规则（Command Handler 不依赖 IQuery）
+
+**对应测试**：
+- `Modules_Should_Not_Reference_Each_Other`
+- `CommandHandlers_Should_Not_Depend_On_Contracts`
+- `Handlers_Should_Be_In_FeatureSlices`
+
+---
+
+### ADR-0002：Platform / Application / Host 三层启动体系
+
+**核心约束**：
+- ✅ Platform 不得依赖 Application 或 Host
+- ✅ Application 不得依赖 Host
+- ✅ Host 不得包含业务逻辑
+
+**对应测试**：
+- `Platform_Should_Not_Depend_On_Application`
+- `Application_Should_Not_Depend_On_Host`
+- `Host_Should_Not_Contain_Business_Types`
+
+---
+
+### ADR-0003：命名空间与项目边界规范
+
+**核心约束**：
+- ✅ 所有类型命名空间以 `Zss.BilliardHall` 开头
+- ✅ 命名空间必须反映真实的架构层次
+- ✅ 禁止不规范命名空间（Common、Shared、Utils）
+
+**对应测试**：
+- `All_Types_Should_Start_With_BaseNamespace`
+- `Namespace_Should_Match_Physical_Structure`
+- `Should_Not_Have_Irregular_Namespaces`
+
+---
+
+### ADR-0004：中央包管理（CPM）规范
+
+**核心约束**：
+- ✅ 所有 NuGet 包版本必须在 Directory.Packages.props 中定义
+- ✅ 禁止项目文件中出现 `<PackageReference Version="...">`
+- ✅ 层级之间的包依赖必须符合规则
+
+**对应测试**：
+- `All_Packages_Should_Be_Centrally_Managed`
+- `Projects_Should_Not_Specify_Package_Versions`
+- `Layer_Package_Dependencies_Should_Be_Valid`
+
+---
+
+### ADR-0005：应用内交互模型与执行边界
+
+**核心约束**：
+- ✅ Handler 不得承载长期状态
+- ✅ 模块间未审批的同步调用被禁止
+- ✅ 模块不共享领域实体
+- ✅ Endpoint 不包含业务逻辑
+
+**对应测试**：
+- `Handlers_Should_Be_Stateless`
+- `Modules_Should_Not_Have_Synchronous_Cross_Module_Calls`
+- `Modules_Should_Not_Share_Domain_Entities`
+- `Endpoints_Should_Not_Contain_Business_Logic`
+
+---
+
 ## 后果（Consequences）
 
 ### 正面影响
 
-- 架构不再依赖“人记得住”
-- ADR 从文档升级为“可执行宪法”
-- 新成员可以通过测试快速理解系统边界
+- ✅ 架构不再依赖"人记得住"
+- ✅ ADR 从文档升级为"可执行宪法"
+- ✅ 新成员可以通过测试快速理解系统边界
+- ✅ 架构腐化可以被及时发现和阻止
+- ✅ 重构有了明确的约束和验证机制
 
 ### 代价
 
-- 初期需要额外维护测试代码
-- 架构决策一旦采纳，将不再“容易推翻”
+- ⚠️ 初期需要额外维护测试代码
+- ⚠️ 架构决策一旦采纳，将不再"容易推翻"
+- ⚠️ 破例流程需要人工介入
 
 这些代价是**刻意且必要的**，用于换取长期系统稳定性。
+
+---
+
+## 与其他 ADR 关系（Related ADRs）
+
+| ADR        | 关系                                   |
+|------------|----------------------------------------|
+| ADR-0001   | 本 ADR 定义如何测试 ADR-0001 的约束    |
+| ADR-0002   | 本 ADR 定义如何测试 ADR-0002 的约束    |
+| ADR-0003   | 本 ADR 定义如何测试 ADR-0003 的约束    |
+| ADR-0004   | 本 ADR 定义如何测试 ADR-0004 的约束    |
+| ADR-0005   | 本 ADR 定义如何测试 ADR-0005 的约束    |
+| 宪法层文档 | 本 ADR 是宪法层的守护机制              |
+
+---
+
+## 快速参考（Quick Reference）
+
+### 常见问题
+
+**Q: 架构测试失败了，应该怎么办？**
+
+A: 
+1. 查看测试失败消息，定位到对应的 ADR 编号
+2. 阅读对应的 ADR，理解违反了什么约束
+3. 修复代码，使其符合约束
+4. 如果确实需要破例，走破例申请流程
+
+---
+
+**Q: 如何添加新的架构测试？**
+
+A:
+1. 确定要验证的架构约束属于哪个 ADR
+2. 在对应的 `ADR_XXXX_Architecture_Tests.cs` 中添加测试方法
+3. 测试方法名和失败消息必须包含 ADR 编号
+4. 运行测试，确保测试能正确检测违规
+
+---
+
+**Q: 架构测试太严格，影响开发效率怎么办？**
+
+A:
+1. 架构测试的目的是保证长期可演进性，短期会有一定约束
+2. 如果确实需要破例，走破例申请流程
+3. 不建议直接跳过或禁用架构测试
+
+---
+
+### 相关文档
+
+- [ADR-0005-Enforcement-Levels.md](ADR-0005-Enforcement-Levels.md)：三级执行分类详细说明
+- [ARCHITECTURE-CONSTITUTIONAL-LAYER.md](ARCHITECTURE-CONSTITUTIONAL-LAYER.md)：宪法层定义
+- `ARCH-VIOLATIONS.md`：破例记录表（如果存在）
 
 ---
 
@@ -149,3 +480,13 @@ NetArchTest 被视为：
 
 > **系统在规模化演进过程中，对抗架构腐化的最后防线。**
 
+三年后，如果架构测试仍在运行，ADR 仍被遵守，系统仍然站得住。
+
+---
+
+## 参考资料（References）
+
+- [NetArchTest.Rules](https://github.com/BenMorris/NetArchTest)
+- [ArchUnit（Java）](https://www.archunit.org/) - 概念参考
+- [Fitness Functions](https://www.thoughtworks.com/insights/blog/fitness-function-driven-development) - 架构适应度函数
+- [ADR 最佳实践](https://github.com/joelparkerhenderson/architecture-decision-record)
