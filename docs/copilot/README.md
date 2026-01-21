@@ -333,16 +333,20 @@ graph TB
 
 ## 十、下一步
 
-- 阅读各个 ADR 对应的 Prompt 文件：
-  - [ADR-0001 提示词库](adr-0001.prompts.md)
-  - [ADR-0002 提示词库](adr-0002.prompts.md)
-  - [ADR-0003 提示词库](adr-0003.prompts.md)
-  - [ADR-0004 提示词库](adr-0004.prompts.md)
-  - [ADR-0005 提示词库](adr-0005.prompts.md)
-- 了解如何用 Copilot 解释架构测试失败：
-  - [架构测试失败解释指南](architecture-test-failures.md)
-- 查看 PR 模板中的 Copilot 参与要求：
-  - [Pull Request Template](../../.github/PULL_REQUEST_TEMPLATE.md)
+### 了解 Copilot 的角色和行为边界
+- [Copilot Instructions](../../.github/instructions/README.md) - Copilot 的行为定义
+
+### 阅读各个 ADR 对应的 Prompt 文件
+- [ADR-0001 提示词库](adr-0001.prompts.md)
+- [ADR-0002 提示词库](adr-0002.prompts.md)
+- [ADR-0003 提示词库](adr-0003.prompts.md)
+- [ADR-0004 提示词库](adr-0004.prompts.md)
+- [ADR-0005 提示词库](adr-0005.prompts.md)
+
+### 了解完整工作流
+- [架构测试失败解释指南](architecture-test-failures.md)
+- [PR Review Pipeline](pr-review-pipeline.md) - Copilot + ArchitectureTests 双护栏流程
+- [Pull Request Template](../../.github/PULL_REQUEST_TEMPLATE.md)
 
 ---
 
