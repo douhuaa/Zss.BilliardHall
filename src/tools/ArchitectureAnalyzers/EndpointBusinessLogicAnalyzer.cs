@@ -16,6 +16,17 @@ public class EndpointBusinessLogicAnalyzer : DiagnosticAnalyzer
 {
     public const string DiagnosticId = "ADR0005_02";
     private const string Category = "Architecture";
+    
+    // Configuration constants for scoring algorithm
+    private const int BusinessLogicScoreThreshold = 10;
+    private const int ManyStatementsScore = 5;
+    private const int SomeStatementsScore = 2;
+    private const int ConditionalScore = 3;
+    private const int LoopScore = 4;
+    private const int QueryScore = 3;
+    private const int DbOperationScore = 2;
+    private const int ManyStatementsThreshold = 10;
+    private const int SomeStatementsThreshold = 5;
 
     private static readonly LocalizableString Title = "Endpoint contains business logic";
     private static readonly LocalizableString MessageFormat = 
@@ -55,7 +66,7 @@ public class EndpointBusinessLogicAnalyzer : DiagnosticAnalyzer
         var businessLogicScore = CalculateBusinessLogicScore(methodDeclaration);
         
         // If score exceeds threshold, report diagnostic
-        if (businessLogicScore > 10)
+        if (businessLogicScore > BusinessLogicScoreThreshold)
         {
             var diagnostic = Diagnostic.Create(
                 Rule,
@@ -99,25 +110,25 @@ public class EndpointBusinessLogicAnalyzer : DiagnosticAnalyzer
 
         // Count lines of code (rough approximation)
         var statements = body.Statements.Count;
-        if (statements > 10)
-            score += 5;
-        else if (statements > 5)
-            score += 2;
+        if (statements > ManyStatementsThreshold)
+            score += ManyStatementsScore;
+        else if (statements > SomeStatementsThreshold)
+            score += SomeStatementsScore;
 
         // Check for conditional logic (if, switch, etc.)
         var conditionals = body.DescendantNodes()
             .Count(n => n is IfStatementSyntax || n is SwitchStatementSyntax);
-        score += conditionals * 3;
+        score += conditionals * ConditionalScore;
 
         // Check for loops
         var loops = body.DescendantNodes()
             .Count(n => n is ForStatementSyntax || n is ForEachStatementSyntax || n is WhileStatementSyntax);
-        score += loops * 4;
+        score += loops * LoopScore;
 
         // Check for LINQ queries
         var queries = body.DescendantNodes()
             .Count(n => n is QueryExpressionSyntax);
-        score += queries * 3;
+        score += queries * QueryScore;
 
         // Check for database context usage (Select, Where, etc.)
         var dbOperations = body.DescendantNodes()
@@ -127,7 +138,7 @@ public class EndpointBusinessLogicAnalyzer : DiagnosticAnalyzer
                 return methodName.Contains("Select") || methodName.Contains("Where") || 
                        methodName.Contains("FirstOrDefault") || methodName.Contains("Any");
             });
-        score += dbOperations * 2;
+        score += dbOperations * DbOperationScore;
 
         return score;
     }

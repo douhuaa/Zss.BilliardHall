@@ -16,6 +16,11 @@ public class CrossModuleCallAnalyzer : DiagnosticAnalyzer
 {
     public const string DiagnosticId = "ADR0005_05";
     private const string Category = "Architecture";
+    
+    // Configuration constants
+    private const string ModuleNamespacePrefix = "Zss.BilliardHall.Modules.";
+    private const string PlatformNamespacePrefix = "Zss.BilliardHall.Platform";
+    private const string ContractsNamespacePart = ".Contracts";
 
     private static readonly LocalizableString Title = "Synchronous cross-module call detected";
     private static readonly LocalizableString MessageFormat = 
@@ -92,7 +97,7 @@ public class CrossModuleCallAnalyzer : DiagnosticAnalyzer
     private string? ExtractModuleName(string namespaceStr)
     {
         // Expected format: Zss.BilliardHall.Modules.{ModuleName}
-        if (!namespaceStr.Contains("Zss.BilliardHall.Modules."))
+        if (!namespaceStr.Contains(ModuleNamespacePrefix))
             return null;
 
         var parts = namespaceStr.Split('.');
@@ -106,11 +111,11 @@ public class CrossModuleCallAnalyzer : DiagnosticAnalyzer
     private bool IsAllowedCrossModuleCall(IMethodSymbol methodSymbol, string targetNamespace)
     {
         // Allow calls to Platform layer
-        if (targetNamespace.StartsWith("Zss.BilliardHall.Platform"))
+        if (targetNamespace.StartsWith(PlatformNamespacePrefix))
             return true;
 
         // Allow calls to Contracts namespace (data contracts for cross-module communication)
-        if (targetNamespace.Contains(".Contracts"))
+        if (targetNamespace.Contains(ContractsNamespacePart))
             return true;
 
         // Allow calls to messaging infrastructure (Publish, Send from Wolverine)

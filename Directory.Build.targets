@@ -1,7 +1,7 @@
 <Project>
   <!-- Automatically reference Architecture Analyzers for Modules -->
-  <ItemGroup Condition="'$(MSBuildProjectDirectory)' != '' AND $(MSBuildProjectDirectory.Contains('\Modules\'))">
-    <ProjectReference Include="$(MSBuildThisFileDirectory)src\tools\ArchitectureAnalyzers\ArchitectureAnalyzers.csproj">
+  <ItemGroup Condition="'$(MSBuildProjectDirectory)' != '' AND ($(MSBuildProjectDirectory.Contains('/Modules/')) OR $(MSBuildProjectDirectory.Contains('\Modules\')))">
+    <ProjectReference Include="$(MSBuildThisFileDirectory)src/tools/ArchitectureAnalyzers/ArchitectureAnalyzers.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <OutputItemType>Analyzer</OutputItemType>
     </ProjectReference>

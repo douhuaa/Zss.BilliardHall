@@ -63,7 +63,7 @@ jobs:
         if: always()
         run: |
           echo "::group::Architecture Compliance Summary"
-          if [ -f "**/architecture-test-results.trx" ]; then
+          if find . -name "architecture-test-results.trx" 2>/dev/null | grep -q .; then
             echo "✅ Architecture tests executed successfully"
             echo "📊 Test results available in artifacts"
           fi

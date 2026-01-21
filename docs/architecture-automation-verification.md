@@ -226,13 +226,17 @@ chmod +x .git/hooks/pre-push
 
 **Windows**:
 ```powershell
-# 复制 hook 脚本
-Copy-Item scripts\pre-push-hook.ps1 .git\hooks\pre-push
+# Copy the PowerShell script
+Copy-Item scripts\pre-push-hook.ps1 .git\hooks\
 
-# 配置 Git 使用 PowerShell 执行 hook
-# 在 .git/hooks/pre-push 中添加：
+# Create a shell wrapper
+@"
 #!/bin/sh
-exec pwsh -File "$(dirname "$0")/pre-push"
+exec pwsh -NoProfile -ExecutionPolicy Bypass -File "`$(dirname "`$0")/pre-push-hook.ps1"
+"@ | Out-File -FilePath .git\hooks\pre-push -Encoding ASCII
+
+# Make the wrapper executable (if using Git Bash or WSL)
+chmod +x .git/hooks/pre-push
 ```
 
 **验证安装**:
