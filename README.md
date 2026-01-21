@@ -38,7 +38,7 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 
 ```bash
 # 启动 Web API
-dotnet run --project src/Host/WebHost/WebHost.csproj
+dotnet run --project src/Host/Web/Web.csproj
 
 # 或启动 Worker
 dotnet run --project src/Host/Worker/Worker.csproj
@@ -132,6 +132,8 @@ graph LR
 
 <details>
 <summary>📝 文本格式目录树（点击展开）</summary>
+
+> 💡 **提示**：文本格式便于复制粘贴使用，而上方的可视化图表更直观易懂。建议先通过图表理解结构，需要时再复制文本格式。
 
 ```
 Zss.BilliardHall/
