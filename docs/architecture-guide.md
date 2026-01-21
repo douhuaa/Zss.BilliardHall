@@ -19,6 +19,111 @@
 
 ## 项目结构
 
+### 🏗️ 架构层次可视化
+
+```mermaid
+graph TB
+    subgraph Host[🌐 宿主层 Host]
+        Web[Web API<br/>ASP.NET Core]
+        Worker[后台任务<br/>Worker Service]
+    end
+    
+    subgraph App[🎯 应用层 Application]
+        AppOrch[应用编排<br/>跨模块协调]
+    end
+    
+    subgraph Modules[💼 业务模块层 Modules]
+        direction LR
+        Members[Members<br/>会员管理]
+        Orders[Orders<br/>订单管理]
+    end
+    
+    subgraph Platform[⚙️ 平台层 Platform]
+        Contracts[Contracts<br/>数据契约]
+        Tech[技术能力<br/>日志/事务/序列化]
+    end
+    
+    Web --> AppOrch
+    Worker --> AppOrch
+    AppOrch --> Members
+    AppOrch --> Orders
+    
+    Members -.领域事件.-> Orders
+    Orders -.领域事件.-> Members
+    
+    Members --> Contracts
+    Orders --> Contracts
+    Members --> Tech
+    Orders --> Tech
+    
+    style Host fill:#e3f2fd
+    style App fill:#f3e5f5
+    style Modules fill:#e8f5e9
+    style Platform fill:#fff3e0
+    style Web fill:#bbdefb
+    style Worker fill:#bbdefb
+```
+
+### 📦 模块依赖关系
+
+```mermaid
+graph LR
+    subgraph External[外部访问]
+        Client[客户端/外部系统]
+    end
+    
+    subgraph HostLayer[宿主层]
+        WebAPI[Web API]
+        WorkerSvc[Worker Service]
+    end
+    
+    subgraph AppLayer[应用层]
+        App[Application<br/>编排层]
+    end
+    
+    subgraph ModulesLayer[模块层]
+        M1[Members 模块]
+        M2[Orders 模块]
+        M3[... 其他模块]
+    end
+    
+    subgraph PlatformLayer[平台层]
+        PC[Platform.Contracts<br/>数据契约]
+        PT[Platform<br/>技术能力]
+    end
+    
+    Client --> WebAPI
+    Client --> WorkerSvc
+    WebAPI --> App
+    WorkerSvc --> App
+    
+    App --> M1
+    App --> M2
+    App --> M3
+    
+    M1 -.事件.-> M2
+    M2 -.事件.-> M1
+    
+    M1 --> PC
+    M2 --> PC
+    M3 --> PC
+    
+    M1 --> PT
+    M2 --> PT
+    M3 --> PT
+    
+    style External fill:#ffebee
+    style HostLayer fill:#e3f2fd
+    style AppLayer fill:#f3e5f5
+    style ModulesLayer fill:#e8f5e9
+    style PlatformLayer fill:#fff3e0
+```
+
+<details>
+<summary>📝 文本格式目录树（点击展开）</summary>
+
+> 💡 **提示**：文本格式便于复制粘贴使用，而上方的可视化图表更直观易懂。建议先通过图表理解结构，需要时再复制文本格式。
+
 ```
 Zss.BilliardHall/
 ├── docs/                          # 文档
@@ -43,10 +148,67 @@ Zss.BilliardHall/
 └── tests/
     └── ArchitectureTests/         # 架构约束测试
 ```
+</details>
 
 ## 模块设计规则
 
 ### 1. 模块隔离规则
+
+#### 🔒 模块通信规则可视化
+
+```mermaid
+graph TB
+    subgraph Allowed[✅ 允许的通信方式]
+        direction TB
+        
+        subgraph M1[Module A]
+            A1[Handler A]
+        end
+        
+        subgraph M2[Module B]
+            B1[Handler B]
+        end
+        
+        subgraph PL[Platform Layer]
+            PC[Contracts<br/>数据契约]
+            EV[Event Bus<br/>领域事件]
+        end
+        
+        A1 -.发布事件.-> EV
+        EV -.订阅事件.-> B1
+        A1 --> PC
+        B1 --> PC
+        
+        style M1 fill:#c8e6c9
+        style M2 fill:#c8e6c9
+        style PL fill:#fff3e0
+    end
+    
+    subgraph Forbidden[❌ 禁止的通信方式]
+        direction TB
+        
+        subgraph M3[Module A]
+            A2[Handler A]
+            E1[Entity A]
+        end
+        
+        subgraph M4[Module B]
+            B2[Handler B]
+            E2[Entity B]
+        end
+        
+        A2 -.❌直接引用.-> B2
+        A2 -.❌共享实体.-> E1
+        E1 -.❌共享实体.-> E2
+        E2 -.❌共享实体.-> B2
+        
+        style M3 fill:#ffcdd2
+        style M4 fill:#ffcdd2
+    end
+    
+    style Allowed fill:#e8f5e9
+    style Forbidden fill:#ffebee
+```
 
 **✅ 允许：**
 
@@ -67,6 +229,64 @@ Zss.BilliardHall/
 - 包含该用例的所有逻辑（端点、命令/查询、Handler、验证等）
 - 自包含，不依赖横向的 Service
 - 命名清晰，反映业务意图
+
+#### 🎯 垂直切片架构对比
+
+```mermaid
+graph TB
+    subgraph VS[✅ 垂直切片架构 Vertical Slice]
+        direction TB
+        VSFeature1[创建会员功能切片]
+        VSFeature2[查询会员功能切片]
+        
+        subgraph F1[CreateMember/]
+            CMD1[Command]
+            HDL1[Handler]
+            EP1[Endpoint]
+            VAL1[Validator]
+        end
+        
+        subgraph F2[GetMemberById/]
+            QRY2[Query]
+            HDL2[Handler]
+            EP2[Endpoint]
+        end
+        
+        VSFeature1 --> F1
+        VSFeature2 --> F2
+        
+        style F1 fill:#c8e6c9
+        style F2 fill:#c8e6c9
+    end
+    
+    subgraph TS[❌ 传统分层架构 Traditional Layers]
+        direction TB
+        TSLayers[按技术层分离]
+        
+        subgraph L1[Controllers/]
+            C1[MemberController]
+        end
+        
+        subgraph L2[Services/]
+            S1[MemberService]
+        end
+        
+        subgraph L3[Repositories/]
+            R1[MemberRepository]
+        end
+        
+        TSLayers --> L1
+        L1 --> L2
+        L2 --> L3
+        
+        style L1 fill:#ffcdd2
+        style L2 fill:#ffcdd2
+        style L3 fill:#ffcdd2
+    end
+    
+    style VS fill:#e8f5e9
+    style TS fill:#ffebee
+```
 
 **目录结构示例：**
 
@@ -177,6 +397,74 @@ Platform 层只能包含技术能力，不能包含业务逻辑。
      3. 提取辅助方法（仅在必要时）
 
 ### 模块间通信
+
+#### 📡 模块间通信方式对比
+
+```mermaid
+sequenceDiagram
+    participant OE as Orders Endpoint
+    participant OH as Orders Handler
+    participant MB as Message Bus
+    participant MH as Members Handler
+    participant LP as Local Projection
+    
+    Note over OE,LP: 方案1：本地副本（推荐）
+    
+    rect rgb(200, 230, 201)
+        Note right of MH: Members 模块发布事件
+        MH->>MB: 发布 MemberActivated 事件
+        MB->>LP: 订阅并更新本地投影
+        Note over LP: Orders 模块维护<br/>会员状态副本
+        
+        OE->>OH: CreateOrderCommand
+        OH->>LP: 查询本地会员状态
+        LP-->>OH: 返回状态
+        OH-->>OE: 创建订单
+    end
+    
+    Note over OE,LP: 方案2：跨模块命令（需审批）
+    
+    rect rgb(255, 205, 210)
+        OE->>OH: CreateOrderCommand
+        OH->>MB: ValidateMemberCommand
+        MB->>MH: 路由到 Members 模块
+        MH-->>MB: ValidationResult
+        MB-->>OH: 返回验证结果
+        OH-->>OE: 创建订单或拒绝
+    end
+```
+
+#### 🔄 事件驱动架构流程
+
+```mermaid
+graph LR
+    subgraph Members[Members 模块]
+        MA[MemberActivated<br/>事件发布]
+    end
+    
+    subgraph EventBus[事件总线]
+        EB[Wolverine<br/>Message Bus]
+    end
+    
+    subgraph Orders[Orders 模块]
+        OL[本地投影<br/>MemberStatus]
+        OH[OrderHandler<br/>使用投影]
+    end
+    
+    subgraph Notifications[Notifications 模块]
+        NH[发送通知<br/>Handler]
+    end
+    
+    MA -->|发布| EB
+    EB -->|订阅| OL
+    EB -->|订阅| NH
+    OL -.查询.-> OH
+    
+    style Members fill:#c8e6c9
+    style Orders fill:#bbdefb
+    style Notifications fill:#f8bbd0
+    style EventBus fill:#fff3e0
+```
 
 **场景：Orders 模块需要验证会员状态**
 

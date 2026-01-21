@@ -10,6 +10,76 @@
 
 本目录包含 Zss.BilliardHall 项目的所有架构决策记录（ADR）。ADR 按照职责分为三个层次：
 
+### 📊 ADR 体系可视化
+
+```mermaid
+graph TB
+    subgraph Constitutional[🏛️ 宪法层 ADR-0000~0005]
+        CONST[不可推翻，只能细化<br/>破例必审]
+    end
+    
+    Constitutional --> Structure
+    Constitutional --> Runtime
+    Constitutional --> Governance
+    
+    subgraph Structure[📐 静态结构层 WHAT]
+        ADR1[ADR-0001<br/>模块与切片]
+        ADR2[ADR-0002<br/>启动体系]
+        ADR3[ADR-0003<br/>命名空间]
+        ADR4[ADR-0004<br/>包管理]
+    end
+    
+    subgraph Runtime[⚡ 运行时行为层 HOW]
+        ADR5[ADR-0005<br/>交互模型]
+    end
+    
+    subgraph Governance[🛡️ 架构治理层 GUARDRAIL]
+        ADR0[ADR-0000<br/>架构测试]
+        AUX[辅助文档<br/>Levels/Layer]
+    end
+    
+    style Constitutional fill:#ffebee
+    style Structure fill:#e8f5e9
+    style Runtime fill:#e3f2fd
+    style Governance fill:#fff3e0
+```
+
+### 🗺️ ADR 关系图
+
+```mermaid
+graph LR
+    ADR0[ADR-0000<br/>架构测试]
+    ADR1[ADR-0001<br/>模块切片]
+    ADR2[ADR-0002<br/>启动体系]
+    ADR3[ADR-0003<br/>命名空间]
+    ADR4[ADR-0004<br/>包管理]
+    ADR5[ADR-0005<br/>交互模型]
+    
+    ADR0 -.校验.-> ADR1
+    ADR0 -.校验.-> ADR2
+    ADR0 -.校验.-> ADR3
+    ADR0 -.校验.-> ADR4
+    ADR0 -.校验.-> ADR5
+    
+    ADR1 --> ADR5
+    ADR2 -.启动.-> ADR1
+    ADR3 -.规范.-> ADR1
+    ADR3 -.规范.-> ADR2
+    ADR4 -.依赖.-> ADR2
+    
+    style ADR0 fill:#fff3e0
+    style ADR1 fill:#c8e6c9
+    style ADR2 fill:#c8e6c9
+    style ADR3 fill:#c8e6c9
+    style ADR4 fill:#c8e6c9
+    style ADR5 fill:#bbdefb
+```
+
+<details>
+<summary>📝 文本格式 ADR 体系（点击展开）</summary>
+
+> 💡 **提示**：文本格式便于复制使用，而上方的可视化图表更直观易懂。建议先通过图表理解 ADR 体系，需要时再查看文本格式。
+
 ```
                     架构决策记录（ADR）体系
                     =====================
@@ -39,6 +109,7 @@
 │ 包管理        │   │               │   │               │
 └───────────────┘   └───────────────┘   └───────────────┘
 ```
+</details>
 
 1. **静态结构层（WHAT）**：定义系统的组织结构、模块划分、命名规范等静态约束
 2. **运行时行为层（HOW）**：定义系统的执行模型、模块通信、一致性保障等动态行为
