@@ -186,7 +186,8 @@ public sealed class ADR_0003_Architecture_Tests
                     || projectName == "Orders"
                     || projectName == "Web"
                     || projectName == "Worker"
-                    || projectName == "ArchitectureTests";
+                    || projectName == "ArchitectureTests"
+                    || projectName == "ArchitectureAnalyzers";  // Level 2 enforcement tool
 
                 Assert.True(isValidName,
                     $"❌ ADR-0003 违规: 项目 {projectFile} 的命名不符合约定。\n" +

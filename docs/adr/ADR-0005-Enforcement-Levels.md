@@ -153,17 +153,25 @@ public class EndpointBusinessLogicAnalyzer : DiagnosticAnalyzer
 
 - [x] Level 1 规则已通过 ArchitectureTests 覆盖
 - [x] 测试失败消息明确标注违规规则
+- [x] Level 2 的 Roslyn Analyzer 已实现
+  - ✅ Endpoint 业务逻辑检查（ADR0005_02）
+  - ✅ Handler 跨模块调用语义检查（ADR0005_05）
+  - ✅ 异常使用规范检查（ADR0005_11）
+- [x] Level 3 的人工 Gate 流程已建立
+  - ✅ PR Template 包含架构违规声明
+  - ✅ ARCH-VIOLATIONS 记录表存在
+  - ✅ 破例审批流程已文档化
 
-### ⚠️ 待完成
+### ⚠️ 待完善（可选）
 
-- [ ] 实现 Level 2 的 Roslyn Analyzer
-  - Endpoint 业务逻辑检查
-  - Handler 跨模块调用语义检查
-  - 异常使用规范检查
-- [ ] 建立 Level 3 的人工 Gate 流程
-  - PR Template（见 ADR-0005-PR-Template.md）
-  - ARCH-VIOLATIONS 记录表
-  - 破例审批流程文档
+- [ ] 扩展更多 Roslyn Analyzer
+  - Command Handler 返回值检查（更严格的类型判断）
+  - 异步方法命名约定检查
+  - Handler 无状态字段检查（更深层的分析）
+- [ ] 定期评审和优化
+  - 收集 Analyzer 误报案例，优化检测逻辑
+  - 根据团队反馈调整严重级别
+  - 定期更新架构约束
 
 ### 🎯 最终目标
 

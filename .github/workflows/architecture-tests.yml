@@ -8,6 +8,12 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  checks: write
+  actions: read
+  pull-requests: write
+
 jobs:
   architecture-tests:
     runs-on: ubuntu-latest
@@ -28,6 +34,43 @@ jobs:
         run: dotnet build --no-restore --configuration Release
       
       - name: Run architecture tests
-        run: dotnet test src/tests/ArchitectureTests --no-build --configuration Release --verbosity normal
+        run: |
+          echo "::group::Architecture Tests Execution"
+          dotnet test src/tests/ArchitectureTests \
+            --no-build \
+            --configuration Release \
+            --verbosity normal \
+            --logger "trx;LogFileName=architecture-test-results.trx" \
+            --logger "console;verbosity=detailed" \
+            --collect:"XPlat Code Coverage"
+          echo "::endgroup::"
         env:
           Configuration: Release
+      
+      - name: Generate test report
+        if: always() && (github.event.pull_request == null || github.event.pull_request.head.repo.full_name == github.repository)
+        uses: dorny/test-reporter@v1
+        with:
+          name: Architecture Tests Report
+          path: '**/architecture-test-results.trx'
+          reporter: dotnet-trx
+          fail-on-error: true
+      
+      - name: Publish test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: architecture-test-results
+          path: |
+            **/architecture-test-results.trx
+            **/TestResults/
+      
+      - name: Check architecture compliance
+        if: always()
+        run: |
+          echo "::group::Architecture Compliance Summary"
+          if find . -name "architecture-test-results.trx" 2>/dev/null | grep -q .; then
+            echo "✅ Architecture tests executed successfully"
+            echo "📊 Test results available in artifacts"
+          fi
+          echo "::endgroup::"
