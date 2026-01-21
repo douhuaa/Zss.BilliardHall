@@ -281,7 +281,7 @@ src/tests/ArchitectureTests/ADR/
    - 预期持续时间
    - 归还计划
 3. **架构审查**：由架构师或 Tech Lead 审批
-4. **记录归档**：在 `ARCH-VIOLATIONS.md` 中记录
+4. **记录归档**：在 [`ARCH-VIOLATIONS.md`](../summaries/governance/arch-violations.md) 中记录
 
 ### 3. 破例记录格式
 
@@ -468,7 +468,7 @@ A:
 
 - [ADR-0005-Enforcement-Levels.md](ADR-0005-Enforcement-Levels.md)：三级执行分类详细说明
 - [ARCHITECTURE-CONSTITUTIONAL-LAYER.md](ARCHITECTURE-CONSTITUTIONAL-LAYER.md)：宪法层定义
-- `ARCH-VIOLATIONS.md`：破例记录表（如果存在）
+- [`ARCH-VIOLATIONS.md`](../summaries/governance/arch-violations.md)：破例记录表
 
 ---
 
