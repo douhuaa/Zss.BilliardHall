@@ -5,6 +5,7 @@
 ### 核心文档
 - **[架构指南](architecture-guide.md)** - 项目架构概述、设计规则和开发指南
 - **[CI/CD 指南](ci-cd-guide.md)** - 持续集成、架构测试集成和违规处理
+- **[架构自动化验证系统](architecture-automation-verification.md)** - 三层自动化防御体系和完整执行指南
 
 ### 架构决策记录 (ADR)
 - [ADR 目录](adr/README.md) - ADR 完整索引和导航
@@ -38,6 +39,7 @@
 1. 阅读 [架构指南](architecture-guide.md) 了解整体架构
 2. 阅读 [ADR-0001](adr/ADR-0001-modular-monolith-vertical-slice-architecture.md) 了解架构决策背景
 3. 阅读 [ADR-0002](adr/ADR-0002-platform-application-host-bootstrap.md) 了解启动器架构决策
+4. 阅读 [架构自动化验证系统](architecture-automation-verification.md) 了解自动化执行体系
 
 ### 开发新功能
 1. 参考 [架构指南 - 开发指南](architecture-guide.md#开发指南)
@@ -45,8 +47,9 @@
 3. 运行架构测试验证
 
 ### 处理 CI 失败
-1. 参考 [CI/CD 指南 - 处理架构违规](ci-cd-guide.md#处理架构违规)
-2. 理解失败原因并修复
+1. 参考 [架构自动化验证系统 - 故障排除](architecture-automation-verification.md#故障排除)
+2. 参考 [CI/CD 指南 - 处理架构违规](ci-cd-guide.md#处理架构违规)
+3. 理解失败原因并修复
 
 ## 架构原则
 
