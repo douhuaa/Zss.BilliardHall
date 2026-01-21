@@ -1,5 +1,8 @@
 # 架构宪法层（Architecture Constitutional Layer）
 
+> **注意**：本文档定义 ADR-0000 至 ADR-0005 的宪法地位和演进规则。  
+> 建议配合 [ADR 索引（README.md）](README.md) 和各主 ADR 一起阅读。  
+
 **状态**：✅ Active  
 **生效日期**：2026-01-20  
 **级别**：系统根约束（System Root Constraint）  
