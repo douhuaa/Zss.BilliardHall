@@ -1,163 +1,162 @@
-# GitHub Copilot Instructions
+# GitHub Copilot 指令
 
-This directory contains role-based instructions for GitHub Copilot to ensure consistent behavior aligned with the project's architecture governance.
+本目录包含基于角色的 GitHub Copilot 指令，以确保与项目架构治理保持一致的行为。
 
-## Purpose
+## 目的
 
-These instruction files define **Copilot's personality and behavioral boundaries** in this repository. They answer: "What kind of assistant are you?"
+这些指令文件定义了**Copilot 在此仓库中的个性和行为边界**。它们回答："你是什么样的助手？"
 
-This is separate from `docs/copilot/` which contains **detailed work manuals** answering: "How do you help with specific tasks?"
+这与 `docs/copilot/` 不同，后者包含**详细的工作手册**，回答："你如何帮助完成特定任务？"
 
-## Structure
+## 结构
 
 ```
 .github/instructions/
-  ├─ base.instructions.md                 ← Core behavior (always active)
-  ├─ backend.instructions.md              ← Backend development
-  ├─ testing.instructions.md              ← Test writing
-  ├─ documentation.instructions.md        ← Documentation
-  └─ architecture-review.instructions.md  ← PR reviews (highest risk)
+  ├─ base.instructions.md                 ← 核心行为（始终激活）
+  ├─ backend.instructions.md              ← 后端开发
+  ├─ testing.instructions.md              ← 测试编写
+  ├─ documentation.instructions.md        ← 文档编写
+  └─ architecture-review.instructions.md  ← PR 评审（最高风险）
 ```
 
-## How This Works
+## 工作原理
 
-### Base Instructions (Always Active)
+### 基础指令（始终激活）
 
-`base.instructions.md` establishes Copilot's fundamental behavior:
-- Respect ADRs as constitutional law
-- Treat architecture tests as hard constraints
-- Never invent rules or bypass CI
-- Amplify understanding, don't replace it
+`base.instructions.md` 建立 Copilot 的基本行为：
+- 尊重 ADR 作为宪法级法律
+- 将架构测试视为硬性约束
+- 绝不发明规则或绕过 CI
+- 放大理解能力，不替代理解
 
-### Role-Specific Instructions (Context-Dependent)
+### 角色特定指令（根据上下文）
 
-Additional instructions apply based on what you're working on:
+根据你的工作内容应用额外指令：
 
-| Working on... | Additional Instructions |
+| 工作内容... | 额外指令 |
 |---------------|------------------------|
-| Handlers, Use Cases, Domain Models | `backend.instructions.md` |
-| Unit Tests, Integration Tests | `testing.instructions.md` |
-| ADRs, Guides, Prompts | `documentation.instructions.md` |
-| PR Reviews, Architecture Evaluation | `architecture-review.instructions.md` |
+| Handler、用例、领域模型 | `backend.instructions.md` |
+| 单元测试、集成测试 | `testing.instructions.md` |
+| ADR、指南、Prompt | `documentation.instructions.md` |
+| PR 评审、架构评估 | `architecture-review.instructions.md` |
 
-## Relationship with docs/copilot/
+## 与 docs/copilot/ 的关系
 
-These two systems work together but have different purposes:
+这两个系统协同工作但目的不同：
 
 | `.github/instructions/` | `docs/copilot/` |
 |------------------------|-----------------|
-| **WHO** Copilot is | **HOW** Copilot works |
-| Personality & boundaries | Specific procedures |
-| Behavioral constraints | Detailed scenarios |
-| What to never do | What to do when |
-| Rarely changes | Evolves with experience |
+| Copilot **是谁** | Copilot **如何**工作 |
+| 个性与边界 | 具体程序 |
+| 行为约束 | 详细场景 |
+| 绝不做什么 | 何时做什么 |
+| 很少变更 | 随经验演进 |
 
-### Example
+### 示例
 
-**Base Instruction says**:
-> "Never introduce cross-module dependencies"
+**基础指令说**：
+> "绝不引入跨模块依赖"
 
-**Copilot Prompt (docs/copilot/adr-0001.prompts.md) says**:
-> "When developer wants to access another module:
-> - ✅ Use domain events: `await _eventBus.Publish(...)`
-> - ✅ Use contracts: `await _queryBus.Send(...)`
-> - ✅ Use primitives: `Guid memberId`
-> - ❌ Don't use direct references"
+**Copilot Prompt（docs/copilot/adr-0001.prompts.md）说**：
+> "当开发者想访问另一个模块时：
+> - ✅ 使用领域事件：`await _eventBus.Publish(...)`
+> - ✅ 使用契约：`await _queryBus.Send(...)`
+> - ✅ 使用原始类型：`Guid memberId`
+> - ❌ 不要使用直接引用"
 
-## When to Update
+## 何时更新
 
-### Update Base Instructions When:
-- Project adopts a new architectural principle
-- A fundamental constraint changes
-- New "never do this" rules emerge
+### 更新基础指令的时机：
+- 项目采用新架构原则
+- 基本约束发生变化
+- 出现新的"绝不做这个"规则
 
-### Update Role-Specific Instructions When:
-- A pattern becomes common enough to formalize
-- A role's boundaries need clarification
-- Risk levels change
+### 更新角色特定指令的时机：
+- 某个模式变得足够常见需要正式化
+- 角色边界需要澄清
+- 风险等级发生变化
 
-### DON'T Update For:
-- Specific examples (those go in `docs/copilot/`)
-- Temporary exceptions
-- Individual use cases
+### 不要更新的情况：
+- 具体示例（放入 `docs/copilot/`）
+- 临时例外
+- 个别用例
 
-## Three-Layer Architecture Governance
+## 三层架构治理
 
 ```
 ┌─────────────────────────────────────────────────┐
-│ Layer 1: ADR (docs/adr/)                        │
-│ - Constitutional law                            │
-│ - Architecture Decision Records                 │
-│ - Highest authority                             │
+│ 第 1 层：ADR（docs/adr/）                        │
+│ - 宪法级法律                                     │
+│ - 架构决策记录                                   │
+│ - 最高权威                                       │
 └─────────────────────────────────────────────────┘
               ↓
 ┌─────────────────────────────────────────────────┐
-│ Layer 2: Instructions (.github/instructions/)  │
-│ - Copilot's personality                         │
-│ - Behavioral boundaries                         │
-│ - "What kind of assistant am I?"                │
+│ 第 2 层：指令（.github/instructions/）          │
+│ - Copilot 的个性                                 │
+│ - 行为边界                                       │
+│ - "我是什么样的助手？"                           │
 └─────────────────────────────────────────────────┘
               ↓
 ┌─────────────────────────────────────────────────┐
-│ Layer 3: Prompts (docs/copilot/)               │
-│ - Detailed work manuals                         │
-│ - Scenario-specific guidance                    │
-│ - "How do I handle situation X?"                │
+│ 第 3 层：Prompt（docs/copilot/）                │
+│ - 详细工作手册                                   │
+│ - 场景特定指导                                   │
+│ - "我如何处理情况 X？"                           │
 └─────────────────────────────────────────────────┘
               ↓
 ┌─────────────────────────────────────────────────┐
-│ Enforcement: ArchitectureTests                  │
-│ - Automated validation                          │
-│ - CI/CD gates                                   │
-│ - Non-negotiable                                │
+│ 执行：ArchitectureTests                          │
+│ - 自动化验证                                     │
+│ - CI/CD 门禁                                     │
+│ - 不可协商                                       │
 └─────────────────────────────────────────────────┘
 ```
 
-## Usage Guidelines
+## 使用指南
 
-### For Developers
+### 对于开发者
 
-When interacting with Copilot:
-1. Copilot will follow these instructions automatically
-2. If you need specific help, reference the relevant `docs/copilot/` file
-3. If Copilot seems overly cautious, that's intentional—it's protecting architecture
+与 Copilot 交互时：
+1. Copilot 将自动遵循这些指令
+2. 如果需要具体帮助，参考相关的 `docs/copilot/` 文件
+3. 如果 Copilot 显得过于谨慎，这是有意为之——它在保护架构
 
-### For Maintainers
+### 对于维护者
 
-When updating instructions:
-1. Ensure consistency across all files
-2. Update version numbers and dates
-3. Test changes don't contradict existing ADRs
-4. Document significant changes in PR
+更新指令时：
+1. 确保所有文件之间的一致性
+2. 更新版本号和日期
+3. 测试变更不与现有 ADR 冲突
+4. 在 PR 中记录重大变更
 
-## Critical Principle
+## 关键原则
 
-> **Copilot is放大理解能力，不替代理解**
-> (Copilot amplifies understanding, doesn't replace it)
+> **Copilot 放大理解能力，不替代理解**
 
-These instructions ensure Copilot:
-- ✅ Helps you understand ADRs faster
-- ✅ Catches violations earlier
-- ✅ Suggests compliant solutions
-- ❌ Doesn't let you bypass learning
-- ❌ Doesn't replace human judgment
-- ❌ Doesn't override architecture tests
+这些指令确保 Copilot：
+- ✅ 帮助你更快理解 ADR
+- ✅ 更早捕获违规
+- ✅ 建议合规解决方案
+- ❌ 不让你绕过学习
+- ❌ 不替代人工判断
+- ❌ 不覆盖架构测试
 
-## Quick Reference
+## 快速参考
 
-| Scenario | Check File |
+| 场景 | 查看文件 |
 |----------|------------|
-| "Can I do X in my module?" | `backend.instructions.md` |
-| "How should I test this?" | `testing.instructions.md` |
-| "How should I document this?" | `documentation.instructions.md` |
-| "Is this PR architecturally sound?" | `architecture-review.instructions.md` |
-| "What are the core rules?" | `base.instructions.md` |
+| "我能在模块中做 X 吗？" | `backend.instructions.md` |
+| "我应该如何测试这个？" | `testing.instructions.md` |
+| "我应该如何记录这个？" | `documentation.instructions.md` |
+| "这个 PR 架构上合理吗？" | `architecture-review.instructions.md` |
+| "核心规则是什么？" | `base.instructions.md` |
 
-For detailed "how-to" guidance, always refer to `docs/copilot/` files.
+对于详细的"如何做"指导，始终参考 `docs/copilot/` 文件。
 
-## Versioning
+## 版本
 
-Current version: 1.0
-Last updated: 2026-01-21
+当前版本：1.0
+最后更新：2026-01-21
 
-Changes to these instructions should be rare and deliberate, as they define Copilot's fundamental behavior in this repository.
+对这些指令的更改应该是罕见且深思熟虑的，因为它们定义了 Copilot 在此仓库中的基本行为。

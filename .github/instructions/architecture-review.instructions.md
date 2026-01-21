@@ -1,132 +1,132 @@
-# Architecture Review Instructions
+# 架构评审指令
 
-## Specific to: Reviewing PRs and Architecture Compliance
+## 适用场景：评审 PR 与架构合规性
 
-When assisting with PR reviews and architecture evaluation, apply these highest-risk constraints on top of `base.instructions.md`.
+在协助 PR 评审和架构评估时，在 `base.instructions.md` 的基础上应用这些最高风险约束。
 
-## Critical Mindset
+## 关键心态
 
-Architecture review is the **highest risk** scenario for Copilot because:
-- ⚠️ A single incorrect approval can cascade into system-wide violations
-- ⚠️ Developers may over-trust your judgment
-- ⚠️ Mistakes here are expensive to fix later
+架构评审是 Copilot 的**最高风险**场景，因为：
+- ⚠️ 单次错误的批准可能导致系统级联违规
+- ⚠️ 开发者可能过度信任你的判断
+- ⚠️ 此处的错误修复成本极高
 
-**Your default stance**: Conservative and referential.
+**你的默认立场**：保守且有据可依。
 
-## Review Process
+## 评审流程
 
-### Step 1: Identify Change Scope
+### 步骤 1：识别变更范围
 
-First, determine what layers/areas are affected:
+首先，确定影响了哪些层/区域：
 
 ```
-- [ ] Platform layer
-- [ ] Application layer  
-- [ ] Host layer
-- [ ] Module boundaries
-- [ ] Cross-module communication
-- [ ] Domain models
-- [ ] Handlers (Command/Query)
-- [ ] Endpoints
-- [ ] Tests
-- [ ] Documentation
+- [ ] Platform 层
+- [ ] Application 层  
+- [ ] Host 层
+- [ ] 模块边界
+- [ ] 跨模块通信
+- [ ] 领域模型
+- [ ] Handler（Command/Query）
+- [ ] Endpoint
+- [ ] 测试
+- [ ] 文档
 ```
 
-### Step 2: Map to ADRs
+### 步骤 2：映射到 ADR
 
-For each affected area, explicitly reference which ADRs apply:
+对于每个受影响的区域，明确引用适用的 ADR：
 
-| Area | Primary ADRs | Prompt Files |
+| 区域 | 主要 ADR | Prompt 文件 |
 |------|--------------|--------------|
-| Module isolation | ADR-0001 | `adr-0001.prompts.md` |
-| Layer boundaries | ADR-0002 | `adr-0002.prompts.md` |
-| Namespaces | ADR-0003 | `adr-0003.prompts.md` |
-| Dependencies | ADR-0004 | `adr-0004.prompts.md` |
-| Handlers/CQRS | ADR-0005 | `adr-0005.prompts.md` |
+| 模块隔离 | ADR-0001 | `adr-0001.prompts.md` |
+| 层级边界 | ADR-0002 | `adr-0002.prompts.md` |
+| 命名空间 | ADR-0003 | `adr-0003.prompts.md` |
+| 依赖管理 | ADR-0004 | `adr-0004.prompts.md` |
+| Handler/CQRS | ADR-0005 | `adr-0005.prompts.md` |
 
-### Step 3: Check for Red Flags
+### 步骤 3：检查危险信号
 
-Scan for these high-risk patterns:
+扫描以下高风险模式：
 
-#### 🚨 Critical Red Flags (MUST stop)
+#### 🚨 关键危险信号（必须停止）
 ```csharp
-// ❌ Cross-module direct reference
+// ❌ 跨模块直接引用
 using Zss.BilliardHall.Modules.OtherModule.Domain;
 
-// ❌ Platform depending on Application/Host
-// In Platform project
+// ❌ Platform 依赖 Application/Host
+// 在 Platform 项目中
 using Zss.BilliardHall.Application;
 
-// ❌ Host containing business logic
-// In Host project
+// ❌ Host 包含业务逻辑
+// 在 Host 项目中
 public class OrderValidator { }
 
-// ❌ Command Handler returning business data
+// ❌ Command Handler 返回业务数据
 public async Task<OrderDto> Handle(CreateOrder command)
 
-// ❌ Shared domain model between modules
-public class SharedCustomer { } // Used by multiple modules
+// ❌ 模块间共享领域模型
+public class SharedCustomer { } // 被多个模块使用
 ```
 
-#### ⚠️ Warning Flags (Needs scrutiny)
+#### ⚠️ 警告信号（需要仔细审查）
 ```csharp
-// ⚠️ Service-like naming
+// ⚠️ 类似 Service 的命名
 public class OrderService { }
 public class MemberManager { }
 
-// ⚠️ Generic helpers with business logic
+// ⚠️ 包含业务逻辑的通用 Helper
 public class BusinessHelper { }
 
-// ⚠️ Synchronous cross-module communication
+// ⚠️ 同步跨模块通信
 await _commandBus.Send(new UpdateOtherModule(...));
 
-// ⚠️ Contract used for business decisions in Command Handler
+// ⚠️ 在 Command Handler 中使用契约做业务决策
 var dto = await _queryBus.Send(new GetData(...));
 if (dto.Status == "Active") { ... }
 ```
 
-### Step 4: Provide Structured Feedback
+### 步骤 4：提供结构化反馈
 
-Use this template:
+使用此模板：
 
 ```markdown
-## Architecture Review Summary
+## 架构评审摘要
 
-### ✅ Compliant Aspects
-- [List what follows ADRs correctly]
+### ✅ 合规方面
+- [列出正确遵循 ADR 的内容]
 
-### ⚠️ Potential Concerns
-- [List items that need clarification]
-- Reference: [Relevant ADR and section]
-- Suggestion: [How to verify or fix]
+### ⚠️ 潜在关注点
+- [列出需要澄清的项目]
+- 参考：[相关 ADR 及章节]
+- 建议：[如何验证或修复]
 
-### ❌ Violations Detected
-- [List clear violations]
-- Violated ADR: [ADR-XXXX: Section]
-- Impact: [Explain why this matters]
-- Fix: [Specific corrective action]
+### ❌ 检测到的违规
+- [列出明确的违规]
+- 违反的 ADR：[ADR-XXXX: 章节]
+- 影响：[解释为什么这很重要]
+- 修复：[具体纠正措施]
 
-### 📚 Recommended Reading
-- [Link to relevant docs/copilot/adr-XXXX.prompts.md]
+### 📚 推荐阅读
+- [链接到相关 docs/copilot/adr-XXXX.prompts.md]
 ```
 
-## Specific Review Scenarios
+## 具体评审场景
 
-### Scenario 1: New Use Case Added
+### 场景 1：新增用例
 
-**Check**:
-- ✅ Is it organized as a vertical slice?
-- ✅ Handler is the sole authority for this use case?
-- ✅ Endpoint is thin (just mapping)?
-- ✅ Business logic is in domain models?
-- ✅ Tests mirror source structure?
+**检查**：
+- ✅ 是否按垂直切片组织？
+- ✅ Handler 是此用例的唯一权威？
+- ✅ Endpoint 是否精简（仅做映射）？
+- ✅ 业务逻辑是否在领域模型中？
+- ✅ 测试是否镜像源码结构？
 
-**Common violations**:
-- Service layer introduced
-- Business logic in Endpoint
-- Handler doing too much directly
+**常见违规**：
+- 引入 Service 层
+- Endpoint 中包含业务逻辑
+- Handler 直接做太多事情
 
-**Correct pattern**:
+**正确模式**：
 ```
 Modules/Orders/UseCases/CreateOrder/
   ├─ CreateOrder.cs          ← Command
@@ -137,226 +137,226 @@ Tests/Modules.Orders.Tests/UseCases/CreateOrder/
   └─ CreateOrderHandlerTests.cs
 ```
 
-### Scenario 2: Module Communication Added
+### 场景 2：新增模块通信
 
-**Check**:
-- ✅ Is it via events (async)?
-- ✅ Or via Contracts (read-only)?
-- ✅ Or via primitives (IDs)?
-- ❌ NOT via direct references?
-- ❌ NOT via synchronous commands?
+**检查**：
+- ✅ 是否通过事件（异步）？
+- ✅ 或通过契约（只读）？
+- ✅ 或通过原始类型（ID）？
+- ❌ 不是通过直接引用？
+- ❌ 不是通过同步命令？
 
-**If you see direct reference**:
+**如果发现直接引用**：
 ```markdown
-⚠️ **Violation**: Module isolation (ADR-0001)
+⚠️ **违规**：模块隔离（ADR-0001）
 
-**Detected**:
+**检测到**：
 ```csharp
 using Zss.BilliardHall.Modules.Members.Domain;
 ```
 
-**Fix**: Use one of three compliant patterns:
-1. Domain Event: `await _eventBus.Publish(new OrderCreated(...))`
-2. Contract Query: `var dto = await _queryBus.Send(new GetMemberById(...))`
-3. Primitive: Pass `Guid memberId` instead of `Member` object
+**修复**：使用三种合规模式之一：
+1. 领域事件：`await _eventBus.Publish(new OrderCreated(...))`
+2. 契约查询：`var dto = await _queryBus.Send(new GetMemberById(...))`
+3. 原始类型：传递 `Guid memberId` 而不是 `Member` 对象
 
-**Reference**: docs/copilot/adr-0001.prompts.md (场景 3)
+**参考**：docs/copilot/adr-0001.prompts.md（场景 3）
 ```
 
-### Scenario 3: Dependency Added
+### 场景 3：新增依赖
 
-**Check**:
-- ✅ Is version in `Directory.Packages.props`?
-- ✅ No `Version` attribute in project file?
-- ✅ Dependency layer is appropriate?
-  - Platform: Only technical packages
-  - Application: Framework packages OK
-  - Modules: Business packages only
-  - Host: Protocol packages only
+**检查**：
+- ✅ 版本是否在 `Directory.Packages.props` 中？
+- ✅ 项目文件中没有 `Version` 属性？
+- ✅ 依赖层级是否合适？
+  - Platform：仅技术包
+  - Application：框架包可以
+  - Modules：仅业务包
+  - Host：仅协议包
 
-**If you see Version in project**:
+**如果在项目中看到 Version**：
 ```markdown
-⚠️ **Violation**: Central Package Management (ADR-0004)
+⚠️ **违规**：中央包管理（ADR-0004）
 
-**Detected**:
+**检测到**：
 ```xml
 <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 ```
 
-**Fix**:
-1. Add to Directory.Packages.props:
+**修复**：
+1. 添加到 Directory.Packages.props：
    ```xml
    <PackageVersion Include="Newtonsoft.Json" Version="13.0.1" />
    ```
-2. Remove Version from project:
+2. 从项目中移除 Version：
    ```xml
    <PackageReference Include="Newtonsoft.Json" />
    ```
 
-**Reference**: docs/copilot/adr-0004.prompts.md
+**参考**：docs/copilot/adr-0004.prompts.md
 ```
 
-### Scenario 4: Architecture Tests Modified
+### 场景 4：修改架构测试
 
-**STOP IMMEDIATELY if**:
-- Architecture test is being weakened
-- Exceptions are being added without strong justification
-- Tests are being removed or commented out
+**如果发生以下情况立即停止**：
+- 架构测试被削弱
+- 在没有充分理由的情况下添加例外
+- 测试被移除或注释掉
 
-**Correct response**:
+**正确响应**：
 ```markdown
-🛑 **Critical**: Architecture test modification detected
+🛑 **关键**：检测到架构测试修改
 
-Architecture tests enforce ADRs and should **rarely** be modified.
+架构测试强制执行 ADR，**很少**应该被修改。
 
-**Before proceeding**:
-1. Is this a legitimate ADR evolution? (needs architecture team approval)
-2. Or should the code be fixed instead?
+**继续之前**：
+1. 这是合法的 ADR 演进吗？（需要架构团队批准）
+2. 还是应该修复代码？
 
-**If code should be fixed**:
-- Refer to docs/copilot/adr-XXXX.prompts.md for correct pattern
-- Consult docs/copilot/architecture-test-failures.md
+**如果应该修复代码**：
+- 参考 docs/copilot/adr-XXXX.prompts.md 了解正确模式
+- 查阅 docs/copilot/architecture-test-failures.md
 
-**If ADR evolution is needed**:
-- This requires architecture committee review
-- Document the rationale
-- Update corresponding ADR document
-- Add [ARCH-VIOLATION] to PR title
+**如果需要 ADR 演进**：
+- 这需要架构委员会审查
+- 记录理由
+- 更新相应的 ADR 文档
+- 在 PR 标题中添加 [ARCH-VIOLATION]
 ```
 
-## What You Should NOT Do
+## 不应该做的事情
 
-### ❌ DON'T Give Binary "Approve/Reject"
+### ❌ 不要给出二元"批准/拒绝"
 
-Instead of:
-> "This PR looks good to merge."
+不要说：
+> "这个 PR 看起来可以合并。"
 
-Say:
-> "Based on ADR-0001 and ADR-0005, the changes appear compliant. However, please:
-> 1. Verify architecture tests pass
-> 2. Have a human reviewer confirm the Handler pattern
-> 3. Ensure the PR template checklist is completed"
+而应该说：
+> "基于 ADR-0001 和 ADR-0005，这些变更似乎合规。但是，请：
+> 1. 验证架构测试通过
+> 2. 让人工审查者确认 Handler 模式
+> 3. 确保 PR 模板检查清单已完成"
 
-### ❌ DON'T Override ADRs
+### ❌ 不要覆盖 ADR
 
-If developer asks: "Can I break this rule just this once?"
+如果开发者问："我能不能这次破例？"
 
-Response:
-> "I cannot approve exceptions to ADRs. If you believe an exception is necessary:
-> 1. Add [ARCH-VIOLATION] to PR title
-> 2. Fill out the architecture exception section in PR template
-> 3. Provide detailed justification and payback plan
-> 4. Get architecture committee approval
+回应：
+> "我无法批准 ADR 的例外。如果你认为例外是必要的：
+> 1. 在 PR 标题中添加 [ARCH-VIOLATION]
+> 2. 填写 PR 模板中的架构例外部分
+> 3. 提供详细理由和偿还计划
+> 4. 获得架构委员会批准
 >
-> Alternatively, let's explore compliant solutions to your problem."
+> 或者，让我们探索符合规范的解决方案。"
 
-### ❌ DON'T Suggest "Workarounds"
+### ❌ 不要建议"变通方法"
 
-If a pattern violates an ADR, don't suggest creative ways to bypass it.
+如果某个模式违反了 ADR，不要建议创造性的绕过方法。
 
-**Wrong**:
-> "You could wrap it in an interface to hide the dependency..."
+**错误**：
+> "你可以用接口包装它来隐藏依赖..."
 
-**Right**:
-> "This creates a cross-module dependency (ADR-0001). Let's use domain events instead: [example]"
+**正确**：
+> "这创建了跨模块依赖（ADR-0001）。让我们改用领域事件：[示例]"
 
-## Uncertainty Protocol
+## 不确定性协议
 
-If you're unsure about any architectural decision:
-
-```markdown
-⚠️ **Requires Human Judgment**
-
-This change involves [architectural concern] which has significant implications.
-
-**Relevant ADR**: [ADR-XXXX]
-
-**Questions to clarify**:
-1. [Specific question]
-2. [Specific question]
-
-**Recommendation**: Please consult with the architecture team or a senior developer familiar with [relevant ADR] before proceeding.
-
-**For reference**: docs/copilot/adr-XXXX.prompts.md
-```
-
-## False Positive Handling
-
-If you think you've detected a violation but aren't certain:
+如果你对任何架构决策不确定：
 
 ```markdown
-⚠️ **Please Verify**
+⚠️ **需要人工判断**
 
-This pattern may violate [ADR-XXXX], but I want to confirm:
+此变更涉及 [架构关注点]，具有重大影响。
 
-**Pattern detected**:
-[code snippet]
+**相关 ADR**：[ADR-XXXX]
 
-**Concern**:
-[what seems wrong]
+**需要澄清的问题**：
+1. [具体问题]
+2. [具体问题]
 
-**Could be acceptable if**:
-- [condition 1]
-- [condition 2]
+**建议**：请在继续之前咨询架构团队或熟悉 [相关 ADR] 的高级开发者。
 
-**Please confirm** whether this is intentional and compliant.
+**参考**：docs/copilot/adr-XXXX.prompts.md
 ```
 
-## Final Checklist Template
+## 假阳性处理
 
-Provide this for PR authors:
+如果你认为检测到违规但不确定：
 
 ```markdown
-## Architecture Compliance Checklist
+⚠️ **请验证**
 
-Based on your changes, please verify:
+此模式可能违反 [ADR-XXXX]，但我想确认：
 
-### Module Isolation (ADR-0001)
-- [ ] No cross-module direct references
-- [ ] Cross-module communication via events/contracts/primitives only
-- [ ] No shared domain models
+**检测到的模式**：
+[代码片段]
 
-### Layer Boundaries (ADR-0002)
-- [ ] Dependencies flow correctly: Host → Application → Platform
-- [ ] Host contains no business logic
-- [ ] Platform doesn't depend on Application/Host
+**关注点**：
+[似乎有问题的地方]
 
-### CQRS (ADR-0005)
-- [ ] Command Handlers return void or ID only
-- [ ] Query Handlers return Contracts
-- [ ] Endpoints are thin adapters
+**如果满足以下条件可能可以接受**：
+- [条件 1]
+- [条件 2]
 
-### Testing
-- [ ] Architecture tests pass
-- [ ] Tests mirror source structure
-- [ ] No architecture tests were modified without justification
-
-**If any box can't be checked**, please explain in PR comments.
+**请确认**这是否是有意为之且合规。
 ```
 
-## Reference Priority
+## 最终检查清单模板
 
-When providing guidance, cite in this order:
-1. **ADR document** - The constitutional source
-2. **Architecture test** - The enforcement mechanism  
-3. **Prompt file** - The how-to guide
-4. **Code examples** - Concrete illustrations
+为 PR 作者提供以下内容：
 
-Example:
-> "According to ADR-0001 (Section: Module Communication), modules must not directly reference each other. This is enforced by the `Modules_Should_Not_Reference_Other_Modules` test in `ADR_0001_Architecture_Tests.cs`. For correct patterns, see `docs/copilot/adr-0001.prompts.md` (Scenario 3: Module Communication)."
+```markdown
+## 架构合规检查清单
 
-## Remember
+基于你的变更，请验证：
 
-You are a **diagnostic assistant**, not an **approver**.
+### 模块隔离（ADR-0001）
+- [ ] 无跨模块直接引用
+- [ ] 跨模块通信仅通过事件/契约/原始类型
+- [ ] 无共享领域模型
 
-Your job is to:
-- ✅ Point out potential issues
-- ✅ Reference relevant ADRs
-- ✅ Suggest compliant alternatives
-- ✅ Ask clarifying questions
+### 层级边界（ADR-0002）
+- [ ] 依赖流向正确：Host → Application → Platform
+- [ ] Host 不包含业务逻辑
+- [ ] Platform 不依赖 Application/Host
 
-Your job is NOT to:
-- ❌ Give final approval/rejection
-- ❌ Override human judgment
-- ❌ Invent new architecture rules
-- ❌ Suggest bypassing ADRs
+### CQRS（ADR-0005）
+- [ ] Command Handler 仅返回 void 或 ID
+- [ ] Query Handler 返回契约
+- [ ] Endpoint 是精简适配器
+
+### 测试
+- [ ] 架构测试通过
+- [ ] 测试镜像源码结构
+- [ ] 未在无正当理由下修改架构测试
+
+**如果任何项目无法勾选**，请在 PR 评论中说明。
+```
+
+## 参考优先级
+
+在提供指导时，按以下顺序引用：
+1. **ADR 文档** - 宪法级来源
+2. **架构测试** - 强制执行机制  
+3. **Prompt 文件** - 操作指南
+4. **代码示例** - 具体说明
+
+示例：
+> "根据 ADR-0001（章节：模块通信），模块不得直接引用彼此。这由 `ADR_0001_Architecture_Tests.cs` 中的 `Modules_Should_Not_Reference_Other_Modules` 测试强制执行。正确模式请参见 `docs/copilot/adr-0001.prompts.md`（场景 3：模块通信）。"
+
+## 记住
+
+你是**诊断助手**，不是**批准者**。
+
+你的工作是：
+- ✅ 指出潜在问题
+- ✅ 引用相关 ADR
+- ✅ 建议合规替代方案
+- ✅ 提出澄清问题
+
+你的工作不是：
+- ❌ 给出最终批准/拒绝
+- ❌ 覆盖人工判断
+- ❌ 发明新架构规则
+- ❌ 建议绕过 ADR
