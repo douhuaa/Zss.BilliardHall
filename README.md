@@ -54,6 +54,85 @@ dotnet run --project src/Host/Worker/Worker.csproj
 
 ## 项目结构
 
+### 目录结构
+
+```mermaid
+graph TB
+    Root[Zss.BilliardHall]
+    
+    Root --> Docs[📁 docs<br/>文档]
+    Root --> Src[📁 src<br/>源代码]
+    Root --> Tests[📁 tests<br/>测试]
+    
+    Docs --> ADR[📁 adr<br/>架构决策记录]
+    Docs --> ArchGuide[📄 architecture-guide.md<br/>架构指南]
+    Docs --> CIGuide[📄 ci-cd-guide.md<br/>CI/CD 指南]
+    
+    Src --> Platform[📁 Platform<br/>平台层-技术能力]
+    Src --> Modules[📁 Modules<br/>业务模块]
+    Src --> Application[📁 Application<br/>应用层]
+    Src --> Host[📁 Host<br/>宿主程序]
+    
+    Platform --> Contracts[📁 Contracts<br/>数据契约]
+    
+    Modules --> Members[📁 Members<br/>会员模块]
+    Modules --> Orders[📁 Orders<br/>订单模块]
+    
+    Host --> WebHost[📁 Web<br/>Web API]
+    Host --> Worker[📁 Worker<br/>后台任务]
+    
+    Tests --> ArchTests[📁 ArchitectureTests<br/>架构测试]
+    
+    style Root fill:#e1f5ff
+    style Docs fill:#fff4e6
+    style Src fill:#e8f5e9
+    style Tests fill:#fce4ec
+    style Modules fill:#f3e5f5
+    style Platform fill:#e0f2f1
+    style Host fill:#fff3e0
+```
+
+### 架构层次关系
+
+```mermaid
+graph LR
+    subgraph Host[宿主层]
+        Web[Web API]
+        Worker[后台任务]
+    end
+    
+    subgraph App[应用层]
+        Application[Application<br/>模块编排]
+    end
+    
+    subgraph Business[业务层]
+        Members[Members 模块]
+        Orders[Orders 模块]
+    end
+    
+    subgraph Platform[平台层]
+        Contracts[Contracts<br/>数据契约]
+        Tech[技术能力]
+    end
+    
+    Web --> Application
+    Worker --> Application
+    Application --> Members
+    Application --> Orders
+    Members -.领域事件.-> Orders
+    Orders -.领域事件.-> Members
+    Members --> Platform
+    Orders --> Platform
+    
+    style Host fill:#e3f2fd
+    style App fill:#f3e5f5
+    style Business fill:#e8f5e9
+    style Platform fill:#fff3e0
+```
+
+<details>
+<summary>📝 文本格式目录树（点击展开）</summary>
+
 ```
 Zss.BilliardHall/
 ├── docs/                      # 文档
@@ -68,11 +147,12 @@ Zss.BilliardHall/
 │   │   └── Orders/            # 订单模块
 │   ├── Application/           # 应用层
 │   └── Host/                  # 宿主程序
-│       ├── WebHost/           # Web API
+│       ├── Web/               # Web API
 │       └── Worker/            # 后台任务
 └── tests/
     └── ArchitectureTests/     # 架构测试
 ```
+</details>
 
 ## 核心概念
 

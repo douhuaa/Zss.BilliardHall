@@ -1,5 +1,88 @@
 # 文档目录
 
+## 📊 文档导航图
+
+```mermaid
+graph TB
+    Start([开始])
+    
+    Start --> NewDev{我是?}
+    NewDev -->|新成员| QuickStart[快速开始]
+    NewDev -->|开发功能| DevGuide[开发指南]
+    NewDev -->|处理CI失败| CIFix[CI/CD指南]
+    
+    QuickStart --> ArchGuide[📘 架构指南<br/>architecture-guide.md]
+    QuickStart --> ADR001[📘 ADR-0001<br/>模块化单体架构]
+    QuickStart --> ADR002[📘 ADR-0002<br/>平台应用主机]
+    QuickStart --> AutoVerify[📘 架构自动化验证系统]
+    
+    DevGuide --> ArchGuide
+    DevGuide --> ModuleDocs[📁 模块文档]
+    DevGuide --> ArchTests[📁 架构测试说明]
+    
+    CIFix --> AutoVerify
+    CIFix --> CIGuide[📘 CI/CD 指南<br/>ci-cd-guide.md]
+    
+    ArchGuide --> ADRIndex[📁 ADR 目录]
+    ADRIndex --> ADR001
+    ADRIndex --> ADR002
+    ADRIndex --> ADR003[📘 ADR-0003<br/>命名空间规范]
+    ADRIndex --> ADR004[📘 ADR-0004<br/>中央包管理]
+    ADRIndex --> ADR005[📘 ADR-0005<br/>应用交互模型]
+    
+    ModuleDocs --> Members[📁 Members 模块]
+    ModuleDocs --> Orders[📁 Orders 模块]
+    ModuleDocs --> Contracts[📁 Platform.Contracts]
+    
+    style Start fill:#e1f5ff
+    style QuickStart fill:#c8e6c9
+    style DevGuide fill:#c8e6c9
+    style CIFix fill:#ffccbc
+    style ArchGuide fill:#fff9c4
+    style ADRIndex fill:#f8bbd0
+    style AutoVerify fill:#b2dfdb
+```
+
+## 🗂️ 文档结构总览
+
+```mermaid
+graph LR
+    subgraph Core[核心文档]
+        AG[架构指南]
+        CI[CI/CD指南]
+        AV[架构自动化验证]
+    end
+    
+    subgraph ADR[架构决策记录]
+        ADR1[ADR-0001<br/>架构决策]
+        ADR2[ADR-0002<br/>平台应用]
+        ADR3[ADR-0003<br/>命名规范]
+        ADR4[ADR-0004<br/>包管理]
+        ADR5[ADR-0005<br/>交互模型]
+    end
+    
+    subgraph Modules[模块文档]
+        MEM[Members]
+        ORD[Orders]
+        CON[Contracts]
+    end
+    
+    subgraph Summaries[改进总结]
+        ARCH[架构改进]
+        TEST[测试改进]
+        GOV[治理改进]
+    end
+    
+    AG -.参考.-> ADR
+    CI -.参考.-> AV
+    AG -.关联.-> Modules
+    
+    style Core fill:#e3f2fd
+    style ADR fill:#f3e5f5
+    style Modules fill:#e8f5e9
+    style Summaries fill:#fff3e0
+```
+
 ## 架构文档
 
 ### 核心文档
