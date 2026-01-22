@@ -162,7 +162,7 @@ docs/summaries/
 ### ADR 文档
 
 - [ADR 目录](../adr/README.md) - 架构决策记录索引
-- [ADR-0000](../adr/ADR-0000-architecture-tests.md) - 架构测试与 CI 治理
+- [ADR-0000](../adr/governance/ADR-0000-architecture-tests.md) - 架构测试与 CI 治理
 - [宪法层文档](../adr/ARCHITECTURE-CONSTITUTIONAL-LAYER.md) - 宪法层定义
 
 ### 关系说明

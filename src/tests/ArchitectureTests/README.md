@@ -165,7 +165,7 @@ dotnet test src/tests/ArchitectureTests -c Release
 ### 未来增强方向
 
 1. **引入 Roslyn Analyzer**：做语义级别的静态检查
-   - 详见 [ADR-0005 执行级别分类](../../docs/adr/ADR-0005-Enforcement-Levels.md)
+   - 详见 [ADR-0005 执行级别分类](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
    - Level 2 规则建议使用 Roslyn Analyzer 实现
 2. **添加更多规则**：
    - 异常处理规范（使用 DomainException）
@@ -203,7 +203,7 @@ dotnet test src/tests/ArchitectureTests -c Release
 2. **Level 2 - 语义半自动**（部分覆盖，建议增强）
    - 当前：启发式检查（建议性）
    - 建议：Roslyn Analyzer（自定义分析器）
-   - 详见 [ADR-0005 执行级别分类](../../docs/adr/ADR-0005-Enforcement-Levels.md)
+   - 详见 [ADR-0005 执行级别分类](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
 
 3. **Level 3 - 人工 Gate**（流程控制）
    - PR 模板强制架构违规声明

@@ -96,7 +96,7 @@ The analyzers run during:
 
 ## Enforcement Levels
 
-According to [ADR-0005 Enforcement Levels](../../docs/adr/ADR-0005-Enforcement-Levels.md):
+According to [ADR-0005 Enforcement Levels](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md):
 
 - **Level 1 (Static)**: NetArchTest (architecture tests)
 - **Level 2 (Semantic)**: These Roslyn Analyzers ← You are here
@@ -132,9 +132,9 @@ Create test projects in `src/tests/ArchitectureAnalyzers.Tests/` with positive a
 
 ## Related Documentation
 
-- [ADR-0005: Application Interaction Model](../../docs/adr/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-0005 Enforcement Levels](../../docs/adr/ADR-0005-Enforcement-Levels.md)
-- [ADR-0000: Architecture Tests](../../docs/adr/ADR-0000-architecture-tests.md)
+- [ADR-0005: Application Interaction Model](../../docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-0005 Enforcement Levels](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
+- [ADR-0000: Architecture Tests](../../docs/adr/governance/ADR-0000-architecture-tests.md)
 
 ## Support
 

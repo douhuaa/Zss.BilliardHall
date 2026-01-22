@@ -25,7 +25,7 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host $testResult
     Write-Host ""
     Write-Host "Please fix architecture violations before pushing." -ForegroundColor Red
-    Write-Host "See docs/adr/ADR-0000-architecture-tests.md for guidance." -ForegroundColor Yellow
+    Write-Host "See docs/adr/governance/ADR-0000-architecture-tests.md for guidance." -ForegroundColor Yellow
     exit 1
 }
 Write-Host "✅ Architecture tests passed" -ForegroundColor Green
