@@ -109,10 +109,13 @@ graph TB
 
 ## 🚀 新人快速开始
 
+> 💡 **完整指南**：查看 **[快速开始指南 (QUICK-START.md)](QUICK-START.md)** 获取 60 分钟完整入门教程
+
 ### 第一步：理解项目（10 分钟）
-1. 📄 [项目 README](../README.md) - 项目概述、技术栈
-2. 📐 [架构指南](architecture-guide.md) - 架构概述（重点阅读前 3 章）
-3. 🏛️ [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 核心架构决策
+1. 📄 [快速开始指南](QUICK-START.md) - 60 分钟完整入门
+2. 📄 [项目 README](../README.md) - 项目概述、技术栈
+3. 📐 [架构指南](architecture-guide.md) - 架构概述（重点阅读前 3 章）
+4. 🏛️ [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 核心架构决策
 
 ### 第二步：环境搭建（15 分钟）
 ```bash
@@ -162,6 +165,7 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 ## 👨‍💻 开发指南
 
 ### 核心文档
+- 📘 **[快速开始指南](QUICK-START.md)** - 60 分钟快速入门
 - 📘 **[架构设计指南](architecture-guide.md)** - 完整架构说明
 - 📋 **[架构决策记录 (ADR)](adr/README.md)** - 所有架构决策
 - 🏗️ **[模块开发指南](#-模块开发指南)** - 如何开发业务模块
@@ -220,7 +224,10 @@ graph LR
 
 ## 🧪 测试与 CI/CD
 
+> 💡 **完整指南**：查看 **[测试完整指南 (TESTING-GUIDE.md)](TESTING-GUIDE.md)** 获取所有测试相关信息
+
 ### 架构测试
+- 📘 **[测试完整指南](TESTING-GUIDE.md)** - 所有测试类型的完整说明
 - 📘 **[架构测试 README](../src/tests/ArchitectureTests/README.md)** - 测试说明
 - 🏛️ **[ADR-0000](adr/governance/ADR-0000-architecture-tests.md)** - 架构测试治理
 
