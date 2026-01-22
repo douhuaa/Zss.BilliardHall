@@ -20,8 +20,10 @@ docs/summaries/
 │   └── adr-restructure-summary.md
 ├── testing/                     # 测试相关改进总结
 │   └── architecture-tests-improvement-summary.md
-└── governance/                  # 治理流程相关改进总结
-    └── arch-violations.md
+├── governance/                  # 治理流程相关改进总结
+│   └── arch-violations.md
+└── documentation/               # 文档相关改进总结
+    └── documentation-structure-optimization-summary.md
 ```
 
 ---
@@ -103,6 +105,7 @@ AI 驱动的架构治理、Prompts 体系、CI/CD 智能化等相关的改进总
 | ADR 文档管理 | [ADR 重组总结](architecture/adr-restructure-summary.md) |
 | 架构测试优化 | [架构测试体系改进总结](testing/architecture-tests-improvement-summary.md) |
 | 架构违规处理 | [架构违规记录表](governance/arch-violations.md) |
+| 文档结构优化 | [文档结构优化总结](documentation/documentation-structure-optimization-summary.md) |
 | 宪法层定义 | [架构测试体系改进总结](testing/architecture-tests-improvement-summary.md) |
 | 执行级别分类 | [架构测试体系改进总结](testing/architecture-tests-improvement-summary.md) |
 | 破例申请流程 | [架构违规记录表](governance/arch-violations.md) |
@@ -111,6 +114,7 @@ AI 驱动的架构治理、Prompts 体系、CI/CD 智能化等相关的改进总
 
 | 日期 | 文档 | 类型 |
 |------|------|------|
+| 2026-01-22 | [文档结构优化总结](documentation/documentation-structure-optimization-summary.md) | 文档 |
 | 2026-01-21 | [ADR 重组总结](architecture/adr-restructure-summary.md) | 架构 |
 | 2026-01-20 | [架构测试体系改进总结](testing/architecture-tests-improvement-summary.md) | 测试 |
 | 持续更新 | [架构违规记录表](governance/arch-violations.md) | 治理 |
@@ -239,16 +243,18 @@ docs/
 
 ### 文档统计
 
-- **总文档数**：3
+- **总文档数**：4
 - **架构类**：1
 - **测试类**：1
 - **治理类**：1
+- **文档类**：1
 
 ### 覆盖领域
 
 - ✅ 架构设计
 - ✅ 测试体系
 - ✅ 治理流程
+- ✅ 文档结构
 - ⚠️ 性能优化（待补充）
 - ⚠️ 安全改进（待补充）
 
