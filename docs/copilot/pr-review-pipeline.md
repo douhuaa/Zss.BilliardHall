@@ -553,7 +553,7 @@ dotnet test src/tests/ArchitectureTests/
 
 3. **获得架构师批准**
 
-4. **记录在案**：破例会被记录在 `docs/summaries/governance/arch-violations.md`
+4. **记录在案**：破例会被记录在 `docs/summaries/arch-violations.md`
 
 ---
 

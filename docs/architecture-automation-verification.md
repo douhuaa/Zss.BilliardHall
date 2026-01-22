@@ -130,7 +130,7 @@ cat src/tools/ArchitectureAnalyzers/README.md
    - 决定批准或拒绝
 
 4. **记录归档阶段**
-   - 所有破例记录在 `docs/summaries/governance/arch-violations.md`
+   - 所有破例记录在 `docs/summaries/arch-violations.md`
    - 包含违规详情、理由、归还计划
    - 便于后续审计和偿还追踪
 
@@ -148,7 +148,7 @@ cat .github/PULL_REQUEST_TEMPLATE.md
 
 **查看架构违规记录**:
 ```bash
-cat docs/summaries/governance/arch-violations.md
+cat docs/summaries/arch-violations.md
 ```
 
 ---
@@ -329,7 +329,7 @@ open TestResults/architecture-test-results.html
 ### 关键指标
 
 - **架构测试通过率**: 目标 100%
-- **当前豁免数量**: 见 `docs/summaries/governance/arch-violations.md`
+- **当前豁免数量**: 见 `docs/summaries/arch-violations.md`
 - **Analyzer 警告数量**: 使用 `dotnet build` 查看
 - **跨模块依赖数量**: 应为 0（由 ADR-0001 测试保证）
 

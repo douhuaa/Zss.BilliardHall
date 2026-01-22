@@ -1,5 +1,9 @@
 # 文档目录
 
+> 💡 **唯一入口**：查看 **[文档导航中心 (index.md)](index.md)** 获取按角色和任务的快速导航
+> 
+> 本 README 提供文档结构概览，实际使用请访问 [index.md](index.md)
+
 ## 📊 文档导航图
 
 ```mermaid
@@ -86,9 +90,13 @@ graph LR
 ## 架构文档
 
 ### 核心文档
+- **[📍 文档导航中心 (index.md)](index.md)** - 按角色和任务的快速导航入口
+- **[快速开始指南](QUICK-START.md)** - 60 分钟快速入门教程
 - **[架构指南](architecture-guide.md)** - 项目架构概述、设计规则和开发指南
+- **[测试完整指南](TESTING-GUIDE.md)** - 架构测试、单元测试、集成测试完整说明
 - **[CI/CD 指南](ci-cd-guide.md)** - 持续集成、架构测试集成和违规处理
 - **[架构自动化验证系统](architecture-automation-verification.md)** - 三层自动化防御体系和完整执行指南
+- **[文档维护指南](DOCUMENTATION-MAINTENANCE.md)** - 文档更新流程和长效维护机制
 
 ### 架构决策记录 (ADR)
 - [ADR 目录](adr/README.md) - ADR 完整索引和导航
@@ -99,10 +107,11 @@ graph LR
   - [ADR-0005: 应用内交互模型与执行边界](adr/ADR-0005-Application-Interaction-Model-Final.md)
 
 ### 改进总结
-- **[改进总结目录](summaries/README.md)** - 项目改进历程和经验总结
-  - [架构改进](summaries/architecture/) - ADR 重组等架构改进
-  - [测试改进](summaries/testing/) - 架构测试体系改进
-  - [治理改进](summaries/governance/) - 违规管理流程改进
+- **[改进总结目录](summaries/README.md)** - 项目改进历程和经验总结（扁平化结构）
+  - 架构改进 - ADR 重组、编号优化
+  - 测试改进 - 架构测试体系升级
+  - 治理改进 - 违规管理、Copilot 治理
+  - 文档改进 - 文档结构优化
 
 ## 模块文档
 
