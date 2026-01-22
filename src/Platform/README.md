@@ -104,7 +104,21 @@ public class OrderHandler
     }
 }
 
-// 在测试中
+// 在测试中（需要自定义测试实现）
+public class FakeSystemClock : ISystemClock
+{
+    private readonly DateTimeOffset _fixedTime;
+    
+    public FakeSystemClock(DateTimeOffset fixedTime)
+    {
+        _fixedTime = fixedTime;
+    }
+    
+    public DateTimeOffset UtcNow => _fixedTime;
+    public DateTimeOffset Now => _fixedTime.ToLocalTime();
+}
+
+// 使用
 var fakeClock = new FakeSystemClock(new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero));
 var handler = new OrderHandler(fakeClock);
 ```
@@ -238,6 +252,6 @@ Platform 层受以下架构测试保护：
 
 ## 参考资料
 
-- [ADR-0002: Platform / Application / Host 三层启动体系](../../docs/adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)
-- [ADR-0002 Copilot 提示词库](../../docs/copilot/adr-0002.prompts.md)
-- [架构测试说明](../tests/ArchitectureTests/README.md)
+- ADR-0002: Platform / Application / Host 三层启动体系
+- ADR-0002 Copilot 提示词库
+- 架构测试说明

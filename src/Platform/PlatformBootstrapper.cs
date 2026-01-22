@@ -14,17 +14,18 @@ public static class PlatformBootstrapper
         IHostEnvironment environment
     )
     {
-        // 1. 注册时间抽象
-        services.AddSingleton<ISystemClock, SystemClock>();
-
-        // 2. 注册应用程序信息
+        // 1. 注册应用程序信息（在注册时间抽象之前，使用实际系统时间）
+        var startTime = DateTimeOffset.UtcNow;
         services.AddSingleton(new ApplicationInfo
         {
             Name = "Zss.BilliardHall",
             Version = "1.0.0",
             Environment = environment.EnvironmentName,
-            StartTime = DateTimeOffset.UtcNow
+            StartTime = startTime
         });
+
+        // 2. 注册时间抽象（供业务逻辑使用）
+        services.AddSingleton<ISystemClock, SystemClock>();
 
         // 3. 健康检查
         services.AddHealthChecks();
