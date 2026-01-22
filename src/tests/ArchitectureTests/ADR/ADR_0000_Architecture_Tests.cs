@@ -20,15 +20,6 @@ public sealed class ADR_0000_Architecture_Tests
         "ADR-0900-adr-process"
     };
     
-    // 结构层 ADR（100-199）主要通过文档、Copilot Prompts 和 Code Review 保证
-    // 允许使用较简单的文档化测试
-    private static readonly HashSet<string> AllowSimpleDocumentationTests = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "ADR_0110_Architecture_Tests",  // 测试目录组织规范
-        "ADR_0120_Architecture_Tests",  // 功能切片命名规范
-        "ADR_0121_Architecture_Tests",  // 契约命名规范
-    };
-    
     // 最小 IL 字节数阈值：用于启发式判断测试方法是否包含实质内容
     // 这是一个经验值，基于简单测试方法的典型 IL 大小
     // 注意：这不是严格的验证，只是启发式检查
@@ -181,11 +172,6 @@ public sealed class ADR_0000_Architecture_Tests
             {
                 violations.Add($"❌ {testType.Name}: 所有测试都被跳过（Skip）");
             }
-
-            // 跳过结构层 ADR 的简单测试检查
-            // 结构层 ADR（100-199）主要通过文档化、Copilot Prompts 和 Code Review 保证
-            if (AllowSimpleDocumentationTests.Contains(testType.Name))
-                continue;
 
             // 简单启发式检查：测试方法体应该有实际内容
             // 至少应该有一些方法调用（如 Assert.True, GetTypes 等）

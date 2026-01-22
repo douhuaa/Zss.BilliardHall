@@ -1,88 +1,114 @@
+using NetArchTest.Rules;
+using System.Reflection;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
 /// ADR-0120: 功能切片命名规范
 /// 验证 Command/Query/Handler/Endpoint/DTO 命名符合规范
-/// 
-/// 本 ADR 属于结构层（ADR-100~199），主要通过以下方式保证：
-/// 1. Copilot Prompts（docs/copilot/adr-0120.prompts.md）- 实时提醒和指导
-/// 2. Code Review - 人工审查命名是否符合业务语义
-/// 3. 团队培训 - 确保团队理解业务动词和技术动词的区别
-/// 
-/// 注意：根据 ADR-0000，结构层 ADR 的架构测试可以是文档化约束，
-/// 因为命名规范需要理解业务语义，难以通过简单的静态分析完全验证。
 /// </summary>
 public sealed class ADR_0120_Architecture_Tests
 {
-    /// <summary>
-    /// ADR-0120: 功能切片命名规范
-    /// 本测试类标记 ADR-0120 已被文档化并通过多层保障机制执行。
-    /// 
-    /// 保障机制：
-    /// 1. Copilot Prompts - 实时识别技术术语并建议业务术语
-    /// 2. Code Review - PR 审查时验证命名是否表达业务意图
-    /// 3. 团队约定 - 维护业务动词和技术动词对照表
-    /// 
-    /// 未来可扩展的自动化检查：
-    /// - 检查 Command 是否包含 Command 后缀
-    /// - 检查 Query 是否包含 Query 后缀
-    /// - 检查 Handler 是否与 Command/Query 名称对应
-    /// - 检查是否使用黑名单技术动词（Save, Insert, Select 等）
-    /// - 检查目录名是否使用 PascalCase
-    /// 
-    /// 当前状态：已文档化，通过人工审查和 Copilot 辅助保证
-    /// </summary>
-    [Fact(DisplayName = "ADR-0120: 功能切片命名规范（文档化约束）")]
-    public void Feature_Naming_Conventions_Are_Documented()
+    [Theory(DisplayName = "ADR-0120.1: Command 类必须以 Command 结尾")]
+    [ClassData(typeof(ModuleAssemblyData))]
+    public void Commands_Must_End_With_Command(Assembly moduleAssembly)
     {
-        // ADR-0120 定义了功能切片命名规范，包括：
-        
-        // 1. 功能切片目录命名
-        //    格式：{动词}{实体}（PascalCase）
-        //    ✅ 正确：CreateMember, GetMemberById, UpdateMemberProfile
-        //    ❌ 错误：Member（缺少动词）, CRUD（技术术语）, SaveMember（技术动词）
-        
-        // 2. Command 命名
-        //    格式：{动词}{实体}Command
-        //    ✅ 正确：CreateMemberCommand, UpdateMemberProfileCommand
-        //    ❌ 错误：MemberCommand（缺少动词）, SaveMemberCommand（技术动词）
-        
-        // 3. Query 命名
-        //    格式：{动词}{实体}{限定条件}Query
-        //    ✅ 正确：GetMemberByIdQuery, ListActiveMembersQuery
-        //    ❌ 错误：MemberQuery（缺少动词和限定条件）, SelectMemberQuery（SQL 术语）
-        
-        // 4. Handler 命名
-        //    格式：{Command/Query名}Handler
-        //    ✅ 正确：CreateMemberCommandHandler, GetMemberByIdQueryHandler
-        //    ❌ 错误：MemberHandler（过于宽泛）, MemberService（Service 后缀）
-        
-        // 5. DTO 命名
-        //    格式：{实体}{限定词}Dto
-        //    ✅ 正确：MemberDto, MemberSummaryDto, MemberDetailsDto
-        //    ❌ 错误：Member（缺少 Dto 后缀）, MemberContract（不用 Contract 后缀）
-        
-        // 6. 业务动词 vs 技术动词
-        //    业务动词：Create, Update, Activate, Cancel, Approve, Reject
-        //    技术动词（避免）：Save, Insert, Delete, Select, Load, Execute
-        
-        // 这些规范通过以下方式保证：
-        // - docs/copilot/adr-0120.prompts.md 提供实时指导和反模式检测
-        // - Code Review 验证命名是否表达业务意图
-        // - docs/adr/structure/ADR-0120-feature-naming-conventions.md 提供详细说明
-        
-        // 验证：本测试类的存在表明 ADR-0120 已被正式采纳并文档化
-        // 通过多层保障机制（Copilot + Code Review + 团队培训）确保执行
-        
-        // 简单验证：确认测试类本身存在（通过反射）
-        var thisTestType = typeof(ADR_0120_Architecture_Tests);
-        Assert.NotNull(thisTestType);
-        Assert.Equal("ADR_0120_Architecture_Tests", thisTestType.Name);
-        
-        // 文档化说明：ADR-0120 主要通过以下方式保证：
-        // - docs/adr/structure/ADR-0120-feature-naming-conventions.md 提供详细规范
-        // - docs/copilot/adr-0120.prompts.md 提供实时指导和反模式检测
-        // - Code Review 验证命名是否表达业务意图
-        // - 团队培训确保理解业务动词和技术动词的区别
+        var types = moduleAssembly.GetTypes()
+            .Where(t => t.Namespace?.Contains(".Features.") == true)
+            .Where(t => t.IsClass && !t.IsAbstract)
+            .Where(t => t.Name.Contains("Command") && !t.Name.Contains("Handler"))
+            .ToList();
+
+        var violations = new List<string>();
+
+        foreach (var type in types)
+        {
+            if (!type.Name.EndsWith("Command"))
+            {
+                violations.Add($"{type.FullName}");
+            }
+        }
+
+        Assert.True(violations.Count == 0,
+            $"❌ ADR-0120 违规：以下 Command 类命名不符合规范：\n" +
+            $"{string.Join("\n", violations)}\n" +
+            $"正确格式：{{动词}}{{实体}}Command\n" +
+            $"示例：CreateMemberCommand, UpdateMemberProfileCommand\n" +
+            $"修复建议：确保 Command 类名以 'Command' 结尾。");
+    }
+
+    [Theory(DisplayName = "ADR-0120.2: Query 类必须以 Query 结尾")]
+    [ClassData(typeof(ModuleAssemblyData))]
+    public void Queries_Must_End_With_Query(Assembly moduleAssembly)
+    {
+        var types = moduleAssembly.GetTypes()
+            .Where(t => t.Namespace?.Contains(".Features.") == true)
+            .Where(t => t.IsClass && !t.IsAbstract)
+            .Where(t => t.Name.Contains("Query") && !t.Name.Contains("Handler"))
+            .ToList();
+
+        var violations = new List<string>();
+
+        foreach (var type in types)
+        {
+            if (!type.Name.EndsWith("Query"))
+            {
+                violations.Add($"{type.FullName}");
+            }
+        }
+
+        Assert.True(violations.Count == 0,
+            $"❌ ADR-0120 违规：以下 Query 类命名不符合规范：\n" +
+            $"{string.Join("\n", violations)}\n" +
+            $"正确格式：{{动词}}{{实体}}{{限定条件}}Query\n" +
+            $"示例：GetMemberByIdQuery, ListActiveMembersQuery\n" +
+            $"修复建议：确保 Query 类名以 'Query' 结尾。");
+    }
+
+    [Theory(DisplayName = "ADR-0120.3: Handler 类必须以 Handler 结尾")]
+    [ClassData(typeof(ModuleAssemblyData))]
+    public void Handlers_Must_End_With_Handler(Assembly moduleAssembly)
+    {
+        var types = moduleAssembly.GetTypes()
+            .Where(t => t.Namespace?.Contains(".Features.") == true)
+            .Where(t => t.IsClass && !t.IsAbstract)
+            .Where(t => t.Name.Contains("Handler"))
+            .ToList();
+
+        var violations = new List<string>();
+
+        foreach (var type in types)
+        {
+            if (!type.Name.EndsWith("Handler"))
+            {
+                violations.Add($"{type.FullName}");
+            }
+        }
+
+        Assert.True(violations.Count == 0,
+            $"❌ ADR-0120 违规：以下 Handler 类命名不符合规范：\n" +
+            $"{string.Join("\n", violations)}\n" +
+            $"正确格式：{{Command/Query名}}Handler\n" +
+            $"示例：CreateMemberCommandHandler, GetMemberByIdQueryHandler\n" +
+            $"修复建议：确保 Handler 类名以 'Handler' 结尾。");
+    }
+
+    [Theory(DisplayName = "ADR-0120.4: 禁止在 Features 中使用 Service 后缀")]
+    [ClassData(typeof(ModuleAssemblyData))]
+    public void Features_Should_Not_Use_Service_Suffix(Assembly moduleAssembly)
+    {
+        var result = Types.InAssembly(moduleAssembly)
+            .That()
+            .ResideInNamespaceContaining("Features")
+            .ShouldNot()
+            .HaveNameEndingWith("Service")
+            .GetResult();
+
+        Assert.True(result.IsSuccessful,
+            $"❌ ADR-0120 违规：在垂直切片架构中禁止使用 Service 后缀。\n" +
+            $"违规类型：{string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}\n" +
+            $"正确做法：使用 Handler 处理业务逻辑\n" +
+            $"示例：CreateMemberCommandHandler 而非 MemberService\n" +
+            $"修复建议：将 Service 重构为对应用例的 Handler。");
     }
 }

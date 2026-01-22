@@ -1,79 +1,101 @@
+using System.Reflection;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
 /// ADR-0110: 测试目录组织规范
 /// 验证测试代码的目录组织符合规范
-/// 
-/// 本 ADR 属于结构层（ADR-100~199），主要通过以下方式保证：
-/// 1. Copilot Prompts（docs/copilot/adr-0110.prompts.md）- 实时提醒和指导
-/// 2. Code Review - 人工审查测试组织是否符合规范
-/// 3. 团队培训 - 确保团队理解和遵循规范
-/// 
-/// 注意：根据 ADR-0000，结构层 ADR 的架构测试可以是文档化约束，
-/// 因为某些组织和命名规范难以通过静态分析完全验证。
 /// </summary>
 public sealed class ADR_0110_Architecture_Tests
 {
-    /// <summary>
-    /// ADR-0110: 测试目录组织规范
-    /// 本测试类标记 ADR-0110 已被文档化并通过多层保障机制执行。
-    /// 
-    /// 保障机制：
-    /// 1. Copilot Prompts - 实时提醒开发者遵循规范
-    /// 2. Code Review - PR 审查时验证测试组织
-    /// 3. 团队约定 - 团队培训和文档学习
-    /// 
-    /// 未来可扩展的自动化检查：
-    /// - 检查测试项目命名是否符合 {命名空间}.Tests 模式
-    /// - 检查测试文件是否镜像源码目录结构
-    /// - 检查 ADR 测试文件命名是否符合 ADR_{编号:D4}_Architecture_Tests
-    /// - 检查测试类命名是否符合 {被测类名}Tests 模式
-    /// 
-    /// 当前状态：已文档化，通过人工审查和 Copilot 辅助保证
-    /// </summary>
-    [Fact(DisplayName = "ADR-0110: 测试目录组织规范（文档化约束）")]
-    public void Test_Directory_Organization_Is_Documented()
+    [Fact(DisplayName = "ADR-0110.1: 架构测试类必须在 ArchitectureTests.ADR 命名空间")]
+    public void Architecture_Test_Classes_Must_Be_In_ADR_Namespace()
     {
-        // ADR-0110 定义了测试目录组织规范，包括：
-        
-        // 1. 架构测试集中管理
-        //    所有架构测试必须放在 ArchitectureTests 项目的 ADR/ 目录下
-        //    理由：架构约束是全局性的，集中管理便于维护
-        
-        // 2. 单元测试镜像源码结构
-        //    测试文件路径应该镜像源码文件路径
-        //    示例：src/Modules/Members/Features/CreateMember/CreateMemberHandler.cs
-        //         tests/Modules.Members.Tests/Features/CreateMember/CreateMemberHandlerTests.cs
-        
-        // 3. 测试项目命名规范
-        //    格式：{命名空间}.Tests
-        //    示例：Modules.Members.Tests, Modules.Orders.Tests
-        
-        // 4. 测试类命名规范
-        //    格式：{被测类名}Tests
-        //    示例：CreateMemberHandlerTests, GetMemberByIdQueryHandlerTests
-        
-        // 5. ADR 映射测试命名规范
-        //    格式：ADR_{编号:D4}_Architecture_Tests
-        //    示例：ADR_0001_Architecture_Tests, ADR_0110_Architecture_Tests
-        
-        // 这些规范通过以下方式保证：
-        // - docs/copilot/adr-0110.prompts.md 提供实时指导
-        // - Code Review 验证实际执行
-        // - docs/adr/structure/ADR-0110-test-directory-organization.md 提供详细说明
-        
-        // 验证：本测试类的存在表明 ADR-0110 已被正式采纳并文档化
-        // 通过多层保障机制（Copilot + Code Review + 团队培训）确保执行
-        
-        // 简单验证：确认测试类本身存在（通过反射）
-        var thisTestType = typeof(ADR_0110_Architecture_Tests);
-        Assert.NotNull(thisTestType);
-        Assert.Equal("ADR_0110_Architecture_Tests", thisTestType.Name);
-        
-        // 文档化说明：ADR-0110 主要通过以下方式保证：
-        // - docs/adr/structure/ADR-0110-test-directory-organization.md 提供详细规范
-        // - docs/copilot/adr-0110.prompts.md 提供实时指导和检查
-        // - Code Review 验证测试组织符合规范
-        // - 团队培训确保理解和遵循规范
+        var testAssembly = typeof(ADR_0110_Architecture_Tests).Assembly;
+        var archTestTypes = testAssembly.GetTypes()
+            .Where(t => t.Name.StartsWith("ADR_") && t.Name.Contains("Architecture_Tests"))
+            .Where(t => t.IsClass && !t.IsAbstract)
+            .ToList();
+
+        foreach (var testType in archTestTypes)
+        {
+            Assert.True(testType.Namespace?.Contains(".ADR") == true,
+                $"❌ ADR-0110 违规：架构测试类 {testType.Name} 必须在 ADR 命名空间中。\n" +
+                $"当前命名空间：{testType.Namespace}\n" +
+                $"正确命名空间：Zss.BilliardHall.Tests.ArchitectureTests.ADR\n" +
+                $"修复建议：将测试类移动到 tests/ArchitectureTests/ADR/ 目录。");
+        }
+    }
+
+    [Fact(DisplayName = "ADR-0110.2: ADR 测试类命名必须符合 ADR_xxxx_Architecture_Tests 格式")]
+    public void ADR_Test_Classes_Must_Follow_Naming_Convention()
+    {
+        var testAssembly = typeof(ADR_0110_Architecture_Tests).Assembly;
+        var adrTestTypes = testAssembly.GetTypes()
+            .Where(t => t.Name.StartsWith("ADR_") && t.Name.Contains("Architecture_Tests"))
+            .Where(t => t.IsClass && !t.IsAbstract)
+            .ToList();
+
+        var invalidNames = new List<string>();
+        var pattern = @"^ADR_\d{4}_Architecture_Tests$";
+
+        foreach (var testType in adrTestTypes)
+        {
+            if (!System.Text.RegularExpressions.Regex.IsMatch(testType.Name, pattern))
+            {
+                invalidNames.Add(testType.Name);
+            }
+        }
+
+        Assert.True(invalidNames.Count == 0,
+            $"❌ ADR-0110 违规：以下 ADR 测试类命名不符合规范：\n" +
+            $"{string.Join("\n", invalidNames)}\n" +
+            $"正确格式：ADR_{{编号:D4}}_Architecture_Tests\n" +
+            $"示例：ADR_0001_Architecture_Tests, ADR_0110_Architecture_Tests\n" +
+            $"修复建议：重命名测试类文件和类名以符合规范。");
+    }
+
+    [Fact(DisplayName = "ADR-0110.3: 测试方法 DisplayName 必须包含 ADR 编号")]
+    public void Test_Methods_Must_Include_ADR_Number_In_DisplayName()
+    {
+        var testAssembly = typeof(ADR_0110_Architecture_Tests).Assembly;
+        var adrTestTypes = testAssembly.GetTypes()
+            .Where(t => t.Name.StartsWith("ADR_") && t.Name.Contains("Architecture_Tests"))
+            .Where(t => t.IsClass && !t.IsAbstract)
+            .ToList();
+
+        var violations = new List<string>();
+
+        foreach (var testType in adrTestTypes)
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(testType.Name, @"ADR_(\d{4})_");
+            if (!match.Success) continue;
+            
+            var adrNumber = match.Groups[1].Value;
+            var expectedPrefix = $"ADR-{adrNumber}";
+
+            var testMethods = testType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => m.GetCustomAttributes(typeof(FactAttribute), false).Any() ||
+                           m.GetCustomAttributes(typeof(TheoryAttribute), false).Any())
+                .ToList();
+
+            foreach (var method in testMethods)
+            {
+                var factAttr = method.GetCustomAttributes(typeof(FactAttribute), false).FirstOrDefault() as FactAttribute;
+                var theoryAttr = method.GetCustomAttributes(typeof(TheoryAttribute), false).FirstOrDefault() as TheoryAttribute;
+                
+                var displayName = factAttr?.DisplayName ?? theoryAttr?.DisplayName;
+                
+                if (string.IsNullOrEmpty(displayName) || !displayName.StartsWith(expectedPrefix))
+                {
+                    violations.Add($"{testType.Name}.{method.Name}: DisplayName='{displayName}' 应以 '{expectedPrefix}' 开头");
+                }
+            }
+        }
+
+        Assert.True(violations.Count == 0,
+            $"❌ ADR-0110 违规：以下测试方法的 DisplayName 未包含正确的 ADR 编号：\n" +
+            $"{string.Join("\n", violations)}\n" +
+            $"修复建议：确保 DisplayName 格式为 'ADR-{{编号}}.{{子编号}}: {{约束描述}}'。");
     }
 }
