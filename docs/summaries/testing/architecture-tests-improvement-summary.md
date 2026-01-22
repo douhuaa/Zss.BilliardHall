@@ -21,7 +21,7 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
 
 **解决方案**：
 
-1. **创建了执行级别分类文档** (`docs/adr/ADR-0005-Enforcement-Levels.md`)
+1. **创建了执行级别分类文档** (`docs/adr/constitutional/ADR-0005-Enforcement-Levels.md`)
    - **Level 1 - 静态可执行**：NetArchTest 自动化检查（已实现）
    - **Level 2 - 语义半自动**：建议使用 Roslyn Analyzer（待实现）
    - **Level 3 - 人工 Gate**：PR Review + 破例记录（已建立流程）
@@ -104,7 +104,7 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
 
 **实现内容**：
 
-创建了 `docs/adr/ADR-0005-Enforcement-Levels.md` 文档，明确定义：
+创建了 `docs/adr/constitutional/ADR-0005-Enforcement-Levels.md` 文档，明确定义：
 
 1. **Level 1 规则列表**（8 条，已通过 NetArchTest 覆盖）
    - Handler 命名约定
@@ -239,7 +239,7 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
 
 1. `.github/PULL_REQUEST_TEMPLATE.md` - PR 模板（143 行）
 2. `docs/summaries/governance/arch-violations.md` - 破例记录表（215 行）
-3. `docs/adr/ADR-0005-Enforcement-Levels.md` - 执行级别分类（183 行）
+3. `docs/adr/constitutional/ADR-0005-Enforcement-Levels.md` - 执行级别分类（183 行）
 4. `docs/adr/ARCHITECTURE-CONSTITUTIONAL-LAYER.md` - 宪法层文档（262 行）
 
 ### 修改文件
