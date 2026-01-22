@@ -14,7 +14,7 @@ public class ValidationException : DomainException
     /// 创建验证异常
     /// </summary>
     /// <param name="errors">验证错误字典</param>
-    public ValidationException(Dictionary<string, string[]> errors)
+    public ValidationException(IReadOnlyDictionary<string, string[]> errors)
         : base("VALIDATION_ERROR", "一个或多个验证错误发生")
     {
         Errors = errors;
