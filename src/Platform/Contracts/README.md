@@ -106,4 +106,4 @@ public class CreateOrderHandler
 
 ## 参考
 
-- [ADR-0001: 模块化单体与垂直切片架构决策](/docs/adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-0001: 模块化单体与垂直切片架构决策](/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)

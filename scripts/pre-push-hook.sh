@@ -32,7 +32,7 @@ if ! dotnet test src/tests/ArchitectureTests --no-build --configuration Release 
     cat /tmp/arch-test-output.txt
     echo ""
     echo "Please fix architecture violations before pushing."
-    echo "See docs/adr/ADR-0000-architecture-tests.md for guidance."
+    echo "See docs/adr/governance/ADR-0000-architecture-tests.md for guidance."
     exit 1
 fi
 echo -e "${GREEN}✅ Architecture tests passed${NC}"

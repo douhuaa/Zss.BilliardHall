@@ -50,7 +50,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 
 - **[架构指南](docs/architecture-guide.md)** - 架构概述和开发指南
 - **[CI/CD 指南](docs/ci-cd-guide.md)** - 持续集成和测试
-- **[ADR-0001](docs/adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)** - 架构决策记录
+- **[ADR-0001](docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)** - 架构决策记录
 
 ## 🤖 Copilot 驱动的架构治理
 

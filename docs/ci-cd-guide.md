@@ -145,7 +145,7 @@ chmod +x .git/hooks/pre-push
 
 2. **理解违规原因**
    - 为什么这条规则存在？
-   - 参考 [ADR-0001](/docs/adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+   - 参考 [ADR-0001](/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 
 3. **应用修复方案**
    - 按照测试建议进行修改
@@ -265,5 +265,5 @@ A: 优化建议：
 ## 参考
 
 - [Architecture Tests README](/src/tests/ArchitectureTests/README.md)
-- [ADR-0001](/docs/adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-0001](/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 - [Architecture Guide](/docs/architecture-guide.md)

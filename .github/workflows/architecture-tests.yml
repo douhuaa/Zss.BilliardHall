@@ -135,11 +135,11 @@ dotnet test src/tests/ArchitectureTests/
 
 ### 📚 相关 ADR
 
-- [ADR-0001: 模块化单体与垂直切片架构](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-0002: Platform / Application / Host 三层启动体系](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/ADR-0002-platform-application-host-bootstrap.md)
-- [ADR-0003: 命名空间与项目边界规范](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/ADR-0003-namespace-rules.md)
-- [ADR-0004: 中央包管理（CPM）规范](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/ADR-0004-Cpm-Final.md)
-- [ADR-0005: 应用内交互模型与执行边界](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-0001: 模块化单体与垂直切片架构](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-0002: Platform / Application / Host 三层启动体系](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)
+- [ADR-0003: 命名空间与项目边界规范](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-0003-namespace-rules.md)
+- [ADR-0004: 中央包管理（CPM）规范](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-0004-Cpm-Final.md)
+- [ADR-0005: 应用内交互模型与执行边界](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
 
 ---
 

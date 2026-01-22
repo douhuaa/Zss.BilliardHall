@@ -14,6 +14,12 @@ public sealed class ADR_0000_Architecture_Tests
     private const string TestNamespacePrefix = "Zss.BilliardHall.Tests.ArchitectureTests.ADR";
     private const string TypeSuffix = "_Architecture_Tests";
     
+    // ADR-0900 是流程规范，无需架构测试
+    private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "ADR-0900-adr-process"
+    };
+    
     // 最小 IL 字节数阈值：用于启发式判断测试方法是否包含实质内容
     // 这是一个经验值，基于简单测试方法的典型 IL 大小
     // 注意：这不是严格的验证，只是启发式检查
@@ -32,7 +38,9 @@ public sealed class ADR_0000_Architecture_Tests
 
         Assert.True(Directory.Exists(adrDirectory), $"未找到 ADR 文档目录：{AdrDocsPath}");
 
-        var adrIds = LoadAdrIds(adrDirectory);
+        var adrIds = LoadAdrIds(adrDirectory)
+            .Where(adr => !AdrWithoutTests.Contains(adr)) // 跳过无需测试的 ADR
+            .ToList();
         Assert.NotEmpty(adrIds);
 
         var testTypes = LoadArchitectureTestTypes();
@@ -96,7 +104,8 @@ public sealed class ADR_0000_Architecture_Tests
 
     private static IReadOnlyList<string> LoadAdrIds(string adrDirectory)
     {
-        return Directory.GetFiles(adrDirectory, AdrFilePattern)
+        // 递归搜索所有子目录中的 ADR 文件（支持新的分层目录结构）
+        return Directory.GetFiles(adrDirectory, AdrFilePattern, SearchOption.AllDirectories)
             .Select(Path.GetFileNameWithoutExtension)
             .Where(file => !string.IsNullOrWhiteSpace(file) &&
                            System.Text.RegularExpressions.Regex.IsMatch(file!, @"^ADR-\d{4}", System.Text.RegularExpressions.RegexOptions.IgnoreCase))

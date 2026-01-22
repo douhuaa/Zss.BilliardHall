@@ -6,7 +6,7 @@
 
 ## 三层防御体系
 
-根据 [ADR-0000](../adr/ADR-0000-architecture-tests.md) 和 [ADR-0005 执行级别分类](../adr/ADR-0005-Enforcement-Levels.md)，我们实施了三层自动化防御体系：
+根据 [ADR-0000](../adr/governance/ADR-0000-architecture-tests.md) 和 [ADR-0005 执行级别分类](../adr/ADR-0005-Enforcement-Levels.md)，我们实施了三层自动化防御体系：
 
 ### 🛡️ Level 1: 静态可执行（Static Enforceable）
 
@@ -363,7 +363,7 @@ open TestResults/architecture-test-results.html
 
 **新人入职**:
 1. 阅读本文档
-2. 阅读 [ADR-0000](../adr/ADR-0000-architecture-tests.md)
+2. 阅读 [ADR-0000](../adr/governance/ADR-0000-architecture-tests.md)
 3. 运行一次架构测试
 4. 安装 pre-push hook
 5. 尝试故意违反一条规则，观察反馈
@@ -395,7 +395,7 @@ open TestResults/architecture-test-results.html
 
 ## 相关文档
 
-- [ADR-0000: 架构测试与 CI 治理](../adr/ADR-0000-architecture-tests.md)
+- [ADR-0000: 架构测试与 CI 治理](../adr/governance/ADR-0000-architecture-tests.md)
 - [ADR-0005: 应用内交互模型](../adr/ADR-0005-Application-Interaction-Model-Final.md)
 - [ADR-0005 执行级别分类](../adr/ADR-0005-Enforcement-Levels.md)
 - [Architecture Tests README](../../src/tests/ArchitectureTests/README.md)
