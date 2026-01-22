@@ -1,5 +1,7 @@
 # 文档目录
 
+> 💡 **快速导航**：查看 **[文档导航中心 (index.md)](index.md)** 获取按角色和任务的快速导航
+
 ## 📊 文档导航图
 
 ```mermaid
@@ -86,9 +88,11 @@ graph LR
 ## 架构文档
 
 ### 核心文档
+- **[📍 文档导航中心 (index.md)](index.md)** - 按角色和任务的快速导航入口
 - **[架构指南](architecture-guide.md)** - 项目架构概述、设计规则和开发指南
 - **[CI/CD 指南](ci-cd-guide.md)** - 持续集成、架构测试集成和违规处理
 - **[架构自动化验证系统](architecture-automation-verification.md)** - 三层自动化防御体系和完整执行指南
+- **[文档维护指南](DOCUMENTATION-MAINTENANCE.md)** - 文档更新流程和长效维护机制
 
 ### 架构决策记录 (ADR)
 - [ADR 目录](adr/README.md) - ADR 完整索引和导航

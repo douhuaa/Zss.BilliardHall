@@ -46,8 +46,11 @@ dotnet run --project src/Host/Worker/Worker.csproj
 
 ## 架构文档
 
+> 💡 **快速查找**：访问 **[文档导航中心](docs/index.md)** 按角色和任务快速找到所需文档
+
 完整的架构文档请查看 [docs/](docs/) 目录：
 
+- **[📍 文档导航中心](docs/index.md)** - 按角色和任务的快速导航
 - **[架构指南](docs/architecture-guide.md)** - 架构概述和开发指南
 - **[CI/CD 指南](docs/ci-cd-guide.md)** - 持续集成和测试
 - **[ADR-0001](docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)** - 架构决策记录
