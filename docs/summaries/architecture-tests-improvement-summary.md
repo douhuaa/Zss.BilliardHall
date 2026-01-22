@@ -144,7 +144,7 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
      - 影响范围
      - 归还计划
 
-2. **创建了破例记录表** ([`docs/summaries/governance/arch-violations.md`](../governance/arch-violations.md))
+2. **创建了破例记录表** ([`docs/summari../arch-violations.md`](../arch-violations.md))
    - 活跃破例（尚未归还）
    - 已归还破例（历史审计）
    - 永久破例（需全体批准）
@@ -238,7 +238,7 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
 ### 新增文件
 
 1. `.github/PULL_REQUEST_TEMPLATE.md` - PR 模板（143 行）
-2. `docs/summaries/governance/arch-violations.md` - 破例记录表（215 行）
+2. `docs/summari../arch-violations.md` - 破例记录表（215 行）
 3. `docs/adr/constitutional/ADR-0005-Enforcement-Levels.md` - 执行级别分类（183 行）
 4. `docs/adr/ARCHITECTURE-CONSTITUTIONAL-LAYER.md` - 宪法层文档（262 行）
 
@@ -268,7 +268,7 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
 2. **如需申请破例**
    - 在 PR 中详细说明理由、影响、归还计划
    - 等待架构师审批
-   - 破例批准后会被记录在 [`arch-violations.md`](../governance/arch-violations.md)
+   - 破例批准后会被记录在 [`arch-violations.md`](../arch-violations.md)
 
 3. **查阅规则详情**
    - 静态规则：直接看测试代码和失败消息
@@ -284,11 +284,11 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
 
 2. **批准破例**
    - 根据影响时长选择审批级别
-   - 在 [`arch-violations.md`](../governance/arch-violations.md) 中记录破例
+   - 在 [`arch-violations.md`](../arch-violations.md) 中记录破例
    - 设置提醒，跟踪归还进度
 
 3. **定期审计**
-   - 每季度检查 [`arch-violations.md`](../governance/arch-violations.md)
+   - 每季度检查 [`arch-violations.md`](../arch-violations.md)
    - 核实已归还的破例是否真正修复
    - 评估破例趋势，决定是否需要修订 ADR
 
@@ -301,7 +301,7 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
 
 2. **团队培训**
    - 新成员入职时讲解架构宪法层
-   - 定期回顾 [`arch-violations.md`](../governance/arch-violations.md)
+   - 定期回顾 [`arch-violations.md`](../arch-violations.md)
    - 分享典型的拒绝案例和成功案例
 
 3. **制度维护**
@@ -335,7 +335,7 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
    - 展示破例分布和趋势
 
 2. **自动化审计**
-   - 定期扫描 [`arch-violations.md`](../governance/arch-violations.md)
+   - 定期扫描 [`arch-violations.md`](../arch-violations.md)
    - 自动提醒超期未归还的破例
    - 生成季度审计报告
 

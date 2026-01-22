@@ -71,7 +71,7 @@
 | **开发者** | 修复 bug | [测试指南](TESTING-GUIDE.md), [架构测试失败诊断](copilot/architecture-test-failures.md) | [CI/CD 指南](ci-cd-guide.md) |
 | **开发者** | 提交 PR | [PR 模板](../.github/PULL_REQUEST_TEMPLATE.md), [文档维护指南](DOCUMENTATION-MAINTENANCE.md) | [Copilot 评审](copilot/pr-review-pipeline.md) |
 | **架构师** | 制定架构决策 | [ADR-0900](adr/governance/ADR-0900-adr-process.md), [宪法层说明](adr/constitutional/README.md) | [架构指南](architecture-guide.md) |
-| **架构师** | 架构评审 | [ADR 目录](adr/README.md), [架构测试](../src/tests/ArchitectureTests/README.md) | [违规记录](summaries/governance/arch-violations.md) |
+| **架构师** | 架构评审 | [ADR 目录](adr/README.md), [架构测试](../src/tests/ArchitectureTests/README.md) | [违规记录](summaries/arch-violations.md) |
 | **QA/测试** | 编写测试 | [测试指南](TESTING-GUIDE.md), [.github/instructions/testing.instructions.md](../.github/instructions/testing.instructions.md) | [架构测试 README](../src/tests/ArchitectureTests/README.md) |
 | **QA/测试** | 调查测试失败 | [架构测试失败诊断](copilot/architecture-test-failures.md), [测试指南-故障处理](TESTING-GUIDE.md#-测试失败处理流程) | [Copilot Prompts](copilot/) |
 | **DevOps** | 配置 CI/CD | [CI/CD 指南](ci-cd-guide.md), [架构自动化验证](architecture-automation-verification.md) | [GitHub Actions](../.github/workflows/) |
@@ -407,17 +407,17 @@ graph TB
 ## 🏗️ 架构治理
 
 ### 改进总结
-- 📁 **[改进总结目录](summaries/README.md)** - 项目改进历程
+- 📁 **[改进总结目录](summaries/README.md)** - 项目改进历程（扁平化结构，所有文件位于同一目录）
 
 #### 架构改进
-- [ADR 重组总结](summaries/architecture/adr-restructure-summary.md) - ADR 体系重组
-- [ADR 编号优化总结](summaries/architecture/adr-numbering-optimization-summary.md) - 编号体系优化
+- [ADR 重组总结](summaries/adr-restructure-summary.md) - ADR 体系重组
+- [ADR 编号优化总结](summaries/adr-numbering-optimization-summary.md) - 编号体系优化
 
 #### 测试改进
-- [架构测试体系改进总结](summaries/testing/architecture-tests-improvement-summary.md) - 测试体系升级
+- [架构测试体系改进总结](summaries/architecture-tests-improvement-summary.md) - 测试体系升级
 
 #### 治理改进
-- [架构违规记录表](summaries/governance/arch-violations.md) - 破例管理
+- [架构违规记录表](summaries/arch-violations.md) - 破例管理
 
 ### Copilot 治理实施
 - [Copilot 治理实施总结](summaries/copilot-governance-implementation.md) - Copilot 驱动架构治理

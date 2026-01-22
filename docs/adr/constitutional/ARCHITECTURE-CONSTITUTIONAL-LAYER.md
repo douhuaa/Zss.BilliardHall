@@ -182,7 +182,7 @@
 
 宪法层的破例必须满足：
 
-1. **明确记录**：在 [`ARCH-VIOLATIONS.md`](../summaries/governance/arch-violations.md) 中永久记录
+1. **明确记录**：在 [`ARCH-VIOLATIONS.md`](../summaries/arch-violations.md) 中永久记录
 2. **时限约束**：破例必须有明确的失效期
 3. **归还计划**：临时破例必须有归还路径
 4. **最高审批**：需要架构委员会审批，不得委托
@@ -243,11 +243,11 @@ ADR-0017: 在特殊情况下允许模块间同步调用
 
 - ✅ PR Template 强制架构违规声明
 - ✅ 架构师 Code Review 必须检查宪法层合规性
-- ✅ 所有破例记录在 [`ARCH-VIOLATIONS.md`](../summaries/governance/arch-violations.md)
+- ✅ 所有破例记录在 [`ARCH-VIOLATIONS.md`](../summaries/arch-violations.md)
 
 ### 3. 审计机制
 
-- 每季度审计 [`ARCH-VIOLATIONS.md`](../summaries/governance/arch-violations.md)，检查破例是否归还
+- 每季度审计 [`ARCH-VIOLATIONS.md`](../summaries/arch-violations.md)，检查破例是否归还
 - 每年度评估宪法层是否需要修订
 
 ---

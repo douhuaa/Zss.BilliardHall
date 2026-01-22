@@ -1,13 +1,14 @@
 # 改进总结文档目录
 
 **目的**：统一管理项目中的各类改进总结文档，便于查阅和维护  
-**最后更新**：2026-01-21  
+**最后更新**：2026-01-22  
+**结构**：扁平化，所有文件位于同一目录
 
 ---
 
 ## 概述
 
-本目录集中管理 Zss.BilliardHall 项目中所有的改进总结内容。通过分类组织，提升文档的可访问性和可维护性。
+本目录集中管理 Zss.BilliardHall 项目中所有的改进总结内容。采用**扁平化结构**，减少目录层级，提升访问效率。
 
 ---
 
@@ -15,84 +16,50 @@
 
 ```
 docs/summaries/
-├── README.md                    # 本文件 - 总索引
-├── architecture/                # 架构相关改进总结
-│   └── adr-restructure-summary.md
-├── testing/                     # 测试相关改进总结
-│   └── architecture-tests-improvement-summary.md
-├── governance/                  # 治理流程相关改进总结
-│   └── arch-violations.md
-└── documentation/               # 文档相关改进总结
-    └── documentation-structure-optimization-summary.md
+├── README.md                                           # 本文件 - 总索引
+├── adr-restructure-summary.md                          # 架构 - ADR 重组
+├── adr-numbering-optimization-summary.md               # 架构 - ADR 编号优化
+├── architecture-tests-improvement-summary.md           # 测试 - 架构测试改进
+├── arch-violations.md                                  # 治理 - 架构违规记录
+├── copilot-governance-implementation.md                # 治理 - Copilot 治理实施
+└── documentation-structure-optimization-summary.md     # 文档 - 文档结构优化
 ```
 
 ---
 
-## 文档分类
+## 文档列表
 
-### 架构改进（Architecture）
-
-架构设计、模块组织、ADR 管理等相关的改进总结。
+### 架构改进
 
 | 文档 | 描述 | 版本 | 日期 |
 |------|------|------|------|
-| [ADR 重组总结](architecture/adr-restructure-summary.md) | ADR 文档体系重组，分离静态/动态/治理层 | v2.0 | 2026-01-21 |
-
-**主要内容**：
-- ADR 结构优化
-- 三层分工（静态结构/运行时行为/架构治理）
-- 导航和索引改进
-- 文档标准化
+| [ADR 重组总结](adr-restructure-summary.md) | ADR 文档体系重组，分离静态/动态/治理层 | v2.0 | 2026-01-21 |
+| [ADR 编号优化总结](adr-numbering-optimization-summary.md) | ADR 编号体系优化，引入分段编号 | v3.0 | 2026-01-22 |
 
 ---
 
-### 测试改进（Testing）
-
-测试体系、架构测试、质量保障等相关的改进总结。
+### 测试改进
 
 | 文档 | 描述 | 版本 | 日期 |
 |------|------|------|------|
-| [架构测试体系改进总结](testing/architecture-tests-improvement-summary.md) | 架构测试从"合格"到"宪法级体系"的系统性提升 | v2.0 | 2026-01-20 |
-
-**主要内容**：
-- 解决三个硬伤（ADR-0005 静态化、Program.cs 脆弱规则、反作弊规则）
-- 三个前瞻性改进（执行级别分类、违规事件化、宪法层冻结）
-- 测试验证和使用指南
-- 后续改进方向
+| [架构测试体系改进总结](architecture-tests-improvement-summary.md) | 架构测试从"合格"到"宪法级体系"的系统性提升 | v2.0 | 2026-01-20 |
 
 ---
 
-### Copilot 治理与智能化（Copilot Governance）
-
-AI 驱动的架构治理、Prompts 体系、CI/CD 智能化等相关的改进总结。
+### 治理流程
 
 | 文档 | 描述 | 版本 | 日期 |
 |------|------|------|------|
-| [Copilot 治理体系实施总结](copilot-governance-implementation.md) | Copilot 驱动架构治理、Prompts 标准化、CI/CD 智能化 | v1.0 | 2026-01-21 |
-
-**主要内容**：
-- Copilot Prompt 资产化与标准化
-- PR/CI 流程集成 Copilot 审查
-- 三权分立治理模型与角色定位
-- 量化指标与团队效能提升
+| [架构违规记录表](arch-violations.md) | 记录所有架构破例，确保可追溯和可审计 | - | 持续更新 |
+| [Copilot 治理实施总结](copilot-governance-implementation.md) | Copilot 驱动架构治理体系实施 | v1.0 | 2026-01-21 |
 
 ---
 
-### 治理流程（Governance）
-
-架构治理、违规管理、审批流程等相关的改进总结。
+### 文档改进
 
 | 文档 | 描述 | 版本 | 日期 |
 |------|------|------|------|
-| [架构违规记录表](governance/arch-violations.md) | 记录所有架构破例，确保可追溯和可审计 | - | 持续更新 |
-
-**主要内容**：
-- 当前活跃破例
-- 已归还破例
-- 永久破例
-- 被拒绝的破例申请
-- 破例统计和趋势分析
-- 破例申请流程
+| [文档结构优化与长效更新机制](documentation-structure-optimization-summary.md) | 文档结构系统性重组，建立长效维护机制 | v1.0 | 2026-01-22 |
 
 ---
 
@@ -102,32 +69,36 @@ AI 驱动的架构治理、Prompts 体系、CI/CD 智能化等相关的改进总
 
 | 主题 | 相关文档 |
 |------|---------|
-| ADR 文档管理 | [ADR 重组总结](architecture/adr-restructure-summary.md) |
-| 架构测试优化 | [架构测试体系改进总结](testing/architecture-tests-improvement-summary.md) |
-| 架构违规处理 | [架构违规记录表](governance/arch-violations.md) |
-| 文档结构优化 | [文档结构优化总结](documentation/documentation-structure-optimization-summary.md) |
-| 宪法层定义 | [架构测试体系改进总结](testing/architecture-tests-improvement-summary.md) |
-| 执行级别分类 | [架构测试体系改进总结](testing/architecture-tests-improvement-summary.md) |
-| 破例申请流程 | [架构违规记录表](governance/arch-violations.md) |
+| ADR 文档管理 | [ADR 重组总结](adr-restructure-summary.md) |
+| ADR 编号体系 | [ADR 编号优化总结](adr-numbering-optimization-summary.md) |
+| 架构测试优化 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) |
+| 架构违规处理 | [架构违规记录表](arch-violations.md) |
+| 文档结构优化 | [文档结构优化总结](documentation-structure-optimization-summary.md) |
+| Copilot 治理 | [Copilot 治理实施总结](copilot-governance-implementation.md) |
+| 宪法层定义 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) |
+| 执行级别分类 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) |
+| 破例申请流程 | [架构违规记录表](arch-violations.md) |
 
 ### 按时间线查找
 
 | 日期 | 文档 | 类型 |
 |------|------|------|
-| 2026-01-22 | [文档结构优化总结](documentation/documentation-structure-optimization-summary.md) | 文档 |
-| 2026-01-21 | [ADR 重组总结](architecture/adr-restructure-summary.md) | 架构 |
-| 2026-01-20 | [架构测试体系改进总结](testing/architecture-tests-improvement-summary.md) | 测试 |
-| 持续更新 | [架构违规记录表](governance/arch-violations.md) | 治理 |
+| 2026-01-22 | [文档结构优化总结](documentation-structure-optimization-summary.md) | 文档 |
+| 2026-01-22 | [ADR 编号优化总结](adr-numbering-optimization-summary.md) | 架构 |
+| 2026-01-21 | [ADR 重组总结](adr-restructure-summary.md) | 架构 |
+| 2026-01-21 | [Copilot 治理实施总结](copilot-governance-implementation.md) | 治理 |
+| 2026-01-20 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) | 测试 |
+| 持续更新 | [架构违规记录表](arch-violations.md) | 治理 |
 
 ### 按角色推荐
 
 | 角色 | 推荐阅读 |
 |------|---------|
-| 新成员 Onboarding | [ADR 重组总结](architecture/adr-restructure-summary.md) |
-| 开发者 | [架构违规记录表](governance/arch-violations.md) |
+| 新成员 Onboarding | [ADR 重组总结](adr-restructure-summary.md), [文档结构优化总结](documentation-structure-optimization-summary.md) |
+| 开发者 | [架构违规记录表](arch-violations.md), [Copilot 治理实施总结](copilot-governance-implementation.md) |
 | 架构师 | 全部文档 |
 | Tech Lead | 全部文档 |
-| DevOps / SRE | [架构测试体系改进总结](testing/architecture-tests-improvement-summary.md) |
+| DevOps / SRE | [架构测试体系改进总结](architecture-tests-improvement-summary.md), [文档结构优化总结](documentation-structure-optimization-summary.md) |
 
 ---
 
@@ -137,16 +108,11 @@ AI 驱动的架构治理、Prompts 体系、CI/CD 智能化等相关的改进总
 
 当完成一项重要改进时，应创建改进总结文档：
 
-1. **确定分类**：根据改进内容选择合适的子目录
-   - `architecture/` - 架构设计、模块组织相关
-   - `testing/` - 测试体系、质量保障相关
-   - `governance/` - 治理流程、审批机制相关
-
-2. **创建文档**：在对应子目录下创建 Markdown 文件
+1. **创建文档**：在 `docs/summaries/` 目录下直接创建 Markdown 文件
    - 文件命名：使用小写字母和连字符，例如 `xxx-improvement-summary.md`
    - 包含版本号和日期
 
-3. **文档结构**：建议包含以下章节
+2. **文档结构**：建议包含以下章节
    - 改进背景
    - 改进内容
    - 实施过程
@@ -154,7 +120,7 @@ AI 驱动的架构治理、Prompts 体系、CI/CD 智能化等相关的改进总
    - 使用指南
    - 后续建议
 
-4. **更新索引**：在本 README.md 中添加新文档的索引
+3. **更新索引**：在本 README.md 中添加新文档的索引
 
 ### 文档更新规范
 
@@ -167,7 +133,6 @@ AI 驱动的架构治理、Prompts 体系、CI/CD 智能化等相关的改进总
 
 - 过时的改进总结不删除，添加"已归档"标记
 - 说明归档原因和替代文档
-- 移动到 `archive/` 子目录（如需要）
 
 ---
 
@@ -192,13 +157,15 @@ docs/
 ├── README.md                    # 总入口
 ├── architecture-guide.md        # 现状文档（如何做）
 ├── ci-cd-guide.md              # 现状文档（如何做）
-├── summaries/                  # 改进总结（怎么来的）
-│   ├── architecture/           # 架构改进历史
-│   ├── testing/                # 测试改进历史
-│   └── governance/             # 治理改进历史
+├── summaries/                  # 改进总结（怎么来的） - 扁平化结构
+│   ├── README.md
+│   ├── adr-*.md                # 架构改进
+│   ├── architecture-tests-*.md # 测试改进
+│   ├── arch-violations.md      # 治理改进
+│   ├── copilot-*.md            # Copilot 改进
+│   └── documentation-*.md      # 文档改进
 └── adr/                        # 决策记录（为什么）
-    ├── ADR-0000 ~ 0005         # 宪法层
-    └── ...                     # 后续 ADR
+    └── ...
 ```
 
 **区别**：
@@ -243,10 +210,10 @@ docs/
 
 ### 文档统计
 
-- **总文档数**：4
-- **架构类**：1
+- **总文档数**：6（不含 README）
+- **架构类**：2
 - **测试类**：1
-- **治理类**：1
+- **治理类**：2
 - **文档类**：1
 
 ### 覆盖领域
@@ -255,6 +222,7 @@ docs/
 - ✅ 测试体系
 - ✅ 治理流程
 - ✅ 文档结构
+- ✅ Copilot 智能化
 - ⚠️ 性能优化（待补充）
 - ⚠️ 安全改进（待补充）
 
@@ -273,4 +241,4 @@ docs/
 
 **维护人**：架构团队  
 **联系方式**：通过 GitHub Issue 或 PR 联系  
-**下次评审**：2026-04-21
+**下次评审**：2026-04-22
