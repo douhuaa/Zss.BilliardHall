@@ -630,6 +630,230 @@ graph TB
 
 ---
 
+## 🔧 常见错误场景与解决方案
+
+### 场景 1：环境依赖问题
+
+**错误信息**：
+```
+System.InvalidOperationException: Unable to resolve service for type 'IRepository'
+```
+
+**原因**：依赖注入配置缺失或测试 Fixture 未正确设置
+
+**解决方案**：
+```csharp
+// 在测试 Fixture 中正确注册依赖
+services.AddScoped<IRepository, TestRepository>();
+
+// 或使用 Mock
+var repository = Substitute.For<IRepository>();
+```
+
+---
+
+### 场景 2：数据库连接问题
+
+**错误信息**：
+```
+Npgsql.NpgsqlException: Connection refused
+```
+
+**原因**：PostgreSQL 未启动或连接字符串配置错误
+
+**解决方案**：
+```bash
+# 检查 PostgreSQL 是否运行
+sudo service postgresql status
+
+# 或使用 Docker 启动测试数据库
+docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=test postgres:latest
+
+# 更新测试配置文件中的连接字符串
+"ConnectionStrings": {
+  "DefaultConnection": "Host=localhost;Database=test;Username=postgres;Password=test"
+}
+```
+
+---
+
+### 场景 3：并发测试冲突
+
+**错误信息**：
+```
+System.InvalidOperationException: A second operation started on this context
+```
+
+**原因**：多个测试共享 DbContext 实例
+
+**解决方案**：
+```csharp
+// 每个测试使用独立的 DbContext
+public class TestBase : IDisposable
+{
+    protected AppDbContext CreateContext()
+    {
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString()) // 每次生成唯一数据库
+            .Options;
+        return new AppDbContext(options);
+    }
+    
+    public void Dispose()
+    {
+        // 清理资源
+    }
+}
+```
+
+---
+
+### 场景 4：异步测试超时
+
+**错误信息**：
+```
+Test 'SomeTest' exceeded timeout of 30000ms
+```
+
+**原因**：异步操作未正确等待或死锁
+
+**解决方案**：
+```csharp
+// ❌ 错误：混用 .Result 导致死锁
+var result = someAsyncMethod().Result;
+
+// ✅ 正确：使用 async/await
+var result = await someAsyncMethod();
+
+// 或增加超时时间（谨慎使用）
+[Fact(Timeout = 60000)]
+public async Task LongRunningTest() { }
+```
+
+---
+
+### 场景 5：Fixture 初始化失败
+
+**错误信息**：
+```
+System.Exception: The following constructor parameters did not have matching fixture data
+```
+
+**原因**：测试类需要的 Fixture 未在 Collection 中定义
+
+**解决方案**：
+```csharp
+// 定义 Collection
+[CollectionDefinition("Integration")]
+public class IntegrationCollection : ICollectionFixture<IntegrationTestFixture>
+{
+}
+
+// 在测试类中使用
+[Collection("Integration")]
+public class MyIntegrationTests
+{
+    private readonly IntegrationTestFixture _fixture;
+    
+    public MyIntegrationTests(IntegrationTestFixture fixture)
+    {
+        _fixture = fixture;
+    }
+}
+```
+
+---
+
+### 场景 6：Mocking 框架使用错误
+
+**错误信息**：
+```
+NSubstitute.Exceptions.ReceivedCallsException: Expected to receive exactly 1 call matching...
+```
+
+**原因**：Mock 对象未按预期调用
+
+**解决方案**：
+```csharp
+// 检查 Mock 设置
+var mock = Substitute.For<IService>();
+mock.DoSomething(Arg.Any<string>()).Returns(true);
+
+// Act
+await handler.Handle(command);
+
+// 验证调用（注意参数匹配）
+await mock.Received(1).DoSomething(Arg.Is<string>(s => s == "expected"));
+
+// 调试：查看实际接收到的调用
+var calls = mock.ReceivedCalls();
+foreach (var call in calls)
+{
+    Console.WriteLine($"Method: {call.GetMethodInfo().Name}, Args: {string.Join(", ", call.GetArguments())}");
+}
+```
+
+---
+
+## 📋 CI/CD 相关问题
+
+### Q: CI 中测试通过但本地失败？
+
+**A:** 常见原因：
+1. **环境差异**：检查 .NET 版本、依赖版本
+2. **配置文件**：CI 可能使用不同的 appsettings
+3. **时区问题**：使用 UTC 时间而非本地时间
+
+**解决方案**：
+```bash
+# 使用 CI 相同的 .NET 版本
+dotnet --version
+
+# 使用 CI 相同的配置
+export ASPNETCORE_ENVIRONMENT=CI
+dotnet test
+
+# 检查时区相关代码
+DateTime.UtcNow  # ✅ 使用 UTC
+DateTime.Now     # ❌ 避免使用本地时间
+```
+
+---
+
+### Q: 本地测试通过但 CI 失败？
+
+**A:** 常见原因：
+1. **并发问题**：CI 可能并行运行测试
+2. **资源限制**：CI 环境内存或 CPU 受限
+3. **文件路径**：使用了绝对路径而非相对路径
+
+**解决方案**：
+```bash
+# 本地模拟并行测试
+dotnet test --parallel
+
+# 限制并行度
+dotnet test --parallel:4
+
+# 使用相对路径
+Path.Combine(AppContext.BaseDirectory, "data", "test.json")  # ✅
+"/home/user/data/test.json"  # ❌
+```
+
+---
+
+### Q: 架构测试在 CI 中特别慢？
+
+**A:** 优化建议：
+```yaml
+# .github/workflows/test.yml
+- name: Run Architecture Tests
+  run: dotnet test src/tests/ArchitectureTests/ --no-build --configuration Release
+  # 关键：使用 --no-build 避免重复构建
+```
+
+---
+
 ## 📜 版本历史
 
 | 版本 | 日期 | 变更说明 |

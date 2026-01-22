@@ -63,6 +63,24 @@
 | 🔍 **查看改进历史** | [改进总结](summaries/README.md) |
 | 📝 **提交 PR** | [PR 模板](../.github/PULL_REQUEST_TEMPLATE.md) → [Copilot 评审](#-copilot-参与评审) |
 
+### 角色-任务-文档映射表
+
+| 角色 | 典型任务 | 主要文档 | 协作文档 |
+|------|---------|---------|---------|
+| **开发者** | 开发新功能 | [架构指南](architecture-guide.md), [模块 README](../src/Modules/) | [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md), [ADR-0005](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) |
+| **开发者** | 修复 bug | [测试指南](TESTING-GUIDE.md), [架构测试失败诊断](copilot/architecture-test-failures.md) | [CI/CD 指南](ci-cd-guide.md) |
+| **开发者** | 提交 PR | [PR 模板](../.github/PULL_REQUEST_TEMPLATE.md), [文档维护指南](DOCUMENTATION-MAINTENANCE.md) | [Copilot 评审](copilot/pr-review-pipeline.md) |
+| **架构师** | 制定架构决策 | [ADR-0900](adr/governance/ADR-0900-adr-process.md), [宪法层说明](adr/constitutional/README.md) | [架构指南](architecture-guide.md) |
+| **架构师** | 架构评审 | [ADR 目录](adr/README.md), [架构测试](../src/tests/ArchitectureTests/README.md) | [违规记录](summaries/governance/arch-violations.md) |
+| **QA/测试** | 编写测试 | [测试指南](TESTING-GUIDE.md), [.github/instructions/testing.instructions.md](../.github/instructions/testing.instructions.md) | [架构测试 README](../src/tests/ArchitectureTests/README.md) |
+| **QA/测试** | 调查测试失败 | [架构测试失败诊断](copilot/architecture-test-failures.md), [测试指南-故障处理](TESTING-GUIDE.md#-测试失败处理流程) | [Copilot Prompts](copilot/) |
+| **DevOps** | 配置 CI/CD | [CI/CD 指南](ci-cd-guide.md), [架构自动化验证](architecture-automation-verification.md) | [GitHub Actions](../.github/workflows/) |
+| **DevOps** | 监控健康度 | [文档健康度度量](DOCUMENTATION-MAINTENANCE.md#-文档健康度度量) | [ADR-0000](adr/governance/ADR-0000-architecture-tests.md) |
+| **新成员** | 快速入门 | [快速开始](QUICK-START.md), [README](../README.md) | [架构指南前3章](architecture-guide.md) |
+| **新成员** | 理解架构 | [ADR-0001~0005](adr/constitutional/), [架构指南](architecture-guide.md) | [Copilot 角色定位](copilot/README.md) |
+
+> 💡 **使用提示**：此映射表帮助团队成员快速定位跨角色协作所需的文档，减少沟通成本。
+
 ---
 
 ## 📖 文档结构总览

@@ -1,101 +1,104 @@
 # 快速开始指南
 
 **版本**：1.0  
-**最后更新**：2026-01-22  
-**预计完成时间**：60 分钟
+**最后更新**：2026-01-22
 
 ---
 
-## 👋 欢迎
+## 🎯 选择你的路径
 
-欢迎来到 Zss.BilliardHall 项目！这是一个采用模块化单体架构和垂直切片设计的台球馆管理系统。
+### 极速上手（15 分钟）⚡
+适合：需要立即运行项目的开发者
 
-本指南将在 **60 分钟内**帮助你：
-- ✅ 搭建开发环境
-- ✅ 理解核心架构
-- ✅ 运行第一个用例
-- ✅ 提交第一个 PR
+**目标**：克隆、构建、验证环境
 
----
-
-## 📋 前置要求
-
-在开始之前，请确保已安装：
-
-- [ ] **.NET 10.0 SDK** 或更高版本
-  - 检查：`dotnet --version`
-  - 下载：https://dotnet.microsoft.com/download
-
-- [ ] **Git**
-  - 检查：`git --version`
-  - 下载：https://git-scm.com/
-
-- [ ] **IDE**（任选其一）
-  - Visual Studio 2022+
-  - JetBrains Rider
-  - VS Code + C# Dev Kit
-
-- [ ] **PostgreSQL**（可选，用于完整功能）
-  - 本地开发可以跳过
-  - 生产部署必需
+→ [跳转到极速上手](#-极速上手15-分钟)
 
 ---
 
-## 🚀 第一步：克隆并构建（10 分钟）
+### 完整入门（60 分钟）📚
+适合：新加入团队的开发者
 
-### 1. 克隆仓库
+**目标**：理解架构、探索代码、准备开发
+
+→ [跳转到完整入门](#-完整入门60-分钟)
+
+---
+
+### 进阶学习路径（1-4 周）🎓
+适合：需要深入理解架构的开发者
+
+**目标**：掌握所有 ADR、独立开发、贡献代码
+
+→ [跳转到学习路径](#-学习路径建议)
+
+---
+
+## ⚡ 极速上手（15 分钟）
+
+> 💡 **目标**：让你的本地环境可以运行并通过架构测试
+
+### 1. 克隆仓库（2 分钟）
 
 ```bash
 git clone https://github.com/douhuaa/Zss.BilliardHall.git
 cd Zss.BilliardHall
 ```
 
-### 2. 恢复依赖
+### 2. 一键构建（5 分钟）
 
 ```bash
-dotnet restore
+# 恢复依赖 + 构建 + 测试
+dotnet restore && dotnet build && dotnet test src/tests/ArchitectureTests/
 ```
 
-**预期输出**：
+**预期结果**：
 ```
-Determining projects to restore...
-  Restored ...
-```
-
-### 3. 构建项目
-
-```bash
-dotnet build
+✅ Build succeeded
+✅ Passed! - Architecture Tests
 ```
 
-**预期输出**：
-```
-Build succeeded.
-    0 Warning(s)
-    0 Error(s)
-```
-
-### 4. 运行架构测试（验证环境）
+### 3. 启动应用（可选，5 分钟）
 
 ```bash
-dotnet test src/tests/ArchitectureTests/
+# 启动 Web API
+dotnet run --project src/Host/Web/
+
+# 访问 Swagger
+# http://localhost:5000/swagger
 ```
 
-**预期输出**：
-```
-Passed!  - Failed:     0, Passed:    XX, Skipped:     0, Total:    XX
-```
+### 4. 验证完成（3 分钟）
 
-✅ **如果所有测试通过，环境搭建成功！**
+- [ ] 架构测试通过
+- [ ] 应用可以启动
+- [ ] 可以访问 Swagger UI
 
-❌ **如果测试失败**：
-1. 检查 .NET SDK 版本是否正确
-2. 重新运行 `dotnet restore` 和 `dotnet build`
-3. 查看错误信息或询问团队
+**🎉 完成！** 你的环境已就绪。
+
+**下一步**：
+- 浏览代码？ → 继续阅读 [完整入门](#-完整入门60-分钟)
+- 开始开发？ → 查看 [开发指南](architecture-guide.md)
+- 遇到问题？ → 查看 [常见问题](#-获取帮助)
 
 ---
 
-## 📖 第二步：理解架构（15 分钟）
+## 📚 完整入门（60 分钟）
+
+> 💡 **目标**：理解核心架构、探索代码、启用工具
+
+### 第一步：理解项目（15 分钟）
+
+#### 📋 前置要求
+
+在开始之前，请确保已安装：
+
+- **.NET 10.0 SDK** 或更高版本（`dotnet --version`）
+- **Git**（`git --version`）
+- **IDE**：Visual Studio 2022+ / JetBrains Rider / VS Code + C# Dev Kit
+- **PostgreSQL**（可选，本地开发可跳过）
+
+#### 核心概念速览（10 分钟）
 
 ### 核心概念速览
 

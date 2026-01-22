@@ -391,6 +391,23 @@ PR 前的自检项
 
 ### 推荐工具
 
+#### 自动化脚本（推荐）
+
+项目已包含文档健康度检查脚本：
+
+```bash
+# 运行文档健康度检查
+./scripts/docs/health-check.sh
+```
+
+**检查内容**：
+- ✅ 核心文档存在性
+- 🔜 内部链接有效性（开发中）
+- 🔜 文档结构完整性（开发中）
+- 🔜 内容质量检查（开发中）
+
+详见：[scripts/docs/README.md](../scripts/docs/README.md)
+
 #### 链接检查
 ```bash
 # 使用 markdown-link-check
@@ -419,6 +436,13 @@ mmdc -i architecture.mmd -o architecture.svg
 #!/bin/sh
 # 检查 Markdown 格式
 markdownlint $(git diff --cached --name-only --diff-filter=ACM | grep '\.md$')
+```
+
+**pre-push hook**（可选）：
+```bash
+#!/bin/sh
+# 运行文档健康度检查
+./scripts/docs/health-check.sh
 ```
 
 ---

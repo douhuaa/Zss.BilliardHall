@@ -46,11 +46,14 @@ dotnet run --project src/Host/Worker/Worker.csproj
 
 ## 架构文档
 
-> 💡 **快速查找**：访问 **[文档导航中心](docs/index.md)** 按角色和任务快速找到所需文档
+> 💡 **唯一入口**：所有文档通过 **[文档导航中心 (docs/index.md)](docs/index.md)** 统一访问
+> 
+> 按角色和任务快速找到所需文档，避免在多个 README 间跳转
 
 完整的架构文档请查看 [docs/](docs/) 目录：
 
-- **[📍 文档导航中心](docs/index.md)** - 按角色和任务的快速导航
+- **[📍 文档导航中心](docs/index.md)** - 按角色和任务的快速导航（主入口）
+- **[快速开始指南](docs/QUICK-START.md)** - 15 分钟极速上手 / 60 分钟完整入门
 - **[架构指南](docs/architecture-guide.md)** - 架构概述和开发指南
 - **[CI/CD 指南](docs/ci-cd-guide.md)** - 持续集成和测试
 - **[ADR-0001](docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)** - 架构决策记录
