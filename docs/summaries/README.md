@@ -60,6 +60,22 @@ docs/summaries/
 
 ---
 
+### Copilot 治理与智能化（Copilot Governance）
+
+AI 驱动的架构治理、Prompts 体系、CI/CD 智能化等相关的改进总结。
+
+| 文档 | 描述 | 版本 | 日期 |
+|------|------|------|------|
+| [Copilot 治理体系实施总结](copilot-governance-implementation.md) | Copilot 驱动架构治理、Prompts 标准化、CI/CD 智能化 | v1.0 | 2026-01-21 |
+
+**主要内容**：
+- Copilot Prompt 资产化与标准化
+- PR/CI 流程集成 Copilot 审查
+- 三权分立治理模型与角色定位
+- 量化指标与团队效能提升
+
+---
+
 ### 治理流程（Governance）
 
 架构治理、违规管理、审批流程等相关的改进总结。
