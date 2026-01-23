@@ -60,6 +60,8 @@
 
 ### 2.1 BaseNamespace 固定
 
+**【必须架构测试覆盖】**
+
 在 `Directory.Build.props` 中定义：
 
 ```xml
@@ -77,6 +79,8 @@
 
 ### 2.2 目录 → RootNamespace 映射规则
 
+**【必须架构测试覆盖】**
+
 | 目录前缀                 | RootNamespace                     | 规则说明                  |
 | -------------------- | --------------------------------- | --------------------- |
 | `src/Platform`       | `$(BaseNamespace).Platform`       | 技术平台基座                |
@@ -90,6 +94,8 @@
 ---
 
 ### 2.3 防御性规则
+
+**【必须架构测试覆盖】**
 
 1. **未推导出 RootNamespace → 构建失败**
 
@@ -126,7 +132,29 @@
 
 ---
 
-## 3. 强化与测试
+## 3. 规范化命名与目录策略
+
+**【必须架构测试覆盖】**
+
+* **项目名 = RootNamespace 尾部**（Host / Module / Test）
+* **禁止在项目中硬编码 Namespace**
+* **禁止使用 WebHost / Api / Misc 等随意命名**
+* **Modules 必须完整 Vertical Slice**
+* **Host 多实例是默认能力，不是扩展能力**
+
+---
+
+## 4. 例外与限制
+
+* 特殊情况必须写 ADR 批准
+* 禁止在 ADR-0003 外新增非标准目录映射
+* 禁止在子项目私改 BaseNamespace
+
+---
+
+## 5. 强化与测试
+
+**【必须架构测试覆盖】**
 
 所有命名空间规则必须通过自动化架构测试验证。
 
@@ -137,24 +165,8 @@
 - 命名空间与物理结构匹配
 - 无不规范命名空间（Common、Shared、Utils）
 - 项目未手动覆盖 RootNamespace
-
----
-
-## 4. 规范化命名与目录策略
-
-* **项目名 = RootNamespace 尾部**（Host / Module / Test）
-* **禁止在项目中硬编码 Namespace**
-* **禁止使用 WebHost / Api / Misc 等随意命名**
-* **Modules 必须完整 Vertical Slice**
-* **Host 多实例是默认能力，不是扩展能力**
-
----
-
-## 5. 例外与限制
-
-* 特殊情况必须写 ADR 批准
-* 禁止在 ADR-0003 外新增非标准目录映射
-* 禁止在子项目私改 BaseNamespace
+- Directory.Build.props 存在且定义 BaseNamespace
+- 项目命名遵循约定
 
 ---
 
@@ -189,6 +201,22 @@
 - 本 ADR 定义命名空间规范
 - ADR-0002 引用本 ADR 的 BaseNamespace 定义
 - 所有 ADR 都依赖本 ADR 的命名空间规则
+
+---
+
+## 快速参考表（Quick Reference Table）
+
+| 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
+|---------|---------|---------|---------|---------|
+| ADR-0003.1 | 所有类型应以 BaseNamespace 开头 | ✅ | `All_Types_Should_Start_With_Base_Namespace` | 2.1, 5 |
+| ADR-0003.2 | Platform 类型应在 Zss.BilliardHall.Platform 命名空间 | ✅ | `Platform_Types_Should_Have_Platform_Namespace` | 2.2, 5 |
+| ADR-0003.3 | Application 类型应在 Zss.BilliardHall.Application 命名空间 | ✅ | `Application_Types_Should_Have_Application_Namespace` | 2.2, 5 |
+| ADR-0003.4 | Module 类型应在 Zss.BilliardHall.Modules.{ModuleName} 命名空间 | ✅ | `Module_Types_Should_Have_Module_Namespace` | 2.2, 5 |
+| ADR-0003.5 | Host 类型应在 Zss.BilliardHall.Host.{HostName} 命名空间 | ✅ | `Host_Types_Should_Have_Host_Namespace` | 2.2, 5 |
+| ADR-0003.6 | Directory.Build.props 应存在于仓库根目录 | ✅ | `Directory_Build_Props_Should_Exist_At_Repository_Root` | 2.1, 2.3 |
+| ADR-0003.7 | Directory.Build.props 应定义 BaseNamespace | ✅ | `Directory_Build_Props_Should_Define_Base_Namespace` | 2.1, 2.3 |
+| ADR-0003.8 | 所有项目应遵循命名空间约定 | ✅ | `All_Projects_Should_Follow_Namespace_Convention` | 2.2, 3 |
+| ADR-0003.9 | 模块不应包含不规范的命名空间模式 | ✅ | `Modules_Should_Not_Contain_Irregular_Namespace_Patterns` | 3 |
 
 ---
 
