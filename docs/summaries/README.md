@@ -20,6 +20,7 @@ docs/summaries/
 ├── adr-restructure-summary.md                          # 架构 - ADR 重组
 ├── adr-numbering-optimization-summary.md               # 架构 - ADR 编号优化
 ├── adr-0000-0005-refactoring-summary.md                # 架构 - ADR 0000-0005 重构验证
+├── adr-ultimate-template-implementation.md             # 架构 - ADR 终极模板实施
 ├── adr-test-consistency-implementation.md              # 测试 - ADR-测试一致性实施
 ├── architecture-tests-improvement-summary.md           # 测试 - 架构测试改进
 ├── arch-violations.md                                  # 治理 - 架构违规记录
@@ -39,6 +40,7 @@ docs/summaries/
 | [ADR 重组总结](adr-restructure-summary.md) | ADR 文档体系重组，分离静态/动态/治理层 | v2.0 | 2026-01-21 |
 | [ADR 编号优化总结](adr-numbering-optimization-summary.md) | ADR 编号体系优化，引入分段编号 | v3.0 | 2026-01-22 |
 | [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md) | 验证 ADR 文档与架构测试映射关系 | v1.0 | 2026-01-23 |
+| [ADR 终极模板实施总结](adr-ultimate-template-implementation.md) | ADR 终极模板（六段式结构）实施和迁移指南 | v1.0 | 2026-01-23 |
 
 ---
 
@@ -78,6 +80,7 @@ docs/summaries/
 | ADR 文档管理 | [ADR 重组总结](adr-restructure-summary.md) |
 | ADR 编号体系 | [ADR 编号优化总结](adr-numbering-optimization-summary.md) |
 | ADR 文档重构 | [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md) |
+| ADR 终极模板 | [ADR 终极模板实施总结](adr-ultimate-template-implementation.md) |
 | 架构测试优化 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) |
 | ADR-测试映射 | [ADR-测试一致性实施总结](adr-test-consistency-implementation.md), [PR#126 待办事项完成总结](pr126-todo-completion-summary.md) |
 | 架构违规处理 | [架构违规记录表](arch-violations.md) |

@@ -1,0 +1,254 @@
+# ADR-0000：架构测试与 CI 治理
+
+> **唯一架构执法元规则**：本 ADR 定义架构合法性评判的唯一基准。
+
+**状态**：Final  
+**级别**：宪法层  
+**影响范围**：全体代码仓库及所有 ADR（ADR-0001 ~ 0999）  
+**生效时间**：2026-01-20
+
+---
+
+## 1. Rule（规则本体｜裁决源）
+
+> **这是本 ADR 唯一具有裁决力的部分。**
+
+### R0.1 ADR-测试映射
+
+All ADRs marked **【必须架构测试覆盖】** **MUST** have at least one corresponding architecture test.
+
+Each architecture test **MUST**:
+- Be named with `ADR_XXXX_` prefix
+- Explicitly reference the ADR number in test name and failure message
+- Be executable in CI pipeline
+
+### R0.2 CI 阻断
+
+Architecture test failure **MUST**:
+- Block PR merge
+- Block main branch merge
+- Have no exceptions
+
+### R0.3 测试组织
+
+Architecture tests **MUST**:
+- Be organized by ADR number
+- Use format: `ADR-XXXX 违规：{原因} 修复建议：{建议}` for failure messages
+- Be maintained in sync with ADR changes
+
+### R0.4 破例记录
+
+Any exception to architecture rules **MUST**:
+- Be recorded in `docs/summaries/ARCH-VIOLATIONS.md`
+- Include ADR number + Rule number
+- Include expiration date (≤ 6 months)
+- Include repayment plan
+
+Unrecorded exceptions **SHALL** be treated as unauthorized architecture violations.
+
+### R0.5 权威声明
+
+ADR body text (`.md` files in `docs/adr/`) **SHALL** be the sole source of architectural authority.
+
+Supporting materials (README, Copilot prompts, guides) **MUST NOT** contradict ADR body text.
+
+When conflicts arise, ADR body text **SHALL** prevail.
+
+---
+
+## 2. Enforcement（执法模型）
+
+> **规则如果无法执法，就不配存在。**
+
+### 2.1 执行级别
+
+| Level | 名称      | 执法方式               | 后果    |
+| ----- | ------- | ------------------ | ----- |
+| L1    | 静态可执行   | NetArchTest 自动化测试 | CI 阻断 |
+| L2    | 语义半自动   | Roslyn Analyzer    | 人工复核  |
+| L3    | 人工 Gate | Review / Checklist | 架构裁决  |
+
+### 2.2 测试映射
+
+| Rule 编号 | 执行级 | 测试 / 手段                        |
+| ------- | --- | ------------------------------ |
+| R0.1    | L1  | CI pipeline test count validation |
+| R0.2    | L1  | CI pipeline configuration          |
+| R0.3    | L1  | Test naming convention checker     |
+| R0.4    | L3  | PR review + quarterly audit        |
+| R0.5    | L3  | Documentation review               |
+
+### 2.3 具体映射表
+
+| ADR 编号 | 测试类                              | 关键测试用例                      | 必须测试 |
+| ------ | -------------------------------- | --------------------------- | ---- |
+| ADR-0001 | ADR_0001_Architecture_Tests.cs | 模块隔离、契约合规、垂直切片            | ✅    |
+| ADR-0002 | ADR_0002_Architecture_Tests.cs | 层级依赖、Host 装配边界             | ✅    |
+| ADR-0003 | ADR_0003_Architecture_Tests.cs | 命名空间映射、防御性规则              | ✅    |
+| ADR-0004 | ADR_0004_Architecture_Tests.cs | CPM、层级依赖、版本唯一性             | ✅    |
+| ADR-0005 | ADR_0005_Architecture_Tests.cs | Handler、CQRS、模块通信、状态约束 | ✅    |
+
+---
+
+## 3. Exception（破例与归还）
+
+> **破例不是逃避，而是债务。**
+
+### 3.1 允许破例的前提
+
+破例 **仅在以下情况允许**：
+
+* 技术限制（第三方库强制约束）
+* 迁移期遗留问题（必须有明确归还计划）
+* 性能关键路径优化（需架构委员会审批）
+* 外部系统强制约束
+
+### 3.2 破例要求（不可省略）
+
+每个破例 **必须**：
+
+* 记录在 `docs/summaries/ARCH-VIOLATIONS.md`
+* 指明 ADR 编号 + Rule 编号（如 ADR-0000.R0.1）
+* 指定失效日期（不超过 6 个月）
+* 给出归还计划（具体到季度）
+* 在 PR 标题和描述中声明
+
+**未记录的破例 = 未授权架构违规。**
+
+### 3.3 破例审计
+
+* 连续破例三次未归还 **MUST** 触发架构审查
+* 本地和 CI **MUST** 预警破例到期
+* 每季度 **MUST** 审计所有破例记录
+
+---
+
+## 4. Change Policy（变更政策）
+
+> **ADR 不是"随时可改"的文档。**
+
+### 4.1 变更规则
+
+* **宪法层 ADR**（ADR-0000~0005）
+
+  * 修改 = 架构修宪
+  * 需要架构委员会 100% 同意
+  * 需要 2 周公示期
+  * 需要全量回归测试
+
+* **治理层 ADR**（ADR-900~999）
+
+  * 可修订，但不得削弱宪法层
+  * 需要 Tech Lead 审批
+  * 需要 1 周公示期
+
+* **其他层 ADR**（ADR-100~899）
+
+  * 可 Superseded
+  * 不得悄然修改 Rule
+  * 需要单人审批
+
+### 4.2 失效与替代
+
+* Superseded ADR **必须**：
+  - 状态标记为 "Superseded by ADR-YYYY"
+  - 指向替代 ADR
+  - 保留在仓库中（不删除）
+  - 移除或更新对应测试
+
+* 不允许"隐性废弃"（偷偷删除或不标记状态）
+
+### 4.3 同步更新
+
+ADR 变更时 **必须** 同步更新：
+
+* 架构测试代码
+* Copilot prompts 文件
+* 映射脚本
+* README 导航
+
+---
+
+## 5. Non-Goals（明确不管什么）
+
+> **防止 ADR 膨胀的关键段落。**
+
+本 ADR **不负责**：
+
+* 单元测试、集成测试的编写规范 → 团队测试指南
+* 代码风格和命名约定 → `.editorconfig`
+* 具体测试框架的选型 → ADR-300+ 技术层
+* 教学示例和最佳实践 → `docs/copilot/*.prompts.md`
+* 临时的测试调试策略 → 开发者自主决策
+
+---
+
+## 6. References（非裁决性）
+
+> **仅供理解，不具裁决力。**
+
+### 术语表
+
+| 术语         | 定义                                     |
+| ---------- | -------------------------------------- |
+| 架构测试       | 可自动执行的结构约束型测试                          |
+| ADR-测试映射   | ADR 【必须架构测试覆盖】→ 测试用例                   |
+| CI 阻断      | 测试失败即阻断 PR / 发布                        |
+| 破例         | 已批准的临时性违规（需归还）                         |
+| 宪法层 ADR    | ADR-0001~0005，系统根基不可推翻约束               |
+| 治理层 ADR    | ADR-0000, 900~999，架构过程、CI、审批相关         |
+| 执行分级       | L1 静态可执行、L2 语义半自动、L3 人工 Gate          |
+
+### 相关 ADR
+
+- ADR-0001：模块化单体与垂直切片架构
+- ADR-0002：Platform/Application/Host 边界
+- ADR-0003：命名空间规则
+- ADR-0004：中央包管理
+- ADR-0005：应用交互模型
+- ADR-0900：ADR 流程管理
+- [ADR-0005-Enforcement-Levels.md](../constitutional/ADR-0005-Enforcement-Levels.md)
+
+### 辅导材料
+
+- `docs/copilot/architecture-test-failures.md` - 测试失败诊断指南
+- `docs/summaries/ARCH-VIOLATIONS.md` - 破例记录表
+- `docs/summaries/copilot-governance-implementation.md` - Copilot 治理实施总结
+
+### 企业级行动建议（非强制）
+
+建议（但不要求）：
+
+* 设定每季度架构健康度报告
+* 统计测试失效、破例量、CI 通过率
+* Copilot Prompts 与测试、ADR 同步迭代维护
+* 新增/变更 ADR 时，严格全链更新自检
+* Onboarding 必须培训 ADR-0000 机制
+
+### 版本历史
+
+| 版本  | 日期         | 变更说明                     |
+| --- | ---------- | ------------------------ |
+| 3.0 | 2026-01-23 | 采用终极模板，明确规则与执法分离         |
+| 2.0 | 2026-01-23 | 聚焦自动化与治理闭环，细化执行分级        |
+| 1.0 | 2026-01-20 | 初版                       |
+
+---
+
+# 附：ADR-0000 特殊说明
+
+本 ADR 是架构治理的元规则，定义了**如何执行所有其他 ADR**。
+
+它的特殊性在于：
+
+1. **元规则地位**：它不仅是一条规则，更是规则的规则
+2. **执法源头**：所有架构测试的合法性都源自本 ADR
+3. **权威声明**：它明确了 ADR 正文的唯一裁决力
+
+因此，本 ADR 的修改需要**极其谨慎**，必须经过架构委员会全体一致同意。
+
+---
+
+# ADR 终极一句话定义
+
+> **ADR 是系统的法律条文，不是架构师的解释说明。**

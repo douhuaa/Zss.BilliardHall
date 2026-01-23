@@ -1,9 +1,44 @@
 # 架构决策记录（Architecture Decision Records）
 
-**版本**：3.1  
-**最后更新**：2026-01-22  
+**版本**：3.2  
+**最后更新**：2026-01-23  
 **状态**：Active  
-**重大变更**：引入分段编号体系与分层目录结构
+**重大变更**：引入 ADR 终极模板（六段式结构）
+
+---
+
+## 📐 ADR 终极模板（Ultimate Template）
+
+> **从 2026-01-23 起，所有新 ADR 必须使用终极模板。**
+
+### 核心理念
+
+> **ADR 是系统的法律条文，不是架构师的解释说明。**
+
+### 终极模板文档
+
+| 文档                         | 用途                              |
+| -------------------------- | ------------------------------- |
+| `ADR-TEMPLATE-ULTIMATE.md` | 终极模板本体（六段式结构）                   |
+| `ADR-TEMPLATE-GUIDE.md`    | 详细使用指南（8000+ 字，包含示例和检查清单）      |
+| `ADR-TEMPLATE-MIGRATION.md` | 现有 ADR 迁移指南（10000+ 字，包含迁移策略和对比） |
+
+### 六段式结构
+
+```markdown
+1. Rule（规则本体｜裁决源）        ← 唯一具有裁决力的部分
+2. Enforcement（执法模型）         ← 如何执行规则（测试、工具、流程）
+3. Exception（破例与归还）         ← 破例条件和归还机制
+4. Change Policy（变更政策）       ← ADR 修改和废弃流程
+5. Non-Goals（明确不管什么）       ← 防止 ADR 膨胀
+6. References（非裁决性）          ← 术语、示例、历史（无裁决力）
+```
+
+### 快速开始
+
+* **编写新 ADR**：复制 `ADR-TEMPLATE-ULTIMATE.md`，阅读 `ADR-TEMPLATE-GUIDE.md`
+* **迁移现有 ADR**：阅读 `ADR-TEMPLATE-MIGRATION.md`
+* **了解实施情况**：阅读 `docs/summaries/adr-ultimate-template-implementation.md`
 
 ---
 
