@@ -360,3 +360,59 @@ using Zss.BilliardHall.Modules.Members.Domain;
 - ❌ 覆盖人工判断
 - ❌ 发明新架构规则
 - ❌ 建议绕过 ADR
+
+## 文档变更的特殊检查
+
+当 PR 包含文档变更时（特别是 `docs/` 目录），**必须**额外检查：
+
+### 新增文档检查清单
+
+如果 PR 创建了新文档，验证：
+
+1. **索引更新**
+   - [ ] 如果在 `docs/summaries/` 中添加文档，`docs/summaries/README.md` 是否已更新？
+   - [ ] 如果添加 ADR，`docs/adr/README.md` 和相应类别的 README 是否已更新？
+   - [ ] 如果添加 Copilot Prompt，`docs/copilot/README.md` 是否已更新？
+
+2. **交叉引用完整性**
+   - [ ] 新文档是否在所有相关索引中被引用？
+   - [ ] 目录结构图是否已更新？
+   - [ ] 快速导航表是否已更新？
+   - [ ] 时间线表（如适用）是否已更新？
+   - [ ] 统计数字是否已更新？
+
+3. **链接有效性**
+   - [ ] 新文档中的所有链接是否可用？
+   - [ ] 被引用的文档是否添加了反向链接？
+
+### 常见遗漏
+
+**最常见的文档错误**：
+```markdown
+❌ 错误：创建 docs/summaries/xxx-summary.md 但未更新 docs/summaries/README.md
+✅ 正确：同时更新文档和索引文件
+
+❌ 错误：只在一个索引表中添加，遗漏其他表（如时间线、主题导航）
+✅ 正确：更新所有相关的索引表和统计数字
+```
+
+### 文档检查示例
+
+```markdown
+⚠️ **文档索引缺失**
+
+检测到新文档创建但索引未更新：
+
+**检测到**：
+- 新文件：`docs/summaries/new-summary.md`
+- 未更新：`docs/summaries/README.md`
+
+**需要更新的位置**：
+1. 目录结构图（添加新文件行）
+2. 文档列表表格（按类别添加）
+3. 快速导航表（添加主题）
+4. 时间线表（添加日期条目）
+5. 统计数字（更新总数和分类计数）
+
+**参考**：`.github/instructions/documentation.instructions.md`（更新索引文件章节）
+```

@@ -22,7 +22,8 @@ docs/summaries/
 ├── architecture-tests-improvement-summary.md           # 测试 - 架构测试改进
 ├── arch-violations.md                                  # 治理 - 架构违规记录
 ├── copilot-governance-implementation.md                # 治理 - Copilot 治理实施
-└── documentation-structure-optimization-summary.md     # 文档 - 文档结构优化
+├── documentation-structure-optimization-summary.md     # 文档 - 文档结构优化
+└── pr126-todo-completion-summary.md                    # 治理 - PR#126 待办事项完成
 ```
 
 ---
@@ -52,6 +53,7 @@ docs/summaries/
 |------|------|------|------|
 | [架构违规记录表](arch-violations.md) | 记录所有架构破例，确保可追溯和可审计 | - | 持续更新 |
 | [Copilot 治理实施总结](copilot-governance-implementation.md) | Copilot 驱动架构治理体系实施 | v1.0 | 2026-01-21 |
+| [PR#126 待办事项完成总结](pr126-todo-completion-summary.md) | 完成 ADR-测试映射标准化（ADR-0002 至 ADR-0005） | v1.0 | 2026-01-23 |
 
 ---
 
@@ -75,6 +77,7 @@ docs/summaries/
 | 架构违规处理 | [架构违规记录表](arch-violations.md) |
 | 文档结构优化 | [文档结构优化总结](documentation-structure-optimization-summary.md) |
 | Copilot 治理 | [Copilot 治理实施总结](copilot-governance-implementation.md) |
+| ADR-测试映射 | [PR#126 待办事项完成总结](pr126-todo-completion-summary.md) |
 | 宪法层定义 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) |
 | 执行级别分类 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) |
 | 破例申请流程 | [架构违规记录表](arch-violations.md) |
@@ -83,6 +86,7 @@ docs/summaries/
 
 | 日期 | 文档 | 类型 |
 |------|------|------|
+| 2026-01-23 | [PR#126 待办事项完成总结](pr126-todo-completion-summary.md) | 治理 |
 | 2026-01-22 | [文档结构优化总结](documentation-structure-optimization-summary.md) | 文档 |
 | 2026-01-22 | [ADR 编号优化总结](adr-numbering-optimization-summary.md) | 架构 |
 | 2026-01-21 | [ADR 重组总结](adr-restructure-summary.md) | 架构 |
@@ -210,10 +214,10 @@ docs/
 
 ### 文档统计
 
-- **总文档数**：6（不含 README）
+- **总文档数**：7（不含 README）
 - **架构类**：2
 - **测试类**：1
-- **治理类**：2
+- **治理类**：3
 - **文档类**：1
 
 ### 覆盖领域

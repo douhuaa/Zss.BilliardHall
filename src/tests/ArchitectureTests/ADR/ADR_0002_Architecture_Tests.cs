@@ -6,6 +6,22 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// <summary>
 /// ADR-0002: Platform / Application / Host 三层启动体系
 /// 验证三层依赖约束和启动职责分工
+/// 
+/// 测试映射：
+/// - Platform_Should_Not_Depend_On_Application → ADR-0002.1 (Platform 不应依赖 Application)
+/// - Platform_Should_Not_Depend_On_Host → ADR-0002.2 (Platform 不应依赖 Host)
+/// - Platform_Should_Not_Depend_On_Modules → ADR-0002.3 (Platform 不应依赖任何 Modules)
+/// - Platform_Should_Have_Single_Bootstrapper_Entry_Point → ADR-0002.4 (Platform 应有唯一的 PlatformBootstrapper 入口)
+/// - Application_Should_Not_Depend_On_Host → ADR-0002.5 (Application 不应依赖 Host)
+/// - Application_Should_Not_Depend_On_Modules → ADR-0002.6 (Application 不应依赖任何 Modules)
+/// - Application_Should_Have_Single_Bootstrapper_Entry_Point → ADR-0002.7 (Application 应有唯一的 ApplicationBootstrapper 入口)
+/// - Application_Should_Not_Use_HttpContext → ADR-0002.8 (Application 不应包含 HttpContext 等 Host 专属类型)
+/// - Host_Should_Not_Depend_On_Modules → ADR-0002.9 (Host 不应依赖任何 Modules)
+/// - Host_Should_Not_Contain_Business_Types → ADR-0002.10 (Host 不应包含业务类型)
+/// - Host_Csproj_Should_Not_Reference_Modules → ADR-0002.11 (Host 项目文件不应引用 Modules)
+/// - Program_Cs_Should_Be_Concise → ADR-0002.12 (Program.cs 应保持简洁)
+/// - Program_Cs_Should_Only_Call_Bootstrapper → ADR-0002.13 (Program.cs 只应调用 Bootstrapper)
+/// - Verify_Complete_Three_Layer_Dependency_Direction → ADR-0002.14 (验证完整的三层依赖方向)
 /// </summary>
 public sealed class ADR_0002_Architecture_Tests
 {
@@ -20,9 +36,13 @@ public sealed class ADR_0002_Architecture_Tests
             .GetResult();
 
         Assert.True(result.IsSuccessful,
-            $"❌ ADR-0002 违规: Platform 层不应依赖 Application 层。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：依赖关系应该是 Application -> Platform，而不是反向。");
+            $"❌ ADR-0002.1 违规: Platform 层不应依赖 Application 层\n\n" +
+            $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+            $"修复建议:\n" +
+            $"1. 移除 Platform 对 Application 的引用\n" +
+            $"2. 将共享的技术抽象提取到 Platform 层\n" +
+            $"3. 确保依赖方向正确: Host → Application → Platform\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md (场景 2)");
     }
 
     [Fact(DisplayName = "ADR-0002.2: Platform 不应依赖 Host")]
@@ -37,9 +57,13 @@ public sealed class ADR_0002_Architecture_Tests
             .GetResult();
 
         Assert.True(result.IsSuccessful,
-            $"❌ ADR-0002 违规: Platform 层不应依赖 Host 层。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：依赖关系应该是 Host -> Platform，而不是反向。");
+            $"❌ ADR-0002.2 违规: Platform 层不应依赖 Host 层\n\n" +
+            $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+            $"修复建议:\n" +
+            $"1. 移除 Platform 对 Host 的引用\n" +
+            $"2. Platform 只提供技术基座能力（日志、追踪、异常处理）\n" +
+            $"3. 不感知运行形态（Web/Worker）\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md (场景 2)");
     }
 
     [Fact(DisplayName = "ADR-0002.3: Platform 不应依赖任何 Modules")]
@@ -52,9 +76,13 @@ public sealed class ADR_0002_Architecture_Tests
             .GetResult();
 
         Assert.True(result.IsSuccessful,
-            $"❌ ADR-0002 违规: Platform 层不应依赖任何 Modules。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：Platform 是基础层，应该被模块依赖，而不是依赖模块。");
+            $"❌ ADR-0002.3 违规: Platform 层不应依赖任何 Modules\n\n" +
+            $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+            $"修复建议:\n" +
+            $"1. 移除 Platform 对 Modules 的引用\n" +
+            $"2. Platform 是技术基座，不感知业务模块\n" +
+            $"3. 将业务无关的通用逻辑提取到 BuildingBlocks\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md (场景 2)");
     }
 
     [Fact(DisplayName = "ADR-0002.4: Platform 应有唯一的 PlatformBootstrapper 入口")]
@@ -68,8 +96,12 @@ public sealed class ADR_0002_Architecture_Tests
             .ToList();
 
         Assert.True(bootstrappers.Count > 0,
-            $"❌ ADR-0002 违规: Platform 层必须包含 Bootstrapper 入口点。\n" +
-            $"修复建议：创建 PlatformBootstrapper 类作为 Platform 层的唯一入口。");
+            $"❌ ADR-0002.4 违规: Platform 层必须包含 Bootstrapper 入口点\n\n" +
+            $"修复建议:\n" +
+            $"1. 创建 PlatformBootstrapper 类作为 Platform 层的唯一入口\n" +
+            $"2. 在 PlatformBootstrapper 中封装所有技术配置\n" +
+            $"3. 提供 public static void Configure() 方法\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md (场景 2)");
 
         // 验证有 Configure 方法
         var platformBootstrapper = bootstrappers.FirstOrDefault(t => t.Name == "PlatformBootstrapper");
@@ -80,8 +112,12 @@ public sealed class ADR_0002_Architecture_Tests
             .ToList();
 
         Assert.True(configureMethods.Count > 0,
-            $"❌ ADR-0002 违规: PlatformBootstrapper 必须包含 Configure 方法。\n" +
-            $"修复建议：在 PlatformBootstrapper 中添加 public static void Configure() 方法。");
+            $"❌ ADR-0002.4 违规: PlatformBootstrapper 必须包含 Configure 方法\n\n" +
+            $"修复建议:\n" +
+            $"1. 在 PlatformBootstrapper 中添加 public static void Configure() 方法\n" +
+            $"2. 方法签名应接受 IServiceCollection, IConfiguration, IHostEnvironment\n" +
+            $"3. 在此方法中注册所有 Platform 层服务\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md (场景 2)");
     }
 
     #endregion
@@ -100,9 +136,13 @@ public sealed class ADR_0002_Architecture_Tests
             .GetResult();
 
         Assert.True(result.IsSuccessful,
-            $"❌ ADR-0002 违规: Application 层不应依赖 Host 层。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：依赖关系应该是 Host -> Application，而不是反向。");
+            $"❌ ADR-0002.5 违规: Application 层不应依赖 Host 层\n\n" +
+            $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+            $"修复建议:\n" +
+            $"1. 移除 Application 对 Host 的引用\n" +
+            $"2. Application 定义\"系统是什么\"，不应感知运行形态\n" +
+            $"3. 使用抽象替代具体的 Host 类型（如 ICurrentUserProvider 替代 HttpContext）\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md (场景 3)");
     }
 
     [Fact(DisplayName = "ADR-0002.6: Application 不应依赖任何 Modules")]
@@ -115,9 +155,13 @@ public sealed class ADR_0002_Architecture_Tests
             .GetResult();
 
         Assert.True(result.IsSuccessful,
-            $"❌ ADR-0002 违规: Application 层不应依赖任何 Modules。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：Application 层用于横切关注点，不应耦合具体业务模块。");
+            $"❌ ADR-0002.6 违规: Application 层不应依赖任何 Modules\n\n" +
+            $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+            $"修复建议:\n" +
+            $"1. 移除 Application 对 Modules 的引用\n" +
+            $"2. Application 通过扫描和反射加载模块，而非直接引用\n" +
+            $"3. 使用 ApplicationBootstrapper 自动发现并注册模块\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md (场景 3)");
     }
 
     [Fact(DisplayName = "ADR-0002.7: Application 应有唯一的 ApplicationBootstrapper 入口")]
@@ -131,8 +175,12 @@ public sealed class ADR_0002_Architecture_Tests
             .ToList();
 
         Assert.True(bootstrappers.Count > 0,
-            $"❌ ADR-0002 违规: Application 层必须包含 Bootstrapper 入口点。\n" +
-            $"修复建议：创建 ApplicationBootstrapper 类作为 Application 层的唯一入口。");
+            $"❌ ADR-0002.7 违规: Application 层必须包含 Bootstrapper 入口点\n\n" +
+            $"修复建议:\n" +
+            $"1. 创建 ApplicationBootstrapper 类作为 Application 层的唯一入口\n" +
+            $"2. 在 ApplicationBootstrapper 中封装模块扫描和业务装配\n" +
+            $"3. 提供 public static void Configure() 方法\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md (场景 3)");
 
         var applicationBootstrapper = bootstrappers.FirstOrDefault(t => t.Name == "ApplicationBootstrapper");
         Assert.NotNull(applicationBootstrapper);
@@ -142,8 +190,12 @@ public sealed class ADR_0002_Architecture_Tests
             .ToList();
 
         Assert.True(configureMethods.Count > 0,
-            $"❌ ADR-0002 违规: ApplicationBootstrapper 必须包含 Configure 方法。\n" +
-            $"修复建议：在 ApplicationBootstrapper 中添加 public static void Configure() 方法。");
+            $"❌ ADR-0002.7 违规: ApplicationBootstrapper 必须包含 Configure 方法\n\n" +
+            $"修复建议:\n" +
+            $"1. 在 ApplicationBootstrapper 中添加 public static void Configure() 方法\n" +
+            $"2. 方法签名应接受 IServiceCollection, IConfiguration\n" +
+            $"3. 在此方法中注册所有 Application 层服务和模块\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md (场景 3)");
     }
 
     [Fact(DisplayName = "ADR-0002.8: Application 不应包含 HttpContext 等 Host 专属类型")]
@@ -155,9 +207,13 @@ public sealed class ADR_0002_Architecture_Tests
             .GetResult();
 
         Assert.True(result.IsSuccessful,
-            $"❌ ADR-0002 违规: Application 层不应使用 HttpContext 等 Host 专属类型。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：HttpContext 等类型应该只存在于 Host 层。");
+            $"❌ ADR-0002.8 违规: Application 层不应使用 HttpContext 等 Host 专属类型\n\n" +
+            $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+            $"修复建议:\n" +
+            $"1. 移除对 HttpContext 的依赖\n" +
+            $"2. 创建业务抽象（如 ICurrentUserProvider）\n" +
+            $"3. 在 Host 层实现抽象，Application 层只依赖接口\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md (场景 3, 反模式 3)");
     }
 
     #endregion
@@ -180,9 +236,13 @@ public sealed class ADR_0002_Architecture_Tests
             .GetResult();
 
         Assert.True(result.IsSuccessful,
-            $"❌ ADR-0002 违规: Host {hostAssembly.GetName().Name} 不应依赖任何 Modules。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：将业务契约移出 Modules（到 Platform/BuildingBlocks），或使用消息/事件进行解耦。");
+            $"❌ ADR-0002.9 违规: Host {hostAssembly.GetName().Name} 不应依赖任何 Modules\n\n" +
+            $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+            $"修复建议:\n" +
+            $"1. 移除 Host 对 Modules 的项目引用\n" +
+            $"2. Host 通过 Application 间接引入模块\n" +
+            $"3. 将共享契约移到 Platform/BuildingBlocks\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md (场景 1, 反模式 4)");
     }
 
     [Theory(DisplayName = "ADR-0002.10: Host 不应包含业务类型")]
@@ -222,10 +282,15 @@ public sealed class ADR_0002_Architecture_Tests
             if (moduleProjFiles.Contains(refPath))
             {
                 Assert.Fail(
-                    $"❌ ADR-0002 违规: Host 项目 {Path.GetFileName(csprojPath)} 不应直接引用 Modules 下的项目: {Path.GetFileName(refPath)}。\n" +
-                    $"项目路径: {csprojPath}\n" +
-                    $"引用路径: {include}\n" +
-                    $"修复建议：将共享契约移到 Platform/BuildingBlocks，或改为消息通信。");
+                    $"❌ ADR-0002.11 违规: Host 项目不应直接引用 Modules\n\n" +
+                    $"Host 项目: {Path.GetFileName(csprojPath)}\n" +
+                    $"违规引用: {Path.GetFileName(refPath)}\n" +
+                    $"引用路径: {include}\n\n" +
+                    $"修复建议:\n" +
+                    $"1. 从 Host.csproj 中移除对 Module 项目的引用\n" +
+                    $"2. Host 只应引用 Application 和 Platform\n" +
+                    $"3. 将共享契约移到 Platform/BuildingBlocks\n\n" +
+                    $"参考: docs/copilot/adr-0002.prompts.md (场景 1, 反模式 4)");
             }
         }
     }
@@ -260,9 +325,14 @@ public sealed class ADR_0002_Architecture_Tests
                 .ToList();
 
             Assert.True(lines.Count <= 50,
-                $"❌ ADR-0002 建议: Program.cs 建议保持在 50 行以内，当前 {lines.Count} 行。\n" +
-                $"文件路径: {programFile}\n" +
-                $"修复建议：将启动逻辑移到 PlatformBootstrapper 和 ApplicationBootstrapper。");
+                $"❌ ADR-0002.12 违规: Program.cs 应保持简洁（≤ 50 行）\n\n" +
+                $"当前行数: {lines.Count}\n" +
+                $"文件路径: {programFile}\n\n" +
+                $"修复建议:\n" +
+                $"1. 将技术配置逻辑移到 PlatformBootstrapper\n" +
+                $"2. 将业务装配逻辑移到 ApplicationBootstrapper\n" +
+                $"3. Program.cs 只保留核心调用（builder.AddPlatform, builder.AddApplication, app.Run）\n\n" +
+                $"参考: docs/copilot/adr-0002.prompts.md (场景 4)");
         }
     }
 
@@ -391,8 +461,13 @@ public sealed class ADR_0002_Architecture_Tests
             .GetResult();
 
         Assert.True(platformResult.IsSuccessful,
-            $"❌ ADR-0002 违规: Platform 不应依赖 Application 或 Host。\n" +
-            $"违规类型: {string.Join(", ", platformResult.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。");
+            $"❌ ADR-0002.14 违规: Platform 不应依赖 Application 或 Host\n\n" +
+            $"违规类型:\n{string.Join("\n", platformResult.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+            $"修复建议:\n" +
+            $"1. 确保三层依赖方向: Host → Application → Platform\n" +
+            $"2. Platform 是最底层，不依赖任何上层\n" +
+            $"3. 移除违规的依赖引用\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md");
 
         // Application 不应依赖 Host
         var applicationResult = Types.InAssembly(applicationAssembly)
@@ -400,8 +475,13 @@ public sealed class ADR_0002_Architecture_Tests
             .GetResult();
 
         Assert.True(applicationResult.IsSuccessful,
-            $"❌ ADR-0002 违规: Application 不应依赖 Host。\n" +
-            $"违规类型: {string.Join(", ", applicationResult.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。");
+            $"❌ ADR-0002.14 违规: Application 不应依赖 Host\n\n" +
+            $"违规类型:\n{string.Join("\n", applicationResult.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+            $"修复建议:\n" +
+            $"1. 确保三层依赖方向: Host → Application → Platform\n" +
+            $"2. Application 不感知运行形态\n" +
+            $"3. 移除对 Host 的依赖\n\n" +
+            $"参考: docs/copilot/adr-0002.prompts.md");
     }
 
     #endregion

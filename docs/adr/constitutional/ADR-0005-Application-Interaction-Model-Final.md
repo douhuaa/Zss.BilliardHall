@@ -82,6 +82,8 @@
 
 ### 1. 最小执行单元：Use Case + Handler
 
+**【必须架构测试覆盖】**
+
 - **最小执行单元**是一个明确的业务用例（Use Case）。
 - 每个 Use Case **必须对应一个 Handler**，且该 Handler 是该业务意图的**唯一权威**。
 - Endpoint / Controller / Adapter 仅负责：
@@ -96,6 +98,8 @@
 ---
 
 ### 2. Handler 职责边界（不可模糊）
+
+**【必须架构测试覆盖】**
 
 Handler 必须满足以下条件：
 
@@ -117,6 +121,8 @@ Handler 必须满足以下条件：
 
 ### 3. 同步 / 异步原则（硬规则）
 
+**【必须架构测试覆盖】**
+
 - **模块内**：允许同步调用
 - **模块间**：默认异步通信（事件 / 消息）
 
@@ -133,6 +139,8 @@ Handler 必须满足以下条件：
 
 ### 4. 模块通信契约（Contracts）
 
+**【必须架构测试覆盖】**
+
 - 模块间只能通过显式、版本化的契约通信
 - 禁止引用其他模块的内部类型或领域模型
 
@@ -147,6 +155,8 @@ Handler 必须满足以下条件：
 ---
 
 ### 5. 查询（Read）与命令（Write）
+
+**【必须架构测试覆盖】**
 
 - Query：只读投影 / DTO
 - Command：通过 Handler 执行业务决策
@@ -236,6 +246,25 @@ ADR-0005 定义的不是技术选型，而是**运行时秩序**：
 
 **补充文档**：
 - [ADR-0005-Enforcement-Levels.md](ADR-0005-Enforcement-Levels.md)：执行级别分类
+
+---
+
+## 快速参考表（Quick Reference Table）
+
+| 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
+|---------|---------|---------|---------|---------|
+| ADR-0005.1 | Handler 应有明确的命名约定 | ✅ | `Handlers_Should_Have_Clear_Naming_Convention` | 1, 8 |
+| ADR-0005.2 | Endpoint 不应包含业务逻辑 | ✅ | `Endpoints_Should_Not_Contain_Business_Logic` | 1, 8 |
+| ADR-0005.3 | Handler 不应依赖 ASP.NET 类型 | ✅ | `Handlers_Should_Not_Depend_On_AspNet` | 2, 8 |
+| ADR-0005.4 | Handler 应该是无状态的 | ✅ | `Handlers_Should_Be_Stateless` | 2, 8 |
+| ADR-0005.5 | 模块间不应有未审批的同步调用 | ✅ | `Modules_Should_Not_Have_Synchronous_Cross_Module_Calls` | 3, 8 |
+| ADR-0005.6 | 异步方法应遵循命名约定 | ✅ | `Async_Methods_Should_Follow_Naming_Convention` | 3, 8 |
+| ADR-0005.7 | 模块不应共享领域实体 | ✅ | `Modules_Should_Not_Share_Domain_Entities` | 4, 8 |
+| ADR-0005.8 | Query Handler 可以返回 Contracts | ✅ | `QueryHandlers_Can_Return_Contracts` | 4, 5, 8 |
+| ADR-0005.9 | Command Handler 和 Query Handler 应明确分离 | ✅ | `Command_And_Query_Handlers_Should_Be_Separated` | 5, 8 |
+| ADR-0005.10 | Command Handler 不应返回业务数据 | ✅ | `CommandHandlers_Should_Not_Return_Business_Data` | 5, 8 |
+| ADR-0005.11 | Handler 应使用结构化异常 | ✅ | `Handlers_Should_Use_Structured_Exceptions` | 7, 8 |
+| ADR-0005.12 | 所有 Handler 应在模块程序集中 | ✅ | `All_Handlers_Should_Be_In_Module_Assemblies` | 2, 8 |
 
 ---
 
