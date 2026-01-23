@@ -85,6 +85,18 @@ Modules（隔离）    BuildingBlocks
 - `fix(ADR-XXXX): 描述`
 - `docs(copilot): 描述`
 
+## PR 标准
+
+所有 Pull Request 必须使用**简体中文**：
+- **PR 标题**：必须使用简体中文，遵循清晰简洁的描述原则
+- **PR 描述**：正文内容必须使用简体中文
+- **代码示例**：PR 描述中的代码块可以使用英文注释和代码
+- **技术术语**：常用英文技术术语（如 "API"、"DTO"、"CQRS"）可以保留
+
+示例：
+- ✅ 正确：`完成 ADR-0002 至 ADR-0005 的测试映射标准化`
+- ❌ 错误：`Complete ADR-test mapping standardization for ADR-0002 through ADR-0005`
+
 ## 关键心态
 
 记住：你的角色是**放大理解能力**，而非替代理解。
