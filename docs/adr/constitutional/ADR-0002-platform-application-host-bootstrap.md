@@ -122,13 +122,19 @@ Platform 是**全系统技术基座**：
 
 ### 4.3 严禁
 
+**【必须架构测试覆盖】**
+
 * ❌ 引用 Application
+* ❌ 引用 Host
+* ❌ 引用任何 Modules
 * ❌ 模块扫描
 * ❌ Handler / UseCase 注册
 * ❌ 读取业务配置
 * ❌ Host / Web / Worker 判断
 
 ### 4.4 标准入口（唯一）
+
+**【必须架构测试覆盖】**
 
 ```csharp
 namespace Zss.BilliardHall.Platform;
@@ -169,6 +175,10 @@ Application 表示：
 
 ### 5.3 严禁
 
+**【必须架构测试覆盖】**
+
+* ❌ 依赖 Host 层
+* ❌ 直接依赖任何 Modules
 * ❌ HttpContext
 * ❌ 端口 / 协议
 * ❌ Host 类型判断
@@ -176,10 +186,14 @@ Application 表示：
 
 ### 5.4 核心约束
 
+**【必须架构测试覆盖】**
+
 > **ApplicationBootstrapper 是应用能力装配的唯一合法入口**
 > 禁止存在任何 `AddXxxModule` 或 `AddYyyFeature` 被 Host 调用
 
 ### 5.5 标准入口（唯一）
+
+**【必须架构测试覆盖】**
 
 ```csharp
 namespace Zss.BilliardHall.Application;
@@ -214,6 +228,10 @@ Host 是**进程外壳**：
 
 ### 6.3 严禁
 
+**【必须架构测试覆盖】**
+
+* ❌ 直接依赖任何 Modules
+* ❌ 包含业务类型
 * ❌ 业务逻辑
 * ❌ 模块注册
 * ❌ Wolverine / Marten 配置
@@ -227,6 +245,8 @@ Host 是**进程外壳**：
 * Host 是角色，不是技术（禁止 WebHost 词汇）
 
 ### 6.5 Program.cs（唯一推荐写法）
+
+**【必须架构测试覆盖】**
 
 ```csharp
 using Zss.BilliardHall.Platform;
@@ -331,15 +351,27 @@ app.Run();
 
 ## 9. 强化与测试
 
+**【必须架构测试覆盖】**
+
 所有层级依赖规则必须通过自动化架构测试验证。
 
 **架构测试详见**：[ADR-0000：架构测试与 CI 治理](ADR-0000-architecture-tests.md)
 
 **核心测试用例**：
 - Platform 不应依赖 Application
+- Platform 不应依赖 Host
+- Platform 不应依赖任何 Modules
+- Platform 应有唯一的 PlatformBootstrapper 入口
 - Application 不应依赖 Host
+- Application 不应依赖任何 Modules
+- Application 应有唯一的 ApplicationBootstrapper 入口
+- Application 不应包含 HttpContext 等 Host 专属类型
+- Host 不应依赖任何 Modules
 - Host 不应包含业务类型
-- Host 不应直接注册服务（只能调用 Bootstrapper）
+- Host 项目文件不应引用 Modules
+- Program.cs 应保持简洁（建议 ≤ 50 行）
+- Program.cs 只应调用 Bootstrapper（语义检查）
+- 完整的三层依赖方向验证 (Host → Application → Platform)
 
 ---
 
@@ -378,6 +410,27 @@ app.Run();
 - ADR-0003 补充命名空间规则
 - ADR-0004 补充依赖管理规则
 - ADR-0005 定义运行时行为
+
+---
+
+## 快速参考表（Quick Reference Table）
+
+| 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
+|---------|---------|---------|---------|---------|
+| ADR-0002.1 | Platform 不应依赖 Application | ✅ | `Platform_Should_Not_Depend_On_Application` | 4.3, 9 |
+| ADR-0002.2 | Platform 不应依赖 Host | ✅ | `Platform_Should_Not_Depend_On_Host` | 4.3, 9 |
+| ADR-0002.3 | Platform 不应依赖任何 Modules | ✅ | `Platform_Should_Not_Depend_On_Modules` | 4.3, 9 |
+| ADR-0002.4 | Platform 应有唯一的 PlatformBootstrapper 入口 | ✅ | `Platform_Should_Have_Single_Bootstrapper_Entry_Point` | 4.4, 9 |
+| ADR-0002.5 | Application 不应依赖 Host | ✅ | `Application_Should_Not_Depend_On_Host` | 5.3, 9 |
+| ADR-0002.6 | Application 不应依赖任何 Modules | ✅ | `Application_Should_Not_Depend_On_Modules` | 5.3, 9 |
+| ADR-0002.7 | Application 应有唯一的 ApplicationBootstrapper 入口 | ✅ | `Application_Should_Have_Single_Bootstrapper_Entry_Point` | 5.4, 5.5, 9 |
+| ADR-0002.8 | Application 不应包含 HttpContext 等 Host 专属类型 | ✅ | `Application_Should_Not_Use_HttpContext` | 5.3, 9 |
+| ADR-0002.9 | Host 不应依赖任何 Modules | ✅ | `Host_Should_Not_Depend_On_Modules` | 6.3, 9 |
+| ADR-0002.10 | Host 不应包含业务类型 | ✅ | `Host_Should_Not_Contain_Business_Types` | 6.3, 9 |
+| ADR-0002.11 | Host 项目文件不应引用 Modules | ✅ | `Host_Csproj_Should_Not_Reference_Modules` | 6.3, 9 |
+| ADR-0002.12 | Program.cs 应保持简洁（建议 ≤ 50 行） | ✅ | `Program_Cs_Should_Be_Concise` | 6.5, 9 |
+| ADR-0002.13 | Program.cs 只应调用 Bootstrapper（语义检查） | ✅ | `Program_Cs_Should_Only_Call_Bootstrapper` | 6.5, 9 |
+| ADR-0002.14 | 验证完整的三层依赖方向 | ✅ | `Verify_Complete_Three_Layer_Dependency_Direction` | 3, 9 |
 
 ---
 
