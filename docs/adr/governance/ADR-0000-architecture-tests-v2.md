@@ -9,54 +9,54 @@
 
 ---
 
-## 1. Rule（规则本体｜裁决源）
+## 1. 规则本体（Rule）
 
 > **这是本 ADR 唯一具有裁决力的部分。**
 
 ### R0.1 ADR-测试映射
 
-All ADRs marked **【必须架构测试覆盖】** **MUST** have at least one corresponding architecture test.
+所有标记【必须架构测试覆盖】的 ADR **必须**至少有一个对应的架构测试。
 
-Each architecture test **MUST**:
-- Be named with `ADR_XXXX_` prefix
-- Explicitly reference the ADR number in test name and failure message
-- Be executable in CI pipeline
+每个架构测试**必须**：
+- 使用 `ADR_XXXX_` 前缀命名
+- 在测试名称和失败消息中显式引用 ADR 编号
+- 可在 CI 流水线中执行
 
 ### R0.2 CI 阻断
 
-Architecture test failure **MUST**:
-- Block PR merge
-- Block main branch merge
-- Have no exceptions
+架构测试失败**必须**：
+- 阻断 PR 合并
+- 阻断主分支合并
+- 无例外情况
 
 ### R0.3 测试组织
 
-Architecture tests **MUST**:
-- Be organized by ADR number
-- Use format: `ADR-XXXX 违规：{原因} 修复建议：{建议}` for failure messages
-- Be maintained in sync with ADR changes
+架构测试**必须**：
+- 按 ADR 编号组织
+- 失败消息使用格式：`ADR-XXXX 违规：{原因} 修复建议：{建议}`
+- 与 ADR 变更保持同步
 
 ### R0.4 破例记录
 
-Any exception to architecture rules **MUST**:
-- Be recorded in `docs/summaries/ARCH-VIOLATIONS.md`
-- Include ADR number + Rule number
-- Include expiration date (≤ 6 months)
-- Include repayment plan
+任何架构规则的破例**必须**：
+- 记录在 `docs/summaries/ARCH-VIOLATIONS.md`
+- 包含 ADR 编号 + 规则编号
+- 包含失效日期（≤ 6 个月）
+- 包含归还计划
 
-Unrecorded exceptions **SHALL** be treated as unauthorized architecture violations.
+未记录的破例**应**被视为未授权的架构违规。
 
 ### R0.5 权威声明
 
-ADR body text (`.md` files in `docs/adr/`) **SHALL** be the sole source of architectural authority.
+ADR 正文（`docs/adr/` 中的 `.md` 文件）**应**是架构权威的唯一来源。
 
-Supporting materials (README, Copilot prompts, guides) **MUST NOT** contradict ADR body text.
+辅助材料（README、Copilot prompts、指南）**禁止**与 ADR 正文冲突。
 
-When conflicts arise, ADR body text **SHALL** prevail.
+出现冲突时，ADR 正文**应**优先。
 
 ---
 
-## 2. Enforcement（执法模型）
+## 2. 执法模型（Enforcement）
 
 > **规则如果无法执法，就不配存在。**
 
@@ -70,7 +70,7 @@ When conflicts arise, ADR body text **SHALL** prevail.
 
 ### 2.2 测试映射
 
-| Rule 编号 | 执行级 | 测试 / 手段                        |
+| 规则编号 | 执行级 | 测试 / 手段                        |
 | ------- | --- | ------------------------------ |
 | R0.1    | L1  | CI pipeline test count validation |
 | R0.2    | L1  | CI pipeline configuration          |
@@ -90,7 +90,7 @@ When conflicts arise, ADR body text **SHALL** prevail.
 
 ---
 
-## 3. Exception（破例与归还）
+## 3. 破例与归还（Exception）
 
 > **破例不是逃避，而是债务。**
 
@@ -123,7 +123,7 @@ When conflicts arise, ADR body text **SHALL** prevail.
 
 ---
 
-## 4. Change Policy（变更政策）
+## 4. 变更政策（Change Policy）
 
 > **ADR 不是"随时可改"的文档。**
 
@@ -145,7 +145,7 @@ When conflicts arise, ADR body text **SHALL** prevail.
 * **其他层 ADR**（ADR-100~899）
 
   * 可 Superseded
-  * 不得悄然修改 Rule
+  * 不得悄然修改规则
   * 需要单人审批
 
 ### 4.2 失效与替代
@@ -169,7 +169,7 @@ ADR 变更时 **必须** 同步更新：
 
 ---
 
-## 5. Non-Goals（明确不管什么）
+## 5. 明确不管什么（Non-Goals）
 
 > **防止 ADR 膨胀的关键段落。**
 
@@ -183,7 +183,7 @@ ADR 变更时 **必须** 同步更新：
 
 ---
 
-## 6. References（非裁决性）
+## 6. 非裁决性参考（References）
 
 > **仅供理解，不具裁决力。**
 

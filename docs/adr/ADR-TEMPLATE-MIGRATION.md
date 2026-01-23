@@ -42,22 +42,22 @@
 **影响范围**：...
 **生效时间**：...
 
-## 1. Rule（规则本体｜裁决源）
+## 1. 规则本体（Rule）
 ...
 
-## 2. Enforcement（执法模型）
+## 2. 执法模型（Enforcement）
 ...
 
-## 3. Exception（破例与归还）
+## 3. 破例与归还（Exception）
 ...
 
-## 4. Change Policy（变更政策）
+## 4. 变更政策（Change Policy）
 ...
 
-## 5. Non-Goals（明确不管什么）
+## 5. 明确不管什么（Non-Goals）
 ...
 
-## 6. References（非裁决性）
+## 6. 非裁决性参考（References）
 ...
 ```
 

@@ -24,22 +24,22 @@
 
 ## 二、六段式结构详解
 
-### 第 1 段：Rule（规则本体）
+### 第 1 段：规则本体（Rule）
 
 **目的**：这是本 ADR 唯一具有裁决力的部分。
 
 **写作要求**：
 
 1. **必须用不可协商的语气**
-   - ✅ 使用：MUST / MUST NOT / SHALL / SHALL NOT
+   - ✅ 使用：必须（MUST）/ 禁止（MUST NOT）/ 应当（SHALL）/ 不应（SHALL NOT）
    - ❌ 禁止：建议 / 推荐 / 通常 / 尽量 / 可以
 
 2. **必须可判真伪**
-   - ✅ "Platform MUST NOT depend on Application"
+   - ✅ "Platform **禁止**依赖 Application"
    - ❌ "Platform 应该避免依赖 Application"
 
 3. **必须独立于作者解释**
-   - ✅ "Modules MUST NOT reference each other directly"
+   - ✅ "模块**禁止**直接引用其他模块"
    - ❌ "为了保持模块独立性，我们建议..."
 
 4. **必须简洁（≤ 1 页）**
@@ -48,25 +48,25 @@
 **示例（合格）**：
 
 ```markdown
-## 1. Rule
+## 1. 规则本体
 
-Platform **MUST NOT** depend on Application, Host, or any Modules.
+Platform **禁止**依赖 Application、Host 或任何模块。
 
-Modules **MUST NOT**:
-- Reference other modules directly
-- Share domain objects across module boundaries
-- Make synchronous cross-module calls
+模块**禁止**：
+- 直接引用其他模块
+- 跨模块边界共享领域对象
+- 进行同步跨模块调用
 
-All cross-module communication **MUST** use one of:
-- Domain Events (async)
-- Data Contracts (read-only DTOs)
-- Primitive types (Guid, string, int)
+所有跨模块通信**必须**使用以下方式之一：
+- 领域事件（异步）
+- 数据契约（只读 DTO）
+- 原始类型（Guid、string、int）
 ```
 
 **反例（不合格）**：
 
 ```markdown
-## 1. Rule
+## 1. 规则本体
 
 为了保持系统的模块化，我们建议 Platform 层不要依赖 Application 层。
 通常情况下，模块之间应该避免直接引用。
@@ -75,7 +75,7 @@ All cross-module communication **MUST** use one of:
 
 ---
 
-### 第 2 段：Enforcement（执法模型）
+### 第 2 段：执法模型（Enforcement）
 
 **目的**：规则如果无法执法，就不配存在。
 
@@ -114,7 +114,7 @@ All cross-module communication **MUST** use one of:
 
 ---
 
-### 第 3 段：Exception（破例与归还）
+### 第 3 段：破例与归还（Exception）
 
 **目的**：破例不是逃避，而是债务。
 
@@ -159,7 +159,7 @@ All cross-module communication **MUST** use one of:
 
 ---
 
-### 第 4 段：Change Policy（变更政策）
+### 第 4 段：变更政策（Change Policy）
 
 **目的**：ADR 不是"随时可改"的文档。
 
@@ -205,7 +205,7 @@ All cross-module communication **MUST** use one of:
 
 ---
 
-### 第 5 段：Non-Goals（明确不管什么）
+### 第 5 段：明确不管什么（Non-Goals）
 
 **目的**：防止 ADR 膨胀的关键段落。
 
@@ -235,7 +235,7 @@ All cross-module communication **MUST** use one of:
 
 ---
 
-### 第 6 段：References（非裁决性）
+### 第 6 段：非裁决性参考（References）
 
 **目的**：仅供理解，不具裁决力。
 

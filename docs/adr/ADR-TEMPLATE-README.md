@@ -13,12 +13,12 @@
 ## 📐 六段式结构
 
 ```markdown
-1. Rule（规则本体｜裁决源）        ← 唯一具有裁决力的部分，≤ 1 页
-2. Enforcement（执法模型）         ← 如何执行规则（测试、工具、流程）
-3. Exception（破例与归还）         ← 破例条件和归还机制
-4. Change Policy（变更政策）       ← ADR 修改和废弃流程
-5. Non-Goals（明确不管什么）       ← 防止 ADR 膨胀
-6. References（非裁决性）          ← 术语、示例、历史（无裁决力）
+1. 规则本体（Rule）           ← 唯一具有裁决力的部分，≤ 1 页
+2. 执法模型（Enforcement）     ← 如何执行规则（测试、工具、流程）
+3. 破例与归还（Exception）     ← 破例条件和归还机制
+4. 变更政策（Change Policy）   ← ADR 修改和废弃流程
+5. 明确不管什么（Non-Goals）   ← 防止 ADR 膨胀
+6. 非裁决性参考（References）  ← 术语、示例、历史（无裁决力）
 ```
 
 ---

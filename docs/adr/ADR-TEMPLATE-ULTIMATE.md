@@ -7,7 +7,7 @@
 
 ---
 
-## 1. Rule（规则本体｜裁决源）
+## 1. 规则本体（Rule）
 
 > **这是本 ADR 唯一具有裁决力的部分。**
 
@@ -21,32 +21,32 @@
 
 **推荐格式：**
 
-* ❗ MUST / MUST NOT / SHALL / SHALL NOT
+* ❗ 必须（MUST）/ 禁止（MUST NOT）/ 应当（SHALL）/ 不应（SHALL NOT）
 * ❗ 违反即为架构违规
 
 **示例：**
 
-* Platform **MUST NOT** depend on Application or Host
-* Modules **MUST NOT** reference each other directly
-* All ADRs marked **【必须架构测试覆盖】** **MUST** have at least one architecture test
+* Platform **禁止**依赖 Application 或 Host
+* 模块**禁止**直接引用其他模块
+* 所有标记【必须架构测试覆盖】的 ADR **必须**至少有一个架构测试
 
-> Rule 段落 **≤ 1 页**，超过就是设计说明，不是 ADR。
+> 规则段落 **≤ 1 页**，超过就是设计说明，不是 ADR。
 
 ---
 
-## 2. Enforcement（执法模型）
+## 2. 执法模型（Enforcement）
 
 > **规则如果无法执法，就不配存在。**
 
 ### 2.1 执行级别
 
-| Level | 名称      | 执法方式               | 后果    |
-| ----- | ------- | ------------------ | ----- |
-| L1    | 静态可执行   | 自动化测试              | CI 阻断 |
-| L2    | 语义半自动   | Analyzer / 启发式     | 人工复核  |
-| L3    | 人工 Gate | Review / Checklist | 架构裁决  |
+| 级别 | 名称      | 执法方式               | 后果    |
+| ---- | ------- | ------------------ | ----- |
+| L1   | 静态可执行   | 自动化测试              | CI 阻断 |
+| L2   | 语义半自动   | Analyzer / 启发式     | 人工复核  |
+| L3   | 人工 Gate | Review / Checklist | 架构裁决  |
 
-**每一条 Rule 必须标注 Level。**
+**每一条规则必须标注级别。**
 
 ---
 
@@ -54,7 +54,7 @@
 
 > 仅列出**裁决级**测试，不列示例。
 
-| Rule 编号    | 执行级 | 测试 / 手段                        |
+| 规则编号       | 执行级 | 测试 / 手段                        |
 | ---------- | --- | ------------------------------ |
 | ADR-XXXX.1 | L1  | `XXX_Should_Not_Depend_On_YYY` |
 | ADR-XXXX.2 | L2  | Roslyn Analyzer / Review       |
@@ -62,7 +62,7 @@
 
 ---
 
-## 3. Exception（破例与归还）
+## 3. 破例与归还（Exception）
 
 > **破例不是逃避，而是债务。**
 
@@ -82,7 +82,7 @@
 每个破例 **必须**：
 
 * 记录在 `ARCH-VIOLATIONS.md`
-* 指明 ADR 编号 + Rule 编号
+* 指明 ADR 编号 + 规则编号
 * 指定失效日期
 * 给出归还计划
 
@@ -90,7 +90,7 @@
 
 ---
 
-## 4. Change Policy（变更政策）
+## 4. 变更政策（Change Policy）
 
 > **ADR 不是"随时可改"的文档。**
 
@@ -104,7 +104,7 @@
 * **决策层 ADR**
 
   * 可 Superseded
-  * 不得悄然修改 Rule
+  * 不得悄然修改规则
 
 ---
 
@@ -115,7 +115,7 @@
 
 ---
 
-## 5. Non-Goals（明确不管什么）
+## 5. 明确不管什么（Non-Goals）
 
 > **防止 ADR 膨胀的关键段落。**
 
@@ -129,7 +129,7 @@
 
 ---
 
-## 6. References（非裁决性）
+## 6. 非裁决性参考（References）
 
 > **仅供理解，不具裁决力。**
 
