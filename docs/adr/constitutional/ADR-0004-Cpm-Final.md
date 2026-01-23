@@ -57,7 +57,7 @@
 
 ## 2️⃣ 核心约束
 
-### 2.1 所有项目必须使用中央包管理
+### 2.1 所有项目必须使用中央包管理 **【必须架构测试覆盖】**
 
 在 `Directory.Packages.props` 中定义版本：
 
@@ -66,7 +66,7 @@
 
 禁止单个项目手动指定版本。
 
-### 2.2 分层依赖规则
+### 2.2 分层依赖规则 **【必须架构测试覆盖】**
 
 | 层级          | 可用包类型                                    | 禁止依赖                             |
 |-------------|------------------------------------------|----------------------------------|
@@ -78,7 +78,7 @@
 
 > 任何违规引用需在 CI 校验阶段失败。
 
-### 2.3 包分组示例（参考现有 CPM）
+### 2.3 包分组示例（参考现有 CPM） **【必须架构测试覆盖】**
 
 ```xml
 <ItemGroup Label="Aspire">
@@ -102,7 +102,7 @@
 
 > 可根据项目需要调整包列表，但必须严格遵循层级依赖规则。
 
-### 2.4 防御性规则
+### 2.4 防御性规则 **【必须架构测试覆盖】**
 
 1. CI 阶段检查：禁止项目手动覆盖包版本。
 2. CI 阶段检查：禁止层级越界引用包。
@@ -168,6 +168,22 @@
 - 本 ADR 定义依赖包管理规范
 - ADR-0002 的层级约束需要本 ADR 的依赖规则支撑
 - 所有层级的包依赖必须符合本 ADR 的规则
+
+---
+
+## 快速参考表（Quick Reference Table）
+
+| 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
+|---------|---------|---------|---------|---------|
+| ADR-0004.1 | Directory.Packages.props 应存在于仓库根目录 | ✅ | `Repository_Should_Have_Directory_Packages_Props` | 2.1 |
+| ADR-0004.2 | CPM 应被启用 (ManagePackageVersionsCentrally=true) | ✅ | `CPM_Should_Be_Enabled` | 2.1 |
+| ADR-0004.3 | CPM 应启用传递依赖固定 (CentralPackageTransitivePinningEnabled) | ⚠️ | `CPM_Should_Enable_Transitive_Pinning` | 2.1 |
+| ADR-0004.4 | 项目文件不应手动指定包版本 | ✅ | `Projects_Should_Not_Specify_Package_Versions` | 2.1, 2.4 |
+| ADR-0004.5 | Directory.Packages.props 应包含包分组 (Label) | ⚠️ | `Directory_Packages_Props_Should_Contain_Package_Groups` | 2.3 |
+| ADR-0004.6 | Directory.Packages.props 应包含常见包分组 | ⚠️ | `Directory_Packages_Props_Should_Contain_Common_Package_Groups` | 2.3 |
+| ADR-0004.7 | Platform 项目不应引用业务包 | ✅ | `Platform_Projects_Should_Not_Reference_Business_Packages` | 2.2, 2.4 |
+| ADR-0004.8 | 所有测试项目应引用相同的测试框架版本 | ✅ | `All_Test_Projects_Should_Use_Same_Test_Framework_Versions` | 2.4 |
+| ADR-0004.9 | Directory.Packages.props 应定义所有项目使用的包 | ✅ | `Directory_Packages_Props_Should_Define_All_Used_Packages` | 2.1, 2.4 |
 
 ---
 
