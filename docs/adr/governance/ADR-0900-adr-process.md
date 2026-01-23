@@ -283,18 +283,58 @@ Copilot 会参考：
 
 测试文件命名：`src/tests/ArchitectureTests/ADR/ADR_XXXX_Architecture_Tests.cs`
 
+#### ADR-测试映射要求
+
+**关键约束标记**：
+- 在 ADR 文档中，为需要测试的约束添加 **【必须架构测试覆盖】** 标记
+- 在快速参考表中添加"测试覆盖"列，明确对应的测试方法
+
+**测试代码规范**：
+- 测试方法必须在 DisplayName 或方法名中包含 `ADR-{编号}`
+- 测试失败消息格式：`❌ ADR-{编号} 违规：{约束描述}\n{违规详情}\n修复建议：{具体建议}`
+
+**示例**：
+
+ADR 文档中：
+```markdown
+### 3. 模块通信约束
+
+严禁行为：
+- ❌ 跨模块引用 Entity / Aggregate / ValueObject **【必须架构测试覆盖】**
+```
+
+测试代码中：
+```csharp
+[Theory(DisplayName = "ADR-0001.3: 模块不得跨模块引用实体")]
+public void Modules_Should_Not_Reference_Entities_Across_Modules()
+{
+    // 测试逻辑...
+    
+    Assert.True(result.IsSuccessful,
+        $"❌ ADR-0001.3 违规: 模块实体被其他模块引用。\n" +
+        $"违规类型: {failingTypes}。\n" +
+        $"修复建议：使用数据契约（DTO）替代直接引用实体。");
+}
+```
+
 #### 使用 Copilot 生成测试
 
 ```
 询问 Copilot：
 "为 ADR-XXXX 生成架构测试，验证：
-[列出需要验证的约束]"
+[列出需要验证的约束]
+
+要求：
+1. 测试方法名包含 ADR 编号
+2. 失败消息包含 ADR 引用和修复建议
+3. 参考现有测试的格式"
 ```
 
 Copilot 会参考：
 - `docs/copilot/adr-0000.prompts.md`
 - 现有架构测试
 - NetArchTest 模式
+- [ADR-测试映射规范](../../ADR-TEST-MAPPING-SPECIFICATION.md)
 
 ### 2.7 第六步：创建 Copilot Prompts
 
@@ -315,6 +355,21 @@ Copilot 会参考：
 ## 四、典型问答（FAQ）
 
 ## 五、快速检查清单
+
+## 六、测试覆盖自检清单  ← **新增必需章节**
+
+### 6.1 ADR-测试映射表
+
+| ADR 约束 | 测试方法 | 测试文件 | 状态 |
+|---------|---------|---------|------|
+| ADR-XXXX.1: ... | `Test_Method_Name` | ADR_XXXX_Architecture_Tests.cs | ✅ 已覆盖 |
+
+### 6.2 自检问题
+
+1. ✅ 所有【必须架构测试覆盖】的约束是否都有对应的测试方法？
+2. ✅ 测试方法名是否清晰反映了 ADR 约束内容？
+3. ✅ 测试失败消息是否包含 ADR 编号和修复建议？
+...
 ```
 
 #### 使用 Copilot 生成 Prompts
@@ -325,10 +380,34 @@ Copilot 会参考：
 1. 场景触发条件
 2. 反模式和正确模式
 3. CI 失败解释模板
-4. FAQ"
+4. FAQ
+5. 测试覆盖自检清单（包含完整的映射表）"
 ```
 
-### 2.8 第七步：Copilot 审查 ADR
+### 2.8 第七步：运行映射验证
+
+在提交 PR 前，**必须运行** ADR-测试映射验证：
+
+```bash
+# 运行映射一致性验证
+./scripts/validate-adr-test-mapping.sh
+
+# 或 PowerShell
+./scripts/validate-adr-test-mapping.ps1
+```
+
+验证脚本会检查：
+- ADR 文档中所有 **【必须架构测试覆盖】** 的约束
+- 测试代码中的 ADR 引用
+- 映射关系的完整性
+
+**如果验证失败**：
+1. 检查 ADR 文档是否正确标记了约束
+2. 检查测试方法是否包含 ADR 引用
+3. 检查快速参考表和 Prompts 文件的映射表是否更新
+4. 参考：[ADR-测试一致性开发者指南](../../ADR-TEST-CONSISTENCY-DEVELOPER-GUIDE.md)
+
+### 2.9 第八步：Copilot 审查 ADR
 
 在提交 PR 前，使用 Copilot 审查：
 

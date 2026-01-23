@@ -152,6 +152,50 @@ src/tests/ArchitectureTests/ADR/
 
 ---
 
+## ADR-测试内容映射机制
+
+### 目的
+
+确保 ADR 文档中的约束与架构测试代码之间的**强一致性**，防止"形式合规、内容偏离"问题。
+
+### 核心要求
+
+1. **ADR 文档标记**
+   - 所有需要架构测试的约束必须标记 **【必须架构测试覆盖】**
+   - 快速参考表必须包含"测试覆盖"列，明确列出对应的测试方法
+
+2. **测试代码规范**
+   - 测试类命名：`ADR_{编号}_Architecture_Tests`
+   - 测试方法必须在 DisplayName 或方法名中包含 `ADR-{编号}`
+   - 测试失败消息必须包含：ADR 编号、违规详情、修复建议
+
+3. **自动化校验**
+   - 提供 `scripts/validate-adr-test-mapping.sh/ps1` 脚本
+   - CI 工作流自动运行映射验证
+   - 失败时提供详细的不一致报告
+
+4. **三方同步**
+   - ADR 文档 ↔ 架构测试 ↔ Copilot Prompts 必须保持一致
+   - 任何一方变更，必须同步更新其他两方
+
+### 详细规范
+
+参见：
+- [ADR-测试映射规范](../../ADR-TEST-MAPPING-SPECIFICATION.md) - 完整规范定义
+- [ADR-测试一致性开发者指南](../../ADR-TEST-CONSISTENCY-DEVELOPER-GUIDE.md) - 场景化使用指南
+
+### 验证工具
+
+```bash
+# 运行映射一致性验证
+./scripts/validate-adr-test-mapping.sh
+
+# 或 PowerShell
+./scripts/validate-adr-test-mapping.ps1
+```
+
+---
+
 ## ADR 与测试映射表
 
 | ADR 编号  | ADR 主题                           | 测试类                             | 核心测试用例                                    |
