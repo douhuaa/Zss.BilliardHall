@@ -4,8 +4,17 @@ using System.Reflection;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
-/// ADR-0001: 模块化单体与垂直切片架构决策
+/// ADR-0001: 模块化单体与垂直切片架构决策（v3.2）
 /// 验证模块隔离、垂直切片、契约使用等核心架构约束
+/// 
+/// 约束映射（对应 ADR-0001 v3.2 快速参考和架构测试映射表）：
+/// - ADR-0001.1: 模块不可相互引用 (L1) → Modules_Should_Not_Reference_Other_Modules
+/// - ADR-0001.2: 项目文件/程序集禁止引用其他模块 (L1) → Module_Csproj_Should_Not_Reference_Other_Modules
+/// - ADR-0001.3: 垂直切片/用例为最小单元 (L2) → Handlers_Should_Be_In_UseCases_Namespace
+/// - ADR-0001.4: 禁止横向 Service 抽象 (L1) → Modules_Should_Not_Contain_Service_Classes
+/// - ADR-0001.5: 只允许事件/契约/原始类型通信 (L2) → Contract_Rules_Semantic_Check
+/// - ADR-0001.6: Contract 不含业务判断字段 (L2/L3) → Contract_Business_Field_Analyzer
+/// - ADR-0001.7: 命名空间/目录强制隔离 (L1) → Namespace_Should_Match_Module_Boundaries
 /// </summary>
 public sealed class ADR_0001_Architecture_Tests
 {
@@ -88,7 +97,7 @@ public sealed class ADR_0001_Architecture_Tests
 
     #region 2. 垂直切片架构约束
 
-    [Theory(DisplayName = "ADR-0001.3: 模块不应包含传统分层命名空间")]
+    [Theory(DisplayName = "ADR-0001.3 (旧) / v3.2需对齐: 模块不应包含传统分层命名空间")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Modules_Should_Not_Contain_Traditional_Layering_Namespaces(Assembly moduleAssembly)
     {
@@ -107,7 +116,7 @@ public sealed class ADR_0001_Architecture_Tests
         }
     }
 
-    [Theory(DisplayName = "ADR-0001.4: 模块不应包含 Repository/Service 等横向抽象")]
+    [Theory(DisplayName = "ADR-0001.4 (v3.2对齐): 模块不应包含 Repository/Service 等横向抽象")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Modules_Should_Not_Contain_Repository_Or_Service_Semantics(Assembly moduleAssembly)
     {
@@ -126,7 +135,7 @@ public sealed class ADR_0001_Architecture_Tests
         }
     }
 
-    [Theory(DisplayName = "ADR-0001.5: Handler 应该自包含，不依赖横向 Service")]
+    [Theory(DisplayName = "ADR-0001.5 (旧) / v3.2需对齐: Handler 应该自包含，不依赖横向 Service")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Handlers_Should_Not_Depend_On_Horizontal_Services(Assembly moduleAssembly)
     {
@@ -149,7 +158,7 @@ public sealed class ADR_0001_Architecture_Tests
         }
     }
 
-    [Theory(DisplayName = "ADR-0001.6: Handler 不应直接调用其他 Handler")]
+    [Theory(DisplayName = "ADR-0001.6 (旧) / v3.2需对齐: Handler 不应直接调用其他 Handler")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Handlers_Should_Not_Call_Other_Handlers_Directly(Assembly moduleAssembly)
     {
@@ -176,7 +185,7 @@ public sealed class ADR_0001_Architecture_Tests
 
     #region 3. 契约使用规则约束
 
-    [Theory(DisplayName = "ADR-0001.7: Command Handler 不应依赖 IQuery 接口")]
+    [Theory(DisplayName = "ADR-0001.7 (旧) / v3.2需对齐: Command Handler 不应依赖 IQuery 接口")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void CommandHandlers_Should_Not_Depend_On_IQuery_Interfaces(Assembly moduleAssembly)
     {
@@ -192,7 +201,7 @@ public sealed class ADR_0001_Architecture_Tests
             $"修复建议：Command Handler 应通过领域事件、命令或维护本地状态副本来获取必要信息，而不是查询其他模块的契约数据做业务决策。");
     }
 
-    [Theory(DisplayName = "ADR-0001.8: Platform 不应依赖模块契约")]
+    [Theory(DisplayName = "ADR-0001.8 (旧) / v3.2需对齐: Platform 不应依赖模块契约")]
     [MemberData(nameof(GetPlatformAssembly))]
     public void Platform_Should_Not_Depend_On_Module_Contracts(Assembly platformAssembly)
     {
@@ -218,7 +227,7 @@ public sealed class ADR_0001_Architecture_Tests
 
     #region 4. 模块通信约束
 
-    [Theory(DisplayName = "ADR-0001.9: 模块只能依赖 Platform，不能依赖 Application/Host")]
+    [Theory(DisplayName = "ADR-0001.9 (旧) / v3.2需对齐: 模块只能依赖 Platform，不能依赖 Application/Host")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Modules_Should_Only_Depend_On_Platform(Assembly moduleAssembly)
     {
@@ -238,7 +247,7 @@ public sealed class ADR_0001_Architecture_Tests
 
     #region 5. Platform 层限制
 
-    [Fact(DisplayName = "ADR-0001.10: Platform 不应包含业务相关命名")]
+    [Fact(DisplayName = "ADR-0001.10 (旧) / v3.2需对齐: Platform 不应包含业务相关命名")]
     public void Platform_Should_Not_Contain_Business_Named_Types()
     {
         var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
@@ -262,7 +271,7 @@ public sealed class ADR_0001_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-0001.11: Contracts 应该是简单的数据结构")]
+    [Fact(DisplayName = "ADR-0001.11 (旧) / v3.2需对齐: Contracts 应该是简单的数据结构")]
     public void Contracts_Should_Be_Simple_Data_Structures()
     {
         var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
