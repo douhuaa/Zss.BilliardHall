@@ -1,7 +1,7 @@
 # 改进总结文档目录
 
 **目的**：统一管理项目中的各类改进总结文档，便于查阅和维护  
-**最后更新**：2026-01-22  
+**最后更新**：2026-01-23  
 **结构**：扁平化，所有文件位于同一目录
 
 ---
@@ -19,6 +19,8 @@ docs/summaries/
 ├── README.md                                           # 本文件 - 总索引
 ├── adr-restructure-summary.md                          # 架构 - ADR 重组
 ├── adr-numbering-optimization-summary.md               # 架构 - ADR 编号优化
+├── adr-0000-0005-refactoring-summary.md                # 架构 - ADR 0000-0005 重构验证
+├── adr-test-consistency-implementation.md              # 测试 - ADR-测试一致性实施
 ├── architecture-tests-improvement-summary.md           # 测试 - 架构测试改进
 ├── arch-violations.md                                  # 治理 - 架构违规记录
 ├── copilot-governance-implementation.md                # 治理 - Copilot 治理实施
@@ -36,6 +38,7 @@ docs/summaries/
 |------|------|------|------|
 | [ADR 重组总结](adr-restructure-summary.md) | ADR 文档体系重组，分离静态/动态/治理层 | v2.0 | 2026-01-21 |
 | [ADR 编号优化总结](adr-numbering-optimization-summary.md) | ADR 编号体系优化，引入分段编号 | v3.0 | 2026-01-22 |
+| [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md) | 验证 ADR 文档与架构测试映射关系 | v1.0 | 2026-01-23 |
 
 ---
 
@@ -44,6 +47,7 @@ docs/summaries/
 | 文档 | 描述 | 版本 | 日期 |
 |------|------|------|------|
 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) | 架构测试从"合格"到"宪法级体系"的系统性提升 | v2.0 | 2026-01-20 |
+| [ADR-测试一致性实施总结](adr-test-consistency-implementation.md) | ADR-测试映射标准化实施 | v1.0 | 2026-01-23 |
 
 ---
 
@@ -73,11 +77,13 @@ docs/summaries/
 |------|---------|
 | ADR 文档管理 | [ADR 重组总结](adr-restructure-summary.md) |
 | ADR 编号体系 | [ADR 编号优化总结](adr-numbering-optimization-summary.md) |
+| ADR 文档重构 | [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md) |
 | 架构测试优化 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) |
+| ADR-测试映射 | [ADR-测试一致性实施总结](adr-test-consistency-implementation.md), [PR#126 待办事项完成总结](pr126-todo-completion-summary.md) |
 | 架构违规处理 | [架构违规记录表](arch-violations.md) |
 | 文档结构优化 | [文档结构优化总结](documentation-structure-optimization-summary.md) |
 | Copilot 治理 | [Copilot 治理实施总结](copilot-governance-implementation.md) |
-| ADR-测试映射 | [PR#126 待办事项完成总结](pr126-todo-completion-summary.md) |
+
 | 宪法层定义 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) |
 | 执行级别分类 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) |
 | 破例申请流程 | [架构违规记录表](arch-violations.md) |
@@ -86,6 +92,8 @@ docs/summaries/
 
 | 日期 | 文档 | 类型 |
 |------|------|------|
+| 2026-01-23 | [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md) | 架构 |
+| 2026-01-23 | [ADR-测试一致性实施总结](adr-test-consistency-implementation.md) | 测试 |
 | 2026-01-23 | [PR#126 待办事项完成总结](pr126-todo-completion-summary.md) | 治理 |
 | 2026-01-22 | [文档结构优化总结](documentation-structure-optimization-summary.md) | 文档 |
 | 2026-01-22 | [ADR 编号优化总结](adr-numbering-optimization-summary.md) | 架构 |
@@ -214,9 +222,9 @@ docs/
 
 ### 文档统计
 
-- **总文档数**：7（不含 README）
-- **架构类**：2
-- **测试类**：1
+- **总文档数**：9（不含 README）
+- **架构类**：3
+- **测试类**：2
 - **治理类**：3
 - **文档类**：1
 
