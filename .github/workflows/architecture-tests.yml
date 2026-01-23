@@ -33,6 +33,13 @@ jobs:
       - name: Build solution
         run: dotnet build --no-restore --configuration Release
       
+      - name: Validate ADR-Test Mapping
+        run: |
+          echo "::group::ADR-测试映射一致性验证"
+          chmod +x ./scripts/validate-adr-test-mapping.sh
+          ./scripts/validate-adr-test-mapping.sh
+          echo "::endgroup::"
+      
       - name: Run architecture tests
         run: |
           echo "::group::Architecture Tests Execution"
