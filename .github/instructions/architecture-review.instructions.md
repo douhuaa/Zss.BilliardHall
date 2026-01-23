@@ -4,6 +4,15 @@
 
 在协助 PR 评审和架构评估时，在 `base.instructions.md` 的基础上应用这些最高风险约束。
 
+## ⚖️ 权威提醒
+
+**评审时的唯一判决依据 = ADR 正文**
+
+- 引用 ADR 时，必须指向 ADR 正文文件（如 `ADR-0001-modular-monolith-vertical-slice-architecture.md`）
+- Prompt 文件（如 `adr-0001.prompts.md`）仅为辅助理解，不能作为判定依据
+- 若 Prompt 文件与 ADR 正文冲突，以 ADR 正文为准
+- 架构测试基于 ADR 正文中标注【必须架构测试覆盖】的条款
+
 ## 关键心态
 
 架构评审是 Copilot 的**最高风险**场景，因为：
@@ -11,7 +20,7 @@
 - ⚠️ 开发者可能过度信任你的判断
 - ⚠️ 此处的错误修复成本极高
 
-**你的默认立场**：保守且有据可依。
+**你的默认立场**：保守且有据可依，始终引用 ADR 正文。
 
 ## 评审流程
 
@@ -32,17 +41,19 @@
 - [ ] 文档
 ```
 
-### 步骤 2：映射到 ADR
+### 步骤 2：映射到 ADR 正文
 
-对于每个受影响的区域，明确引用适用的 ADR：
+对于每个受影响的区域，明确引用适用的 **ADR 正文**：
 
-| 区域 | 主要 ADR | Prompt 文件 |
+| 区域 | 主要 ADR 正文 | 辅助 Prompt 文件 |
 |------|--------------|--------------|
-| 模块隔离 | ADR-0001 | `adr-0001.prompts.md` |
-| 层级边界 | ADR-0002 | `adr-0002.prompts.md` |
-| 命名空间 | ADR-0003 | `adr-0003.prompts.md` |
-| 依赖管理 | ADR-0004 | `adr-0004.prompts.md` |
-| Handler/CQRS | ADR-0005 | `adr-0005.prompts.md` |
+| 模块隔离 | `ADR-0001-modular-monolith-vertical-slice-architecture.md` | `adr-0001.prompts.md` |
+| 层级边界 | `ADR-0002-platform-application-host-bootstrap.md` | `adr-0002.prompts.md` |
+| 命名空间 | `ADR-0003-namespace-rules.md` | `adr-0003.prompts.md` |
+| 依赖管理 | `ADR-0004-Cpm-Final.md` | `adr-0004.prompts.md` |
+| Handler/CQRS | `ADR-0005-Application-Interaction-Model-Final.md` | `adr-0005.prompts.md` |
+
+**重要**：评审时必须引用 ADR 正文的具体章节，而非仅引用 Prompt 文件。
 
 ### 步骤 3：检查危险信号
 

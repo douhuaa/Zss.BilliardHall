@@ -4,6 +4,14 @@
 
 在协助后端开发时，在 `base.instructions.md` 的基础上应用这些额外约束。
 
+## ⚖️ 权威提醒
+
+所有后端开发约束基于以下 **ADR 正文**：
+- `ADR-0001-modular-monolith-vertical-slice-architecture.md` - 模块隔离和垂直切片
+- `ADR-0005-Application-Interaction-Model-Final.md` - Handler 规则和 CQRS
+
+引用规则时，必须以 ADR 正文为准，Prompt 文件仅为辅助理解。
+
 ## 垂直切片组织
 
 每个业务用例必须组织为完整的垂直切片：
