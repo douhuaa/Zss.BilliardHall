@@ -6,6 +6,24 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// <summary>
 /// ADR-0005: 应用内交互模型与执行边界
 /// 验证运行时规则：Handler 职责、同步/异步边界、模块通信契约
+/// 
+/// ADR 映射清单（ADR Mapping Checklist）：
+/// ┌─────────────┬────────────────────────────────────────────────────────┬──────────┐
+/// │ 测试方法     │ 对应 ADR 约束                                          │ ADR 章节 │
+/// ├─────────────┼────────────────────────────────────────────────────────┼──────────┤
+/// │ ADR-0005.1  │ Handler 应有明确的命名约定                              │ 1, 8     │
+/// │ ADR-0005.2  │ Endpoint 不应包含业务逻辑                               │ 1, 8     │
+/// │ ADR-0005.3  │ Handler 不应依赖 ASP.NET 类型                           │ 2, 8     │
+/// │ ADR-0005.4  │ Handler 应该是无状态的                                  │ 2, 8     │
+/// │ ADR-0005.5  │ 模块间不应有未审批的同步调用                            │ 3, 8     │
+/// │ ADR-0005.6  │ 异步方法应遵循命名约定                                  │ 3, 8     │
+/// │ ADR-0005.7  │ 模块不应共享领域实体                                    │ 4, 8     │
+/// │ ADR-0005.8  │ Query Handler 可以返回 Contracts                       │ 4, 5, 8  │
+/// │ ADR-0005.9  │ Command Handler 和 Query Handler 应明确分离            │ 5, 8     │
+/// │ ADR-0005.10 │ Command Handler 不应返回业务数据                        │ 5, 8     │
+/// │ ADR-0005.11 │ Handler 应使用结构化异常                                │ 7, 8     │
+/// │ ADR-0005.12 │ 所有 Handler 应在模块程序集中                           │ 2, 8     │
+/// └─────────────┴────────────────────────────────────────────────────────┴──────────┘
 /// </summary>
 public sealed class ADR_0005_Architecture_Tests
 {
@@ -26,8 +44,15 @@ public sealed class ADR_0005_Architecture_Tests
             var isEventHandler = handler.Name.Contains("Event");
 
             Assert.True(isCommandHandler || isQueryHandler || isEventHandler,
-                $"❌ ADR-0005 违规: Handler {handler.FullName} 命名不清晰。\n" +
-                $"修复建议：Handler 应明确命名为 *CommandHandler、*QueryHandler 或 *EventHandler，表达明确的业务意图。");
+                $"❌ ADR-0005.1 违规: Handler 命名不清晰\n\n" +
+                $"违规类型: {handler.FullName}\n\n" +
+                $"问题分析:\n" +
+                $"Handler 命名未明确表达业务意图（Command/Query/Event）\n\n" +
+                $"修复建议:\n" +
+                $"1. 将 Handler 重命名为 *CommandHandler（如 CreateOrderCommandHandler）\n" +
+                $"2. 或重命名为 *QueryHandler（如 GetOrderByIdQueryHandler）\n" +
+                $"3. 或重命名为 *EventHandler（如 OrderCreatedEventHandler）\n\n" +
+                $"参考: docs/copilot/adr-0005.prompts.md（场景 1-3）");
         }
     }
 
@@ -62,8 +87,16 @@ public sealed class ADR_0005_Architecture_Tests
                 if (constructorParams.Count > 5)
                 {
                     Assert.Fail(
-                        $"⚠️ ADR-0005 建议: Endpoint/Controller {endpoint.FullName} 注入了过多依赖 ({constructorParams.Count} 个)，可能包含业务逻辑。\n" +
-                        $"修复建议：Endpoint 应该只负责接收请求、映射为 Use Case、转发给 Handler。业务逻辑应在 Handler 中实现。");
+                        $"❌ ADR-0005.2 违规: Endpoint/Controller 包含过多依赖\n\n" +
+                        $"违规类型: {endpoint.FullName}\n" +
+                        $"构造函数依赖数量: {constructorParams.Count} 个（超过建议的 5 个）\n\n" +
+                        $"问题分析:\n" +
+                        $"Endpoint/Controller 注入过多业务依赖，可能包含业务逻辑\n\n" +
+                        $"修复建议:\n" +
+                        $"1. Endpoint 应只注入 IMessageBus 或类似的协调服务\n" +
+                        $"2. 将业务逻辑移到 Handler 中实现\n" +
+                        $"3. Endpoint 只负责：接收请求 → 映射 Command/Query → 转发给 Handler → 返回响应\n\n" +
+                        $"参考: docs/copilot/adr-0005.prompts.md（场景 5，反模式 1）");
                 }
             }
         }
@@ -84,9 +117,16 @@ public sealed class ADR_0005_Architecture_Tests
             .GetResult();
 
         Assert.True(result.IsSuccessful,
-            $"❌ ADR-0005 违规: 模块 {moduleAssembly.GetName().Name} 中的 Handler 不应依赖 ASP.NET Core 包/程序集。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：Handler 应该是纯业务逻辑，不应依赖 Web 基础设施。");
+            $"❌ ADR-0005.3 违规: Handler 依赖 ASP.NET Core 类型\n\n" +
+            $"模块: {moduleAssembly.GetName().Name}\n" +
+            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}\n\n" +
+            $"问题分析:\n" +
+            $"Handler 不应依赖 Web 基础设施类型（ASP.NET Core），应保持协议无关\n\n" +
+            $"修复建议:\n" +
+            $"1. 将 Web/HTTP 相关逻辑保持在 Endpoint 或 Host 层\n" +
+            $"2. Handler 应只依赖业务抽象接口（如 IRepository, IEventBus）\n" +
+            $"3. 使用 Command/Query 对象传递数据，而非 HttpContext/IFormFile 等\n\n" +
+            $"参考: docs/copilot/adr-0005.prompts.md（场景 2）");
 
         // 额外的反射检查
         var handlers = Types.InAssembly(moduleAssembly)
@@ -104,8 +144,16 @@ public sealed class ADR_0005_Architecture_Tests
                 .ToList();
 
             Assert.True(ctorDeps.Count == 0,
-                $"❌ ADR-0005 违规: Handler {handler.FullName} 的构造函数参数依赖 ASP.NET 类型: {string.Join(", ", ctorDeps.Select(t => t.FullName))}。\n" +
-                $"修复建议：把 Web/HTTP 相关类型保持在 Host 层，Handler 应该是协议无关的。");
+                $"❌ ADR-0005.3 违规: Handler 构造函数依赖 ASP.NET 类型\n\n" +
+                $"违规 Handler: {handler.FullName}\n" +
+                $"依赖类型: {string.Join(", ", ctorDeps.Select(t => t.FullName))}\n\n" +
+                $"问题分析:\n" +
+                $"Handler 构造函数注入了 Web 框架类型\n\n" +
+                $"修复建议:\n" +
+                $"1. 移除 ASP.NET 类型的构造函数参数\n" +
+                $"2. 通过 Command/Query 传递必要的数据\n" +
+                $"3. 保持 Handler 为纯业务逻辑组件\n\n" +
+                $"参考: docs/copilot/adr-0005.prompts.md（场景 2）");
         }
     }
 
@@ -125,9 +173,16 @@ public sealed class ADR_0005_Architecture_Tests
                 .ToList();
 
             Assert.True(fields.Count == 0,
-                $"⚠️ ADR-0005 建议: Handler {handler.FullName} 包含可变字段，可能承载状态。\n" +
-                $"可变字段: {string.Join(", ", fields.Select(f => f.Name))}。\n" +
-                $"修复建议：Handler 应该是无状态的，所有依赖应通过构造函数注入（readonly）。");
+                $"❌ ADR-0005.4 违规: Handler 包含可变字段\n\n" +
+                $"违规 Handler: {handler.FullName}\n" +
+                $"可变字段: {string.Join(", ", fields.Select(f => f.Name))}\n\n" +
+                $"问题分析:\n" +
+                $"Handler 包含非 readonly 字段，可能维护长期状态\n\n" +
+                $"修复建议:\n" +
+                $"1. 将所有依赖字段标记为 readonly\n" +
+                $"2. 通过构造函数注入依赖，而非在字段中维护状态\n" +
+                $"3. Handler 应该是短生命周期、无状态、可重入的\n\n" +
+                $"参考: docs/copilot/adr-0005.prompts.md（反模式 3）");
         }
     }
 
@@ -162,8 +217,18 @@ public sealed class ADR_0005_Architecture_Tests
                     if (paramModule != null && paramModule != currentModule)
                     {
                         Assert.Fail(
-                            $"❌ ADR-0005 违规: Handler {handler.FullName} 注入了其他模块 {paramModule} 的类型: {param.FullName}。\n" +
-                            $"修复建议：模块间应通过异步通信（事件/消息）解耦，避免同步调用。如确需同步调用，必须提交 ADR 审批。");
+                            $"❌ ADR-0005.5 违规: Handler 注入了其他模块的类型\n\n" +
+                            $"违规 Handler: {handler.FullName}\n" +
+                            $"当前模块: {currentModule}\n" +
+                            $"依赖模块: {paramModule}\n" +
+                            $"依赖类型: {param.FullName}\n\n" +
+                            $"问题分析:\n" +
+                            $"模块间直接注入依赖表示同步调用，违反模块隔离原则\n\n" +
+                            $"修复建议:\n" +
+                            $"1. 使用异步事件通信: await _eventBus.Publish(new SomeEvent(...))\n" +
+                            $"2. 或通过契约查询: var dto = await _queryBus.Send(new GetSomeData(...))\n" +
+                            $"3. 如确需同步调用，必须提交 ADR 破例审批\n\n" +
+                            $"参考: docs/copilot/adr-0005.prompts.md（场景 4，反模式 4）");
                     }
                 }
             }
@@ -191,8 +256,16 @@ public sealed class ADR_0005_Architecture_Tests
                 if (!method.Name.EndsWith("Async"))
                 {
                     Assert.Fail(
-                        $"⚠️ ADR-0005 建议: 异步方法 {type.FullName}.{method.Name} 应该以 'Async' 结尾。\n" +
-                        $"修复建议：异步方法命名应遵循 .NET 约定，以 Async 结尾（Handler.Handle 方法除外）。");
+                        $"❌ ADR-0005.6 违规: 异步方法命名不符合约定\n\n" +
+                        $"违规方法: {type.FullName}.{method.Name}\n" +
+                        $"返回类型: {method.ReturnType.Name}\n\n" +
+                        $"问题分析:\n" +
+                        $"异步方法（返回 Task/Task<T>）应以 'Async' 结尾\n\n" +
+                        $"修复建议:\n" +
+                        $"1. 将方法重命名为 {method.Name}Async\n" +
+                        $"2. 确保调用方也更新方法名\n" +
+                        $"3. Handler.Handle 方法可以例外（框架约定）\n\n" +
+                        $"参考: docs/copilot/adr-0005.prompts.md（场景 2-3）");
                 }
             }
         }
@@ -269,8 +342,15 @@ public sealed class ADR_0005_Architecture_Tests
             if (isCommandHandler && isQueryHandler)
             {
                 Assert.Fail(
-                    $"❌ ADR-0005 违规: Handler {handler.FullName} 同时包含 Command 和 Query 语义。\n" +
-                    $"修复建议：严格分离 Command Handler（写操作）和 Query Handler（读操作）。");
+                    $"❌ ADR-0005.9 违规: Handler 同时包含 Command 和 Query 语义\n\n" +
+                    $"违规 Handler: {handler.FullName}\n\n" +
+                    $"问题分析:\n" +
+                    $"Handler 命名同时包含 Command 和 Query，违反 CQRS 原则\n\n" +
+                    $"修复建议:\n" +
+                    $"1. 严格分离为两个 Handler：XxxCommandHandler 和 XxxQueryHandler\n" +
+                    $"2. Command Handler：执行写操作，返回 void 或 ID\n" +
+                    $"3. Query Handler：执行读操作，返回 DTO\n\n" +
+                    $"参考: docs/copilot/adr-0005.prompts.md（FAQ Q1）");
             }
         }
     }
