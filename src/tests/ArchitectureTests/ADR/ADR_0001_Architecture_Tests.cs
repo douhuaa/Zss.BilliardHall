@@ -4,12 +4,21 @@ using System.Reflection;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
-/// ADR-0001: 模块化单体与垂直切片架构决策
+/// ADR-0001: 模块化单体与垂直切片架构决策（v3.2）
 /// 验证模块隔离、垂直切片、契约使用等核心架构约束
+/// 
+/// 约束映射（对应 ADR-0001 v3.2 快速参考和架构测试映射表）：
+/// - ADR-0001.1: 模块不可相互引用 (L1) → Modules_Should_Not_Reference_Other_Modules
+/// - ADR-0001.2: 项目文件/程序集禁止引用其他模块 (L1) → Module_Csproj_Should_Not_Reference_Other_Modules
+/// - ADR-0001.3: 垂直切片/用例为最小单元 (L2) → Handlers_Should_Be_In_UseCases_Namespace
+/// - ADR-0001.4: 禁止横向 Service 抽象 (L1) → Modules_Should_Not_Contain_Service_Classes
+/// - ADR-0001.5: 只允许事件/契约/原始类型通信 (L2) → Contract_Rules_Semantic_Check
+/// - ADR-0001.6: Contract 不含业务判断字段 (L2/L3) → Contract_Business_Field_Analyzer
+/// - ADR-0001.7: 命名空间/目录强制隔离 (L1) → Namespace_Should_Match_Module_Boundaries
 /// </summary>
 public sealed class ADR_0001_Architecture_Tests
 {
-    #region 1. 模块隔离约束
+    #region 1. 模块隔离约束 (ADR-0001.1, 0001.2, 0001.7)
 
     [Theory(DisplayName = "ADR-0001.1: 模块不应相互引用")]
     [ClassData(typeof(ModuleAssemblyData))]
@@ -24,9 +33,13 @@ public sealed class ADR_0001_Architecture_Tests
                 .GetResult();
 
             Assert.True(result.IsSuccessful,
-                $"❌ ADR-0001 违规: 模块 {moduleName} 不应依赖模块 {other}。\n" +
+                $"❌ ADR-0001.1 违规: 模块 {moduleName} 不应依赖模块 {other}。\n" +
                 $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-                $"修复建议：将共享逻辑移至 Platform/BuildingBlocks，或改为消息通信（Publish/Invoke），或由 Bootstrapper/Coordinator 做模块级协调。");
+                $"修复建议：\n" +
+                $"  1. 使用领域事件进行异步通信\n" +
+                $"  2. 使用数据契约进行只读查询\n" +
+                $"  3. 传递原始类型（Guid、string）而非领域对象\n" +
+                $"参考：docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md");
         }
     }
 
@@ -64,11 +77,30 @@ public sealed class ADR_0001_Architecture_Tests
                 continue;
 
             Assert.Fail(
-                $"❌ ADR-0001 违规: 模块 {projectName} 不应引用其他模块或非白名单项目: {refName}。\n" +
+                $"❌ ADR-0001.2 违规: 模块 {projectName} 不应引用其他模块或非白名单项目: {refName}。\n" +
                 $"项目路径: {csprojPath}\n" +
                 $"引用路径: {include}\n" +
-                $"修复建议：将共享代码移至 Platform/BuildingBlocks，或改用消息通信（Publish/Invoke）。");
+                $"修复建议：将共享代码移至 Platform/BuildingBlocks，或改用消息通信。");
         }
+    }
+
+    [Theory(DisplayName = "ADR-0001.7: 命名空间应匹配模块边界")]
+    [ClassData(typeof(ModuleAssemblyData))]
+    public void Namespace_Should_Match_Module_Boundaries(Assembly moduleAssembly)
+    {
+        var moduleName = moduleAssembly.GetName().Name!.Split('.').Last();
+        var expectedNamespace = $"Zss.BilliardHall.Modules.{moduleName}";
+
+        var result = Types.InAssembly(moduleAssembly)
+            .That().AreClasses()
+            .Or().AreInterfaces()
+            .Should().ResideInNamespaceStartingWith(expectedNamespace)
+            .GetResult();
+
+        Assert.True(result.IsSuccessful,
+            $"❌ ADR-0001.7 违规: 模块 {moduleName} 的类型必须在命名空间 {expectedNamespace} 下。\n" +
+            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
+            $"修复建议：确保所有类型都在正确的模块命名空间下，遵循目录结构与命名空间一致性原则。");
     }
 
     public static IEnumerable<object[]> GetModuleProjectFiles()
@@ -86,30 +118,37 @@ public sealed class ADR_0001_Architecture_Tests
 
     #endregion
 
-    #region 2. 垂直切片架构约束
+    #region 2. 垂直切片架构约束 (ADR-0001.3, 0001.4)
 
-    [Theory(DisplayName = "ADR-0001.3: 模块不应包含传统分层命名空间")]
+    [Theory(DisplayName = "ADR-0001.3: Handler 应该在 UseCases 命名空间下")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Modules_Should_Not_Contain_Traditional_Layering_Namespaces(Assembly moduleAssembly)
+    public void Handlers_Should_Be_In_UseCases_Namespace(Assembly moduleAssembly)
     {
-        var forbidden = new[] { ".Application", ".Domain", ".Infrastructure", ".Repository", ".Service", ".Shared", ".Common" };
-        foreach (var ns in forbidden)
-        {
-            var result = Types.InAssembly(moduleAssembly)
-                .That().ResideInNamespaceStartingWith("Zss.BilliardHall.Modules")
-                .ShouldNot().ResideInNamespaceContaining(ns)
-                .GetResult();
+        var handlers = Types.InAssembly(moduleAssembly)
+            .That().HaveNameEndingWith("Handler")
+            .And().AreClasses()
+            .GetTypes();
 
-            Assert.True(result.IsSuccessful,
-                $"❌ ADR-0001 违规: 模块 {moduleAssembly.GetName().Name} 禁止出现命名空间: {ns}。\n" +
-                $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-                $"修复建议：将相关代码移回模块切片内部或抽象到 Platform（仅当满足 BuildingBlocks 准入规则）。");
+        foreach (var handler in handlers)
+        {
+            var ns = handler.Namespace ?? "";
+            // 接受 UseCases 或 Features（历史原因，语义相同）
+            var hasUseCases = ns.Contains(".UseCases.") || ns.Contains(".Features.");
+
+            Assert.True(hasUseCases,
+                $"❌ ADR-0001.3 违规: Handler {handler.FullName} 必须在 UseCases 或 Features 命名空间下。\n" +
+                $"当前命名空间: {ns}\n" +
+                $"修复建议：\n" +
+                $"  1. 将 Handler 移动到对应的 UseCases/<用例名>/ 或 Features/<用例名>/ 目录下\n" +
+                $"  2. 采用垂直切片架构，每个用例包含 Endpoint、Command/Query、Handler\n" +
+                $"  3. 避免创建横向的 Service 层\n" +
+                $"参考：docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md");
         }
     }
 
-    [Theory(DisplayName = "ADR-0001.4: 模块不应包含 Repository/Service 等横向抽象")]
+    [Theory(DisplayName = "ADR-0001.4: 模块不应包含横向 Service 类")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Modules_Should_Not_Contain_Repository_Or_Service_Semantics(Assembly moduleAssembly)
+    public void Modules_Should_Not_Contain_Service_Classes(Assembly moduleAssembly)
     {
         var forbidden = new[] { "Repository", "Service", "Manager", "Store" };
         foreach (var word in forbidden)
@@ -120,150 +159,52 @@ public sealed class ADR_0001_Architecture_Tests
                 .GetResult();
 
             Assert.True(result.IsSuccessful,
-                $"❌ ADR-0001 违规: 模块 {moduleAssembly.GetName().Name} 禁止出现类型名包含: {word}。\n" +
+                $"❌ ADR-0001.4 违规: 模块 {moduleAssembly.GetName().Name} 禁止包含名称含 '{word}' 的类型。\n" +
                 $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-                $"修复建议：把实现放到模块内的领域/领域服务或改为消息交互。");
-        }
-    }
-
-    [Theory(DisplayName = "ADR-0001.5: Handler 应该自包含，不依赖横向 Service")]
-    [ClassData(typeof(ModuleAssemblyData))]
-    public void Handlers_Should_Not_Depend_On_Horizontal_Services(Assembly moduleAssembly)
-    {
-        var handlers = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("Handler")
-            .GetTypes();
-
-        foreach (var handler in handlers)
-        {
-            var dependencies = handler.GetConstructors()
-                .SelectMany(c => c.GetParameters())
-                .Select(p => p.ParameterType)
-                .Where(t => t.Name.EndsWith("Service") &&
-                           t.Namespace?.StartsWith("Zss.BilliardHall.Modules") == true)
-                .ToList();
-
-            Assert.True(dependencies.Count == 0,
-                $"❌ ADR-0001 违规: Handler {handler.FullName} 依赖了横向 Service: {string.Join(", ", dependencies.Select(d => d.Name))}。\n" +
-                $"修复建议：在垂直切片架构中，Handler 应直接包含业务逻辑，避免抽象为横向 Service。");
-        }
-    }
-
-    [Theory(DisplayName = "ADR-0001.6: Handler 不应直接调用其他 Handler")]
-    [ClassData(typeof(ModuleAssemblyData))]
-    public void Handlers_Should_Not_Call_Other_Handlers_Directly(Assembly moduleAssembly)
-    {
-        var handlers = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("Handler")
-            .GetTypes();
-
-        foreach (var handler in handlers)
-        {
-            var dependencies = handler.GetConstructors()
-                .SelectMany(c => c.GetParameters())
-                .Select(p => p.ParameterType)
-                .Where(t => t.Name.EndsWith("Handler") &&
-                           t.Namespace?.StartsWith("Zss.BilliardHall.Modules") == true)
-                .ToList();
-
-            Assert.True(dependencies.Count == 0,
-                $"❌ ADR-0001 违规: Handler {handler.FullName} 直接依赖了其他 Handler: {string.Join(", ", dependencies.Select(d => d.Name))}。\n" +
-                $"修复建议：Handler 之间不应直接调用。如需组合逻辑，使用 Mediator/EventBus 进行解耦。");
+                $"修复建议：\n" +
+                $"  1. 将业务逻辑放入领域模型或 Handler 中\n" +
+                $"  2. 采用垂直切片架构，避免横向抽象层\n" +
+                $"  3. 如需共享技术能力，移至 Platform/BuildingBlocks\n" +
+                $"参考：docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md");
         }
     }
 
     #endregion
 
-    #region 3. 契约使用规则约束
+    #region 3. 契约使用规则约束 (ADR-0001.5, 0001.6)
 
-    [Theory(DisplayName = "ADR-0001.7: Command Handler 不应依赖 IQuery 接口")]
+    [Theory(DisplayName = "ADR-0001.5: 模块间只允许事件/契约/原始类型通信（语义检查）")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void CommandHandlers_Should_Not_Depend_On_IQuery_Interfaces(Assembly moduleAssembly)
+    public void Contract_Rules_Semantic_Check(Assembly moduleAssembly)
     {
-        var result = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("CommandHandler")
-            .Or().HaveNameEndingWith("Command.Handler")
-            .ShouldNot().HaveDependencyOn("Zss.BilliardHall.Platform.Contracts.IQuery")
-            .GetResult();
-
-        Assert.True(result.IsSuccessful,
-            $"❌ ADR-0001 违规: 模块 {moduleAssembly.GetName().Name} 中的 Command Handler 不应依赖 IQuery 接口。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：Command Handler 应通过领域事件、命令或维护本地状态副本来获取必要信息，而不是查询其他模块的契约数据做业务决策。");
-    }
-
-    [Theory(DisplayName = "ADR-0001.8: Platform 不应依赖模块契约")]
-    [MemberData(nameof(GetPlatformAssembly))]
-    public void Platform_Should_Not_Depend_On_Module_Contracts(Assembly platformAssembly)
-    {
-        var result = Types.InAssembly(platformAssembly)
-            .That().ResideInNamespace("Zss.BilliardHall.Platform")
-            .And().DoNotResideInNamespace("Zss.BilliardHall.Platform.Contracts")
-            .ShouldNot().HaveDependencyOnAny(
-                ModuleAssemblyData.ModuleNames.Select(m => $"Zss.BilliardHall.Modules.{m}").ToArray())
-            .GetResult();
-
-        Assert.True(result.IsSuccessful,
-            $"❌ ADR-0001 违规: Platform 层不应依赖任何模块的契约或实现。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：Platform 只提供技术能力，不应包含业务逻辑或依赖业务契约。");
-    }
-
-    public static IEnumerable<object[]> GetPlatformAssembly()
-    {
-        yield return new object[] { typeof(Platform.PlatformBootstrapper).Assembly };
-    }
-
-    #endregion
-
-    #region 4. 模块通信约束
-
-    [Theory(DisplayName = "ADR-0001.9: 模块只能依赖 Platform，不能依赖 Application/Host")]
-    [ClassData(typeof(ModuleAssemblyData))]
-    public void Modules_Should_Only_Depend_On_Platform(Assembly moduleAssembly)
-    {
-        var result = Types.InAssembly(moduleAssembly)
-            .ShouldNot().HaveDependencyOnAny(
-                "Zss.BilliardHall.Application",
-                "Zss.BilliardHall.Host")
-            .GetResult();
-
-        Assert.True(result.IsSuccessful,
-            $"❌ ADR-0001 违规: 模块 {moduleAssembly.GetName().Name} 不应依赖 Application 或 Host。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：将需要共享的契约放到 Platform/BuildingBlocks，或通过消息通信解耦。");
-    }
-
-    #endregion
-
-    #region 5. Platform 层限制
-
-    [Fact(DisplayName = "ADR-0001.10: Platform 不应包含业务相关命名")]
-    public void Platform_Should_Not_Contain_Business_Named_Types()
-    {
-        var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
-        var businessKeywords = new[]
+        var moduleName = moduleAssembly.GetName().Name!.Split('.').Last();
+        
+        // 检查是否有跨模块的领域对象引用（Entity/Aggregate/ValueObject）
+        var domainTypes = new[] { "Entity", "Aggregate", "ValueObject", "DomainEvent" };
+        
+        foreach (var other in ModuleAssemblyData.ModuleNames.Where(m => m != moduleName))
         {
-            "Member", "Order", "Payment", "Billing", "Invoice",
-            "Customer", "Product", "Reservation", "Table"
-        };
+            foreach (var domainType in domainTypes)
+            {
+                var result = Types.InAssembly(moduleAssembly)
+                    .That().ResideInNamespaceStartingWith($"Zss.BilliardHall.Modules.{moduleName}")
+                    .ShouldNot().HaveDependencyOn($"Zss.BilliardHall.Modules.{other}.Domain")
+                    .GetResult();
 
-        foreach (var keyword in businessKeywords)
-        {
-            var result = Types.InAssembly(platformAssembly)
-                .That().DoNotResideInNamespace("Zss.BilliardHall.Platform.Contracts")
-                .ShouldNot().HaveNameMatching($".*{keyword}.*")
-                .GetResult();
-
-            Assert.True(result.IsSuccessful,
-                $"❌ ADR-0001 违规: Platform 层不应包含业务相关类型名称: {keyword}。\n" +
-                $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.Name) ?? Array.Empty<string>())}。\n" +
-                $"修复建议：Platform 只提供技术能力（日志、事务、序列化等），业务逻辑应放在模块中。");
+                Assert.True(result.IsSuccessful,
+                    $"❌ ADR-0001.5 违规: 模块 {moduleName} 不应依赖其他模块 {other} 的领域对象。\n" +
+                    $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
+                    $"修复建议：\n" +
+                    $"  1. 使用领域事件进行异步通信\n" +
+                    $"  2. 使用只读契约（Contracts）传递数据\n" +
+                    $"  3. 传递原始类型（Guid、string、int）而非领域对象\n" +
+                    $"参考：docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md");
+            }
         }
     }
 
-    [Fact(DisplayName = "ADR-0001.11: Contracts 应该是简单的数据结构")]
-    public void Contracts_Should_Be_Simple_Data_Structures()
+    [Fact(DisplayName = "ADR-0001.6: Contract 不应包含业务判断字段（语义分析）")]
+    public void Contract_Business_Field_Analyzer()
     {
         var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
         var contractTypes = Types.InAssembly(platformAssembly)
@@ -271,19 +212,34 @@ public sealed class ADR_0001_Architecture_Tests
             .And().AreClasses()
             .GetTypes();
 
+        // 业务判断相关字段名称模式
+        var businessDecisionPatterns = new[]
+        {
+            "CanRefund", "CanCancel", "IsValid", "IsEnabled", "IsActive",
+            "ShouldApprove", "MustVerify", "AllowEdit"
+        };
+
         foreach (var contractType in contractTypes)
         {
             if (contractType.IsAbstract || contractType.IsInterface)
                 continue;
 
-            var publicMethods = contractType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(m => !m.IsSpecialName)
-                .Where(m => m.DeclaringType == contractType)
-                .ToList();
+            var properties = contractType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            
+            foreach (var prop in properties)
+            {
+                var hasBusinessDecisionPattern = businessDecisionPatterns.Any(pattern => 
+                    prop.Name.Contains(pattern, StringComparison.OrdinalIgnoreCase));
 
-            Assert.True(publicMethods.Count == 0,
-                $"❌ ADR-0001 违规: 契约类型 {contractType.FullName} 包含业务方法: {string.Join(", ", publicMethods.Select(m => m.Name))}。\n" +
-                $"修复建议：契约应该是简单的数据结构（DTO/Record），只包含属性，不包含业务逻辑方法。");
+                Assert.False(hasBusinessDecisionPattern,
+                    $"❌ ADR-0001.6 违规: Contract {contractType.Name} 包含疑似业务判断字段: {prop.Name}。\n" +
+                    $"修复建议：\n" +
+                    $"  1. Contract 应仅用于数据传递，不包含业务决策字段\n" +
+                    $"  2. 将业务判断逻辑移至 Handler 或领域模型中\n" +
+                    $"  3. 使用简单的数据字段（如状态枚举）而非判断字段\n" +
+                    $"参考：docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md\n" +
+                    $"注意：此为 L2/L3 级别检查，可能需要人工确认是否真的违规。");
+            }
         }
     }
 

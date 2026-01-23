@@ -7,6 +7,19 @@
 
 ---
 
+## ⚖️ 权威声明（Authority Declaration）
+
+> **本目录下的各层 README 和 Copilot Prompts（如 `docs/copilot/adr-XXXX.prompts.md`）仅为说明、辅导和快速参考之用。**
+>
+> **在架构判定、CI 校验、测试执行时，唯一判决依据为各 ADR 的正文内容（如 `ADR-0001-modular-monolith-vertical-slice-architecture.md`）。**
+>
+> - ✅ ADR 正文 = 宪法，具有最高权威
+> - 📖 README / Prompts = 辅导材料，帮助理解和应用
+> - 🚫 若辅导材料与 ADR 正文冲突，以 ADR 正文为准
+> - 🔍 架构测试的唯一依据是 ADR 正文中标注【必须架构测试覆盖】的条款
+
+---
+
 ## 概述
 
 > 本 README 只描述 ADR 的分层、编号与阅读方式；具体规则以各 ADR 为准。
