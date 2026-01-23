@@ -448,7 +448,137 @@ app.Run();
 - [ ] 是否只做模块装配？
 - [ ] 是否不依赖 Host？
 - [ ] 是否提供了标准入口 ApplicationBootstrapper？
-- [ ] 是否避免了 HttpContext 等 Host 特定类型？
+- [ ] 是否避免了 HttpContext 等 Host 特# ADR-0002：Platform / Application / Host 三层启动体系
+
+**状态**：✅ 已采纳（Final，不可随意修改）  
+**级别**：架构约束（Architectural Contract）  
+**适用范围**：所有 Host、模块、测试、未来子系统  
+**生效时间**：即刻
+
+---
+
+## 聚焦内容（Focus）
+
+- 三层装配模型：Platform / Application / Host 职责分明
+- 层级依赖方向：唯一单向依赖（Host → Application → Platform）
+- Bootstrapping 的唯一入口
+- 目录结构与命名标准，支持多 Host 实例
+- Program.cs 极简化，所有启动集中到装配入口
+- 与命名空间和包管理的关系（见 ADR-0003、0004）
+
+---
+
+## 术语表（Glossary）
+
+| 术语        | 定义                                       |
+|-------------|------------------------------------------|
+| Platform    | 技术基座，仅提供技术能力，不感知业务       |
+| Application | 应用装配层，定义“系统是什么”，聚合模块和用例 |
+| Host        | 进程外壳，决定“怎么跑”，如 Web/Worker/Test |
+| Bootstrapper| 唯一的装配入口，负责注册服务和配置         |
+| 单向依赖    | Host → Application → Platform           |
+
+---
+
+## 决策（Decision）
+
+### Platform 层
+
+- 只提供通用技术能力
+- 不感知任何业务（不可访问 Application、Host、Modules）
+- 必须有唯一入口`PlatformBootstrapper`
+- 只允许注册日志、追踪、异常、序列化等
+
+### Application 层
+
+- 负责系统能力的装配和集成
+- 禁止依赖 Host
+- 合理注册 Wolverine/Marten/所有 Pipeline
+- 必须有唯一入口`ApplicationBootstrapper`
+- 不直接依赖 Host/Modules/任何业务对象
+
+### Host 层
+
+- 唯一职责：调用 Platform、Application 的 Bootstrapper
+- 决定进程模型，不包含任何业务逻辑
+- Program.cs 保持极简（建议 ≤30 行）
+- 项目命名为`Zss.BilliardHall.Host.*`
+
+**通用���止项：**
+- ❌ 禁止 Platform 依赖 Application/Host
+- ❌ 禁止 Application 依赖 Host
+- ❌ 禁止 Host 包含任何业务代码或直接注册 Handler/Module
+
+---
+
+## 快速参考和架构测试映射
+
+| 约束编号     | 描述                             | 层级 | 测试用例/自动化                         | 章节            |
+|--------------|----------------------------------|------|-----------------------------------------|---------------|
+| ADR-0002.1   | Platform 不应依赖 Application    | L1   | Platform_Should_Not_Depend_On_Application | 决策-Platform |
+| ADR-0002.2   | Platform 不应依赖 Host           | L1   | Platform_Should_Not_Depend_On_Host        | 决策-Platform |
+| ADR-0002.3   | Platform 不应依赖 Modules        | L1   | Platform_Should_Not_Depend_On_Modules     | 决策-Platform |
+| ADR-0002.4   | Platform 应有唯一 Bootstrapper   | L1   | Platform_Should_Have_Single_Bootstrapper_Entry_Point | 决策-Platform |
+| ADR-0002.5   | Application 不依赖 Host          | L1   | Application_Should_Not_Depend_On_Host     | 决策-Application |
+| ADR-0002.6   | Application 不依赖 Modules       | L1   | Application_Should_Not_Depend_On_Modules  | 决策-Application |
+| ADR-0002.7   | Application 应有唯一 Bootstrapper| L1   | Application_Should_Have_Single_Bootstrapper_Entry_Point | 决策-Application |
+| ADR-0002.8   | Application 不含 Host 专属类型   | L1   | Application_Should_Not_Use_HttpContext | 决策-Application |
+| ADR-0002.9   | Host 不依赖 Modules              | L1   | Host_Should_Not_Depend_On_Modules        | 决策-Host      |
+| ADR-0002.10  | Host 不含业务类型                | L1   | Host_Should_Not_Contain_Business_Types   | 决策-Host      |
+| ADR-0002.11  | Host 项目文件不应引用 Modules    | L1   | Host_Csproj_Should_Not_Reference_Modules | 决策-Host      |
+| ADR-0002.12  | Program.cs 建议 ≤30行            | L1   | Program_Cs_Should_Be_Concise             | 决策-Host      |
+| ADR-0002.13  | Program.cs 只应调用 Bootstrapper | L1   | Program_Cs_Should_Only_Call_Bootstrapper | 决策-Host      |
+| ADR-0002.14  | 三层唯一依赖方向验证             | L1   | Verify_Complete_Three_Layer_Dependency_Direction    | 决策 |
+
+> L1: 静态自动化可执行（ArchitectureTests）
+
+---
+
+## 依赖与相关ADR
+
+- ADR-0001：模块组织与切片（配合定义模块边界）
+- ADR-0003：命名空间自动推导
+- ADR-0004：包管理与依赖分层
+- ADR-0005：运行时交互模型
+- ADR-0000：架构测试机制
+
+---
+
+## 检查清单
+
+- [ ] Platform 是否只提供技术能力，不依赖业务？
+- [ ] Application 只做装配，无 Host/业务依赖？
+- [ ] Host 仅负责装配和启动，无业务逻辑、无服务注册？
+- [ ] Program.cs 是否极简、只调用 Bootstrapper？
+- [ ] 每一层均有唯一 Bootstrapper 入口定义？
+- [ ] 所有依赖方向只允许单向流动？
+
+---
+
+## 扩展落地建议
+
+- 将 Bootstrapper 明确模板化，统一团队新建
+- 多 Host 支持通过目录+命名空间一致性自动校验
+- 所有启动/装配规则写入 Onboarding 培训
+- Program.cs 超 30 行主动触发架构审查
+- 强制架构测试配合 CI，防止依赖倒置
+
+---
+
+## 版本历史
+
+| 版本 | 日期       | 变更摘要                               |
+|------|------------|----------------------------------|
+| 3.0  | 2026-01-22 | 结构升级、去编号化、加强测试映射           |
+| 2.0  | 2026-01-20 | 目录与依赖方向细化                       |
+| 1.0  | 初版       | 初始发布                               |
+
+---
+
+## 附件
+
+- [ADR-0003 命名空间与项目边界规范](ADR-0003-namespace-rules.md)
+- [ADR-0004 中央包管理与依赖](ADR-0004-Cpm-Final.md)定类型？
 
 ### Host 层检查清单
 
