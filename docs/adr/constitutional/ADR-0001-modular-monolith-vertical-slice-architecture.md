@@ -37,7 +37,7 @@
 
 ---
 
-## 决策与约束
+## 决策（Decision）
 
 ### 模块定义与隔离
 
@@ -147,7 +147,7 @@ public record OrderPaidEvent(Guid OrderId);
 
 ---
 
-## 企业级扩展落地建议
+## 扩展落地建议
 
 - 契约分包：推荐所有跨模块 Contracts 独立 `*.Contracts` 项目，分层版本化管理
 - 事件设计：领域/集成事件建议统一格式+工具化校验
