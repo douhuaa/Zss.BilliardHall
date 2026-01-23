@@ -175,15 +175,15 @@
 
 | 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
 |---------|---------|---------|---------|---------|
-| ADR-0004.1 | Directory.Packages.props 应存在于仓库根目录 | ✅ | `Repository_Should_Have_Directory_Packages_Props` | 2.1 |
-| ADR-0004.2 | CPM 应被启用 (ManagePackageVersionsCentrally=true) | ✅ | `CPM_Should_Be_Enabled` | 2.1 |
-| ADR-0004.3 | CPM 应启用传递依赖固定 (CentralPackageTransitivePinningEnabled) | ⚠️ | `CPM_Should_Enable_Transitive_Pinning` | 2.1 |
-| ADR-0004.4 | 项目文件不应手动指定包版本 | ✅ | `Projects_Should_Not_Specify_Package_Versions` | 2.1, 2.4 |
-| ADR-0004.5 | Directory.Packages.props 应包含包分组 (Label) | ⚠️ | `Directory_Packages_Props_Should_Contain_Package_Groups` | 2.3 |
-| ADR-0004.6 | Directory.Packages.props 应包含常见包分组 | ⚠️ | `Directory_Packages_Props_Should_Contain_Common_Package_Groups` | 2.3 |
-| ADR-0004.7 | Platform 项目不应引用业务包 | ✅ | `Platform_Projects_Should_Not_Reference_Business_Packages` | 2.2, 2.4 |
-| ADR-0004.8 | 所有测试项目应引用相同的测试框架版本 | ✅ | `All_Test_Projects_Should_Use_Same_Test_Framework_Versions` | 2.4 |
-| ADR-0004.9 | Directory.Packages.props 应定义所有项目使用的包 | ✅ | `Directory_Packages_Props_Should_Define_All_Used_Packages` | 2.1, 2.4 |
+| ADR-0004.1 | Directory.Packages.props 应存在于仓库根目录 | ✅ | Repository_Should_Have_Directory_Packages_Props | 2.1, 2.4, 3 |
+| ADR-0004.2 | CPM 应被启用 (ManagePackageVersionsCentrally=true) | ✅ | CPM_Should_Be_Enabled | 2.1, 2.4, 3 |
+| ADR-0004.3 | CPM 应启用传递依赖固定 (CentralPackageTransitivePinningEnabled) | ✅ | CPM_Should_Enable_Transitive_Pinning | 2.1, 3 |
+| ADR-0004.4 | 项目文件不应手动指定包版本 | ✅ | Projects_Should_Not_Specify_Package_Versions | 2.1, 2.4, 3 |
+| ADR-0004.5 | Directory.Packages.props 应包含包分组 (Label) | ✅ | Directory_Packages_Props_Should_Contain_Package_Groups | 2.3, 3 |
+| ADR-0004.6 | Directory.Packages.props 应包含常见包分组 | ✅ | Directory_Packages_Props_Should_Contain_Common_Package_Groups | 2.3, 3 |
+| ADR-0004.7 | Platform 项目不应引用业务包 | ✅ | Platform_Projects_Should_Not_Reference_Business_Packages | 2.2, 2.4, 3 |
+| ADR-0004.8 | 所有测试项目应使用相同的测试框架版本 | ✅ | All_Test_Projects_Should_Use_Same_Test_Framework_Versions | 2.4, 3 |
+| ADR-0004.9 | Directory.Packages.props 应定义所有项目使用的包 | ✅ | Directory_Packages_Props_Should_Define_All_Used_Packages | 2.1, 2.4, 3 |
 
 ---
 

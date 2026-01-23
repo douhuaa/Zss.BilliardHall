@@ -475,6 +475,17 @@ NetArchTest 被视为：
 
 ---
 
+## 快速参考表（Quick Reference Table）
+
+| 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
+|---------|---------|---------|---------|---------|
+| ADR-0000.1 | 每个 ADR 必须有对应的架构测试类 | ✅ | Each_ADR_Must_Have_Exact_And_Unique_Architecture_Test | 5, 9 |
+| ADR-0000.2 | 架构测试类必须包含最少数量的断言 | ✅ | Architecture_Test_Classes_Must_Have_Minimum_Assertions | 5, 9 |
+| ADR-0000.3 | 测试失败消息必须包含 ADR 编号 | ✅ | Test_Failure_Messages_Must_Include_ADR_Number | 5, 9 |
+| ADR-0000.4 | 架构测试不得被跳过 | ✅ | Architecture_Tests_Must_Not_Be_Skipped | 5, 9 |
+
+---
+
 ## 快速参考（Quick Reference）
 
 ### 常见问题

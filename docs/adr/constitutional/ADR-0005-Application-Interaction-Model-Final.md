@@ -253,18 +253,18 @@ ADR-0005 定义的不是技术选型，而是**运行时秩序**：
 
 | 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
 |---------|---------|---------|---------|---------|
-| ADR-0005.1 | Handler 应有明确的命名约定 | ✅ | `Handlers_Should_Have_Clear_Naming_Convention` | 1, 8 |
-| ADR-0005.2 | Endpoint 不应包含业务逻辑 | ✅ | `Endpoints_Should_Not_Contain_Business_Logic` | 1, 8 |
-| ADR-0005.3 | Handler 不应依赖 ASP.NET 类型 | ✅ | `Handlers_Should_Not_Depend_On_AspNet` | 2, 8 |
-| ADR-0005.4 | Handler 应该是无状态的 | ✅ | `Handlers_Should_Be_Stateless` | 2, 8 |
-| ADR-0005.5 | 模块间不应有未审批的同步调用 | ✅ | `Modules_Should_Not_Have_Synchronous_Cross_Module_Calls` | 3, 8 |
-| ADR-0005.6 | 异步方法应遵循命名约定 | ✅ | `Async_Methods_Should_Follow_Naming_Convention` | 3, 8 |
-| ADR-0005.7 | 模块不应共享领域实体 | ✅ | `Modules_Should_Not_Share_Domain_Entities` | 4, 8 |
-| ADR-0005.8 | Query Handler 可以返回 Contracts | ✅ | `QueryHandlers_Can_Return_Contracts` | 4, 5, 8 |
-| ADR-0005.9 | Command Handler 和 Query Handler 应明确分离 | ✅ | `Command_And_Query_Handlers_Should_Be_Separated` | 5, 8 |
-| ADR-0005.10 | Command Handler 不应返回业务数据 | ✅ | `CommandHandlers_Should_Not_Return_Business_Data` | 5, 8 |
-| ADR-0005.11 | Handler 应使用结构化异常 | ✅ | `Handlers_Should_Use_Structured_Exceptions` | 7, 8 |
-| ADR-0005.12 | 所有 Handler 应在模块程序集中 | ✅ | `All_Handlers_Should_Be_In_Module_Assemblies` | 2, 8 |
+| ADR-0005.1 | Handler 应有明确的命名约定 | ✅ | Handlers_Should_Have_Clear_Naming_Convention | 1, 2, 8 |
+| ADR-0005.2 | Endpoint 不应包含业务逻辑 | ✅ | Endpoints_Should_Not_Contain_Business_Logic | 1, 8 |
+| ADR-0005.3 | Handler 不应依赖 ASP.NET 类型 | ✅ | Handlers_Should_Not_Depend_On_AspNet | 2, 8 |
+| ADR-0005.4 | Handler 应该是无状态的 | ✅ | Handlers_Should_Be_Stateless | 2, 8 |
+| ADR-0005.5 | 模块间不应有未审批的同步调用 | ✅ | Modules_Should_Not_Have_Synchronous_Cross_Module_Calls | 3, 8 |
+| ADR-0005.6 | 异步方法应遵循命名约定 | ✅ | Async_Methods_Should_Follow_Naming_Convention | 3, 8 |
+| ADR-0005.7 | 模块不应共享领域实体 | ✅ | Modules_Should_Not_Share_Domain_Entities | 4, 8 |
+| ADR-0005.8 | Query Handler 可以返回 Contracts | ✅ | QueryHandlers_Can_Return_Contracts | 4, 5, 8 |
+| ADR-0005.9 | Command Handler 和 Query Handler 应明确分离 | ✅ | Command_And_Query_Handlers_Should_Be_Separated | 5, 8 |
+| ADR-0005.10 | Command Handler 不应返回业务数据 | ✅ | CommandHandlers_Should_Not_Return_Business_Data | 5, 8 |
+| ADR-0005.11 | Handler 应使用结构化异常 | ✅ | Handlers_Should_Use_Structured_Exceptions | 7, 8 |
+| ADR-0005.12 | 所有 Handler 应在模块程序集中 | ✅ | All_Handlers_Should_Be_In_Module_Assemblies | 2, 8 |
 
 ---
 

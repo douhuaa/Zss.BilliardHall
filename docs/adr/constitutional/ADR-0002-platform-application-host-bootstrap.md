@@ -417,20 +417,20 @@ app.Run();
 
 | 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
 |---------|---------|---------|---------|---------|
-| ADR-0002.1 | Platform 不应依赖 Application | ✅ | `Platform_Should_Not_Depend_On_Application` | 4.3, 9 |
-| ADR-0002.2 | Platform 不应依赖 Host | ✅ | `Platform_Should_Not_Depend_On_Host` | 4.3, 9 |
-| ADR-0002.3 | Platform 不应依赖任何 Modules | ✅ | `Platform_Should_Not_Depend_On_Modules` | 4.3, 9 |
-| ADR-0002.4 | Platform 应有唯一的 PlatformBootstrapper 入口 | ✅ | `Platform_Should_Have_Single_Bootstrapper_Entry_Point` | 4.4, 9 |
-| ADR-0002.5 | Application 不应依赖 Host | ✅ | `Application_Should_Not_Depend_On_Host` | 5.3, 9 |
-| ADR-0002.6 | Application 不应依赖任何 Modules | ✅ | `Application_Should_Not_Depend_On_Modules` | 5.3, 9 |
-| ADR-0002.7 | Application 应有唯一的 ApplicationBootstrapper 入口 | ✅ | `Application_Should_Have_Single_Bootstrapper_Entry_Point` | 5.4, 5.5, 9 |
-| ADR-0002.8 | Application 不应包含 HttpContext 等 Host 专属类型 | ✅ | `Application_Should_Not_Use_HttpContext` | 5.3, 9 |
-| ADR-0002.9 | Host 不应依赖任何 Modules | ✅ | `Host_Should_Not_Depend_On_Modules` | 6.3, 9 |
-| ADR-0002.10 | Host 不应包含业务类型 | ✅ | `Host_Should_Not_Contain_Business_Types` | 6.3, 9 |
-| ADR-0002.11 | Host 项目文件不应引用 Modules | ✅ | `Host_Csproj_Should_Not_Reference_Modules` | 6.3, 9 |
-| ADR-0002.12 | Program.cs 应保持简洁（建议 ≤ 50 行） | ✅ | `Program_Cs_Should_Be_Concise` | 6.5, 9 |
-| ADR-0002.13 | Program.cs 只应调用 Bootstrapper（语义检查） | ✅ | `Program_Cs_Should_Only_Call_Bootstrapper` | 6.5, 9 |
-| ADR-0002.14 | 验证完整的三层依赖方向 | ✅ | `Verify_Complete_Three_Layer_Dependency_Direction` | 3, 9 |
+| ADR-0002.1 | Platform 不应依赖 Application | ✅ | Platform_Should_Not_Depend_On_Application | 4.3, 9 |
+| ADR-0002.2 | Platform 不应依赖 Host | ✅ | Platform_Should_Not_Depend_On_Host | 4.3, 9 |
+| ADR-0002.3 | Platform 不应依赖任何 Modules | ✅ | Platform_Should_Not_Depend_On_Modules | 4.3, 9 |
+| ADR-0002.4 | Platform 应有唯一的 PlatformBootstrapper 入口 | ✅ | Platform_Should_Have_Single_Bootstrapper_Entry_Point | 4.4, 9 |
+| ADR-0002.5 | Application 不应依赖 Host | ✅ | Application_Should_Not_Depend_On_Host | 5.3, 9 |
+| ADR-0002.6 | Application 不应依赖任何 Modules | ✅ | Application_Should_Not_Depend_On_Modules | 5.3, 9 |
+| ADR-0002.7 | Application 应有唯一的 ApplicationBootstrapper 入口 | ✅ | Application_Should_Have_Single_Bootstrapper_Entry_Point | 5.4, 5.5, 9 |
+| ADR-0002.8 | Application 不应包含 HttpContext 等 Host 专属类型 | ✅ | Application_Should_Not_Use_HttpContext | 5.3, 9 |
+| ADR-0002.9 | Host 不应依赖任何 Modules | ✅ | Host_Should_Not_Depend_On_Modules | 6.3, 9 |
+| ADR-0002.10 | Host 不应包含业务类型 | ✅ | Host_Should_Not_Contain_Business_Types | 6.3, 9 |
+| ADR-0002.11 | Host 项目文件不应引用 Modules | ✅ | Host_Csproj_Should_Not_Reference_Modules | 6.3, 9 |
+| ADR-0002.12 | Program.cs 应保持简洁（建议 ≤ 50 行） | ✅ | Program_Cs_Should_Be_Concise | 6.5, 9 |
+| ADR-0002.13 | Program.cs 只应调用 Bootstrapper（语义检查） | ✅ | Program_Cs_Should_Only_Call_Bootstrapper | 6.5, 9 |
+| ADR-0002.14 | 验证完整的三层依赖方向 | ✅ | Verify_Complete_Three_Layer_Dependency_Direction | 3, 9 |
 
 ---
 
