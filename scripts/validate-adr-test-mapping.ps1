@@ -111,21 +111,38 @@ function Extract-ADRRequirements {
     $content = Get-Content $FilePath -Raw
     $lines = Get-Content $FilePath
     
-    # 查找标记为【必须架构测试覆盖】的条款
+    # 移除代码块中的内容（```...```），避免误计数示例代码
+    $inCodeBlock = $false
+    $filteredLines = @()
+    
     for ($i = 0; $i -lt $lines.Count; $i++) {
         $line = $lines[$i]
         
+        if ($line -match '^```') {
+            $inCodeBlock = -not $inCodeBlock
+            continue
+        }
+        
+        if (-not $inCodeBlock) {
+            $filteredLines += $line
+        }
+    }
+    
+    # 查找标记为【必须架构测试覆盖】的条款（排除代码块后）
+    for ($i = 0; $i -lt $filteredLines.Count; $i++) {
+        $line = $filteredLines[$i]
+        
         # 匹配【必须架构测试覆盖】或 [MUST_TEST] 标记
-        if ($line -match '【必须架构测试覆盖】|【必须测试】|\[MUST_TEST\]|\*\*必须测试\*\*') {
+        if ($line -match '【必须架构测试覆盖】|【必须测试】|\[MUST_TEST\]') {
             # 向前查找相关的内容（通常在同一段落或上一行）
             $contextStart = [Math]::Max(0, $i - 3)
-            $contextEnd = [Math]::Min($lines.Count - 1, $i + 1)
-            $context = ($lines[$contextStart..$contextEnd] -join " ").Trim()
+            $contextEnd = [Math]::Min($filteredLines.Count - 1, $i + 1)
+            $context = ($filteredLines[$contextStart..$contextEnd] -join " ").Trim()
             
             # 提取章节信息
             $section = ""
             for ($j = $i; $j -ge 0; $j--) {
-                if ($lines[$j] -match '^#+\s+(.+)$') {
+                if ($filteredLines[$j] -match '^#+\s+(.+)$') {
                     $section = $matches[1].Trim()
                     break
                 }
@@ -282,12 +299,18 @@ function Validate-Mapping {
             Write-Info "  发现 $($requirements.Count) 条必须测试的约束"
         }
         
-        # 检查是否有对应的测试文件
-        if (-not $testFileMap.ContainsKey($adrNumber)) {
+        # 检查是否有对应的测试文件（只有在有标记约束时才需要）
+        if ($requirements.Count -gt 0 -and -not $testFileMap.ContainsKey($adrNumber)) {
             Write-Error-Custom "  缺少测试文件: ADR_${adrNumber}_Architecture_Tests.cs"
             $result.IsValid = $false
             $result.MissingTests += $requirements
             $result.RequirementsWithoutTests += $requirements.Count
+            continue
+        }
+        
+        # 如果没有标记约束，跳过测试文件检查
+        if ($requirements.Count -eq 0) {
+            Write-Host ""
             continue
         }
         

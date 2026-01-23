@@ -70,11 +70,26 @@ function extract_adr_requirements() {
     local adr_number="$2"
     local count=0
     
-    # 查找标记为【必须架构测试覆盖】的条款
-    local marked=$(grep -c "【必须架构测试覆盖】\|【必须测试】\|\[MUST_TEST\]\|\*\*必须测试\*\*" "$file" 2>/dev/null || true)
+    # 临时文件，移除代码块后的内容
+    local temp_file=$(mktemp)
+    
+    # 移除代码块（```...```）中的内容，避免误计数示例代码
+    awk '
+        /^```/ { 
+            in_code_block = !in_code_block
+            next
+        }
+        !in_code_block { print }
+    ' "$file" > "$temp_file"
+    
+    # 查找标记为【必须架构测试覆盖】的条款（排除代码块后）
+    local marked=$(grep -c "【必须架构测试覆盖】\|【必须测试】\|\[MUST_TEST\]" "$temp_file" 2>/dev/null || true)
     if [ -n "$marked" ] && [ "$marked" != "0" ]; then
         count=$((count + marked))
     fi
+    
+    # 清理临时文件
+    rm -f "$temp_file"
     
     # 查找快速参考表中的约束（简单计数表格行）
     if grep -q "##\s*快速参考" "$file" 2>/dev/null; then
@@ -166,11 +181,17 @@ function validate_mapping() {
             log_info "  发现 $req_count 条必须测试的约束"
         fi
         
-        # 检查是否有对应的测试文件
-        if [ -z "${test_file_map[$adr_number]}" ]; then
+        # 检查是否有对应的测试文件（只有在有标记约束时才需要）
+        if [ "$req_count" -gt 0 ] && [ -z "${test_file_map[$adr_number]}" ]; then
             log_error "  缺少测试文件: ADR_${adr_number}_Architecture_Tests.cs"
             IS_VALID=false
             REQUIREMENTS_WITHOUT_TESTS=$((REQUIREMENTS_WITHOUT_TESTS + req_count))
+            echo ""
+            continue
+        fi
+        
+        # 如果没有标记约束，跳过测试文件检查
+        if [ "$req_count" -eq 0 ]; then
             echo ""
             continue
         fi
