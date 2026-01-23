@@ -69,9 +69,9 @@
 
 ### 1. 模块划分方式
 
-- 按业务能力划分独立模块：如 Members、Orders、Payments
-- 每个模块拥有独立程序集与逻辑边界
-- 对外只暴露受控集成点，禁止其他模块访问内部实现
+- 按业务能力划分独立模块：如 Members、Orders、Payments **【必须架构测试覆盖】**
+- 每个模块拥有独立程序集与逻辑边界 **【必须架构测试覆盖】**
+- 对外只暴露受控集成点，禁止其他模块访问内部实现 **【必须架构测试覆盖】**
 - 强调模块是工程隔离单元而非命名空间
 
 结构示例：
@@ -91,19 +91,19 @@ Module Assembly
   - Handler
   - 业务规则与校验
   - 持久化与集成逻辑
-- 严禁将业务逻辑抽象为横向 Service
+- 严禁将业务逻辑抽象为横向 Service **【必须架构测试覆盖】**
 
 ### 3. 模块通信约束
 
 仅允许以下三种模块间通信方式：
 
-1. 领域事件（Domain Events）
-2. 数据契约（Contracts，只读稳定 DTO）
+1. 领域事件（Domain Events） **【必须架构测试覆盖】**
+2. 数据契约（Contracts，只读稳定 DTO） **【必须架构测试覆盖】**
 3. 原始类型 / 标准库类型
 
 严禁行为：
 
-- ❌ 跨模块引用 Entity / Aggregate / ValueObject
+- ❌ 跨模块引用 Entity / Aggregate / ValueObject **【必须架构测试覆盖】**
 - ❌ 在契约中表达业务意图、决策字段
 - ❌ 将数据契约演变为服务接口
 
@@ -206,6 +206,26 @@ public class GetMemberQueryHandler
 - 本 ADR 定义静态模块结构
 - ADR-0002/0003/0004 定义如何组织和管理模块
 - ADR-0005 定义模块如何在运行时协作
+
+---
+
+## 快速参考表（Quick Reference Table）
+
+| 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
+|---------|---------|---------|---------|----------|
+| ADR-0001.1 | 模块不得相互引用（程序集级） | ✅ | ADR_0001_Architecture_Tests::Modules_Should_Not_Reference_Other_Modules | 1 |
+| ADR-0001.2 | 模块项目文件不得引用其他模块 | ✅ | ADR_0001_Architecture_Tests::Module_Csproj_Should_Not_Reference_Other_Modules | 1 |
+| ADR-0001.3 | 禁止传统分层命名空间 | ✅ | ADR_0001_Architecture_Tests::Modules_Should_Not_Contain_Traditional_Layering_Namespaces | 2 |
+| ADR-0001.4 | 禁止 Service 后缀类 | ✅ | ADR_0001_Architecture_Tests::Modules_Should_Not_Contain_Service_Classes | 2 |
+| ADR-0001.5 | Handler 必须在 UseCases 下 | ✅ | ADR_0001_Architecture_Tests::Handlers_Should_Be_In_UseCases_Namespace | 2 |
+| ADR-0001.6 | 模块通信仅限三种方式 | 🔄 | 部分覆盖（需人工 Code Review） | 3 |
+| ADR-0001.7 | Command Handler 不得依赖 Contracts | ✅ | 待补充（ADR-0005 覆盖） | 6 |
+
+**图例说明**：
+- ✅ 已自动化测试
+- 🔄 部分自动化（需配合人工审查）
+- ❌ 待补充测试
+- 💡 无需自动化（概念性指导）
 
 ---
 
