@@ -208,15 +208,15 @@
 
 | 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
 |---------|---------|---------|---------|---------|
-| ADR-0003.1 | 所有类型应以 BaseNamespace 开头 | ✅ | `All_Types_Should_Start_With_Base_Namespace` | 2.1, 5 |
-| ADR-0003.2 | Platform 类型应在 Zss.BilliardHall.Platform 命名空间 | ✅ | `Platform_Types_Should_Have_Platform_Namespace` | 2.2, 5 |
-| ADR-0003.3 | Application 类型应在 Zss.BilliardHall.Application 命名空间 | ✅ | `Application_Types_Should_Have_Application_Namespace` | 2.2, 5 |
-| ADR-0003.4 | Module 类型应在 Zss.BilliardHall.Modules.{ModuleName} 命名空间 | ✅ | `Module_Types_Should_Have_Module_Namespace` | 2.2, 5 |
-| ADR-0003.5 | Host 类型应在 Zss.BilliardHall.Host.{HostName} 命名空间 | ✅ | `Host_Types_Should_Have_Host_Namespace` | 2.2, 5 |
-| ADR-0003.6 | Directory.Build.props 应存在于仓库根目录 | ✅ | `Directory_Build_Props_Should_Exist_At_Repository_Root` | 2.1, 2.3 |
-| ADR-0003.7 | Directory.Build.props 应定义 BaseNamespace | ✅ | `Directory_Build_Props_Should_Define_Base_Namespace` | 2.1, 2.3 |
-| ADR-0003.8 | 所有项目应遵循命名空间约定 | ✅ | `All_Projects_Should_Follow_Namespace_Convention` | 2.2, 3 |
-| ADR-0003.9 | 模块不应包含不规范的命名空间模式 | ✅ | `Modules_Should_Not_Contain_Irregular_Namespace_Patterns` | 3 |
+| ADR-0003.1 | 所有类型应以 BaseNamespace 开头 | ✅ | All_Types_Should_Start_With_Base_Namespace | 2.1, 5 |
+| ADR-0003.2 | Platform 类型应在 Platform 命名空间 | ✅ | Platform_Types_Should_Have_Platform_Namespace | 2.2, 5 |
+| ADR-0003.3 | Application 类型应在 Application 命名空间 | ✅ | Application_Types_Should_Have_Application_Namespace | 2.2, 5 |
+| ADR-0003.4 | Module 类型应在 Modules.{ModuleName} 命名空间 | ✅ | Module_Types_Should_Have_Module_Namespace | 2.2, 5 |
+| ADR-0003.5 | Host 类型应在 Host.{HostName} 命名空间 | ✅ | Host_Types_Should_Have_Host_Namespace | 2.2, 5 |
+| ADR-0003.6 | Directory.Build.props 应存在于仓库根目录 | ✅ | Directory_Build_Props_Should_Exist_At_Repository_Root | 2.1, 2.3, 5 |
+| ADR-0003.7 | Directory.Build.props 应定义 BaseNamespace | ✅ | Directory_Build_Props_Should_Define_Base_Namespace | 2.1, 2.3, 5 |
+| ADR-0003.8 | 所有项目应遵循命名空间约定 | ✅ | All_Projects_Should_Follow_Namespace_Convention | 2.2, 3, 5 |
+| ADR-0003.9 | 模块不应包含不规范的命名空间模式 | ✅ | Modules_Should_Not_Contain_Irregular_Namespace_Patterns | 2.3, 3, 5 |
 
 ---
 

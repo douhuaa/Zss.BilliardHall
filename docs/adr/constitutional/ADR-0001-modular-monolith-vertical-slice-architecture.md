@@ -213,13 +213,17 @@ public class GetMemberQueryHandler
 
 | 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
 |---------|---------|---------|---------|----------|
-| ADR-0001.1 | 模块不得相互引用（程序集级） | ✅ | ADR_0001_Architecture_Tests::Modules_Should_Not_Reference_Other_Modules | 1 |
-| ADR-0001.2 | 模块项目文件不得引用其他模块 | ✅ | ADR_0001_Architecture_Tests::Module_Csproj_Should_Not_Reference_Other_Modules | 1 |
-| ADR-0001.3 | 禁止传统分层命名空间 | ✅ | ADR_0001_Architecture_Tests::Modules_Should_Not_Contain_Traditional_Layering_Namespaces | 2 |
-| ADR-0001.4 | 禁止 Service 后缀类 | ✅ | ADR_0001_Architecture_Tests::Modules_Should_Not_Contain_Service_Classes | 2 |
-| ADR-0001.5 | Handler 必须在 UseCases 下 | ✅ | ADR_0001_Architecture_Tests::Handlers_Should_Be_In_UseCases_Namespace | 2 |
-| ADR-0001.6 | 模块通信仅限三种方式 | 🔄 | 部分覆盖（需人工 Code Review） | 3 |
-| ADR-0001.7 | Command Handler 不得依赖 Contracts | ✅ | 待补充（ADR-0005 覆盖） | 6 |
+| ADR-0001.1 | 模块不得相互引用（程序集级） | ✅ | Modules_Should_Not_Reference_Other_Modules | 1, 7 |
+| ADR-0001.2 | 模块项目文件不得引用其他模块 | ✅ | Module_Csproj_Should_Not_Reference_Other_Modules | 1, 7 |
+| ADR-0001.3 | 禁止传统分层命名空间（Service/Repository/Controller） | ✅ | Modules_Should_Not_Contain_Traditional_Layering_Namespaces | 2, 7 |
+| ADR-0001.4 | 禁止 Repository 或 Service 后缀语义 | ✅ | Modules_Should_Not_Contain_Repository_Or_Service_Semantics | 2, 7 |
+| ADR-0001.5 | Handler 不应依赖横向 Service | ✅ | Handlers_Should_Not_Depend_On_Horizontal_Services | 2, 7 |
+| ADR-0001.6 | Handler 不应直接调用其他 Handler | ✅ | Handlers_Should_Not_Call_Other_Handlers_Directly | 2, 7 |
+| ADR-0001.7 | Command Handler 不得依赖 IQuery 接口 | ✅ | CommandHandlers_Should_Not_Depend_On_IQuery_Interfaces | 3, 6, 7 |
+| ADR-0001.8 | Platform 不应依赖模块契约 | ✅ | Platform_Should_Not_Depend_On_Module_Contracts | 5, 7 |
+| ADR-0001.9 | 模块应只依赖 Platform | ✅ | Modules_Should_Only_Depend_On_Platform | 1, 7 |
+| ADR-0001.10 | Platform 不应包含业务命名类型 | ✅ | Platform_Should_Not_Contain_Business_Named_Types | 5, 7 |
+| ADR-0001.11 | 契约应是简单数据结构 | ✅ | Contracts_Should_Be_Simple_Data_Structures | 3, 7 |
 
 **图例说明**：
 - ✅ 已自动化测试
