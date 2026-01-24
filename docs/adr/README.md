@@ -43,7 +43,7 @@
 | 层级      | 编号范围                | 目录                | 说明            | 当前状态         |
 |---------|---------------------|-------------------|---------------|--------------|
 | **宪法层** | `ADR-0001~0009`     | `constitutional/` | 系统根基/不可推翻约束   | ✅ 已有 5 个 ADR |
-| **结构层** | `ADR-100~199`       | `structure/`      | 模块静态边界/组织细化   | ✅ 已有 1 个 ADR |
+| **结构层** | `ADR-100~199`       | `structure/`      | 模块静态边界/组织细化   | ✅ 已有 2 个 ADR |
 | **运行层** | `ADR-200~299`       | `runtime/`        | 运行/交互/协议/事件   | 🔜 未来扩展      |
 | **技术层** | `ADR-300~399`       | `technical/`      | 技术选型/具体落地     | 🔜 未来扩展      |
 | **治理层** | `ADR-0000, 900~999` | `governance/`     | 治理/破例/流程/变更管理 | ✅ 已有 2 个 ADR |
@@ -92,6 +92,7 @@ graph TB
 
     subgraph Structure["📐 结构层 (ADR-100~199)"]
         S120[ADR-120 领域事件命名]
+        S121[ADR-121 契约命名组织]
     end
 
     subgraph Runtime["⚡ 运行层 (ADR-200~299)"]
@@ -137,8 +138,9 @@ ADR-0900~0999    → 治理层（governance/）
 | 命名空间和项目如何组织     | [ADR-0003](constitutional/ADR-0003-namespace-rules.md)                              | constitutional/ | 命名空间与工程映射规范      |
 | 依赖包如何管理         | [ADR-0004](constitutional/ADR-0004-Cpm-Final.md)                                    | constitutional/ | 中央包管理（CPM）       |
 | 业务用例如何执行        | [ADR-0005](constitutional/ADR-0005-Application-Interaction-Model-Final.md)          | constitutional/ | 应用内运行模型          |
-| **领域事件如何命名**    | **[ADR-120](structure/ADR-120-domain-event-naming-convention.md)**                  | structure/      | **领域事件命名规范与组织**  |
-| 架构如何自动化校验       | [ADR-0000](governance/ADR-0000-architecture-tests.md)                               | governance/     | 架构测试与 CI 治理      |
+| **领域事件如何命名**    | **[ADR-120](structure/ADR-120-domain-event-naming-convention.md)**                  | structure/      | **领域事件命名规范与组织**          |
+| **契约如何命名和组织**    | **[ADR-121](structure/ADR-121-contract-dto-naming-organization.md)**                | structure/      | **跨模块契约/DTO 命名与版本管理规范** |
+| 架构如何自动化校验       | [ADR-0000](governance/ADR-0000-architecture-tests.md)                               | governance/     | 架构测试与 CI 治理                |
 | **如何新增和修订 ADR** | **[ADR-0900](governance/ADR-0900-adr-process.md)**                                  | governance/     | **ADR 新增与修订流程**  |
 | 宪法层的地位和演进规则     | [宪法层说明](constitutional/ARCHITECTURE-CONSTITUTIONAL-LAYER.md)                        | constitutional/ | 宪法层定义与修订流程       |
 | 完整的自动化验证体系      | [架构自动化验证系统](../architecture-automation-verification.md)                             | docs/           | 三层防御体系、工具、本地开发流程 |
@@ -569,6 +571,9 @@ ADR-0900~0999    → 治理层（governance/）
 - `ADR_0003_Architecture_Tests.cs` - 命名空间规范
 - `ADR_0004_Architecture_Tests.cs` - 中央包管理
 - `ADR_0005_Architecture_Tests.cs` - 应用内交互模型
+- `ADR_0120_Architecture_Tests.cs` - 领域事件命名规范
+- `ADR_0121_Architecture_Tests.cs` - 契约/DTO 命名组织规范
+- `ADR_0900_Architecture_Tests.cs` - ADR 流程管理
 
 **测试失败 = 构建失败 = PR 阻断**
 
