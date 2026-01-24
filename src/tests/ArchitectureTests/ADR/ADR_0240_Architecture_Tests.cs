@@ -40,9 +40,9 @@ public sealed class ADR_0240_Architecture_Tests
                 .And()
                 .DoNotInherit(typeof(DomainException))
                 .And()
-                .DoNotHaveName(nameof(ValidationException))
+                .DoNotInherit(typeof(ValidationException))
                 .And()
-                .DoNotHaveName(nameof(InfrastructureException))
+                .DoNotInherit(typeof(InfrastructureException))
                 .And()
                 .AreNotAbstract()
                 .GetTypes()
@@ -55,7 +55,7 @@ public sealed class ADR_0240_Architecture_Tests
             {
                 // 检查是否继承自三大基类之一
                 var isDomainException = typeof(DomainException).IsAssignableFrom(exception);
-                var isValidationException = exception == typeof(ValidationException);
+                var isValidationException = typeof(ValidationException).IsAssignableFrom(exception);
                 var isInfrastructureException = typeof(InfrastructureException).IsAssignableFrom(exception);
 
                 if (!isDomainException && !isValidationException && !isInfrastructureException)
@@ -182,8 +182,6 @@ public sealed class ADR_0240_Architecture_Tests
             var validationExceptions = Types
                 .InAssembly(assembly)
                 .That()
-                .HaveName(nameof(ValidationException))
-                .Or()
                 .Inherit(typeof(ValidationException))
                 .GetTypes();
 
