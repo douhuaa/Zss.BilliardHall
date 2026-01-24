@@ -357,6 +357,7 @@ graph TB
 - [ADR-0005 提示词库](adr-0005.prompts.md) - 应用内交互模型
 - [ADR-120 提示词库](adr-0120.prompts.md) - 领域事件命名规范
 - [ADR-240 提示词库](adr-0240.prompts.md) - Handler 异常处理与重试标准
+- [ADR-340 提示词库](adr-0340.prompts.md) - 结构化日志与监控约束
 
 ### 了解完整工作流
 

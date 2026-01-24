@@ -50,11 +50,13 @@
 
 ---
 
-## 当前状态
+## 当前 ADR 列表
 
-当前项目尚未创建技术方案层 ADR。技术选型隐含在代码中或口头约定。
+### 日志、监控与可观测性 (340~349)
 
-未来如需正式记录技术决策，应使用 ADR-300~399 编号段。
+| 编号 | 标题 | 状态 | 文件 |
+|------|------|------|------|
+| **ADR-340** | 结构化日志与监控约束 | ✅ Final | [ADR-340-structured-logging-monitoring-constraints.md](ADR-340-structured-logging-monitoring-constraints.md) |
 
 ---
 
@@ -67,7 +69,6 @@
 - **ADR-320**：RESTful API 设计规范
 - **ADR-321**：API 版本化策略
 - **ADR-330**：使用 JWT 进行身份认证
-- **ADR-340**：使用 Serilog 进行结构化日志
 - **ADR-341**：应用性能监控（APM）选型
 - **ADR-350**：集成测试基础设施（TestContainers）
 - **ADR-360**：容器化部署策略（Docker）
@@ -87,5 +88,6 @@
 
 ## 参考文档
 
-- [架构宪法层说明](../ARCHITECTURE-CONSTITUTIONAL-LAYER.md)
+- [架构宪法层说明](../constitutional/ARCHITECTURE-CONSTITUTIONAL-LAYER.md)
 - [ADR 新增与修订流程](../governance/ADR-0900-adr-process.md)
+- [ADR 总览](../README.md)
