@@ -123,7 +123,10 @@ docs/copilot/
   ├─ adr-0005.prompts.md                ← ADR-0005 提示词库
   ├─ adr-0120.prompts.md                ← ADR-120 提示词库
   ├─ adr-0240.prompts.md                ← ADR-240 提示词库
-  └─ architecture-test-failures.md      ← 架构测试失败解释指南
+  ├─ adr-0340.prompts.md                ← ADR-340 提示词库
+  ├─ architecture-test-failures.md      ← 架构测试失败解释指南
+  ├─ pr-review-pipeline.md              ← PR 审查流程指南
+  └─ pr-common-issues.prompts.md        ← 最近 PR 常见问题总结
 ```
 
 ### 📝 每个 Prompt 文件回答三件事
@@ -280,16 +283,18 @@ graph TB
 ### 🚀 新成员第一次使用
 
 1. **阅读本文档**（你现在正在做）
-2. **浏览 `adr-XXXX.prompts.md` 文件**，了解每个 ADR 的典型提示词
-3. **在 IDE 中启用 Copilot**（VS Code / Visual Studio / Rider）
-4. **尝试提问**："我想添加一个新的业务用例，有哪些架构约束？"
-5. **对比 Copilot 的回答和 ADR 文档**，验证理解是否一致
+2. **查看常见问题总结**：[pr-common-issues.prompts.md](pr-common-issues.prompts.md)，了解最容易犯的错误
+3. **浏览 `adr-XXXX.prompts.md` 文件**，了解每个 ADR 的典型提示词
+4. **在 IDE 中启用 Copilot**（VS Code / Visual Studio / Rider）
+5. **尝试提问**："我想添加一个新的业务用例，有哪些架构约束？"
+6. **对比 Copilot 的回答和 ADR 文档**，验证理解是否一致
 
 ### 🎯 老员工快速上手
 
-1. **参考 `architecture-test-failures.md`**，了解如何用 Copilot 解释测试失败
-2. **在 PR Review 时**，使用 Copilot Chat 询问："请基于 ADR 审查这个 PR"
-3. **分享你的 Copilot 使用经验**，帮助团队建立最佳实践
+1. **先看一遍常见问题**：[pr-common-issues.prompts.md](pr-common-issues.prompts.md)，避免重复前人的错误
+2. **参考 `architecture-test-failures.md`**，了解如何用 Copilot 解释测试失败
+3. **在 PR Review 时**，使用 Copilot Chat 询问："请基于 ADR 审查这个 PR"
+4. **分享你的 Copilot 使用经验**，帮助团队建立最佳实践
 
 ---
 
@@ -363,6 +368,7 @@ graph TB
 
 - [架构测试失败解释指南](architecture-test-failures.md)
 - [PR Review Pipeline](pr-review-pipeline.md) - Copilot + ArchitectureTests 双护栏流程
+- [最近 PR 常见问题总结](pr-common-issues.prompts.md) - 基于 PR #142~#147 的经验总结
 - [Pull Request Template](../../.github/PULL_REQUEST_TEMPLATE.md)
 
 ---
