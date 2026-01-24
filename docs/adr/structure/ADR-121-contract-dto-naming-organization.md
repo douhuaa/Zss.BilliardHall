@@ -464,32 +464,108 @@ public record MemberInfoDtoV2(Guid MemberId, string UserName, string Email);
 public record MemberInfoDtoV3(Guid MemberId, string UserName, string Email, string PhoneNumber);
 ```
 
-#### 4.2 版本共存
+#### 4.2 版本共存与废弃标记
 
-多个版本可以并行存在，直到所有消费方迁移完成：
+多个版本可以并行存在，直到所有消费方迁移完成。旧版本应使用 `[Obsolete]` 特性标记：
 
 **✅ 版本共存示例**：
 
 ```csharp
 // 同一目录下并存
 // src/Platform/Contracts/Members/
-//   ├── MemberInfoDto.cs      (V1)
-//   ├── MemberInfoDtoV2.cs    (V2)
-//   └── MemberInfoDtoV3.cs    (V3)
+//   ├── MemberInfoDto.cs      (V1 - 已废弃)
+//   ├── MemberInfoDtoV2.cs    (V2 - 当前)
+//   └── MemberInfoDtoV3.cs    (V3 - 最新)
 
 namespace Zss.BilliardHall.Platform.Contracts.Members;
 
-// V1（保持兼容）
+// V1（已废弃，保持兼容直到所有消费方迁移）
+[Obsolete("Use MemberInfoDtoV2 instead. This version will be removed after 2025-01-01.", false)]
 public record MemberInfoDto(Guid MemberId, string UserName);
 
-// V2（添加了 Email）
+// V2（当前稳定版本，添加了 Email）
+[Obsolete("Use MemberInfoDtoV3 for new implementations. This version remains supported.", false)]
 public record MemberInfoDtoV2(Guid MemberId, string UserName, string Email);
 
-// V3（添加了 PhoneNumber）
+// V3（最新版本，添加了 PhoneNumber）
 public record MemberInfoDtoV3(Guid MemberId, string UserName, string Email, string PhoneNumber);
 ```
 
-#### 4.3 版本迁移指导
+**废弃标记策略**：
+
+- **警告级别废弃**（`error: false`）：旧版本仍可使用，但 IDE 会显示警告，引导开发者迁移
+- **错误级别废弃**（`error: true`）：在废弃截止日期后使用，阻止新代码依赖旧版本
+- **Roslyn 分析器集成**：可配置自定义分析器，在编译时检测并阻止对废弃契约的新依赖
+
+**✅ 渐进式废弃流程**：
+
+```csharp
+// 阶段 1：发布新版本，旧版本标记为警告
+[Obsolete("Use MemberInfoDtoV2. Migration guide: docs/migrations/member-info-v1-to-v2.md", false)]
+public record MemberInfoDto(Guid MemberId, string UserName);
+
+// 阶段 2：6 个月后，升级为错误（在约定的废弃日期后）
+[Obsolete("MemberInfoDto is no longer supported. Use MemberInfoDtoV2.", true)]
+public record MemberInfoDto(Guid MemberId, string UserName);
+
+// 阶段 3：12 个月后，完全移除旧版本
+// 文件删除，Git 历史保留
+```
+
+#### 4.3 嵌套 DTO 版本管理
+
+嵌套 DTO（如 `OrderItemDto`）也必须遵循版本管理规则，尤其当父契约升级时：
+
+**✅ 嵌套 DTO 版本演进示例**：
+
+```csharp
+// V1：基础订单契约
+public record OrderDetailContract(
+    Guid OrderId,
+    IReadOnlyList<OrderItemDto> Items,
+    decimal TotalAmount
+);
+
+public record OrderItemDto(
+    Guid ProductId,
+    string ProductName,
+    int Quantity,
+    decimal UnitPrice
+);
+
+// V2：订单添加优惠信息，OrderItemDto 需要添加折扣字段
+public record OrderDetailContractV2(
+    Guid OrderId,
+    IReadOnlyList<OrderItemDtoV2> Items,  // 使用新版本嵌套 DTO
+    decimal SubTotal,
+    decimal Discount,
+    decimal TotalAmount
+);
+
+[Obsolete("Use OrderItemDtoV2 for new implementations.", false)]
+public record OrderItemDto(
+    Guid ProductId,
+    string ProductName,
+    int Quantity,
+    decimal UnitPrice
+);
+
+public record OrderItemDtoV2(
+    Guid ProductId,
+    string ProductName,
+    int Quantity,
+    decimal UnitPrice,
+    decimal DiscountRate  // 新增字段
+);
+```
+
+**嵌套 DTO 版本管理原则**：
+
+- **独立版本号**：嵌套 DTO 有自己的版本号，不依赖父契约版本
+- **向后兼容**：旧版本父契约可以继续使用旧版本嵌套 DTO
+- **同步演进**：当嵌套 DTO 变更影响父契约时，父契约也应升级版本
+
+#### 4.4 版本迁移指导
 
 版本变更应记录在 ChangeLog 或专有注释块：
 
@@ -507,15 +583,21 @@ public record MemberInfoDtoV3(Guid MemberId, string UserName, string Email, stri
 /// 迁移指南：
 /// 1. V1 用户需要更新到 V2，提供 Email 字段
 /// 2. V2 将在 2025-01-01 后成为默认版本，V1 标记为废弃
+/// 3. 迁移文档：docs/migrations/member-info-v1-to-v2.md
+/// 
+/// 自动化迁移：
+/// - 使用 Roslyn analyzer 检测 V1 使用并提供代码修复
+/// - CI 管道会警告使用废弃版本的 PR
 /// </remarks>
+[Obsolete("Use MemberInfoDtoV3 for new implementations.", false)]
 public record MemberInfoDtoV2(Guid MemberId, string UserName, string Email);
 ```
 
 ### 5. 契约实现标记接口（可选）
 
-为了更好的类型识别和工具支持，契约可以实现标记接口：
+为了更好的类型识别、工具支持和文档生成，契约可以实现标记接口：
 
-**✅ 使用标记接口**：
+**✅ 基础标记接口**：
 
 ```csharp
 // 在 Platform.Contracts 中定义标记接口
@@ -532,10 +614,51 @@ public record MemberInfoDto(Guid MemberId, string UserName) : IContract;
 public record MemberDetailContract(Guid MemberId, string UserName, string Email) : IContract;
 ```
 
-**优势**：
+**✅ 增强标记接口（带版本信息）**：
 
-- 便于架构测试识别契约类型
-- 支持运行时反射和类型检查
+为支持自动化工具和文档生成，可以扩展标记接口：
+
+```csharp
+namespace Zss.BilliardHall.Platform.Contracts;
+
+/// <summary>
+/// 契约标记接口，用于类型识别和工具支持
+/// </summary>
+public interface IContract
+{
+    /// <summary>
+    /// 契约版本号（如 "1.0", "2.0"）
+    /// 用于运行时版本检查和文档生成
+    /// </summary>
+    string Version => "1.0";
+}
+
+// 使用示例
+namespace Zss.BilliardHall.Platform.Contracts.Members;
+
+public record MemberInfoDto(Guid MemberId, string UserName) : IContract
+{
+    public string Version => "1.0";
+}
+
+public record MemberInfoDtoV2(Guid MemberId, string UserName, string Email) : IContract
+{
+    public string Version => "2.0";
+}
+
+public record MemberInfoDtoV3(Guid MemberId, string UserName, string Email, string PhoneNumber) : IContract
+{
+    public string Version => "3.0";
+}
+```
+
+**标记接口的优势**：
+
+- **类型识别**：便于架构测试识别契约类型
+- **运行时检查**：支持运行时反射和类型检查
+- **工具集成**：便于工具和框架集成
+- **版本追踪**：`Version` 属性支持运行时版本检查
+- **文档生成**：自动化工具可基于 `IContract` 生成 API 文档
 - 便于工具和框架集成
 
 ---
@@ -584,20 +707,29 @@ public record MemberDetailContract(Guid MemberId, string UserName, string Email)
 | ADR-121.3 | 契约不得包含业务方法                 | L1 | Contracts_Should_Not_Contain_Business_Methods   | ✅    | 3.2    |
 | ADR-121.4 | 契约不得包含领域模型类型               | L1 | Contracts_Should_Not_Contain_Domain_Types       | ✅    | 3.3    |
 | ADR-121.5 | 契约必须位于 Contracts 命名空间下      | L1 | Contracts_Should_Be_In_Contracts_Namespace      | ✅    | 2.2    |
-| ADR-121.6 | 契约命名空间必须与物理目录一致            | L2 | Contract_Namespace_Should_Match_Directory       | ⚠️   | 2.2    |
+| ADR-121.6 | 契约命名空间必须与物理目录一致            | L1 | Contract_Namespace_Should_Match_Directory       | 🔜   | 2.2    |
 
 **层级说明**：
 
 - **L1（核心约束）**：架构测试必须覆盖，违反即为严重架构违规
 - **L2（建议约束）**：架构测试可选覆盖，违反会影响代码可维护性
 
+**关于 ADR-121.6**：
+
+ADR-121.6（命名空间与目录一致性）已从 L2 升级为 L1 核心约束，因为跨模块契约引用错误是隐蔽且高风险的。建议实施：
+
+1. **CI 验证脚本**：扫描 `Platform.Contracts` 下所有文件，确保命名空间与路径匹配
+2. **架构测试**：当文件系统访问可用时启用 L1 级别测试（当前为 L2，已注释）
+3. **开发者工具**：配置 EditorConfig 和 Roslyn 分析器，实时检测不一致
+
 ---
 
 ## 版本历史（Version History）
 
-| 版本  | 日期         | 变更说明                          | 修订人       |
-|-----|------------|-------------------------------|-----------|
-| 1.0 | 2026-01-24 | 初稿发布，定义契约命名、组织、版本管理和约束规范      | GitHub Copilot |
+| 版本  | 日期         | 变更说明                                                             | 修订人            |
+|-----|------------|------------------------------------------------------------------|----------------|
+| 1.0 | 2026-01-24 | 初稿发布，定义契约命名、组织、版本管理和约束规范                                         | GitHub Copilot |
+| 1.1 | 2026-01-24 | 增强版本管理：添加 Obsolete 废弃标记策略、嵌套 DTO 版本规则、IContract.Version 属性、文档生成建议 | GitHub Copilot |
 
 ---
 
@@ -651,11 +783,173 @@ IContract（标记接口）
 2. **团队培训**：确保团队理解契约的作用和约束
 3. **工具支持**：配置 IDE 和 Roslyn 分析器，提前发现违规
 4. **文档维护**：保持契约文档和版本历史更新
+5. **废弃策略**：使用 `[Obsolete]` 标记旧版本，配置 Roslyn analyzer 阻止新代码依赖
+6. **自动化文档**：使用工具自动生成契约文档和 API 规范
 
-### D. 参考资源
+### D. 自动化文档生成建议
 
+为了提升契约的可维护性和团队协作效率，建议配置自动化文档生成工具：
+
+#### D.1 API 文档生成
+
+**使用 Swashbuckle（OpenAPI/Swagger）**：
+
+```csharp
+// 在 Startup.cs 或 Program.cs 中配置
+services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Zss.BilliardHall Contracts API",
+        Version = "v1",
+        Description = "跨模块契约 API 文档"
+    });
+    
+    // 包含 XML 注释
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+    
+    // 标记废弃的 API
+    options.SchemaFilter<ObsoleteSchemaFilter>();
+});
+```
+
+**效果**：
+- 自动生成所有契约的 API 文档
+- 显示契约版本历史和废弃标记
+- 提供在线 API 测试界面
+
+#### D.2 静态文档生成
+
+**使用 DocFX**：
+
+```yaml
+# docfx.json 配置
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": ["Platform/Contracts/**/*.cs"],
+          "src": "../src"
+        }
+      ],
+      "dest": "api",
+      "filter": "filterConfig.yml"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": ["api/**.yml", "api/index.md"]
+      },
+      {
+        "files": ["docs/**.md"]
+      }
+    ],
+    "dest": "_site"
+  }
+}
+```
+
+**效果**：
+- 生成静态 HTML 文档站点
+- 自动从 XML 注释提取文档
+- 支持版本对比和搜索功能
+
+#### D.3 契约变更检测
+
+**使用 Roslyn Analyzer**：
+
+```csharp
+// 自定义分析器：检测契约破坏性变更
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class ContractBreakingChangeAnalyzer : DiagnosticAnalyzer
+{
+    public override void Initialize(AnalysisContext context)
+    {
+        context.RegisterSymbolAction(AnalyzeNamedType, SymbolKind.NamedType);
+    }
+    
+    private void AnalyzeNamedType(SymbolAnalysisContext context)
+    {
+        var namedType = (INamedTypeSymbol)context.Symbol;
+        
+        // 检测契约是否有破坏性变更（属性删除、类型变更等）
+        if (IsContract(namedType))
+        {
+            CheckForBreakingChanges(context, namedType);
+        }
+    }
+}
+```
+
+**效果**：
+- 编译时检测契约破坏性变更
+- 强制要求升级版本号
+- 阻止不当的契约修改
+
+#### D.4 CI/CD 集成
+
+**契约文档自动发布**：
+
+```yaml
+# .github/workflows/docs.yml
+name: Generate Contract Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/Platform/Contracts/**'
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Generate Swagger/OpenAPI docs
+        run: dotnet swagger tofile --output swagger.json
+      
+      - name: Generate DocFX site
+        run: |
+          docfx metadata
+          docfx build
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+```
+
+**效果**：
+- 契约变更自动触发文档更新
+- 文档自动发布到 GitHub Pages
+- 团队始终访问最新契约文档
+
+### E. 参考资源
+
+**架构相关**：
 - [ADR-0001: 模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 - [ADR-0005: 应用内交互模型](../constitutional/ADR-0005-Application-Interaction-Model-Final.md)
 - [ADR-120: 领域事件命名规范](ADR-120-domain-event-naming-convention.md)
+
+**设计模式**：
 - [Martin Fowler: DTO Pattern](https://martinfowler.com/eaaCatalog/dataTransferObject.html)
 - [Microsoft: Data Transfer Objects](https://docs.microsoft.com/en-us/aspnet/web-api/overview/data/using-web-api-with-entity-framework/part-5)
+
+**版本管理**：
+- [Semantic Versioning (SemVer)](https://semver.org/)
+- [API Versioning Best Practices](https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design#versioning-a-restful-web-api)
+
+**文档生成工具**：
+- [Swashbuckle (Swagger/OpenAPI)](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
+- [DocFX](https://dotnet.github.io/docfx/)
+- [NSwag](https://github.com/RicoSuter/NSwag)
+
+**代码分析**：
+- [Roslyn Analyzers](https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/tutorials/how-to-write-csharp-analyzer-code-fix)
+- [.NET Compiler Platform SDK](https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/)
