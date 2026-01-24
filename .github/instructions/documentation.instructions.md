@@ -1,13 +1,68 @@
 # 文档编写指令
 
+> **⚠️ 权威声明**  
+> 本文件所列规则仅作操作/辅导用，权威判据以 ADR 正文为准。  
+> 若本文件与 ADR 正文存在分歧，请及时修订本文件，并以 ADR 正文为最终依据。
+
 ## 适用场景：编写和维护文档
 
-在协助文档工作时，在 `base.instructions.md` 的基础上应用这些指南。
+在协助文档工作时，在 [`base.instructions.md`](./base.instructions.md) 的基础上应用这些指南。
 
-**编写原则**：
+---
+
+## 🚨 高风险防御点（文档完整性）
+
+### 文档/索引同步检查（强制）
+
+在进行以下操作前，**必须**使用检查清单：
+
+#### ✅ 创建新文档前的检查清单
+
+```markdown
+- [ ] 确定文档类型（ADR/Summary/Copilot Prompt/Guide）
+- [ ] 确定目标目录位置
+- [ ] 识别需要更新的索引文件
+- [ ] 准备文档元数据（标题、日期、作者）
+- [ ] 准备交叉引用列表
+```
+
+#### ✅ 创建新文档后的检查清单
+
+```markdown
+- [ ] 文档已创建并遵循标准格式
+- [ ] 相应的 README.md 已更新
+  - [ ] 目录结构图已添加新文件
+  - [ ] 文档列表表格已添加新条目
+  - [ ] 快速导航已添加新主题（如适用）
+  - [ ] 时间线已添加新条目（如适用）
+  - [ ] 统计数字已更新
+- [ ] 所有链接已验证可用
+- [ ] 相关文档已添加交叉引用（双向链接）
+- [ ] 如果是 ADR，相应的 adr-XXXX.prompts.md 已创建/更新
+```
+
+#### ✅ 修改现有文档的检查清单
+
+```markdown
+- [ ] 版本号已更新
+- [ ] 修改日期已更新
+- [ ] 版本历史已添加变更记录
+- [ ] 所有受影响的链接已更新
+- [ ] 交叉引用的文档已更新（双向链接）
+- [ ] 如果是重大变更，相关索引已更新
+```
+
+**执行级别**：**强制执行** - 所有文档变更必须完成相应检查清单
+
+---
+
+## ⚖️ 编写原则
+**核心原则**：
 - ADR 正文必须清晰、完整、可执行
 - 辅导材料不得与 ADR 正文冲突
 - 发现冲突时，以 ADR 正文为准并修正辅导材料
+
+---
 
 ## 语言和风格
 
@@ -23,13 +78,15 @@
 - **示例驱动** - 在适用的情况下始终包含代码示例
 - **可扫描** - 使用标题、列表和表格
 
+---
+
 ## 文档类型
 
 ### 1. ADR（架构决策记录）
 
-**位置**：`docs/adr/`
+**位置**：[`docs/adr/`](../../docs/adr/)
 
-**结构**（必须遵循）：[ADR 模板](/docs/templates/adr-template.md)
+**结构**（必须遵循）：参考 ADR 模板
 
 **绝不做**：
 - ❌ 在一个 ADR 中混合多个关注点
@@ -37,11 +94,18 @@
 - ❌ 跳过技术术语的术语表
 - ❌ 忘记链接相关 ADR
 
+**关键要求**：
+- 每个 ADR 必须明确标注【必须架构测试覆盖】的条款
+- 所有约束必须有清晰的✅允许/❌禁止示例
+- 必须包含"相关 ADR"和"参考资料"章节
+
+---
+
 ### 2. Copilot Prompts
 
-**位置**：`docs/copilot/`
+**位置**：[`docs/copilot/`](../../docs/copilot/)
 
-**结构**（必须遵循）：[Prompt 模板](/docs/templates/copilot-pormpts-template.md)
+**结构**（必须遵循）：参考 Copilot Prompt 模板
 
 **目的**：这些文件供 Copilot 参考，因此：
 - 极其具体
@@ -49,9 +113,16 @@
 - 展示 ❌ 错误和 ✅ 正确模式
 - 提供确切的 CI 错误消息和解释
 
+**关键要求**：
+- 每个 Prompt 必须链接到对应的 ADR 正文
+- 必须包含场景化的"开发者问题 → Copilot 响应"示例
+- 必须包含执行级别（Level 1/2/3）说明
+
+---
+
 ### 3. 用户指南
 
-**位置**：`docs/`（根级别指南）
+**位置**：[`docs/`](../../docs/)（根级别指南）
 
 **特征**：
 - 以清晰的目的陈述开始
@@ -59,6 +130,8 @@
 - 使用 mermaid 图表展示流程和关系
 - 提供逐步说明
 - 链接到相关 ADR 和 Prompts
+
+---
 
 ## 格式标准
 
@@ -116,9 +189,17 @@ dotnet test
 ### 链接
 始终使用仓库内的相对路径：
 ```markdown
-[ADR-0001](../adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-[Prompt 库](../copilot/adr-0001.prompts.md)
+[ADR-0001](../../docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+[Prompt 库](../../docs/copilot/adr-0001.prompts.md)
 ```
+
+**检查清单**：
+- [ ] 所有内部链接使用相对路径
+- [ ] 链接已验证（文件存在）
+- [ ] 跨引用文档已添加反向链接
+- [ ] 重组时已更新所有相关链接
+
+---
 
 ## 图表
 
@@ -145,15 +226,32 @@ graph TB
 - 单一关系（使用文字）
 - 当图表会比文字解释更大时
 
+---
+
 ## 文档维护
 
 ### 更新现有文档
+
+**检查清单化流程**：
 
 更新文档时：
 1. **检查版本** - 更新版本号和日期
 2. **维护结构** - 不要打破既定模式
 3. **更新链接** - 确保所有引用仍然有效
 4. **添加到历史** - 在版本历史部分记录更改
+
+**重大变更检查清单**（必须）：
+```markdown
+- [ ] 版本号已升级（major/minor/patch）
+- [ ] 修改日期已更新
+- [ ] 变更历史已添加新条目
+- [ ] 所有相关链接已验证
+- [ ] 交叉引用文档已通知/更新
+- [ ] 相关 Copilot Prompts 已同步
+- [ ] 如果是 ADR，架构测试已同步
+```
+
+---
 
 ### 废弃文档
 
@@ -163,6 +261,8 @@ graph TB
 3. 链接到替代文档
 4. 解释为什么被废弃
 
+---
+
 ### 交叉引用
 
 始终维护双向链接：
@@ -170,45 +270,98 @@ graph TB
 - 使用一致的链接文字
 - 重组时检查链接不会断裂
 
-### 更新索引文件
+---
+
+### 更新索引文件（强制执行）
 
 **关键规则**：创建新文档时，必须更新相关的索引/目录文件：
 
-#### 添加新的 Summary 文档
-当在 `docs/summaries/` 中创建新的总结文档时：
-1. **必须**更新 `docs/summaries/README.md`
-2. 在以下位置添加引用：
-   - 目录结构图
-   - 文档列表表格（按类别）
-   - 快速导航（按主题）
-   - 时间线表格
-   - 文档统计
-3. 使用与现有文档一致的格式
+#### 🚨 添加新的 Summary 文档（强制检查清单）
 
-#### 添加新的 ADR
-当创建新的 ADR 文档时：
-1. **必须**更新 `docs/adr/README.md`
-2. **必须**在相应的类别 README 中添加
-3. 更新相关的 index.md 文件
+当在 [`docs/summaries/`](../../docs/summaries/) 中创建新的总结文档时：
 
-#### 添加新的 Copilot Prompt
-当创建新的 Copilot Prompt 时：
-1. **必须**更新 `docs/copilot/README.md`
-2. 在文件列表中添加新文档
-
-**示例检查清单**：
+**强制检查清单**：
 ```markdown
-创建新 Summary 文档前的检查：
-- [ ] 文档已创建并遵循标准格式
-- [ ] docs/summaries/README.md 已更新
+- [ ] 新文档已创建：docs/summaries/[name]-summary.md
+- [ ] README.md 已更新：docs/summaries/README.md
   - [ ] 目录结构图已添加新文件
-  - [ ] 文档列表表格已添加新条目
-  - [ ] 快速导航已添加新主题
-  - [ ] 时间线已添加新条目
-  - [ ] 统计数字已更新
+  - [ ] 文档列表表格已添加新条目（按类别）
+  - [ ] 快速导航已添加新主题（按主题）
+  - [ ] 时间线表已添加新条目（按日期）
+  - [ ] 文档统计已更新（总数+分类计数）
 - [ ] 所有链接已验证可用
 - [ ] 相关文档已添加交叉引用
 ```
+
+**示例**：
+```markdown
+创建 docs/summaries/copilot-governance-summary.md 后：
+
+✅ 必须做：
+1. 在 docs/summaries/README.md 的目录结构图中添加：
+   │   ├─ copilot-governance-summary.md
+
+2. 在文档列表表格中添加（按类别排序）：
+   | copilot-governance-summary.md | Copilot 治理体系总结 | 治理 | 2026-01-21 |
+
+3. 在快速导航中添加（如果是新主题）：
+   - **Copilot 治理**：[copilot-governance-summary.md]
+
+4. 在时间线表中添加：
+   | 2026-01-21 | copilot-governance-summary.md | 新增 Copilot 治理体系总结 |
+
+5. 更新统计数字：
+   总文档数：15 → 16
+   治理类：3 → 4
+```
+
+#### 🚨 添加新的 ADR（强制检查清单）
+
+当创建新的 ADR 文档时：
+
+**强制检查清单**：
+```markdown
+- [ ] 新 ADR 已创建：docs/adr/[category]/ADR-XXXX-[name].md
+- [ ] 主 README 已更新：docs/adr/README.md
+- [ ] 分类 README 已更新：docs/adr/[category]/README.md
+- [ ] 相应的 Copilot Prompt 已创建：docs/copilot/adr-XXXX.prompts.md
+- [ ] Copilot README 已更新：docs/copilot/README.md
+- [ ] 相关架构测试已创建/更新（如适用）
+- [ ] 所有交叉引用已建立
+```
+
+#### 🚨 添加新的 Copilot Prompt（强制检查清单）
+
+当创建新的 Copilot Prompt 时：
+
+**强制检查清单**：
+```markdown
+- [ ] 新 Prompt 已创建：docs/copilot/[name].prompts.md
+- [ ] README.md 已更新：docs/copilot/README.md
+  - [ ] 文件列表已添加新条目
+  - [ ] 按字母顺序排序
+- [ ] 对应的 ADR 已链接此 Prompt
+- [ ] .github/instructions/ 中相关指令已引用此 Prompt
+```
+
+**示例检查过程**：
+```markdown
+✅ 正确流程：
+1. 创建 ADR-0006-xxx.md
+2. 立即创建 adr-0006.prompts.md
+3. 更新 docs/adr/README.md
+4. 更新 docs/adr/[category]/README.md
+5. 更新 docs/copilot/README.md
+6. 在 ADR 中链接 Prompt
+7. 在 Prompt 中链接 ADR
+8. 验证所有链接可用
+
+❌ 错误流程：
+1. 创建 ADR-0006-xxx.md
+2. [停止] ← 索引未更新！
+```
+
+---
 
 ## 要遵循的示例
 
@@ -274,13 +427,30 @@ public class OrderService { }
 
 | 场景 | 建议 |
 |------|------|
-| 新的架构决策 | 按模板创建新 ADR |
-| 常见的 Copilot 问题 | 添加到相关 `adr-XXXX.prompts.md` |
-| 流程变更 | 更新 `docs/` 中的相关指南 |
+| 新的架构决策 | 按模板创建新 ADR，同时创建对应的 Copilot Prompt |
+| 常见的 Copilot 问题 | 添加到相关 [`adr-XXXX.prompts.md`](../../docs/copilot/) |
+| 流程变更 | 更新 [`docs/`](../../docs/) 中的相关指南 |
 | 令人困惑的 ADR | 添加示例和图表，不要简化规则 |
+
+---
 
 ## 参考
 
-- 所有 ADR：`docs/adr/README.md`
-- Copilot 系统：`docs/copilot/README.md`
-- 实施总结：`docs/summaries/copilot-governance-implementation.md`
+- [所有 ADR](../../docs/adr/README.md) - ADR 总览
+- [Copilot 系统](../../docs/copilot/README.md) - Copilot Prompts 库
+- [实施总结](../../docs/summaries/copilot-governance-implementation.md) - Copilot 治理实施
+
+---
+
+## 维护提醒
+
+> **🔄 重要**  
+> 如本文件内容与 ADR 正文存在不一致，或架构演进导致规则变更，请：
+> 1. 同步架构负责人确认变更
+> 2. 更新本文件以与 ADR 正文保持一致
+> 3. 进行团队公告，确保所有成员知晓变更
+> 4. 更新相关的 [`docs/copilot/`](../../docs/copilot/) 辅导材料
+> 5. 确保所有文档索引保持最新状态
+> 6. 验证所有交叉引用的完整性
+
+---
