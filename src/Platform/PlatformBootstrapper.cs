@@ -22,7 +22,6 @@ public static class PlatformBootstrapper
         Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .Enrich.FromLogContext()
-            .Enrich.WithMachineName()
             .Enrich.WithEnvironmentName()
             .Enrich.WithProperty("Application", "Zss.BilliardHall")
             .MinimumLevel.Information()
