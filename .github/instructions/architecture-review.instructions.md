@@ -1,34 +1,133 @@
 # 架构评审指令
 
+> **⚠️ 权威声明**  
+> 本文件所列规则仅作操作/辅导用，权威判据以 ADR 正文为准。  
+> 若本文件与 ADR 正文存在分歧，请及时修订本文件，并以 ADR 正文为最终依据。
+
 ## 适用场景：评审 PR 与架构合规性
 
-在协助 PR 评审和架构评估时，在 `base.instructions.md` 的基础上应用这些最高风险约束。
+在协助 PR 评审和架构评估时，在 [`base.instructions.md`](./base.instructions.md) 的基础上应用这些最高风险约束。
 
-## ⚖️ 权威提醒
+---
+
+## 🚨 高风险防御点（架构评审）
+
+### ⚠️ 关键心态
+
+架构评审是 Copilot 的**最高风险**场景，因为：
+- 🚨 单次错误的批准可能导致系统级联违规
+- 🚨 开发者可能过度信任你的判断
+- 🚨 此处的错误修复成本极高
+
+**你的默认立场**：**保守且有据可依，始终引用 ADR 正文**
+
+### 🛑 绝不允许的行为
+
+❌ **致命错误**：
+- 给出二元"批准/拒绝"判断
+- 覆盖或例外 ADR 规则
+- 建议"变通方法"绕过架构约束
+- 批准架构测试修改而不提出严重警告
+- 在不确定时给出确定性建议
+
+✅ **正确角色**：
+- 作为诊断助手，指出潜在问题
+- 引用相关 ADR 和具体章节
+- 建议合规替代方案
+- 提出需要澄清的问题
+- 标记需要人工判断的场景
+
+---
+
+## ⚖️ 权威依据
 
 **评审时的唯一判决依据 = ADR 正文**
 
-- 引用 ADR 时，必须指向 ADR 正文文件（如 `ADR-0001-modular-monolith-vertical-slice-architecture.md`）
-- Prompt 文件（如 `adr-0001.prompts.md`）仅为辅助理解，不能作为判定依据
+- 引用 ADR 时，必须指向 ADR 正文文件（如 [ADR-0001](../../docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)）
+- Prompt 文件（如 [adr-0001.prompts.md](../../docs/copilot/adr-0001.prompts.md)）仅为辅助理解，不能作为判定依据
 - 若 Prompt 文件与 ADR 正文冲突，以 ADR 正文为准
 - 架构测试基于 ADR 正文中标注【必须架构测试覆盖】的条款
 
-## 关键心态
+**核心 ADR 参考**：
+- [ADR-0001：模块隔离](../../docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-0002：层级边界](../../docs/adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)
+- [ADR-0005：Handler/CQRS](../../docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-0005：执行级别](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
 
-架构评审是 Copilot 的**最高风险**场景，因为：
-- ⚠️ 单次错误的批准可能导致系统级联违规
-- ⚠️ 开发者可能过度信任你的判断
-- ⚠️ 此处的错误修复成本极高
-
-**你的默认立场**：保守且有据可依，始终引用 ADR 正文。
+---
 
 ## 评审流程
 
+### 步骤 0：🚨 高风险模式快速扫描（优先）
+
+**在详细评审前，先快速扫描以下致命模式**：
+
+#### 🚨 Level 1 - 致命违规（必须立即标记）
+
+```csharp
+// ❌ 致命：跨模块直接引用
+using Zss.BilliardHall.Modules.OtherModule.Domain;
+
+// ❌ 致命：Platform 依赖 Application/Host
+// 在 Platform 项目中
+using Zss.BilliardHall.Application;
+
+// ❌ 致命：Host 包含业务逻辑
+// 在 Host 项目中
+public class OrderValidator { }
+
+// ❌ 致命：模块间共享领域模型
+public class SharedCustomer { } // 被多个模块使用
+```
+
+**相关 ADR**：
+- [ADR-0001：模块隔离](../../docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md#模块隔离)
+- [ADR-0002：层级边界](../../docs/adr/constitutional/ADR-0002-platform-application-host-bootstrap.md#层级依赖规则)
+
+**执行级别**：[Level 1 - 静态可执行](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md#level-1-静态可执行static-enforceable)
+
+#### ⚠️ Level 2 - 严重警告（需要仔细审查）
+
+```csharp
+// ⚠️ Command Handler 返回业务数据
+public async Task<OrderDto> Handle(CreateOrder command)
+
+// ⚠️ Endpoint 包含业务逻辑
+builder.MapPost("/orders", async (request, db) => {
+    if (request.Total > 1000) { // 业务规则！
+        // 应该在领域模型中
+    }
+});
+
+// ⚠️ 同步跨模块通信
+await _commandBus.Send(new UpdateOtherModule(...));
+```
+
+**相关 ADR**：
+- [ADR-0005：Handler 规范](../../docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md#handler-规范)
+
+**执行级别**：[Level 2 - 语义半自动](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md#level-2-语义半自动semantic-semi-auto)
+
+#### 🔍 Level 3 - 需要人工判定
+
+```csharp
+// 🔍 可能需要架构例外的场景
+// - 跨模块事务
+// - 性能优化突破边界
+// - 遗留系统集成
+```
+
+**相关 ADR**：
+- [ADR-0005：执行级别 - Level 3](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md#level-3-人工-gatemanual-gate)
+
+---
+
 ### 步骤 1：识别变更范围
 
-首先，确定影响了哪些层/区域：
+确定影响了哪些层/区域：
 
-```
+**检查清单**：
+```markdown
 - [ ] Platform 层
 - [ ] Application 层  
 - [ ] Host 层
@@ -37,49 +136,37 @@
 - [ ] 领域模型
 - [ ] Handler（Command/Query）
 - [ ] Endpoint
-- [ ] 测试
+- [ ] 架构测试
 - [ ] 文档
 ```
 
+---
+
 ### 步骤 2：映射到 ADR 正文
 
-对于每个受影响的区域，明确引用适用的 **ADR 正文**：
+对于每个受影响的区域，明确引用适用的 **ADR 正文**和**执行级别**：
 
-| 区域 | 主要 ADR 正文 | 辅助 Prompt 文件 |
-|------|--------------|--------------|
-| 模块隔离 | `ADR-0001-modular-monolith-vertical-slice-architecture.md` | `adr-0001.prompts.md` |
-| 层级边界 | `ADR-0002-platform-application-host-bootstrap.md` | `adr-0002.prompts.md` |
-| 命名空间 | `ADR-0003-namespace-rules.md` | `adr-0003.prompts.md` |
-| 依赖管理 | `ADR-0004-Cpm-Final.md` | `adr-0004.prompts.md` |
-| Handler/CQRS | `ADR-0005-Application-Interaction-Model-Final.md` | `adr-0005.prompts.md` |
+| 区域 | 主要 ADR 正文 | 执行级别 | 辅助 Prompt 文件 |
+|------|--------------|---------|--------------|
+| 模块隔离 | [ADR-0001](../../docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) | Level 1 | [adr-0001.prompts.md](../../docs/copilot/adr-0001.prompts.md) |
+| 层级边界 | [ADR-0002](../../docs/adr/constitutional/ADR-0002-platform-application-host-bootstrap.md) | Level 1 | [adr-0002.prompts.md](../../docs/copilot/adr-0002.prompts.md) |
+| 命名空间 | [ADR-0003](../../docs/adr/constitutional/ADR-0003-namespace-rules.md) | Level 1 | [adr-0003.prompts.md](../../docs/copilot/adr-0003.prompts.md) |
+| 依赖管理 | [ADR-0004](../../docs/adr/constitutional/ADR-0004-Cpm-Final.md) | Level 1 | [adr-0004.prompts.md](../../docs/copilot/adr-0004.prompts.md) |
+| Handler/CQRS | [ADR-0005](../../docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) | Level 1/2 | [adr-0005.prompts.md](../../docs/copilot/adr-0005.prompts.md) |
 
-**重要**：评审时必须引用 ADR 正文的具体章节，而非仅引用 Prompt 文件。
+**重要**：评审时必须引用 ADR 正文的具体章节，并标注执行级别。
+
+---
 
 ### 步骤 3：检查危险信号
 
-扫描以下高风险模式：
+按执行级别扫描：
 
-#### 🚨 关键危险信号（必须停止）
-```csharp
-// ❌ 跨模块直接引用
-using Zss.BilliardHall.Modules.OtherModule.Domain;
+#### 🚨 关键危险信号（Level 1 - 必须停止）
 
-// ❌ Platform 依赖 Application/Host
-// 在 Platform 项目中
-using Zss.BilliardHall.Application;
+已在"步骤 0"中列出，此处不再重复。
 
-// ❌ Host 包含业务逻辑
-// 在 Host 项目中
-public class OrderValidator { }
-
-// ❌ Command Handler 返回业务数据
-public async Task<OrderDto> Handle(CreateOrder command)
-
-// ❌ 模块间共享领域模型
-public class SharedCustomer { } // 被多个模块使用
-```
-
-#### ⚠️ 警告信号（需要仔细审查）
+#### ⚠️ 警告信号（Level 2 - 需要仔细审查）
 ```csharp
 // ⚠️ 类似 Service 的命名
 public class OrderService { }
@@ -96,36 +183,49 @@ var dto = await _queryBus.Send(new GetData(...));
 if (dto.Status == "Active") { ... }
 ```
 
+**参考执行级别**：[ADR-0005-Enforcement-Levels.md](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
+
+---
+
 ### 步骤 4：提供结构化反馈
 
-使用此模板：
+使用此模板（包含执行级别）：
 
 ```markdown
 ## 架构评审摘要
 
 ### ✅ 合规方面
 - [列出正确遵循 ADR 的内容]
+- 符合 [ADR-XXXX：章节]
 
-### ⚠️ 潜在关注点
+### ⚠️ 潜在关注点（Level 2/3）
 - [列出需要澄清的项目]
-- 参考：[相关 ADR 及章节]
+- 参考：[ADR-XXXX：具体章节](链接)
+- 执行级别：Level 2/3 - [需要人工审查/需要架构委员会批准]
 - 建议：[如何验证或修复]
 
-### ❌ 检测到的违规
+### ❌ 检测到的违规（Level 1）
 - [列出明确的违规]
-- 违反的 ADR：[ADR-XXXX: 章节]
+- 违反的 ADR：[ADR-XXXX：章节](链接)
+- 执行级别：Level 1 - 自动阻止
 - 影响：[解释为什么这很重要]
 - 修复：[具体纠正措施]
 
 ### 📚 推荐阅读
-- [链接到相关 docs/copilot/adr-XXXX.prompts.md]
+- [ADR 正文链接](../../docs/adr/...)
+- [Copilot Prompt 链接](../../docs/copilot/...)
+- [执行级别说明](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
 ```
+
+---
 
 ## 具体评审场景
 
 ### 场景 1：新增用例
 
-**检查**：
+**权威依据**：[ADR-0001：垂直切片架构](../../docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md#垂直切片架构)
+
+**检查清单**：
 - ✅ 是否按垂直切片组织？
 - ✅ Handler 是此用例的唯一权威？
 - ✅ Endpoint 是否精简（仅做映射）？
@@ -148,9 +248,15 @@ Tests/Modules.Orders.Tests/UseCases/CreateOrder/
   └─ CreateOrderHandlerTests.cs
 ```
 
+**执行级别**：Level 1/2（结构为 Level 1，业务逻辑位置为 Level 2）
+
+---
+
 ### 场景 2：新增模块通信
 
-**检查**：
+**权威依据**：[ADR-0001：模块通信规则](../../docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md#模块通信)
+
+**检查清单**：
 - ✅ 是否通过事件（异步）？
 - ✅ 或通过契约（只读）？
 - ✅ 或通过原始类型（ID）？
@@ -158,25 +264,37 @@ Tests/Modules.Orders.Tests/UseCases/CreateOrder/
 - ❌ 不是通过同步命令？
 
 **如果发现直接引用**：
+
 ```markdown
-⚠️ **违规**：模块隔离（ADR-0001）
+🚨 **违规**：模块隔离（Level 1 - 自动阻止）
 
 **检测到**：
 ```csharp
 using Zss.BilliardHall.Modules.Members.Domain;
 ```
 
+**违反的 ADR**：
+[ADR-0001：模块隔离](../../docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md#模块隔离)
+
+**执行级别**：Level 1 - 静态可执行
+
 **修复**：使用三种合规模式之一：
 1. 领域事件：`await _eventBus.Publish(new OrderCreated(...))`
 2. 契约查询：`var dto = await _queryBus.Send(new GetMemberById(...))`
 3. 原始类型：传递 `Guid memberId` 而不是 `Member` 对象
 
-**参考**：docs/copilot/adr-0001.prompts.md（场景 3）
+**参考**：
+- [ADR-0001 正文](../../docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [adr-0001.prompts.md（场景 3）](../../docs/copilot/adr-0001.prompts.md)
 ```
+
+---
 
 ### 场景 3：新增依赖
 
-**检查**：
+**权威依据**：[ADR-0004：中央包管理](../../docs/adr/constitutional/ADR-0004-Cpm-Final.md)
+
+**检查清单**：
 - ✅ 版本是否在 `Directory.Packages.props` 中？
 - ✅ 项目文件中没有 `Version` 属性？
 - ✅ 依赖层级是否合适？
@@ -186,13 +304,19 @@ using Zss.BilliardHall.Modules.Members.Domain;
   - Host：仅协议包
 
 **如果在项目中看到 Version**：
+
 ```markdown
-⚠️ **违规**：中央包管理（ADR-0004）
+🚨 **违规**：中央包管理（Level 1 - 自动阻止）
 
 **检测到**：
 ```xml
 <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 ```
+
+**违反的 ADR**：
+[ADR-0004：中央包管理](../../docs/adr/constitutional/ADR-0004-Cpm-Final.md#包版本管理)
+
+**执行级别**：Level 1 - 静态可执行
 
 **修复**：
 1. 添加到 Directory.Packages.props：
@@ -204,10 +328,14 @@ using Zss.BilliardHall.Modules.Members.Domain;
    <PackageReference Include="Newtonsoft.Json" />
    ```
 
-**参考**：docs/copilot/adr-0004.prompts.md
+**参考**：[adr-0004.prompts.md](../../docs/copilot/adr-0004.prompts.md)
 ```
 
-### 场景 4：修改架构测试
+---
+
+### 场景 4：修改架构测试（🚨 最高风险）
+
+**权威依据**：[ADR-0000：架构测试与 CI 治理](../../docs/adr/constitutional/ADR-0000-architecture-tests.md)
 
 **如果发生以下情况立即停止**：
 - 架构测试被削弱
@@ -215,25 +343,31 @@ using Zss.BilliardHall.Modules.Members.Domain;
 - 测试被移除或注释掉
 
 **正确响应**：
+
 ```markdown
-🛑 **关键**：检测到架构测试修改
+🛑 **关键**：检测到架构测试修改（Level 1 - 严格审查）
 
 架构测试强制执行 ADR，**很少**应该被修改。
+
+**权威依据**：[ADR-0000：架构测试](../../docs/adr/constitutional/ADR-0000-architecture-tests.md)
 
 **继续之前**：
 1. 这是合法的 ADR 演进吗？（需要架构团队批准）
 2. 还是应该修复代码？
 
 **如果应该修复代码**：
-- 参考 docs/copilot/adr-XXXX.prompts.md 了解正确模式
-- 查阅 docs/copilot/architecture-test-failures.md
+- 参考 [adr-XXXX.prompts.md](../../docs/copilot/) 了解正确模式
+- 查阅 [architecture-test-failures.md](../../docs/copilot/architecture-test-failures.md)
 
 **如果需要 ADR 演进**：
 - 这需要架构委员会审查
 - 记录理由
 - 更新相应的 ADR 文档
 - 在 PR 标题中添加 [ARCH-VIOLATION]
+- 记录在 [ARCH-VIOLATIONS.md](../../docs/summaries/arch-violations.md)
 ```
+
+---
 
 ## 不应该做的事情
 
@@ -327,12 +461,12 @@ using Zss.BilliardHall.Modules.Members.Domain;
 - [ ] 跨模块通信仅通过事件/契约/原始类型
 - [ ] 无共享领域模型
 
-### 层级边界（ADR-0002）
+### 层级边界（[ADR-0002](../../docs/adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)）
 - [ ] 依赖流向正确：Host → Application → Platform
 - [ ] Host 不包含业务逻辑
 - [ ] Platform 不依赖 Application/Host
 
-### CQRS（ADR-0005）
+### CQRS（[ADR-0005](../../docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)）
 - [ ] Command Handler 仅返回 void 或 ID
 - [ ] Query Handler 返回契约
 - [ ] Endpoint 是精简适配器
@@ -342,41 +476,53 @@ using Zss.BilliardHall.Modules.Members.Domain;
 - [ ] 测试镜像源码结构
 - [ ] 未在无正当理由下修改架构测试
 
-**如果任何项目无法勾选**，请在 PR 评论中说明。
-```
+**执行级别参考**：[ADR-0005-Enforcement-Levels.md](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
+
+**如果任何项目无法勾选**，请在 PR 评论中说明原因并标注执行级别。
+
+---
 
 ## 参考优先级
 
-在提供指导时，按以下顺序引用：
-1. **ADR 文档** - 宪法级来源
-2. **架构测试** - 强制执行机制  
-3. **Prompt 文件** - 操作指南
-4. **代码示例** - 具体说明
+在提供指导时，按以下顺序引用（包含执行级别）：
+1. **ADR 文档** - 宪法级来源（包含具体章节链接）
+2. **执行级别** - [ADR-0005-Enforcement-Levels.md](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
+3. **架构测试** - 强制执行机制  
+4. **Prompt 文件** - 操作指南
+5. **代码示例** - 具体说明
 
-示例：
-> "根据 ADR-0001（章节：模块通信），模块不得直接引用彼此。这由 `ADR_0001_Architecture_Tests.cs` 中的 `Modules_Should_Not_Reference_Other_Modules` 测试强制执行。正确模式请参见 `docs/copilot/adr-0001.prompts.md`（场景 3：模块通信）。"
+**示例引用模板**：
+> "根据 [ADR-0001：模块通信](../../docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md#模块通信)（Level 1 - 静态可执行），模块不得直接引用彼此。这由 `ADR_0001_Architecture_Tests.cs` 中的 `Modules_Should_Not_Reference_Other_Modules` 测试强制执行。正确模式请参见 [adr-0001.prompts.md（场景 3：模块通信）](../../docs/copilot/adr-0001.prompts.md)。"
 
-## 记住
+---
+
+## 🚨 记住：你的角色边界
 
 你是**诊断助手**，不是**批准者**。
 
-你的工作是：
-- ✅ 指出潜在问题
-- ✅ 引用相关 ADR
+**你的工作是**：
+- ✅ 指出潜在问题并标注执行级别
+- ✅ 引用相关 ADR 的具体章节
 - ✅ 建议合规替代方案
-- ✅ 提出澄清问题
+- ✅ 提出需要澄清的问题
+- ✅ 标记需要人工判断的场景（Level 2/3）
 
-你的工作不是：
-- ❌ 给出最终批准/拒绝
-- ❌ 覆盖人工判断
+**你的工作不是**：
+- ❌ 给出最终批准/拒绝决定
+- ❌ 覆盖人工判断或架构委员会决策
 - ❌ 发明新架构规则
-- ❌ 建议绕过 ADR
+- ❌ 建议绕过 ADR 的"变通方法"
+- ❌ 在不确定时给出确定性建议
+
+---
 
 ## 文档变更的特殊检查
 
-当 PR 包含文档变更时（特别是 `docs/` 目录），**必须**额外检查：
+**参考**：[documentation.instructions.md](./documentation.instructions.md)
 
-### 新增文档检查清单
+当 PR 包含文档变更时（特别是 [`docs/`](../../docs/) 目录），**必须**额外检查：
+
+### 🚨 新增文档检查清单（强制）
 
 如果 PR 创建了新文档，验证：
 
@@ -427,3 +573,18 @@ using Zss.BilliardHall.Modules.Members.Domain;
 
 **参考**：`.github/instructions/documentation.instructions.md`（更新索引文件章节）
 ```
+
+---
+
+## 维护提醒
+
+> **🔄 重要**  
+> 如本文件内容与 ADR 正文存在不一致，或架构演进导致规则变更，请：
+> 1. 同步架构负责人确认变更
+> 2. 更新本文件以与 ADR 正文保持一致
+> 3. 进行团队公告，确保所有成员知晓变更
+> 4. 更新相关的 [`docs/copilot/`](../../docs/copilot/) 辅导材料
+> 5. 确保架构测试与 ADR 正文保持同步
+> 6. 更新执行级别分类（如适用）
+
+---
