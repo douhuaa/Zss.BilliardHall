@@ -121,6 +121,7 @@ docs/copilot/
   ├─ adr-0003.prompts.md                ← ADR-0003 提示词库
   ├─ adr-0004.prompts.md                ← ADR-0004 提示词库
   ├─ adr-0005.prompts.md                ← ADR-0005 提示词库
+  ├─ adr-0120.prompts.md                ← ADR-120 提示词库
   └─ architecture-test-failures.md      ← 架构测试失败解释指南
 ```
 
@@ -348,11 +349,12 @@ graph TB
 
 ### 阅读各个 ADR 对应的 Prompt 文件
 
-- [ADR-0001 提示词库](adr-0001.prompts.md)
-- [ADR-0002 提示词库](adr-0002.prompts.md)
-- [ADR-0003 提示词库](adr-0003.prompts.md)
-- [ADR-0004 提示词库](adr-0004.prompts.md)
-- [ADR-0005 提示词库](adr-0005.prompts.md)
+- [ADR-0001 提示词库](adr-0001.prompts.md) - 模块化单体与垂直切片架构
+- [ADR-0002 提示词库](adr-0002.prompts.md) - Platform/Application/Host 启动体系
+- [ADR-0003 提示词库](adr-0003.prompts.md) - 命名空间规范
+- [ADR-0004 提示词库](adr-0004.prompts.md) - 中央包管理
+- [ADR-0005 提示词库](adr-0005.prompts.md) - 应用内交互模型
+- [ADR-120 提示词库](adr-0120.prompts.md) - 领域事件命名规范
 
 ### 了解完整工作流
 
