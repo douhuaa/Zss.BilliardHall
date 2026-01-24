@@ -378,3 +378,16 @@ graph TB
 | 版本  | 日期         | 变更说明 |
 |-----|------------|------|
 | 1.0 | 2026-01-21 | 初始版本 |
+
+## 新增 ADR 提示词（2026-01-24）
+
+- [adr-0201.prompts.md](./adr-0201.prompts.md) - Command Handler 生命周期管理
+- [adr-0122.prompts.md](./adr-0122.prompts.md) - 测试代码组织与命名规范
+- [adr-0301.prompts.md](./adr-0301.prompts.md) - 集成测试环境自动化与隔离约束
+- [adr-0360.prompts.md](./adr-0360.prompts.md) - CI/CD Pipeline 流程标准化
+- [adr-0930.prompts.md](./adr-0930.prompts.md) - 代码审查与 ADR 合规自检流程
+- [adr-0210.prompts.md](./adr-0210.prompts.md) - 领域事件版本化与兼容性
+- [adr-0220.prompts.md](./adr-0220.prompts.md) - 集成事件总线选型与适配规范
+- [adr-0123.prompts.md](./adr-0123.prompts.md) - Repository 接口与分层命名规范
+- [adr-0124.prompts.md](./adr-0124.prompts.md) - Endpoint 命名及参数约束规范
+- [adr-0350.prompts.md](./adr-0350.prompts.md) - 日志与可观测性标签与字段标准
