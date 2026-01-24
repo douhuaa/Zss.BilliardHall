@@ -581,7 +581,8 @@ ADR-0900~0999    → 治理层（governance/）
 
 ## 📝 待落地 ADR 提案
 
-**跟踪文档**：[待落地 ADR 提案跟踪清单](./PENDING-ADR-PROPOSALS.md)
+**跟踪文档**：[待落地 ADR 提案跟踪清单](./PENDING-ADR-PROPOSALS.md)  
+**实施指南**：[ADR 实施指南](./ADR-IMPLEMENTATION-GUIDE.md)
 
 本仓库正在按照 ADR-0900 流程逐步完善架构治理体系。以下 ADR 提案已规划，待实施：
 
