@@ -18,8 +18,9 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// │ ADR-120.4    │ 事件处理器必须以 `Handler` 后缀结尾                       │ L1      │ Event_Handlers_Should_End_With_Handler_Suffix      │
 /// │ ADR-120.5    │ 事件不得包含领域实体类型                                  │ L1      │ Events_Should_Not_Contain_Domain_Entities          │
 /// │ ADR-120.6    │ 事件不得包含业务方法                                      │ L1      │ Events_Should_Not_Contain_Business_Methods         │
-/// │ ADR-120.7    │ 事件文件名必须与类型名一致                                │ L1      │ Event_File_Names_Should_Match_Type_Names           │
 /// └──────────────┴────────────────────────────────────────────────────────┴─────────┴────────────────────────────────────────────────────┘
+/// 
+/// 注：ADR-120.7（文件名与类型名一致）已移除，因其耦合仓库物理结构，属于代码组织习惯而非架构约束。
 /// </summary>
 public sealed class ADR_0120_Architecture_Tests
 {
@@ -67,27 +68,21 @@ public sealed class ADR_0120_Architecture_Tests
             .Where(t => !t.IsAbstract)
             .ToList();
 
-        // 常见的违规模式：现在时/进行时/原形动词
+        // 禁止的违规模式：现在时/进行时/原形动词
+        // 架构测试哲学：裁定明显错误，而不是证明正确
         var forbiddenPatterns = new[]
         {
             // 进行时 (-ing)
             new Regex(@"(\w+)ingEvent$", RegexOptions.Compiled),
-            // 常见现在时动词（需要更详细的列表，这里仅示例）
-            new Regex(@"(Create|Update|Delete|Add|Remove|Send|Process|Execute)Event$", RegexOptions.Compiled)
-        };
-
-        // 常见的正确过去式模式
-        var correctPatterns = new[]
-        {
-            new Regex(@"(\w+)(ed|d)Event$", RegexOptions.Compiled),      // Created, Updated, Added
-            new Regex(@"(\w+)(Cancelled|Shipped|Paid|Upgraded|Downgraded|Suspended|Resumed|Completed)Event$", RegexOptions.Compiled)
+            // 常见现在时动词原形
+            new Regex(@"(Create|Update|Delete|Add|Remove|Send|Process|Execute|Start|Stop|Begin|End|Open|Close)Event$", RegexOptions.Compiled)
         };
 
         foreach (var eventType in eventTypes)
         {
             var eventName = eventType.Name;
 
-            // 检查是否匹配违规模式
+            // 只检查是否匹配违规模式（明确的错误）
             foreach (var pattern in forbiddenPatterns)
             {
                 if (pattern.IsMatch(eventName))
@@ -108,15 +103,6 @@ public sealed class ADR_0120_Architecture_Tests
                         $"   - Cancelled, Shipped, Paid, Upgraded, Suspended\n\n" +
                         $"参考: docs/adr/structure/ADR-120-domain-event-naming-convention.md（基本命名规则）");
                 }
-            }
-
-            // 提示：如果不匹配任何正确模式，给出警告（不直接失败，因为可能有特殊情况）
-            var matchesCorrectPattern = correctPatterns.Any(p => p.IsMatch(eventName));
-            if (!matchesCorrectPattern)
-            {
-                System.Diagnostics.Debug.WriteLine(
-                    $"⚠️ ADR-120.2 建议: 事件 {eventType.FullName} 的命名可能不符合过去式约定。\n" +
-                    $"请确认动词是否为过去式形式（如 Created、Updated、Cancelled 等）。");
             }
         }
     }
@@ -172,25 +158,36 @@ public sealed class ADR_0120_Architecture_Tests
     [ClassData(typeof(ModuleAssemblyData))]
     public void Event_Handlers_Should_End_With_Handler_Suffix(Assembly moduleAssembly)
     {
-        // 查找所有在 EventHandlers 命名空间或名称包含 EventHandler 的类型
-        var eventHandlerTypes = Types.InAssembly(moduleAssembly)
-            .That()
-            .ResideInNamespaceContaining("EventHandlers")
-            .GetTypes()
+        // 语义化检测：查找实现了事件处理接口的类型
+        // 而不是基于命名约定猜测（避免误杀 EventHandlerRegistry、EventHandlerMetrics 等）
+        var allTypes = moduleAssembly.GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract)
             .ToList();
 
-        // 同时检查名称包含 EventHandler 的类型
-        var namedEventHandlers = Types.InAssembly(moduleAssembly)
-            .That()
-            .AreClasses()
-            .GetTypes()
-            .Where(t => !t.IsAbstract && t.Name.Contains("EventHandler"))
-            .ToList();
+        var eventHandlerTypes = new List<Type>();
 
-        var allEventHandlers = eventHandlerTypes.Concat(namedEventHandlers).Distinct().ToList();
+        foreach (var type in allTypes)
+        {
+            // 检查是否实现了事件处理接口（IEventHandler<T>、IHandle<T> 等）
+            var interfaces = type.GetInterfaces();
+            var isEventHandler = interfaces.Any(i =>
+                i.IsGenericType &&
+                (i.GetGenericTypeDefinition().Name.Contains("IEventHandler") ||
+                 i.GetGenericTypeDefinition().Name.Contains("IHandle")) &&
+                i.GetGenericArguments().Any(arg => arg.Name.EndsWith("Event")));
 
-        foreach (var handlerType in allEventHandlers)
+            // 或者：位于明确的事件处理命名空间（精确匹配，不是模糊包含）
+            var isInEventHandlersNamespace = type.Namespace != null &&
+                                             (type.Namespace.EndsWith(".EventHandlers") ||
+                                              type.Namespace.Contains(".EventHandlers."));
+
+            if (isEventHandler || isInEventHandlersNamespace)
+            {
+                eventHandlerTypes.Add(type);
+            }
+        }
+
+        foreach (var handlerType in eventHandlerTypes)
         {
             Assert.True(handlerType.Name.EndsWith("Handler"),
                 $"❌ ADR-120.4 违规: 事件处理器缺少 'Handler' 后缀\n\n" +
@@ -327,88 +324,6 @@ public sealed class ADR_0120_Architecture_Tests
                     $"   - 判断逻辑 → 领域模型方法\n" +
                     $"   - 协调逻辑 → Handler\n\n" +
                     $"参考: docs/adr/structure/ADR-120-domain-event-naming-convention.md（模块隔离约束）");
-            }
-        }
-    }
-
-    #endregion
-
-    #region 5. 文件结构组织 (ADR-120.7)
-
-    [Theory(DisplayName = "ADR-120.7: 事件文件名必须与类型名一致")]
-    [ClassData(typeof(ModuleAssemblyData))]
-    public void Event_File_Names_Should_Match_Type_Names(Assembly moduleAssembly)
-    {
-        var eventTypes = Types.InAssembly(moduleAssembly)
-            .That()
-            .ResideInNamespaceContaining(".Events")
-            .And()
-            .HaveNameEndingWith("Event")
-            .GetTypes()
-            .Where(t => !t.IsAbstract)
-            .ToList();
-
-        var root = ModuleAssemblyData.GetSolutionRoot();
-        var modulesDir = Path.Combine(root, "src", "Modules");
-
-        foreach (var eventType in eventTypes)
-        {
-            // 从命名空间推导预期的文件路径
-            if (eventType.Namespace == null) continue;
-
-            var namespaceParts = eventType.Namespace.Split('.');
-            var moduleIndex = Array.IndexOf(namespaceParts, "Modules");
-            if (moduleIndex < 0 || moduleIndex + 1 >= namespaceParts.Length) continue;
-
-            var moduleName = namespaceParts[moduleIndex + 1];
-            var subPath = string.Join(Path.DirectorySeparatorChar, namespaceParts.Skip(moduleIndex + 2));
-
-            var expectedDir = Path.Combine(modulesDir, moduleName, subPath);
-            var expectedFilePath = Path.Combine(expectedDir, $"{eventType.Name}.cs");
-
-            // 检查文件是否存在
-            if (Directory.Exists(expectedDir))
-            {
-                var filesInDir = Directory.GetFiles(expectedDir, "*.cs", SearchOption.TopDirectoryOnly);
-                var matchingFile = filesInDir.FirstOrDefault(f => Path.GetFileNameWithoutExtension(f) == eventType.Name);
-
-                if (matchingFile == null)
-                {
-                    // 检查是否在其他文件中定义（这是违规的）
-                    var allCsFiles = Directory.GetFiles(expectedDir, "*.cs", SearchOption.TopDirectoryOnly);
-                    var foundInOtherFile = false;
-
-                    foreach (var file in allCsFiles)
-                    {
-                        var content = File.ReadAllText(file);
-                        if (content.Contains($"class {eventType.Name}") ||
-                            content.Contains($"record {eventType.Name}") ||
-                            content.Contains($"struct {eventType.Name}"))
-                        {
-                            foundInOtherFile = true;
-                            Assert.Fail(
-                                $"❌ ADR-120.7 违规: 事件文件名与类型名不一致\n\n" +
-                                $"违规事件: {eventType.FullName}\n" +
-                                $"期望文件: {expectedFilePath}\n" +
-                                $"实际文件: {file}\n\n" +
-                                $"问题分析:\n" +
-                                $"事件类型与文件名不一致，或多个事件定义在同一个文件中\n\n" +
-                                $"修复建议:\n" +
-                                $"1. 为每个事件创建独立文件：{eventType.Name}.cs\n" +
-                                $"2. 文件名必须与类型名完全一致（包括大小写）\n" +
-                                $"3. 禁止在一个文件中定义多个事件类型\n" +
-                                $"4. 文件路径应与命名空间对应\n\n" +
-                                $"参考: docs/adr/structure/ADR-120-domain-event-naming-convention.md（文件结构组织）");
-                            break;
-                        }
-                    }
-
-                    if (!foundInOtherFile)
-                    {
-                        System.Diagnostics.Debug.WriteLine(
-                            $"⚠️ ADR-120.7 提示: 未找到事件 {eventType.FullName} 的源文件，期望路径: {expectedFilePath}");
-                    }
-                }
             }
         }
     }

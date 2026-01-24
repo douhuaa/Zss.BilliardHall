@@ -475,18 +475,22 @@ public record OrderCreatedEvent(Guid OrderId, Guid MemberId, DateTime CreatedAt)
 
 | 约束编号 | 描述 | 层级 | 测试用例/自动化 | 章节 |
 |---------|------|------|----------------|------|
+| 约束编号 | 描述 | 层级 | 测试用例/自动化 | 章节 |
+|---------|------|------|----------------|------|
 | ADR-120.1 | 事件类型必须以 `Event` 后缀结尾 | L1 | Event_Types_Should_End_With_Event_Suffix | 基本命名规则 |
 | ADR-120.2 | 事件名称必须使用动词过去式 | L1 | Event_Names_Should_Use_Past_Tense_Verbs | 基本命名规则 |
 | ADR-120.3 | 事件必须在模块的 `Events` 命名空间下 | L1 | Events_Should_Be_In_Events_Namespace | 命名空间组织规则 |
 | ADR-120.4 | 事件处理器必须以 `Handler` 后缀结尾 | L1 | Event_Handlers_Should_End_With_Handler_Suffix | 事件处理器命名规则 |
 | ADR-120.5 | 事件不得包含领域实体类型 | L1 | Events_Should_Not_Contain_Domain_Entities | 模块隔离约束 |
 | ADR-120.6 | 事件不得包含业务方法 | L1 | Events_Should_Not_Contain_Business_Methods | 模块隔离约束 |
-| ADR-120.7 | 事件文件名必须与类型名一致 | L1 | Event_File_Names_Should_Match_Type_Names | 文件结构组织 |
+| ADR-120.7 | 事件文件名必须与类型名一致 | L2 | 人工 Code Review | 文件结构组织 |
 | ADR-120.8 | 事件版本标识使用 `V{N}` 格式 | L2 | Event_Versions_Should_Use_VN_Format | 事件版本演进规则 |
 
 **测试层级说明**：
 - **L1**：必须架构测试覆盖，CI 自动阻断（本体语义约束，违反即为架构退化）
 - **L2**：建议架构测试覆盖或人工 Code Review（技术实践约束，可根据情况灵活处理）
+
+**注**：ADR-120.7 从 L1 降级为 L2，因其耦合仓库物理结构（monorepo、目录重组等），属于代码组织习惯而非架构本体约束。
 
 ---
 
@@ -603,6 +607,7 @@ public void Event_Handlers_Should_End_With_Handler_Suffix()
 
 | 版本 | 日期 | 变更摘要 |
 |------|------|---------|
+| 1.2  | 2026-01-24 | 架构测试精化版本：1) ADR-120.2 移除"证明正确"逻辑，只保留禁止模式（架构测试哲学：裁定明显错误，不证明正确）；2) ADR-120.4 改用语义检测（接口实现）而非命名猜测，避免误杀；3) ADR-120.7 从 L1 降级至 L2（文件名约束耦合物理结构，属代码组织而非架构本体） |
 | 1.1  | 2026-01-24 | 强化版本：1) 扩展 EventHandler 命名规则支持 `{Purpose}` 后缀以应对多订阅场景；2) 明确事件版本命名 ≠ 序列化兼容策略；3) 升级"动词过去式"约束从 L2 至 L1（本体语义约束） |
 | 1.0  | 2026-01-24 | 初始版本：定义领域事件命名规范、命名空间组织、版本演进和模块隔离约束 |
 
