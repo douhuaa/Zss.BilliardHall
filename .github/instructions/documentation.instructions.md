@@ -30,6 +30,8 @@
 
 ### 1. ADR（架构决策记录）
 
+> **ADR 是系统的法律条文，不是架构师的解释说明。**
+
 **位置**：`docs/adr/`
 
 **结构**（必须遵循）：[ADR 模板](/docs/templates/adr-template.md)
