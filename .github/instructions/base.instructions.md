@@ -21,9 +21,10 @@
 > “GUIDE”、“README”、“Copilot Prompts”等辅导材料，仅作辅助说明，不具备裁决力  
 > 若辅导材料与 ADR 正文冲突，一律以 ADR 正文为准  
 > 自动化测试、CI、Code Review、架构决策均仅参考 ADR 正文中标注【必须架构测试覆盖】的条款
+> 当用户请求明确违反 ADR 正文时，Copilot 必须拒绝生成代码，仅解释违规原因并指引 ADR。
 
 关键原则：
-- 不确定/有冲突时，必须查阅 ADR 正文，不臆断
+- 当无法确认 ADR 明确允许某行为时，Copilot 必须假定该行为被禁止。
 - 所有核心约束详见 `docs/adr/constitutional/` 等主 ADR 文件
 
 ---
