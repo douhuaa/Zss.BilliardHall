@@ -1,0 +1,240 @@
+# ======================================================================================================
+# EditorConfig 企业级配置文件
+# ======================================================================================================
+# 本文件定义 Zss.BilliardHall 项目的代码风格与格式规范
+# 
+# 重要原则：
+# 1. 本文件仅包含格式和风格规则，不包含业务约束或架构逻辑
+# 2. 所有架构约束必须在 ADR（架构决策记录）中定义
+# 3. 命名空间、分层、依赖等架构规则由 Directory.Build.props 和架构测试强制执行
+# 4. 任何修改必须遵循 ADR-0900（ADR 新增与修订流程）
+#
+# 参考文档：
+# - 详细说明：docs/configuration/editorconfig.md
+# - ADR 流程：docs/adr/governance/ADR-0900-adr-process.md
+# - 配置索引：docs/configuration/README.md
+#
+# 版本：1.0
+# 最后更新：2026-01-24
+# ======================================================================================================
+
+# 顶级配置：标记为根配置文件，停止向上查找
+root = true
+
+# ======================================================================================================
+# 通用默认规则（适用于所有文件）
+# ======================================================================================================
+[*]
+# 字符集：UTF-8（通用标准）
+charset = utf-8
+# 缩进样式：空格（禁止使用 Tab）
+indent_style = space
+# 文件末尾：必须有换行符
+insert_final_newline = true
+# 清理行尾空格：是（文档文件除外）
+trim_trailing_whitespace = true
+
+# ======================================================================================================
+# C# 源代码文件配置
+# ======================================================================================================
+# 适用于所有 .cs 文件，包括 Platform、Application、Modules、Host、Tests 等各层
+[*.cs]
+# 字符集：UTF-8 BOM（C# 编译器推荐，确保跨平台兼容性）
+charset = utf-8-bom
+# 缩进大小：4 个空格（.NET 生态标准）
+indent_size = 4
+# 换行符：CRLF（Windows 标准，与 Visual Studio 默认一致）
+end_of_line = crlf
+
+# C# 代码风格偏好设置（仅提示，不强制错误）
+# 注意：架构约束（如命名空间、分层依赖）由 ADR 和架构测试强制执行，不在此配置
+
+# 命名规则：使用 PascalCase（公共成员）和 camelCase（私有字段）
+dotnet_naming_rule.private_fields_should_be_camel_case.severity = suggestion
+dotnet_naming_rule.private_fields_should_be_camel_case.symbols = private_fields
+dotnet_naming_rule.private_fields_should_be_camel_case.style = camel_case_style
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.camel_case_style.capitalization = camel_case
+dotnet_naming_style.camel_case_style.required_prefix = _
+
+# 现代 C# 语法偏好
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_style_namespace_declarations = file_scoped:suggestion
+csharp_style_prefer_method_group_conversion = true:suggestion
+csharp_style_prefer_top_level_statements = true:suggestion
+csharp_style_expression_bodied_methods = true:suggestion
+csharp_style_expression_bodied_constructors = false:suggestion
+csharp_style_expression_bodied_operators = true:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
+csharp_style_expression_bodied_indexers = true:suggestion
+csharp_style_expression_bodied_accessors = true:suggestion
+
+# 使用 var 偏好
+csharp_style_var_for_built_in_types = false:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = false:suggestion
+
+# 代码块偏好
+csharp_prefer_braces = true:suggestion
+
+# 空格设置
+csharp_space_after_cast = false
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_space_between_method_call_parameter_list_parentheses = false
+csharp_space_between_method_declaration_parameter_list_parentheses = false
+
+# ======================================================================================================
+# 项目和配置文件
+# ======================================================================================================
+# MSBuild 项目文件、属性文件、目标文件
+[*.{csproj,props,targets}]
+indent_size = 2
+end_of_line = crlf
+
+# 解决方案文件
+[*.{sln,slnx}]
+indent_size = 2
+end_of_line = crlf
+# 解决方案文件通常由 Visual Studio 管理，保留其格式
+insert_final_newline = false
+
+# NuGet 配置
+[*.config]
+indent_size = 2
+end_of_line = crlf
+
+# ======================================================================================================
+# 文档和数据文件
+# ======================================================================================================
+# Markdown 文档
+[*.md]
+# 字符集：UTF-8（不使用 BOM，避免某些工具兼容性问题）
+charset = utf-8
+# 缩进：2 个空格（标准 Markdown 缩进）
+indent_size = 2
+# 换行符：LF（跨平台文档标准）
+end_of_line = lf
+# 保留尾随空格：Markdown 使用两个空格表示换行
+trim_trailing_whitespace = false
+# 最大行宽：建议 120 字符（便于阅读和 diff）
+max_line_length = 120
+
+# YAML 配置文件（GitHub Actions、Docker Compose 等）
+[*.{yml,yaml}]
+charset = utf-8
+indent_size = 2
+end_of_line = lf
+
+# JSON 文件
+[*.json]
+charset = utf-8
+indent_size = 2
+end_of_line = lf
+
+# JSON with Comments (VSCode 设置等)
+[*.jsonc]
+charset = utf-8
+indent_size = 2
+end_of_line = lf
+
+# ======================================================================================================
+# Shell 脚本和工具文件
+# ======================================================================================================
+# Bash/Shell 脚本
+[*.sh]
+charset = utf-8
+indent_size = 2
+end_of_line = lf
+
+# PowerShell 脚本
+[*.ps1]
+charset = utf-8-bom
+indent_size = 4
+end_of_line = crlf
+
+# Dockerfile
+[Dockerfile]
+charset = utf-8
+indent_size = 2
+end_of_line = lf
+
+[*.dockerfile]
+charset = utf-8
+indent_size = 2
+end_of_line = lf
+
+# ======================================================================================================
+# Git 配置文件
+# ======================================================================================================
+[.gitignore]
+charset = utf-8
+end_of_line = lf
+
+[.gitattributes]
+charset = utf-8
+end_of_line = lf
+
+# ======================================================================================================
+# 前端文件（如果项目包含前端代码）
+# ======================================================================================================
+# JavaScript/TypeScript
+[*.{js,ts,jsx,tsx}]
+charset = utf-8
+indent_size = 2
+end_of_line = lf
+
+# CSS/SCSS
+[*.{css,scss,sass}]
+charset = utf-8
+indent_size = 2
+end_of_line = lf
+
+# HTML
+[*.html]
+charset = utf-8
+indent_size = 2
+end_of_line = lf
+
+# ======================================================================================================
+# 特殊文件排除
+# ======================================================================================================
+# 生成的代码文件（通常不应手动编辑）
+[*.Designer.cs]
+# 保留生成工具的原始格式
+generated_code = true
+
+[*.g.cs]
+generated_code = true
+
+[*.g.i.cs]
+generated_code = true
+
+# ======================================================================================================
+# 约束说明
+# ======================================================================================================
+# 1. 架构约束不在此文件中定义
+#    - 命名空间规则：ADR-0003 + Directory.Build.props
+#    - 分层依赖：ADR-0001、ADR-0002 + 架构测试
+#    - 包管理：ADR-0004 + Directory.Packages.props
+#    - CQRS/Handler：ADR-0005 + 架构测试
+#
+# 2. 本文件仅控制格式和风格
+#    - 缩进、换行、字符集
+#    - 代码风格建议（非强制）
+#    - 文件组织建议
+#
+# 3. 修改此文件必须遵循 ADR-0900 流程
+#    - 技术层 ADR：Tech Lead/架构师批准
+#    - 提交 PR 前必须更新 docs/configuration/editorconfig.md
+#    - 团队公告并同步 IDE 配置
+#
+# 4. IDE 配置建议
+#    - Visual Studio：自动识别并应用
+#    - JetBrains Rider：自动识别并应用
+#    - VS Code：需要安装 EditorConfig 扩展
+#    - 详见：docs/configuration/editorconfig.md
+#
+# ======================================================================================================
