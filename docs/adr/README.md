@@ -42,7 +42,7 @@
 | 层级      | 编号范围                | 目录                | 说明            | 当前状态         |
 |---------|---------------------|-------------------|---------------|--------------|
 | **宪法层** | `ADR-0001~0009`     | `constitutional/` | 系统根基/不可推翻约束   | ✅ 已有 5 个 ADR |
-| **结构层** | `ADR-100~199`       | `structure/`      | 模块静态边界/组织细化   | 🔜 未来扩展      |
+| **结构层** | `ADR-100~199`       | `structure/`      | 模块静态边界/组织细化   | ✅ 已有 1 个 ADR |
 | **运行层** | `ADR-200~299`       | `runtime/`        | 运行/交互/协议/事件   | 🔜 未来扩展      |
 | **技术层** | `ADR-300~399`       | `technical/`      | 技术选型/具体落地     | 🔜 未来扩展      |
 | **治理层** | `ADR-0000, 900~999` | `governance/`     | 治理/破例/流程/变更管理 | ✅ 已有 2 个 ADR |
@@ -90,7 +90,7 @@ graph TB
     end
 
     subgraph Structure["📐 结构层 (ADR-100~199)"]
-        S[未来扩展:<br/>模块组织细化]
+        S120[ADR-120 领域事件命名]
     end
 
     subgraph Runtime["⚡ 运行层 (ADR-200~299)"]
@@ -136,6 +136,7 @@ ADR-0900~0999    → 治理层（governance/）
 | 命名空间和项目如何组织     | [ADR-0003](constitutional/ADR-0003-namespace-rules.md)                              | constitutional/ | 命名空间与工程映射规范      |
 | 依赖包如何管理         | [ADR-0004](constitutional/ADR-0004-Cpm-Final.md)                                    | constitutional/ | 中央包管理（CPM）       |
 | 业务用例如何执行        | [ADR-0005](constitutional/ADR-0005-Application-Interaction-Model-Final.md)          | constitutional/ | 应用内运行模型          |
+| **领域事件如何命名**     | **[ADR-120](structure/ADR-120-domain-event-naming-convention.md)**                 | structure/      | **领域事件命名规范与组织** |
 | 架构如何自动化校验       | [ADR-0000](governance/ADR-0000-architecture-tests.md)                               | governance/     | 架构测试与 CI 治理      |
 | **如何新增和修订 ADR** | **[ADR-0900](governance/ADR-0900-adr-process.md)**                                  | governance/     | **ADR 新增与修订流程**  |
 | 宪法层的地位和演进规则     | [宪法层说明](constitutional/ARCHITECTURE-CONSTITUTIONAL-LAYER.md)                        | constitutional/ | 宪法层定义与修订流程       |
@@ -147,7 +148,7 @@ ADR-0900~0999    → 治理层（governance/）
 |-------------------|-------------------|----------------|-----------------------|
 | `constitutional/` | ADR-0001~0009     | 宪法层 ADR，系统根基约束 | [查看](constitutional/) |
 | `governance/`     | ADR-0000, 900~999 | 治理流程、架构测试、破例管理 | [查看](governance/)     |
-| `structure/`      | ADR-100~199       | 静态结构细化（未来扩展）   | [查看](structure/)      |
+| `structure/`      | ADR-100~199       | 静态结构细化（命名、组织）  | [查看](structure/)      |
 | `runtime/`        | ADR-200~299       | 运行时行为细化（未来扩展）  | [查看](runtime/)        |
 | `technical/`      | ADR-300~399       | 技术选型和实现（未来扩展）  | [查看](technical/)      |
 
@@ -310,14 +311,34 @@ ADR-0900~0999    → 治理层（governance/）
 **位置**：`structure/` 目录  
 **特征**：静态结构细化、模块组织细节
 
-**当前状态**：🔜 未来扩展  
+**当前状态**：✅ 已有 1 个 ADR  
 **用途**：对宪法层结构约束（ADR-0001, 0002, 0003）的细化和补充
+
+### [ADR-120：领域事件命名规范](structure/ADR-120-domain-event-naming-convention.md)
+
+**主轴**：领域事件命名与组织  
+**聚焦内容**：
+
+- 事件类型命名模式（{AggregateRoot}{Action}Event）
+- 事件命名空间组织规则
+- 事件文件结构映射
+- 事件处理器命名规则
+- 事件版本演进支持
+- 模块隔离约束在事件中的应用
+
+**禁止内容**：
+
+- ❌ 事件缺少 `Event` 后缀
+- ❌ 使用现在时或动词原形
+- ❌ 事件包含领域实体
+- ❌ 事件包含跨模块业务语义
+- ❌ 命名空间与文件结构不一致
 
 **示例（未来可能）**：
 
 - ADR-101：特定领域模块的子模块划分策略
 - ADR-110：测试目录组织规范
-- ADR-120：领域事件命名规范
+- ADR-121：契约（Contract）命名规范
 
 [查看详细说明](structure/README.md)
 
