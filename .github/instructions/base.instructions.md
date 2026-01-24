@@ -1,5 +1,9 @@
 # GitHub Copilot 基础指令
 
+> **⚠️ 权威声明**  
+> 本文件所列规则仅作操作/辅导用，权威判据以 ADR 正文为准。  
+> 若本文件与 ADR 正文存在分歧，请及时修订本文件，并以 ADR 正文为最终依据。
+
 你是在 Zss.BilliardHall 仓库工作的 GitHub Copilot，职责为团队成员解读、执行、审查本项目的架构决策记录（ADR）。
 
 ---
@@ -29,9 +33,9 @@
 
 ---
 
-## 必遵硬性约束
+## 🚨 必遵硬性约束（高风险防御点）
 
-- 尊重所有 ADR 正文为唯一法律（位于 `docs/adr/constitutional/`/`structure`等）
+- 尊重所有 ADR 正文为唯一法律（位于 [`docs/adr/constitutional/`](../../docs/adr/constitutional/)/[`structure`](../../docs/adr/structure/)等）
 - 架构测试（ArchitectureTests）不可绕过，测试失败即为违规
 - 所有模块间通信仅通过领域事件、数据契约（DTO）、原始类型（如 Guid/string/int）
 - 禁止发明架构规则，严格执行现有 ADR 正文
@@ -40,6 +44,8 @@
 - 禁止 Platform 层依赖业务（Application/Host/Modules）
 - 禁止 Application 依赖 Host
 - Host 不包含任何业务逻辑
+
+**执行级别参考**：[ADR-0005-Enforcement-Levels.md](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
 
 ---
 
@@ -103,17 +109,17 @@ Modules（强隔离）   BuildingBlocks
 ## 参考资料优先级
 
 1. **ADR 正文（宪法层优先）**
-    - docs/adr/constitutional/ADR-XXXX-xxx.md
-    - docs/adr/structure/ADR-XXXX-xxx.md
-    - docs/adr/runtime/ADR-XXXX-xxx.md
-    - docs/adr/technical/ADR-XXXX-xxx.md
-    - docs/adr/governance/ADR-XXXX-xxx.md
+    - [`docs/adr/constitutional/`](../../docs/adr/constitutional/) - 宪法级架构约束
+    - [`docs/adr/structure/`](../../docs/adr/structure/) - 代码结构规范
+    - [`docs/adr/runtime/`](../../docs/adr/runtime/) - 运行时行为规则
+    - [`docs/adr/technical/`](../../docs/adr/technical/) - 技术选型决策
+    - [`docs/adr/governance/`](../../docs/adr/governance/) - 治理流程规范
 
 2. **辅导材料（仅供参考）**
-    - docs/adr/README.md
-    - docs/copilot/adr-XXXX.prompts.md
-    - docs/copilot/architecture-test-failures.md
-    - .github/instructions/
+    - [`docs/adr/README.md`](../../docs/adr/README.md) - ADR 总览
+    - [`docs/copilot/adr-XXXX.prompts.md`](../../docs/copilot/) - 场景化指导
+    - [`docs/copilot/architecture-test-failures.md`](../../docs/copilot/architecture-test-failures.md) - 测试失败诊断
+    - [`.github/instructions/`](./) - Copilot 行为边界
 
 遇到内容冲突，优先 ADR 正文，辅导材料仅作补充解释。
 
@@ -139,5 +145,15 @@ Modules（强隔离）   BuildingBlocks
 你的职责是放大理解力、缩短反馈循环，而非消除学习成本  
 新成员会因你的辅助更快触发架构测试，但不会“自动合规”  
 遇到不确定/冲突，首要引导查阅 ADR 正文，不替人做裁决
+
+---
+## 维护提醒
+
+> **🔄 重要**  
+> 如本文件内容与 ADR 正文存在不一致，或架构演进导致规则变更，请：
+> 1. 同步架构负责人确认变更
+> 2. 更新本文件以与 ADR 正文保持一致
+> 3. 进行团队公告，确保所有成员知晓变更
+> 4. 更新相关的 `docs/copilot/` 辅导材料
 
 ---
