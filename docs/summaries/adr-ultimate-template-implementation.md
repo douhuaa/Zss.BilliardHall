@@ -48,12 +48,12 @@
 **影响范围**：〈明确列出模块 / 层 / 仓库〉
 **生效时间**：YYYY-MM-DD
 
-## 1. 规则本体（Rule）
+## 规则本体（Rule）
 ## 2. 执法模型（Enforcement）
-## 3. 破例与归还（Exception）
-## 4. 变更政策（Change Policy）
-## 5. 明确不管什么（Non-Goals）
-## 6. 非裁决性参考（References）
+## 破例与归还（Exception）
+## 变更政策（Change Policy）
+## 明确不管什么（Non-Goals）
+## 非裁决性参考（References）
 ```
 
 ### 段落职责

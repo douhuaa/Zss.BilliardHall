@@ -7,7 +7,7 @@
 
 ---
 
-## 1. 规则本体（Rule）
+## 规则本体（Rule）
 
 > **这是本 ADR 唯一具有裁决力的部分。**
 
@@ -71,7 +71,7 @@ Command/Query Handler **禁止**：
 
 ---
 
-## 2. 执法模型（Enforcement）
+## 执法模型（Enforcement）
 
 > **规则如果无法执法，就不配存在。**
 
@@ -105,7 +105,7 @@ Command/Query Handler **禁止**：
 
 ---
 
-## 3. 破例与归还（Exception）
+## 破例与归还（Exception）
 
 > **破例不是逃避，而是债务。**
 
@@ -130,7 +130,7 @@ Command/Query Handler **禁止**：
 
 ---
 
-## 4. 变更政策（Change Policy）
+## 变更政策（Change Policy）
 
 > **ADR 不是"随时可改"的文档。**
 
@@ -164,7 +164,7 @@ ADR 变更时 **必须** 同步更新：
 
 ---
 
-## 5. 明确不管什么（Non-Goals）
+## 明确不管什么（Non-Goals）
 
 > **防止 ADR 膨胀的关键段落。**
 
@@ -178,7 +178,7 @@ ADR 变更时 **必须** 同步更新：
 
 ---
 
-## 6. 非裁决性参考（References）
+## 非裁决性参考（References）
 
 > **仅供理解，不具裁决力。**
 

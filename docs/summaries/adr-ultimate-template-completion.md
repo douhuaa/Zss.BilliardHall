@@ -91,7 +91,7 @@
 
 **After（v2）**：
 ```markdown
-## 1. 规则本体（Rule）
+## 规则本体（Rule）
 
 ### R1.1 模块定义与隔离
 
@@ -156,7 +156,7 @@
 ### 3.5 变更保护
 
 ```markdown
-## 4. 变更政策（Change Policy）
+## 变更政策（Change Policy）
 
 ### 4.1 变更规则
 
