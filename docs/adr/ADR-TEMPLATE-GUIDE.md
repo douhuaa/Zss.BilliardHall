@@ -95,7 +95,7 @@ Platform **禁止**依赖 Application、Host 或任何模块。
 ```markdown
 ## 2. Enforcement
 
-### 2.1 执行级别
+### 执行级别
 
 | Level | 名称      | 执法方式               | 后果    |
 | ----- | ------- | ------------------ | ----- |
@@ -103,7 +103,7 @@ Platform **禁止**依赖 Application、Host 或任何模块。
 | L2    | 语义半自动   | Analyzer / 启发式     | 人工复核  |
 | L3    | 人工 Gate | Review / Checklist | 架构裁决  |
 
-### 2.2 测试映射
+### 测试映射
 
 | Rule 编号    | 执行级 | 测试 / 手段                                    |
 | ---------- | --- | ------------------------------------------ |
@@ -137,7 +137,7 @@ Platform **禁止**依赖 Application、Host 或任何模块。
 ```markdown
 ## 3. Exception
 
-### 3.1 允许破例的前提
+### 允许破例的前提
 
 破例 **仅在以下情况允许**：
 
@@ -145,7 +145,7 @@ Platform **禁止**依赖 Application、Host 或任何模块。
 * 迁移期遗留代码（必须在 6 个月内归还）
 * 性能关键路径的特殊优化（需架构委员会审批）
 
-### 3.2 破例要求
+### 破例要求
 
 每个破例 **必须**：
 
@@ -178,7 +178,7 @@ Platform **禁止**依赖 Application、Host 或任何模块。
 ```markdown
 ## 4. Change Policy
 
-### 4.1 变更规则
+### 变更规则
 
 * **宪法层 ADR**（ADR-0001~0005）
 
@@ -193,7 +193,7 @@ Platform **禁止**依赖 Application、Host 或任何模块。
   * 不得悄然修改 Rule
   * 需要 Tech Lead 审批
 
-### 4.2 失效与替代
+### 失效与替代
 
 * Superseded ADR **必须**：
   - 状态标记为 "Superseded by ADR-YYYY"
@@ -532,13 +532,13 @@ Modules **MUST NOT** reference each other directly.
 ```markdown
 ## 2. Enforcement
 
-### 2.1 执行级别
+### 执行级别
 
 | Level | 名称      | 执法方式   | 后果    |
 | ----- | ------- | -------- | ----- |
 | L1    | 静态可执行 | 自动化测试 | CI 阻断 |
 
-### 2.2 测试映射
+### 测试映射
 
 | Rule 编号    | 执行级 | 测试 / 手段                              |
 | ---------- | --- | ------------------------------------ |

@@ -8,7 +8,7 @@
 
 ## 一、背景与动机
 
-### 1.1 现状问题
+### 现状问题
 
 在优化前，项目已建立了宪法层（ADR-0000~0005）架构治理体系，但存在以下问题：
 
@@ -17,7 +17,7 @@
 3. **认知负担**：新成员需要阅读文档才能理解 ADR 的层级关系
 4. **扩展性不足**：未来新增 ADR 无明确的编号规划
 
-### 1.2 优化目标
+### 优化目标
 
 1. **认知一致性增强**：编号即层级，一眼识别 ADR 性质
 2. **快速定位能力**：通过目录结构和编号段快速找到相关 ADR
@@ -28,7 +28,7 @@
 
 ## 二、解决方案设计
 
-### 2.1 编号分段体系
+### 编号分段体系
 
 | 层级 | 编号范围 | 目录 | 说明 | 当前状态 |
 |------|----------|------|------|----------|
@@ -42,7 +42,7 @@
 - `ADR-0000`：架构测试元规则，保持原编号（治理层核心，特殊地位）
 - `ADR-0900`：ADR 流程管理（原 ADR-0000A，重新编号）
 
-### 2.2 目录层级结构
+### 目录层级结构
 
 ```
 docs/adr/
@@ -72,7 +72,7 @@ docs/adr/
 
 ## 三、实施过程
 
-### 3.1 实施步骤
+### 实施步骤
 
 #### 阶段 1：规划与设计（已完成）
 - ✅ 分析现有 ADR 结构
@@ -116,7 +116,7 @@ docs/adr/
 - ✅ 文档链接正确
 - ✅ Copilot prompts 同步
 
-### 3.2 技术细节
+### 技术细节
 
 #### 文件迁移命令
 ```bash
@@ -151,7 +151,7 @@ private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.Ord
 
 ## 四、成果与价值
 
-### 4.1 直接成果
+### 直接成果
 
 | 指标 | 优化前 | 优化后 | 提升 |
 |------|--------|--------|------|
@@ -161,7 +161,7 @@ private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.Ord
 | 文档链接正确性 | - | 100% | 完整验证 |
 | 架构测试通过率 | - | 100% (81/81) | 全部通过 |
 
-### 4.2 业务价值
+### 业务价值
 
 #### 1. 认知清晰度提升
 - **快速识别**：通过编号段一眼看出 ADR 层级（宪法/治理/结构/运行/技术）
@@ -183,7 +183,7 @@ private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.Ord
 - **报告生成**：按层级生成架构健康度报告
 - **违规追踪**：破例记录可精确到层级和编号段
 
-### 4.3 长期影响
+### 长期影响
 
 1. **为未来自动化打基础**
    - 编号分段体系便于工具自动分类和分析
@@ -204,7 +204,7 @@ private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.Ord
 
 ## 五、经验教训
 
-### 5.1 成功经验
+### 成功经验
 
 1. **使用 git mv 保留历史**
    - 文件迁移保留完整的 Git 历史
@@ -222,7 +222,7 @@ private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.Ord
    - 逐步推进，每个阶段验证
    - 降低风险，便于回滚
 
-### 5.2 注意事项
+### 注意事项
 
 1. **特殊编号处理**
    - ADR-0000 保持原编号（特殊地位）
@@ -240,19 +240,19 @@ private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.Ord
 
 ## 六、后续计划
 
-### 6.1 短期（1个月内）
+### 短期（1个月内）
 
 - [ ] 创建自动化脚本验证文档链接完整性
 - [ ] 编写 ADR 编号分配指南
 - [ ] 培训团队成员使用新编号体系
 
-### 6.2 中期（3个月内）
+### 中期（3个月内）
 
 - [ ] 根据实际需要新增结构层/运行层/技术层 ADR
 - [ ] 建立 ADR 健康度监控看板
 - [ ] 优化 Copilot prompts 适配新结构
 
-### 6.3 长期（6个月+）
+### 长期（6个月+）
 
 - [ ] 开发架构可视化工具利用层级信息
 - [ ] 构建 ADR 知识图谱
@@ -262,13 +262,13 @@ private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.Ord
 
 ## 七、参考资料
 
-### 7.1 相关文档
+### 相关文档
 
 - [ADR 主索引](../adr/README.md)
 - [ADR-0900：ADR 新增与修订流程](../adr/governance/ADR-0900-adr-process.md)
 - [宪法层说明](../adr/constitutional/ARCHITECTURE-CONSTITUTIONAL-LAYER.md)
 
-### 7.2 实施提交
+### 实施提交
 
 - 初始化计划：commit 78ab201
 - 目录结构创建：commit 6f4dd2f

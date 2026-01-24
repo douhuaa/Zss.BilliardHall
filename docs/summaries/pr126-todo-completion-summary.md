@@ -14,7 +14,7 @@ PR#126 建立了 ADR-测试内容映射强一致性校验机制，完成了核�
 
 ## 二、已完成的任务
 
-### 2.1 ADR 文档标准化
+### ADR 文档标准化
 
 为 **ADR-0002 至 ADR-0005** 四个宪法级 ADR 文档添加：
 
@@ -35,7 +35,7 @@ PR#126 建立了 ADR-测试内容映射强一致性校验机制，完成了核�
 - `docs/adr/constitutional/ADR-0004-Cpm-Final.md`
 - `docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md`
 
-### 2.2 测试代码规范化
+### 测试代码规范化
 
 为 **ADR_0002 至 ADR_0005** 四个架构测试类增强：
 
@@ -63,7 +63,7 @@ PR#126 建立了 ADR-测试内容映射强一致性校验机制，完成了核�
 - `src/tests/ArchitectureTests/ADR/ADR_0004_Architecture_Tests.cs`
 - `src/tests/ArchitectureTests/ADR/ADR_0005_Architecture_Tests.cs`
 
-### 2.3 Copilot Prompts 增强
+### Copilot Prompts 增强
 
 为 **adr-0002 至 adr-0005** 四个 Prompts 文件添加完整的"测试覆盖自检清单"章节：
 
@@ -106,7 +106,7 @@ PR#126 建立了 ADR-测试内容映射强一致性校验机制，完成了核�
 
 ## 四、质量验证
 
-### 4.1 架构测试
+### 架构测试
 ```bash
 $ dotnet test src/tests/ArchitectureTests/
 
@@ -118,7 +118,7 @@ Total tests: 81
 
 ✅ **所有 81 个架构测试通过**
 
-### 4.2 构建验证
+### 构建验证
 ```bash
 $ dotnet build --no-restore
 
@@ -129,7 +129,7 @@ Build succeeded.
 
 ✅ **构建成功，无错误**
 
-### 4.3 模式一致性
+### 模式一致性
 - ✅ 所有更改严格遵循 ADR-0001 建立的模式
 - ✅ 快速参考表格式统一
 - ✅ 测试失败消息格式统一
@@ -139,7 +139,7 @@ Build succeeded.
 
 ## 五、关键成果
 
-### 5.1 完整的映射体系
+### 完整的映射体系
 
 现在所有 5 个宪法级 ADR（ADR-0001 至 ADR-0005）都具备：
 1. ✅ 明确的【必须架构测试覆盖】标记
@@ -147,14 +147,14 @@ Build succeeded.
 3. ✅ 详细的测试失败消息（包含 ADR 编号和修复建议）
 4. ✅ 完善的 Prompts 自检清单
 
-### 5.2 开发者友好
+### 开发者友好
 
 - **测试失败时**: 开发者能立即知道违反了哪条 ADR 约束（如 ADR-0002.1）
 - **编写代码时**: 可以参考 Prompts 文件中的自检清单
 - **提交 PR 前**: 可以对照映射表确保测试覆盖完整
 - **学习架构时**: 通过快速参考表快速理解约束和测试的对应关系
 
-### 5.3 治理能力增强
+### 治理能力增强
 
 建立了"三同步"机制：
 - **ADR 文档** ↔ **架构测试** ↔ **Copilot Prompts**
@@ -167,7 +167,7 @@ Build succeeded.
 
 根据 PR#126 的计划，以下任务因依赖关系未完成（它们在 PR#126 分支中）：
 
-### 6.1 验证脚本运行
+### 验证脚本运行
 
 PR#126 创建的验证脚本需要在合并后运行：
 - `scripts/validate-adr-test-mapping.sh`
@@ -180,7 +180,7 @@ PR#126 创建的验证脚本需要在合并后运行：
 2. 在本分支上运行验证脚本
 3. 确保所有验证通过
 
-### 6.2 CI 工作流验证
+### CI 工作流验证
 
 PR#126 更新的 `.github/workflows/architecture-tests.yml` 需要在 CI 环境中验证。
 
@@ -193,13 +193,13 @@ PR#126 更新的 `.github/workflows/architecture-tests.yml` 需要在 CI 环境�
 
 ## 七、后续建议
 
-### 7.1 立即行动
+### 立即行动
 
 1. **合并 PR#126**: 将验证脚本和 CI 增强合并到 main
 2. **验证本 PR**: 在本 PR 上运行验证脚本
 3. **更新 PR 模板**: 确保 ADR-测试一致性检查清单在所有 PR 中被使用
 
-### 7.2 长期维护
+### 长期维护
 
 1. **新增 ADR 时**: 
    - 为关键约束添加【必须架构测试覆盖】标记

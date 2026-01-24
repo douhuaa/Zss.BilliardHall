@@ -145,13 +145,13 @@ Modules **MUST** communicate using only:
 ```markdown
 ## 2. Enforcement
 
-### 2.1 执行级别
+### 执行级别
 
 | Level | 名称      | 执法方式   | 后果    |
 | ----- | ------- | -------- | ----- |
 | L1    | 静态可执行 | 自动化测试 | CI 阻断 |
 
-### 2.2 测试映射
+### 测试映射
 
 | Rule 编号    | 执行级 | 测试 / 手段                              |
 | ---------- | --- | ------------------------------------ |
@@ -172,7 +172,7 @@ Modules **MUST** communicate using only:
 ```markdown
 ## 3. Exception
 
-### 3.1 允许破例的前提
+### 允许破例的前提
 
 破例 **仅在以下情况允许**：
 
@@ -180,7 +180,7 @@ Modules **MUST** communicate using only:
 * 迁移期遗留代码（必须在 6 个月内归还）
 * 性能关键路径的特殊优化（需架构委员会审批）
 
-### 3.2 破例要求
+### 破例要求
 
 每个破例 **必须**：
 
@@ -207,7 +207,7 @@ Modules **MUST** communicate using only:
 ```markdown
 ## 4. Change Policy
 
-### 4.1 变更规则
+### 变更规则
 
 * **宪法层 ADR**（ADR-0001~0005）
 
@@ -216,7 +216,7 @@ Modules **MUST** communicate using only:
   * 需要 2 周公示期
   * 需要全量回归测试
 
-### 4.2 失效与替代
+### 失效与替代
 
 * Superseded ADR **必须**：
   - 状态标记为 "Superseded by ADR-YYYY"
@@ -405,13 +405,13 @@ Business logic **MUST NOT**:
 
 ## 2. Enforcement
 
-### 2.1 执行级别
+### 执行级别
 
 | Level | 名称      | 执法方式   | 后果    |
 | ----- | ------- | -------- | ----- |
 | L1    | 静态可执行 | 自动化测试 | CI 阻断 |
 
-### 2.2 测试映射
+### 测试映射
 
 | Rule 编号 | 执行级 | 测试 / 手段                              |
 | ------- | --- | ------------------------------------ |
@@ -421,12 +421,12 @@ Business logic **MUST NOT**:
 
 ## 3. Exception
 
-### 3.1 允许破例的前提
+### 允许破例的前提
 
 - 迁移期遗留代码（必须在 6 个月内归还）
 - 第三方库的技术限制（需架构委员会审批）
 
-### 3.2 破例要求
+### 破例要求
 
 每个破例 **必须**：
 - 记录在 `docs/summaries/ARCH-VIOLATIONS.md`
@@ -436,7 +436,7 @@ Business logic **MUST NOT**:
 
 ## 4. Change Policy
 
-### 4.1 变更规则
+### 变更规则
 
 * **宪法层 ADR**（ADR-0001~0005）
   * 修改 = 架构修宪
@@ -444,7 +444,7 @@ Business logic **MUST NOT**:
   * 需要 2 周公示期
   * 需要全量回归测试
 
-### 4.2 失效与替代
+### 失效与替代
 
 * Superseded ADR **必须**指向替代 ADR
 * 不允许"隐性废弃"

@@ -8,7 +8,7 @@
 
 ## 一、背景与目标
 
-### 1.1 问题陈述
+### 问题陈述
 
 项目已建立架构测试机制，但面临"形式合规、内容偏离"的风险：
 
@@ -17,7 +17,7 @@
 - ❌ **内容偏离**：测试存在，但验证的内容与 ADR 约束不一致
 - ❌ **失败不明确**：测试失败时无法快速定位违反了哪条 ADR
 
-### 1.2 解决方案
+### 解决方案
 
 建立 **ADR 文档 ↔ 测试断言 ↔ Prompts 文件** 三方强一致性机制：
 
@@ -39,7 +39,7 @@
 
 ## 二、已实施功能
 
-### 2.1 自动化校验工具
+### 自动化校验工具
 
 ✅ **创建了两个验证脚本**：
 
@@ -75,7 +75,7 @@ ADR 文档统计：
 ✅ 验证通过：ADR 文档与测试映射一致！
 ```
 
-### 2.2 CI/CD 集成
+### CI/CD 集成
 
 ✅ **更新了 GitHub Actions 工作流**：
 
@@ -99,7 +99,7 @@ ADR 文档统计：
 - CI 流程失败，阻止合并
 - 提供详细的不一致报告
 
-### 2.3 PR 模板增强
+### PR 模板增强
 
 ✅ **更新了 Pull Request 模板**：
 
@@ -115,7 +115,7 @@ ADR 文档统计：
 - [ ] Copilot 审查已确认测试与 ADR 内容无偏差
 ```
 
-### 2.4 文档规范
+### 文档规范
 
 ✅ **创建了 3 个核心文档**：
 
@@ -125,7 +125,7 @@ ADR 文档统计：
 | 开发者指南 | `docs/ADR-TEST-CONSISTENCY-DEVELOPER-GUIDE.md` | 场景化使用指南 |
 | 实施总结 | `docs/summaries/adr-test-consistency-implementation.md` | 本文档 |
 
-### 2.5 ADR 文档更新
+### ADR 文档更新
 
 ✅ **更新了治理层 ADR**：
 
@@ -139,7 +139,7 @@ ADR 文档统计：
 - 强化 Prompts 文件中必须包含"测试覆盖自检清单"
 - 补充测试代码规范示例
 
-### 2.6 示例实现
+### 示例实现
 
 ✅ **为 ADR-0001 提供了完整示例**：
 
@@ -158,7 +158,7 @@ ADR 文档统计：
 
 ## 三、技术实现细节
 
-### 3.1 ADR 文档标记规范
+### ADR 文档标记规范
 
 **支持的标记方式**：
 ```markdown
@@ -175,7 +175,7 @@ ADR 文档统计：
 | ADR-0001.1 | 模块不得相互引用 | ✅ | ADR_0001_Architecture_Tests::Modules_Should_Not_Reference_Other_Modules | 1 |
 ```
 
-### 3.2 测试代码规范
+### 测试代码规范
 
 **测试类命名**：
 ```csharp
@@ -202,7 +202,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 - ✅ 失败消息包含：ADR 编号、违规详情、修复建议、参考文档
 - ✅ 测试类头部包含映射清单注释
 
-### 3.3 验证脚本逻辑
+### 验证脚本逻辑
 
 **PowerShell 版本核心逻辑**：
 ```powershell
@@ -232,7 +232,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 
 ## 四、使用流程
 
-### 4.1 开发者工作流
+### 开发者工作流
 
 ```
 1. 修改 ADR 或测试
@@ -257,7 +257,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 7. 合并（如通过）
 ```
 
-### 4.2 Copilot 辅助流程
+### Copilot 辅助流程
 
 **场景 1：新增 ADR 约束**
 
@@ -290,7 +290,7 @@ Copilot 会参考：
 
 ## 五、成果与价值
 
-### 5.1 质量保障
+### 质量保障
 
 ✅ **防止架构测试形式化**：
 - 测试存在，但与 ADR 内容不符 → 映射验证可发现
@@ -307,7 +307,7 @@ Copilot 会参考：
 - 自动化校验，减少人工疏漏
 - 清晰的开发者指南，降低学习成本
 
-### 5.2 工程效率
+### 工程效率
 
 ✅ **开发者体验**：
 - 明确的标记规范，易于理解
@@ -319,7 +319,7 @@ Copilot 会参考：
 - 自动化验证，减少代码审查负担
 - Copilot 辅助，降低编写难度
 
-### 5.3 量化指标
+### 量化指标
 
 当前状态（2026-01-23）：
 - ✅ ADR 文档数：8
@@ -332,7 +332,7 @@ Copilot 会参考：
 
 ## 六、后续计划
 
-### 6.1 待完成任务
+### 待完成任务
 
 #### 短期（1-2 周）
 
@@ -355,7 +355,7 @@ Copilot 会参考：
 - [ ] 扩展到其他类型的测试（单元测试、集成测试）
 - [ ] 探索更智能的验证机制（如 AST 分析）
 
-### 6.2 改进方向
+### 改进方向
 
 **技术改进**：
 - 考虑使用 Roslyn Analyzer 进行更深入的代码分析
@@ -371,20 +371,20 @@ Copilot 会参考：
 
 ## 七、参考资料
 
-### 7.1 核心文档
+### 核心文档
 
 - [ADR-测试映射规范](../ADR-TEST-MAPPING-SPECIFICATION.md)
 - [ADR-测试一致性开发者指南](../ADR-TEST-CONSISTENCY-DEVELOPER-GUIDE.md)
 - [ADR-0000: 架构测试与 CI 治理](../adr/governance/ADR-0000-architecture-tests.md)
 - [ADR-0900: ADR 新增与修订流程](../adr/governance/ADR-0900-adr-process.md)
 
-### 7.2 工具和脚本
+### 工具和脚本
 
 - `scripts/validate-adr-test-mapping.ps1` - PowerShell 验证脚本
 - `scripts/validate-adr-test-mapping.sh` - Bash 验证脚本
 - `.github/workflows/architecture-tests.yml` - CI 工作流
 
-### 7.3 示例
+### 示例
 
 - ADR-0001 文档：标记和快速参考表示例
 - adr-0001.prompts.md：测试覆盖自检清单示例

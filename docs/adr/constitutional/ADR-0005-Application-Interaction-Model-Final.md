@@ -75,7 +75,7 @@ Command/Query Handler **禁止**：
 
 > **规则如果无法执法，就不配存在。**
 
-### 2.1 执行级别
+### 执行级别
 
 | 级别 | 名称      | 执法方式               | 后果    |
 | ---- | ------- | ------------------ | ----- |
@@ -83,7 +83,7 @@ Command/Query Handler **禁止**：
 | L2   | 语义半自动   | Roslyn Analyzer / 启发式 | 人工复核  |
 | L3   | 人工 Gate | Code Review / Checklist | 架构裁决  |
 
-### 2.2 测试映射
+### 测试映射
 
 | 规则编号 | 执行级 | 测试 / 手段                        |
 | ------- | --- | ------------------------------ |
@@ -99,7 +99,7 @@ Command/Query Handler **禁止**：
 | R5.6    | L1  | `Query_Handlers_Should_Not_Modify_State` |
 | R5.6    | L1  | `Handlers_Should_Follow_CQRS_Pattern` |
 
-### 2.3 测试位置
+### 测试位置
 
 所有架构测试位于：`src/tests/ArchitectureTests/ADR/ADR_0005_Architecture_Tests.cs`
 
@@ -109,7 +109,7 @@ Command/Query Handler **禁止**：
 
 > **破例不是逃避，而是债务。**
 
-### 3.1 允许破例的前提
+### 允许破例的前提
 
 破例 **仅在以下情况允许**：
 
@@ -117,7 +117,7 @@ Command/Query Handler **禁止**：
 * 性能关键路径的特殊优化（需架构委员会审批）
 * 第三方集成的技术限制（需架构委员会审批）
 
-### 3.2 破例要求（不可省略）
+### 破例要求（不可省略）
 
 每个破例 **必须**：
 
@@ -134,7 +134,7 @@ Command/Query Handler **禁止**：
 
 > **ADR 不是"随时可改"的文档。**
 
-### 4.1 变更规则
+### 变更规则
 
 * **宪法层 ADR**（ADR-0001~0005）
 
@@ -143,7 +143,7 @@ Command/Query Handler **禁止**：
   * 需要 2 周公示期
   * 需要全量回归测试
 
-### 4.2 失效与替代
+### 失效与替代
 
 * Superseded ADR **必须**：
   - 状态标记为 "Superseded by ADR-YYYY"
@@ -153,7 +153,7 @@ Command/Query Handler **禁止**：
 
 * 不允许"隐性废弃"（偷偷删除或不标记状态）
 
-### 4.3 同步更新
+### 同步更新
 
 ADR 变更时 **必须** 同步更新：
 
