@@ -60,6 +60,21 @@
 
 ---
 
+## 待落地的 ADR（已规划）
+
+> 详见 [待落地 ADR 提案跟踪清单](../PENDING-ADR-PROPOSALS.md)
+
+### 高优先级
+- **ADR-930**：代码审查与 ADR 合规自检流程（📋 Proposed）
+  - PR Template 必填项、Copilot 自检机制、架构测试集成、人工审查职责
+
+### 未来可能的 ADR
+- **ADR-920**：技术债务管理与偿还流程
+- **ADR-931**：架构变更审批权限矩阵
+- **ADR-940**：架构度量与健康检查
+
+---
+
 ## 参考文档
 
 - [架构自动化验证系统](../../architecture-automation-verification.md)

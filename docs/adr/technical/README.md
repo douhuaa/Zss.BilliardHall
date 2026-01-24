@@ -60,9 +60,21 @@
 
 ---
 
-## 示例（未来可能的 ADR）
+## 待落地的 ADR（已规划）
 
-- **ADR-301**：使用 Wolverine 作为应用内消息总线
+> 详见 [待落地 ADR 提案跟踪清单](../PENDING-ADR-PROPOSALS.md)
+
+### 高优先级
+- **ADR-301**：集成测试环境自动化与隔离约束（📋 Proposed）
+  - TestContainers 使用规范、数据库隔离策略、测试数据清理
+- **ADR-360**：CI/CD Pipeline 流程标准化（📋 Proposed）
+  - 分支合规校验、失败快照、自动部署触发、分支保护
+
+### 中优先级
+- **ADR-350**：日志与可观测性标签与字段标准（📋 Proposed）
+  - 结构化日志字段规范、CorrelationId 传播、追踪标签标准
+
+### 未来可能的 ADR
 - **ADR-302**：使用 Entity Framework Core 作为 ORM
 - **ADR-310**：数据库迁移策略（Code First vs Database First）
 - **ADR-311**：读写分离与 CQRS 物理实现
@@ -70,8 +82,6 @@
 - **ADR-321**：API 版本化策略
 - **ADR-330**：使用 JWT 进行身份认证
 - **ADR-341**：应用性能监控（APM）选型
-- **ADR-350**：集成测试基础设施（TestContainers）
-- **ADR-360**：容器化部署策略（Docker）
 
 ---
 
