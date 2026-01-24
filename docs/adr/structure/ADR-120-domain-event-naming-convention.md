@@ -205,6 +205,8 @@ src/Shared/Events/OrderCreatedEvent.cs                 // ❌ 放在共享目录
 
 事件处理器（EventHandler）必须遵循以下命名规则：
 
+#### 基础命名模式
+
 ```
 {EventName}Handler
 ```
@@ -234,6 +236,55 @@ public class OrderPaidEventHandler : IEventHandler<OrderPaidEvent>  // 订阅 Or
 }
 ```
 
+#### 扩展命名模式（多订阅场景）
+
+当同一个事件被多个模块订阅时，为了在日志、APM、追踪和文档中更好地区分不同的处理目的，**允许**使用扩展命名模式：
+
+```
+{EventName}{Purpose}Handler
+```
+
+**✅ 扩展模式示例**（同一事件的多个订阅者）：
+```csharp
+// Members 模块：处理积分
+namespace Zss.BilliardHall.Modules.Members.EventHandlers;
+
+public class OrderPaidEventAddPointsHandler : IEventHandler<OrderPaidEvent>
+{
+    public async Task Handle(OrderPaidEvent @event)
+    {
+        // 为会员增加积分
+    }
+}
+
+// Accounting 模块：生成发票
+namespace Zss.BilliardHall.Modules.Accounting.EventHandlers;
+
+public class OrderPaidEventGenerateInvoiceHandler : IEventHandler<OrderPaidEvent>
+{
+    public async Task Handle(OrderPaidEvent @event)
+    {
+        // 生成财务发票
+    }
+}
+
+// Notifications 模块：发送通知
+namespace Zss.BilliardHall.Modules.Notifications.EventHandlers;
+
+public class OrderPaidEventSendNotificationHandler : IEventHandler<OrderPaidEvent>
+{
+    public async Task Handle(OrderPaidEvent @event)
+    {
+        // 发送支付成功通知
+    }
+}
+```
+
+**命名建议**：
+- **Purpose** 部分应清晰描述处理器的业务意图（如 `AddPoints`、`GenerateInvoice`、`SendNotification`）
+- 对于简单场景（单一订阅者），使用基础模式 `{EventName}Handler` 即可
+- 对于复杂场景（多个订阅者），使用扩展模式以提高可观测性
+
 **❌ 错误示例**：
 ```csharp
 // ❌ 缺少 Handler 后缀
@@ -244,6 +295,10 @@ public class OrderCreatedService : IEventHandler<OrderCreatedEvent> { }
 
 // ❌ 命名不对应事件名称
 public class OrderEventHandler : IEventHandler<OrderCreatedEvent> { }
+
+// ❌ Purpose 部分含糊不清
+public class OrderPaidEventHandler1 : IEventHandler<OrderPaidEvent> { }
+public class OrderPaidEventHandler2 : IEventHandler<OrderPaidEvent> { }
 ```
 
 ### 集成事件命名规则
@@ -316,6 +371,14 @@ public record OrderCreatedEventV2(
 - **向后兼容**：新版本必须能够从旧版本转换
 - **同时支持**：可以在过渡期同时发布两个版本的事件
 - **废弃策略**：明确旧版本的废弃时间和迁移路径
+
+**⚠️ 重要说明**：
+
+> **事件类型版本命名（如 `V2`）≠ 序列化兼容性策略**
+> 
+> 本 ADR 定义的版本命名仅限于**代码层面的类型标识**。实际的序列化兼容性、Schema 版本管理、消费者版本声明等跨进程/跨系统的兼容性策略，将在技术层 ADR（ADR-300 系列：Integration / Messaging）中定义。
+> 
+> 不要误以为添加 `V2` 后缀就能自动实现跨系统的兼容性保障。
 
 **✅ 版本转换示例**：
 ```csharp
@@ -413,7 +476,7 @@ public record OrderCreatedEvent(Guid OrderId, Guid MemberId, DateTime CreatedAt)
 | 约束编号 | 描述 | 层级 | 测试用例/自动化 | 章节 |
 |---------|------|------|----------------|------|
 | ADR-120.1 | 事件类型必须以 `Event` 后缀结尾 | L1 | Event_Types_Should_End_With_Event_Suffix | 基本命名规则 |
-| ADR-120.2 | 事件名称必须使用动词过去式 | L2 | Event_Names_Should_Use_Past_Tense_Verbs | 基本命名规则 |
+| ADR-120.2 | 事件名称必须使用动词过去式 | L1 | Event_Names_Should_Use_Past_Tense_Verbs | 基本命名规则 |
 | ADR-120.3 | 事件必须在模块的 `Events` 命名空间下 | L1 | Events_Should_Be_In_Events_Namespace | 命名空间组织规则 |
 | ADR-120.4 | 事件处理器必须以 `Handler` 后缀结尾 | L1 | Event_Handlers_Should_End_With_Handler_Suffix | 事件处理器命名规则 |
 | ADR-120.5 | 事件不得包含领域实体类型 | L1 | Events_Should_Not_Contain_Domain_Entities | 模块隔离约束 |
@@ -422,8 +485,8 @@ public record OrderCreatedEvent(Guid OrderId, Guid MemberId, DateTime CreatedAt)
 | ADR-120.8 | 事件版本标识使用 `V{N}` 格式 | L2 | Event_Versions_Should_Use_VN_Format | 事件版本演进规则 |
 
 **测试层级说明**：
-- **L1**：必须架构测试覆盖，CI 自动阻断
-- **L2**：建议架构测试覆盖或人工 Code Review
+- **L1**：必须架构测试覆盖，CI 自动阻断（本体语义约束，违反即为架构退化）
+- **L2**：建议架构测试覆盖或人工 Code Review（技术实践约束，可根据情况灵活处理）
 
 ---
 
@@ -540,6 +603,7 @@ public void Event_Handlers_Should_End_With_Handler_Suffix()
 
 | 版本 | 日期 | 变更摘要 |
 |------|------|---------|
+| 1.1  | 2026-01-24 | 强化版本：1) 扩展 EventHandler 命名规则支持 `{Purpose}` 后缀以应对多订阅场景；2) 明确事件版本命名 ≠ 序列化兼容策略；3) 升级"动词过去式"约束从 L2 至 L1（本体语义约束） |
 | 1.0  | 2026-01-24 | 初始版本：定义领域事件命名规范、命名空间组织、版本演进和模块隔离约束 |
 
 ---
