@@ -355,23 +355,25 @@ ADR-0900~0999    → 治理层（governance/）
 **当前状态**：✅ 已有 1 个 ADR  
 **用途**：对宪法层运行时约束（ADR-0005）的细化和补充
 
-### [ADR-240：Handler 异常处理与重试标准](runtime/ADR-240-handler-exception-handling-retry-standards.md) ✅
+### [ADR-240：Handler 异常约束](runtime/ADR-240-handler-exception-constraints.md) ✅
 
-**主轴**：异常处理 / 重试策略  
+**主轴**：异常处理 / 可判定规则  
 **聚焦内容**：
 
-- 结构化异常体系（领域/验证/基础设施异常）
-- Handler 异常处理规则（Command/Query/Event Handler）
-- 重试策略标准（可重试条件、指数退避）
-- 幂等性保障要求
-- 异常传播与转换边界
+- Handler 禁止抛出通用异常（必须使用结构化异常）
+- 可重试标记仅限基础设施异常
+- Handler 禁止吞噬异常
+- 异常类型命名空间约束
+- 跨模块事件异常禁止同步传播
 
 **禁止内容**：
 
-- ❌ 抛出通用 `System.Exception`
-- ❌ 领域异常标记为可重试
-- ❌ 验证异常标记为可重试
-- ❌ Handler 捕获并吞噬异常
+- ❌ 抛出 `System.Exception`
+- ❌ 领域/验证异常标记为可重试
+- ❌ 捕获异常后不重新抛出
+- ❌ 异常不在 `*.Exceptions` 命名空间
+
+> 详细工程实践指南参见 [Handler 异常处理与重试工程标准](../../guides/handler-exception-retry-standard.md)（非裁决性）
 
 **示例（未来可能）**：
 

@@ -53,10 +53,12 @@
 
 ### 已采纳的运行时行为 ADR
 
-- **[ADR-240：Handler 异常处理与重试标准](./ADR-240-handler-exception-handling-retry-standards.md)** ✅
-  - 定义异常分类体系（领域/验证/基础设施异常）
-  - Handler 异常处理规则
-  - 重试策略与幂等性要求
+- **[ADR-240：Handler 异常约束](./ADR-240-handler-exception-constraints.md)** ✅
+  - Handler 禁止抛出通用异常
+  - 可重试标记仅限基础设施异常
+  - Handler 禁止吞噬异常
+  - 异常类型命名空间约束
+  - 跨模块事件异常禁止同步传播
 
 ### 宪法层相关 ADR
 

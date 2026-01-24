@@ -5,18 +5,18 @@ using Zss.BilliardHall.Platform.Exceptions;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
-/// ADR-240: Handler 异常处理与重试标准
-/// 验证异常分类、Handler 异常处理规则、重试策略合规性
+/// ADR-240: Handler 异常约束
+/// 验证异常分类、可重试标记、命名空间约束
 /// 
 /// ADR 映射清单（ADR Mapping Checklist）：
 /// ┌─────────────┬────────────────────────────────────────────────────────┬──────────┐
 /// │ 测试方法     │ 对应 ADR 约束                                          │ ADR 章节 │
 /// ├─────────────┼────────────────────────────────────────────────────────┼──────────┤
-/// │ ADR-240.1   │ Handler 仅抛出结构化异常（Domain/Validation/Infrastructure）│ 1, 2  │
-/// │ ADR-240.2   │ 可重试异常必须是基础设施异常                              │ 3        │
-/// │ ADR-240.3   │ 领域异常不可标记为可重试                                  │ 3        │
-/// │ ADR-240.4   │ 验证异常不可标记为可重试                                  │ 3        │
-/// │ ADR-240.5   │ 异常类型必须在正确的命名空间                              │ 1        │
+/// │ ADR-240.1   │ Handler 仅抛出结构化异常（Domain/Validation/Infrastructure）│ 1     │
+/// │ ADR-240.2   │ 可重试异常必须是基础设施异常                              │ 2        │
+/// │ ADR-240.3   │ 领域异常不可标记为可重试                                  │ 2        │
+/// │ ADR-240.4   │ 验证异常不可标记为可重试                                  │ 2        │
+/// │ ADR-240.5   │ 异常类型必须在正确的命名空间                              │ 4        │
 /// └─────────────┴────────────────────────────────────────────────────────┴──────────┘
 /// </summary>
 public sealed class ADR_0240_Architecture_Tests
@@ -78,7 +78,7 @@ public sealed class ADR_0240_Architecture_Tests
                         $"1. 将异常类改为继承适当的基类\n" +
                         $"2. 例如：public class OrderCancelledException : DomainException\n" +
                         $"3. 确保异常分类符合业务语义\n\n" +
-                        $"参考: docs/adr/runtime/ADR-240-handler-exception-handling-retry-standards.md（规则 1）");
+                        $"参考: docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 1）");
         }
     }
 
@@ -124,7 +124,7 @@ public sealed class ADR_0240_Architecture_Tests
                         $"1. 将异常改为继承 InfrastructureException\n" +
                         $"2. 或移除 IRetryable 接口实现\n" +
                         $"3. 重新评估异常的业务语义分类\n\n" +
-                        $"参考: docs/adr/runtime/ADR-240-handler-exception-handling-retry-standards.md（规则 3）");
+                        $"参考: docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 3）");
         }
     }
 
@@ -166,7 +166,7 @@ public sealed class ADR_0240_Architecture_Tests
                         $"1. 移除 IRetryable 接口实现\n" +
                         $"2. 如果是暂时性技术故障，应使用 InfrastructureException\n" +
                         $"3. 确保异常分类准确反映失败原因\n\n" +
-                        $"参考: docs/adr/runtime/ADR-240-handler-exception-handling-retry-standards.md（规则 3）");
+                        $"参考: docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 3）");
         }
     }
 
@@ -208,7 +208,7 @@ public sealed class ADR_0240_Architecture_Tests
                         $"1. 移除 IRetryable 接口实现\n" +
                         $"2. 客户端应修正输入后重新提交\n" +
                         $"3. 如果是暂时性技术故障，应使用 InfrastructureException\n\n" +
-                        $"参考: docs/adr/runtime/ADR-240-handler-exception-handling-retry-standards.md（规则 3）");
+                        $"参考: docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 3）");
         }
     }
 
@@ -267,7 +267,7 @@ public sealed class ADR_0240_Architecture_Tests
                         $"修复建议:\n" +
                         $"1. 将异常类移至对应的 Exceptions 命名空间\n" +
                         $"2. 确保文件夹结构与命名空间一致\n\n" +
-                        $"参考: docs/adr/runtime/ADR-240-handler-exception-handling-retry-standards.md（规则 1）");
+                        $"参考: docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 1）");
         }
     }
 
