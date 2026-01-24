@@ -26,9 +26,15 @@ public sealed class ADR_0121_Architecture_Tests
     [Fact(DisplayName = "ADR-121.1: 位于 Contracts 命名空间的类型必须以 Dto 或 Contract 结尾")]
     public void Contract_Types_Should_End_With_Dto_Or_Contract_Suffix()
     {
+        // 获取所有程序集（包括模块和 Host）
+        var allAssemblies = ModuleAssemblyData.ModuleAssemblies
+            .Concat(HostAssemblyData.HostAssemblies)
+            .Concat(new[] { Assembly.Load("Platform"), Assembly.Load("Application") })
+            .ToList();
+
         // 查找所有在 Contracts 命名空间的公共类型（排除接口和抽象类）
         var contractTypes = Types
-            .InAssemblies(TestData.AllAssemblies)
+            .InAssemblies(allAssemblies)
             .That()
             .ResideInNamespaceContaining(".Contracts")
             .And()
@@ -70,8 +76,13 @@ public sealed class ADR_0121_Architecture_Tests
     [Fact(DisplayName = "ADR-121.2: 契约属性必须是只读的")]
     public void Contracts_Should_Be_Immutable()
     {
+        var allAssemblies = ModuleAssemblyData.ModuleAssemblies
+            .Concat(HostAssemblyData.HostAssemblies)
+            .Concat(new[] { Assembly.Load("Platform"), Assembly.Load("Application") })
+            .ToList();
+
         var contractTypes = Types
-            .InAssemblies(TestData.AllAssemblies)
+            .InAssemblies(allAssemblies)
             .That()
             .ResideInNamespaceContaining(".Contracts")
             .And()
@@ -129,8 +140,13 @@ public sealed class ADR_0121_Architecture_Tests
     [Fact(DisplayName = "ADR-121.3: 契约不得包含业务方法")]
     public void Contracts_Should_Not_Contain_Business_Methods()
     {
+        var allAssemblies = ModuleAssemblyData.ModuleAssemblies
+            .Concat(HostAssemblyData.HostAssemblies)
+            .Concat(new[] { Assembly.Load("Platform"), Assembly.Load("Application") })
+            .ToList();
+
         var contractTypes = Types
-            .InAssemblies(TestData.AllAssemblies)
+            .InAssemblies(allAssemblies)
             .That()
             .ResideInNamespaceContaining(".Contracts")
             .And()
@@ -202,8 +218,13 @@ public sealed class ADR_0121_Architecture_Tests
     [Fact(DisplayName = "ADR-121.4: 契约不得包含领域模型类型")]
     public void Contracts_Should_Not_Contain_Domain_Types()
     {
+        var allAssemblies = ModuleAssemblyData.ModuleAssemblies
+            .Concat(HostAssemblyData.HostAssemblies)
+            .Concat(new[] { Assembly.Load("Platform"), Assembly.Load("Application") })
+            .ToList();
+
         var contractTypes = Types
-            .InAssemblies(TestData.AllAssemblies)
+            .InAssemblies(allAssemblies)
             .That()
             .ResideInNamespaceContaining(".Contracts")
             .And()
@@ -314,9 +335,14 @@ public sealed class ADR_0121_Architecture_Tests
     [Fact(DisplayName = "ADR-121.5: 契约必须位于 Contracts 命名空间下")]
     public void Contracts_Should_Be_In_Contracts_Namespace()
     {
+        var allAssemblies = ModuleAssemblyData.ModuleAssemblies
+            .Concat(HostAssemblyData.HostAssemblies)
+            .Concat(new[] { Assembly.Load("Platform"), Assembly.Load("Application") })
+            .ToList();
+
         // 查找所有以 Dto 或 Contract 结尾的类型
         var dtoTypes = Types
-            .InAssemblies(TestData.AllAssemblies)
+            .InAssemblies(allAssemblies)
             .That()
             .AreClasses()
             .And()
