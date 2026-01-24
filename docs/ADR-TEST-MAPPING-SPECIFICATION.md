@@ -2,7 +2,7 @@
 
 **版本**：1.0  
 **状态**：✅ 生效  
-**最后更新**：2026-01-23  
+**最后更新**：2026-01-23
 
 ---
 
@@ -11,6 +11,7 @@
 ### 1.1 问题陈述
 
 架构测试已存在，但面临以下风险：
+
 - ❌ **形式合规，内容偏离**：测试类存在，但测试内容与 ADR 约束不一致
 - ❌ **映射缺失**：无法追溯哪个测试对应哪条 ADR 约束
 - ❌ **覆盖盲区**：ADR 新增约束，但没有对应的测试
@@ -71,6 +72,7 @@
 ```
 
 **列说明**：
+
 - **约束**：简短名称
 - **描述**：约束内容摘要
 - **测试覆盖**：格式为 `✅ 测试文件名::测试方法名`，如无测试则标记 `❌ 待补充`
@@ -124,6 +126,7 @@ public void ADR_0001_3_2_No_Horizontal_Service_Layer()
 ```
 
 **要求**：
+
 - 方法名或 DisplayName 必须包含 `ADR-{编号}`
 - 清晰表达验证的约束内容
 
@@ -164,6 +167,7 @@ Assert.True(result.IsSuccessful,
 ```
 
 **要求**：
+
 - 必须包含 `ADR-{编号}`
 - 明确说明违反了哪条约束
 - 提供具体的违规详情
@@ -251,21 +255,21 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ### 3.2 脚本功能
 
 1. **扫描 ADR 文档**：
-   - 提取所有标记为【必须架构测试覆盖】的约束
-   - 统计需要测试的约束数量
+  - 提取所有标记为【必须架构测试覆盖】的约束
+  - 统计需要测试的约束数量
 
 2. **扫描测试代码**：
-   - 提取所有测试方法
-   - 检查是否包含 ADR 引用
+  - 提取所有测试方法
+  - 检查是否包含 ADR 引用
 
 3. **生成映射报告**：
-   - 标记缺少测试的 ADR 约束
-   - 标记缺少 ADR 引用的测试方法
-   - 统计覆盖率
+  - 标记缺少测试的 ADR 约束
+  - 标记缺少 ADR 引用的测试方法
+  - 统计覆盖率
 
 4. **校验结果**：
-   - 通过：所有约束都有测试，所有测试都有 ADR 引用
-   - 失败：存在映射不一致，返回非零退出码
+  - 通过：所有约束都有测试，所有测试都有 ADR 引用
+  - 失败：存在映射不一致，返回非零退出码
 
 ### 3.3 本地运行
 
@@ -280,6 +284,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ### 3.4 CI 集成
 
 校验已集成到 GitHub Actions 工作流（见 `.github/workflows/architecture-tests.yml`），在以下时机自动运行：
+
 - PR 提交时
 - 合并到 main 分支时
 
@@ -329,18 +334,18 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ### 5.1 新增 ADR 时
 
 1. **编写 ADR 文档**：
-   - 为需要测试的约束添加【必须架构测试覆盖】标记
-   - 在快速参考表中预留"测试覆盖"列
+  - 为需要测试的约束添加【必须架构测试覆盖】标记
+  - 在快速参考表中预留"测试覆盖"列
 
 2. **编写架构测试**：
-   - 创建 `ADR_XXXX_Architecture_Tests.cs`
-   - 按规范编写测试方法和失败消息
-   - 在测试类头部添加映射清单注释
+  - 创建 `ADR_XXXX_Architecture_Tests.cs`
+  - 按规范编写测试方法和失败消息
+  - 在测试类头部添加映射清单注释
 
 3. **编写 Prompts**：
-   - 创建 `adr-XXXX.prompts.md`
-   - 添加测试覆盖自检清单
-   - 提供编写测试的示例
+  - 创建 `adr-XXXX.prompts.md`
+  - 添加测试覆盖自检清单
+  - 提供编写测试的示例
 
 4. **运行校验**：
    ```bash
@@ -351,19 +356,19 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ### 5.2 修订 ADR 时
 
 1. **更新 ADR 约束**：
-   - 新增约束时添加【必须架构测试覆盖】标记
-   - 废弃约束时更新快速参考表
+  - 新增约束时添加【必须架构测试覆盖】标记
+  - 废弃约束时更新快速参考表
 
 2. **同步更新测试**：
-   - 新增对应的测试方法
-   - 或删除/修改已有测试（如约束变更）
+  - 新增对应的测试方法
+  - 或删除/修改已有测试（如约束变更）
 
 3. **同步更新 Prompts**：
-   - 更新测试覆盖清单
-   - 更新示例代码
+  - 更新测试覆盖清单
+  - 更新示例代码
 
 4. **运行校验**：
-   - 确保映射关系仍然一致
+  - 确保映射关系仍然一致
 
 ### 5.3 定期审计
 
@@ -381,6 +386,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ### Q1: 是否所有 ADR 约束都需要测试？
 
 **A**: 不是。只有标记为【必须架构测试覆盖】的约束需要自动化测试。以下情况不需要：
+
 - 纯概念性的指导原则
 - 需要人工判断的最佳实践
 - 无法通过静态分析验证的约束
@@ -403,14 +409,16 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 
 ### Q3: 测试方法很多，如何避免遗漏？
 
-**A**: 
+**A**:
+
 1. 在测试类头部维护映射清单注释
 2. 定期运行校验脚本
 3. 在 PR 模板中强制要求检查
 
 ### Q4: 如果校验脚本误报怎么办？
 
-**A**: 
+**A**:
+
 1. 检查是否正确使用了标记（【必须架构测试覆盖】）
 2. 检查测试方法是否包含 ADR 引用（方法名或 DisplayName）
 3. 如确实是脚本问题，请提交 Issue 改进脚本
@@ -427,4 +435,5 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ---
 
 **版本历史**：
+
 - v1.0 (2026-01-23): 初始版本，定义 ADR-测试映射规范

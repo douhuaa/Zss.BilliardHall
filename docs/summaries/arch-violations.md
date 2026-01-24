@@ -2,7 +2,7 @@
 
 **目的**：记录所有架构破例，确保可追溯和可审计  
 **维护责任**：架构师团队  
-**更新频率**：每次批准破例时立即更新  
+**更新频率**：每次批准破例时立即更新
 
 ---
 
@@ -19,13 +19,14 @@
 
 > 这些是当前系统中存在的架构破例，尚未归还
 
-| ID | 违反的 ADR | 违规描述 | 影响范围 | 批准人 | 批准日期 | 计划归还日期 | 状态 |
-|----|-----------|---------|---------|--------|---------|------------|------|
+| ID       | 违反的 ADR  | 违规描述                                | 影响范围                         | 批准人        | 批准日期       | 计划归还日期     | 状态     |
+|----------|----------|-------------------------------------|------------------------------|------------|------------|------------|--------|
 | ARCH-001 | ADR-0005 | [示例] Members 模块同步调用 Orders 模块查询会员积分 | Members/Features/CreateOrder | @architect | 2026-01-15 | 2026-02-15 | 🟡 进行中 |
 
 **ID**: ARCH-001  
 **违反的 ADR**: ADR-0005（模块间应异步通信）  
-**违规详情**：  
+**违规详情**：
+
 ```
 Members 模块的 CreateOrderHandler 中直接注入了 Orders 模块的 IPointsQuery，
 进行同步查询以验证会员积分是否足够。
@@ -37,19 +38,23 @@ Members 模块的 CreateOrderHandler 中直接注入了 Orders 模块的 IPoints
 创建订单时需要实时验证积分，异步方案会导致用户体验下降（需等待事件传播）。
 
 **已评估的替代方案**：
+
 1. 通过事件查询 - 不可行，延迟不可接受
 2. 在 Application 层编排 - 不可行，Application 不应依赖 Modules
 
 **影响范围**：
+
 - 模块：Members、Orders
 - 文件：`Members/Features/CreateOrder/CreateOrderHandler.cs`
 
 **缓解措施**：
+
 - 将 IPointsQuery 定义为 Platform.Contracts 中的契约接口
 - 明确标记为"临时同步调用，待优化"
 - 设置超时和降级策略
 
 **归还计划**：
+
 1. 实现积分数据的本地缓存（Read Model）
 2. 通过事件保持缓存同步
 3. 将同步调用替换为本地缓存查询
@@ -57,9 +62,10 @@ Members 模块的 CreateOrderHandler 中直接注入了 Orders 模块的 IPoints
 **负责人**：@developer-name  
 **审批人**：@architect-name  
 **审批日期**：2026-01-15  
-**计划归还日期**：2026-02-15  
+**计划归还日期**：2026-02-15
 
 **状态更新**：
+
 - 2026-01-15: 破例批准，开始实施
 - 2026-01-20: 本地缓存设计完成，待实现
 
@@ -69,8 +75,8 @@ Members 模块的 CreateOrderHandler 中直接注入了 Orders 模块的 IPoints
 
 > 这些破例已经被修复，记录在此作为历史审计
 
-| ID | 违反的 ADR | 违规描述 | 批准日期 | 归还日期 | 归还方式 |
-|----|-----------|---------|---------|---------|---------|
+| ID       | 违反的 ADR  | 违规描述                               | 批准日期       | 归还日期       | 归还方式                       |
+|----------|----------|------------------------------------|------------|------------|----------------------------|
 | ARCH-000 | ADR-0001 | [示例] 初始版本中 Members 模块引用了 Orders 模块 | 2025-12-01 | 2025-12-15 | 将共享契约移到 Platform.Contracts |
 
 **ID**: ARCH-000  
@@ -79,6 +85,7 @@ Members 模块的 CreateOrderHandler 中直接注入了 Orders 模块的 IPoints
 初始版本中 Members 模块直接引用了 Orders 模块，用于获取会员的订单历史。
 
 **归还方式**：
+
 1. 创建 `Platform.Contracts.Orders.MemberOrderHistoryDto`
 2. Orders 模块实现查询接口
 3. Members 模块通过 Platform 层契约调用
@@ -92,9 +99,9 @@ Members 模块的 CreateOrderHandler 中直接注入了 Orders 模块的 IPoints
 
 > 这些是经过架构委员会批准的永久性破例，不需要归还
 
-| ID | 违反的 ADR | 违规描述 | 批准人 | 批准日期 | 理由 |
-|----|-----------|---------|--------|---------|------|
-| - | - | 目前无永久破例 | - | - | - |
+| ID | 违反的 ADR | 违规描述    | 批准人 | 批准日期 | 理由 |
+|----|---------|---------|-----|------|----|
+| -  | -       | 目前无永久破例 | -   | -    | -  |
 
 **说明**：永久破例需要架构委员会全体成员一致同意，且必须记录充分的理由。
 
@@ -103,15 +110,15 @@ Members 模块的 CreateOrderHandler 中直接注入了 Orders 模块的 IPoints
 ## 被拒绝的破例申请（Rejected Exceptions）
 
 > 这些破例申请被拒绝，记录在此作为决策参考
-> 
+>
 > **重要**：公开拒绝案例是防止"违规白名单"的关键机制。
 > 不是所有申请都会通过，这个列表让团队看到架构委员会的决策标准。
 
-| ID | 违反的 ADR | 申请描述 | 申请人 | 申请日期 | 拒绝理由 | 替代方案 |
-|----|-----------|---------|--------|---------|---------|---------|
-| ARCH-REJ-001 | ADR-0005 | [示例] 请求允许 Endpoint 直接查询数据库 | @developer | 2026-01-10 | 违反职责分离原则 | 创建 QueryHandler |
-| ARCH-REJ-002 | ADR-0001 | [示例] 请求 Members 模块直接引用 Orders 模块 | @developer | 2026-01-12 | 破坏模块隔离 | 通过 Platform.Contracts |
-| ARCH-REJ-003 | ADR-0002 | [示例] 请求在 Program.cs 中添加环境判断逻辑 | @developer | 2026-01-15 | Program.cs 应保持简洁 | 移到 Bootstrapper |
+| ID           | 违反的 ADR  | 申请描述                             | 申请人        | 申请日期       | 拒绝理由             | 替代方案                  |
+|--------------|----------|----------------------------------|------------|------------|------------------|-----------------------|
+| ARCH-REJ-001 | ADR-0005 | [示例] 请求允许 Endpoint 直接查询数据库       | @developer | 2026-01-10 | 违反职责分离原则         | 创建 QueryHandler       |
+| ARCH-REJ-002 | ADR-0001 | [示例] 请求 Members 模块直接引用 Orders 模块 | @developer | 2026-01-12 | 破坏模块隔离           | 通过 Platform.Contracts |
+| ARCH-REJ-003 | ADR-0002 | [示例] 请求在 Program.cs 中添加环境判断逻辑    | @developer | 2026-01-15 | Program.cs 应保持简洁 | 移到 Bootstrapper       |
 
 ---
 
@@ -123,6 +130,7 @@ Members 模块的 CreateOrderHandler 中直接注入了 Orders 模块的 IPoints
 希望在 Endpoint 中直接注入 DbContext 查询会员列表，理由是"这只是简单的查询，不需要 Handler"。
 
 **拒绝理由**：
+
 1. 即使是简单查询，也应该通过 QueryHandler 执行
 2. Endpoint 直接依赖 DbContext 会破坏测试隔离
 3. 未来查询可能变复杂，届时重构成本高
@@ -141,11 +149,13 @@ Members 模块的 CreateOrderHandler 中直接注入了 Orders 模块的 IPoints
 希望 Members 模块直接引用 Orders 模块以获取会员订单统计，理由是"只读取数据，不修改"。
 
 **拒绝理由**：
+
 1. 只读引用仍然是依赖，会造成模块耦合
 2. 未来 Orders 模块的变更会影响 Members 模块
 3. 违反了模块隔离的核心原则
 
 **替代方案**：
+
 1. 将共享的查询 DTO 移到 `Platform.Contracts.Orders`
 2. Orders 模块实现查询接口，Members 通过契约调用
 3. 或者 Orders 发布领域事件，Members 维护本地投影
@@ -161,12 +171,14 @@ Members 模块的 CreateOrderHandler 中直接注入了 Orders 模块的 IPoints
 希望在 Program.cs 中添加 `if (env.IsDevelopment())` 判断以加载开发环境专用配置。
 
 **拒绝理由**：
+
 1. 环境判断逻辑应该封装在 Bootstrapper 内部
 2. Program.cs 应该只是"启动入口"，不包含任何业务判断
 3. 允许这种做法会导致 Program.cs 逐渐膨胀
 
 **替代方案**：
 在 `PlatformBootstrapper.Configure()` 方法内部进行环境判断：
+
 ```csharp
 public static void Configure(IServiceCollection services, IConfiguration config)
 {
@@ -194,12 +206,13 @@ public static void Configure(IServiceCollection services, IConfiguration config)
 
 ### 趋势分析
 
-| 月份 | 新增破例 | 归还破例 | 净增长 |
-|------|---------|---------|--------|
-| 2025-12 | 1 | 0 | +1 |
-| 2026-01 | 0 | 1 | -1 |
+| 月份      | 新增破例 | 归还破例 | 净增长 |
+|---------|------|------|-----|
+| 2025-12 | 1    | 0    | +1  |
+| 2026-01 | 0    | 1    | -1  |
 
 **健康指标**：
+
 - ✅ 破例数量下降趋势
 - ✅ 平均归还时长：15 天
 - ⚠️ 需关注：新增破例速率
@@ -215,6 +228,7 @@ public static void Configure(IServiceCollection services, IConfiguration config)
 ### 2. 初步审查
 
 架构师进行初步审查：
+
 - 是否有充分理由？
 - 是否评估过替代方案？
 - 是否有归还计划？
@@ -233,6 +247,7 @@ public static void Configure(IServiceCollection services, IConfiguration config)
 ### 5. 定期审计
 
 每季度审计一次：
+
 - 检查已归还破例是否真正修复
 - 检查未归还破例是否超期
 - 评估破例趋势，决定是否需要修订 ADR
@@ -261,9 +276,9 @@ A: 不会。即使破例已归还，记录也会永久保留在"已归还破例"
 
 ## 审计历史
 
-| 审计日期 | 审计人 | 发现问题 | 处理结果 |
-|---------|--------|---------|---------|
-| 2026-01-20 | @architect | 无 | 系统健康 |
+| 审计日期       | 审计人        | 发现问题 | 处理结果 |
+|------------|------------|------|------|
+| 2026-01-20 | @architect | 无    | 系统健康 |
 
 ---
 

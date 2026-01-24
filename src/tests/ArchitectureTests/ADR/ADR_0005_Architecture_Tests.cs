@@ -1,4 +1,4 @@
-using NetArchTest.Rules;
+﻿using NetArchTest.Rules;
 using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -27,14 +27,17 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// </summary>
 public sealed class ADR_0005_Architecture_Tests
 {
+
     #region 1. Use Case + Handler 最小执行单元
 
     [Theory(DisplayName = "ADR-0005.1: Handler 应有明确的命名约定")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Handlers_Should_Have_Clear_Naming_Convention(Assembly moduleAssembly)
     {
-        var handlers = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("Handler")
+        var handlers = Types
+            .InAssembly(moduleAssembly)
+            .That()
+            .HaveNameEndingWith("Handler")
             .GetTypes();
 
         foreach (var handler in handlers)
@@ -44,15 +47,15 @@ public sealed class ADR_0005_Architecture_Tests
             var isEventHandler = handler.Name.Contains("Event");
 
             Assert.True(isCommandHandler || isQueryHandler || isEventHandler,
-                $"❌ ADR-0005.1 违规: Handler 命名不清晰\n\n" +
-                $"违规类型: {handler.FullName}\n\n" +
-                $"问题分析:\n" +
-                $"Handler 命名未明确表达业务意图（Command/Query/Event）\n\n" +
-                $"修复建议:\n" +
-                $"1. 将 Handler 重命名为 *CommandHandler（如 CreateOrderCommandHandler）\n" +
-                $"2. 或重命名为 *QueryHandler（如 GetOrderByIdQueryHandler）\n" +
-                $"3. 或重命名为 *EventHandler（如 OrderCreatedEventHandler）\n\n" +
-                $"参考: docs/copilot/adr-0005.prompts.md（场景 1-3）");
+            $"❌ ADR-0005.1 违规: Handler 命名不清晰\n\n" +
+            $"违规类型: {handler.FullName}\n\n" +
+            $"问题分析:\n" +
+            $"Handler 命名未明确表达业务意图（Command/Query/Event）\n\n" +
+            $"修复建议:\n" +
+            $"1. 将 Handler 重命名为 *CommandHandler（如 CreateOrderCommandHandler）\n" +
+            $"2. 或重命名为 *QueryHandler（如 GetOrderByIdQueryHandler）\n" +
+            $"3. 或重命名为 *EventHandler（如 OrderCreatedEventHandler）\n\n" +
+            $"参考: docs/copilot/adr-0005.prompts.md（场景 1-3）");
         }
     }
 
@@ -60,15 +63,19 @@ public sealed class ADR_0005_Architecture_Tests
     [ClassData(typeof(ModuleAssemblyData))]
     public void Endpoints_Should_Not_Contain_Business_Logic(Assembly moduleAssembly)
     {
-        var endpoints = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("Endpoint")
-            .Or().HaveNameEndingWith("Controller")
+        var endpoints = Types
+            .InAssembly(moduleAssembly)
+            .That()
+            .HaveNameEndingWith("Endpoint")
+            .Or()
+            .HaveNameEndingWith("Controller")
             .GetTypes();
 
         foreach (var endpoint in endpoints)
         {
             // 检查方法行数（简单启发式检查）
-            var methods = endpoint.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+            var methods = endpoint
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(m => !m.IsSpecialName)
                 .Where(m => m.DeclaringType == endpoint)
                 .ToList();
@@ -77,7 +84,8 @@ public sealed class ADR_0005_Architecture_Tests
             {
                 // 检查方法是否注入了过多依赖（超过 3 个可能表示业务逻辑）
                 var parameters = method.GetParameters();
-                var constructorParams = endpoint.GetConstructors()
+                var constructorParams = endpoint
+                    .GetConstructors()
                     .SelectMany(c => c.GetParameters())
                     .Select(p => p.ParameterType)
                     .Where(t => !t.Namespace?.StartsWith("Microsoft.Extensions") == true)
@@ -86,17 +94,16 @@ public sealed class ADR_0005_Architecture_Tests
 
                 if (constructorParams.Count > 5)
                 {
-                    Assert.Fail(
-                        $"❌ ADR-0005.2 违规: Endpoint/Controller 包含过多依赖\n\n" +
-                        $"违规类型: {endpoint.FullName}\n" +
-                        $"构造函数依赖数量: {constructorParams.Count} 个（超过建议的 5 个）\n\n" +
-                        $"问题分析:\n" +
-                        $"Endpoint/Controller 注入过多业务依赖，可能包含业务逻辑\n\n" +
-                        $"修复建议:\n" +
-                        $"1. Endpoint 应只注入 IMessageBus 或类似的协调服务\n" +
-                        $"2. 将业务逻辑移到 Handler 中实现\n" +
-                        $"3. Endpoint 只负责：接收请求 → 映射 Command/Query → 转发给 Handler → 返回响应\n\n" +
-                        $"参考: docs/copilot/adr-0005.prompts.md（场景 5，反模式 1）");
+                    Assert.Fail($"❌ ADR-0005.2 违规: Endpoint/Controller 包含过多依赖\n\n" +
+                                $"违规类型: {endpoint.FullName}\n" +
+                                $"构造函数依赖数量: {constructorParams.Count} 个（超过建议的 5 个）\n\n" +
+                                $"问题分析:\n" +
+                                $"Endpoint/Controller 注入过多业务依赖，可能包含业务逻辑\n\n" +
+                                $"修复建议:\n" +
+                                $"1. Endpoint 应只注入 IMessageBus 或类似的协调服务\n" +
+                                $"2. 将业务逻辑移到 Handler 中实现\n" +
+                                $"3. Endpoint 只负责：接收请求 → 映射 Command/Query → 转发给 Handler → 返回响应\n\n" +
+                                $"参考: docs/copilot/adr-0005.prompts.md（场景 5，反模式 1）");
                 }
             }
         }
@@ -111,49 +118,55 @@ public sealed class ADR_0005_Architecture_Tests
     public void Handlers_Should_Not_Depend_On_AspNet(Assembly moduleAssembly)
     {
         var forbiddenDeps = new[] { "Microsoft.AspNetCore", "Microsoft.AspNetCore.Http", "Microsoft.AspNetCore.Mvc" };
-        var result = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("Handler")
-            .ShouldNot().HaveDependencyOnAny(forbiddenDeps)
+        var result = Types
+            .InAssembly(moduleAssembly)
+            .That()
+            .HaveNameEndingWith("Handler")
+            .ShouldNot()
+            .HaveDependencyOnAny(forbiddenDeps)
             .GetResult();
 
         Assert.True(result.IsSuccessful,
-            $"❌ ADR-0005.3 违规: Handler 依赖 ASP.NET Core 类型\n\n" +
-            $"模块: {moduleAssembly.GetName().Name}\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}\n\n" +
-            $"问题分析:\n" +
-            $"Handler 不应依赖 Web 基础设施类型（ASP.NET Core），应保持协议无关\n\n" +
-            $"修复建议:\n" +
-            $"1. 将 Web/HTTP 相关逻辑保持在 Endpoint 或 Host 层\n" +
-            $"2. Handler 应只依赖业务抽象接口（如 IRepository, IEventBus）\n" +
-            $"3. 使用 Command/Query 对象传递数据，而非 HttpContext/IFormFile 等\n\n" +
-            $"参考: docs/copilot/adr-0005.prompts.md（场景 2）");
+        $"❌ ADR-0005.3 违规: Handler 依赖 ASP.NET Core 类型\n\n" +
+        $"模块: {moduleAssembly.GetName().Name}\n" +
+        $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}\n\n" +
+        $"问题分析:\n" +
+        $"Handler 不应依赖 Web 基础设施类型（ASP.NET Core），应保持协议无关\n\n" +
+        $"修复建议:\n" +
+        $"1. 将 Web/HTTP 相关逻辑保持在 Endpoint 或 Host 层\n" +
+        $"2. Handler 应只依赖业务抽象接口（如 IRepository, IEventBus）\n" +
+        $"3. 使用 Command/Query 对象传递数据，而非 HttpContext/IFormFile 等\n\n" +
+        $"参考: docs/copilot/adr-0005.prompts.md（场景 2）");
 
         // 额外的反射检查
-        var handlers = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("Handler")
+        var handlers = Types
+            .InAssembly(moduleAssembly)
+            .That()
+            .HaveNameEndingWith("Handler")
             .GetTypes();
 
         var forbiddenNamespaces = new[] { "Microsoft.AspNetCore", "Microsoft.AspNetCore.Http", "Microsoft.AspNetCore.Mvc" };
 
         foreach (var handler in handlers)
         {
-            var ctorDeps = handler.GetConstructors()
+            var ctorDeps = handler
+                .GetConstructors()
                 .SelectMany(c => c.GetParameters())
                 .Select(p => p.ParameterType)
                 .Where(t => t?.Namespace != null && forbiddenNamespaces.Any(ns => t.Namespace.StartsWith(ns)))
                 .ToList();
 
             Assert.True(ctorDeps.Count == 0,
-                $"❌ ADR-0005.3 违规: Handler 构造函数依赖 ASP.NET 类型\n\n" +
-                $"违规 Handler: {handler.FullName}\n" +
-                $"依赖类型: {string.Join(", ", ctorDeps.Select(t => t.FullName))}\n\n" +
-                $"问题分析:\n" +
-                $"Handler 构造函数注入了 Web 框架类型\n\n" +
-                $"修复建议:\n" +
-                $"1. 移除 ASP.NET 类型的构造函数参数\n" +
-                $"2. 通过 Command/Query 传递必要的数据\n" +
-                $"3. 保持 Handler 为纯业务逻辑组件\n\n" +
-                $"参考: docs/copilot/adr-0005.prompts.md（场景 2）");
+            $"❌ ADR-0005.3 违规: Handler 构造函数依赖 ASP.NET 类型\n\n" +
+            $"违规 Handler: {handler.FullName}\n" +
+            $"依赖类型: {string.Join(", ", ctorDeps.Select(t => t.FullName))}\n\n" +
+            $"问题分析:\n" +
+            $"Handler 构造函数注入了 Web 框架类型\n\n" +
+            $"修复建议:\n" +
+            $"1. 移除 ASP.NET 类型的构造函数参数\n" +
+            $"2. 通过 Command/Query 传递必要的数据\n" +
+            $"3. 保持 Handler 为纯业务逻辑组件\n\n" +
+            $"参考: docs/copilot/adr-0005.prompts.md（场景 2）");
         }
     }
 
@@ -161,28 +174,31 @@ public sealed class ADR_0005_Architecture_Tests
     [ClassData(typeof(ModuleAssemblyData))]
     public void Handlers_Should_Be_Stateless(Assembly moduleAssembly)
     {
-        var handlers = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("Handler")
+        var handlers = Types
+            .InAssembly(moduleAssembly)
+            .That()
+            .HaveNameEndingWith("Handler")
             .GetTypes();
 
         foreach (var handler in handlers)
         {
             // 检查是否有可变的实例字段（除了注入的依赖）
-            var fields = handler.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+            var fields = handler
+                .GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                 .Where(f => !f.IsInitOnly) // 排除 readonly 字段
                 .ToList();
 
             Assert.True(fields.Count == 0,
-                $"❌ ADR-0005.4 违规: Handler 包含可变字段\n\n" +
-                $"违规 Handler: {handler.FullName}\n" +
-                $"可变字段: {string.Join(", ", fields.Select(f => f.Name))}\n\n" +
-                $"问题分析:\n" +
-                $"Handler 包含非 readonly 字段，可能维护长期状态\n\n" +
-                $"修复建议:\n" +
-                $"1. 将所有依赖字段标记为 readonly\n" +
-                $"2. 通过构造函数注入依赖，而非在字段中维护状态\n" +
-                $"3. Handler 应该是短生命周期、无状态、可重入的\n\n" +
-                $"参考: docs/copilot/adr-0005.prompts.md（反模式 3）");
+            $"❌ ADR-0005.4 违规: Handler 包含可变字段\n\n" +
+            $"违规 Handler: {handler.FullName}\n" +
+            $"可变字段: {string.Join(", ", fields.Select(f => f.Name))}\n\n" +
+            $"问题分析:\n" +
+            $"Handler 包含非 readonly 字段，可能维护长期状态\n\n" +
+            $"修复建议:\n" +
+            $"1. 将所有依赖字段标记为 readonly\n" +
+            $"2. 通过构造函数注入依赖，而非在字段中维护状态\n" +
+            $"3. Handler 应该是短生命周期、无状态、可重入的\n\n" +
+            $"参考: docs/copilot/adr-0005.prompts.md（反模式 3）");
         }
     }
 
@@ -195,13 +211,16 @@ public sealed class ADR_0005_Architecture_Tests
     public void Modules_Should_Not_Have_Synchronous_Cross_Module_Calls(Assembly moduleAssembly)
     {
         // 检查模块是否直接依赖其他模块的 Handler（这表示同步调用）
-        var handlers = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("Handler")
+        var handlers = Types
+            .InAssembly(moduleAssembly)
+            .That()
+            .HaveNameEndingWith("Handler")
             .GetTypes();
 
         foreach (var handler in handlers)
         {
-            var ctorParams = handler.GetConstructors()
+            var ctorParams = handler
+                .GetConstructors()
                 .SelectMany(c => c.GetParameters())
                 .Select(p => p.ParameterType)
                 .ToList();
@@ -211,24 +230,29 @@ public sealed class ADR_0005_Architecture_Tests
                 // 检查是否注入了其他模块的类型
                 if (param.Namespace != null && param.Namespace.StartsWith("Zss.BilliardHall.Modules"))
                 {
-                    var currentModule = moduleAssembly.GetName().Name!.Split('.').Last();
-                    var paramModule = param.Namespace.Split('.').ElementAtOrDefault(3);
+                    var currentModule = moduleAssembly.GetName()
+                        .Name!
+                        .Split('.')
+                        .Last();
+                    var paramModule = param
+                        .Namespace
+                        .Split('.')
+                        .ElementAtOrDefault(3);
 
                     if (paramModule != null && paramModule != currentModule)
                     {
-                        Assert.Fail(
-                            $"❌ ADR-0005.5 违规: Handler 注入了其他模块的类型\n\n" +
-                            $"违规 Handler: {handler.FullName}\n" +
-                            $"当前模块: {currentModule}\n" +
-                            $"依赖模块: {paramModule}\n" +
-                            $"依赖类型: {param.FullName}\n\n" +
-                            $"问题分析:\n" +
-                            $"模块间直接注入依赖表示同步调用，违反模块隔离原则\n\n" +
-                            $"修复建议:\n" +
-                            $"1. 使用异步事件通信: await _eventBus.Publish(new SomeEvent(...))\n" +
-                            $"2. 或通过契约查询: var dto = await _queryBus.Send(new GetSomeData(...))\n" +
-                            $"3. 如确需同步调用，必须提交 ADR 破例审批\n\n" +
-                            $"参考: docs/copilot/adr-0005.prompts.md（场景 4，反模式 4）");
+                        Assert.Fail($"❌ ADR-0005.5 违规: Handler 注入了其他模块的类型\n\n" +
+                                    $"违规 Handler: {handler.FullName}\n" +
+                                    $"当前模块: {currentModule}\n" +
+                                    $"依赖模块: {paramModule}\n" +
+                                    $"依赖类型: {param.FullName}\n\n" +
+                                    $"问题分析:\n" +
+                                    $"模块间直接注入依赖表示同步调用，违反模块隔离原则\n\n" +
+                                    $"修复建议:\n" +
+                                    $"1. 使用异步事件通信: await _eventBus.Publish(new SomeEvent(...))\n" +
+                                    $"2. 或通过契约查询: var dto = await _queryBus.Send(new GetSomeData(...))\n" +
+                                    $"3. 如确需同步调用，必须提交 ADR 破例审批\n\n" +
+                                    $"参考: docs/copilot/adr-0005.prompts.md（场景 4，反模式 4）");
                     }
                 }
             }
@@ -239,13 +263,16 @@ public sealed class ADR_0005_Architecture_Tests
     [ClassData(typeof(ModuleAssemblyData))]
     public void Async_Methods_Should_Follow_Naming_Convention(Assembly moduleAssembly)
     {
-        var types = Types.InAssembly(moduleAssembly)
-            .That().ResideInNamespaceStartingWith("Zss.BilliardHall.Modules")
+        var types = Types
+            .InAssembly(moduleAssembly)
+            .That()
+            .ResideInNamespaceStartingWith("Zss.BilliardHall.Modules")
             .GetTypes();
 
         foreach (var type in types)
         {
-            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
+            var methods = type
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
                 .Where(m => m.ReturnType.Name.Contains("Task"))
                 .Where(m => !m.IsSpecialName)
                 .Where(m => m.Name != "Handle") // Wolverine 使用 Handle 作为约定方法名
@@ -255,17 +282,16 @@ public sealed class ADR_0005_Architecture_Tests
             {
                 if (!method.Name.EndsWith("Async"))
                 {
-                    Assert.Fail(
-                        $"❌ ADR-0005.6 违规: 异步方法命名不符合约定\n\n" +
-                        $"违规方法: {type.FullName}.{method.Name}\n" +
-                        $"返回类型: {method.ReturnType.Name}\n\n" +
-                        $"问题分析:\n" +
-                        $"异步方法（返回 Task/Task<T>）应以 'Async' 结尾\n\n" +
-                        $"修复建议:\n" +
-                        $"1. 将方法重命名为 {method.Name}Async\n" +
-                        $"2. 确保调用方也更新方法名\n" +
-                        $"3. Handler.Handle 方法可以例外（框架约定）\n\n" +
-                        $"参考: docs/copilot/adr-0005.prompts.md（场景 2-3）");
+                    Assert.Fail($"❌ ADR-0005.6 违规: 异步方法命名不符合约定\n\n" +
+                                $"违规方法: {type.FullName}.{method.Name}\n" +
+                                $"返回类型: {method.ReturnType.Name}\n\n" +
+                                $"问题分析:\n" +
+                                $"异步方法（返回 Task/Task<T>）应以 'Async' 结尾\n\n" +
+                                $"修复建议:\n" +
+                                $"1. 将方法重命名为 {method.Name}Async\n" +
+                                $"2. 确保调用方也更新方法名\n" +
+                                $"3. Handler.Handle 方法可以例外（框架约定）\n\n" +
+                                $"参考: docs/copilot/adr-0005.prompts.md（场景 2-3）");
                 }
             }
         }
@@ -279,10 +305,14 @@ public sealed class ADR_0005_Architecture_Tests
     [ClassData(typeof(ModuleAssemblyData))]
     public void Modules_Should_Not_Share_Domain_Entities(Assembly moduleAssembly)
     {
-        var entities = Types.InAssembly(moduleAssembly)
-            .That().ResideInNamespaceContaining(".Entities")
-            .Or().ResideInNamespaceContaining(".Domain")
-            .Or().HaveNameEndingWith("Entity")
+        var entities = Types
+            .InAssembly(moduleAssembly)
+            .That()
+            .ResideInNamespaceContaining(".Entities")
+            .Or()
+            .ResideInNamespaceContaining(".Domain")
+            .Or()
+            .HaveNameEndingWith("Entity")
             .GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract)
             .ToList();
@@ -298,8 +328,7 @@ public sealed class ADR_0005_Architecture_Tests
                 // 这是一个软约束，用于提醒开发者注意
                 if (constructors.Length > 0)
                 {
-                    System.Diagnostics.Debug.WriteLine(
-                        $"⚠️ ADR-0005 建议: 实体 {entity.FullName} 是 public 且有公共构造函数，确保不会被其他模块直接引用。");
+                    System.Diagnostics.Debug.WriteLine($"⚠️ ADR-0005 建议: 实体 {entity.FullName} 是 public 且有公共构造函数，确保不会被其他模块直接引用。");
                 }
             }
         }
@@ -311,9 +340,12 @@ public sealed class ADR_0005_Architecture_Tests
     [ClassData(typeof(ModuleAssemblyData))]
     public void QueryHandlers_Can_Return_Contracts(Assembly moduleAssembly)
     {
-        var queryHandlers = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("QueryHandler")
-            .Or().HaveNameEndingWith("Query.Handler")
+        var queryHandlers = Types
+            .InAssembly(moduleAssembly)
+            .That()
+            .HaveNameEndingWith("QueryHandler")
+            .Or()
+            .HaveNameEndingWith("Query.Handler")
             .GetTypes();
 
         // 这是一个"正面"测试，确保我们没有过度限制
@@ -329,8 +361,10 @@ public sealed class ADR_0005_Architecture_Tests
     [ClassData(typeof(ModuleAssemblyData))]
     public void Command_And_Query_Handlers_Should_Be_Separated(Assembly moduleAssembly)
     {
-        var handlers = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("Handler")
+        var handlers = Types
+            .InAssembly(moduleAssembly)
+            .That()
+            .HaveNameEndingWith("Handler")
             .GetTypes();
 
         foreach (var handler in handlers)
@@ -341,16 +375,15 @@ public sealed class ADR_0005_Architecture_Tests
             // Handler 不应同时是 Command 和 Query
             if (isCommandHandler && isQueryHandler)
             {
-                Assert.Fail(
-                    $"❌ ADR-0005.9 违规: Handler 同时包含 Command 和 Query 语义\n\n" +
-                    $"违规 Handler: {handler.FullName}\n\n" +
-                    $"问题分析:\n" +
-                    $"Handler 命名同时包含 Command 和 Query，违反 CQRS 原则\n\n" +
-                    $"修复建议:\n" +
-                    $"1. 严格分离为两个 Handler：XxxCommandHandler 和 XxxQueryHandler\n" +
-                    $"2. Command Handler：执行写操作，返回 void 或 ID\n" +
-                    $"3. Query Handler：执行读操作，返回 DTO\n\n" +
-                    $"参考: docs/copilot/adr-0005.prompts.md（FAQ Q1）");
+                Assert.Fail($"❌ ADR-0005.9 违规: Handler 同时包含 Command 和 Query 语义\n\n" +
+                            $"违规 Handler: {handler.FullName}\n\n" +
+                            $"问题分析:\n" +
+                            $"Handler 命名同时包含 Command 和 Query，违反 CQRS 原则\n\n" +
+                            $"修复建议:\n" +
+                            $"1. 严格分离为两个 Handler：XxxCommandHandler 和 XxxQueryHandler\n" +
+                            $"2. Command Handler：执行写操作，返回 void 或 ID\n" +
+                            $"3. Query Handler：执行读操作，返回 DTO\n\n" +
+                            $"参考: docs/copilot/adr-0005.prompts.md（FAQ Q1）");
             }
         }
     }
@@ -359,15 +392,19 @@ public sealed class ADR_0005_Architecture_Tests
     [ClassData(typeof(ModuleAssemblyData))]
     public void CommandHandlers_Should_Not_Return_Business_Data(Assembly moduleAssembly)
     {
-        var commandHandlers = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("CommandHandler")
-            .Or().HaveNameEndingWith("Command.Handler")
+        var commandHandlers = Types
+            .InAssembly(moduleAssembly)
+            .That()
+            .HaveNameEndingWith("CommandHandler")
+            .Or()
+            .HaveNameEndingWith("Command.Handler")
             .GetTypes();
 
         foreach (var handler in commandHandlers)
         {
             // 查找 Handle 或 Execute 方法
-            var handleMethods = handler.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+            var handleMethods = handler
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(m => m.Name == "Handle" || m.Name == "Execute" || m.Name.EndsWith("Async"))
                 .ToList();
 
@@ -376,15 +413,29 @@ public sealed class ADR_0005_Architecture_Tests
                 var returnType = method.ReturnType;
 
                 // 提取 Task<T> 中的 T
-                if (returnType.IsGenericType && returnType.GetGenericTypeDefinition().Name.StartsWith("Task"))
+                if (returnType.IsGenericType &&
+                    returnType
+                        .GetGenericTypeDefinition()
+                        .Name
+                        .StartsWith("Task"))
                 {
-                    returnType = returnType.GetGenericArguments().FirstOrDefault() ?? returnType;
+                    returnType = returnType
+                                     .GetGenericArguments()
+                                     .FirstOrDefault() ??
+                                 returnType;
                 }
 
                 // 提取 ValueTask<T> 中的 T
-                if (returnType.IsGenericType && returnType.GetGenericTypeDefinition().Name.StartsWith("ValueTask"))
+                if (returnType.IsGenericType &&
+                    returnType
+                        .GetGenericTypeDefinition()
+                        .Name
+                        .StartsWith("ValueTask"))
                 {
-                    returnType = returnType.GetGenericArguments().FirstOrDefault() ?? returnType;
+                    returnType = returnType
+                                     .GetGenericArguments()
+                                     .FirstOrDefault() ??
+                                 returnType;
                 }
 
                 // 允许的返回类型：void, Task, ValueTask, Unit, bool, int (表示 ID), Guid
@@ -393,12 +444,9 @@ public sealed class ADR_0005_Architecture_Tests
                 if (!allowedTypes.Contains(returnType.Name) && returnType != typeof(void))
                 {
                     // 如果返回类型是复杂业务对象，给出建议
-                    if (returnType.Namespace?.StartsWith("Zss.BilliardHall.Modules") == true ||
-                        returnType.Namespace?.StartsWith("Zss.BilliardHall.Platform.Contracts") == true)
+                    if (returnType.Namespace?.StartsWith("Zss.BilliardHall.Modules") == true || returnType.Namespace?.StartsWith("Zss.BilliardHall.Platform.Contracts") == true)
                     {
-                        System.Diagnostics.Debug.WriteLine(
-                            $"⚠️ ADR-0005 建议: Command Handler {handler.FullName}.{method.Name} 返回了业务数据类型 {returnType.FullName}。\n" +
-                            $"建议：Command Handler 应该只返回简单类型（如 ID/bool）或 void，避免返回完整的业务对象。");
+                        System.Diagnostics.Debug.WriteLine($"⚠️ ADR-0005 建议: Command Handler {handler.FullName}.{method.Name} 返回了业务数据类型 {returnType.FullName}。\n" + $"建议：Command Handler 应该只返回简单类型（如 ID/bool）或 void，避免返回完整的业务对象。");
                     }
                 }
             }
@@ -415,13 +463,16 @@ public sealed class ADR_0005_Architecture_Tests
     [ClassData(typeof(ModuleAssemblyData))]
     public void Handlers_Should_Use_Structured_Exceptions(Assembly moduleAssembly)
     {
-        var handlers = Types.InAssembly(moduleAssembly)
-            .That().HaveNameEndingWith("Handler")
+        var handlers = Types
+            .InAssembly(moduleAssembly)
+            .That()
+            .HaveNameEndingWith("Handler")
             .GetTypes();
 
         foreach (var handler in handlers)
         {
-            var handleMethods = handler.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+            var handleMethods = handler
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(m => m.Name == "Handle" || m.Name == "Execute" || m.Name.EndsWith("Async"))
                 .ToList();
 
@@ -434,8 +485,7 @@ public sealed class ADR_0005_Architecture_Tests
                 {
                     // 建议使用 DomainException 等结构化异常
                     // 这里只是示例，实际需要更复杂的 IL 分析或 Roslyn Analyzer
-                    System.Diagnostics.Debug.WriteLine(
-                        $"提示: 确保 Handler {handler.FullName}.{method.Name} 使用结构化异常（如 DomainException）。");
+                    System.Diagnostics.Debug.WriteLine($"提示: 确保 Handler {handler.FullName}.{method.Name} 使用结构化异常（如 DomainException）。");
                 }
             }
         }
@@ -454,18 +504,24 @@ public sealed class ADR_0005_Architecture_Tests
         var applicationAssembly = typeof(Application.ApplicationBootstrapper).Assembly;
 
         // Platform 不应包含 Handler
-        var platformHandlers = Types.InAssembly(platformAssembly)
-            .That().HaveNameEndingWith("Handler")
+        var platformHandlers = Types
+            .InAssembly(platformAssembly)
+            .That()
+            .HaveNameEndingWith("Handler")
             .GetTypes()
             .ToList();
 
         Assert.Empty(platformHandlers);
 
         // Application 不应包含业务 Handler（可能有基础 Handler）
-        var applicationHandlers = Types.InAssembly(applicationAssembly)
-            .That().HaveNameEndingWith("Handler")
-            .And().DoNotHaveNameStartingWith("Base")
-            .And().DoNotHaveNameStartingWith("Abstract")
+        var applicationHandlers = Types
+            .InAssembly(applicationAssembly)
+            .That()
+            .HaveNameEndingWith("Handler")
+            .And()
+            .DoNotHaveNameStartingWith("Base")
+            .And()
+            .DoNotHaveNameStartingWith("Abstract")
             .GetTypes()
             .ToList();
 
@@ -479,4 +535,5 @@ public sealed class ADR_0005_Architecture_Tests
     }
 
     #endregion
+
 }

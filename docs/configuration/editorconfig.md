@@ -38,6 +38,7 @@
 - ❌ EditorConfig 不管理：命名空间规则、分层依赖、包管理、CQRS 模式
 
 架构约束由以下机制强制执行：
+
 - **ADR-0001**：模块化单体与垂直切片架构
 - **ADR-0002**：Platform/Application/Host 三层启动体系
 - **ADR-0003**：命名空间规则（通过 `Directory.Build.props` 强制）
@@ -52,6 +53,7 @@
 ### 1. 仅控制格式，不涉及业务
 
 EditorConfig 配置纯粹是技术性的：
+
 - 文件编码（UTF-8、UTF-8 BOM）
 - 换行符（LF、CRLF）
 - 缩进（空格数量）
@@ -61,16 +63,17 @@ EditorConfig 配置纯粹是技术性的：
 
 本配置文件是 ADR 体系的补充，而非替代：
 
-| 关注点 | 管理机制 | 配置文件 |
-|--------|---------|---------|
-| 代码格式 | EditorConfig | `.editorconfig` |
-| 命名空间 | MSBuild + ADR-0003 | `Directory.Build.props` |
-| 依赖管理 | CPM + ADR-0004 | `Directory.Packages.props` |
+| 关注点  | 管理机制                 | 配置文件                           |
+|------|----------------------|--------------------------------|
+| 代码格式 | EditorConfig         | `.editorconfig`                |
+| 命名空间 | MSBuild + ADR-0003   | `Directory.Build.props`        |
+| 依赖管理 | CPM + ADR-0004       | `Directory.Packages.props`     |
 | 架构约束 | 架构测试 + ADR-0001~0005 | `src/tests/ArchitectureTests/` |
 
 ### 3. 跨平台兼容
 
 配置考虑不同操作系统和开发环境：
+
 - **Windows**：CRLF 换行符（C# 文件）
 - **Linux/macOS**：LF 换行符（文档、脚本）
 - **跨平台**：统一使用空格缩进，禁止 Tab
@@ -89,11 +92,13 @@ end_of_line = crlf           # Windows 换行符（Visual Studio 默认）
 ```
 
 **选择理由**：
+
 - **UTF-8 BOM**：C# 编译器官方推荐，避免某些情况下的字符集识别问题
 - **4 空格**：.NET 生态系统的事实标准，所有微软示例代码使用此缩进
 - **CRLF**：Windows 是主要开发平台，Visual Studio 默认使用 CRLF
 
 **注意事项**：
+
 - Git 通过 `.gitattributes` 自动转换换行符，无需担心跨平台协作问题
 - 如果团队主要在 Linux/macOS 开发，可考虑改为 LF，但需团队一致同意
 
@@ -109,6 +114,7 @@ max_line_length = 120        # 建议行宽（便于阅读）
 ```
 
 **选择理由**：
+
 - **无 BOM**：许多文档工具和解析器不兼容 BOM
 - **2 空格**：Markdown、YAML、JSON 社区标准
 - **LF**：文档通常跨平台共享，LF 是更广泛的标准
@@ -123,6 +129,7 @@ end_of_line = crlf           # Windows 换行符（MSBuild 标准）
 ```
 
 **选择理由**：
+
 - **2 空格**：XML 文件通常使用更紧凑的缩进
 - **CRLF**：MSBuild 和 Visual Studio 在 Windows 上运行，保持一致
 
@@ -141,6 +148,7 @@ end_of_line = crlf           # Windows 脚本使用 CRLF
 ```
 
 **选择理由**：
+
 - **Shell 脚本 (LF)**：Unix/Linux 系统要求 LF 换行符
 - **PowerShell (CRLF)**：Windows 脚本环境标准
 
@@ -154,11 +162,11 @@ end_of_line = crlf           # Windows 脚本使用 CRLF
 
 #### 1. 评估变更级别
 
-| 变更类型 | 级别 | 审批要求 | 公示期 |
-|---------|------|---------|--------|
-| 新增文件类型规范 | 技术层 | Tech Lead/架构师单人批准 | 无 |
-| 修改现有规范（如改变缩进大小） | 技术层 | Tech Lead/架构师单人批准 | 无 |
-| 涉及架构影响的变更 | 结构层 | Tech Lead/架构师 | 建议讨论 |
+| 变更类型            | 级别  | 审批要求              | 公示期  |
+|-----------------|-----|-------------------|------|
+| 新增文件类型规范        | 技术层 | Tech Lead/架构师单人批准 | 无    |
+| 修改现有规范（如改变缩进大小） | 技术层 | Tech Lead/架构师单人批准 | 无    |
+| 涉及架构影响的变更       | 结构层 | Tech Lead/架构师     | 建议讨论 |
 
 #### 2. 提交变更流程
 
@@ -207,6 +215,7 @@ git push origin config/update-editorconfig
 **症状**：保存文件时，IDE 没有应用预期的格式规则
 
 **可能原因**：
+
 1. IDE 未启用 EditorConfig 支持
 2. IDE 缓存未刷新
 3. 项目级别设置覆盖了 EditorConfig
@@ -215,6 +224,7 @@ git push origin config/update-editorconfig
 **解决方案**：
 
 **Visual Studio**：
+
 ```
 工具 → 选项 → 文本编辑器 → 代码清理
 确保勾选"在保存时运行代码清理"
@@ -222,6 +232,7 @@ git push origin config/update-editorconfig
 ```
 
 **JetBrains Rider**：
+
 ```
 Settings → Editor → Code Style
 确保勾选"Enable EditorConfig support"
@@ -229,6 +240,7 @@ Settings → Editor → Code Style
 ```
 
 **VS Code**：
+
 ```
 安装扩展：EditorConfig for VS Code
 重启编辑器
@@ -240,6 +252,7 @@ Settings → Editor → Code Style
 **症状**：Git 显示整个文件都有变更，实际只是换行符不同
 
 **可能原因**：
+
 1. `.gitattributes` 未配置或配置不当
 2. 开发者在不同操作系统间切换
 3. EditorConfig 换行符设置与实际文件不匹配
@@ -278,13 +291,13 @@ git reset --hard origin/main
    ```
 
 2. **查阅对应 ADR**：
-   - 命名空间问题 → [ADR-0003](../adr/constitutional/ADR-0003-namespace-rules.md)
-   - 依赖问题 → [ADR-0001](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-   - 包管理问题 → [ADR-0004](../adr/constitutional/ADR-0004-Cpm-Final.md)
+  - 命名空间问题 → [ADR-0003](../adr/constitutional/ADR-0003-namespace-rules.md)
+  - 依赖问题 → [ADR-0001](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+  - 包管理问题 → [ADR-0004](../adr/constitutional/ADR-0004-Cpm-Final.md)
 
 3. **参考 Copilot 指南**：
-   - [架构测试失败诊断](../copilot/architecture-test-failures.md)
-   - [ADR Prompts](../copilot/)
+  - [架构测试失败诊断](../copilot/architecture-test-failures.md)
+  - [ADR Prompts](../copilot/)
 
 ### 问题 4：缩进不一致
 
@@ -293,18 +306,21 @@ git reset --hard origin/main
 **解决方案**：
 
 **Visual Studio**：
+
 ```
 编辑 → 高级 → 将空格转换为制表符（或反之）
 Ctrl+K, Ctrl+D（格式化文档）
 ```
 
 **Rider**：
+
 ```
 Code → Reformat Code (Ctrl+Alt+L)
 选择"Cleanup code"并应用
 ```
 
 **VS Code**：
+
 ```
 命令面板 → "Convert Indentation to Spaces"
 保存文件触发自动格式化
@@ -315,6 +331,7 @@ Code → Reformat Code (Ctrl+Alt+L)
 **症状**：中文注释在某些编辑器中显示为乱码或问号
 
 **可能原因**：
+
 1. 文件编码不是 UTF-8
 2. 编辑器未正确检测编码
 3. 缺少 BOM（C# 文件）
@@ -365,10 +382,11 @@ mv file_utf8.cs file.cs
    ```
 
 3. **快捷键**：
-   - `Ctrl+K, Ctrl+D`：格式化整个文档
-   - `Ctrl+K, Ctrl+E`：运行代码清理
+  - `Ctrl+K, Ctrl+D`：格式化整个文档
+  - `Ctrl+K, Ctrl+E`：运行代码清理
 
 **验证配置**：
+
 ```
 打开任意 .cs 文件
 查看底部状态栏，应显示：
@@ -398,10 +416,11 @@ mv file_utf8.cs file.cs
    ```
 
 3. **快捷键**：
-   - `Ctrl+Alt+L`：重新格式化代码
-   - `Ctrl+Alt+Enter`：代码清理
+  - `Ctrl+Alt+L`：重新格式化代码
+  - `Ctrl+Alt+Enter`：代码清理
 
 **验证配置**：
+
 ```
 打开任意 .cs 文件
 右下角应显示：
@@ -442,6 +461,7 @@ mv file_utf8.cs file.cs
    ```
 
 **验证配置**：
+
 ```
 打开任意 .cs 文件
 状态栏右下角应显示：
@@ -508,12 +528,14 @@ dotnet format --verify-no-changes || exit 1
 ### 2. 代码审查注意事项
 
 **不要关注的格式问题**（EditorConfig 自动处理）：
+
 - ❌ 缩进是 2 空格还是 4 空格
 - ❌ 换行符是 LF 还是 CRLF
 - ❌ 文件末尾是否有空行
 - ❌ 行尾是否有多余空格
 
 **应该关注的问题**（EditorConfig 无法检测）：
+
 - ✅ 命名空间是否符合 ADR-0003
 - ✅ 模块依赖是否违反 ADR-0001
 - ✅ 包引用是否符合 ADR-0004
@@ -537,6 +559,7 @@ dotnet format --verify-no-changes || exit 1
 ```
 
 **注意**：
+
 - 格式检查应该是警告而非失败（避免阻塞合法 PR）
 - 或在 PR 合并前自动修复格式（推荐）
 
@@ -599,15 +622,16 @@ git commit -m "style: 应用 EditorConfig 到 Modules"
 
 ## 版本历史
 
-| 版本 | 日期 | 变更摘要 | 负责人 |
-|------|------|---------|-------|
-| 1.0  | 2026-01-24 | 初始版本，企业级 EditorConfig 配置 | 架构团队 |
+| 版本  | 日期         | 变更摘要                     | 负责人  |
+|-----|------------|--------------------------|------|
+| 1.0 | 2026-01-24 | 初始版本，企业级 EditorConfig 配置 | 架构团队 |
 
 ---
 
 ## 相关文档
 
 ### ADR 体系
+
 - [ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 - [ADR-0002：Platform/Application/Host 三层启动体系](../adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)
 - [ADR-0003：命名空间规则](../adr/constitutional/ADR-0003-namespace-rules.md)
@@ -616,12 +640,14 @@ git commit -m "style: 应用 EditorConfig 到 Modules"
 - [ADR-0900：ADR 新增与修订流程](../adr/governance/ADR-0900-adr-process.md)
 
 ### 配置文件
+
 - [配置文件索引](README.md)
 - [.editorconfig 文件](../../.editorconfig)
 - [Directory.Build.props](../../Directory.Build.props)
 - [Directory.Packages.props](../../Directory.Packages.props)
 
 ### Copilot 指南
+
 - [架构测试失败诊断](../copilot/architecture-test-failures.md)
 - [ADR-0003 Prompts](../copilot/adr-0003.prompts.md)
 - [Copilot 指令索引](../copilot/README.md)
@@ -637,6 +663,7 @@ git commit -m "style: 应用 EditorConfig 到 Modules"
 3. **团队讨论**：在团队会议中提出讨论
 
 **联系方式**：
+
 - 技术负责人：[姓名/联系方式]
 - 架构委员会：[联系方式]
 

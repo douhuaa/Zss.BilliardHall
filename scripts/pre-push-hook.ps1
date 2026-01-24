@@ -7,7 +7,8 @@ Write-Host ""
 # Build the solution
 Write-Host "📦 Building solution..." -ForegroundColor Yellow
 $buildResult = & dotnet build --configuration Release 2>&1
-if ($LASTEXITCODE -ne 0) {
+if ($LASTEXITCODE -ne 0)
+{
     Write-Host "❌ Build failed" -ForegroundColor Red
     Write-Host "   Fix build errors before pushing" -ForegroundColor Red
     exit 1
@@ -18,7 +19,8 @@ Write-Host ""
 # Run architecture tests
 Write-Host "🔍 Running architecture tests..." -ForegroundColor Yellow
 $testResult = & dotnet test src/tests/ArchitectureTests --no-build --configuration Release --verbosity quiet 2>&1
-if ($LASTEXITCODE -ne 0) {
+if ($LASTEXITCODE -ne 0)
+{
     Write-Host "❌ Architecture tests failed" -ForegroundColor Red
     Write-Host ""
     Write-Host "Test output:" -ForegroundColor Yellow
@@ -35,10 +37,13 @@ Write-Host ""
 Write-Host "🔬 Checking for analyzer warnings..." -ForegroundColor Yellow
 $analyzerWarnings = & dotnet build --no-restore --configuration Release 2>&1 | Select-String "warning ADR"
 $warningCount = ($analyzerWarnings | Measure-Object).Count
-if ($warningCount -gt 0) {
+if ($warningCount -gt 0)
+{
     Write-Host "⚠️  Found $warningCount architecture analyzer warning(s)" -ForegroundColor Yellow
     Write-Host "   Consider reviewing these before pushing (non-blocking)" -ForegroundColor Yellow
-} else {
+}
+else
+{
     Write-Host "✅ No analyzer warnings" -ForegroundColor Green
 }
 Write-Host ""

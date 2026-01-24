@@ -7,7 +7,7 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RootNamespace>Zss.BilliardHall.ArchitectureAnalyzers</RootNamespace>
-    
+
     <!-- Analyzer Package Metadata -->
     <PackageId>Zss.BilliardHall.ArchitectureAnalyzers</PackageId>
     <Title>Architecture Analyzers for Zss.BilliardHall</Title>
@@ -15,18 +15,18 @@
     <Version>1.0.0</Version>
     <Authors>Zss.BilliardHall Team</Authors>
     <PackageTags>roslyn;analyzer;architecture;csharp</PackageTags>
-    
+
     <!-- Suppress warnings about package references -->
     <NoWarn>$(NoWarn);NU5128</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all"/>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="all"/>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>
   </ItemGroup>
 
 </Project>

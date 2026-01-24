@@ -180,6 +180,7 @@ Assert.True(result.IsSuccessful,
 #### 步骤 1：查看失败消息
 
 失败消息应该包含：
+
 - ❌ ADR 编号
 - 违规的具体内容
 - 修复建议
@@ -339,6 +340,7 @@ Assert.True(result.IsSuccessful, "Test failed");
 ### Q1: 验证脚本报告"缺少测试"，但我确实写了测试，怎么办？
 
 **A**: 检查以下几点：
+
 1. 测试方法是否使用了 `[Fact]` 或 `[Theory]` 属性？
 2. 测试方法或 DisplayName 是否包含对应的 ADR 编号（如 `ADR-0001`）？
 3. ADR 文档中是否正确标记了 **【必须架构测试覆盖】**？
@@ -372,6 +374,7 @@ Assert.True(result.IsSuccessful,
 ### Q4: 我可以临时跳过映射验证吗？
 
 **A**: 不建议。如果确实需要：
+
 1. 在 PR 中明确说明原因
 2. 创建后续任务补充测试
 3. 在 PR 模板的"ADR-测试一致性检查"中勾选"本 PR 未修改 ADR 文档或架构测试"
@@ -379,6 +382,7 @@ Assert.True(result.IsSuccessful,
 ### Q5: CI 中的映射验证失败了，本地却通过，怎么办？
 
 **A**: 可能的原因：
+
 1. 检查是否有未提交的文件
 2. 确保使用的是最新的脚本版本
 3. 检查换行符差异（Windows vs Linux）
@@ -406,4 +410,5 @@ Assert.True(result.IsSuccessful,
 ---
 
 **版本历史**：
+
 - v1.0 (2026-01-23): 初始版本

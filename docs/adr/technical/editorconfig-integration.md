@@ -42,13 +42,13 @@
 ### 关键原则
 
 1. **EditorConfig 仅处理格式，不涉及架构**
-   - ✅ 缩进、换行、字符集 → EditorConfig
-   - ❌ 命名空间、依赖、分层 → ADR + MSBuild + 架构测试
+  - ✅ 缩进、换行、字符集 → EditorConfig
+  - ❌ 命名空间、依赖、分层 → ADR + MSBuild + 架构测试
 
 2. **架构约束必须可自动化验证**
-   - EditorConfig 无法强制执行架构规则
-   - 所有架构约束由架构测试验证
-   - CI 确保未通过架构测试的代码无法合并
+  - EditorConfig 无法强制执行架构规则
+  - 所有架构约束由架构测试验证
+  - CI 确保未通过架构测试的代码无法合并
 
 ---
 
@@ -69,11 +69,13 @@ Zss.BilliardHall/
 ```
 
 **EditorConfig 查找顺序**：
+
 1. 从当前文件向上查找 `.editorconfig`
 2. 遇到 `root = true` 停止向上查找
 3. 应用从根到当前目录的所有规则（就近优先）
 
 **最佳实践**：
+
 - ✅ 仅在仓库根目录放置一个 `.editorconfig`
 - ✅ 设置 `root = true` 防止意外继承
 - ❌ 避免在子目录创建 `.editorconfig`（除非有特殊需求）
@@ -82,14 +84,14 @@ Zss.BilliardHall/
 
 **EditorConfig** 和 **Directory.Build.props** 各司其职：
 
-| 关注点 | EditorConfig | Directory.Build.props |
-|--------|-------------|----------------------|
-| 文件编码 | ✅ `charset = utf-8-bom` | - |
-| 缩进和换行 | ✅ `indent_size = 4` | - |
-| 命名空间 | ❌ | ✅ `RootNamespace` 自动推导 |
-| 目标框架 | ❌ | ✅ `TargetFramework` |
-| 语言版本 | ❌ | ✅ `LangVersion` |
-| 包管理 | ❌ | ✅ `ManagePackageVersionsCentrally` |
+| 关注点   | EditorConfig            | Directory.Build.props              |
+|-------|-------------------------|------------------------------------|
+| 文件编码  | ✅ `charset = utf-8-bom` | -                                  |
+| 缩进和换行 | ✅ `indent_size = 4`     | -                                  |
+| 命名空间  | ❌                       | ✅ `RootNamespace` 自动推导             |
+| 目标框架  | ❌                       | ✅ `TargetFramework`                |
+| 语言版本  | ❌                       | ✅ `LangVersion`                    |
+| 包管理   | ❌                       | ✅ `ManagePackageVersionsCentrally` |
 
 **示例工作流**：
 
@@ -131,6 +133,7 @@ Zss.BilliardHall/
 ```
 
 **验证集成**：
+
 1. 打开任意 `.cs` 文件
 2. 底部状态栏应显示：`UTF-8 with signature` `CRLF` `空格: 4`
 3. 修改缩进后保存，应自动格式化回 4 空格
@@ -253,6 +256,7 @@ jobs:
 ```
 
 **推荐策略**：
+
 - **格式问题**：警告或自动修复（用户友好）
 - **架构测试**：必须通过（严格执行 ADR）
 
@@ -267,6 +271,7 @@ jobs:
 **原因**：EditorConfig 不负责架构约束
 
 **解决方案**：
+
 1. 识别失败的架构测试
 2. 查阅对应 ADR（ADR-0001 ~ 0005）
 3. 修复架构违规，而非修改格式
@@ -290,11 +295,13 @@ using Zss.BilliardHall.Modules.Members.Contracts;  // ← 合规
 **解决方案**：
 
 **优先级顺序**：
+
 1. `.editorconfig`（最高优先级，团队标准）
 2. IDE 项目/解决方案配置
 3. IDE 全局配置
 
 **最佳实践**：
+
 - ✅ 依赖 `.editorconfig` 作为唯一真实来源
 - ✅ IDE 设置应该"启用 EditorConfig 支持"
 - ❌ 避免在 IDE 中覆盖 EditorConfig 设置
@@ -363,9 +370,9 @@ git config --global core.autocrlf input
 
 ## 版本历史
 
-| 版本 | 日期 | 变更摘要 | 负责人 |
-|------|------|---------|-------|
-| 1.0  | 2026-01-24 | 创建 EditorConfig 集成技术指南 | 架构团队 |
+| 版本  | 日期         | 变更摘要                   | 负责人  |
+|-----|------------|------------------------|------|
+| 1.0 | 2026-01-24 | 创建 EditorConfig 集成技术指南 | 架构团队 |
 
 ---
 

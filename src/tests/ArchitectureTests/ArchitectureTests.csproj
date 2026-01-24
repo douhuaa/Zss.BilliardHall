@@ -1,33 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <IsPackable>false</IsPackable>
-        <IsTestProject>true</IsTestProject>
-    </PropertyGroup>
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="NetArchTest.Rules" />
-        <PackageReference Include="xunit" />
-        <PackageReference Include="xunit.runner.visualstudio" />
-        <PackageReference Include="FluentAssertions" />
-        <PackageReference Include="Marten.AspNetCore" />
-        <PackageReference Include="WolverineFx.Http" />
-        <PackageReference Include="Testcontainers" />
-        <PackageReference Include="Testcontainers.PostgreSql" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <Using Include="Xunit" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <ProjectReference Include="..\..\Platform\Platform.csproj" />
-        <ProjectReference Include="..\..\Application\Application.csproj" />
-        <ProjectReference Include="..\..\Modules\Members\Members.csproj" />
-        <ProjectReference Include="..\..\Modules\Orders\Orders.csproj" />
-        <ProjectReference Include="..\..\Host\Web\Web.csproj" />
-    </ItemGroup>
-    
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+    <PackageReference Include="NetArchTest.Rules"/>
+    <PackageReference Include="xunit"/>
+    <PackageReference Include="xunit.runner.visualstudio"/>
+    <PackageReference Include="FluentAssertions"/>
+    <PackageReference Include="Marten.AspNetCore"/>
+    <PackageReference Include="WolverineFx.Http"/>
+    <PackageReference Include="Testcontainers"/>
+    <PackageReference Include="Testcontainers.PostgreSql"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Platform\Platform.csproj"/>
+    <ProjectReference Include="..\..\Application\Application.csproj"/>
+    <ProjectReference Include="..\..\Modules\Members\Members.csproj"/>
+    <ProjectReference Include="..\..\Modules\Orders\Orders.csproj"/>
+    <ProjectReference Include="..\..\Host\Web\Web.csproj"/>
+  </ItemGroup>
+
 </Project>

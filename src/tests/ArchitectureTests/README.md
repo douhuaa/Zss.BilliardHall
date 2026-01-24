@@ -15,11 +15,13 @@
 位于 `ADR/` 子目录下，每个 ADR 文档对应一个测试类：
 
 #### ADR-0000: 架构测试元规则
+
 - **测试类**: `ADR_0000_Architecture_Tests`
 - **目的**: 确保每条 ADR 都有唯一对应的架构测试类
 - **核心约束**: ADR 与测试类的一一映射关系
 
 #### ADR-0001: 模块化单体与垂直切片架构
+
 - **测试类**: `ADR_0001_Architecture_Tests`
 - **测试数量**: 11 个测试
 - **核心约束**:
@@ -31,6 +33,7 @@
   - 契约是简单数据结构（不含业务方法）
 
 #### ADR-0002: Platform / Application / Host 三层启动体系
+
 - **测试类**: `ADR_0002_Architecture_Tests`
 - **测试数量**: 13 个测试
 - **核心约束**:
@@ -42,6 +45,7 @@
   - 三层依赖方向验证
 
 #### ADR-0003: 命名空间与项目边界规范
+
 - **测试类**: `ADR_0003_Architecture_Tests`
 - **测试数量**: 9 个测试
 - **核心约束**:
@@ -51,6 +55,7 @@
   - 禁止不规范命名空间模式
 
 #### ADR-0004: 中央包管理 (CPM) 规范
+
 - **测试类**: `ADR_0004_Architecture_Tests`
 - **测试数量**: 9 个测试
 - **核心约束**:
@@ -61,6 +66,7 @@
   - 测试框架版本一致性
 
 #### ADR-0005: 应用内交互模型与执行边界
+
 - **测试类**: `ADR_0005_Architecture_Tests`
 - **测试数量**: 12 个测试
 - **核心约束**:
@@ -119,8 +125,6 @@ dotnet test src/tests/ArchitectureTests -c Release
 
 如果架构测试失败，CI 将阻断合并，确保架构规范得到严格执行。
 
-
-
 ## 常见问题
 
 ### 问题：测试失败提示"未找到模块程序集"
@@ -128,6 +132,7 @@ dotnet test src/tests/ArchitectureTests -c Release
 **原因**：模块尚未构建，测试无法加载 DLL。
 
 **解决方法**：
+
 ```bash
 dotnet build
 dotnet test src/tests/ArchitectureTests
@@ -138,6 +143,7 @@ dotnet test src/tests/ArchitectureTests
 **原因**：本地使用 Debug 配置，CI 使用 Release 配置。
 
 **解决方法**：
+
 ```bash
 dotnet build -c Release
 export Configuration=Release
@@ -147,6 +153,7 @@ dotnet test src/tests/ArchitectureTests -c Release
 ### 问题：架构测试报告违规
 
 **处理步骤**：
+
 1. 查看测试输出，了解违规类型和位置
 2. 根据修复建议调整代码结构
 3. 重新运行测试验证修复
@@ -160,20 +167,20 @@ dotnet test src/tests/ArchitectureTests -c Release
 ✅ **ADR-0002**: Platform / Application / Host 三层启动体系  
 ✅ **ADR-0003**: 命名空间与项目边界规范  
 ✅ **ADR-0004**: 中央包管理 (CPM) 规范  
-✅ **ADR-0005**: 应用内交互模型与执行边界  
+✅ **ADR-0005**: 应用内交互模型与执行边界
 
 ### 未来增强方向
 
 1. **引入 Roslyn Analyzer**：做语义级别的静态检查
-   - 详见 [ADR-0005 执行级别分类](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
-   - Level 2 规则建议使用 Roslyn Analyzer 实现
+  - 详见 [ADR-0005 执行级别分类](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
+  - Level 2 规则建议使用 Roslyn Analyzer 实现
 2. **添加更多规则**：
-   - 异常处理规范（使用 DomainException）
-   - 数据库事务边界约束
-   - 日志记录规范
+  - 异常处理规范（使用 DomainException）
+  - 数据库事务边界约束
+  - 日志记录规范
 3. **格式化失败信息**：在 PR 模板中强制 ARCH-VIOLATION 字段
-   - 已实现：见 [.github/PULL_REQUEST_TEMPLATE.md](../../.github/PULL_REQUEST_TEMPLATE.md)
-   - 破例记录：见 [docs/summaries/governance/arch-violations.md](../../docs/summaries/governance/arch-violations.md)
+  - 已实现：见 [.github/PULL_REQUEST_TEMPLATE.md](../../.github/PULL_REQUEST_TEMPLATE.md)
+  - 破例记录：见 [docs/summaries/governance/arch-violations.md](../../docs/summaries/governance/arch-violations.md)
 4. **性能测试**：确保架构测试运行时间控制在合理范围内（当前 ~1s）
 5. **覆盖率报告**：生成 ADR 约束覆盖率报告
 
@@ -196,19 +203,19 @@ dotnet test src/tests/ArchitectureTests -c Release
 架构约束通过三层机制执行：
 
 1. **Level 1 - 静态可执行**（当前测试覆盖）
-   - NetArchTest 自动化检查
-   - CI 自动阻断
-   - 零容忍
+  - NetArchTest 自动化检查
+  - CI 自动阻断
+  - 零容忍
 
 2. **Level 2 - 语义半自动**（部分覆盖，建议增强）
-   - 当前：启发式检查（建议性）
-   - 建议：Roslyn Analyzer（自定义分析器）
-   - 详见 [ADR-0005 执行级别分类](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
+  - 当前：启发式检查（建议性）
+  - 建议：Roslyn Analyzer（自定义分析器）
+  - 详见 [ADR-0005 执行级别分类](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
 
 3. **Level 3 - 人工 Gate**（流程控制）
-   - PR 模板强制架构违规声明
-   - 架构师 Code Review
-   - 破例记录在 [arch-violations.md](../../docs/summaries/governance/arch-violations.md)
+  - PR 模板强制架构违规声明
+  - 架构师 Code Review
+  - 破例记录在 [arch-violations.md](../../docs/summaries/governance/arch-violations.md)
 
 ### 🔍 反作弊规则
 
@@ -241,6 +248,7 @@ ADR-0000 现已包含反作弊机制，确保架构测试不能被"形式化"：
 - **失败阻断**：如果任何架构测试失败，CI 将返回非 0 退出码，阻止 PR 合并
 
 CI 工作流程：
+
 1. Checkout 代码
 2. 设置 .NET SDK
 3. 恢复依赖 (`dotnet restore`)

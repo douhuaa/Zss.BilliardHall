@@ -37,12 +37,12 @@ graph TB
 
 ### 测试类型
 
-| 测试类型 | 目的 | 数量 | 执行频率 | 失败影响 |
-|---------|------|------|----------|---------|
-| **架构测试** | 强制执行架构约束 | ~50 | 每次提交 | 阻断 PR |
-| **单元测试** | 验证业务逻辑 | 大量 | 每次提交 | 阻断 PR |
-| **集成测试** | 验证模块协作 | 适量 | 每次提交 | 阻断 PR |
-| **E2E 测试** | 验证端到端流程 | 少量 | 定期 | 警告 |
+| 测试类型       | 目的       | 数量  | 执行频率 | 失败影响  |
+|------------|----------|-----|------|-------|
+| **架构测试**   | 强制执行架构约束 | ~50 | 每次提交 | 阻断 PR |
+| **单元测试**   | 验证业务逻辑   | 大量  | 每次提交 | 阻断 PR |
+| **集成测试**   | 验证模块协作   | 适量  | 每次提交 | 阻断 PR |
+| **E2E 测试** | 验证端到端流程  | 少量  | 定期   | 警告    |
 
 ---
 
@@ -59,28 +59,28 @@ graph TB
 ### 为什么架构测试最重要？
 
 1. **架构退化的第一道防线**
-   - 一旦架构违规合并，修复成本极高
-   - 技术债务会快速积累
+  - 一旦架构违规合并，修复成本极高
+  - 技术债务会快速积累
 
 2. **自动化执行架构决策**
-   - ADR 是文档，架构测试是执行
-   - 测试失败 = 违反宪法
+  - ADR 是文档，架构测试是执行
+  - 测试失败 = 违反宪法
 
 3. **团队共识的守护者**
-   - 新成员可能不了解约束
-   - 老成员可能疏忽
+  - 新成员可能不了解约束
+  - 老成员可能疏忽
 
 ### ADR 与测试映射
 
 每个 ADR 都有对应的测试类：
 
-| ADR | 测试类 | 关键测试 |
-|-----|--------|---------|
-| [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) | `ADR_0001_Architecture_Tests.cs` | 模块隔离、垂直切片 |
-| [ADR-0002](adr/constitutional/ADR-0002-platform-application-host-bootstrap.md) | `ADR_0002_Architecture_Tests.cs` | 层级依赖、启动体系 |
-| [ADR-0003](adr/constitutional/ADR-0003-namespace-rules.md) | `ADR_0003_Architecture_Tests.cs` | 命名空间规则 |
-| [ADR-0004](adr/constitutional/ADR-0004-Cpm-Final.md) | `ADR_0004_Architecture_Tests.cs` | 包管理 |
-| [ADR-0005](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) | `ADR_0005_Architecture_Tests.cs` | Handler 模式、CQRS |
+| ADR                                                                                     | 测试类                              | 关键测试            |
+|-----------------------------------------------------------------------------------------|----------------------------------|-----------------|
+| [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) | `ADR_0001_Architecture_Tests.cs` | 模块隔离、垂直切片       |
+| [ADR-0002](adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)          | `ADR_0002_Architecture_Tests.cs` | 层级依赖、启动体系       |
+| [ADR-0003](adr/constitutional/ADR-0003-namespace-rules.md)                              | `ADR_0003_Architecture_Tests.cs` | 命名空间规则          |
+| [ADR-0004](adr/constitutional/ADR-0004-Cpm-Final.md)                                    | `ADR_0004_Architecture_Tests.cs` | 包管理             |
+| [ADR-0005](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)          | `ADR_0005_Architecture_Tests.cs` | Handler 模式、CQRS |
 
 ### 运行架构测试
 
@@ -100,11 +100,13 @@ dotnet test src/tests/ArchitectureTests/ --logger "console;verbosity=detailed"
 #### IDE 中运行
 
 **Visual Studio / Rider**：
+
 1. 打开 Test Explorer
 2. 右键 `ArchitectureTests` 项目
 3. 选择 "Run Tests"
 
 **VS Code**：
+
 1. 安装 .NET Test Explorer 扩展
 2. 在侧边栏打开 Testing 视图
 3. 运行 ArchitectureTests
@@ -126,11 +128,13 @@ dotnet test src/tests/ArchitectureTests/ --logger "console;verbosity=detailed"
 #### 步骤 2：定位违规代码
 
 失败消息通常包含：
+
 - 违反的规则
 - 违规的类型或程序集
 - 相关的 ADR
 
 示例：
+
 ```
 Test Failed: Platform_Should_Not_Depend_On_Application
 违规类型: Zss.BilliardHall.Platform.SomeClass
@@ -150,13 +154,13 @@ dotnet test src/tests/ArchitectureTests/
 
 ### 常见架构测试失败
 
-| 失败测试 | 原因 | 修复方案 |
-|---------|------|---------|
-| `Modules_Should_Not_Reference_Other_Modules` | 模块间直接引用 | 使用事件/契约/原始类型 |
-| `Platform_Should_Not_Depend_On_Application` | 层级依赖违规 | 移除依赖或重新设计 |
-| `Namespaces_Should_Match_Folder_Structure` | 命名空间不匹配 | 调整命名空间或目录 |
-| `Packages_Should_Use_Central_Management` | 包版本未集中管理 | 移到 Directory.Packages.props |
-| `CommandHandlers_Should_Not_Return_DTOs` | Handler 返回类型错误 | 仅返回 ID |
+| 失败测试                                         | 原因             | 修复方案                        |
+|----------------------------------------------|----------------|-----------------------------|
+| `Modules_Should_Not_Reference_Other_Modules` | 模块间直接引用        | 使用事件/契约/原始类型                |
+| `Platform_Should_Not_Depend_On_Application`  | 层级依赖违规         | 移除依赖或重新设计                   |
+| `Namespaces_Should_Match_Folder_Structure`   | 命名空间不匹配        | 调整命名空间或目录                   |
+| `Packages_Should_Use_Central_Management`     | 包版本未集中管理       | 移到 Directory.Packages.props |
+| `CommandHandlers_Should_Not_Return_DTOs`     | Handler 返回类型错误 | 仅返回 ID                      |
 
 ---
 
@@ -453,22 +457,24 @@ echo "✅ All tests passed! Ready to push."
 
 ### 目标
 
-| 类型 | 目标覆盖率 | 说明 |
-|------|----------|------|
-| **架构测试** | 100% | 所有 ADR 必须有测试 |
-| **领域模型** | 90%+ | 所有业务逻辑必须测试 |
-| **Handler** | 85%+ | 所有用例必须测试 |
-| **基础设施** | 60%+ | 关键路径必须测试 |
+| 类型          | 目标覆盖率 | 说明           |
+|-------------|-------|--------------|
+| **架构测试**    | 100%  | 所有 ADR 必须有测试 |
+| **领域模型**    | 90%+  | 所有业务逻辑必须测试   |
+| **Handler** | 85%+  | 所有用例必须测试     |
+| **基础设施**    | 60%+  | 关键路径必须测试     |
 
 ### 不追求 100% 覆盖率
 
 **可以跳过**：
+
 - ⏭️ 简单的 DTO/契约（无逻辑）
 - ⏭️ 琐碎的属性 getter/setter
 - ⏭️ 基础设施样板代码
 - ⏭️ 自动生成的代码
 
 **必须测试**：
+
 - ✅ 领域模型中的所有业务逻辑
 - ✅ 所有 Handler 编排流程
 - ✅ 所有边界情况和验证
@@ -480,13 +486,13 @@ echo "✅ All tests passed! Ready to push."
 
 ### 推荐工具
 
-| 工具 | 用途 | 安装 |
-|------|------|------|
-| **xUnit** | 测试框架 | 默认集成 |
-| **FluentAssertions** | 断言库 | `dotnet add package FluentAssertions` |
-| **NSubstitute** | Mock 框架 | `dotnet add package NSubstitute` |
-| **NetArchTest.Rules** | 架构测试 | 已集成 |
-| **Bogus** | 测试数据生成 | `dotnet add package Bogus` |
+| 工具                    | 用途      | 安装                                    |
+|-----------------------|---------|---------------------------------------|
+| **xUnit**             | 测试框架    | 默认集成                                  |
+| **FluentAssertions**  | 断言库     | `dotnet add package FluentAssertions` |
+| **NSubstitute**       | Mock 框架 | `dotnet add package NSubstitute`      |
+| **NetArchTest.Rules** | 架构测试    | 已集成                                   |
+| **Bogus**             | 测试数据生成  | `dotnet add package Bogus`            |
 
 ### 测试数据构建器
 
@@ -547,15 +553,15 @@ graph TB
 ### 单元测试失败
 
 1. **确定是 bug 还是测试问题**
-   - 查看测试是否正确描述了预期行为
-   - 确认业务逻辑是否正确
+  - 查看测试是否正确描述了预期行为
+  - 确认业务逻辑是否正确
 
 2. **修复 bug 而非测试**
-   - 除非测试本身有问题，否则修复代码
+  - 除非测试本身有问题，否则修复代码
 
 3. **确保所有相关测试通过**
-   - 不要只修复失败的测试
-   - 运行整个测试套件
+  - 不要只修复失败的测试
+  - 运行整个测试套件
 
 ---
 
@@ -585,16 +591,19 @@ graph TB
 ## 📚 相关资源
 
 ### 内部文档
+
 - [架构测试 README](../src/tests/ArchitectureTests/README.md)
 - [架构测试失败诊断](copilot/architecture-test-failures.md)
 - [CI/CD 指南](ci-cd-guide.md)
 - [架构自动化验证系统](architecture-automation-verification.md)
 
 ### ADR
+
 - [ADR-0000：架构测试与 CI 治理](adr/governance/ADR-0000-architecture-tests.md)
 - [ADR-0001~0005：宪法层 ADR](adr/constitutional/)
 
 ### 外部参考
+
 - [xUnit Documentation](https://xunit.net/)
 - [FluentAssertions](https://fluentassertions.com/)
 - [NetArchTest](https://github.com/BenMorris/NetArchTest)
@@ -606,6 +615,7 @@ graph TB
 ### Q: 架构测试失败但我认为是误报怎么办？
 
 **A:** 流程：
+
 1. 复制失败日志给 Copilot 分析
 2. 查阅相关 ADR 确认规则
 3. 如果确实是误报，在 Issue 中讨论
@@ -614,6 +624,7 @@ graph TB
 ### Q: 单元测试很难写怎么办？
 
 **A:** 可能原因：
+
 - 类的职责太多（违反单一职责原则）
 - 依赖太多（考虑重构）
 - 测试的是实现而非行为
@@ -623,6 +634,7 @@ graph TB
 ### Q: 测试覆盖率要求多少？
 
 **A:** 不追求数字，追求质量：
+
 - ✅ 所有业务逻辑有测试
 - ✅ 所有边界情况有测试
 - ✅ 所有错误场景有测试
@@ -635,6 +647,7 @@ graph TB
 ### 场景 1：环境依赖问题
 
 **错误信息**：
+
 ```
 System.InvalidOperationException: Unable to resolve service for type 'IRepository'
 ```
@@ -642,6 +655,7 @@ System.InvalidOperationException: Unable to resolve service for type 'IRepositor
 **原因**：依赖注入配置缺失或测试 Fixture 未正确设置
 
 **解决方案**：
+
 ```csharp
 // 在测试 Fixture 中正确注册依赖
 services.AddScoped<IRepository, TestRepository>();
@@ -655,6 +669,7 @@ var repository = Substitute.For<IRepository>();
 ### 场景 2：数据库连接问题
 
 **错误信息**：
+
 ```
 Npgsql.NpgsqlException: Connection refused
 ```
@@ -662,6 +677,7 @@ Npgsql.NpgsqlException: Connection refused
 **原因**：PostgreSQL 未启动或连接字符串配置错误
 
 **解决方案**：
+
 ```bash
 # 检查 PostgreSQL 是否运行
 sudo service postgresql status
@@ -680,6 +696,7 @@ docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=test postgres:latest
 ### 场景 3：并发测试冲突
 
 **错误信息**：
+
 ```
 System.InvalidOperationException: A second operation started on this context
 ```
@@ -687,6 +704,7 @@ System.InvalidOperationException: A second operation started on this context
 **原因**：多个测试共享 DbContext 实例
 
 **解决方案**：
+
 ```csharp
 // 每个测试使用独立的 DbContext
 public class TestBase : IDisposable
@@ -711,6 +729,7 @@ public class TestBase : IDisposable
 ### 场景 4：异步测试超时
 
 **错误信息**：
+
 ```
 Test 'SomeTest' exceeded timeout of 30000ms
 ```
@@ -718,6 +737,7 @@ Test 'SomeTest' exceeded timeout of 30000ms
 **原因**：异步操作未正确等待或死锁
 
 **解决方案**：
+
 ```csharp
 // ❌ 错误：混用 .Result 导致死锁
 var result = someAsyncMethod().Result;
@@ -735,6 +755,7 @@ public async Task LongRunningTest() { }
 ### 场景 5：Fixture 初始化失败
 
 **错误信息**：
+
 ```
 System.Exception: The following constructor parameters did not have matching fixture data
 ```
@@ -742,6 +763,7 @@ System.Exception: The following constructor parameters did not have matching fix
 **原因**：测试类需要的 Fixture 未在 Collection 中定义
 
 **解决方案**：
+
 ```csharp
 // 定义 Collection
 [CollectionDefinition("Integration")]
@@ -767,6 +789,7 @@ public class MyIntegrationTests
 ### 场景 6：Mocking 框架使用错误
 
 **错误信息**：
+
 ```
 NSubstitute.Exceptions.ReceivedCallsException: Expected to receive exactly 1 call matching...
 ```
@@ -774,6 +797,7 @@ NSubstitute.Exceptions.ReceivedCallsException: Expected to receive exactly 1 cal
 **原因**：Mock 对象未按预期调用
 
 **解决方案**：
+
 ```csharp
 // 检查 Mock 设置
 var mock = Substitute.For<IService>();
@@ -800,11 +824,13 @@ foreach (var call in calls)
 ### Q: CI 中测试通过但本地失败？
 
 **A:** 常见原因：
+
 1. **环境差异**：检查 .NET 版本、依赖版本
 2. **配置文件**：CI 可能使用不同的 appsettings
 3. **时区问题**：使用 UTC 时间而非本地时间
 
 **解决方案**：
+
 ```bash
 # 使用 CI 相同的 .NET 版本
 dotnet --version
@@ -823,11 +849,13 @@ DateTime.Now     # ❌ 避免使用本地时间
 ### Q: 本地测试通过但 CI 失败？
 
 **A:** 常见原因：
+
 1. **并发问题**：CI 可能并行运行测试
 2. **资源限制**：CI 环境内存或 CPU 受限
 3. **文件路径**：使用了绝对路径而非相对路径
 
 **解决方案**：
+
 ```bash
 # 本地模拟并行测试
 dotnet test --parallel
@@ -845,6 +873,7 @@ Path.Combine(AppContext.BaseDirectory, "data", "test.json")  # ✅
 ### Q: 架构测试在 CI 中特别慢？
 
 **A:** 优化建议：
+
 ```yaml
 # .github/workflows/test.yml
 - name: Run Architecture Tests
@@ -856,8 +885,8 @@ Path.Combine(AppContext.BaseDirectory, "data", "test.json")  # ✅
 
 ## 📜 版本历史
 
-| 版本 | 日期 | 变更说明 |
-|------|------|----------|
+| 版本  | 日期         | 变更说明          |
+|-----|------------|---------------|
 | 1.0 | 2026-01-22 | 初始版本，整合所有测试文档 |
 
 ---

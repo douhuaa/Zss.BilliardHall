@@ -47,7 +47,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 ## 架构文档
 
 > 💡 **唯一入口**：所有文档通过 **[文档导航中心 (docs/index.md)](docs/index.md)** 统一访问
-> 
+>
 > 按角色和任务快速找到所需文档，避免在多个 README 间跳转
 
 完整的架构文档请查看 [docs/](docs/) 目录：
@@ -82,6 +82,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 ### 快速开始
 
 #### 📚 阅读 Copilot 文档
+
 - **[Copilot 角色定位](docs/copilot/README.md)** - 了解 Copilot 在本项目中的作用
 - **[ADR 提示词库](docs/copilot/)** - 各 ADR 的 Copilot 使用指南
 - **[架构测试失败解释](docs/copilot/architecture-test-failures.md)** - CI 失败时的诊断指南
@@ -89,12 +90,14 @@ dotnet run --project src/Host/Worker/Worker.csproj
 #### 🔧 使用 Copilot
 
 **场景 1：开发新功能前**
+
 ```
 询问 Copilot：
 "我想在 Orders 模块中添加一个新的用例，有哪些架构约束？"
 ```
 
 **场景 2：架构测试失败**
+
 ```
 询问 Copilot：
 "请根据以下架构测试失败日志，解释违规原因并提供修复建议
@@ -104,6 +107,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 ```
 
 **场景 3：提交 PR 前**
+
 ```
 询问 Copilot：
 "请基于 ADR-0001 至 ADR-0005 审查本 PR 的变更，检查是否存在架构违规。"
@@ -118,6 +122,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 ### PR 要求
 
 所有 PR 必须完成 [Copilot 参与检查清单](.github/PULL_REQUEST_TEMPLATE.md#-copilot-参与检查清单)：
+
 - ✅ 已使用 Copilot 审查架构合规性
 - ✅ Copilot 未发现违规问题或已修复
 - ✅ 已评估并采纳 Copilot 的合理建议
@@ -226,6 +231,7 @@ Zss.BilliardHall/
 └── tests/
     └── ArchitectureTests/     # 架构测试
 ```
+
 </details>
 
 ## 核心概念
@@ -239,6 +245,7 @@ Zss.BilliardHall/
 - 更多模块待添加...
 
 每个模块：
+
 - 拥有独立的程序集
 - 不能直接引用其他模块
 - 通过领域事件或数据契约通信
@@ -265,6 +272,7 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 ```
 
 测试覆盖：
+
 - ✅ 模块隔离（不能相互引用）
 - ✅ 垂直切片（禁止横向 Service）
 - ✅ 契约使用规则

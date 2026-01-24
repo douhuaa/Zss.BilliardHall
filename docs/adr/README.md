@@ -11,7 +11,8 @@
 
 > **本目录下的各层 README 和 Copilot Prompts（如 `docs/copilot/adr-XXXX.prompts.md`）仅为说明、辅导和快速参考之用。**
 >
-> **在架构判定、CI 校验、测试执行时，唯一判决依据为各 ADR 的正文内容（如 `ADR-0001-modular-monolith-vertical-slice-architecture.md`）。**
+> **在架构判定、CI 校验、测试执行时，唯一判决依据为各 ADR
+的正文内容（如 `ADR-0001-modular-monolith-vertical-slice-architecture.md`）。**
 >
 > - ✅ ADR 正文 = 宪法，具有最高权威
 > - 📖 README / Prompts = 辅导材料，帮助理解和应用
@@ -136,7 +137,7 @@ ADR-0900~0999    → 治理层（governance/）
 | 命名空间和项目如何组织     | [ADR-0003](constitutional/ADR-0003-namespace-rules.md)                              | constitutional/ | 命名空间与工程映射规范      |
 | 依赖包如何管理         | [ADR-0004](constitutional/ADR-0004-Cpm-Final.md)                                    | constitutional/ | 中央包管理（CPM）       |
 | 业务用例如何执行        | [ADR-0005](constitutional/ADR-0005-Application-Interaction-Model-Final.md)          | constitutional/ | 应用内运行模型          |
-| **领域事件如何命名**     | **[ADR-120](structure/ADR-120-domain-event-naming-convention.md)**                 | structure/      | **领域事件命名规范与组织** |
+| **领域事件如何命名**    | **[ADR-120](structure/ADR-120-domain-event-naming-convention.md)**                  | structure/      | **领域事件命名规范与组织**  |
 | 架构如何自动化校验       | [ADR-0000](governance/ADR-0000-architecture-tests.md)                               | governance/     | 架构测试与 CI 治理      |
 | **如何新增和修订 ADR** | **[ADR-0900](governance/ADR-0900-adr-process.md)**                                  | governance/     | **ADR 新增与修订流程**  |
 | 宪法层的地位和演进规则     | [宪法层说明](constitutional/ARCHITECTURE-CONSTITUTIONAL-LAYER.md)                        | constitutional/ | 宪法层定义与修订流程       |
@@ -457,6 +458,7 @@ ADR-0900~0999    → 治理层（governance/）
 
 提供快速查询的表格或清单。
 ```
+
 ---
 
 ## 📚 文档维护
@@ -468,18 +470,18 @@ ADR-0900~0999    → 治理层（governance/）
 **简要说明**：
 
 1. **宪法层 ADR（ADR-0001~0009）**：
-    - 需架构委员会全体一致同意
-    - 至少 2 周公示期
-    - 修订历史永久记录
+  - 需架构委员会全体一致同意
+  - 至少 2 周公示期
+  - 修订历史永久记录
 
 2. **治理层 ADR（ADR-0000, 900~999）**：
-    - 需 Tech Lead + 架构师审批
-    - 影响流程和工具的重大变更
+  - 需 Tech Lead + 架构师审批
+  - 影响流程和工具的重大变更
 
 3. **其他层 ADR（100~399）**：
-    - 提交 RFC（Request for Comments）
-    - 经 Tech Lead 或架构师审批
-    - 记录在 ADR 中
+  - 提交 RFC（Request for Comments）
+  - 经 Tech Lead 或架构师审批
+  - 记录在 ADR 中
 
 ### 文档归档
 

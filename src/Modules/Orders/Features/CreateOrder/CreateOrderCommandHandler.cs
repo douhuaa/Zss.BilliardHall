@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Modules.Orders.Features.CreateOrder;
+﻿namespace Zss.BilliardHall.Modules.Orders.Features.CreateOrder;
 
 /// <summary>
 /// 创建订单命令处理器
@@ -13,11 +13,11 @@ public class CreateOrderCommandHandler
 {
     // ❌ 错误示例：
     // private readonly IMemberQueries _memberQueries; // 不应依赖其他模块的查询
-    
+
     // ✅ 正确示例：
     // private readonly IMessageBus _bus; // 用于发布命令/事件
     // private readonly IDocumentSession _session; // 用于持久化
-    
+
     public async Task<Guid> Handle(CreateOrderCommand command)
     {
         // 1. 验证业务规则（台号是否可用等）
@@ -25,13 +25,13 @@ public class CreateOrderCommandHandler
         // 3. 创建订单聚合根
         // 4. 持久化
         // 5. 发布 OrderCreated 事件
-        
+
         // 示例代码（未实现）
         var orderId = Guid.NewGuid();
-        
+
         // TODO: 实现业务逻辑
         await Task.CompletedTask;
-        
+
         return orderId;
     }
 }

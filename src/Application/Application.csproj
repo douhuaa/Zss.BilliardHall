@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\Platform\Platform.csproj" />
+    <ProjectReference Include="..\Platform\Platform.csproj"/>
   </ItemGroup>
 </Project>

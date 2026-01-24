@@ -62,6 +62,7 @@ Copilot 在解释架构测试失败时，应遵循以下模板：
 #### 场景 1.1：模块间非法依赖
 
 **典型失败消息**：
+
 ```
 ❌ Modules_Should_Not_Reference_Other_Modules
    Expected: No references from 'Orders' to 'Members'
@@ -108,6 +109,7 @@ grep -r "Zss.BilliardHall.Modules.Members.Domain" src/Modules/Orders/
 #### 步骤 2：根据场景选择合规方式
 
 **场景 A：需要传递 Member 标识**
+
 ```csharp
 // ❌ 错误
 using Zss.BilliardHall.Modules.Members.Domain;
@@ -119,6 +121,7 @@ var order = new Order(memberId, items); // Guid
 ```
 
 **场景 B：需要查询 Member 数据**
+
 ```csharp
 // ❌ 错误
 using Zss.BilliardHall.Modules.Members.Domain;
@@ -131,6 +134,7 @@ if (!memberDto.IsActive) throw new Exception();
 ```
 
 **场景 C：需要通知 Member 模块**
+
 ```csharp
 // ❌ 错误
 using Zss.BilliardHall.Modules.Members.Domain;
@@ -161,6 +165,7 @@ dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_0001"
 
 - [ADR-0001 完整文档](../adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 - [ADR-0001 提示词库](adr-0001.prompts.md)
+
 ```
 
 ---
@@ -169,9 +174,11 @@ dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_0001"
 
 **典型失败消息**：
 ```
+
 ❌ Modules_Should_Not_Have_Service_Layer
-   Expected: No types ending with 'Service'
-   Actual: Found 'OrderService' in Orders module
+Expected: No types ending with 'Service'
+Actual: Found 'OrderService' in Orders module
+
 ```
 
 **Copilot 解释重点**：
@@ -187,9 +194,11 @@ dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_0001"
 
 **典型失败消息**：
 ```
+
 ❌ Program_Should_Be_Minimal
-   Expected: Program.cs <= 30 lines
-   Actual: Program.cs has 67 lines
+Expected: Program.cs <= 30 lines
+Actual: Program.cs has 67 lines
+
 ```
 
 **Copilot 解释重点**：
@@ -203,9 +212,11 @@ dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_0001"
 
 **典型失败消息**：
 ```
+
 ❌ Platform_Should_Not_Depend_On_Application
-   Expected: No dependency from Platform to Application
-   Actual: Found reference to 'Zss.BilliardHall.Application'
+Expected: No dependency from Platform to Application
+Actual: Found reference to 'Zss.BilliardHall.Application'
+
 ```
 
 **Copilot 解释重点**：
@@ -221,9 +232,11 @@ dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_0001"
 
 **典型失败消息**：
 ```
+
 ❌ Namespace_Should_Match_Directory_Structure
-   Expected: Zss.BilliardHall.Modules.Orders.Domain
-   Actual: Zss.BilliardHall.Orders
+Expected: Zss.BilliardHall.Modules.Orders.Domain
+Actual: Zss.BilliardHall.Orders
+
 ```
 
 **Copilot 解释重点**：
@@ -239,9 +252,11 @@ dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_0001"
 
 **典型失败消息**：
 ```
+
 ❌ Projects_Should_Not_Specify_Package_Version
-   Expected: No Version attribute in PackageReference
-   Actual: Found Version="7.0.0" in Orders.csproj
+Expected: No Version attribute in PackageReference
+Actual: Found Version="7.0.0" in Orders.csproj
+
 ```
 
 **Copilot 解释重点**：
@@ -257,9 +272,11 @@ dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_0001"
 
 **典型失败消息**：
 ```
+
 ❌ Endpoints_Should_Not_Contain_Business_Logic
-   Expected: Endpoints only map and forward
-   Actual: Found business logic in CreateOrderEndpoint
+Expected: Endpoints only map and forward
+Actual: Found business logic in CreateOrderEndpoint
+
 ```
 
 **Copilot 解释重点**：
@@ -320,6 +337,7 @@ dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_0001"
 ### 提问技巧
 
 **好的提问方式**：
+
 ```
 请根据以下架构测试失败日志，解释违规原因并提供修复建议：
 
@@ -327,6 +345,7 @@ dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_0001"
 ```
 
 **提供额外上下文**：
+
 ```
 我在实现 [功能描述] 时，遇到了以下架构测试失败：
 
@@ -371,7 +390,9 @@ dotnet test
 
 1. **在 PR 标题中添加 `[ARCH-VIOLATION]` 前缀**
    ```
-   [ARCH-VIOLATION] feat(Orders): 临时允许同步调用 Members
+
+[ARCH-VIOLATION] feat(Orders): 临时允许同步调用 Members
+
    ```
 
 2. **在 PR 描述中填写破例详情**：
@@ -442,12 +463,12 @@ dotnet test
 
 ### ADR 与测试类映射
 
-| ADR | 测试类 | 主要检查项 |
-|-----|--------|----------|
-| ADR-0001 | ADR_0001_Architecture_Tests | 模块隔离、垂直切片 |
+| ADR      | 测试类                         | 主要检查项           |
+|----------|-----------------------------|-----------------|
+| ADR-0001 | ADR_0001_Architecture_Tests | 模块隔离、垂直切片       |
 | ADR-0002 | ADR_0002_Architecture_Tests | 三层依赖、Program.cs |
-| ADR-0003 | ADR_0003_Architecture_Tests | 命名空间一致性 |
-| ADR-0004 | ADR_0004_Architecture_Tests | CPM、依赖层级 |
+| ADR-0003 | ADR_0003_Architecture_Tests | 命名空间一致性         |
+| ADR-0004 | ADR_0004_Architecture_Tests | CPM、依赖层级        |
 | ADR-0005 | ADR_0005_Architecture_Tests | CQRS、Handler 职责 |
 
 ---
@@ -481,6 +502,6 @@ dotnet test src/tests/ArchitectureTests/ --verbosity detailed
 
 ## 版本历史
 
-| 版本 | 日期       | 变更说明 |
-|------|------------|----------|
-| 1.0  | 2026-01-21 | 初始版本 |
+| 版本  | 日期         | 变更说明 |
+|-----|------------|------|
+| 1.0 | 2026-01-21 | 初始版本 |

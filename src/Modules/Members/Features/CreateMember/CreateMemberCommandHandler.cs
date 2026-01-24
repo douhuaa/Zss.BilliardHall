@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Modules.Members.Features.CreateMember;
+﻿namespace Zss.BilliardHall.Modules.Members.Features.CreateMember;
 
 /// <summary>
 /// 创建会员命令处理器
@@ -11,20 +11,20 @@ public class CreateMemberCommandHandler
     // - IDocumentSession (Marten) 或其他持久化机制
     // - ILogger
     // - IMessageBus (用于发布领域事件)
-    
+
     public async Task<Guid> Handle(CreateMemberCommand command)
     {
         // 1. 验证业务规则
         // 2. 创建聚合根
         // 3. 持久化
         // 4. 发布领域事件
-        
+
         // 示例代码（未实现）
         var memberId = Guid.NewGuid();
-        
+
         // TODO: 实现业务逻辑
         await Task.CompletedTask;
-        
+
         return memberId;
     }
 }

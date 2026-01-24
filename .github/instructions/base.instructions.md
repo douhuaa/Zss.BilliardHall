@@ -24,6 +24,7 @@
 > 当用户请求明确违反 ADR 正文时，Copilot 必须拒绝生成代码，仅解释违规原因并指引 ADR。
 
 关键原则：
+
 - 当无法确认 ADR 明确允许某行为时，Copilot 必须假定该行为被禁止。
 - 所有核心约束详见 `docs/adr/constitutional/` 等主 ADR 文件
 
@@ -71,17 +72,20 @@ Modules（强隔离）   BuildingBlocks
 ```
 
 **绝不允许：**
+
 - Platform 依赖 Application/Modules/Host
 - Application 依赖 Host
 - Modules 直接依赖其他 Modules
 - Host 包含业务逻辑
 
 模块通信仅允许：
+
 1. 领域事件（异步，发布者不感知订阅方）
 2. 数据契约（只读 DTO）
 3. 原始类型（如 Guid/string/int）
 
 严禁行为：
+
 - 直接引用其他模块类型
 - 共享领域模型
 - 同步跨模块调用
@@ -103,17 +107,17 @@ Modules（强隔离）   BuildingBlocks
 ## 参考资料优先级
 
 1. **ADR 正文（宪法层优先）**
-    - docs/adr/constitutional/ADR-XXXX-xxx.md
-    - docs/adr/structure/ADR-XXXX-xxx.md
-    - docs/adr/runtime/ADR-XXXX-xxx.md
-    - docs/adr/technical/ADR-XXXX-xxx.md
-    - docs/adr/governance/ADR-XXXX-xxx.md
+  - docs/adr/constitutional/ADR-XXXX-xxx.md
+  - docs/adr/structure/ADR-XXXX-xxx.md
+  - docs/adr/runtime/ADR-XXXX-xxx.md
+  - docs/adr/technical/ADR-XXXX-xxx.md
+  - docs/adr/governance/ADR-XXXX-xxx.md
 
 2. **辅导材料（仅供参考）**
-    - docs/adr/README.md
-    - docs/copilot/adr-XXXX.prompts.md
-    - docs/copilot/architecture-test-failures.md
-    - .github/instructions/
+  - docs/adr/README.md
+  - docs/copilot/adr-XXXX.prompts.md
+  - docs/copilot/architecture-test-failures.md
+  - .github/instructions/
 
 遇到内容冲突，优先 ADR 正文，辅导材料仅作补充解释。
 
@@ -122,13 +126,14 @@ Modules（强隔离）   BuildingBlocks
 ## 提交与 PR 规范
 
 - 所有提交信息必须用简体中文，并遵循 [Conventional Commits](https://www.conventionalcommits.org/zh-hans/v1.0.0/) 规范
-    - feat(Module): ...
-    - fix(ADR-XXXX): ...
-    - docs(copilot): ...
+  - feat(Module): ...
+  - fix(ADR-XXXX): ...
+  - docs(copilot): ...
 - PR 必须标题+正文均为简体中文，内容清晰简洁
 - 代码示例可用英文注释和代码，技术术语如 API/DTO/CQRS 可保留英文
 
 示例：
+
 - ✅ 正确：`完成 ADR-0002 至 ADR-0005 的测试映射标准化`
 - ❌ 错误：`Complete ADR-test mapping standardization for ADR-0002 through ADR-0005`
 

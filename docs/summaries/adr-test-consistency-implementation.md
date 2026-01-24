@@ -43,12 +43,13 @@
 
 ✅ **创建了两个验证脚本**：
 
-| 脚本 | 路径 | 用途 |
-|------|------|------|
-| PowerShell 版本 | `scripts/validate-adr-test-mapping.ps1` | Windows 环境使用 |
-| Bash 版本 | `scripts/validate-adr-test-mapping.sh` | Linux/macOS 环境使用 |
+| 脚本            | 路径                                      | 用途               |
+|---------------|-----------------------------------------|------------------|
+| PowerShell 版本 | `scripts/validate-adr-test-mapping.ps1` | Windows 环境使用     |
+| Bash 版本       | `scripts/validate-adr-test-mapping.sh`  | Linux/macOS 环境使用 |
 
 **功能特性**：
+
 - 自动扫描 `docs/adr/` 下的 ADR 文档
 - 提取标记为 **【必须架构测试覆盖】** 的约束
 - 扫描 `src/tests/ArchitectureTests/ADR/` 下的测试文件
@@ -57,6 +58,7 @@
 - 失败时提供清晰的修复指导
 
 **示例输出**：
+
 ```
 📊 验证总结
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -82,6 +84,7 @@ ADR 文档统计：
 文件：`.github/workflows/architecture-tests.yml`
 
 **新增步骤**：
+
 ```yaml
 - name: Validate ADR-Test Mapping
   run: |
@@ -92,10 +95,12 @@ ADR 文档统计：
 ```
 
 **触发时机**：
+
 - PR 提交时自动运行
 - 合并到 main 分支时自动运行
 
 **失败时**：
+
 - CI 流程失败，阻止合并
 - 提供详细的不一致报告
 
@@ -106,6 +111,7 @@ ADR 文档统计：
 文件：`.github/PULL_REQUEST_TEMPLATE.md`
 
 **新增章节**：
+
 ```markdown
 ## 📋 ADR-测试一致性检查
 
@@ -119,22 +125,24 @@ ADR 文档统计：
 
 ✅ **创建了 3 个核心文档**：
 
-| 文档 | 路径 | 用途 |
-|------|------|------|
-| ADR-测试映射规范 | `docs/ADR-TEST-MAPPING-SPECIFICATION.md` | 完整的技术规范 |
-| 开发者指南 | `docs/ADR-TEST-CONSISTENCY-DEVELOPER-GUIDE.md` | 场景化使用指南 |
-| 实施总结 | `docs/summaries/adr-test-consistency-implementation.md` | 本文档 |
+| 文档         | 路径                                                      | 用途      |
+|------------|---------------------------------------------------------|---------|
+| ADR-测试映射规范 | `docs/ADR-TEST-MAPPING-SPECIFICATION.md`                | 完整的技术规范 |
+| 开发者指南      | `docs/ADR-TEST-CONSISTENCY-DEVELOPER-GUIDE.md`          | 场景化使用指南 |
+| 实施总结       | `docs/summaries/adr-test-consistency-implementation.md` | 本文档     |
 
 ### 2.5 ADR 文档更新
 
 ✅ **更新了治理层 ADR**：
 
 **ADR-0000（架构测试与 CI 治理）**：
+
 - 新增"ADR-测试内容映射机制"章节
 - 明确三方同步要求（ADR ↔ 测试 ↔ Prompts）
 - 提供验证工具使用说明
 
 **ADR-0900（ADR 新增与修订流程）**：
+
 - 新增"运行映射验证"步骤（2.8）
 - 强化 Prompts 文件中必须包含"测试覆盖自检清单"
 - 补充测试代码规范示例
@@ -144,11 +152,13 @@ ADR 文档统计：
 ✅ **为 ADR-0001 提供了完整示例**：
 
 **ADR 文档**（`docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md`）：
+
 - 添加 **【必须架构测试覆盖】** 标记
 - 新增"快速参考表"，包含测试覆盖映射
 - 标注每条约束是否需要测试
 
 **Prompts 文件**（`docs/copilot/adr-0001.prompts.md`）：
+
 - 新增"六、测试覆盖自检清单"章节
 - 包含 ADR-测试映射表
 - 提供如何编写符合映射要求的测试示例
@@ -161,6 +171,7 @@ ADR 文档统计：
 ### 3.1 ADR 文档标记规范
 
 **支持的标记方式**：
+
 ```markdown
 1. 【必须架构测试覆盖】
 2. 【必须测试】
@@ -169,6 +180,7 @@ ADR 文档统计：
 ```
 
 **快速参考表格式**：
+
 ```markdown
 | 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
 |---------|---------|---------|---------|----------|
@@ -178,11 +190,13 @@ ADR 文档统计：
 ### 3.2 测试代码规范
 
 **测试类命名**：
+
 ```csharp
 public sealed class ADR_{编号}_Architecture_Tests
 ```
 
 **测试方法规范**：
+
 ```csharp
 [Theory(DisplayName = "ADR-0001.1: 模块不应相互引用")]
 public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
@@ -198,6 +212,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ```
 
 **关键要求**：
+
 - ✅ DisplayName 或方法名包含 `ADR-{编号}`
 - ✅ 失败消息包含：ADR 编号、违规详情、修复建议、参考文档
 - ✅ 测试类头部包含映射清单注释
@@ -205,6 +220,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ### 3.3 验证脚本逻辑
 
 **PowerShell 版本核心逻辑**：
+
 ```powershell
 1. 扫描 ADR 文档：
    - 查找【必须架构测试覆盖】标记
@@ -224,6 +240,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ```
 
 **Bash 版本**：
+
 - 使用 `grep` 和 `sed` 实现相同逻辑
 - 兼容 Linux 和 macOS 环境
 - 输出格式与 PowerShell 版本一致
@@ -262,6 +279,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 **场景 1：新增 ADR 约束**
 
 开发者询问：
+
 ```
 "我要在 ADR-0001 中新增一条约束：禁止模块间共享 Repository。
 请帮我：
@@ -272,6 +290,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ```
 
 Copilot 会参考：
+
 - `docs/ADR-TEST-MAPPING-SPECIFICATION.md`
 - `docs/copilot/adr-0001.prompts.md`
 - 现有的测试示例
@@ -279,6 +298,7 @@ Copilot 会参考：
 **场景 2：验证失败诊断**
 
 开发者询问：
+
 ```
 "映射验证失败了，报告说 ADR-0002 有 3 条约束缺少测试。
 请帮我：
@@ -293,16 +313,19 @@ Copilot 会参考：
 ### 5.1 质量保障
 
 ✅ **防止架构测试形式化**：
+
 - 测试存在，但与 ADR 内容不符 → 映射验证可发现
 - 新增约束未同步测试 → CI 自动阻断
 - 测试失败不明确 → 规范失败消息格式
 
 ✅ **提升可追溯性**：
+
 - 从 ADR 可快速找到对应测试
 - 从测试失败可快速定位 ADR 条款
 - 从 Prompts 可了解完整的映射关系
 
 ✅ **强化架构治理**：
+
 - 文档、测试、Prompts 三方互相印证
 - 自动化校验，减少人工疏漏
 - 清晰的开发者指南，降低学习成本
@@ -310,11 +333,13 @@ Copilot 会参考：
 ### 5.2 工程效率
 
 ✅ **开发者体验**：
+
 - 明确的标记规范，易于理解
 - 自动化脚本，快速验证
 - 详细的错误提示和修复建议
 
 ✅ **维护成本**：
+
 - 规范化的文档结构，易于维护
 - 自动化验证，减少代码审查负担
 - Copilot 辅助，降低编写难度
@@ -322,6 +347,7 @@ Copilot 会参考：
 ### 5.3 量化指标
 
 当前状态（2026-01-23）：
+
 - ✅ ADR 文档数：8
 - ✅ 架构测试文件数：6
 - ✅ 总测试方法数：71
@@ -358,11 +384,13 @@ Copilot 会参考：
 ### 6.2 改进方向
 
 **技术改进**：
+
 - 考虑使用 Roslyn Analyzer 进行更深入的代码分析
 - 探索图形化的映射关系展示工具
 - 集成到 IDE 中，提供实时反馈
 
 **流程改进**：
+
 - 建立定期审查机制
 - 沉淀优秀案例库
 - 培训团队成员
@@ -397,13 +425,15 @@ Copilot 会参考：
 ### Q1: 为什么需要这个机制？现有的架构测试不够吗？
 
 **A**: 现有架构测试只保证"有测试"，但不保证"测试内容正确"。这个机制确保：
+
 - 测试覆盖了 ADR 的所有关键约束
 - 测试内容与 ADR 约束一致
 - 失败时能快速定位问题
 
 ### Q2: 验证脚本会不会太严格，影响开发效率？
 
-**A**: 
+**A**:
+
 - 脚本只检查基本的映射关系，不会过度限制
 - 可以通过标记控制哪些约束需要测试
 - 失败时提供明确的修复指导
@@ -412,6 +442,7 @@ Copilot 会参考：
 ### Q3: 如果某条约束无法自动化测试怎么办？
 
 **A**: 在 ADR 文档中标记为"人工 Code Review"：
+
 ```markdown
 - 此约束需要通过人工 Code Review 验证 **【待自动化测试】**
 ```
@@ -419,6 +450,7 @@ Copilot 会参考：
 ### Q4: 脚本如何处理多语言项目？
 
 **A**: 当前脚本专注于 C# 项目，使用：
+
 - `[Fact]` 和 `[Theory]` 特性
 - 如果需要支持其他语言，可以扩展脚本逻辑
 
@@ -438,4 +470,5 @@ ADR-测试一致性校验机制的实施，为项目的架构治理提供了**�
 ---
 
 **文档维护**：
+
 - v1.0 (2026-01-23): 初始版本，总结核心功能实施

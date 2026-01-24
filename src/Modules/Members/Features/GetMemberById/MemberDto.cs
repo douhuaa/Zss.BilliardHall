@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Modules.Members.Features.GetMemberById;
+﻿namespace Zss.BilliardHall.Modules.Members.Features.GetMemberById;
 
 /// <summary>
 /// 会员 DTO（数据传输对象）

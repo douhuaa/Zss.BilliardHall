@@ -19,12 +19,12 @@
 
 ## 术语表（Glossary）
 
-| 术语                | 定义                                               |
-|---------------------|--------------------------------------------------|
-| BaseNamespace       | 公司+产品根命名空间（如 `Zss.BilliardHall`）       |
-| RootNamespace       | 项目根命名空间，由BaseNamespace及目录自动推导      |
-| Directory.Build.props | MSBuild全局配置文件，统一定义BaseNamespace     |
-| MSBuild 推导        | 通过 MSBuild 条件和目录映射自动赋值 RootNamespace  |
+| 术语                    | 定义                                   |
+|-----------------------|--------------------------------------|
+| BaseNamespace         | 公司+产品根命名空间（如 `Zss.BilliardHall`）     |
+| RootNamespace         | 项目根命名空间，由BaseNamespace及目录自动推导        |
+| Directory.Build.props | MSBuild全局配置文件，统一定义BaseNamespace      |
+| MSBuild 推导            | 通过 MSBuild 条件和目录映射自动赋值 RootNamespace |
 
 ---
 
@@ -49,17 +49,17 @@
 
 ## 快速参考和架构测试映射
 
-| 约束编号     | 描述                                    | 层级 | 测试用例/自动化   | 章节      |
-|--------------|-----------------------------------------|------|-------------------|-----------|
-| ADR-0003.1   | 所有类型命名空间以 BaseNamespace 开头    | L1   | All_Types_Should_Start_With_Base_Namespace | 约束-自动推导  |
-| ADR-0003.2   | Platform 类型以 Platform 命名空间为前缀   | L1   | Platform_Types_Should_Have_Platform_Namespace | 约束-自动推导  |
-| ADR-0003.3   | Application 类型以 Application 命名空间为前缀 | L1   | Application_Types_Should_Have_Application_Namespace | 约束-自动推导  |
-| ADR-0003.4   | Modules 类型对应 Modules.{Name} 命名空间 | L1   | Module_Types_Should_Have_Module_Namespace | 约束-自动推导  |
-| ADR-0003.5   | Host 类型对应 Host.{Name} 命名空间       | L1   | Host_Types_Should_Have_Host_Namespace | 约束-自动推导  |
-| ADR-0003.6   | Directory.Build.props 必须位于仓库根目录 | L1   | Directory_Build_Props_Should_Exist_At_Repository_Root | 防御规则      |
-| ADR-0003.7   | Directory.Build.props 定义 BaseNamespace | L1   | Directory_Build_Props_Should_Define_Base_Namespace | 防御规则      |
-| ADR-0003.8   | 项目命名需遵循命名空间映射               | L1   | All_Projects_Should_Follow_Namespace_Convention | 防御规则      |
-| ADR-0003.9   | 不得出现不规范命名空间                   | L1   | Modules_Should_Not_Contain_Irregular_Namespace_Patterns | 防御规则 |
+| 约束编号       | 描述                                     | 层级 | 测试用例/自动化                                                | 章节      |
+|------------|----------------------------------------|----|---------------------------------------------------------|---------|
+| ADR-0003.1 | 所有类型命名空间以 BaseNamespace 开头             | L1 | All_Types_Should_Start_With_Base_Namespace              | 约束-自动推导 |
+| ADR-0003.2 | Platform 类型以 Platform 命名空间为前缀          | L1 | Platform_Types_Should_Have_Platform_Namespace           | 约束-自动推导 |
+| ADR-0003.3 | Application 类型以 Application 命名空间为前缀    | L1 | Application_Types_Should_Have_Application_Namespace     | 约束-自动推导 |
+| ADR-0003.4 | Modules 类型对应 Modules.{Name} 命名空间       | L1 | Module_Types_Should_Have_Module_Namespace               | 约束-自动推导 |
+| ADR-0003.5 | Host 类型对应 Host.{Name} 命名空间             | L1 | Host_Types_Should_Have_Host_Namespace                   | 约束-自动推导 |
+| ADR-0003.6 | Directory.Build.props 必须位于仓库根目录        | L1 | Directory_Build_Props_Should_Exist_At_Repository_Root   | 防御规则    |
+| ADR-0003.7 | Directory.Build.props 定义 BaseNamespace | L1 | Directory_Build_Props_Should_Define_Base_Namespace      | 防御规则    |
+| ADR-0003.8 | 项目命名需遵循命名空间映射                          | L1 | All_Projects_Should_Follow_Namespace_Convention         | 防御规则    |
+| ADR-0003.9 | 不得出现不规范命名空间                            | L1 | Modules_Should_Not_Contain_Irregular_Namespace_Patterns | 防御规则    |
 
 ---
 
@@ -91,11 +91,11 @@
 
 ## 版本历史
 
-| 版本 | 日期 | 变更摘要          |
-|------|------|-------------------|
-| 3.0  | 2026-01-22 | 完全去编号、结构升级  |
-| 2.0  | 2026-01-20 | 机制细化            |
-| 1.0  | 初版       |                    |
+| 版本  | 日期         | 变更摘要       |
+|-----|------------|------------|
+| 3.0 | 2026-01-22 | 完全去编号、结构升级 |
+| 2.0 | 2026-01-20 | 机制细化       |
+| 1.0 | 初版         |            |
 
 ---
 

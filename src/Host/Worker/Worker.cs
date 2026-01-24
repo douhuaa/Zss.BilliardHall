@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Host.Worker;
+﻿namespace Zss.BilliardHall.Host.Worker;
 
 public class Worker(ILogger<Worker> logger) : BackgroundService
 {

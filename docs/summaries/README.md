@@ -34,37 +34,37 @@ docs/summaries/
 
 ### 架构改进
 
-| 文档 | 描述 | 版本 | 日期 |
-|------|------|------|------|
-| [ADR 重组总结](adr-restructure-summary.md) | ADR 文档体系重组，分离静态/动态/治理层 | v2.0 | 2026-01-21 |
-| [ADR 编号优化总结](adr-numbering-optimization-summary.md) | ADR 编号体系优化，引入分段编号 | v3.0 | 2026-01-22 |
-| [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md) | 验证 ADR 文档与架构测试映射关系 | v1.0 | 2026-01-23 |
+| 文档                                                           | 描述                     | 版本   | 日期         |
+|--------------------------------------------------------------|------------------------|------|------------|
+| [ADR 重组总结](adr-restructure-summary.md)                       | ADR 文档体系重组，分离静态/动态/治理层 | v2.0 | 2026-01-21 |
+| [ADR 编号优化总结](adr-numbering-optimization-summary.md)          | ADR 编号体系优化，引入分段编号      | v3.0 | 2026-01-22 |
+| [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md) | 验证 ADR 文档与架构测试映射关系     | v1.0 | 2026-01-23 |
 
 ---
 
 ### 测试改进
 
-| 文档 | 描述 | 版本 | 日期 |
-|------|------|------|------|
+| 文档                                                      | 描述                      | 版本   | 日期         |
+|---------------------------------------------------------|-------------------------|------|------------|
 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) | 架构测试从"合格"到"宪法级体系"的系统性提升 | v2.0 | 2026-01-20 |
-| [ADR-测试一致性实施总结](adr-test-consistency-implementation.md) | ADR-测试映射标准化实施 | v1.0 | 2026-01-23 |
+| [ADR-测试一致性实施总结](adr-test-consistency-implementation.md) | ADR-测试映射标准化实施           | v1.0 | 2026-01-23 |
 
 ---
 
 ### 治理流程
 
-| 文档 | 描述 | 版本 | 日期 |
-|------|------|------|------|
-| [架构违规记录表](arch-violations.md) | 记录所有架构破例，确保可追溯和可审计 | - | 持续更新 |
-| [Copilot 治理实施总结](copilot-governance-implementation.md) | Copilot 驱动架构治理体系实施 | v1.0 | 2026-01-21 |
-| [PR#126 待办事项完成总结](pr126-todo-completion-summary.md) | 完成 ADR-测试映射标准化（ADR-0002 至 ADR-0005） | v1.0 | 2026-01-23 |
+| 文档                                                     | 描述                                  | 版本   | 日期         |
+|--------------------------------------------------------|-------------------------------------|------|------------|
+| [架构违规记录表](arch-violations.md)                          | 记录所有架构破例，确保可追溯和可审计                  | -    | 持续更新       |
+| [Copilot 治理实施总结](copilot-governance-implementation.md) | Copilot 驱动架构治理体系实施                  | v1.0 | 2026-01-21 |
+| [PR#126 待办事项完成总结](pr126-todo-completion-summary.md)    | 完成 ADR-测试映射标准化（ADR-0002 至 ADR-0005） | v1.0 | 2026-01-23 |
 
 ---
 
 ### 文档改进
 
-| 文档 | 描述 | 版本 | 日期 |
-|------|------|------|------|
+| 文档                                                               | 描述                 | 版本   | 日期         |
+|------------------------------------------------------------------|--------------------|------|------------|
 | [文档结构优化与长效更新机制](documentation-structure-optimization-summary.md) | 文档结构系统性重组，建立长效维护机制 | v1.0 | 2026-01-22 |
 
 ---
@@ -73,16 +73,16 @@ docs/summaries/
 
 ### 按主题查找
 
-| 主题 | 相关文档 |
-|------|---------|
-| ADR 文档管理 | [ADR 重组总结](adr-restructure-summary.md) |
-| ADR 编号体系 | [ADR 编号优化总结](adr-numbering-optimization-summary.md) |
-| ADR 文档重构 | [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md) |
-| 架构测试优化 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) |
-| ADR-测试映射 | [ADR-测试一致性实施总结](adr-test-consistency-implementation.md), [PR#126 待办事项完成总结](pr126-todo-completion-summary.md) |
-| 架构违规处理 | [架构违规记录表](arch-violations.md) |
-| 文档结构优化 | [文档结构优化总结](documentation-structure-optimization-summary.md) |
-| Copilot 治理 | [Copilot 治理实施总结](copilot-governance-implementation.md) |
+| 主题         | 相关文档                                                                                                         |
+|------------|--------------------------------------------------------------------------------------------------------------|
+| ADR 文档管理   | [ADR 重组总结](adr-restructure-summary.md)                                                                       |
+| ADR 编号体系   | [ADR 编号优化总结](adr-numbering-optimization-summary.md)                                                          |
+| ADR 文档重构   | [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md)                                                 |
+| 架构测试优化     | [架构测试体系改进总结](architecture-tests-improvement-summary.md)                                                      |
+| ADR-测试映射   | [ADR-测试一致性实施总结](adr-test-consistency-implementation.md), [PR#126 待办事项完成总结](pr126-todo-completion-summary.md) |
+| 架构违规处理     | [架构违规记录表](arch-violations.md)                                                                                |
+| 文档结构优化     | [文档结构优化总结](documentation-structure-optimization-summary.md)                                                  |
+| Copilot 治理 | [Copilot 治理实施总结](copilot-governance-implementation.md)                                                       |
 
 | 宪法层定义 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) |
 | 执行级别分类 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) |
@@ -90,27 +90,27 @@ docs/summaries/
 
 ### 按时间线查找
 
-| 日期 | 文档 | 类型 |
-|------|------|------|
+| 日期         | 文档                                                           | 类型 |
+|------------|--------------------------------------------------------------|----|
 | 2026-01-23 | [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md) | 架构 |
-| 2026-01-23 | [ADR-测试一致性实施总结](adr-test-consistency-implementation.md) | 测试 |
-| 2026-01-23 | [PR#126 待办事项完成总结](pr126-todo-completion-summary.md) | 治理 |
-| 2026-01-22 | [文档结构优化总结](documentation-structure-optimization-summary.md) | 文档 |
-| 2026-01-22 | [ADR 编号优化总结](adr-numbering-optimization-summary.md) | 架构 |
-| 2026-01-21 | [ADR 重组总结](adr-restructure-summary.md) | 架构 |
-| 2026-01-21 | [Copilot 治理实施总结](copilot-governance-implementation.md) | 治理 |
-| 2026-01-20 | [架构测试体系改进总结](architecture-tests-improvement-summary.md) | 测试 |
-| 持续更新 | [架构违规记录表](arch-violations.md) | 治理 |
+| 2026-01-23 | [ADR-测试一致性实施总结](adr-test-consistency-implementation.md)      | 测试 |
+| 2026-01-23 | [PR#126 待办事项完成总结](pr126-todo-completion-summary.md)          | 治理 |
+| 2026-01-22 | [文档结构优化总结](documentation-structure-optimization-summary.md)  | 文档 |
+| 2026-01-22 | [ADR 编号优化总结](adr-numbering-optimization-summary.md)          | 架构 |
+| 2026-01-21 | [ADR 重组总结](adr-restructure-summary.md)                       | 架构 |
+| 2026-01-21 | [Copilot 治理实施总结](copilot-governance-implementation.md)       | 治理 |
+| 2026-01-20 | [架构测试体系改进总结](architecture-tests-improvement-summary.md)      | 测试 |
+| 持续更新       | [架构违规记录表](arch-violations.md)                                | 治理 |
 
 ### 按角色推荐
 
-| 角色 | 推荐阅读 |
-|------|---------|
-| 新成员 Onboarding | [ADR 重组总结](adr-restructure-summary.md), [文档结构优化总结](documentation-structure-optimization-summary.md) |
-| 开发者 | [架构违规记录表](arch-violations.md), [Copilot 治理实施总结](copilot-governance-implementation.md) |
-| 架构师 | 全部文档 |
-| Tech Lead | 全部文档 |
-| DevOps / SRE | [架构测试体系改进总结](architecture-tests-improvement-summary.md), [文档结构优化总结](documentation-structure-optimization-summary.md) |
+| 角色             | 推荐阅读                                                                                                                 |
+|----------------|----------------------------------------------------------------------------------------------------------------------|
+| 新成员 Onboarding | [ADR 重组总结](adr-restructure-summary.md), [文档结构优化总结](documentation-structure-optimization-summary.md)                  |
+| 开发者            | [架构违规记录表](arch-violations.md), [Copilot 治理实施总结](copilot-governance-implementation.md)                                |
+| 架构师            | 全部文档                                                                                                                 |
+| Tech Lead      | 全部文档                                                                                                                 |
+| DevOps / SRE   | [架构测试体系改进总结](architecture-tests-improvement-summary.md), [文档结构优化总结](documentation-structure-optimization-summary.md) |
 
 ---
 
@@ -121,16 +121,16 @@ docs/summaries/
 当完成一项重要改进时，应创建改进总结文档：
 
 1. **创建文档**：在 `docs/summaries/` 目录下直接创建 Markdown 文件
-   - 文件命名：使用小写字母和连字符，例如 `xxx-improvement-summary.md`
-   - 包含版本号和日期
+  - 文件命名：使用小写字母和连字符，例如 `xxx-improvement-summary.md`
+  - 包含版本号和日期
 
 2. **文档结构**：建议包含以下章节
-   - 改进背景
-   - 改进内容
-   - 实施过程
-   - 验证结果
-   - 使用指南
-   - 后续建议
+  - 改进背景
+  - 改进内容
+  - 实施过程
+  - 验证结果
+  - 使用指南
+  - 后续建议
 
 3. **更新索引**：在本 README.md 中添加新文档的索引
 
@@ -181,6 +181,7 @@ docs/
 ```
 
 **区别**：
+
 - **ADR**：记录"为什么这样决策"（决策背景、理由、权衡）
 - **Guide**：说明"现在怎么做"（当前状态、操作指南）
 - **Summary**：记录"怎么演进来的"（改进历程、经验教训）
@@ -191,17 +192,20 @@ docs/
 
 ### Q: 改进总结和 ADR 有什么区别？
 
-**A:** 
+**A:**
+
 - **ADR**：面向未来，记录架构决策和理由
 - **改进总结**：面向历史，记录改进过程和经验
 
 例如：
+
 - ADR-0000 说明"架构测试应该怎么做"
 - 架构测试改进总结说明"我们如何把测试从 v1.0 改进到 v2.0"
 
 ### Q: 什么样的改进需要写总结？
 
 **A:** 满足以下任一条件：
+
 - 系统性改进（涉及多个文件或模块）
 - 影响团队工作流程
 - 解决了长期存在的问题
@@ -210,6 +214,7 @@ docs/
 ### Q: 改进总结应该多详细？
 
 **A:** 建议包含：
+
 - **背景**：为什么要改进
 - **方案**：改了什么
 - **对比**：改进前后对比
@@ -243,6 +248,7 @@ docs/
 ## 反馈与建议
 
 如果你发现：
+
 - 文档分类不合理
 - 缺少重要的改进总结
 - 文档结构需要优化

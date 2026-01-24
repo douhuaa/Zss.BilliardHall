@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using System.Xml;
 
@@ -37,8 +37,16 @@ public class ModuleAssemblyData : IEnumerable<object[]>
             var prioritizedCandidates = new List<string>();
             foreach (var t in tfms)
             {
-                prioritizedCandidates.Add(Path.Combine(moduleDir, "bin", configuration, t, $"{moduleName}.dll"));
-                prioritizedCandidates.Add(Path.Combine(moduleDir, "obj", configuration, t, $"{moduleName}.dll"));
+                prioritizedCandidates.Add(Path.Combine(moduleDir,
+                "bin",
+                configuration,
+                t,
+                $"{moduleName}.dll"));
+                prioritizedCandidates.Add(Path.Combine(moduleDir,
+                "obj",
+                configuration,
+                t,
+                $"{moduleName}.dll"));
             }
 
             // 2) 其它 fallback 候选
@@ -66,7 +74,9 @@ public class ModuleAssemblyData : IEnumerable<object[]>
                 .ToList();
 
             // 只保留真实存在的文件（但保持优先顺序）
-            var ordered = orderedCandidates.Where(File.Exists).ToList();
+            var ordered = orderedCandidates
+                .Where(File.Exists)
+                .ToList();
 
             if (!ordered.Any())
             {
@@ -80,7 +90,12 @@ public class ModuleAssemblyData : IEnumerable<object[]>
                 var asm = Assembly.LoadFrom(selected);
                 Debug.WriteLine($"[ArchitectureTests] Loaded: {selected}, AssemblyName={asm.GetName().Name}");
                 // 允许 AssemblyName 为 "Zss.BilliardHall.Modules.{模块名}" 或 "{模块名}"
-                if (asm.GetName().Name == moduleName || asm.GetName().Name == $"Zss.BilliardHall.Modules.{moduleName}")
+                if (asm.GetName()
+                        .Name ==
+                    moduleName ||
+                    asm.GetName()
+                        .Name ==
+                    $"Zss.BilliardHall.Modules.{moduleName}")
                 {
                     ModuleAssemblies.Add(asm);
                 }
@@ -105,7 +120,10 @@ public class ModuleAssemblyData : IEnumerable<object[]>
         ModuleNames.AddRange(orderedNames);
     }
 
-    public ModuleAssemblyData() { /* nothing, static ctor does all */ }
+    public ModuleAssemblyData()
+    {
+        /* nothing, static ctor does all */
+    }
 
     public IEnumerator<object[]> GetEnumerator()
     {
@@ -176,8 +194,16 @@ public class HostAssemblyData : IEnumerable<object[]>
             var prioritized = new List<string>();
             foreach (var t in tfms)
             {
-                prioritized.Add(Path.Combine(projectDir, "bin", configuration, t, $"{projectName}.dll"));
-                prioritized.Add(Path.Combine(projectDir, "obj", configuration, t, $"{projectName}.dll"));
+                prioritized.Add(Path.Combine(projectDir,
+                "bin",
+                configuration,
+                t,
+                $"{projectName}.dll"));
+                prioritized.Add(Path.Combine(projectDir,
+                "obj",
+                configuration,
+                t,
+                $"{projectName}.dll"));
             }
 
             var fallback = new List<string>();
@@ -196,13 +222,16 @@ public class HostAssemblyData : IEnumerable<object[]>
                 Debug.WriteLine($"[ArchitectureTests] 搜索 Host DLL 时出错: {ex}");
             }
 
-            var candidates = prioritized.Concat(fallback)
+            var candidates = prioritized
+                .Concat(fallback)
                 .Where(p => !string.IsNullOrEmpty(p))
                 .Select(Path.GetFullPath)
                 .Distinct()
                 .ToList();
 
-            var ordered = candidates.Where(File.Exists).ToList();
+            var ordered = candidates
+                .Where(File.Exists)
+                .ToList();
             if (!ordered.Any())
             {
                 Debug.WriteLine($"[ArchitectureTests] 未找到 Host 输出 DLL: {projectName} at {projectDir}。请确保已构建 Host 项目（dotnet build）。");

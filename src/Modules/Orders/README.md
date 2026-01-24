@@ -3,6 +3,7 @@
 ## 模块职责
 
 管理台球馆订单的生命周期，包括：
+
 - 订单创建
 - 订单状态管理
 - 订单计费
@@ -30,6 +31,7 @@ Orders/
 ### 场景：创建订单需要验证会员状态
 
 **❌ 错误做法**（违反架构约束）：
+
 ```csharp
 public class CreateOrderCommandHandler
 {
@@ -48,6 +50,7 @@ public class CreateOrderCommandHandler
 ```
 
 **✅ 正确做法 1**：维护本地副本
+
 ```csharp
 // Orders 模块维护会员状态的本地副本
 public class CreateOrderCommandHandler
@@ -80,6 +83,7 @@ public class MemberActivatedEventHandler
 ```
 
 **✅ 正确做法 2**：发布验证命令
+
 ```csharp
 public class CreateOrderCommandHandler
 {
@@ -103,12 +107,15 @@ public class CreateOrderCommandHandler
 ## 垂直切片原则
 
 ### 每个切片（Feature）是自包含的
+
 - 包含该用例的所有逻辑
 - 不依赖横向 Service
 - 不依赖其他模块的查询接口做业务决策
 
 ### 代码复用策略
+
 如果多个切片有相似逻辑：
+
 1. **优先考虑复制代码** - 保持切片独立性
 2. 提取为领域服务 - 在模块内部，不要创建横向 Service
 3. 使用领域事件 - 解耦切片间的依赖
@@ -116,11 +123,13 @@ public class CreateOrderCommandHandler
 ## 依赖规则
 
 本模块只能依赖：
+
 - `Platform` - 技术能力
 - 标准库类型
 - 基础设施包
 
 不能依赖：
+
 - ❌ Members 模块
 - ❌ Payments 模块
 - ❌ 其他业务模块

@@ -5,6 +5,7 @@
 本项目采用 **模块化单体架构**（Modular Monolith）结合 **垂直切片架构**（Vertical Slice Architecture）。
 
 核心原则：
+
 1. **模块隔离** - 业务模块之间不能直接相互引用
 2. **垂直切片** - 功能按用例组织，而非技术层
 3. **架构测试** - 所有架构约束通过自动化测试强制执行
@@ -148,6 +149,7 @@ Zss.BilliardHall/
 └── tests/
     └── ArchitectureTests/         # 架构约束测试
 ```
+
 </details>
 
 ## 模块设计规则
@@ -316,14 +318,14 @@ Members/
 
 **使用白名单：**
 
-| 场景 | 允许使用 | 说明 |
-|------|---------|------|
-| Command Handler | ❌ | 禁止依赖其他模块的查询接口 |
-| Query Handler | ✅ | 可以返回契约 |
-| Endpoint/API | ✅ | 用于请求/响应 |
-| ReadModel/Projection | ✅ | 视图模型 |
-| Domain Events | ✅ | 事件载荷 |
-| Platform | ❌ | Platform 不依赖业务契约 |
+| 场景                   | 允许使用 | 说明               |
+|----------------------|------|------------------|
+| Command Handler      | ❌    | 禁止依赖其他模块的查询接口    |
+| Query Handler        | ✅    | 可以返回契约           |
+| Endpoint/API         | ✅    | 用于请求/响应          |
+| ReadModel/Projection | ✅    | 视图模型             |
+| Domain Events        | ✅    | 事件载荷             |
+| Platform             | ❌    | Platform 不依赖业务契约 |
 
 **示例：**
 
@@ -385,16 +387,16 @@ Platform 层只能包含技术能力，不能包含业务逻辑。
    ```
 
 3. **实现业务逻辑**
-   - Command/Query: 只表达意图，不含逻辑
-   - Handler: 包含所有业务规则和验证
-   - Endpoint: 处理 HTTP 请求/响应
+  - Command/Query: 只表达意图，不含逻辑
+  - Handler: 包含所有业务规则和验证
+  - Endpoint: 处理 HTTP 请求/响应
 
 4. **避免横向抽象**
-   - 不要创建 `MemberService`
-   - 如需复用，优先考虑：
-     1. 复制代码（切片独立性优先）
-     2. 领域事件解耦
-     3. 提取辅助方法（仅在必要时）
+  - 不要创建 `MemberService`
+  - 如需复用，优先考虑：
+    1. 复制代码（切片独立性优先）
+    2. 领域事件解耦
+    3. 提取辅助方法（仅在必要时）
 
 ### 模块间通信
 
@@ -536,26 +538,26 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 ### 测试套件
 
 1. **ModuleIsolationTests** - 模块隔离测试
-   - 模块不能相互引用
-   - 禁止传统分层命名空间
-   - 禁止 Repository/Service 命名
+  - 模块不能相互引用
+  - 禁止传统分层命名空间
+  - 禁止 Repository/Service 命名
 
 2. **ContractUsageTests** - 契约使用测试
-   - Command Handler 不能依赖 IQuery 接口
-   - Platform 不能依赖业务契约
-   - Handler 命名约定
+  - Command Handler 不能依赖 IQuery 接口
+  - Platform 不能依赖业务契约
+  - Handler 命名约定
 
 3. **VerticalSliceArchitectureTests** - 垂直切片测试
-   - 禁止传统分层组织
-   - Handler 不能依赖横向 Service
-   - 禁止 Shared/Common 文件夹
-   - Handler 之间不能直接调用
+  - 禁止传统分层组织
+  - Handler 不能依赖横向 Service
+  - 禁止 Shared/Common 文件夹
+  - Handler 之间不能直接调用
 
 4. **PlatformLayerTests** - Platform 层测试
-   - 不能包含业务相关命名
-   - 只能包含技术能力
-   - 不能引用业务模块
-   - 契约应该是简单数据结构
+  - 不能包含业务相关命名
+  - 只能包含技术能力
+  - 不能引用业务模块
+  - 契约应该是简单数据结构
 
 ### 处理架构违规
 
@@ -565,9 +567,9 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 2. **修复代码** - 按照测试建议修改
 3. **重新测试** - 确保修复有效
 4. **如需豁免** - 必须：
-   - 通过 ADR 记录原因
-   - 在 PR 中标注 `ARCH-VIOLATION`
-   - 设定偿还时间
+  - 通过 ADR 记录原因
+  - 在 PR 中标注 `ARCH-VIOLATION`
+  - 设定偿还时间
 
 ## 常见问题
 

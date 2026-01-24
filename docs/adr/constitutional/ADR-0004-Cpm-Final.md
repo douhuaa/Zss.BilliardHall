@@ -19,13 +19,13 @@
 
 ## 术语表（Glossary）
 
-| 术语                    | 定义                                     |
-|-------------------------|------------------------------------------|
-| CPM                     | Central Package Management，中央包管理   |
-| Directory.Packages.props| NuGet 配置文件，集中定义全局依赖包版本   |
-| 传递依赖固定            | 通过 CPM 禁止传递依赖的漂移              |
-| 层级依赖                | 不同层项目允许的包类型约束               |
-| 包分组                  | 依赖包按技术栈、场景分隔分组             |
+| 术语                       | 定义                               |
+|--------------------------|----------------------------------|
+| CPM                      | Central Package Management，中央包管理 |
+| Directory.Packages.props | NuGet 配置文件，集中定义全局依赖包版本           |
+| 传递依赖固定                   | 通过 CPM 禁止传递依赖的漂移                 |
+| 层级依赖                     | 不同层项目允许的包类型约束                    |
+| 包分组                      | 依赖包按技术栈、场景分隔分组                   |
 
 ---
 
@@ -38,13 +38,13 @@
 - 任何项目文件出现 Version 即构建失败
 - 层级依赖关系必须反映体系结构：
 
-| 层级        | 允许依赖包类型                                  | 禁止依赖           |
-|-------------|-----------------------------------------------|--------------------|
-| Platform    | 技术底座包（Logging、OpenTelemetry、基础异常处理等） | Application/Module/Host 的业务包 |
-| Application | Wolverine、Marten、所有装配与 Pipeline          | Host/Http/业务模块 |
-| Modules     | 业务依赖、DTO、协议、契约                       | Platform 内部包、Host、其它模块 |
-| Host        | 仅调用 Platform+Application Bootstrapper        | 业务模块、Handler  |
-| Tests       | 被测模块+Platform/Application                  | Host 内部实现      |
+| 层级          | 允许依赖包类型                               | 禁止依赖                         |
+|-------------|---------------------------------------|------------------------------|
+| Platform    | 技术底座包（Logging、OpenTelemetry、基础异常处理等）  | Application/Module/Host 的业务包 |
+| Application | Wolverine、Marten、所有装配与 Pipeline       | Host/Http/业务模块               |
+| Modules     | 业务依赖、DTO、协议、契约                        | Platform 内部包、Host、其它模块       |
+| Host        | 仅调用 Platform+Application Bootstrapper | 业务模块、Handler                 |
+| Tests       | 被测模块+Platform/Application             | Host 内部实现                    |
 
 ### 包分组管理
 
@@ -61,17 +61,17 @@
 
 ## 快速参考和架构测试映射
 
-| 约束编号     | 描述                        | 层级 | 测试用例/自动化                   | 章节      |
-|--------------|-----------------------------|------|-----------------------------------|-----------|
-| ADR-0004.1   | 必须启用 CPM                | L1   | CPM_Should_Be_Enabled             | 管理规则  |
-| ADR-0004.2   | Directory.Packages.props 强制存在| L1 | Repository_Should_Have_Directory_Packages_Props | 管理规则 |
-| ADR-0004.3   | 不允许项目文件手动指定版本   | L1   | Projects_Should_Not_Specify_Package_Versions | 防御规则 |
-| ADR-0004.4   | 层级依赖必须严格遵守        | L1   | Layer_Package_Dependencies_Should_Be_Valid | 层级依赖  |
-| ADR-0004.5   | 包分组规范                 | L1   | Directory_Packages_Props_Should_Contain_Package_Groups | 分组规则 |
-| ADR-0004.6   | 测试项目使用相同测试框架版本 | L1   | All_Test_Projects_Should_Use_Same_Test_Framework_Versions | 防御规则 |
-| ADR-0004.7   | 包依赖集中声明              | L1   | Directory_Packages_Props_Should_Define_All_Used_Packages | 分组管理 |
-| ADR-0004.8   | Platform 不得依赖业务包      | L1   | Platform_Projects_Should_Not_Reference_Business_Packages | 层级依赖 |
-| ADR-0004.9   | 禁止私自覆盖中央包版本      | L1   | Projects_Should_Not_Override_Central_Package_Versions | 防御规则 |
+| 约束编号       | 描述                            | 层级 | 测试用例/自动化                                                  | 章节   |
+|------------|-------------------------------|----|-----------------------------------------------------------|------|
+| ADR-0004.1 | 必须启用 CPM                      | L1 | CPM_Should_Be_Enabled                                     | 管理规则 |
+| ADR-0004.2 | Directory.Packages.props 强制存在 | L1 | Repository_Should_Have_Directory_Packages_Props           | 管理规则 |
+| ADR-0004.3 | 不允许项目文件手动指定版本                 | L1 | Projects_Should_Not_Specify_Package_Versions              | 防御规则 |
+| ADR-0004.4 | 层级依赖必须严格遵守                    | L1 | Layer_Package_Dependencies_Should_Be_Valid                | 层级依赖 |
+| ADR-0004.5 | 包分组规范                         | L1 | Directory_Packages_Props_Should_Contain_Package_Groups    | 分组规则 |
+| ADR-0004.6 | 测试项目使用相同测试框架版本                | L1 | All_Test_Projects_Should_Use_Same_Test_Framework_Versions | 防御规则 |
+| ADR-0004.7 | 包依赖集中声明                       | L1 | Directory_Packages_Props_Should_Define_All_Used_Packages  | 分组管理 |
+| ADR-0004.8 | Platform 不得依赖业务包              | L1 | Platform_Projects_Should_Not_Reference_Business_Packages  | 层级依赖 |
+| ADR-0004.9 | 禁止私自覆盖中央包版本                   | L1 | Projects_Should_Not_Override_Central_Package_Versions     | 防御规则 |
 
 ---
 
@@ -105,11 +105,11 @@
 
 ## 版本历史
 
-| 版本 | 日期       | 变更摘要                   |
-|------|------------|----------------------|
-| 3.0  | 2026-01-22 | 结构升级、统一结构和映射       |
-| 2.0  | 2026-01-20 | 分组细化，新增CI校验         |
-| 1.0  | 初版       | 初始发布                   |
+| 版本  | 日期         | 变更摘要         |
+|-----|------------|--------------|
+| 3.0 | 2026-01-22 | 结构升级、统一结构和映射 |
+| 2.0 | 2026-01-20 | 分组细化，新增CI校验  |
+| 1.0 | 初版         | 初始发布         |
 
 ---
 

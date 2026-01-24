@@ -1,10 +1,12 @@
 # Zss.BilliardHall Architecture Analyzers
 
-This package contains Roslyn analyzers that enforce architectural constraints defined in ADR-0005 (Application Interaction Model & Execution Boundaries).
+This package contains Roslyn analyzers that enforce architectural constraints defined in ADR-0005 (Application
+Interaction Model & Execution Boundaries).
 
 ## Purpose
 
-These analyzers provide **Level 2 enforcement** (Semantic Semi-Automatic) for architectural rules that cannot be fully checked through static dependency analysis alone but require understanding of code semantics.
+These analyzers provide **Level 2 enforcement** (Semantic Semi-Automatic) for architectural rules that cannot be fully
+checked through static dependency analysis alone but require understanding of code semantics.
 
 ## Included Analyzers
 
@@ -13,6 +15,7 @@ These analyzers provide **Level 2 enforcement** (Semantic Semi-Automatic) for ar
 **Rule**: Endpoints should not contain business logic (ADR-0005.2)
 
 **Detection**:
+
 - Checks endpoint methods for indicators of business logic:
   - Excessive lines of code (>10 statements)
   - Conditional logic (if, switch)
@@ -29,6 +32,7 @@ These analyzers provide **Level 2 enforcement** (Semantic Semi-Automatic) for ar
 **Rule**: Modules should not have synchronous cross-module calls (ADR-0005.5)
 
 **Detection**:
+
 - Detects method invocations crossing module boundaries
 - Allows approved patterns:
   - Calls to Platform layer
@@ -44,18 +48,21 @@ These analyzers provide **Level 2 enforcement** (Semantic Semi-Automatic) for ar
 **Rule**: Handlers should use structured exceptions (ADR-0005.11)
 
 **Detection**:
+
 - Detects `throw new Exception()` in Handler classes
 - Requires domain-specific exception types
 
 **Severity**: Warning
 
-**Fix**: Define and use domain-specific exception types (e.g., `DomainException`, `ValidationException`) instead of generic `System.Exception`.
+**Fix**: Define and use domain-specific exception types (e.g., `DomainException`, `ValidationException`) instead of
+generic `System.Exception`.
 
 ## Usage
 
 ### Installation
 
-The analyzers are automatically included when you build the solution. They are packaged and referenced by all module projects.
+The analyzers are automatically included when you build the solution. They are packaged and referenced by all module
+projects.
 
 ### Configuration
 
@@ -90,6 +97,7 @@ dotnet_diagnostic.ADR0005_05.severity = none
 ## Integration with Build
 
 The analyzers run during:
+
 - **Local builds**: `dotnet build`
 - **IDE**: Real-time as you type (Visual Studio, Rider, VS Code with C# extension)
 - **CI**: As part of the automated build pipeline
@@ -105,10 +113,12 @@ According to [ADR-0005 Enforcement Levels](../../docs/adr/constitutional/ADR-000
 ## Known Limitations
 
 These analyzers use heuristics and may produce:
+
 - **False positives**: Flagging code that is actually compliant
 - **False negatives**: Missing violations that are too complex to detect
 
-**Important**: Analyzer warnings are advisory. If a warning is incorrect, you may suppress it with a comment explaining why. All suppressions should be reviewed during PR review.
+**Important**: Analyzer warnings are advisory. If a warning is incorrect, you may suppress it with a comment explaining
+why. All suppressions should be reviewed during PR review.
 
 ## Development
 
@@ -139,6 +149,7 @@ Create test projects in `src/tests/ArchitectureAnalyzers.Tests/` with positive a
 ## Support
 
 For questions or issues with the analyzers:
+
 1. Check if the warning is a false positive (can you suppress it?)
 2. Review the related ADR documentation
 3. Discuss in architecture review meetings

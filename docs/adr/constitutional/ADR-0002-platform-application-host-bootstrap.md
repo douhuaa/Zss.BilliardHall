@@ -3,7 +3,7 @@
 **状态**：✅ 已采纳（Final，不可随意修改）  
 **级别**：架构约束（Architectural Contract）  
 **适用范围**：所有 Host、模块、测试、未来子系统  
-**生效时间**：即刻  
+**生效时间**：即刻
 
 ---
 
@@ -18,6 +18,7 @@
 5. **命名与结构规则**：Host 项目的命名和 Program.cs 的规范
 
 **不涉及**：
+
 - ❌ 命名空间自动推导（见 ADR-0003）
 - ❌ 依赖包管理（见 ADR-0004）
 - ❌ 运行时交互模型（见 ADR-0005）
@@ -28,14 +29,14 @@
 
 ## 术语表（Glossary）
 
-| 术语                  | 定义                                                                 |
-|-----------------------|----------------------------------------------------------------------|
-| Platform              | 技术基座，提供日志、追踪、异常等基础技术能力，不感知业务             |
-| Application           | 应用装配层，定义"系统是什么"，负责模块扫描和用例注册                 |
-| Host                  | 进程外壳，决定"怎么跑"，如 Web / Worker / Test                       |
-| Bootstrapper          | 各层的唯一装配入口，负责注册服务和配置                               |
-| 单向依赖              | Host → Application → Platform，禁止反向依赖                          |
-| 三权分立              | 三层各司其职，互不干涉                                               |
+| 术语           | 定义                                   |
+|--------------|--------------------------------------|
+| Platform     | 技术基座，提供日志、追踪、异常等基础技术能力，不感知业务         |
+| Application  | 应用装配层，定义"系统是什么"，负责模块扫描和用例注册          |
+| Host         | 进程外壳，决定"怎么跑"，如 Web / Worker / Test   |
+| Bootstrapper | 各层的唯一装配入口，负责注册服务和配置                  |
+| 单向依赖         | Host → Application → Platform，禁止反向依赖 |
+| 三权分立         | 三层各司其职，互不干涉                          |
 
 ---
 
@@ -358,6 +359,7 @@ app.Run();
 **架构测试详见**：[ADR-0000：架构测试与 CI 治理](ADR-0000-architecture-tests.md)
 
 **核心测试用例**：
+
 - Platform 不应依赖 Application
 - Platform 不应依赖 Host
 - Platform 不应依赖任何 Modules
@@ -397,15 +399,16 @@ app.Run();
 
 ## 与其他 ADR 关系（Related ADRs）
 
-| ADR        | 关系                                           |
-|------------|------------------------------------------------|
-| ADR-0000   | 定义本 ADR 的自动化测试机制                    |
-| ADR-0001   | 定义模块的组织方式，本 ADR 定义模块的装配方式  |
-| ADR-0003   | 定义命名空间自动推导规则                       |
-| ADR-0004   | 定义依赖包管理规则                             |
-| ADR-0005   | 定义运行时交互模型                             |
+| ADR      | 关系                        |
+|----------|---------------------------|
+| ADR-0000 | 定义本 ADR 的自动化测试机制          |
+| ADR-0001 | 定义模块的组织方式，本 ADR 定义模块的装配方式 |
+| ADR-0003 | 定义命名空间自动推导规则              |
+| ADR-0004 | 定义依赖包管理规则                 |
+| ADR-0005 | 定义运行时交互模型                 |
 
 **依赖关系**：
+
 - 本 ADR 定义静态启动结构
 - ADR-0003 补充命名空间规则
 - ADR-0004 补充依赖管理规则
@@ -415,22 +418,22 @@ app.Run();
 
 ## 快速参考表（Quick Reference Table）
 
-| 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
-|---------|---------|---------|---------|---------|
-| ADR-0002.1 | Platform 不应依赖 Application | ✅ | Platform_Should_Not_Depend_On_Application | 4.3, 9 |
-| ADR-0002.2 | Platform 不应依赖 Host | ✅ | Platform_Should_Not_Depend_On_Host | 4.3, 9 |
-| ADR-0002.3 | Platform 不应依赖任何 Modules | ✅ | Platform_Should_Not_Depend_On_Modules | 4.3, 9 |
-| ADR-0002.4 | Platform 应有唯一的 PlatformBootstrapper 入口 | ✅ | Platform_Should_Have_Single_Bootstrapper_Entry_Point | 4.4, 9 |
-| ADR-0002.5 | Application 不应依赖 Host | ✅ | Application_Should_Not_Depend_On_Host | 5.3, 9 |
-| ADR-0002.6 | Application 不应依赖任何 Modules | ✅ | Application_Should_Not_Depend_On_Modules | 5.3, 9 |
-| ADR-0002.7 | Application 应有唯一的 ApplicationBootstrapper 入口 | ✅ | Application_Should_Have_Single_Bootstrapper_Entry_Point | 5.4, 5.5, 9 |
-| ADR-0002.8 | Application 不应包含 HttpContext 等 Host 专属类型 | ✅ | Application_Should_Not_Use_HttpContext | 5.3, 9 |
-| ADR-0002.9 | Host 不应依赖任何 Modules | ✅ | Host_Should_Not_Depend_On_Modules | 6.3, 9 |
-| ADR-0002.10 | Host 不应包含业务类型 | ✅ | Host_Should_Not_Contain_Business_Types | 6.3, 9 |
-| ADR-0002.11 | Host 项目文件不应引用 Modules | ✅ | Host_Csproj_Should_Not_Reference_Modules | 6.3, 9 |
-| ADR-0002.12 | Program.cs 应保持简洁（建议 ≤ 50 行） | ✅ | Program_Cs_Should_Be_Concise | 6.5, 9 |
-| ADR-0002.13 | Program.cs 只应调用 Bootstrapper（语义检查） | ✅ | Program_Cs_Should_Only_Call_Bootstrapper | 6.5, 9 |
-| ADR-0002.14 | 验证完整的三层依赖方向 | ✅ | Verify_Complete_Three_Layer_Dependency_Direction | 3, 9 |
+| 约束编号        | 约束描述                                         | 必须测试 | 测试覆盖                                                    | ADR 章节      |
+|-------------|----------------------------------------------|------|---------------------------------------------------------|-------------|
+| ADR-0002.1  | Platform 不应依赖 Application                    | ✅    | Platform_Should_Not_Depend_On_Application               | 4.3, 9      |
+| ADR-0002.2  | Platform 不应依赖 Host                           | ✅    | Platform_Should_Not_Depend_On_Host                      | 4.3, 9      |
+| ADR-0002.3  | Platform 不应依赖任何 Modules                      | ✅    | Platform_Should_Not_Depend_On_Modules                   | 4.3, 9      |
+| ADR-0002.4  | Platform 应有唯一的 PlatformBootstrapper 入口       | ✅    | Platform_Should_Have_Single_Bootstrapper_Entry_Point    | 4.4, 9      |
+| ADR-0002.5  | Application 不应依赖 Host                        | ✅    | Application_Should_Not_Depend_On_Host                   | 5.3, 9      |
+| ADR-0002.6  | Application 不应依赖任何 Modules                   | ✅    | Application_Should_Not_Depend_On_Modules                | 5.3, 9      |
+| ADR-0002.7  | Application 应有唯一的 ApplicationBootstrapper 入口 | ✅    | Application_Should_Have_Single_Bootstrapper_Entry_Point | 5.4, 5.5, 9 |
+| ADR-0002.8  | Application 不应包含 HttpContext 等 Host 专属类型     | ✅    | Application_Should_Not_Use_HttpContext                  | 5.3, 9      |
+| ADR-0002.9  | Host 不应依赖任何 Modules                          | ✅    | Host_Should_Not_Depend_On_Modules                       | 6.3, 9      |
+| ADR-0002.10 | Host 不应包含业务类型                                | ✅    | Host_Should_Not_Contain_Business_Types                  | 6.3, 9      |
+| ADR-0002.11 | Host 项目文件不应引用 Modules                        | ✅    | Host_Csproj_Should_Not_Reference_Modules                | 6.3, 9      |
+| ADR-0002.12 | Program.cs 应保持简洁（建议 ≤ 50 行）                  | ✅    | Program_Cs_Should_Be_Concise                            | 6.5, 9      |
+| ADR-0002.13 | Program.cs 只应调用 Bootstrapper（语义检查）           | ✅    | Program_Cs_Should_Only_Call_Bootstrapper                | 6.5, 9      |
+| ADR-0002.14 | 验证完整的三层依赖方向                                  | ✅    | Verify_Complete_Three_Layer_Dependency_Direction        | 3, 9        |
 
 ---
 
@@ -470,13 +473,13 @@ app.Run();
 
 ## 术语表（Glossary）
 
-| 术语        | 定义                                       |
-|-------------|------------------------------------------|
-| Platform    | 技术基座，仅提供技术能力，不感知业务       |
-| Application | 应用装配层，定义“系统是什么”，聚合模块和用例 |
-| Host        | 进程外壳，决定“怎么跑”，如 Web/Worker/Test |
-| Bootstrapper| 唯一的装配入口，负责注册服务和配置         |
-| 单向依赖    | Host → Application → Platform           |
+| 术语           | 定义                             |
+|--------------|--------------------------------|
+| Platform     | 技术基座，仅提供技术能力，不感知业务             |
+| Application  | 应用装配层，定义“系统是什么”，聚合模块和用例        |
+| Host         | 进程外壳，决定“怎么跑”，如 Web/Worker/Test |
+| Bootstrapper | 唯一的装配入口，负责注册服务和配置              |
+| 单向依赖         | Host → Application → Platform  |
 
 ---
 
@@ -505,6 +508,7 @@ app.Run();
 - 项目命名为`Zss.BilliardHall.Host.*`
 
 **通用���止项：**
+
 - ❌ 禁止 Platform 依赖 Application/Host
 - ❌ 禁止 Application 依赖 Host
 - ❌ 禁止 Host 包含任何业务代码或直接注册 Handler/Module
@@ -513,22 +517,22 @@ app.Run();
 
 ## 快速参考和架构测试映射
 
-| 约束编号     | 描述                             | 层级 | 测试用例/自动化                         | 章节            |
-|--------------|----------------------------------|------|-----------------------------------------|---------------|
-| ADR-0002.1   | Platform 不应依赖 Application    | L1   | Platform_Should_Not_Depend_On_Application | 决策-Platform |
-| ADR-0002.2   | Platform 不应依赖 Host           | L1   | Platform_Should_Not_Depend_On_Host        | 决策-Platform |
-| ADR-0002.3   | Platform 不应依赖 Modules        | L1   | Platform_Should_Not_Depend_On_Modules     | 决策-Platform |
-| ADR-0002.4   | Platform 应有唯一 Bootstrapper   | L1   | Platform_Should_Have_Single_Bootstrapper_Entry_Point | 决策-Platform |
-| ADR-0002.5   | Application 不依赖 Host          | L1   | Application_Should_Not_Depend_On_Host     | 决策-Application |
-| ADR-0002.6   | Application 不依赖 Modules       | L1   | Application_Should_Not_Depend_On_Modules  | 决策-Application |
-| ADR-0002.7   | Application 应有唯一 Bootstrapper| L1   | Application_Should_Have_Single_Bootstrapper_Entry_Point | 决策-Application |
-| ADR-0002.8   | Application 不含 Host 专属类型   | L1   | Application_Should_Not_Use_HttpContext | 决策-Application |
-| ADR-0002.9   | Host 不依赖 Modules              | L1   | Host_Should_Not_Depend_On_Modules        | 决策-Host      |
-| ADR-0002.10  | Host 不含业务类型                | L1   | Host_Should_Not_Contain_Business_Types   | 决策-Host      |
-| ADR-0002.11  | Host 项目文件不应引用 Modules    | L1   | Host_Csproj_Should_Not_Reference_Modules | 决策-Host      |
-| ADR-0002.12  | Program.cs 建议 ≤30行            | L1   | Program_Cs_Should_Be_Concise             | 决策-Host      |
-| ADR-0002.13  | Program.cs 只应调用 Bootstrapper | L1   | Program_Cs_Should_Only_Call_Bootstrapper | 决策-Host      |
-| ADR-0002.14  | 三层唯一依赖方向验证             | L1   | Verify_Complete_Three_Layer_Dependency_Direction    | 决策 |
+| 约束编号        | 描述                            | 层级 | 测试用例/自动化                                                | 章节             |
+|-------------|-------------------------------|----|---------------------------------------------------------|----------------|
+| ADR-0002.1  | Platform 不应依赖 Application     | L1 | Platform_Should_Not_Depend_On_Application               | 决策-Platform    |
+| ADR-0002.2  | Platform 不应依赖 Host            | L1 | Platform_Should_Not_Depend_On_Host                      | 决策-Platform    |
+| ADR-0002.3  | Platform 不应依赖 Modules         | L1 | Platform_Should_Not_Depend_On_Modules                   | 决策-Platform    |
+| ADR-0002.4  | Platform 应有唯一 Bootstrapper    | L1 | Platform_Should_Have_Single_Bootstrapper_Entry_Point    | 决策-Platform    |
+| ADR-0002.5  | Application 不依赖 Host          | L1 | Application_Should_Not_Depend_On_Host                   | 决策-Application |
+| ADR-0002.6  | Application 不依赖 Modules       | L1 | Application_Should_Not_Depend_On_Modules                | 决策-Application |
+| ADR-0002.7  | Application 应有唯一 Bootstrapper | L1 | Application_Should_Have_Single_Bootstrapper_Entry_Point | 决策-Application |
+| ADR-0002.8  | Application 不含 Host 专属类型      | L1 | Application_Should_Not_Use_HttpContext                  | 决策-Application |
+| ADR-0002.9  | Host 不依赖 Modules              | L1 | Host_Should_Not_Depend_On_Modules                       | 决策-Host        |
+| ADR-0002.10 | Host 不含业务类型                   | L1 | Host_Should_Not_Contain_Business_Types                  | 决策-Host        |
+| ADR-0002.11 | Host 项目文件不应引用 Modules         | L1 | Host_Csproj_Should_Not_Reference_Modules                | 决策-Host        |
+| ADR-0002.12 | Program.cs 建议 ≤30行            | L1 | Program_Cs_Should_Be_Concise                            | 决策-Host        |
+| ADR-0002.13 | Program.cs 只应调用 Bootstrapper  | L1 | Program_Cs_Should_Only_Call_Bootstrapper                | 决策-Host        |
+| ADR-0002.14 | 三层唯一依赖方向验证                    | L1 | Verify_Complete_Three_Layer_Dependency_Direction        | 决策             |
 
 > L1: 静态自动化可执行（ArchitectureTests）
 
@@ -567,11 +571,11 @@ app.Run();
 
 ## 版本历史
 
-| 版本 | 日期       | 变更摘要                               |
-|------|------------|----------------------------------|
-| 3.0  | 2026-01-22 | 结构升级、去编号化、加强测试映射           |
-| 2.0  | 2026-01-20 | 目录与依赖方向细化                       |
-| 1.0  | 初版       | 初始发布                               |
+| 版本  | 日期         | 变更摘要             |
+|-----|------------|------------------|
+| 3.0 | 2026-01-22 | 结构升级、去编号化、加强测试映射 |
+| 2.0 | 2026-01-20 | 目录与依赖方向细化        |
+| 1.0 | 初版         | 初始发布             |
 
 ---
 

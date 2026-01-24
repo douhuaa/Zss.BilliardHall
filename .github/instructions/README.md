@@ -24,6 +24,7 @@
 ### 基础指令（始终激活）
 
 `base.instructions.md` 建立 Copilot 的基本行为：
+
 - 尊重 ADR 作为宪法级法律
 - 将架构测试视为硬性约束
 - 绝不发明规则或绕过 CI
@@ -33,24 +34,24 @@
 
 根据你的工作内容应用额外指令：
 
-| 工作内容... | 额外指令 |
-|---------------|------------------------|
-| Handler、用例、领域模型 | `backend.instructions.md` |
-| 单元测试、集成测试 | `testing.instructions.md` |
-| ADR、指南、Prompt | `documentation.instructions.md` |
-| PR 评审、架构评估 | `architecture-review.instructions.md` |
+| 工作内容...         | 额外指令                                  |
+|-----------------|---------------------------------------|
+| Handler、用例、领域模型 | `backend.instructions.md`             |
+| 单元测试、集成测试       | `testing.instructions.md`             |
+| ADR、指南、Prompt   | `documentation.instructions.md`       |
+| PR 评审、架构评估      | `architecture-review.instructions.md` |
 
 ## 与 docs/copilot/ 的关系
 
 这两个系统协同工作但目的不同：
 
-| `.github/instructions/` | `docs/copilot/` |
-|------------------------|-----------------|
-| Copilot **是谁** | Copilot **如何**工作 |
-| 个性与边界 | 具体程序 |
-| 行为约束 | 详细场景 |
-| 绝不做什么 | 何时做什么 |
-| 很少变更 | 随经验演进 |
+| `.github/instructions/` | `docs/copilot/`  |
+|-------------------------|------------------|
+| Copilot **是谁**          | Copilot **如何**工作 |
+| 个性与边界                   | 具体程序             |
+| 行为约束                    | 详细场景             |
+| 绝不做什么                   | 何时做什么            |
+| 很少变更                    | 随经验演进            |
 
 ### 示例
 
@@ -67,16 +68,19 @@
 ## 何时更新
 
 ### 更新基础指令的时机：
+
 - 项目采用新架构原则
 - 基本约束发生变化
 - 出现新的"绝不做这个"规则
 
 ### 更新角色特定指令的时机：
+
 - 某个模式变得足够常见需要正式化
 - 角色边界需要澄清
 - 风险等级发生变化
 
 ### 不要更新的情况：
+
 - 具体示例（放入 `docs/copilot/`）
 - 临时例外
 - 个别用例
@@ -118,6 +122,7 @@
 ### 对于开发者
 
 与 Copilot 交互时：
+
 1. Copilot 将自动遵循这些指令
 2. 如果需要具体帮助，参考相关的 `docs/copilot/` 文件
 3. 如果 Copilot 显得过于谨慎，这是有意为之——它在保护架构
@@ -125,6 +130,7 @@
 ### 对于维护者
 
 更新指令时：
+
 1. 确保所有文件之间的一致性
 2. 更新版本号和日期
 3. 测试变更不与现有 ADR 冲突
@@ -135,6 +141,7 @@
 > **Copilot 放大理解能力，不替代理解**
 
 这些指令确保 Copilot：
+
 - ✅ 帮助你更快理解 ADR
 - ✅ 更早捕获违规
 - ✅ 建议合规解决方案
@@ -144,13 +151,13 @@
 
 ## 快速参考
 
-| 场景 | 查看文件 |
-|----------|------------|
-| "我能在模块中做 X 吗？" | `backend.instructions.md` |
-| "我应该如何测试这个？" | `testing.instructions.md` |
-| "我应该如何记录这个？" | `documentation.instructions.md` |
+| 场景              | 查看文件                                  |
+|-----------------|---------------------------------------|
+| "我能在模块中做 X 吗？"  | `backend.instructions.md`             |
+| "我应该如何测试这个？"    | `testing.instructions.md`             |
+| "我应该如何记录这个？"    | `documentation.instructions.md`       |
 | "这个 PR 架构上合理吗？" | `architecture-review.instructions.md` |
-| "核心规则是什么？" | `base.instructions.md` |
+| "核心规则是什么？"      | `base.instructions.md`                |
 
 对于详细的"如何做"指导，始终参考 `docs/copilot/` 文件。
 

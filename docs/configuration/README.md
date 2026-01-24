@@ -21,11 +21,13 @@
 本目录包含 Zss.BilliardHall 项目中各类配置文件的详细文档。这些配置文件分为两类：
 
 ### 1. 格式和风格配置
+
 - **EditorConfig**（`.editorconfig`）：代码格式、缩进、换行符等
 - 管理范围：纯技术性格式规范
 - 变更流程：遵循 ADR-0900（技术层 ADR）
 
 ### 2. 架构和构建配置
+
 - **Directory.Build.props**：MSBuild 全局属性、命名空间推导
 - **Directory.Packages.props**：中央包管理（CPM）
 - **Directory.Build.targets**：MSBuild 构建目标
@@ -36,14 +38,14 @@
 
 ## 配置文件列表
 
-| 配置文件 | 位置 | 用途 | 详细文档 | 相关 ADR |
-|---------|------|------|---------|---------|
-| `.editorconfig` | 仓库根目录 | 代码格式和风格规范 | [editorconfig.md](editorconfig.md) | ADR-0900 |
-| `Directory.Build.props` | 仓库根目录 | MSBuild 全局属性、命名空间自动推导 | [Directory.Build.props 内联文档](../../Directory.Build.props) | ADR-0003 |
-| `Directory.Packages.props` | 仓库根目录 | 中央包管理（CPM），统一依赖版本 | [Directory.Packages.props 内联文档](../../Directory.Packages.props) | ADR-0004 |
-| `Directory.Build.targets` | 仓库根目录 | MSBuild 构建目标和自定义任务 | [Directory.Build.targets 内联文档](../../Directory.Build.targets) | - |
-| `.gitignore` | 仓库根目录 | Git 忽略文件规则 | - | - |
-| `.gitattributes` | 仓库根目录 | Git 属性配置（换行符等） | - | - |
+| 配置文件                       | 位置    | 用途                    | 详细文档                                                            | 相关 ADR   |
+|----------------------------|-------|-----------------------|-----------------------------------------------------------------|----------|
+| `.editorconfig`            | 仓库根目录 | 代码格式和风格规范             | [editorconfig.md](editorconfig.md)                              | ADR-0900 |
+| `Directory.Build.props`    | 仓库根目录 | MSBuild 全局属性、命名空间自动推导 | [Directory.Build.props 内联文档](../../Directory.Build.props)       | ADR-0003 |
+| `Directory.Packages.props` | 仓库根目录 | 中央包管理（CPM），统一依赖版本     | [Directory.Packages.props 内联文档](../../Directory.Packages.props) | ADR-0004 |
+| `Directory.Build.targets`  | 仓库根目录 | MSBuild 构建目标和自定义任务    | [Directory.Build.targets 内联文档](../../Directory.Build.targets)   | -        |
+| `.gitignore`               | 仓库根目录 | Git 忽略文件规则            | -                                                               | -        |
+| `.gitattributes`           | 仓库根目录 | Git 属性配置（换行符等）        | -                                                               | -        |
 
 ---
 
@@ -82,17 +84,17 @@
 ### 关键原则
 
 1. **EditorConfig 不包含架构约束**
-   - ✅ 控制：文件格式、缩进、换行符
-   - ❌ 不控制：命名空间、依赖、分层、CQRS 模式
+  - ✅ 控制：文件格式、缩进、换行符
+  - ❌ 不控制：命名空间、依赖、分层、CQRS 模式
 
 2. **架构约束由 ADR + MSBuild + 测试强制执行**
-   - `Directory.Build.props`：自动推导命名空间，防止手动覆盖
-   - `Directory.Packages.props`：统一管理包版本，禁止项目级版本
-   - 架构测试：验证所有 ADR 约束合规性
+  - `Directory.Build.props`：自动推导命名空间，防止手动覆盖
+  - `Directory.Packages.props`：统一管理包版本，禁止项目级版本
+  - 架构测试：验证所有 ADR 约束合规性
 
 3. **配置文件变更必须遵循 ADR-0900**
-   - 格式配置（EditorConfig）：技术层 ADR，单人批准
-   - 架构配置（MSBuild、CPM）：可能涉及宪法层，严格审查
+  - 格式配置（EditorConfig）：技术层 ADR，单人批准
+  - 架构配置（MSBuild、CPM）：可能涉及宪法层，严格审查
 
 ---
 
@@ -100,24 +102,24 @@
 
 ### 按场景查找
 
-| 我想... | 查看文档 |
-|--------|---------|
-| 配置代码编辑器的格式规范 | [editorconfig.md](editorconfig.md) |
-| 理解命名空间如何自动推导 | [ADR-0003](../adr/constitutional/ADR-0003-namespace-rules.md) + [Directory.Build.props](../../Directory.Build.props) |
+| 我想...         | 查看文档                                                                                                                 |
+|---------------|----------------------------------------------------------------------------------------------------------------------|
+| 配置代码编辑器的格式规范  | [editorconfig.md](editorconfig.md)                                                                                   |
+| 理解命名空间如何自动推导  | [ADR-0003](../adr/constitutional/ADR-0003-namespace-rules.md) + [Directory.Build.props](../../Directory.Build.props) |
 | 添加或更新 NuGet 包 | [ADR-0004](../adr/constitutional/ADR-0004-Cpm-Final.md) + [Directory.Packages.props](../../Directory.Packages.props) |
-| 修改构建配置 | [Directory.Build.props](../../Directory.Build.props) 内联文档 |
-| 解决架构测试失败 | [架构测试失败诊断](../copilot/architecture-test-failures.md) |
-| 修改任何配置文件 | [ADR-0900](../adr/governance/ADR-0900-adr-process.md) |
+| 修改构建配置        | [Directory.Build.props](../../Directory.Build.props) 内联文档                                                            |
+| 解决架构测试失败      | [架构测试失败诊断](../copilot/architecture-test-failures.md)                                                                 |
+| 修改任何配置文件      | [ADR-0900](../adr/governance/ADR-0900-adr-process.md)                                                                |
 
 ### 按文件类型查找
 
-| 文件类型 | 格式规范 | 架构约束 |
-|---------|---------|---------|
-| C# 源代码 (*.cs) | [editorconfig.md § C# 源代码文件](editorconfig.md#c-源代码文件-cs) | [ADR-0003 命名空间](../adr/constitutional/ADR-0003-namespace-rules.md) |
-| 项目文件 (*.csproj) | [editorconfig.md § 项目配置文件](editorconfig.md#项目和配置文件) | [ADR-0004 包管理](../adr/constitutional/ADR-0004-Cpm-Final.md) |
-| Markdown (*.md) | [editorconfig.md § 文档文件](editorconfig.md#文档和数据文件) | - |
-| YAML (*.yml) | [editorconfig.md § 文档文件](editorconfig.md#文档和数据文件) | - |
-| JSON (*.json) | [editorconfig.md § 文档文件](editorconfig.md#文档和数据文件) | - |
+| 文件类型            | 格式规范                                                     | 架构约束                                                               |
+|-----------------|----------------------------------------------------------|--------------------------------------------------------------------|
+| C# 源代码 (*.cs)   | [editorconfig.md § C# 源代码文件](editorconfig.md#c-源代码文件-cs) | [ADR-0003 命名空间](../adr/constitutional/ADR-0003-namespace-rules.md) |
+| 项目文件 (*.csproj) | [editorconfig.md § 项目配置文件](editorconfig.md#项目和配置文件)      | [ADR-0004 包管理](../adr/constitutional/ADR-0004-Cpm-Final.md)        |
+| Markdown (*.md) | [editorconfig.md § 文档文件](editorconfig.md#文档和数据文件)        | -                                                                  |
+| YAML (*.yml)    | [editorconfig.md § 文档文件](editorconfig.md#文档和数据文件)        | -                                                                  |
+| JSON (*.json)   | [editorconfig.md § 文档文件](editorconfig.md#文档和数据文件)        | -                                                                  |
 
 ---
 
@@ -132,6 +134,7 @@
 3. `Directory.Build.props` 自动推导命名空间
 
 **推荐配置**：
+
 - 启用"保存时代码清理"（包含 EditorConfig 偏好）
 - 快捷键：`Ctrl+K, Ctrl+D`（格式化文档）
 
@@ -174,6 +177,7 @@
 - **包管理**：`Directory.Packages.props` + ADR-0004 + 架构测试
 
 这种分离确保：
+
 1. 每个工具专注其职责
 2. 架构约束可以被自动化测试强制执行
 3. 格式问题不会干扰架构验证
@@ -182,14 +186,15 @@
 
 **A**：根据 [ADR-0900（ADR 新增与修订流程）](../adr/governance/ADR-0900-adr-process.md)：
 
-| 配置文件 | 变更级别 | 审批要求 | 公示期 |
-|---------|---------|---------|--------|
-| `.editorconfig` | 技术层 | Tech Lead/架构师单人批准 | 无 |
-| `Directory.Build.props`（格式性变更） | 技术层 | Tech Lead/架构师单人批准 | 无 |
-| `Directory.Build.props`（架构性变更） | 结构层或宪法层 | 严格审查 | 建议讨论 |
-| `Directory.Packages.props` | 技术层 | Tech Lead/架构师单人批准 | 无 |
+| 配置文件                           | 变更级别    | 审批要求              | 公示期  |
+|--------------------------------|---------|-------------------|------|
+| `.editorconfig`                | 技术层     | Tech Lead/架构师单人批准 | 无    |
+| `Directory.Build.props`（格式性变更） | 技术层     | Tech Lead/架构师单人批准 | 无    |
+| `Directory.Build.props`（架构性变更） | 结构层或宪法层 | 严格审查              | 建议讨论 |
+| `Directory.Packages.props`     | 技术层     | Tech Lead/架构师单人批准 | 无    |
 
 **所有变更必须**：
+
 1. 提交 PR 并说明变更原因
 2. 更新相关文档
 3. 通过 CI 验证
@@ -200,11 +205,13 @@
 **A**：参考 [editorconfig.md § 问题 1：EditorConfig 规则未生效](editorconfig.md#问题-1editorconfig-规则未生效)
 
 常见原因：
+
 1. IDE 未启用 EditorConfig 支持
 2. IDE 缓存未刷新
 3. VS Code 未安装扩展
 
 解决方案：
+
 - Visual Studio：验证"代码清理"配置
 - Rider：验证 `Enable EditorConfig support`
 - VS Code：安装 `EditorConfig for VS Code` 扩展
@@ -215,9 +222,9 @@
 
 1. **架构测试失败诊断**：[architecture-test-failures.md](../copilot/architecture-test-failures.md)
 2. **查阅对应 ADR**：
-   - 命名空间问题 → [ADR-0003](../adr/constitutional/ADR-0003-namespace-rules.md)
-   - 依赖问题 → [ADR-0001](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-   - 包管理问题 → [ADR-0004](../adr/constitutional/ADR-0004-Cpm-Final.md)
+  - 命名空间问题 → [ADR-0003](../adr/constitutional/ADR-0003-namespace-rules.md)
+  - 依赖问题 → [ADR-0001](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+  - 包管理问题 → [ADR-0004](../adr/constitutional/ADR-0004-Cpm-Final.md)
 3. **Copilot Prompts**：[docs/copilot/](../copilot/)
 
 ---
@@ -225,22 +232,26 @@
 ## 相关文档
 
 ### ADR 体系
+
 - [ADR 索引](../adr/README.md)
 - [宪法层 ADR](../adr/constitutional/)
 - [ADR-0900：ADR 新增与修订流程](../adr/governance/ADR-0900-adr-process.md)
 
 ### 配置文件文档
+
 - [EditorConfig 详细文档](editorconfig.md)
 - [.editorconfig 文件](../../.editorconfig)
 - [Directory.Build.props](../../Directory.Build.props)
 - [Directory.Packages.props](../../Directory.Packages.props)
 
 ### Copilot 指南
+
 - [Copilot 指令索引](../copilot/README.md)
 - [架构测试失败诊断](../copilot/architecture-test-failures.md)
 - [ADR Prompts 合集](../copilot/)
 
 ### 开发指南
+
 - [快速入门](../QUICK-START.md)
 - [架构指南](../architecture-guide.md)
 - [测试指南](../TESTING-GUIDE.md)
@@ -250,9 +261,9 @@
 
 ## 版本历史
 
-| 版本 | 日期 | 变更摘要 | 负责人 |
-|------|------|---------|-------|
-| 1.0  | 2026-01-24 | 创建配置文件索引，整合 EditorConfig 文档 | 架构团队 |
+| 版本  | 日期         | 变更摘要                        | 负责人  |
+|-----|------------|-----------------------------|------|
+| 1.0 | 2026-01-24 | 创建配置文件索引，整合 EditorConfig 文档 | 架构团队 |
 
 ---
 

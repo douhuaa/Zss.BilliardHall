@@ -1,27 +1,27 @@
 <Solution>
-  <Folder Name="/src/" />
+  <Folder Name="/src/"/>
   <Folder Name="/src/Application/">
-    <Project Path="src/Application/Application.csproj" />
+    <Project Path="src/Application/Application.csproj"/>
   </Folder>
   <Folder Name="/src/Host/">
-    <Project Path="src/Host/Web/Web.csproj" />
-    <Project Path="src/Host/Worker/Worker.csproj" />
+    <Project Path="src/Host/Web/Web.csproj"/>
+    <Project Path="src/Host/Worker/Worker.csproj"/>
   </Folder>
   <Folder Name="/src/Modules/">
-    <Project Path="src/Modules/Members/Members.csproj" />
-    <Project Path="src/Modules/Orders/Orders.csproj" />
+    <Project Path="src/Modules/Members/Members.csproj"/>
+    <Project Path="src/Modules/Orders/Orders.csproj"/>
   </Folder>
   <Folder Name="/src/Platform/">
-    <Project Path="src/Platform/Platform.csproj" />
+    <Project Path="src/Platform/Platform.csproj"/>
   </Folder>
   <Folder Name="/src/Tests/">
-    <Project Path="src/tests/ArchitectureTests/ArchitectureTests.csproj" />
+    <Project Path="src/tests/ArchitectureTests/ArchitectureTests.csproj"/>
   </Folder>
   <Folder Name="/src/Tools/">
-    <Project Path="src/tools/ArchitectureAnalyzers/ArchitectureAnalyzers.csproj" />
+    <Project Path="src/tools/ArchitectureAnalyzers/ArchitectureAnalyzers.csproj"/>
   </Folder>
   <Folder Name="/docs/">
-    <Project Path="docs/Docs.csproj" />
+    <Project Path="docs/Docs.csproj"/>
   </Folder>
 
 </Solution>

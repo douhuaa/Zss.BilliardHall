@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Platform.Contracts;
+﻿namespace Zss.BilliardHall.Platform.Contracts;
 
 /// <summary>
 /// 基础查询接口标记，用于标识查询服务接口

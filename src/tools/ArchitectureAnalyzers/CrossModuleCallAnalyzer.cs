@@ -1,4 +1,4 @@
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -16,29 +16,25 @@ public class CrossModuleCallAnalyzer : DiagnosticAnalyzer
 {
     public const string DiagnosticId = "ADR0005_05";
     private const string Category = "Architecture";
-    
+
     // Configuration constants
     private const string ModuleNamespacePrefix = "Zss.BilliardHall.Modules.";
     private const string PlatformNamespacePrefix = "Zss.BilliardHall.Platform";
     private const string ContractsNamespacePart = ".Contracts";
 
     private static readonly LocalizableString Title = "Synchronous cross-module call detected";
-    private static readonly LocalizableString MessageFormat = 
-        "Detected potential synchronous call to module '{0}' from module '{1}'. Use asynchronous messaging instead (ADR-0005.5)";
-    private static readonly LocalizableString Description = 
-        "Modules should communicate asynchronously through domain events or application layer orchestration. " +
-        "Direct synchronous calls between modules violate isolation principles.";
+    private static readonly LocalizableString MessageFormat = "Detected potential synchronous call to module '{0}' from module '{1}'. Use asynchronous messaging instead (ADR-0005.5).";
+    private static readonly LocalizableString Description = "Modules should communicate asynchronously through domain events or application layer orchestration. " + "Direct synchronous calls between modules violate isolation principles.";
 
-    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
-        DiagnosticId,
-        Title,
-        MessageFormat,
-        Category,
-        DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: Description);
+    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId,
+    Title,
+    MessageFormat,
+    Category,
+    DiagnosticSeverity.Warning,
+    isEnabledByDefault: true,
+    description: Description);
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => 
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
         ImmutableArray.Create(Rule);
 
     public override void Initialize(AnalysisContext context)
@@ -77,18 +73,18 @@ public class CrossModuleCallAnalyzer : DiagnosticAnalyzer
 
         if (targetModule != callerModule && !IsAllowedCrossModuleCall(methodSymbol, targetNamespace))
         {
-            var diagnostic = Diagnostic.Create(
-                Rule,
-                invocation.GetLocation(),
-                targetModule,
-                callerModule);
+            var diagnostic = Diagnostic.Create(Rule,
+            invocation.GetLocation(),
+            targetModule,
+            callerModule);
             context.ReportDiagnostic(diagnostic);
         }
     }
 
     private string? GetContainingNamespace(SyntaxNode node)
     {
-        var namespaceDeclaration = node.Ancestors()
+        var namespaceDeclaration = node
+            .Ancestors()
             .OfType<BaseNamespaceDeclarationSyntax>()
             .FirstOrDefault();
         return namespaceDeclaration?.Name.ToString();
@@ -120,9 +116,7 @@ public class CrossModuleCallAnalyzer : DiagnosticAnalyzer
 
         // Allow calls to messaging infrastructure (Publish, Send from Wolverine)
         var methodName = methodSymbol.Name;
-        if (methodName == "Publish" || methodName == "PublishAsync" || 
-            methodName == "Send" || methodName == "SendAsync" ||
-            methodName == "Invoke" || methodName == "InvokeAsync")
+        if (methodName == "Publish" || methodName == "PublishAsync" || methodName == "Send" || methodName == "SendAsync" || methodName == "Invoke" || methodName == "InvokeAsync")
             return true;
 
         return false;

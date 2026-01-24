@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Modules.Members.Features.GetMemberById;
+﻿namespace Zss.BilliardHall.Modules.Members.Features.GetMemberById;
 
 /// <summary>
 /// 查询会员处理器
@@ -10,16 +10,16 @@ public class GetMemberByIdQueryHandler
     // 在实际实现中，可能注入：
     // - IDocumentSession (Marten) 用于查询
     // - 或直接使用 SQL 查询
-    
+
     public async Task<MemberDto?> Handle(GetMemberByIdQuery query)
     {
         // 1. 查询数据库
         // 2. 映射到 DTO
         // 3. 返回结果
-        
+
         // 示例代码（未实现）
         await Task.CompletedTask;
-        
+
         return null; // TODO: 实现查询逻辑
     }
 }

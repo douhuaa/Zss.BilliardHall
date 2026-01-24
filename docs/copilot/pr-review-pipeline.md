@@ -9,6 +9,7 @@
 ## 概述
 
 本文档定义 "Copilot Review + ArchitectureTests" 双护栏机制的完整流程，确保所有 PR 在合并前经过：
+
 1. **Copilot 辅助性审查** - 预防性识别潜在违规
 2. **ArchitectureTests 强制验证** - 不可绕过的硬护栏
 
@@ -28,12 +29,13 @@
 
 ### 明确职责分工
 
-| 组件 | 职责 | 权限 | 失败后果 |
-|------|------|------|---------|
-| **Copilot Review** | 识别潜在问题、提供修复建议 | 建议权 | 提醒，不阻断 |
-| **ArchitectureTests** | 验证 ADR 合规性 | 否决权 | 阻断合并 |
+| 组件                    | 职责            | 权限  | 失败后果   |
+|-----------------------|---------------|-----|--------|
+| **Copilot Review**    | 识别潜在问题、提供修复建议 | 建议权 | 提醒，不阻断 |
+| **ArchitectureTests** | 验证 ADR 合规性    | 否决权 | 阻断合并   |
 
 **关键**：
+
 - ✅ Copilot 说"有问题" → 必须仔细审查
 - ⚠️ Copilot 说"没问题" → 仍需通过 ArchitectureTests
 - ❌ ArchitectureTests 失败 → **必须修复，无例外**
@@ -92,17 +94,20 @@ graph TB
 **场景**：不确定架构约束时
 
 **操作**：
+
 ```
 询问 Copilot：
 "我想在 Orders 模块中 [具体操作]，有哪些架构约束需要注意？"
 ```
 
 **Copilot 会参考**：
+
 - `.github/instructions/backend.instructions.md`
 - `docs/copilot/adr-XXXX.prompts.md`
 - 相关 ADR 文档
 
 **预期输出**：
+
 - 适用的 ADR 列表
 - 允许和禁止的模式
 - 代码示例
@@ -112,6 +117,7 @@ graph TB
 ### 1.2 本地架构测试（必须）
 
 **操作**：
+
 ```bash
 # 运行所有架构测试
 dotnet test src/tests/ArchitectureTests/
@@ -125,6 +131,7 @@ dotnet test --filter "FullyQualifiedName~ADR_0001"
 #### 步骤 1：复制完整失败日志
 
 包括：
+
 - 测试名称
 - 失败消息
 - 预期/实际结果
@@ -140,11 +147,13 @@ dotnet test --filter "FullyQualifiedName~ADR_0001"
 ```
 
 **Copilot 会参考**：
+
 - `docs/copilot/architecture-test-failures.md`
 - 对应的 `docs/copilot/adr-XXXX.prompts.md`
 - ADR 文档
 
 **预期输出**：
+
 - 违规分析（人话解释）
 - 违反的具体 ADR 条款
 - 逐步修复建议
@@ -159,6 +168,7 @@ dotnet test --filter "FullyQualifiedName~ADR_0001"
 ### 1.3 Copilot 预审查（推荐）
 
 **操作**：
+
 ```
 询问 Copilot：
 "请基于 ADR-0001 至 ADR-0005 审查我的以下变更：
@@ -168,10 +178,12 @@ dotnet test --filter "FullyQualifiedName~ADR_0001"
 ```
 
 **Copilot 会参考**：
+
 - `.github/instructions/architecture-review.instructions.md`
 - 所有 `docs/copilot/adr-XXXX.prompts.md`
 
 **预期输出**：
+
 ```markdown
 ## Architecture Review Summary
 
@@ -229,6 +241,7 @@ Copilot 回复摘要：
 ```
 
 **如果勾选"架构破例"**：
+
 - 必须填写完整的破例详情
 - 必须获得架构师批准
 - PR 标题必须加 `[ARCH-VIOLATION]` 前缀
@@ -260,6 +273,7 @@ Copilot 回复摘要：
 $ dotnet test src/tests/ArchitectureTests/
 ✅ 所有测试通过 (36 passed, 0 failed)
 ```
+
 ```
 
 ---
@@ -277,6 +291,7 @@ PR 创建/更新后，CI 自动运行：
 ### 3.2 CI 成功
 
 **CI 输出**：
+
 ```
 ✅ Architecture Compliance Summary
 
@@ -343,9 +358,11 @@ PR 创建/更新后，CI 自动运行：
 将失败日志复制给 GitHub Copilot，并询问：
 
 ```
+
 请根据以下架构测试失败日志，解释违规原因并提供修复建议
 
 [粘贴失败日志]
+
 ```
 
 #### 3️⃣ Copilot 参考资源
@@ -372,6 +389,7 @@ dotnet test src/tests/ArchitectureTests/
 ---
 
 💡 **提示**：记得在 PR 描述中完成 "Copilot 参与检查清单"。
+
 ```
 
 #### 开发者响应流程
@@ -383,9 +401,11 @@ dotnet test src/tests/ArchitectureTests/
 
 3. **询问 Copilot**
    ```
-   请根据以下架构测试失败日志，解释违规原因并提供修复建议：
 
-   [粘贴失败日志]
+请根据以下架构测试失败日志，解释违规原因并提供修复建议：
+
+[粘贴失败日志]
+
    ```
 
 4. **Copilot 提供诊断**
@@ -408,15 +428,18 @@ dotnet test src/tests/ArchitectureTests/
    await _eventBus.Publish(new OrderCreated(orderId, memberId));
    ```
 
-   2. **数据契约**：
+2. **数据契约**：
+
    ```csharp
    var memberDto = await _queryBus.Send(new GetMemberById(memberId));
    ```
 
-   3. **原始类型**：
+3. **原始类型**：
+
    ```csharp
    var command = new CreateOrder(memberId); // Guid, 不是 Member 对象
    ```
+
    ```
 
 5. **根据建议修复代码**
@@ -470,11 +493,13 @@ dotnet test src/tests/ArchitectureTests/
 #### 场景 1：架构问题但测试通过
 
 **可能原因**：
+
 - 测试覆盖不完整（罕见）
 - 测试本身有 bug（极罕见）
 - 这是测试未覆盖的新场景
 
 **处理**：
+
 1. 在 PR 中明确指出问题
 2. 引用相关 ADR
 3. 建议开发者询问 Copilot
@@ -483,11 +508,13 @@ dotnet test src/tests/ArchitectureTests/
 #### 场景 2：Copilot 未发现的问题
 
 **可能原因**：
+
 - 开发者未使用 Copilot Review
 - Copilot 的判断范围有限
 - 问题属于业务逻辑而非架构
 
 **处理**：
+
 1. 正常提出 Review 意见
 2. 如果是常见问题，建议补充到 `docs/copilot/` 相关文件
 
@@ -498,11 +525,13 @@ dotnet test src/tests/ArchitectureTests/
 ### 5.1 合并前最终检查清单
 
 自动化检查（CI 强制）：
+
 - [x] 所有架构测试通过
 - [x] 所有单元/集成测试通过
 - [x] 构建成功
 
 人工检查（Reviewer 负责）：
+
 - [x] 至少一位 Reviewer 批准
 - [x] Copilot 参与清单已完成
 - [x] 所有 Review 意见已解决
@@ -517,9 +546,9 @@ dotnet test src/tests/ArchitectureTests/
 
 1. **立即创建 Issue** 记录问题
 2. **分析根因**：
-   - 是测试缺口？→ 补充架构测试
-   - 是 Copilot 提示不足？→ 更新 `docs/copilot/`
-   - 是人工 Review 疏漏？→ 团队复盘
+  - 是测试缺口？→ 补充架构测试
+  - 是 Copilot 提示不足？→ 更新 `docs/copilot/`
+  - 是人工 Review 疏漏？→ 团队复盘
 3. **修复问题**
 4. **完善防护网**
 
@@ -562,15 +591,15 @@ dotnet test src/tests/ArchitectureTests/
 **如果 Copilot 错误地标记合规代码为违规**：
 
 1. **记录案例**：
-   - 在 PR 评论中说明
-   - 引用相关 ADR 证明合规
+  - 在 PR 评论中说明
+  - 引用相关 ADR 证明合规
 
 2. **补充到 Prompt 库**：
-   - 在相关的 `docs/copilot/adr-XXXX.prompts.md` 中添加澄清
+  - 在相关的 `docs/copilot/adr-XXXX.prompts.md` 中添加澄清
 
 3. **不要因此忽视 Copilot**：
-   - 误报率低不代表可以跳过 Copilot Review
-   - 持续完善 Prompt 库可以降低误报
+  - 误报率低不代表可以跳过 Copilot Review
+  - 持续完善 Prompt 库可以降低误报
 
 ---
 
@@ -579,19 +608,19 @@ dotnet test src/tests/ArchitectureTests/
 **如果架构测试错误地失败**：
 
 1. **验证是否真的误报**：
-   - 仔细阅读 ADR
-   - 询问 Copilot
-   - 咨询架构师
+  - 仔细阅读 ADR
+  - 询问 Copilot
+  - 咨询架构师
 
 2. **如果确认误报**：
-   - 创建 Issue 报告测试 bug
-   - 标题：`[ArchTest] 测试误报: TestName`
-   - 提供详细场景说明
+  - 创建 Issue 报告测试 bug
+  - 标题：`[ArchTest] 测试误报: TestName`
+  - 提供详细场景说明
 
 3. **临时处理**：
-   - 获得架构师/Tech Lead 批准
-   - 在 PR 中明确说明
-   - 跟踪修复 Issue
+  - 获得架构师/Tech Lead 批准
+  - 在 PR 中明确说明
+  - 跟踪修复 Issue
 
 ---
 
@@ -601,32 +630,32 @@ dotnet test src/tests/ArchitectureTests/
 
 定期收集以下数据：
 
-| 指标 | 目标 | 测量方式 |
-|------|------|---------|
-| 架构测试首次通过率 | >85% | CI 统计 |
-| Copilot Review 使用率 | 100% | PR 模板勾选统计 |
-| CI 失败后修复时间 | <30min | PR 时间戳分析 |
-| 合并后发现的架构问题 | <1/月 | Issue 统计 |
+| 指标                 | 目标     | 测量方式      |
+|--------------------|--------|-----------|
+| 架构测试首次通过率          | >85%   | CI 统计     |
+| Copilot Review 使用率 | 100%   | PR 模板勾选统计 |
+| CI 失败后修复时间         | <30min | PR 时间戳分析  |
+| 合并后发现的架构问题         | <1/月   | Issue 统计  |
 
 ### 持续改进
 
 #### 每月回顾
 
 1. **分析 CI 失败案例**
-   - 哪些违规最常见？
-   - 是否需要加强某个 ADR 的提示？
+  - 哪些违规最常见？
+  - 是否需要加强某个 ADR 的提示？
 
 2. **收集 Copilot 使用反馈**
-   - 哪些建议最有帮助？
-   - 哪些地方 Copilot 判断不准确？
+  - 哪些建议最有帮助？
+  - 哪些地方 Copilot 判断不准确？
 
 3. **更新 Prompt 库**
-   - 补充新的场景和示例
-   - 澄清误报案例
+  - 补充新的场景和示例
+  - 澄清误报案例
 
 4. **完善架构测试**
-   - 填补测试缺口
-   - 修复测试 bug
+  - 填补测试缺口
+  - 修复测试 bug
 
 ---
 
@@ -635,6 +664,7 @@ dotnet test src/tests/ArchitectureTests/
 ### Q1: 我必须使用 Copilot 吗？
 
 **A:** PR 模板要求勾选 Copilot 参与清单，但更重要的是：
+
 - ✅ 架构测试必须通过（强制）
 - ✅ PR 必须经过人工 Review（强制）
 - ⚠️ Copilot Review 是强烈建议，可以大幅提高通过率
@@ -642,6 +672,7 @@ dotnet test src/tests/ArchitectureTests/
 ### Q2: Copilot 说没问题，但 CI 失败了，怎么办？
 
 **A:** 架构测试是最终裁决：
+
 - Copilot 是辅助工具，不是权威
 - 将 CI 失败日志复制给 Copilot，获取修复建议
 - 修复代码直到测试通过
@@ -649,6 +680,7 @@ dotnet test src/tests/ArchitectureTests/
 ### Q3: CI 通过了，Reviewer 还需要检查架构吗？
 
 **A:** 需要，但可以轻量化：
+
 - ✅ 抽查关键变更是否合规
 - ✅ 验证 Copilot 参与清单已完成
 - ⏭️ 不需要逐行检查 ADR 合规性（CI 已验证）
@@ -656,6 +688,7 @@ dotnet test src/tests/ArchitectureTests/
 ### Q4: 如何处理紧急 hotfix？
 
 **A:** 流程不变：
+
 - 架构测试仍必须通过
 - 可以简化人工 Review 流程
 - 如果确需破例，走架构破例流程（不推荐）
@@ -682,6 +715,6 @@ dotnet test src/tests/ArchitectureTests/
 
 ## 版本历史
 
-| 版本 | 日期 | 变更说明 |
-|------|------|----------|
+| 版本  | 日期         | 变更说明 |
+|-----|------------|------|
 | 1.0 | 2026-01-21 | 初始版本 |

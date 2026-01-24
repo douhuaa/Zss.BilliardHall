@@ -33,10 +33,13 @@ tests/
 ## 架构测试（关键）
 
 ### 位置
+
 所有架构测试位于：`src/tests/ArchitectureTests/ADR/`
 
 ### 结构
+
 每个 ADR 都有对应的测试类：
+
 - `ADR_0001_Architecture_Tests.cs` - 模块隔离
 - `ADR_0002_Architecture_Tests.cs` - Platform/Application/Host 边界
 - `ADR_0003_Architecture_Tests.cs` - 命名空间规则
@@ -46,11 +49,13 @@ tests/
 ### 绝不建议
 
 ❌ **不要建议**：
+
 - 修改架构测试以使代码通过
 - 注释掉失败的架构测试
 - 在没有充分理由的情况下为架构测试添加例外/排除
 
 ✅ **应该建议**：
+
 - 修复代码以符合架构
 - 参考相关 ADR 以了解正确模式
 - 查阅 `docs/copilot/adr-XXXX.prompts.md` 获取指导
@@ -58,6 +63,7 @@ tests/
 ## 单元测试
 
 ### Handler 测试
+
 独立测试 Handler：
 
 ```csharp
@@ -83,6 +89,7 @@ public class CreateOrderHandlerTests
 ```
 
 ### 领域模型测试
+
 测试领域模型中的业务逻辑：
 
 ```csharp
@@ -145,6 +152,7 @@ public class CreateOrderIntegrationTests
 ## 要遵循的测试模式
 
 ### ✅ 好的模式
+
 ```csharp
 // 描述行为的清晰测试名称
 [Fact]
@@ -165,6 +173,7 @@ result.Should().NotBeEmpty(); // Assert
 ```
 
 ### ❌ 坏的模式
+
 ```csharp
 // ❌ 模糊的测试名称
 [Fact]
@@ -185,6 +194,7 @@ public async Task Handle_CallsRepository() // 过于关注实现
 ## 测试失败时
 
 ### 如果架构测试失败
+
 1. **不要修改测试**
 2. 复制失败消息
 3. 建议："请参考 `docs/copilot/architecture-test-failures.md` 并将此错误粘贴给我进行诊断"
@@ -192,6 +202,7 @@ public async Task Handle_CallsRepository() // 过于关注实现
 5. 建议正确实现
 
 ### 如果单元/集成测试失败
+
 1. 分析失败原因
 2. 确定是合法的 bug 还是测试问题
 3. 修复 bug，而非测试（除非测试确实有问题）
@@ -200,12 +211,14 @@ public async Task Handle_CallsRepository() // 过于关注实现
 ## 覆盖率指南
 
 不要追求覆盖率百分比。专注于：
+
 - ✅ 领域模型中的所有业务逻辑
 - ✅ 所有 Handler 编排流程
 - ✅ 所有边界情况和验证
 - ✅ 关键的集成路径
 
 可以跳过：
+
 - ⏭️ 简单的 DTO/契约（无逻辑）
 - ⏭️ 琐碎的属性 getter/setter
 - ⏭️ 基础设施样板代码
@@ -245,6 +258,7 @@ var order = new OrderBuilder()
 ## 本地运行测试
 
 建议这个工作流程：
+
 ```bash
 # 运行所有架构测试
 dotnet test src/tests/ArchitectureTests/
@@ -262,5 +276,6 @@ dotnet test
 ## 参考
 
 对于架构测试失败：
+
 - `docs/copilot/architecture-test-failures.md` - 诊断指南
 - `docs/copilot/adr-XXXX.prompts.md` - 特定 ADR 指导

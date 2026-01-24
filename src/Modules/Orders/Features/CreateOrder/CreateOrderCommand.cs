@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Modules.Orders.Features.CreateOrder;
+﻿namespace Zss.BilliardHall.Modules.Orders.Features.CreateOrder;
 
 /// <summary>
 /// 创建订单命令

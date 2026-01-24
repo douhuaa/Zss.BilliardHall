@@ -1,4 +1,4 @@
-using Zss.BilliardHall.Application;
+﻿using Zss.BilliardHall.Application;
 using Zss.BilliardHall.Platform;
 
 var builder = WebApplication.CreateBuilder(args);

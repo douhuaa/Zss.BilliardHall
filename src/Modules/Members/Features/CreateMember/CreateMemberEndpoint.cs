@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Modules.Members.Features.CreateMember;
+﻿namespace Zss.BilliardHall.Modules.Members.Features.CreateMember;
 
 /// <summary>
 /// 创建会员端点

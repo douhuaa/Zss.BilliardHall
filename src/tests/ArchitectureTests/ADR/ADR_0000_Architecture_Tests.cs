@@ -13,13 +13,12 @@ public sealed class ADR_0000_Architecture_Tests
     private const string AdrFilePattern = "ADR-*.md";
     private const string TestNamespacePrefix = "Zss.BilliardHall.Tests.ArchitectureTests.ADR";
     private const string TypeSuffix = "_Architecture_Tests";
-    
+
     // ADR-0005-Enforcement-Levels 是 ADR-0005 的补充文档，不是独立的 ADR
-    private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.OrdinalIgnoreCase)
-    {
+    private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.OrdinalIgnoreCase) {
         "ADR-0005-Enforcement-Levels"
     };
-    
+
     // 最小 IL 字节数阈值：用于启发式判断测试方法是否包含实质内容
     // 这是一个经验值，基于简单测试方法的典型 IL 大小
     // 注意：这不是严格的验证，只是启发式检查
@@ -46,8 +45,7 @@ public sealed class ADR_0000_Architecture_Tests
         var testTypes = LoadArchitectureTestTypes();
 
         var duplicates = adrIds
-            .Select(adr => new
-            {
+            .Select(adr => new {
                 Adr = adr,
                 Matches = testTypes
                     .Where(t => string.Equals(t.Name, ToExpectedTypeName(adr), StringComparison.OrdinalIgnoreCase))
@@ -58,8 +56,7 @@ public sealed class ADR_0000_Architecture_Tests
             .ToList();
 
         var missing = adrIds
-            .Where(adr => !testTypes.Any(t =>
-                string.Equals(t.Name, ToExpectedTypeName(adr), StringComparison.OrdinalIgnoreCase)))
+            .Where(adr => !testTypes.Any(t => string.Equals(t.Name, ToExpectedTypeName(adr), StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         if (duplicates.Any() || missing.Any())
@@ -93,8 +90,7 @@ public sealed class ADR_0000_Architecture_Tests
         var current = new DirectoryInfo(AppContext.BaseDirectory);
         while (current != null)
         {
-            if (Directory.Exists(Path.Combine(current.FullName, "docs", "adr")) ||
-                Directory.Exists(Path.Combine(current.FullName, ".git")))
+            if (Directory.Exists(Path.Combine(current.FullName, "docs", "adr")) || Directory.Exists(Path.Combine(current.FullName, ".git")))
                 return current.FullName;
 
             current = current.Parent;
@@ -105,10 +101,10 @@ public sealed class ADR_0000_Architecture_Tests
     private static IReadOnlyList<string> LoadAdrIds(string adrDirectory)
     {
         // 递归搜索所有子目录中的 ADR 文件（支持新的分层目录结构）
-        return Directory.GetFiles(adrDirectory, AdrFilePattern, SearchOption.AllDirectories)
+        return Directory
+            .GetFiles(adrDirectory, AdrFilePattern, SearchOption.AllDirectories)
             .Select(Path.GetFileNameWithoutExtension)
-            .Where(file => !string.IsNullOrWhiteSpace(file) &&
-                           System.Text.RegularExpressions.Regex.IsMatch(file!, @"^ADR-\d{4}", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+            .Where(file => !string.IsNullOrWhiteSpace(file) && System.Text.RegularExpressions.Regex.IsMatch(file!, @"^ADR-\d{4}", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
             .Select(file => file!)
             .Distinct()
             .ToList();
@@ -116,12 +112,10 @@ public sealed class ADR_0000_Architecture_Tests
 
     private static IReadOnlyList<Type> LoadArchitectureTestTypes()
     {
-        return Assembly.GetExecutingAssembly()
+        return Assembly
+            .GetExecutingAssembly()
             .GetTypes()
-            .Where(t =>
-                t is { IsClass: true, IsSealed: true, IsPublic: true, Namespace: not null } &&
-                t.Namespace.StartsWith(TestNamespacePrefix, StringComparison.OrdinalIgnoreCase) &&
-                t.Name.EndsWith(TypeSuffix))
+            .Where(t => t is { IsClass: true, IsSealed: true, IsPublic: true, Namespace: not null } && t.Namespace.StartsWith(TestNamespacePrefix, StringComparison.OrdinalIgnoreCase) && t.Name.EndsWith(TypeSuffix))
             .ToList();
     }
 
@@ -149,9 +143,14 @@ public sealed class ADR_0000_Architecture_Tests
             if (testType.Name == "ADR_0000_Architecture_Tests")
                 continue;
 
-            var testMethods = testType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(m => m.GetCustomAttributes(typeof(FactAttribute), false).Any() ||
-                           m.GetCustomAttributes(typeof(TheoryAttribute), false).Any())
+            var testMethods = testType
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => m
+                                .GetCustomAttributes(typeof(FactAttribute), false)
+                                .Any() ||
+                            m
+                                .GetCustomAttributes(typeof(TheoryAttribute), false)
+                                .Any())
                 .ToList();
 
             if (testMethods.Count == 0)
@@ -163,8 +162,12 @@ public sealed class ADR_0000_Architecture_Tests
             // 检查是否所有测试都被跳过
             var allSkipped = testMethods.All(m =>
             {
-                var factAttr = m.GetCustomAttributes(typeof(FactAttribute), false).FirstOrDefault() as FactAttribute;
-                var theoryAttr = m.GetCustomAttributes(typeof(TheoryAttribute), false).FirstOrDefault() as TheoryAttribute;
+                var factAttr = m
+                    .GetCustomAttributes(typeof(FactAttribute), false)
+                    .FirstOrDefault() as FactAttribute;
+                var theoryAttr = m
+                    .GetCustomAttributes(typeof(TheoryAttribute), false)
+                    .FirstOrDefault() as TheoryAttribute;
                 return (factAttr?.Skip != null) || (theoryAttr?.Skip != null);
             });
 
@@ -175,8 +178,11 @@ public sealed class ADR_0000_Architecture_Tests
 
             // 简单启发式检查：测试方法体应该有实际内容
             // 至少应该有一些方法调用（如 Assert.True, GetTypes 等）
-            var hasSubstantialTests = testMethods.Any(m => 
-                m.GetMethodBody()?.GetILAsByteArray()?.Length > MinimumILBytesForSubstantialTest);
+            var hasSubstantialTests = testMethods.Any(m => m
+                                                               .GetMethodBody()
+                                                               ?.GetILAsByteArray()
+                                                               ?.Length >
+                                                           MinimumILBytesForSubstantialTest);
             if (!hasSubstantialTests)
             {
                 violations.Add($"⚠️ {testType.Name}: 测试方法体可能过于简单（建议人工审查）");
@@ -185,9 +191,7 @@ public sealed class ADR_0000_Architecture_Tests
 
         if (violations.Any())
         {
-            var message = "❌ ADR-0000 反作弊检查失败：\n" +
-                         string.Join("\n", violations) +
-                         "\n\n修复建议：架构测试类必须包含实质性的测试逻辑，不允许空测试或全部跳过的测试。";
+            var message = "❌ ADR-0000 反作弊检查失败：\n" + string.Join("\n", violations) + "\n\n修复建议：架构测试类必须包含实质性的测试逻辑，不允许空测试或全部跳过的测试。";
             throw new Xunit.Sdk.XunitException(message);
         }
     }
@@ -216,15 +220,24 @@ public sealed class ADR_0000_Architecture_Tests
             }
 
             // 检查测试方法的 DisplayName 是否包含 ADR 编号
-            var testMethods = testType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(m => m.GetCustomAttributes(typeof(FactAttribute), false).Any() ||
-                           m.GetCustomAttributes(typeof(TheoryAttribute), false).Any())
+            var testMethods = testType
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => m
+                                .GetCustomAttributes(typeof(FactAttribute), false)
+                                .Any() ||
+                            m
+                                .GetCustomAttributes(typeof(TheoryAttribute), false)
+                                .Any())
                 .ToList();
 
             foreach (var method in testMethods)
             {
-                var factAttr = method.GetCustomAttributes(typeof(FactAttribute), false).FirstOrDefault() as FactAttribute;
-                var theoryAttr = method.GetCustomAttributes(typeof(TheoryAttribute), false).FirstOrDefault() as TheoryAttribute;
+                var factAttr = method
+                    .GetCustomAttributes(typeof(FactAttribute), false)
+                    .FirstOrDefault() as FactAttribute;
+                var theoryAttr = method
+                    .GetCustomAttributes(typeof(TheoryAttribute), false)
+                    .FirstOrDefault() as TheoryAttribute;
                 var displayName = factAttr?.DisplayName ?? theoryAttr?.DisplayName;
 
                 if (displayName != null && !displayName.Contains($"ADR-{adrNumber}"))
@@ -236,10 +249,8 @@ public sealed class ADR_0000_Architecture_Tests
 
         if (violations.Any())
         {
-            var message = "⚠️ ADR-0000 建议：\n" +
-                         string.Join("\n", violations) +
-                         "\n\n建议：所有测试的 DisplayName 应包含 ADR 编号（如 'ADR-0001: ...'），便于追溯和审计。";
-            
+            var message = "⚠️ ADR-0000 建议：\n" + string.Join("\n", violations) + "\n\n建议：所有测试的 DisplayName 应包含 ADR 编号（如 'ADR-0001: ...'），便于追溯和审计。";
+
             // 这是建议性规则，暂时只输出调试信息，不阻断
             System.Diagnostics.Debug.WriteLine(message);
         }
@@ -256,16 +267,25 @@ public sealed class ADR_0000_Architecture_Tests
 
         foreach (var testType in testTypes)
         {
-            var testMethods = testType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(m => m.GetCustomAttributes(typeof(FactAttribute), false).Any() ||
-                           m.GetCustomAttributes(typeof(TheoryAttribute), false).Any())
+            var testMethods = testType
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => m
+                                .GetCustomAttributes(typeof(FactAttribute), false)
+                                .Any() ||
+                            m
+                                .GetCustomAttributes(typeof(TheoryAttribute), false)
+                                .Any())
                 .ToList();
 
             foreach (var method in testMethods)
             {
-                var factAttr = method.GetCustomAttributes(typeof(FactAttribute), false).FirstOrDefault() as FactAttribute;
-                var theoryAttr = method.GetCustomAttributes(typeof(TheoryAttribute), false).FirstOrDefault() as TheoryAttribute;
-                
+                var factAttr = method
+                    .GetCustomAttributes(typeof(FactAttribute), false)
+                    .FirstOrDefault() as FactAttribute;
+                var theoryAttr = method
+                    .GetCustomAttributes(typeof(TheoryAttribute), false)
+                    .FirstOrDefault() as TheoryAttribute;
+
                 var skipReason = factAttr?.Skip ?? theoryAttr?.Skip;
                 if (skipReason != null)
                 {
@@ -276,10 +296,7 @@ public sealed class ADR_0000_Architecture_Tests
 
         if (skippedTests.Any())
         {
-            var message = "❌ ADR-0000 违规：禁止跳过架构测试\n" +
-                         string.Join("\n", skippedTests) +
-                         "\n\n修复建议：如果某个架构约束不再适用，应删除测试或修改 ADR，而不是跳过测试。" +
-                         "跳过测试会导致架构约束形同虚设。";
+            var message = "❌ ADR-0000 违规：禁止跳过架构测试\n" + string.Join("\n", skippedTests) + "\n\n修复建议：如果某个架构约束不再适用，应删除测试或修改 ADR，而不是跳过测试。" + "跳过测试会导致架构约束形同虚设。";
             throw new Xunit.Sdk.XunitException(message);
         }
     }

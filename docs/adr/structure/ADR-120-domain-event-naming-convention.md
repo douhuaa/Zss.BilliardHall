@@ -21,14 +21,14 @@
 
 ## 术语表（Glossary）
 
-| 术语 | 定义 |
-|------|------|
-| 领域事件（Domain Event） | 描述模块内已发生业务事实的不可变对象，用于模块内或跨模块异步通信 |
-| 集成事件（Integration Event） | 跨模块、跨系统的事件，通常由领域事件转换而来，用于外部集成 |
-| 事件名称 | 事件类型的完整名称，遵循动词过去式+名词模式 |
-| 事件命名空间 | 事件类型所在的命名空间，必须与物理文件结构对应 |
-| 事件版本 | 事件结构的版本标识，用于支持向后兼容和演进 |
-| 事件聚合根 | 事件所属的聚合根实体，决定事件的业务语义边界 |
+| 术语                      | 定义                               |
+|-------------------------|----------------------------------|
+| 领域事件（Domain Event）      | 描述模块内已发生业务事实的不可变对象，用于模块内或跨模块异步通信 |
+| 集成事件（Integration Event） | 跨模块、跨系统的事件，通常由领域事件转换而来，用于外部集成    |
+| 事件名称                    | 事件类型的完整名称，遵循动词过去式+名词模式           |
+| 事件命名空间                  | 事件类型所在的命名空间，必须与物理文件结构对应          |
+| 事件版本                    | 事件结构的版本标识，用于支持向后兼容和演进            |
+| 事件聚合根                   | 事件所属的聚合根实体，决定事件的业务语义边界           |
 
 ---
 
@@ -45,12 +45,14 @@
 ```
 
 **组成部分说明**：
+
 - **{AggregateRoot}**：聚合根名称（单数形式，PascalCase）
 - **{Action}**：动词过去式（PascalCase），描述已发生的业务动作
 - **Event**：固定后缀（必须）
 - **{Version}**：可选版本标识（如 V2、V3），用于演进场景
 
 **✅ 正确示例**：
+
 ```csharp
 // 模块：Orders
 public record OrderCreatedEvent(Guid OrderId, Guid MemberId, DateTime CreatedAt);
@@ -68,6 +70,7 @@ public record OrderCreatedEventV2(Guid OrderId, Guid MemberId, DateTime CreatedA
 ```
 
 **❌ 错误示例**：
+
 ```csharp
 // ❌ 缺少 Event 后缀
 public record OrderCreated(Guid OrderId);
@@ -95,6 +98,7 @@ public record OrderDataChangedEvent(Guid OrderId);
 - 避免使用通用属性名（如 `Id`、`Time`），明确业务语义
 
 **✅ 正确示例**：
+
 ```csharp
 public record OrderCreatedEvent(
     Guid OrderId,           // 明确的聚合根 ID
@@ -105,6 +109,7 @@ public record OrderCreatedEvent(
 ```
 
 **❌ 错误示例**：
+
 ```csharp
 public record OrderCreatedEvent(
     Guid Id,                // ❌ 不明确
@@ -124,6 +129,7 @@ Zss.BilliardHall.Modules.{ModuleName}.Events[.{SubNamespace}]
 ```
 
 **✅ 正确命名空间示例**：
+
 ```csharp
 namespace Zss.BilliardHall.Modules.Orders.Events;
 
@@ -155,6 +161,7 @@ public record OrderRefundedEvent(...);
 ```
 
 **❌ 禁止的命名空间模式**：
+
 ```csharp
 // ❌ 不在模块内
 namespace Zss.BilliardHall.Events;
@@ -183,11 +190,13 @@ src/Modules/{ModuleName}/
 ```
 
 **文件命名规则**：
+
 - 每个事件独立文件
 - 文件名 = 类型名（如 `OrderCreatedEvent.cs`）
 - 禁止一个文件包含多个事件定义（除非是同一事件的多个版本）
 
 **✅ 正确文件组织**：
+
 ```
 src/Modules/Orders/Events/OrderCreatedEvent.cs
 src/Modules/Orders/Events/OrderPaidEvent.cs
@@ -195,6 +204,7 @@ src/Modules/Orders/EventHandlers/OrderCreatedEventHandler.cs
 ```
 
 **❌ 错误文件组织**：
+
 ```
 src/Modules/Orders/Domain/Events/OrderCreatedEvent.cs  // ❌ 路径不符合规范
 src/Modules/Orders/OrderEvents.cs                      // ❌ 多个事件在一个文件
@@ -212,6 +222,7 @@ src/Shared/Events/OrderCreatedEvent.cs                 // ❌ 放在共享目录
 ```
 
 **✅ 正确示例**：
+
 ```csharp
 // 处理本模块事件
 namespace Zss.BilliardHall.Modules.Orders.EventHandlers;
@@ -245,6 +256,7 @@ public class OrderPaidEventHandler : IEventHandler<OrderPaidEvent>  // 订阅 Or
 ```
 
 **✅ 扩展模式示例**（同一事件的多个订阅者）：
+
 ```csharp
 // Members 模块：处理积分
 namespace Zss.BilliardHall.Modules.Members.EventHandlers;
@@ -281,11 +293,13 @@ public class OrderPaidEventSendNotificationHandler : IEventHandler<OrderPaidEven
 ```
 
 **命名建议**：
+
 - **Purpose** 部分应清晰描述处理器的业务意图（如 `AddPoints`、`GenerateInvoice`、`SendNotification`）
 - 对于简单场景（单一订阅者），使用基础模式 `{EventName}Handler` 即可
 - 对于复杂场景（多个订阅者），使用扩展模式以提高可观测性
 
 **❌ 错误示例**：
+
 ```csharp
 // ❌ 缺少 Handler 后缀
 public class OrderCreatedProcessor : IEventHandler<OrderCreatedEvent> { }
@@ -310,6 +324,7 @@ public class OrderPaidEventHandler2 : IEventHandler<OrderPaidEvent> { }
 ```
 
 **✅ 正确示例**：
+
 ```csharp
 namespace Zss.BilliardHall.Integration.Events;
 
@@ -323,6 +338,7 @@ public record OrderCreatedIntegrationEvent(
 ```
 
 **转换示例**：
+
 ```csharp
 // 从领域事件转换为集成事件
 public class OrderCreatedEventHandler : IEventHandler<OrderCreatedEvent>
@@ -375,12 +391,14 @@ public record OrderCreatedEventV2(
 **⚠️ 重要说明**：
 
 > **事件类型版本命名（如 `V2`）≠ 序列化兼容性策略**
-> 
-> 本 ADR 定义的版本命名仅限于**代码层面的类型标识**。实际的序列化兼容性、Schema 版本管理、消费者版本声明等跨进程/跨系统的兼容性策略，将在技术层 ADR（ADR-300 系列：Integration / Messaging）中定义。
-> 
+>
+> 本 ADR 定义的版本命名仅限于**代码层面的类型标识**。实际的序列化兼容性、Schema 版本管理、消费者版本声明等跨进程/跨系统的兼容性策略，将在技术层
+> ADR（ADR-300 系列：Integration / Messaging）中定义。
+>
 > 不要误以为添加 `V2` 后缀就能自动实现跨系统的兼容性保障。
 
 **✅ 版本转换示例**：
+
 ```csharp
 // V1 到 V2 的转换适配器
 public class OrderCreatedEventAdapter
@@ -405,12 +423,14 @@ public class OrderCreatedEventAdapter
 #### ✅ 允许的模式
 
 1. **模块内事件发布和订阅**：
+
 ```csharp
 // Orders 模块内部
 await _eventBus.PublishAsync(new OrderCreatedEvent(orderId, memberId, DateTime.UtcNow));
 ```
 
 2. **跨模块异步事件订阅**：
+
 ```csharp
 // Members 模块订阅 Orders 模块事件
 public class OrderPaidEventHandler : IEventHandler<OrderPaidEvent>
@@ -424,6 +444,7 @@ public class OrderPaidEventHandler : IEventHandler<OrderPaidEvent>
 ```
 
 3. **事件仅包含原始类型和 DTO**：
+
 ```csharp
 // ✅ 正确：只包含原始类型和简单 DTO
 public record OrderCreatedEvent(
@@ -439,6 +460,7 @@ public record OrderItemDto(string ProductId, int Quantity, decimal Price);
 #### ❌ 禁止的模式
 
 1. **事件包含领域实体**：
+
 ```csharp
 // ❌ 禁止：事件包含领域实体
 public record OrderCreatedEvent(
@@ -448,6 +470,7 @@ public record OrderCreatedEvent(
 ```
 
 2. **事件嵌入跨模块业务逻辑**：
+
 ```csharp
 // ❌ 禁止：事件名称包含多模块业务语义
 public record OrderCreatedAndPointsAddedEvent(Guid OrderId, Guid MemberId, int Points);
@@ -458,6 +481,7 @@ public record MemberPointsAddedEvent(Guid MemberId, int Points, string Reason);
 ```
 
 3. **事件包含业务判断方法**：
+
 ```csharp
 // ❌ 禁止：事件包含业务方法
 public record OrderCreatedEvent(Guid OrderId, Guid MemberId, DateTime CreatedAt)
@@ -473,20 +497,21 @@ public record OrderCreatedEvent(Guid OrderId, Guid MemberId, DateTime CreatedAt)
 
 ## 快速参考表（Quick Reference）
 
-| 约束编号 | 描述 | 层级 | 测试用例/自动化 | 章节 |
-|---------|------|------|----------------|------|
-| 约束编号 | 描述 | 层级 | 测试用例/自动化 | 章节 |
-|---------|------|------|----------------|------|
-| ADR-120.1 | 事件类型必须以 `Event` 后缀结尾 | L1 | Event_Types_Should_End_With_Event_Suffix | 基本命名规则 |
-| ADR-120.2 | 事件名称必须使用动词过去式 | L1 | Event_Names_Should_Use_Past_Tense_Verbs | 基本命名规则 |
-| ADR-120.3 | 事件必须在模块的 `Events` 命名空间下 | L1 | Events_Should_Be_In_Events_Namespace | 命名空间组织规则 |
-| ADR-120.4 | 事件处理器必须以 `Handler` 后缀结尾 | L1 | Event_Handlers_Should_End_With_Handler_Suffix | 事件处理器命名规则 |
-| ADR-120.5 | 事件不得包含领域实体类型 | L1 | Events_Should_Not_Contain_Domain_Entities | 模块隔离约束 |
-| ADR-120.6 | 事件不得包含业务方法 | L1 | Events_Should_Not_Contain_Business_Methods | 模块隔离约束 |
-| ADR-120.7 | 事件文件名必须与类型名一致 | L2 | 人工 Code Review | 文件结构组织 |
-| ADR-120.8 | 事件版本标识使用 `V{N}` 格式 | L2 | Event_Versions_Should_Use_VN_Format | 事件版本演进规则 |
+| 约束编号      | 描述                      | 层级     | 测试用例/自动化                                      | 章节        |
+|-----------|-------------------------|--------|-----------------------------------------------|-----------|
+| 约束编号      | 描述                      | 层级     | 测试用例/自动化                                      | 章节        |
+| --------- | ------                  | ------ | ----------------                              | ------    |
+| ADR-120.1 | 事件类型必须以 `Event` 后缀结尾    | L1     | Event_Types_Should_End_With_Event_Suffix      | 基本命名规则    |
+| ADR-120.2 | 事件名称必须使用动词过去式           | L1     | Event_Names_Should_Use_Past_Tense_Verbs       | 基本命名规则    |
+| ADR-120.3 | 事件必须在模块的 `Events` 命名空间下 | L1     | Events_Should_Be_In_Events_Namespace          | 命名空间组织规则  |
+| ADR-120.4 | 事件处理器必须以 `Handler` 后缀结尾 | L1     | Event_Handlers_Should_End_With_Handler_Suffix | 事件处理器命名规则 |
+| ADR-120.5 | 事件不得包含领域实体类型            | L1     | Events_Should_Not_Contain_Domain_Entities     | 模块隔离约束    |
+| ADR-120.6 | 事件不得包含业务方法              | L1     | Events_Should_Not_Contain_Business_Methods    | 模块隔离约束    |
+| ADR-120.7 | 事件文件名必须与类型名一致           | L2     | 人工 Code Review                                | 文件结构组织    |
+| ADR-120.8 | 事件版本标识使用 `V{N}` 格式      | L2     | Event_Versions_Should_Use_VN_Format           | 事件版本演进规则  |
 
 **测试层级说明**：
+
 - **L1**：必须架构测试覆盖，CI 自动阻断（本体语义约束，违反即为架构退化）
 - **L2**：建议架构测试覆盖或人工 Code Review（技术实践约束，可根据情况灵活处理）
 
@@ -582,34 +607,34 @@ public void Event_Handlers_Should_End_With_Handler_Suffix()
 ## 扩展落地建议
 
 1. **代码生成模板**：
-   - 创建事件和处理器的代码生成模板（如 dotnet new templates）
-   - 自动生成符合规范的事件和处理器代码
+  - 创建事件和处理器的代码生成模板（如 dotnet new templates）
+  - 自动生成符合规范的事件和处理器代码
 
 2. **IDE 插件支持**：
-   - 开发 IDE 插件或代码片段（snippets），快速生成标准事件
-   - 提供实时命名检查和建议
+  - 开发 IDE 插件或代码片段（snippets），快速生成标准事件
+  - 提供实时命名检查和建议
 
 3. **文档自动生成**：
-   - 基于事件定义自动生成事件目录和关系图
-   - 生成模块间事件订阅关系文档
+  - 基于事件定义自动生成事件目录和关系图
+  - 生成模块间事件订阅关系文档
 
 4. **监控和追踪**：
-   - 为事件添加追踪标识（Trace ID、Correlation ID）
-   - 实现事件发布和处理的监控和日志
+  - 为事件添加追踪标识（Trace ID、Correlation ID）
+  - 实现事件发布和处理的监控和日志
 
 5. **测试支持**：
-   - 提供事件测试辅助工具（Event Test Helpers）
-   - 支持事件回放和时间旅行调试
+  - 提供事件测试辅助工具（Event Test Helpers）
+  - 支持事件回放和时间旅行调试
 
 ---
 
 ## 版本历史
 
-| 版本 | 日期 | 变更摘要 |
-|------|------|---------|
-| 1.2  | 2026-01-24 | 架构测试精化版本：1) ADR-120.2 移除"证明正确"逻辑，只保留禁止模式（架构测试哲学：裁定明显错误，不证明正确）；2) ADR-120.4 改用语义检测（接口实现）而非命名猜测，避免误杀；3) ADR-120.7 从 L1 降级至 L2（文件名约束耦合物理结构，属代码组织而非架构本体） |
-| 1.1  | 2026-01-24 | 强化版本：1) 扩展 EventHandler 命名规则支持 `{Purpose}` 后缀以应对多订阅场景；2) 明确事件版本命名 ≠ 序列化兼容策略；3) 升级"动词过去式"约束从 L2 至 L1（本体语义约束） |
-| 1.0  | 2026-01-24 | 初始版本：定义领域事件命名规范、命名空间组织、版本演进和模块隔离约束 |
+| 版本  | 日期         | 变更摘要                                                                                                                                                 |
+|-----|------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1.2 | 2026-01-24 | 架构测试精化版本：1) ADR-120.2 移除"证明正确"逻辑，只保留禁止模式（架构测试哲学：裁定明显错误，不证明正确）；2) ADR-120.4 改用语义检测（接口实现）而非命名猜测，避免误杀；3) ADR-120.7 从 L1 降级至 L2（文件名约束耦合物理结构，属代码组织而非架构本体） |
+| 1.1 | 2026-01-24 | 强化版本：1) 扩展 EventHandler 命名规则支持 `{Purpose}` 后缀以应对多订阅场景；2) 明确事件版本命名 ≠ 序列化兼容策略；3) 升级"动词过去式"约束从 L2 至 L1（本体语义约束）                                          |
+| 1.0 | 2026-01-24 | 初始版本：定义领域事件命名规范、命名空间组织、版本演进和模块隔离约束                                                                                                                   |
 
 ---
 
