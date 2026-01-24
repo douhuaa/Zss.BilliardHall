@@ -61,7 +61,7 @@
 - **Level 2 语义半自动**：Roslyn Analyzer 等启发式，需人工二次确认
 - **Level 3 人工 Gate**：不可程控的约束，长期破例流程审计
 
-具体标准参见 [ADR-0005-Enforcement-Levels.md](ADR-0005-Enforcement-Levels.md)
+具体标准参见 [ADR-0005-Enforcement-Levels.md](/docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
 
 ---
 
@@ -78,7 +78,7 @@
 
 - 破例需在 PR 标题和描述中声明，填写《破例表单》
 - 本地和CI均需预警破例到期
-- 所有破例记录归档于 [`ARCH-VIOLATIONS.md`](../summaries/arch-violations.md)
+- 所有破例记录归档于 [`ARCH-VIOLATIONS.md`](/docs/summaries/arch-violations.md)
 - 连续破例三次未归还，自动触发架构审查
 
 ---
@@ -111,5 +111,5 @@
 
 ## 附件与参考
 
-- [ADR-0005-Enforcement-Levels.md](ADR-0005-Enforcement-Levels.md)
-- [ARCH-VIOLATIONS.md](../summaries/arch-violations.md)
+- [ADR-0005-Enforcement-Levels.md](/docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
+- [`ARCH-VIOLATIONS.md`](/docs/summaries/arch-violations.md)
