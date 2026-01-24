@@ -1,0 +1,178 @@
+﻿# GitHub Actions Workflow - Code Format Check
+#
+# 本工作流验证代码格式是否符合 .editorconfig 规范
+# 与 ADR-0900 和 docs/configuration/editorconfig.md 协同
+#
+# 触发条件：
+# - Pull Request 到 main 分支
+# - 推送到 main 分支
+#
+# 版本：1.0
+# 最后更新：2026-01-24
+
+name: Code Format Check
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# 并发控制：同一 PR 只运行最新的工作流
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ============================================
+  # Job 1: 格式验证（仅警告，不阻塞 PR）
+  # ============================================
+  format-check:
+    name: Verify Code Format
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取完整历史，用于 diff
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # 方案 1：仅验证格式，不修改文件（警告模式）
+      - name: Verify code format (Warning Mode)
+        run: dotnet format --verify-no-changes --verbosity diagnostic
+        continue-on-error: true  # 格式问题仅警告，不阻塞 PR
+
+      # EditorConfig 规则验证
+      - name: Install EditorConfig Checker
+        run: npm install -g editorconfig-checker
+
+      - name: Verify EditorConfig compliance
+        run: ec
+        continue-on-error: true  # EditorConfig 问题仅警告
+
+  # ============================================
+  # Job 2: 自动修复格式（可选，适合宽松团队）
+  # ============================================
+  # 如果希望 CI 自动修复格式并提交，取消下面的注释
+
+  # auto-format:
+  #   name: Auto Format Code
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'pull_request'
+  #
+  #   permissions:
+  #     contents: write  # 需要写权限以提交变更
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #       with:
+  #         ref: ${{ github.head_ref }}  # PR 分支
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #
+  #     - name: Setup .NET
+  #       uses: actions/setup-dotnet@v4
+  #       with:
+  #         dotnet-version: '10.0.x'
+  #
+  #     - name: Restore dependencies
+  #       run: dotnet restore
+  #
+  #     - name: Format code
+  #       run: dotnet format
+  #
+  #     - name: Check for changes
+  #       id: check_changes
+  #       run: |
+  #         if git diff --quiet; then
+  #           echo "No formatting changes needed"
+  #           echo "has_changes=false" >> $GITHUB_OUTPUT
+  #         else
+  #           echo "Code was formatted"
+  #           echo "has_changes=true" >> $GITHUB_OUTPUT
+  #         fi
+  #
+  #     - name: Commit and push changes
+  #       if: steps.check_changes.outputs.has_changes == 'true'
+  #       run: |
+  #         git config user.name "github-actions[bot]"
+  #         git config user.email "github-actions[bot]@users.noreply.github.com"
+  #         git commit -am "style: 自动格式化代码 [skip ci]"
+  #         git push
+  #
+  #     - name: Add comment to PR
+  #       if: steps.check_changes.outputs.has_changes == 'true'
+  #       uses: actions/github-script@v7
+  #       with:
+  #         script: |
+  #           github.rest.issues.createComment({
+  #             issue_number: context.issue.number,
+  #             owner: context.repo.owner,
+  #             repo: context.repo.repo,
+  #             body: '✅ 代码已自动格式化并提交。请查看最新提交。'
+  #           })
+
+  # ============================================
+  # Job 3: 严格模式（可选，适合严格团队）
+  # ============================================
+  # 如果希望格式不合规时失败，取消下面的注释并禁用 Job 1
+
+  # strict-format-check:
+  #   name: Strict Format Check
+  #   runs-on: ubuntu-latest
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Setup .NET
+  #       uses: actions/setup-dotnet@v4
+  #       with:
+  #         dotnet-version: '10.0.x'
+  #
+  #     - name: Restore dependencies
+  #       run: dotnet restore
+  #
+  #     # 严格模式：格式不合规即失败
+  #     - name: Verify code format (Strict Mode)
+  #       run: dotnet format --verify-no-changes --verbosity diagnostic
+  #       # 不设置 continue-on-error，失败即阻塞 PR
+  #
+  #     - name: Verify EditorConfig compliance
+  #       run: |
+  #         npm install -g editorconfig-checker
+  #         ec
+  #       # 不设置 continue-on-error，失败即阻塞 PR
+
+# ============================================
+# 使用说明
+# ============================================
+#
+# 1. 选择合适的策略
+#    - **警告模式**（默认）：Job 1 - 格式问题仅警告，不阻塞 PR
+#    - **自动修复模式**：启用 Job 2 - CI 自动修复并提交
+#    - **严格模式**：启用 Job 3 - 格式不合规即失败
+#
+# 2. 推荐策略
+#    - 开发阶段：使用"警告模式"或"自动修复模式"
+#    - 生产阶段：使用"严格模式"
+#
+# 3. 与 ADR-0900 集成
+#    - 本工作流属于技术层 CI 配置
+#    - 格式检查不涉及架构约束（架构测试在其他工作流中）
+#    - 格式问题建议自动修复或警告，架构问题必须失败
+#
+# 4. 故障排查
+#    - 如果格式检查失败，参考：docs/configuration/editorconfig.md § 常见问题排查
+#    - 本地验证：dotnet format --verify-no-changes
+#    - 本地修复：dotnet format
+#
+# ============================================
