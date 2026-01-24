@@ -27,7 +27,7 @@ public sealed class ADR_0240_Architecture_Tests
     public void All_Custom_Exceptions_Should_Inherit_From_Structured_Exception_Base_Classes()
     {
         // 获取所有项目程序集
-        var assemblies = TestData.AllProjectAssemblies;
+        var assemblies = GetAllProjectAssemblies();
 
         var violations = new List<string>();
 
@@ -85,7 +85,7 @@ public sealed class ADR_0240_Architecture_Tests
     [Fact(DisplayName = "ADR-240.2: 可重试异常必须是基础设施异常")]
     public void Retryable_Exceptions_Must_Be_Infrastructure_Exceptions()
     {
-        var assemblies = TestData.AllProjectAssemblies;
+        var assemblies = GetAllProjectAssemblies();
 
         var violations = new List<string>();
 
@@ -131,7 +131,7 @@ public sealed class ADR_0240_Architecture_Tests
     [Fact(DisplayName = "ADR-240.3: 领域异常不可标记为可重试")]
     public void Domain_Exceptions_Should_Not_Be_Retryable()
     {
-        var assemblies = TestData.AllProjectAssemblies;
+        var assemblies = GetAllProjectAssemblies();
 
         var violations = new List<string>();
 
@@ -173,7 +173,7 @@ public sealed class ADR_0240_Architecture_Tests
     [Fact(DisplayName = "ADR-240.4: 验证异常不可标记为可重试")]
     public void Validation_Exceptions_Should_Not_Be_Retryable()
     {
-        var assemblies = TestData.AllProjectAssemblies;
+        var assemblies = GetAllProjectAssemblies();
 
         var violations = new List<string>();
 
@@ -217,7 +217,7 @@ public sealed class ADR_0240_Architecture_Tests
     [Fact(DisplayName = "ADR-240.5: 异常类型必须在正确的命名空间")]
     public void Exceptions_Should_Be_In_Correct_Namespaces()
     {
-        var assemblies = TestData.AllProjectAssemblies;
+        var assemblies = GetAllProjectAssemblies();
 
         var violations = new List<string>();
 
@@ -270,6 +270,26 @@ public sealed class ADR_0240_Architecture_Tests
                         $"1. 将异常类移至对应的 Exceptions 命名空间\n" +
                         $"2. 确保文件夹结构与命名空间一致\n\n" +
                         $"参考: docs/adr/runtime/ADR-240-handler-exception-handling-retry-standards.md（规则 1）");
+        }
+    }
+
+    #endregion
+
+    #region Helper Methods
+
+    private static IEnumerable<Assembly> GetAllProjectAssemblies()
+    {
+        yield return typeof(Platform.PlatformBootstrapper).Assembly;
+        yield return typeof(Application.ApplicationBootstrapper).Assembly;
+
+        foreach (var moduleAssembly in ModuleAssemblyData.ModuleAssemblies)
+        {
+            yield return moduleAssembly;
+        }
+
+        foreach (var hostAssembly in HostAssemblyData.HostAssemblies)
+        {
+            yield return hostAssembly;
         }
     }
 
