@@ -12,6 +12,8 @@
 - Prompt 文件（如 `adr-0001.prompts.md`）仅为辅助理解，不能作为判定依据
 - 若 Prompt 文件与 ADR 正文冲突，以 ADR 正文为准
 - 架构测试基于 ADR 正文中标注【必须架构测试覆盖】的条款
+- 任何把架构意图塞进 editorconfig 的 PR，直接 FAIL
+- 任何 CI Workflow 如果把 format / lint / style 结果当作架构失败依据，视为 ADR-0000 违规。
 
 ## 关键心态
 
