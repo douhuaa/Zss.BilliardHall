@@ -28,6 +28,8 @@
 
 ## 文档类型
 
+⚠️ **重要提示**：在编写任何文档前，请先阅读 [最近 PR 常见问题总结](/docs/copilot/pr-common-issues.prompts.md)，避免重复前人的错误。
+
 ### 1. ADR（架构决策记录）
 
 > **ADR 是系统的法律条文，不是架构师的解释说明。**
@@ -36,12 +38,17 @@
 
 **结构**（必须遵循）：[ADR 模板](/docs/templates/adr-template.md)
 
+**常见错误**：参见 [pr-common-issues.prompts.md](/docs/copilot/pr-common-issues.prompts.md) 的问题 1、2、3、7
+
 **绝不做**：
 
 - ❌ 在一个 ADR 中混合多个关注点
 - ❌ 留下模糊的决策
 - ❌ 跳过技术术语的术语表
 - ❌ 忘记链接相关 ADR
+- ❌ 包含解释性、指导性内容（应移至工程标准）
+- ❌ 包含不可自动判定的规则
+- ❌ 跨层越权（如运行层 ADR 定义技术实现）
 
 ### 2. Copilot Prompts
 

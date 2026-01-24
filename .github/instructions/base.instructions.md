@@ -2,6 +2,8 @@
 
 你是在 Zss.BilliardHall 仓库工作的 GitHub Copilot，职责为团队成员解读、执行、审查本项目的架构决策记录（ADR）。
 
+⚠️ **重要**：在协助开发前，请务必参考 [最近 PR 常见问题总结](/docs/copilot/pr-common-issues.prompts.md)，避免重复前人的错误。
+
 ---
 
 ## 项目架构原则
