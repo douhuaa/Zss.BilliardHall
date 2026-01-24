@@ -45,7 +45,7 @@
 | **宪法层** | `ADR-0001~0009`     | `constitutional/` | 系统根基/不可推翻约束   | ✅ 已有 5 个 ADR |
 | **结构层** | `ADR-100~199`       | `structure/`      | 模块静态边界/组织细化   | ✅ 已有 2 个 ADR |
 | **运行层** | `ADR-200~299`       | `runtime/`        | 运行/交互/协议/事件   | ✅ 已有 1 个 ADR |
-| **技术层** | `ADR-300~399`       | `technical/`      | 技术选型/具体落地     | 🔜 未来扩展      |
+| **技术层** | `ADR-300~399`       | `technical/`      | 技术选型/具体落地     | ✅ 已有 1 个 ADR |
 | **治理层** | `ADR-0000, 900~999` | `governance/`     | 治理/破例/流程/变更管理 | ✅ 已有 2 个 ADR |
 
 ### 编号规则说明
@@ -100,7 +100,7 @@ graph TB
     end
 
     subgraph Technical["🔧 技术层 (ADR-300~399)"]
-        T[未来扩展:<br/>技术选型]
+        T340[ADR-340 日志监控]
     end
 
     Governance -. 保障 .-> Constitutional
