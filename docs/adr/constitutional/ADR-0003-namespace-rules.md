@@ -11,14 +11,14 @@
 
 > **这是本 ADR 唯一具有裁决力的部分。**
 
-### R3.1 BaseNamespace 定义
+### R1 BaseNamespace 定义
 
 所有项目**必须**：
 - 通过 `Directory.Build.props` 定义 BaseNamespace
 - BaseNamespace = `Zss.BilliardHall`
 - 不得在单个项目中覆盖 BaseNamespace
 
-### R3.2 命名空间自动推导
+### R2 命名空间自动推导
 
 项目 RootNamespace **必须**：
 - 由 BaseNamespace + 目录路径自动推导
@@ -27,14 +27,14 @@
 - Modules：`Zss.BilliardHall.Modules.{ModuleName}`
 - Host：`Zss.BilliardHall.Host.{HostName}`
 
-### R3.3 命名空间与目录一致性
+### R3 命名空间与目录一致性
 
 命名空间**必须**：
 - 与目录结构严格对应
 - 所有类型的命名空间以 BaseNamespace 开头
 - 禁止手动指定 RootNamespace（MSBuild 自动推导）
 
-### R3.4 禁止不规范命名
+### R4 禁止不规范命名
 
 **禁止**使用以下命名空间：
 - `Common`

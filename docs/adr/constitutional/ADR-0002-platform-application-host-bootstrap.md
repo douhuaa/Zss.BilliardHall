@@ -11,7 +11,7 @@
 
 > **这是本 ADR 唯一具有裁决力的部分。**
 
-### R2.1 层级定义与职责
+### R1 层级定义与职责
 
 三层**必须**按以下职责划分：
 
@@ -19,7 +19,7 @@
 - **Application**：系统装配层，负责模块扫描、用例注册、Wolverine/Marten 配置
 - **Host**：进程外壳，决定运行方式（Web/Worker/Test）
 
-### R2.2 依赖方向
+### R2 依赖方向
 
 依赖方向**必须**：
 
@@ -32,7 +32,7 @@ Host → Application → Platform
 - Application 依赖 Host
 - 任何反向依赖
 
-### R2.3 Bootstrapper 入口
+### R3 Bootstrapper 入口
 
 每层**必须**：
 - 有且仅有一个 Bootstrapper 静态类作为装配入口
@@ -43,7 +43,7 @@ Host → Application → Platform
 - 多个装配入口
 - Host 直接注册服务或配置模块
 
-### R2.4 Platform 层约束
+### R4 Platform 层约束
 
 Platform 层**禁止**：
 - 引用 Application 或 Host
@@ -52,7 +52,7 @@ Platform 层**禁止**：
 - 读取业务配置
 - 包含业务逻辑
 
-### R2.5 Application 层约束
+### R5 Application 层约束
 
 Application 层**禁止**：
 - 依赖 Host 层
@@ -60,7 +60,7 @@ Application 层**禁止**：
 - 使用 HttpContext 等 Host 专属类型
 - 包含端口/协议配置
 
-### R2.6 Host 层约束
+### R6 Host 层约束
 
 Host 层**必须**：
 - Program.cs ≤ 50 行

@@ -11,14 +11,14 @@
 
 > **这是本 ADR 唯一具有裁决力的部分。**
 
-### R4.1 CPM 启用
+### R1 CPM 启用
 
 所有项目**必须**：
 - 启用中央包管理（CPM）
 - 在 `Directory.Packages.props` 中集中管理所有包版本
 - 项目文件中**禁止**出现 `Version` 属性
 
-### R4.2 层级依赖约束
+### R2 层级依赖约束
 
 各层**必须**遵守以下依赖约束：
 
@@ -30,14 +30,14 @@
 | Host        | 仅调用 Platform+Application Bootstrapper        | 业务模块、Handler  |
 | Tests       | 被测模块+Platform/Application                  | Host 内部实现      |
 
-### R4.3 版本唯一性
+### R3 版本唯一性
 
 同一个包**必须**：
 - 在整个解决方案中只有一个版本
 - 所有引用该包的项目使用相同版本
 - 版本定义在 `Directory.Packages.props` 中
 
-### R4.4 包分组管理
+### R4 包分组管理
 
 `Directory.Packages.props` **必须**：
 - 按功能或技术栈分组

@@ -11,14 +11,14 @@
 
 > **这是本 ADR 唯一具有裁决力的部分。**
 
-### R5.1 Use Case 与 Handler 唯一性
+### R1 Use Case 与 Handler 唯一性
 
 每个业务用例**必须**：
 - 有且仅有一个 Handler
 - Handler 拥有该用例的全部业务决策权
 - Handler 不得持有跨调用生命周期的业务状态
 
-### R5.2 Endpoint 职责限制
+### R2 Endpoint 职责限制
 
 Endpoint/Controller **必须**：
 - 仅做请求适配和 Handler 调用
@@ -29,14 +29,14 @@ Endpoint **禁止**：
 - 直接访问数据库或仓储
 - 承载业务状态
 
-### R5.3 Handler 边界约束
+### R3 Handler 边界约束
 
 Handler **禁止**：
 - 作为同步跨模块"粘合层"
 - 返回或暴露领域实体（Entity/Aggregate/VO）作为出参
 - 依赖 ASP.NET 专属类型（如 HttpContext）
 
-### R5.4 模块通信规则
+### R4 模块通信规则
 
 模块间通信**必须**：
 - 默认使用异步通信（领域事件/集成事件）
@@ -47,14 +47,14 @@ Handler **禁止**：
 - 未经审批的跨模块同步调用
 - 共享领域模型
 
-### R5.5 契约约束
+### R5 契约约束
 
 契约（Contract）**必须**：
 - 仅用于数据传递
 - 只读且单向
 - 不包含业务决策/行为方法
 
-### R5.6 CQRS 分离
+### R6 CQRS 分离
 
 Command Handler **必须**：
 - 仅执行业务逻辑
