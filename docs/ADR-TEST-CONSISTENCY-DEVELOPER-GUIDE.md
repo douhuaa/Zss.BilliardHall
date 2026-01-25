@@ -115,7 +115,7 @@ dotnet test src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
 
 #### 步骤 1：更新 ADR 文档
 
-修改或删除约束，确保 **【必须架构测试覆盖】** 标记仍然准确。
+修改或删除约束，检查并更新 **【必须架构测试覆盖】** 标记的准确性（根据 ADR-0000）。
 
 #### 步骤 2：同步更新测试
 
