@@ -1,6 +1,6 @@
 # ADR-123：Repository 接口与分层命名规范
 
-**状态**：Draft  
+**状态**：✅ Accepted  
 **级别**：结构层  
 **影响范围**：所有 Repository 实现  
 **生效时间**：待审批通过后

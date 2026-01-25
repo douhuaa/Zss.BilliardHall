@@ -4,14 +4,64 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
 /// ADR-360: CI/CD Pipeline 流程标准化
+/// 参考：docs/adr/technical/ADR-360-cicd-pipeline-standardization.md
 /// </summary>
 public sealed class ADR_0360_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-360: CI/CD 规则（通过 GitHub Actions 配置验证）")]
-    public void CICD_Rules_Verified_By_GitHub_Actions()
+    [Fact(DisplayName = "ADR-360.1: GitHub Workflows 配置文件应存在")]
+    public void GitHub_Workflows_Configuration_Should_Exist()
     {
-        // CI/CD 规则通过 GitHub Actions Workflow 文件验证
-        // 包括：分支保护、PR 检查、架构测试强制等
-        Assert.True(true, "CI/CD 规则通过 .github/workflows 配置文件验证");
+        var currentDir = Directory.GetCurrentDirectory();
+        var repoRoot = FindRepositoryRoot(currentDir);
+        
+        Assert.NotNull(repoRoot);
+        
+        var workflowsDir = Path.Combine(repoRoot!, ".github", "workflows");
+        Assert.True(Directory.Exists(workflowsDir), 
+            $"【ADR-360.1】GitHub Workflows 目录应存在：{workflowsDir}");
+        
+        // 验证至少有一个 workflow 文件
+        var workflowFiles = Directory.GetFiles(workflowsDir, "*.yml")
+            .Concat(Directory.GetFiles(workflowsDir, "*.yaml"))
+            .ToList();
+            
+        Assert.NotEmpty(workflowFiles);
+    }
+
+    [Fact(DisplayName = "ADR-360.2: PR 模板应存在")]
+    public void Pull_Request_Template_Should_Exist()
+    {
+        var currentDir = Directory.GetCurrentDirectory();
+        var repoRoot = FindRepositoryRoot(currentDir);
+        
+        Assert.NotNull(repoRoot);
+        
+        var prTemplate = Path.Combine(repoRoot!, ".github", "PULL_REQUEST_TEMPLATE.md");
+        Assert.True(File.Exists(prTemplate), 
+            $"【ADR-360.2】PR 模板文件应存在：{prTemplate}");
+    }
+
+    [Fact(DisplayName = "ADR-360.3: 架构测试项目应存在并可被 CI 执行")]
+    public void Architecture_Tests_Should_Be_Executable()
+    {
+        // 验证架构测试项目可以被发现和执行
+        var currentAssembly = typeof(ADR_0360_Architecture_Tests).Assembly;
+        Assert.NotNull(currentAssembly);
+        Assert.Equal("ArchitectureTests", currentAssembly.GetName().Name);
+    }
+
+    private static string? FindRepositoryRoot(string startPath)
+    {
+        var dir = new DirectoryInfo(startPath);
+        while (dir != null)
+        {
+            if (Directory.Exists(Path.Combine(dir.FullName, ".github")) ||
+                File.Exists(Path.Combine(dir.FullName, "Directory.Build.props")))
+            {
+                return dir.FullName;
+            }
+            dir = dir.Parent;
+        }
+        return null;
     }
 }

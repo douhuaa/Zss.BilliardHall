@@ -1,6 +1,6 @@
 # ADR-124：Endpoint 命名及参数约束规范
 
-**状态**：Draft  
+**状态**：✅ Accepted  
 **级别**：结构层  
 **影响范围**：所有 HTTP Endpoint  
 **生效时间**：待审批通过后

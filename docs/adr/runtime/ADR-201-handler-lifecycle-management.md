@@ -1,6 +1,6 @@
 # ADR-201：Command Handler 生命周期管理
 
-**状态**：Draft  
+**状态**：✅ Accepted  
 **级别**：运行时层  
 **影响范围**：所有 Command Handler 实现  
 **生效时间**：待审批通过后

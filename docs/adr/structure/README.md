@@ -78,14 +78,14 @@
 
 > 详见 [待落地 ADR 提案跟踪清单](../PENDING-ADR-PROPOSALS.md)
 
-### 高优先级
-- **ADR-122**：测试代码组织与命名规范（📋 Proposed）
+### ✅ 已完成
+- **ADR-122**：测试代码组织与命名规范（✅ Accepted）
   - 测试目录结构、测试类命名、测试方法命名、架构测试组织
 
-### 中优先级
-- **ADR-123**：Repository 接口与分层命名规范（📋 Proposed）
+### ✅ 已完成
+- **ADR-123**：Repository 接口与分层命名规范（✅ Accepted）
   - Repository 接口命名、实现类命名、位置约束
-- **ADR-124**：Endpoint 命名及参数约束规范（📋 Proposed）
+- **ADR-124**：Endpoint 命名及参数约束规范（✅ Accepted）
   - Endpoint 类命名、路由命名、请求响应 DTO 命名
 
 ### 未来可能的 ADR

@@ -71,14 +71,14 @@
 
 > 详见 [待落地 ADR 提案跟踪清单](../PENDING-ADR-PROPOSALS.md)
 
-### 高优先级
-- **ADR-201**：Command Handler 生命周期管理（📋 Proposed）
+### ✅ 已完成
+- **ADR-201**：Command Handler 生命周期管理（✅ Accepted）
   - Handler 生命周期规范、幂等性、资源释放标准
-- **ADR-210**：领域事件版本化与兼容性（📋 Proposed）
+- **ADR-210**：领域事件版本化与兼容性（✅ Accepted）
   - 事件版本命名、序列化格式、向后兼容性、迁移适配
 
-### 中优先级
-- **ADR-220**：集成事件总线选型与适配规范（📋 Proposed）
+### ✅ 已完成
+- **ADR-220**：集成事件总线选型与适配规范（✅ Accepted）
   - 事件总线技术选型、发布/订阅接口、幂等性保障
 
 ### 未来可能的 ADR

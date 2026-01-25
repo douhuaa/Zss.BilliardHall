@@ -64,8 +64,8 @@
 
 > 详见 [待落地 ADR 提案跟踪清单](../PENDING-ADR-PROPOSALS.md)
 
-### 高优先级
-- **ADR-930**：代码审查与 ADR 合规自检流程（📋 Proposed）
+### ✅ 已完成
+- **ADR-930**：代码审查与 ADR 合规自检流程（✅ Accepted）
   - PR Template 必填项、Copilot 自检机制、架构测试集成、人工审查职责
 
 ### 未来可能的 ADR

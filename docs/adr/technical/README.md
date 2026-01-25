@@ -64,14 +64,14 @@
 
 > 详见 [待落地 ADR 提案跟踪清单](../PENDING-ADR-PROPOSALS.md)
 
-### 高优先级
-- **ADR-301**：集成测试环境自动化与隔离约束（📋 Proposed）
+### ✅ 已完成
+- **ADR-301**：集成测试环境自动化与隔离约束（✅ Accepted）
   - TestContainers 使用规范、数据库隔离策略、测试数据清理
-- **ADR-360**：CI/CD Pipeline 流程标准化（📋 Proposed）
+- **ADR-360**：CI/CD Pipeline 流程标准化（✅ Accepted）
   - 分支合规校验、失败快照、自动部署触发、分支保护
 
-### 中优先级
-- **ADR-350**：日志与可观测性标签与字段标准（📋 Proposed）
+### ✅ 已完成
+- **ADR-350**：日志与可观测性标签与字段标准（✅ Accepted）
   - 结构化日志字段规范、CorrelationId 传播、追踪标签标准
 
 ### 未来可能的 ADR
