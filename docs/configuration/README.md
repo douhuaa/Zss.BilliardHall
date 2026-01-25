@@ -92,10 +92,10 @@
 
 2. **架构约束由 ADR + MSBuild + 测试强制执行**
   - `Directory.Build.props`：自动推导命名空间，防止手动覆盖
-  - `Directory.Packages.props`：统一管理包版本，禁止项目级版本
+  - `Directory.Packages.props`：统一管理包版本，根据 ADR-0004 禁止项目级版本
   - 架构测试：验证所有 ADR 约束合规性
 
-3. **配置文件变更必须遵循 ADR-0900**
+3. **配置文件变更应遵循 ADR-0900**
   - 格式配置（EditorConfig）：技术层 ADR，单人批准
   - 架构配置（MSBuild、CPM）：可能涉及宪法层，严格审查
 
@@ -196,7 +196,7 @@
 | `Directory.Build.props`（架构性变更） | 结构层或宪法层 | 严格审查              | 建议讨论 |
 | `Directory.Packages.props`     | 技术层     | Tech Lead/架构师单人批准 | 无    |
 
-**所有变更必须**：
+**所有变更应**（根据 ADR-0900）：
 
 1. 提交 PR 并说明变更原因
 2. 更新相关文档
