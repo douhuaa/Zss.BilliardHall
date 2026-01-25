@@ -94,13 +94,27 @@ public sealed class ADR_0910_Architecture_Tests
 
     // ========== 执法级测试：真正阻止违规行为 ==========
 
+    // 裁决性词汇（ADR-0910 明确禁止 README 使用）
+    // Decision-making words forbidden in README files unless in allowed contexts
+    private static readonly string[] ForbiddenDecisionWords = new[]
+    {
+        "必须",    // MUST - defines mandatory requirements
+        "禁止",    // MUST NOT / FORBIDDEN - defines prohibited actions
+        "不允许",  // NOT ALLOWED - defines prohibited actions
+        "不得",    // SHALL NOT - defines prohibited actions
+        "应当"     // SHALL - defines normative requirements
+    };
+
+    // 限制检查的文件数量以提高性能
+    // Limit number of files to check for performance reasons
+    // Rationale: Architecture tests should run quickly; if we have more than 30 READMEs,
+    // it likely indicates organizational issues that should be addressed separately
+    private const int MaxReadmeFilesToCheck = 30;
+
     [Fact(DisplayName = "ADR-0910.4: README 不得使用裁决性语言（执法级）")]
     public void README_Must_Not_Use_Decision_Language()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        
-        // 裁决性词汇（ADR-0910 明确禁止 README 使用）
-        var forbiddenWords = new[] { "必须", "禁止", "不允许", "不得", "应当" };
         
         // 例外：可以在引用 ADR 的上下文中使用，或在示例标记中使用
         var allowedContextPatterns = new[]
@@ -165,7 +179,7 @@ public sealed class ADR_0910_Architecture_Tests
             );
         }
 
-        foreach (var file in readmeFiles.Take(30)) // 限制检查数量以提高性能
+        foreach (var file in readmeFiles.Take(MaxReadmeFilesToCheck))
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
@@ -180,7 +194,7 @@ public sealed class ADR_0910_Architecture_Tests
             {
                 var line = lines[i];
                 
-                foreach (var word in forbiddenWords)
+                foreach (var word in ForbiddenDecisionWords)
                 {
                     if (line.Contains(word))
                     {
@@ -233,6 +247,10 @@ public sealed class ADR_0910_Architecture_Tests
         }
     }
 
+    // 限制检查的文件数量以提高性能
+    // Limit number of files to check for performance - same rationale as MaxReadmeFilesToCheck
+    private const int MaxReadmeFilesForDeclarationCheck = 20;
+
     [Fact(DisplayName = "ADR-0910.5: README 必须声明无裁决力（执法级）")]
     public void README_Must_Declare_No_Authority()
     {
@@ -255,14 +273,14 @@ public sealed class ADR_0910_Architecture_Tests
         // 检测模式
         var declarationPatterns = new[]
         {
+            @"不具备裁决力",          // 推荐的简洁格式
             @"无裁决力",
             @"无架构裁决权",
             @"不具备架构裁决权",
-            @"不具备裁决权",
             @"仅供参考.*不具备.*裁决"
         };
 
-        foreach (var file in readmeFiles.Take(20)) // 限制检查数量
+        foreach (var file in readmeFiles.Take(MaxReadmeFilesForDeclarationCheck))
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
@@ -425,6 +443,12 @@ public sealed class ADR_0910_Architecture_Tests
         return string.Join("\n", nonQuotedLines);
     }
 
+    // 判断是否为纯操作性 README 的阈值
+    // Threshold for determining if a README is purely operational (commands/scripts only)
+    // Rationale: If 70% or more of the content is code blocks, it's likely just operational documentation
+    // without architectural guidance, and thus can be exempted from requiring authority declarations
+    private const double PureOperationalCodeThreshold = 0.7;
+
     private static bool IsPureOperationalReadme(string content)
     {
         // 简单启发式：如果文档主要是代码块和命令，认为是纯操作性的
@@ -436,7 +460,7 @@ public sealed class ADR_0910_Architecture_Tests
         var contentWithoutCode = Regex.Replace(content, codeBlockPattern, string.Empty);
         var textLength = contentWithoutCode.Trim().Length;
         
-        // 如果代码占比超过70%，认为是纯操作性的
-        return totalCodeLength > textLength * 0.7;
+        // 如果代码占比超过阈值，认为是纯操作性的
+        return totalCodeLength > textLength * PureOperationalCodeThreshold;
     }
 }
