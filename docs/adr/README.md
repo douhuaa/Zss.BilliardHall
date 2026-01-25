@@ -179,7 +179,7 @@ ADR-0900~0999    → 治理层（governance/）
 - 契约使用规则（Contracts）
 - 模块通信约束（事件、契约、原始类型）
 
-**禁止内容**：
+**ADR 规定的约束**：
 
 - ❌ 模块间直接引用
 - ❌ 横向 Service 层
@@ -197,7 +197,7 @@ ADR-0900~0999    → 治理层（governance/）
 - 唯一入口规范（Bootstrapper）
 - 目录结构标准
 
-**禁止内容**：
+**ADR 规定的约束**：
 
 - ❌ Platform 依赖 Application
 - ❌ Application 依赖 Host
@@ -216,7 +216,7 @@ ADR-0900~0999    → 治理层（governance/）
 - MSBuild 策略
 - 防御性规则
 
-**禁止内容**：
+**ADR 规定的约束**：
 
 - ❌ 手动覆盖 BaseNamespace
 - ❌ 不规范命名空间（Common、Shared、Utils）
@@ -234,7 +234,7 @@ ADR-0900~0999    → 治理层（governance/）
 - 包分组策略
 - 防御性规则
 
-**禁止内容**：
+**ADR 规定的约束**：
 
 - ❌ 项目手动指定包版本
 - ❌ 层级越界引用包
@@ -253,7 +253,7 @@ ADR-0900~0999    → 治理层（governance/）
 - 事务与一致性语义
 - 错误与失败语义
 
-**禁止内容**：
+**ADR 规定的约束**：
 
 - ❌ Endpoint 包含业务逻辑
 - ❌ Handler 承载长期状态
@@ -447,7 +447,7 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 - 事件版本演进支持
 - 模块隔离约束在事件中的应用
 
-**禁止内容**：
+**ADR 规定的约束**：
 
 - ❌ 事件缺少 `Event` 后缀
 - ❌ 使用现在时或动词原形
@@ -484,7 +484,7 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 - 异常类型命名空间约束
 - 跨模块事件异常禁止同步传播
 
-**禁止内容**：
+**ADR 规定的约束**：
 
 - ❌ 抛出 `System.Exception`
 - ❌ 领域/验证异常标记为可重试
