@@ -1,84 +1,20 @@
-# 运行时行为层 ADR (ADR-200 ~ 299)
+# 运行层 ADR
 
-**编号范围**：ADR-200 ~ ADR-299  
-**层级定位**：运行行为 / 交互协议 / 执行边界
+> ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
+> 所有架构决策以相关 ADR 正文为准。
 
----
+## 目录用途
 
-## 定义
+包含运行层（ADR-200~299）架构决策记录，关于运行时交互、协议和事件的规范。
 
-运行时行为层 ADR 定义系统的执行模型、模块协作、一致性保障等动态行为：
+## ADR 列表
 
-- **执行模型**：Use Case 如何被执行
-- **通信协议**：模块间如何交互（同步/异步）
-- **事务边界**：如何保障数据一致性
-- **错误处理**：如何处理失败和异常
-- **事件流转**：领域事件的发布和订阅
+- [ADR-0200：领域事件与集成事件规范](ADR-0200-domain-integration-events.md)
 
----
+## 相关链接
 
-## 与宪法层的关系
-
-运行时行为层是对宪法层执行模型的细化：
-
-```
-宪法层定义原则：
-- ADR-0005：Handler 模式、CQRS、异步优先
-
-↓ 细化
-
-运行时层定义细节：
-- ADR-2xx：Handler 生命周期管理
-- ADR-2xx：事件版本化与兼容性
-- ADR-2xx：错误处理与重试策略
-- ADR-2xx：事务边界与补偿
-```
-
----
-
-## 编号规则
-
-| 编号段         | 用途             |
-|-------------|----------------|
-| ADR-200~209 | Handler 执行模型细节 |
-| ADR-210~219 | 模块间通信协议        |
-| ADR-220~229 | 事件驱动架构细节       |
-| ADR-230~239 | 事务与一致性策略       |
-| ADR-240~249 | 错误处理与容错        |
-| ADR-250~299 | 其他运行时主题        |
-
----
-
-## 目录
-
-- [概述](../../README.md)
-- [宪法级 ADR](../constitutional/)
-- [结构性 ADR](../structure/)
-- [技术性 ADR](../technical/)
-- [治理 ADR](../governance/)
-
-### 已采纳的运行时行为 ADR
-
-- [ADR-201：Command Handler 生命周期管理](./ADR-201-command-handler-lifecycle.md) ✅
-- [ADR-210：领域事件版本化与兼容性](./ADR-210-domain-event-versioning.md) ✅
-- [ADR-220：集成事件总线选型与适配规范](./ADR-220-integration-eventbus-adapter.md) ✅
-- [ADR-240：Handler 异常约束](./ADR-240-handler-exception-constraints.md) ✅
-
-### 宪法层相关 ADR
-
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-handler-cqrs-boundary.md)
-- [ADR-0005-Enforcement-Levels：执行级别分类](../constitutional/ADR-0005-Enforcement-Levels.md)
-
----
-
-### 未来可能的 ADR
-- ADR-202：Query Handler 超时与降级策略
-- ADR-211：模块间同步调用审批流程
-- ADR-230：Saga 模式应用指南
-- ADR-241：补偿事务设计指南
-
----
-
-## 参考文档
-
-> 本 README 仅作索引与说明，所有裁决性内容以 ADR-201 正文为准。
+- [上级目录：adr](../README.md)
+- [宪法层 ADR](../constitutional/)
+- [结构层 ADR](../structure/)
+- [技术层 ADR](../technical/)
+- [治理层 ADR](../governance/)
