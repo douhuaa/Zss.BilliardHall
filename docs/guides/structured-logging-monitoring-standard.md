@@ -1,10 +1,15 @@
 # 结构化日志与监控工程标准
 
+> ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
+> 所有架构决策以 [ADR-340](../adr/technical/ADR-340-structured-logging-monitoring-constraints.md) 和 [ADR-350](../adr/technical/ADR-350-logging-observability-standards.md) 为准。
+
 **性质**：工程标准（Engineering Standard）- 非裁决性  
 **版本**：1.0  
 **最后更新**：2026-01-24  
 **状态**：Active  
-**相关 ADR**：[ADR-340](../adr/technical/ADR-340-structured-logging-monitoring-constraints.md)（裁决性规则）
+**相关 ADR**：
+- [ADR-340](../adr/technical/ADR-340-structured-logging-monitoring-constraints.md)（裁决性规则）
+- [ADR-350](../adr/technical/ADR-350-logging-observability-standards.md)（裁决性规则）
 
 ---
 
@@ -217,7 +222,7 @@ services:
 
 ## 三、日志字段推荐
 
-### 3.1 必须包含的上下文字段
+### 3.1 建议包含的上下文字段（根据 ADR-350）
 
 所有业务日志**应该**包含以下上下文字段：
 
@@ -276,7 +281,7 @@ _logger.LogInformation(
 
 ### 3.3 避免敏感信息泄露
 
-**禁止记录的敏感信息**：
+**不应记录的敏感信息**（根据 ADR-350）：
 
 - ❌ 密码、密钥、Token
 - ❌ 完整的银行卡号、身份证号

@@ -3,7 +3,7 @@ name: "Architecture Guardian"
 description: "架构守护者 - 实时监督代码符合所有架构约束"
 version: "2.0"
 risk_level: "极高"
-supervised_adrs: ["ADR-0000", "ADR-0001", "ADR-0002", "ADR-0003", "ADR-0004", "ADR-0005", "ADR-0007"]
+supervised_adrs: ["ADR-0000", "ADR-0001", "ADR-0002", "ADR-0003", "ADR-0004", "ADR-0005", "ADR-0007", "ADR-0008"]
 based_on: "ADR-0007"
 tools: ["code-analysis", "architecture-tests", "dependency-scanner"]
 ---
@@ -260,6 +260,8 @@ dotnet test src/tests/ArchitectureTests/ --filter "ModuleBoundary"
 | ADR-0003   | 命名空间规范                   |
 | ADR-0004   | 中央包管理                    |
 | ADR-0005   | Handler 模式、CQRS           |
+| ADR-0007   | Agent 行为边界、三态输出          |
+| ADR-0008   | 文档治理、裁决权力边界              |
 | ADR-120+   | 结构层规范                    |
 | ADR-200+   | 运行层规范                    |
 | ADR-300+   | 技术层规范                    |
@@ -283,6 +285,22 @@ dotnet test src/tests/ArchitectureTests/ --filter "ModuleBoundary"
 - ❌ Command Handler 返回业务数据
 - ❌ Query Handler 修改状态
 - ❌ Handler 直接依赖其他模块
+
+**ADR-0007：Agent 行为与权限**
+- ❌ Agent 输出模糊判断（"我觉得"、"试试看"）
+- ❌ Agent 在 ADR 未明确时给出实现方案
+- ❌ Agent 批准架构破例
+
+**ADR-0008：文档编写与维护（治理警察职责）**
+- ⚠️ **Guardian 必须阻断违反 ADR-0008 的 Agent/Skill 输出**
+- ❌ README/Guide 试图定义架构规则
+- ❌ Instructions/Agents 引入新规则或弱化 ADR
+- ❌ Skills 输出判断性结论（"违规"、"建议"）
+- ❌ 非 ADR 文档使用裁决性语言（"必须"、"禁止"）
+- ❌ 任何文档试图通过"引用 ADR"获得裁决力
+
+**关键原则（来自 ADR-0008）**：
+> Architecture Guardian 作为治理警察，必须主动识别并阻断任何试图绕过 ADR-0008 的文档治理违规行为。
 
 #### 2️⃣ 结构层（高优先级）
 

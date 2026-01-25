@@ -1,5 +1,8 @@
 # 架构治理系统（Architecture Governance System）
 
+> ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
+> 所有架构决策以相关 ADR 正文为准。详见 [ADR 目录](adr/README.md)。
+
 **版本**：1.0  
 **最后更新**：2026-01-25  
 **状态**：Active
@@ -106,16 +109,20 @@ docs/adr/
 
 ### 关键原则
 
+根据 [ADR-0007](adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md) 和 [ADR-0008](adr/constitutional/ADR-0008-documentation-governance-constitution.md)：
+
 - ✅ ADR 是唯一的"事实来源"（Source of Truth）
-- ✅ 所有层级必须服从 ADR
+- ✅ 所有层级服从 ADR
 - ✅ ADR 冲突时按优先级裁决（ADR-0000.X）
-- ❌ 任何人不得绕过 ADR
-- ❌ Prompts/Instructions 不得与 ADR 冲突
+- ❌ 不应绕过 ADR
+- ❌ Prompts/Instructions 不应与 ADR 冲突
 
 ### 参考文档
 
 - [ADR 目录](adr/README.md)
 - [ADR-0000: 架构测试与 CI 治理宪法](adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-0007: Agent 行为与权限宪法](adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+- [ADR-0008: 文档编写与维护宪法](adr/constitutional/ADR-0008-documentation-governance-constitution.md)
 - [ADR-0900: ADR 新增与修订流程](adr/governance/ADR-0900-adr-process.md)
 
 ---
@@ -437,7 +444,9 @@ graph TB
 
 ---
 
-## 十、关键原则（必须遵守）
+## 十、关键原则
+
+根据 [ADR-0007](adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md) 和 [ADR-0008](adr/constitutional/ADR-0008-documentation-governance-constitution.md)：
 
 ### 单向依赖原则
 
@@ -445,7 +454,7 @@ graph TB
 ADR → Instructions → Agents → Prompts → Skills
 ```
 
-**绝对禁止的反向关系**：
+**不允许的反向关系**：
 
 - ❌ Prompt 创造规则
 - ❌ Agent 推翻 ADR
