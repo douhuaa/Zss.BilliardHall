@@ -107,6 +107,34 @@ public class OrderCreatedHandler :
 - ✅ 为新字段提供默认值
 - ❌ 禁止抛出异常在遇到未知字段时
 
+### ADR-210.6：事件版本异常必须降级处理不得中断消费
+
+事件处理遇到版本异常时**必须**记录告警并降级处理，不得中断消费流程。
+
+**容错策略**：
+- ✅ 未识别 SchemaVersion → 记录 Warning，使用 Fallback Handler
+- ✅ 反序列化失败 → 记录 Error，移入死信队列
+- ✅ 语义不兼容 → 记录 Warning，按旧版本逻辑处理
+- ❌ 禁止因版本异常导致消费者停止
+
+**Fallback Handler 要求**：
+```csharp
+// 必须提供未知版本兜底处理
+public class UnknownVersionEventHandler : IEventHandler<object>
+{
+    public async Task Handle(object evt)
+    {
+        _logger.LogWarning("Unknown event version: {EventType}", evt.GetType());
+        // 移入死信队列或人工审查队列
+    }
+}
+```
+
+**生产事故容错原则**：
+- 事件系统第一原则：**不死**
+- 版本错误是数据问题，不是系统故障
+- 必须允许系统在版本异常时继续运行
+
 ---
 
 ## 执法模型（Enforcement）
@@ -122,6 +150,7 @@ public class OrderCreatedHandler :
 | ADR-210.3 | L2 | 人工审查 + 版本跟踪 |
 | ADR-210.4 | L2 | Code Review + 集成测试 |
 | ADR-210.5 | L3 | 集成测试验证 |
+| ADR-210.6 | L2 | 集成测试 + Runtime 监控 |
 
 ---
 

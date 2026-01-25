@@ -100,7 +100,31 @@ return Results.Created($"/orders/{orderId}", orderId);
 ```
 
 **复杂流程处理**：
-如需多步骤，应在 Handler 或 Saga 中编排，而非在 Endpoint 中。
+- 如需多步骤，应在 Handler 或 Saga 中编排，而非在 Endpoint 中
+- 复杂业务流程**必须**通过 Saga / Workflow 显式建模
+- **禁止**在 Handler 中隐式串联多个领域动作
+
+**Saga 示例**：
+```csharp
+// ✅ 正确：复杂流程使用 Saga
+public class OrderFulfillmentSaga
+{
+    public async Task Execute(FulfillOrder command)
+    {
+        await _bus.Send(new ValidateInventory(...));
+        await _bus.Send(new ReserveFunds(...));
+        await _bus.Send(new CreateShipment(...));
+    }
+}
+
+// ❌ 错误：在 Endpoint 中串联多个操作
+builder.MapPost("/orders/fulfill", async (request, bus) =>
+{
+    await bus.Send(new ValidateInventory(...));  // 多个调用
+    await bus.Send(new ReserveFunds(...));
+    await bus.Send(new CreateShipment(...));
+});
+```
 
 ---
 

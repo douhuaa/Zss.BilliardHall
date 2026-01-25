@@ -115,11 +115,22 @@ _logger.LogError(
 
 | 规则编号 | 执行级 | 测试/手段 |
 |---------|--------|----------|
-| ADR-350.1 | L2 | Code Review + 日志审计 |
+| ADR-350.1 | L1 | `Logs_Must_Include_CorrelationId` + Serilog Enricher 强制 |
 | ADR-350.2 | L2 | Code Review + 自动扫描 |
 | ADR-350.3 | L1 | `Log_Fields_Must_Use_PascalCase` |
-| ADR-350.4 | L2 | Code Review |
+| ADR-350.4 | L1 | Roslyn Analyzer: 禁止 `LogError(string)` 仅允许 `LogError(exception, string)` |
 | ADR-350.5 | L2 | Code Review |
+
+### 架构测试说明
+
+**ADR-350.1 L1 实现**：
+- 架构测试：扫描代码中的 `_logger.Log*(` 调用，验证包含 CorrelationId 参数
+- Serilog Enricher：全局注入 CorrelationId，无需手动传递
+- 推荐使用 Enricher 而非手动，降低遗漏风险
+
+**ADR-350.4 L1 实现**：
+- Roslyn Analyzer：检测 `LogError(string)` 模式并报编译错误
+- 强制使用 `LogError(Exception, string)` 确保异常信息完整
 
 ---
 

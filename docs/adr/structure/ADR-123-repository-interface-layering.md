@@ -87,6 +87,17 @@ Task InsertOrUpdateAsync(Order order);          // Insert/Update 是 CRUD 术语
 - Delete/Remove（删除）
 - Exists（存在性检查）
 
+**永久黑名单（严禁使用）**：
+- ❌ Select/SelectAll/SelectWhere（SQL 术语）
+- ❌ Insert/Update/Upsert（CRUD 术语）
+- ❌ Query/Execute/ExecuteSql（数据库操作暴露）
+- ❌ FindByPrimaryKey/FindByForeignKey（数据库概念）
+- ❌ Load/Fetch（ORM 实现细节）
+
+**违规处理**：
+- 代码审查必须拒绝黑名单方法名
+- 建议使用 Roslyn Analyzer 自动检测黑名单
+
 ---
 
 ## 执法模型（Enforcement）

@@ -11,16 +11,25 @@
 
 > **这是本 ADR 唯一具有裁决力的部分。**
 
-### ADR-201.1：Handler 生命周期必须为 Scoped
+### ADR-201.1：Handler 生命周期必须与执行上下文匹配
 
-所有 Command Handler **必须**注册为 Scoped 生命周期。
+Command Handler 的生命周期**必须**根据执行上下文类型选择。
 
-**禁止**：
-- ❌ 注册为 Singleton 生命周期
-- ❌ 注册为 Transient 生命周期
-- ❌ 不显式指定生命周期（依赖默认行为）
+**Request-driven Handler（HTTP/gRPC 请求驱动）**：
+- ✅ 必须注册为 Scoped 生命周期
+- ❌ 禁止 Singleton
+- ❌ 禁止 Transient（除非有性能证明）
 
-**原因**：Scoped 确保每个请求有独立的 Handler 实例，避免状态污染，同时避免 Transient 的频繁创建开销。
+**Message-driven / Background Handler（消息/后台任务驱动）**：
+- ✅ Scoped（推荐）：每个消息独立上下文
+- ✅ Transient（允许）：需在注释中说明原因
+- ❌ 禁止 Singleton
+
+**Context-free Handler（无状态纯计算）**：
+- ✅ 可使用 Transient
+- ✅ 必须在注释中标注 `// STATELESS-HANDLER`
+
+**原因**：不同执行上下文有不同的生命周期需求，统一强制 Scoped 会在后台任务、消息重放等场景造成不必要的约束。
 
 ### ADR-201.2：Handler 禁止依赖 Singleton 有状态服务
 
@@ -83,7 +92,7 @@ Command Handler **禁止**通过任何方式在不同请求之间共享可变状
 
 | 规则编号 | 执行级 | 测试/手段 |
 |---------|--------|----------|
-| ADR-201.1 | L1 | `Handlers_Must_Be_Registered_As_Scoped` |
+| ADR-201.1 | L1 | `Handlers_Must_Be_Registered_As_Scoped` (HTTP) / L2 (Background) |
 | ADR-201.2 | L2 | Roslyn Analyzer + 人工审查 |
 | ADR-201.3 | L1 | `Handlers_Must_Not_Have_Static_Fields` |
 | ADR-201.4 | L2 | 人工审查（Code Review） |
@@ -92,13 +101,19 @@ Command Handler **禁止**通过任何方式在不同请求之间共享可变状
 ### 架构测试说明
 
 **L1 测试**：
-- 验证所有 Handler 在 DI 容器中注册为 Scoped
-- 检测 Handler 类中的 static 字段（排除 const/readonly）
+- 验证 Request-driven Handler 在 DI 容器中注册为 Scoped
+- 检测 Handler 类中的 static 字段（排除 const/readonly 不可变类型）
+- Background Handler 如使用 Transient 需注释说明
 
 **L2 测试**：
 - 通过 Code Review 检查 Singleton 依赖是否有状态
 - 审查 IDisposable 实现的正确性
 - 检查是否存在跨请求状态共享
+
+**执行上下文判定**：
+- HTTP/gRPC Endpoint 触发 → Request-driven（强制 Scoped）
+- 消息队列/定时任务触发 → Message-driven（Scoped 或 Transient）
+- 纯计算无状态 → Context-free（Transient）
 
 ---
 
