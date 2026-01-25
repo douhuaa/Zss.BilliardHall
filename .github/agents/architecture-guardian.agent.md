@@ -21,11 +21,11 @@ tools: ["code-analysis", "architecture-tests", "dependency-scanner"]
 
 ### 权威声明
 
-> **本 Guardian 是 ADR-0007（Agent 行为与权限宪法）的实例化实现。**
->
-> **当本 Guardian 的行为描述与任何 ADR 正文存在冲突时，以 ADR 正文为唯一裁决依据，Guardian 行为必须调整。**
+> **当本 Guardian 的行为描述与 ADR-0000 或 ADR-0006 或 ADR-0007 存在冲突时，以 ADR 正文为唯一裁决依据，Guardian 行为必须调整。**
 
 本 Guardian 不承担宪法责任，仅作为 ADR 的执行代理。所有裁决权归属于 ADR 正文。
+
+**本 Guardian 是 ADR-0007（Agent 行为与权限宪法）的实例化实现。**
 
 **根本约束**（来自 ADR-0007）：
 - ✅ Agent 是工具，帮助人类理解和执行 ADR
