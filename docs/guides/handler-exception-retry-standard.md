@@ -1,5 +1,8 @@
 # Handler 异常处理与重试工程标准
 
+> ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
+> 所有架构决策以 [ADR-240](../adr/runtime/ADR-240-handler-exception-constraints.md) 为准。
+
 **性质**：工程标准（Engineering Standard）- 非裁决性  
 **版本**：1.0  
 **最后更新**：2026-01-24  

@@ -1,12 +1,15 @@
 # 架构指南
 
+> ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
+> 所有架构决策以相关 ADR 正文为准。详见 [ADR 目录](adr/README.md)。
+
 ## 概述
 
 本项目采用 **模块化单体架构**（Modular Monolith）结合 **垂直切片架构**（Vertical Slice Architecture）。
 
-核心原则：
+核心原则（详见 ADR 文档）：
 
-1. **模块隔离** - 业务模块之间不能直接相互引用
+1. **模块隔离** - 业务模块之间不应直接相互引用
 2. **垂直切片** - 功能按用例组织，而非技术层
 3. **架构测试** - 所有架构约束通过自动化测试强制执行
 
@@ -17,6 +20,8 @@
 所有重要的架构决策都记录在 [ADR 文档](/docs/adr/) 中：
 
 - [ADR-0001: 模块化单体与垂直切片架构决策](/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+
+**注意**：本指南仅对 ADR 进行解释说明。如有冲突，以 ADR 正文为准。
 
 ## 项目结构
 
@@ -212,21 +217,25 @@ graph TB
     style Forbidden fill:#ffebee
 ```
 
-**✅ 允许：**
+根据 [ADR-0001](/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)：
+
+**允许的依赖**：
 
 - 模块可以依赖 `Platform`
 - 模块可以通过领域事件通信
 - 模块可以使用 `Platform.Contracts` 中定义的数据契约
 
-**❌ 禁止：**
+**不应使用的依赖（根据 ADR-0001）**：
 
 - 模块之间直接相互引用
 - 共享聚合根、实体或值对象
 - 跨模块调用 Handler
 
+详见：[ADR-0001 第 3.1-3.2 节](/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+
 ### 2. 垂直切片规则
 
-每个功能切片（Feature）应该：
+根据 ADR-0001，每个功能切片（Feature）应该：
 
 - 包含该用例的所有逻辑（端点、命令/查询、Handler、验证等）
 - 自包含，不依赖横向的 Service
@@ -301,7 +310,7 @@ Features/
     └── CreateMemberValidator.cs       # 验证器（可选）
 ```
 
-**❌ 禁止的组织方式：**
+**❌ 不建议的组织方式（参考 ADR-0001）：**
 
 ```
 Members/
@@ -316,11 +325,11 @@ Members/
 
 数据契约（Contracts）定义在 `Platform.Contracts` 中，用于模块间数据传递。
 
-**使用白名单：**
+**使用规范（根据 ADR-0005）：**
 
 | 场景                   | 允许使用 | 说明               |
 |----------------------|------|------------------|
-| Command Handler      | ❌    | 禁止依赖其他模块的查询接口    |
+| Command Handler      | ❌    | 不应依赖其他模块的查询接口（详见 ADR-0005）    |
 | Query Handler        | ✅    | 可以返回契约           |
 | Endpoint/API         | ✅    | 用于请求/响应          |
 | ReadModel/Projection | ✅    | 视图模型             |
@@ -361,7 +370,7 @@ Platform 层只能包含技术能力，不能包含业务逻辑。
 - 契约定义（IContract、IQuery）
 - 基础设施抽象
 
-**❌ 禁止：**
+**❌ 不应包含（根据 ADR-0002）：**
 
 - 业务规则或判断
 - 包含 `if (业务状态)` 的代码
@@ -537,20 +546,20 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 
 ### 测试套件
 
-1. **ModuleIsolationTests** - 模块隔离测试
+1. **ModuleIsolationTests** - 模块隔离测试（验证 ADR-0001）
   - 模块不能相互引用
-  - 禁止传统分层命名空间
-  - 禁止 Repository/Service 命名
+  - 不应使用传统分层命名空间（参考 ADR-0001）
+  - 不应使用 Repository/Service 命名（参考 ADR-0001）
 
-2. **ContractUsageTests** - 契约使用测试
+2. **ContractUsageTests** - 契约使用测试（验证 ADR-0005）
   - Command Handler 不能依赖 IQuery 接口
   - Platform 不能依赖业务契约
   - Handler 命名约定
 
-3. **VerticalSliceArchitectureTests** - 垂直切片测试
-  - 禁止传统分层组织
+3. **VerticalSliceArchitectureTests** - 垂直切片测试（验证 ADR-0001）
+  - 不应使用传统分层组织（根据 ADR-0001）
   - Handler 不能依赖横向 Service
-  - 禁止 Shared/Common 文件夹
+  - 不应创建 Shared/Common 文件夹（参考 ADR-0001）
   - Handler 之间不能直接调用
 
 4. **PlatformLayerTests** - Platform 层测试
@@ -566,7 +575,7 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 1. **理解违规原因** - 阅读测试失败信息
 2. **修复代码** - 按照测试建议修改
 3. **重新测试** - 确保修复有效
-4. **如需豁免** - 必须：
+4. **如需豁免** - 根据 ADR-0000 规定：
   - 通过 ADR 记录原因
   - 在 PR 中标注 `ARCH-VIOLATION`
   - 设定偿还时间

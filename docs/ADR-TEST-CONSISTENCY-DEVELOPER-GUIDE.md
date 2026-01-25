@@ -1,5 +1,8 @@
 # ADR-测试一致性开发者指南
 
+> ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
+> 所有架构决策以相关 ADR 正文为准。详见 [ADR 目录](adr/README.md)。
+
 **版本**：1.0  
 **目标受众**：开发者、架构师  
 **最后更新**：2026-01-23
@@ -10,7 +13,7 @@
 
 ### 1.1 我需要做什么？
 
-如果你的 PR 涉及以下任一内容，**必须**确保 ADR-测试映射一致性：
+如果你的 PR 涉及以下任一内容，应确保 ADR-测试映射一致性：
 
 - ✅ 新增或修订 ADR 文档
 - ✅ 新增或修改架构测试
@@ -36,7 +39,7 @@ dotnet test src/tests/ArchitectureTests/
 
 #### 步骤 1：在 ADR 文档中标记约束
 
-在需要测试的约束后添加 **【必须架构测试覆盖】** 标记：
+在需要测试的约束后添加 **【必须架构测试覆盖】** 标记（根据 ADR-0000）：
 
 ```markdown
 ### 3. 模块通信约束
@@ -57,7 +60,7 @@ dotnet test src/tests/ArchitectureTests/
 ```markdown
 ## 快速参考表（Quick Reference Table）
 
-| 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
+| 约束编号 | 约束描述 | 需要测试 | 测试覆盖 | ADR 章节 |
 |---------|---------|---------|---------|----------|
 | ADR-0001.1 | 模块不得相互引用 | ✅ | ADR_0001_Architecture_Tests::Modules_Should_Not_Reference_Other_Modules | 1 |
 | ADR-0001.3 | 跨模块禁止引用实体 | ✅ | ❌ 待补充 | 3 |
@@ -112,7 +115,7 @@ dotnet test src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
 
 #### 步骤 1：更新 ADR 文档
 
-修改或删除约束，确保 **【必须架构测试覆盖】** 标记仍然准确。
+修改或删除约束，检查并更新 **【必须架构测试覆盖】** 标记的准确性（根据 ADR-0000）。
 
 #### 步骤 2：同步更新测试
 
@@ -134,7 +137,7 @@ dotnet test src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
 
 #### 步骤 1：确保测试方法包含 ADR 引用
 
-测试方法名或 `DisplayName` 必须包含 `ADR-{编号}`：
+根据测试规范，测试方法名或 `DisplayName` 应包含 `ADR-{编号}`：
 
 ```csharp
 // 方式 1：在 DisplayName 中
@@ -146,7 +149,7 @@ public void Platform_Should_Not_Depend_On_Application()
 public void ADR_0002_1_Platform_Should_Not_Depend_On_Application()
 ```
 
-#### 步骤 2：测试失败消息必须包含 ADR 引用
+#### 步骤 2：测试失败消息应包含 ADR 引用
 
 ```csharp
 Assert.True(result.IsSuccessful,
@@ -343,7 +346,7 @@ Assert.True(result.IsSuccessful, "Test failed");
 
 1. 测试方法是否使用了 `[Fact]` 或 `[Theory]` 属性？
 2. 测试方法或 DisplayName 是否包含对应的 ADR 编号（如 `ADR-0001`）？
-3. ADR 文档中是否正确标记了 **【必须架构测试覆盖】**？
+3. ADR 文档中标记了 **【必须架构测试覆盖】** 的约束是否都有测试？（参考 ADR-0000）
 
 ### Q2: 测试失败消息太长，影响可读性？
 

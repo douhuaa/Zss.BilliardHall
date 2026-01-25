@@ -19,7 +19,7 @@ required_agent: "module-boundary-checker"
 
 ### 用途
 
-扫描项目中的跨模块引用，提取引用事实，由 Agent 根据 ADR 判定合规性。
+扫描项目中的跨模块引用，提取引用事实，由 Agent 根据 ADR 进行判定。
 
 ### 输入参数
 
@@ -65,7 +65,7 @@ required_agent: "module-boundary-checker"
 **关键说明**：
 - `derivedSeverity`：基于当前 ADR（如 ADR-0001.2）推导的严重性，**不是 Skill 固化的真理**
 - `severitySource`：严重性判定依据的 ADR 条款，便于追溯
-- 最终合规性判定由 Agent 根据最新 ADR 执行
+- 最终判定由 Agent 根据最新 ADR 执行
 
 ---
 
@@ -217,7 +217,7 @@ required_agent: "module-boundary-checker"
 ### 典型使用流程
 
 1. Agent 调用此 Skill 获取引用事实
-2. Agent 根据最新 ADR 判定每个引用的合规性
+2. Agent 根据最新 ADR 判定每个引用
 3. Agent 生成符合三态格式的响应（✅ Allowed / ⚠️ Blocked / ❓ Uncertain）
 
 ### 修复建议来源
