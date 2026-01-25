@@ -84,6 +84,7 @@ graph TB
         C4[ADR-0004 包管理]
         C5[ADR-0005 交互模型]
         C6[ADR-0006 术语编号]
+        C7[ADR-0007 Agent行为]
     end
 
     subgraph Governance["🛡️ 治理层 (ADR-0000, 900~999)"]
@@ -140,6 +141,7 @@ ADR-0900~0999    → 治理层（governance/）
 | 依赖包如何管理         | [ADR-0004](constitutional/ADR-0004-Cpm-Final.md)                                    | constitutional/ | 中央包管理（CPM）       |
 | 业务用例如何执行        | [ADR-0005](constitutional/ADR-0005-Application-Interaction-Model-Final.md)          | constitutional/ | 应用内运行模型          |
 | **术语定义和编号规则**    | **[ADR-0006](constitutional/ADR-0006-terminology-numbering-constitution.md)**       | constitutional/ | **术语与编号宪法**      |
+| **Agent 行为边界和权限** | **[ADR-0007](constitutional/ADR-0007-agent-behavior-permissions-constitution.md)** | constitutional/ | **Agent 行为与权限宪法** |
 | **领域事件如何命名**    | **[ADR-120](structure/ADR-120-domain-event-naming-convention.md)**                  | structure/      | **领域事件命名规范与组织**          |
 | **契约如何命名和组织**    | **[ADR-121](structure/ADR-121-contract-dto-naming-organization.md)**                | structure/      | **跨模块契约/DTO 命名与版本管理规范** |
 | 架构如何自动化校验       | [ADR-0000](governance/ADR-0000-architecture-tests.md)                               | governance/     | 架构测试与 CI 治理                |
@@ -293,6 +295,47 @@ ADR-0900~0999    → 治理层（governance/）
 **特殊说明**：
 
 > ADR-0006 让编号体系从"约定"升级为"宪法"。没有 ADR-0006，编号不一致只能算"意见"，不算"违规"。
+
+---
+
+### [ADR-0007：Agent 行为与权限宪法](constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+
+**主轴**：Agent 行为边界 + 权限约束元规则  
+**聚焦内容**：
+
+- Agent 的角色定位与权限边界
+- Agent 的三态输出规则（Allowed/Blocked/Uncertain）
+- Agent 禁止的语义行为（解释性扩权、替代性裁决、模糊输出）
+- Prompts 的法律地位（示例，不是规则）
+- Guardian 与其他 Agent 的主从关系
+- Agent 升级/变更的治理流程
+
+**核心地位**：
+
+- 📌 所有 Agent 的元规则（Meta-Rule）
+- 📌 Agent 行为与权限的唯一裁决源
+- 📌 防止 Agent "越权"和"语义扩权"的宪法级约束
+- 📌 确保 Agent 作为工具而非决策者的根本保障
+
+**关键原则**：
+
+- ✅ Agent 是工具，帮助人类理解和执行 ADR
+- ❌ Agent 不是架构的决策者
+- ❌ Agent 不是 ADR 的解释权威
+- ❌ Agent 不能绕过架构测试
+- ❌ Agent 不能批准破例
+- 🔑 当无法确认 ADR 明确允许某行为时，Agent 必须假定该行为被禁止
+
+**三态输出规则**：
+
+- ✅ **Allowed**：ADR 正文明确允许的行为
+- ⚠️ **Blocked**：ADR 正文明确禁止的行为
+- ❓ **Uncertain**：ADR 未明确覆盖，默认禁止
+
+**特殊说明**：
+
+> Agent 是架构的执行者和解释者，而非架构的决策者。ADR-0007 让 Agent 从"可能越权的工具"升级为"有边界的助手"。
+
 
 ---
 
