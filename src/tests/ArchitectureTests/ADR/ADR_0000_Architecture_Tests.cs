@@ -143,6 +143,10 @@ public sealed class ADR_0000_Architecture_Tests
             if (testType.Name == "ADR_0000_Architecture_Tests")
                 continue;
 
+            // 跳过重定向测试（ADR_0008 已重构为三层架构）
+            if (testType.Name == "ADR_0008_Architecture_Tests")
+                continue;
+
             var testMethods = testType
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(m => m
