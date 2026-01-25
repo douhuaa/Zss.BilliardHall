@@ -380,7 +380,7 @@ docs-lint check-declaration docs/**/*.md
 - ADR-0007：Agent 行为与权限宪法
 - ADR-0900：ADR 流程管理
 - `docs/templates/adr-template.md`：ADR 编写模板
-- `docs/copilot/adr-0008.prompts.md`：场景化示例（待创建）
+- `docs/copilot/adr-0008.prompts.md`：场景化示例
 
 ---
 
