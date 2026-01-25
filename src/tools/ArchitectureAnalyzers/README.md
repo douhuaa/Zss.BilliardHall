@@ -1,5 +1,7 @@
 # Zss.BilliardHall Architecture Analyzers
 
+⚠️ 本文档不具备裁决力。所有架构决策以对应 ADR 正文为准。
+
 This package contains Roslyn analyzers that enforce architectural constraints defined in ADR-0005 (Application
 Interaction Model & Execution Boundaries).
 
