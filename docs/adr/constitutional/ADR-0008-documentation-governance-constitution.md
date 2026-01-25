@@ -176,18 +176,20 @@ ADR **禁止**包含以下内容：
 
 #### 3.3 README / Guide
 
+> **注意**：README 的详细约束已独立为 [ADR-0910: README 编写与维护宪法](../../governance/ADR-0910-readme-governance-constitution.md)。  
+> 本节仅保留核心原则，具体执法规则见 ADR-0910。
+
 **强制要求**：
 
 - ✅ **只允许**解释"如何使用"
 - ✅ **必须**在首部声明"无裁决力"
 - ✅ **不得**定义规则或做出架构判断
 
-**声明格式**（强制）：
+**核心原则**：
 
-```markdown
-> ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
-> 所有架构决策以相关 ADR 正文为准。
-```
+> **README 是使用说明，不是架构裁决书。**
+
+**详细规则**：参见 [ADR-0910](../../governance/ADR-0910-readme-governance-constitution.md)
 
 ---
 
@@ -385,6 +387,7 @@ docs-lint check-declaration docs/**/*.md
 - ADR-0006：术语与编号宪法
 - ADR-0007：Agent 行为与权限宪法
 - ADR-0900：ADR 流程管理
+- ADR-0910：README 编写与维护宪法（README 专项治理）
 - `docs/templates/adr-template.md`：ADR 编写模板
 - `docs/copilot/adr-0008.prompts.md`：场景化示例
 
@@ -403,9 +406,10 @@ docs-lint check-declaration docs/**/*.md
 
 ## 版本历史
 
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 1.0 | 2026-01-25 | 初版，定义文档治理 |
+| 版本  | 日期         | 变更说明                                 |
+|-----|------------|--------------------------------------|
+| 1.1 | 2026-01-25 | README 约束独立为 ADR-0910，本 ADR 仅保留核心原则 |
+| 1.0 | 2026-01-25 | 初版，定义文档治理                            |
 
 ---
 
