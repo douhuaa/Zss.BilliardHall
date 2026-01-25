@@ -19,6 +19,7 @@ GitHub Copilot 场景化提示词。
 - [adr-0008.prompts.md](adr-0008.prompts.md) - 文档治理
 - [adr-0900.prompts.md](adr-0900.prompts.md) - 治理流程
 - [adr-910.prompts.md](adr-910.prompts.md) - README 编写与维护
+- [adr-920.prompts.md](adr-920.prompts.md) - 示例代码编写与维护
 - [adr-0930.prompts.md](adr-0930.prompts.md) - 变更审批
 - [architecture-test-failures.md](architecture-test-failures.md) - 测试失败诊断
 - [pr-common-issues.prompts.md](pr-common-issues.prompts.md) - PR 常见问题
