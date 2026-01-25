@@ -122,6 +122,7 @@ docs/copilot/
   ├─ adr-0004.prompts.md                ← ADR-0004 提示词库
   ├─ adr-0005.prompts.md                ← ADR-0005 提示词库
   ├─ adr-0007.prompts.md                ← ADR-0007 提示词库（Agent 行为与权限）
+  ├─ adr-0008.prompts.md                ← ADR-0008 提示词库（文档编写与维护）
   ├─ adr-0120.prompts.md                ← ADR-120 提示词库
   ├─ adr-0240.prompts.md                ← ADR-240 提示词库
   ├─ adr-0340.prompts.md                ← ADR-340 提示词库
@@ -362,6 +363,7 @@ graph TB
 - [ADR-0004 提示词库](adr-0004.prompts.md) - 中央包管理
 - [ADR-0005 提示词库](adr-0005.prompts.md) - 应用内交互模型
 - [ADR-0007 提示词库](adr-0007.prompts.md) - Agent 行为与权限（**Agent 开发者必读**）
+- [ADR-0008 提示词库](adr-0008.prompts.md) - 文档编写与维护（**文档编写者必读**）
 - [ADR-120 提示词库](adr-0120.prompts.md) - 领域事件命名规范
 - [ADR-240 提示词库](adr-0240.prompts.md) - Handler 异常处理与重试标准
 - [ADR-340 提示词库](adr-0340.prompts.md) - 结构化日志与监控约束

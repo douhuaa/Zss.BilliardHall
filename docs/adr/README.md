@@ -42,7 +42,7 @@
 
 | 层级      | 编号范围                | 目录                | 说明            | 当前状态         |
 |---------|---------------------|-------------------|---------------|--------------|
-| **宪法层** | `ADR-0001~0009`     | `constitutional/` | 系统根基/不可推翻约束   | ✅ 已有 6 个 ADR |
+| **宪法层** | `ADR-0001~0009`     | `constitutional/` | 系统根基/不可推翻约束   | ✅ 已有 8 个 ADR |
 | **结构层** | `ADR-100~199`       | `structure/`      | 模块静态边界/组织细化   | ✅ 已有 2 个 ADR |
 | **运行层** | `ADR-200~299`       | `runtime/`        | 运行/交互/协议/事件   | ✅ 已有 1 个 ADR |
 | **技术层** | `ADR-300~399`       | `technical/`      | 技术选型/具体落地     | ✅ 已有 1 个 ADR |
@@ -85,6 +85,7 @@ graph TB
         C5[ADR-0005 交互模型]
         C6[ADR-0006 术语编号]
         C7[ADR-0007 Agent行为]
+        C8[ADR-0008 文档治理]
     end
 
     subgraph Governance["🛡️ 治理层 (ADR-0000, 900~999)"]
@@ -142,6 +143,7 @@ ADR-0900~0999    → 治理层（governance/）
 | 业务用例如何执行        | [ADR-0005](constitutional/ADR-0005-Application-Interaction-Model-Final.md)          | constitutional/ | 应用内运行模型          |
 | **术语定义和编号规则**    | **[ADR-0006](constitutional/ADR-0006-terminology-numbering-constitution.md)**       | constitutional/ | **术语与编号宪法**      |
 | **Agent 行为边界和权限** | **[ADR-0007](constitutional/ADR-0007-agent-behavior-permissions-constitution.md)** | constitutional/ | **Agent 行为与权限宪法** |
+| **文档编写与治理规则**    | **[ADR-0008](constitutional/ADR-0008-documentation-governance-constitution.md)**    | constitutional/ | **文档编写与维护宪法**    |
 | **领域事件如何命名**    | **[ADR-120](structure/ADR-120-domain-event-naming-convention.md)**                  | structure/      | **领域事件命名规范与组织**          |
 | **契约如何命名和组织**    | **[ADR-121](structure/ADR-121-contract-dto-naming-organization.md)**                | structure/      | **跨模块契约/DTO 命名与版本管理规范** |
 | 架构如何自动化校验       | [ADR-0000](governance/ADR-0000-architecture-tests.md)                               | governance/     | 架构测试与 CI 治理                |
@@ -336,6 +338,45 @@ ADR-0900~0999    → 治理层（governance/）
 
 > Agent 是架构的执行者和解释者，而非架构的决策者。ADR-0007 让 Agent 从"可能越权的工具"升级为"有边界的助手"。
 
+
+---
+
+### [ADR-0008：文档编写与维护宪法](constitutional/ADR-0008-documentation-governance-constitution.md)
+
+**主轴**：文档治理 + 裁决权力元规则  
+**聚焦内容**：
+
+- 文档分级与唯一裁决权划分（宪法级/治理级/执行级/说明级）
+- 各类文档允许表达的内容边界
+- 非 ADR 文档的强制约束
+- 文档结构与格式的宪法级规范
+- 文档变更治理机制
+- 违规处理与执行机制
+
+**核心地位**：
+
+- 📌 文档治理的唯一裁决源
+- 📌 防止文档成为隐性规则源的宪法级约束
+- 📌 确保 ADR 作为唯一裁决权威的根本保障
+- 📌 所有文档编写的元规则（Meta-Rule）
+
+**关键原则**：
+
+- ✅ 只有 ADR 具备裁决力
+- ❌ 其他文档不得定义、修改或解释 ADR 语义
+- ✅ 发现冲突时，唯一以 ADR 正文为准
+- ✅ ADR 只回答：是否允许、为什么、如何裁决
+- ❌ ADR 禁止包含操作步骤、示例代码实现细节
+
+**文档优先级**（冲突裁决）：
+
+```
+ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
+```
+
+**特殊说明**：
+
+> 文档不是"知识沉淀工具"，而是治理体系的一部分。ADR-0008 防止文档退化为"意见集合"，并反向侵蚀架构宪法的权威性。
 
 ---
 
