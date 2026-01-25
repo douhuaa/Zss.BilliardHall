@@ -41,6 +41,7 @@ docs/summaries/
 | [ADR 编号优化总结](adr-numbering-optimization-summary.md)          | ADR 编号体系优化，引入分段编号      | v3.0 | 2026-01-22 |
 | [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md) | 验证 ADR 文档与架构测试映射关系     | v1.0 | 2026-01-23 |
 | [ADR 提案体系实施总结](adr-proposals-implementation-summary.md)    | 10 个待落地 ADR 提案规划与跟踪体系建设 | v1.0 | 2026-01-24 |
+| [ADR-0006 编号语义审计报告](adr-0006-numbering-audit.md)          | ADR-0006 引入后的全面编号语义审计   | v1.0 | 2026-01-25 |
 
 ---
 
