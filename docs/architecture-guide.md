@@ -1,5 +1,8 @@
 # 架构指南
 
+> ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
+> 所有架构决策以相关 ADR 正文为准。详见 [ADR 目录](adr/README.md)。
+
 ## 概述
 
 本项目采用 **模块化单体架构**（Modular Monolith）结合 **垂直切片架构**（Vertical Slice Architecture）。
