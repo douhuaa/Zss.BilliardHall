@@ -1,4 +1,4 @@
-# ADR-0910：README 编写与维护宪法
+# ADR-910：README 编写与维护宪法
 
 > ⚖️ **本 ADR 是所有 README 文档的唯一裁决源，定义 README 的边界、约束与执法机制。**
 
@@ -21,11 +21,11 @@
 
 ---
 
-## 为什么需要 ADR-0910（Why This ADR Matters）
+## 为什么需要 ADR-910（Why This ADR Matters）
 
 ### 问题陈述
 
-在 ADR-0910 之前：
+在 ADR-910 之前：
 
 - ❌ README 是违规高发区，经常误用裁决性语言
 - ❌ README 试图定义架构规则而非解释使用方法
@@ -33,9 +33,9 @@
 - ❌ README 违规埋没在通用文档治理中，不够显眼
 - ❌ 开发者不清楚 README 的权限边界
 
-### ADR-0910 的定位
+### ADR-910 的定位
 
-ADR-0910 是：
+ADR-910 是：
 
 - 📌 **README 违规的专门执法机制**
 - 📌 **防止 README 成为隐性规则源的专项约束**
@@ -308,11 +308,11 @@ README 中出现以下模式**必须**有明确的 ADR 引用：
 
 | 规则编号        | 执行级 | 测试 / 手段                                        |
 |-------------|-----|------------------------------------------------|
-| ADR-0910.1  | L2  | CI 脚本检查 README 是否使用裁决性语言                       |
-| ADR-0910.2  | L2  | CI 脚本检查 README 是否包含"无裁决力声明"                   |
-| ADR-0910.3  | L3  | Code Review 检查 README 是否越界                     |
-| ADR-0910.4  | L2  | ArchitectureTests: README_Must_Not_Use_Decision_Language |
-| ADR-0910.5  | L2  | ArchitectureTests: README_Must_Declare_No_Authority    |
+| ADR-910.1  | L2  | CI 脚本检查 README 是否使用裁决性语言                       |
+| ADR-910.2  | L2  | CI 脚本检查 README 是否包含"无裁决力声明"                   |
+| ADR-910.3  | L3  | Code Review 检查 README 是否越界                     |
+| ADR-910.4  | L2  | ArchitectureTests: README_Must_Not_Use_Decision_Language |
+| ADR-910.5  | L2  | ArchitectureTests: README_Must_Declare_No_Authority    |
 
 ### 自动化检查工具
 
@@ -321,10 +321,10 @@ README 中出现以下模式**必须**有明确的 ADR 引用：
 ```csharp
 // ADR_0910_Architecture_Tests.cs
 
-[Fact(DisplayName = "ADR-0910.1: README 不得使用裁决性语言")]
+[Fact(DisplayName = "ADR-910.1: README 不得使用裁决性语言")]
 public void README_Must_Not_Use_Decision_Language()
 
-[Fact(DisplayName = "ADR-0910.2: README 必须声明无裁决力")]
+[Fact(DisplayName = "ADR-910.2: README 必须声明无裁决力")]
 public void README_Must_Declare_No_Authority()
 ```
 
@@ -379,7 +379,7 @@ README 规则的破例**仅在以下情况允许**：
 
 ### 变更规则
 
-- **ADR-0910**（治理层）
+- **ADR-910**（治理层）
   - 修改需 Tech Lead 审批
   - 需要全量 README 回归检查
   - 需要更新对应的架构测试
