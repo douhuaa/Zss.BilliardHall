@@ -1,63 +1,30 @@
-# 宪法层 ADR (ADR-0001 ~ 0009)
+﻿# 宪法级 ADR 文档索引
+> ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
+> 具体裁决请以各 ADR 正文为准，详见 [ADR 目录](adr/README.md)。
 
-**编号范围**：ADR-0001 ~ ADR-0009  
-**层级定位**：系统根基 / 不可推翻约束
+本目录收录所有“宪法级”架构决策记录（ADR），为系统架构的最高法律依据。
 
----
+## 目录
 
-## ⚖️ 权威声明（Authority Declaration）
+- [概述](../../README.md)
+- [结构性 ADR](../structure/)
+- [运行时 ADR](../runtime/)
+- [技术性 ADR](../technical/)
+- [治理 ADR](../governance/)
 
-> **本 README 和相关的 Copilot Prompts（如 `docs/copilot/adr-XXXX.prompts.md`）仅为说明、辅导和快速参考之用。**
->
-> **在架构判定、CI 校验、测试执行时，唯一判决依据为各宪法层 ADR
-的正文内容（如 `ADR-0001-modular-monolith-vertical-slice-architecture.md`）。**
->
-> - ✅ ADR 正文 = 宪法，具有最高权威
-> - 📖 README / Prompts = 辅导材料，帮助理解和应用
-> - 🚫 若辅导材料与 ADR 正文冲突，以 ADR 正文为准
-> - 🔍 架构测试的唯一依据是 ADR 正文中标注【必须架构测试覆盖】的条款
+### 宪法级 ADR 列表
 
----
+> 请将具体 ADR 文档按编号顺序补充在下方：
 
-## 定义
-
-宪法层 ADR 是系统架构的根本约束，具有最高优先级：
-
-- **不可推翻**：后续 ADR 不得与宪法层冲突
-- **只能细化**：后续 ADR 只能补充细节，不能削弱约束
-- **破例必审**：任何违反宪法层的破例必须经过架构委员会审批
-- **永久记录**：所有破例记录在案，可追溯
+- [ADR-0001：模块化单体与垂直切片架构](ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-0002：Platform / Application / Host 三层启动体系](ADR-0002-platform-application-host-bootstrap.md)
+- [ADR-0003：命名空间与项目边界规范](ADR-0003-namespace-rules.md)
+- [ADR-0004：中央包管理（CPM）规范](ADR-0004-Cpm-Final.md)
+- [ADR-0005：应用内交互模型与执行边界](ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-0006：术语与编号宪法](ADR-0006-terminology-numbering-constitution.md) 
+- [ADR-0007：Agent 行为与权限宪法](ADR-0007-agent-behavior-permissions-constitution.md)
+- [ADR-0008：文档编写与维护宪法](ADR-0008-documentation-governance-constitution.md)
 
 ---
 
-## 当前宪法层 ADR
-
-| ADR 编号   | 标题                               | 核心约束                 |
-|----------|----------------------------------|----------------------|
-| ADR-0001 | 模块化单体与垂直切片架构                     | 模块隔离、垂直切片、契约规则       |
-| ADR-0002 | Platform/Application/Host 三层启动体系 | 三层装配、单向依赖            |
-| ADR-0003 | 命名空间与项目边界规范                      | 命名空间映射、防御性规则         |
-| ADR-0004 | 中央包管理（CPM）规范                     | 集中版本管理、依赖分层          |
-| ADR-0005 | 应用内交互模型与执行边界                     | Handler 模式、CQRS、异步优先 |
-| ADR-0006 | 术语与编号宪法                          | 术语定义、编号规则、语义约束       |
-| ADR-0007 | Agent 行为与权限宪法                    | Agent 边界、三态输出、Prompts 地位 |
-| ADR-0008 | 文档编写与维护宪法                        | 文档分级、边界约束、裁决权力划分     |
-
----
-
-## 修订条件
-
-宪法层 ADR 只能在以下情况修订：
-
-1. **发现根本性设计缺陷**：经架构委员会一致同意
-2. **技术栈重大变更**：如从单体迁移到微服务
-3. **法规/合规要求**：外部强制性要求
-
-修订流程：RFC → 公示（至少 2 周）→ 架构委员会投票（100% 同意）→ 永久记录
-
----
-
-## 参考文档
-
-- [架构宪法层完整说明](../ARCHITECTURE-CONSTITUTIONAL-LAYER.md)
-- [ADR 新增与修订流程](../governance/ADR-0900-adr-process.md)
+如需查阅全部 ADR，请返回 [ADR 总览](../README.md)。

@@ -49,47 +49,36 @@
 
 ---
 
-## 当前状态
+## 目录
+
+- [概述](../../README.md)
+- [宪法级 ADR](../constitutional/)
+- [结构性 ADR](../structure/)
+- [技术性 ADR](../technical/)
+- [治理 ADR](../governance/)
 
 ### 已采纳的运行时行为 ADR
 
-- **[ADR-240：Handler 异常约束](./ADR-240-handler-exception-constraints.md)** ✅
-  - Handler 禁止抛出通用异常
-  - 可重试标记仅限基础设施异常
-  - Handler 禁止吞噬异常
-  - 异常类型命名空间约束
-  - 跨模块事件异常禁止同步传播
+- [ADR-201：Command Handler 生命周期管理](./ADR-201-command-handler-lifecycle.md) ✅
+- [ADR-210：领域事件版本化与兼容性](./ADR-210-domain-event-versioning.md) ✅
+- [ADR-220：集成事件总线选型与适配规范](./ADR-220-integration-eventbus-adapter.md) ✅
+- [ADR-240：Handler 异常约束](./ADR-240-handler-exception-constraints.md) ✅
 
 ### 宪法层相关 ADR
 
-- ADR-0005：应用内交互模型与执行边界
-- ADR-0005-Enforcement-Levels：执行级别分类
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-handler-cqrs-boundary.md)
+- [ADR-0005-Enforcement-Levels：执行级别分类](../constitutional/ADR-0005-Enforcement-Levels.md)
 
 ---
 
-## 待落地的 ADR（已规划）
-
-> 详见 [待落地 ADR 提案跟踪清单](../PENDING-ADR-PROPOSALS.md)
-
-### ✅ 已完成
-- **ADR-201**：Command Handler 生命周期管理（✅ Accepted）
-  - Handler 生命周期规范、幂等性、资源释放标准
-- **ADR-210**：领域事件版本化与兼容性（✅ Accepted）
-  - 事件版本命名、序列化格式、向后兼容性、迁移适配
-
-### ✅ 已完成
-- **ADR-220**：集成事件总线选型与适配规范（✅ Accepted）
-  - 事件总线技术选型、发布/订阅接口、幂等性保障
-
 ### 未来可能的 ADR
-- **ADR-202**：Query Handler 超时与降级策略
-- **ADR-211**：模块间同步调用审批流程
-- **ADR-230**：Saga 模式应用指南
-- **ADR-241**：补偿事务设计指南
+- ADR-202：Query Handler 超时与降级策略
+- ADR-211：模块间同步调用审批流程
+- ADR-230：Saga 模式应用指南
+- ADR-241：补偿事务设计指南
 
 ---
 
 ## 参考文档
 
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-0005：执行级别分类](../constitutional/ADR-0005-Enforcement-Levels.md)
+> 本 README 仅作索引与说明，所有裁决性内容以 ADR-201 正文为准。
