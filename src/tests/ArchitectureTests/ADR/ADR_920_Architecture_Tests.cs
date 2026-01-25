@@ -20,6 +20,19 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// - L2（警告）：模式偏差（Handler 返回类型、命名约定）
 /// - L3（允许）：教学简化（省略异常处理、日志）
 /// 
+/// 【技术局限性】
+/// - 当前使用正则表达式进行启发式检测（trade-off：性能 vs 精确度）
+/// - 可能存在极小概率的误判或漏判（特别是复杂多行语句、新 C# 语法）
+/// - 未来可升级为 Roslyn Analyzer 以提供语义级检测
+/// - 测试未检出的违规仍是违规，需在 Code Review 中捕获
+/// 
+/// 【职责边界（重要）】
+/// 本测试类**仅管**：示例 ≠ 规则（示例不可违反 ADR）
+/// 本测试类**不管**：代码美学、教学质量、文档完整性
+/// 
+/// ⚠️ 避免职责膨胀：不要无限往此类添加规则
+/// 新的治理关注点应开新测试类（如 Document_Governance_Tests）
+/// 
 /// 【关联文档】
 /// - ADR: docs/adr/governance/ADR-920-examples-governance-constitution.md
 /// - Prompts: docs/copilot/adr-920.prompts.md
@@ -93,13 +106,27 @@ public sealed class ADR_920_Architecture_Tests
         Assert.Contains("示例作者责任制", content);
     }
 
+    /// <summary>
+    /// 查找仓库根目录
+    /// ⚠️ 健壮性改进：支持环境变量覆盖，避免 CI shallow clone、mono-repo 等场景翻车
+    /// </summary>
     private static string? FindRepositoryRoot()
     {
+        // 优先使用环境变量（CI、mono-repo、NuGet 引用场景）
+        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
+        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
+        {
+            return envRoot;
+        }
+        
+        // 回退到启发式查找
         var currentDir = Directory.GetCurrentDirectory();
         while (currentDir != null)
         {
+            // 多重检测标记，提高鲁棒性
             if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
+                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
+                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
             {
                 return currentDir;
             }
@@ -111,13 +138,16 @@ public sealed class ADR_920_Architecture_Tests
     // ========== 执法级测试：真正阻止违规行为 ==========
 
     // 架构违规模式（示例中禁止出现）
+    // ⚠️ 职责边界：此列表只包含 ADR 明确禁止的核心模式
+    // ⚠️ 规则漂移风险：不要无限膨胀此列表，每个 pattern 必须映射到 ADR 条号
+    // ⚠️ 规则权威源：ADR 正文是唯一规则源，此处仅为最低可执行子集
     private static readonly string[] ForbiddenPatterns = new[]
     {
-        // 跨模块直接引用（ADR-0001）
+        // 跨模块直接引用（ADR-0001.1）
         @"using\s+Zss\.BilliardHall\.Modules\.\w+\.Domain",
         @"using\s+Zss\.BilliardHall\.Modules\.\w+\.Infrastructure",
         
-        // Service 类（ADR-0001）
+        // Service 类（ADR-0001.4）
         @"class\s+\w+Service\s*[:{]",
         @"interface\s+I\w+Service\s*[:{]",
     };
@@ -374,6 +404,7 @@ public sealed class ADR_920_Architecture_Tests
         }
 
         // L2 级别：警告但不失败构建
+        // ⚠️ 关键修复：L2 警告必须实际输出，否则"无牙老虎"
         if (warnings.Any())
         {
             var warningMessage = string.Join("\n", new[]
@@ -396,9 +427,13 @@ public sealed class ADR_920_Architecture_Tests
                 "",
                 "注意：这是 L2 警告级别，不会阻断构建。"
             }));
+            
+            // 实际输出警告（Console + 测试名称）
+            Console.WriteLine(warningMessage);
+            Console.WriteLine(); // 空行分隔
         }
         
-        // L2 警告：总是通过
+        // L2 警告：总是通过（但已输出警告信息）
         Assert.True(true);
     }
 
