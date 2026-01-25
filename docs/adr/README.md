@@ -42,7 +42,7 @@
 
 | 层级      | 编号范围                | 目录                | 说明            | 当前状态         |
 |---------|---------------------|-------------------|---------------|--------------|
-| **宪法层** | `ADR-0001~0009`     | `constitutional/` | 系统根基/不可推翻约束   | ✅ 已有 5 个 ADR |
+| **宪法层** | `ADR-0001~0009`     | `constitutional/` | 系统根基/不可推翻约束   | ✅ 已有 6 个 ADR |
 | **结构层** | `ADR-100~199`       | `structure/`      | 模块静态边界/组织细化   | ✅ 已有 2 个 ADR |
 | **运行层** | `ADR-200~299`       | `runtime/`        | 运行/交互/协议/事件   | ✅ 已有 1 个 ADR |
 | **技术层** | `ADR-300~399`       | `technical/`      | 技术选型/具体落地     | ✅ 已有 1 个 ADR |
@@ -83,6 +83,7 @@ graph TB
         C3[ADR-0003 命名空间]
         C4[ADR-0004 包管理]
         C5[ADR-0005 交互模型]
+        C6[ADR-0006 术语编号]
     end
 
     subgraph Governance["🛡️ 治理层 (ADR-0000, 900~999)"]
@@ -138,6 +139,7 @@ ADR-0900~0999    → 治理层（governance/）
 | 命名空间和项目如何组织     | [ADR-0003](constitutional/ADR-0003-namespace-rules.md)                              | constitutional/ | 命名空间与工程映射规范      |
 | 依赖包如何管理         | [ADR-0004](constitutional/ADR-0004-Cpm-Final.md)                                    | constitutional/ | 中央包管理（CPM）       |
 | 业务用例如何执行        | [ADR-0005](constitutional/ADR-0005-Application-Interaction-Model-Final.md)          | constitutional/ | 应用内运行模型          |
+| **术语定义和编号规则**    | **[ADR-0006](constitutional/ADR-0006-terminology-numbering-constitution.md)**       | constitutional/ | **术语与编号宪法**      |
 | **领域事件如何命名**    | **[ADR-120](structure/ADR-120-domain-event-naming-convention.md)**                  | structure/      | **领域事件命名规范与组织**          |
 | **契约如何命名和组织**    | **[ADR-121](structure/ADR-121-contract-dto-naming-organization.md)**                | structure/      | **跨模块契约/DTO 命名与版本管理规范** |
 | 架构如何自动化校验       | [ADR-0000](governance/ADR-0000-architecture-tests.md)                               | governance/     | 架构测试与 CI 治理                |
@@ -259,6 +261,38 @@ ADR-0900~0999    → 治理层（governance/）
 
 - [ADR-0005-Enforcement-Levels.md](constitutional/ADR-0005-Enforcement-Levels.md)：执行级别分类（静态可执行 / 语义半自动 /
   人工 Gate）
+
+---
+
+### [ADR-0006：术语与编号宪法](constitutional/ADR-0006-terminology-numbering-constitution.md)
+
+**主轴**：术语定义 + 编号体系元规则  
+**聚焦内容**：
+
+- 架构术语的唯一权威定义（Glossary）
+- ADR 编号分层规则与语义约束
+- 编号格式标准（前导零规则）
+- 编号语义边界与禁止跨界
+- 违规处理与编号迁移机制
+
+**核心地位**：
+
+- 📌 所有 ADR 的元规则（Meta-Rule）
+- 📌 术语定义的唯一裁决源
+- 📌 编号体系的宪法级规范
+- 📌 架构测试、CI、PR 校验的语义基础
+
+**关键原则**：
+
+- ✅ 编号即层级，不得跨区间表达含义
+- ✅ 治理规则禁止使用 100~399
+- ✅ 技术规则禁止使用 900~999
+- ✅ 细化层不得引入宪法级约束
+- ✅ 编号一经分配不可更改（除特批迁移）
+
+**特殊说明**：
+
+> ADR-0006 让编号体系从"约定"升级为"宪法"。没有 ADR-0006，编号不一致只能算"意见"，不算"违规"。
 
 ---
 
