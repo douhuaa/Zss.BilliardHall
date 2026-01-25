@@ -1,7 +1,7 @@
 ---
 name: "Scan Cross-Module References"
 description: "扫描跨模块引用"
-version: "1.0"
+version: "1.1"
 risk_level: "低"
 category: "代码分析"
 required_agent: "module-boundary-checker"
@@ -11,7 +11,7 @@ required_agent: "module-boundary-checker"
 
 **类别**：代码分析  
 **风险等级**：低  
-**版本**：1.0
+**版本**：1.1
 
 ---
 
@@ -19,7 +19,7 @@ required_agent: "module-boundary-checker"
 
 ### 用途
 
-扫描项目中的跨模块引用，检测模块边界违规。
+扫描项目中的跨模块引用，提取引用事实，由 Agent 根据 ADR 判定合规性。
 
 ### 输入参数
 
@@ -39,17 +39,33 @@ required_agent: "module-boundary-checker"
       "type": "DirectReference",
       "targetModule": "Members",
       "targetType": "Zss.BilliardHall.Modules.Members.Domain.Member",
-      "severity": "High"
+      "targetNamespace": "Zss.BilliardHall.Modules.Members.Domain",
+      "targetLayer": "Domain",
+      "derivedSeverity": "High",
+      "severitySource": "ADR-0001.2"
     }
   ],
   "summary": {
     "totalViolations": 1,
-    "highSeverity": 1,
-    "mediumSeverity": 0,
-    "lowSeverity": 0
+    "byLayer": {
+      "Domain": 1,
+      "UseCases": 0,
+      "Infrastructure": 0,
+      "Contracts": 0
+    }
+  },
+  "metadata": {
+    "scanTimestamp": "2026-01-25T10:30:00Z",
+    "filesScanned": 42,
+    "scanDurationMs": 234
   }
 }
 ```
+
+**关键说明**：
+- `derivedSeverity`：基于当前 ADR（如 ADR-0001.2）推导的严重性，**不是 Skill 固化的真理**
+- `severitySource`：严重性判定依据的 ADR 条款，便于追溯
+- 最终合规性判定由 Agent 根据最新 ADR 执行
 
 ---
 
@@ -79,20 +95,21 @@ required_agent: "module-boundary-checker"
   - 提取 `using` 语句
   - 识别跨模块引用
 
-3. **分析引用类型**
-  - Direct Reference：直接引用其他模块的类型
-  - Namespace Reference：引用其他模块的命名空间
-  - Assembly Reference：引用其他模块的程序集
+3. **提取引用事实**
+  - 引用类型（DirectReference / NamespaceReference / AssemblyReference）
+  - 目标模块名称
+  - 目标命名空间
+  - 目标层级（Domain / UseCases / Infrastructure / Contracts）
 
-4. **评估严重性**
-  - High：直接引用 Domain 层
-  - Medium：引用非 Contracts 的公共类型
-  - Low：引用 Contracts（需进一步验证使用方式）
+4. **推导严重性（Informational）**
+  - 基于当前 ADR-0001.2 推导严重性
+  - 标注推导依据（ADR 条款）
+  - **注意**：此推导仅供参考，Agent 可根据最新 ADR 重新判定
 
 5. **生成报告**
   - 按文件分组
-  - 按严重性排序
-  - 提供修复建议
+  - 按层级分类统计
+  - 记录扫描元数据
 
 6. **记录日志**
 ```json
@@ -111,84 +128,30 @@ required_agent: "module-boundary-checker"
 
 ---
 
-## 使用示例
+## 严重性推导规则（Informational）
 
-### 示例 1：检查单个模块
+> ⚠️ **重要声明**：以下严重性推导基于 ADR-0001.2（当前版本），仅供 Agent 参考。
+> 
+> Agent 应根据**最新 ADR 正文**进行最终裁决，而非依赖此推导结果。
 
-```
-Agent: module-boundary-checker
-Skill: scan-cross-module-refs
-Parameters:
-  sourceModule: "Orders"
-  targetModules: ["Members"]
-```
+### 推导逻辑（基于 ADR-0001.2）
 
-输出：
-```
-⚠️ 发现 1 个跨模块引用违规
+- **High**：直接引用 Domain 层（`*.Domain.*`）
+  - 依据：ADR-0001.2 明确禁止跨模块 Domain 引用
+  
+- **Medium**：引用非 Contracts 的其他层（`*.UseCases.*`, `*.Infrastructure.*`）
+  - 依据：ADR-0001.2 要求模块内部实现隐藏
+  
+- **Low**：引用 Contracts 层（`*.Contracts.*`）
+  - 依据：ADR-0001.3 允许 Contracts 跨模块使用，但需验证使用方式
 
-文件：UseCases/CreateOrder/CreateOrderHandler.cs:15
-违规：Direct Reference
-目标：Zss.BilliardHall.Modules.Members.Domain.Member
-严重性：High
+### 例外情况（需 Agent 二次判断）
 
-建议：
-- 使用契约查询：GetMemberById
-- 使用领域事件通信
-- 使用原始类型（Guid memberId）
-```
+- Application 层编排多个模块的 Contracts
+- 测试代码引用（`tests/**/*.cs`）
+- Platform 层引用（允许）
 
-### 示例 2：检查所有模块
-
-```
-Agent: architecture-guardian
-Skill: scan-cross-module-refs
-Parameters:
-  sourceModule: "Orders"
-```
-
-输出：
-```
-✅ 未发现跨模块引用违规
-
-已检查：
-- Orders → Members: 0 违规
-- Orders → Products: 0 违规
-- Orders → Platform: 0 违规（允许）
-```
-
----
-
-## 检测规则
-
-### 规则 1：禁止的 using 语句
-
-```csharp
-// ❌ High Severity
-using Zss.BilliardHall.Modules.Members.Domain;
-using Zss.BilliardHall.Modules.Members.UseCases;
-using Zss.BilliardHall.Modules.Members.Infrastructure;
-
-// ⚠️ Medium Severity（需进一步检查）
-using Zss.BilliardHall.Modules.Members.Contracts;
-
-// ✅ 允许
-using Zss.BilliardHall.Platform;
-using Zss.BilliardHall.Application;
-```
-
-### 规则 2：允许的例外
-
-```csharp
-// ✅ 允许：在 Application 层编排多个模块
-// 文件：Application/Features/SomeFeature/Handler.cs
-using Zss.BilliardHall.Modules.Orders.Contracts;
-using Zss.BilliardHall.Modules.Members.Contracts;
-
-// ✅ 允许：测试代码
-// 文件：tests/**/*.cs
-using Zss.BilliardHall.Modules.Orders.Domain;
-```
+**如果 ADR-0001 修订，此推导逻辑可能过时，Agent 不应盲目信任。**
 
 ---
 
@@ -196,45 +159,38 @@ using Zss.BilliardHall.Modules.Orders.Domain;
 
 ### 错误 1：模块不存在
 
-```
-❌ 错误：找不到模块 "Orders"
-
-可能原因：
-- 模块名称拼写错误
-- 模块尚未创建
-- 项目结构变更
-
-建议：
-- 检查 src/Modules/ 目录
-- 确认模块名称正确
+```json
+{
+  "error": "ModuleNotFound",
+  "message": "找不到模块 'Orders'",
+  "suggestions": ["检查模块名称拼写", "确认模块已创建"]
+}
 ```
 
 ### 错误 2：无权限访问
 
-```
-❌ 错误：无权限读取文件
-
-需要的权限：
-- 读取项目文件
-- 访问源代码目录
-
-建议：
-- 检查文件权限
-- 确认 Agent 有正确的授权
+```json
+{
+  "error": "PermissionDenied",
+  "message": "无权限读取文件",
+  "suggestions": ["检查文件权限", "确认 Agent 授权"]
+}
 ```
 
 ---
 
-## 性能考虑
+## 性能指标
 
-- **小型项目**（< 100 文件）：< 1 秒
-- **中型项目**（100-500 文件）：1-3 秒
-- **大型项目**（> 500 文件）：3-10 秒
+| 项目规模 | 文件数 | 预期时间 |
+|---------|-------|---------|
+| 小型    | < 100 | < 1 秒  |
+| 中型    | 100-500 | 1-3 秒 |
+| 大型    | > 500 | 3-10 秒 |
 
-如果扫描时间过长，考虑：
-- 只扫描变更的文件
-- 并行处理多个文件
-- 缓存扫描结果
+**优化建议**：
+- 增量扫描（仅变更文件）
+- 并行处理
+- 结果缓存
 
 ---
 
@@ -242,9 +198,33 @@ using Zss.BilliardHall.Modules.Orders.Domain;
 
 | 版本  | 日期         | 变更说明 |
 |-----|------------|------|
+| 1.1 | 2026-01-25 | 重构：严重性改为推导值，移除人类文档化内容 |
 | 1.0 | 2026-01-25 | 初始版本 |
 
 ---
 
 **维护者**：架构委员会  
 **状态**：✅ Active
+
+---
+
+## 附录：使用指导（Optional - 供人类参考）
+
+> **注意**：以下内容仅供人类开发者理解 Skill 用途，**不作为 Agent 判定依据**。
+> 
+> Agent 应基于 ADR 正文和 Skill 输出的事实数据进行判定。
+
+### 典型使用流程
+
+1. Agent 调用此 Skill 获取引用事实
+2. Agent 根据最新 ADR 判定每个引用的合规性
+3. Agent 生成符合三态格式的响应（✅ Allowed / ⚠️ Blocked / ❓ Uncertain）
+
+### 修复建议来源
+
+修复建议应由 Agent 根据 ADR 生成，常见方案包括：
+- 使用领域事件异步通信（ADR-0001.4）
+- 使用契约查询传递数据（ADR-0001.3）
+- 使用原始类型传递标识（ADR-0001.3）
+
+详见：`docs/copilot/adr-0001.prompts.md`
