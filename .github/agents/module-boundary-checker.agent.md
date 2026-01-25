@@ -54,6 +54,12 @@ tools: ["dependency-scanner", "cross-module-ref-scanner"]
 - 修改 ADR-0001
 - 绕过架构测试
 - 自动修改代码（必须人工确认）
+- 输出模糊判断（如"我觉得可以"、"看起来问题不大"、"一般来说"）
+
+**响应约束**：
+- 必须使用三态输出格式（✅ Allowed / ⚠️ Blocked / ❓ Uncertain）
+- 禁止输出模糊判断
+- 不确定时必须使用 ❓ Uncertain 状态并建议人工确认
 
 ---
 
@@ -200,83 +206,102 @@ Orders 模块直接引用了 Members 模块的 Domain 类型
 
 ## 四、标准响应模板
 
-### 模板 1：询问跨模块调用
+### ✅ Allowed - 符合架构规范
+
+当模块间通信方式符合 ADR-0001 时使用此模板：
 
 ```markdown
-## 模块间通信方案
+## ✅ Allowed - 符合架构规范
 
-### 场景分析
-[分析开发者的需求]
+**ADR 依据**：ADR-0001 [具体章节]
 
-### 推荐方案（按优先级）
+**符合的约束**：
+- 使用[领域事件/契约查询/原始类型]进行模块间通信
+- 未直接引用其他模块的内部类型
+- [其他符合的约束]
 
-#### 方案 1：领域事件（推荐）
-适用于：异步通知、不需要立即返回结果
+**实施建议**：
+[具体的实施代码示例]
 
-```csharp
-[示例代码]
+**参考资料**：
+- docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md
+- docs/copilot/adr-0001.prompts.md（仅作示例参考）
 ```
 
-优点：完全解耦、易于扩展
-缺点：异步、最终一致性
+### ⚠️ Blocked - 检测到违规（必须修复）
 
-#### 方案 2：契约查询
-适用于：需要同步获取数据、只读操作
-
-```csharp
-[示例代码]
-```
-
-优点：同步、简单直接
-缺点：只能用于查询、不能用于业务决策
-
-#### 方案 3：原始类型
-适用于：只需要标识符
-
-```csharp
-[示例代码]
-```
-
-优点：最简单、最解耦
-缺点：有时需要额外的查询
-
-### ❌ 错误做法
-
-```csharp
-[错误示例]
-```
-
-### 📚 参考资料
-- docs/copilot/adr-0001.prompts.md
-```
-
-### 模板 2：检测到违规
+当检测到模块边界违规时使用此模板：
 
 ```markdown
-## ⚠️ 模块边界违规
+## ⚠️ Blocked - 必须修复
 
-### 违反的约束
-ADR-0001：模块隔离
+**违反的 ADR**：ADR-0001 [章节]、[具体条款]
 
-### 检测到的问题
+**检测到的问题**：
 [具体的违规代码/行为]
 
-### 影响范围
+**影响范围**：
 - 破坏模块隔离
 - 增加耦合度
 - 阻碍未来拆分
 
-### 修复方案
-[提供多个方案]
+**修复方案**（必须选择一种）：
+1. **领域事件（推荐）**：适用于异步通知
+   ```csharp
+   [示例代码]
+   ```
+   
+2. **契约查询**：适用于同步查询只读数据
+   ```csharp
+   [示例代码]
+   ```
+   
+3. **原始类型**：只传递 ID
+   ```csharp
+   [示例代码]
+   ```
 
-### 验证方法
-修复后运行：
+**验证方法**：
 ```bash
-dotnet test src/tests/ArchitectureTests/ --filter "ModuleBoundary"
+dotnet test src/tests/ArchitectureTests/ --filter "ADR_0001"
 ```
 
-### 📚 参考资料
-[相关文档链接]
+**为什么这很重要**：
+[解释违规的架构影响]
+
+**参考资料**：
+- docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md
+- docs/copilot/adr-0001.prompts.md（仅作示例参考）
+```
+
+### ❓ Uncertain - ADR 未明确覆盖（默认禁止）
+
+当遇到 ADR-0001 未明确规定的模块间通信方式时使用此模板：
+
+```markdown
+## ❓ Uncertain - 需要人工确认
+
+**当前情况**：
+[描述遇到的场景]
+
+**ADR-0001 未明确覆盖的内容**：
+[说明为什么当前 ADR 无法给出明确判断]
+
+**不确定的原因**：
+- [原因 1]
+- [原因 2]
+
+**建议措施**：
+1. 提交架构咨询请求给架构委员会
+2. 或考虑提出新的 ADR 补充
+3. 在明确前，暂不实施
+
+**临时替代方案**：
+[如果有保守的替代方案，可以提及]
+
+**参考资料**：
+- docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md
+- docs/adr/governance/ADR-0900-adr-process.md
 ```
 
 ---
