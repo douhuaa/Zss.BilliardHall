@@ -7,9 +7,9 @@
 
 本项目采用 **模块化单体架构**（Modular Monolith）结合 **垂直切片架构**（Vertical Slice Architecture）。
 
-核心原则：
+核心原则（详见 ADR 文档）：
 
-1. **模块隔离** - 业务模块之间不能直接相互引用
+1. **模块隔离** - 业务模块之间不应直接相互引用
 2. **垂直切片** - 功能按用例组织，而非技术层
 3. **架构测试** - 所有架构约束通过自动化测试强制执行
 
@@ -20,6 +20,8 @@
 所有重要的架构决策都记录在 [ADR 文档](/docs/adr/) 中：
 
 - [ADR-0001: 模块化单体与垂直切片架构决策](/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+
+**注意**：本指南仅对 ADR 进行解释说明。如有冲突，以 ADR 正文为准。
 
 ## 项目结构
 
@@ -215,21 +217,25 @@ graph TB
     style Forbidden fill:#ffebee
 ```
 
-**✅ 允许：**
+根据 [ADR-0001](/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) 的规定：
+
+**允许的依赖**：
 
 - 模块可以依赖 `Platform`
 - 模块可以通过领域事件通信
 - 模块可以使用 `Platform.Contracts` 中定义的数据契约
 
-**❌ 禁止：**
+**不允许的依赖**：
 
 - 模块之间直接相互引用
 - 共享聚合根、实体或值对象
 - 跨模块调用 Handler
 
+详见：[ADR-0001 第 3.1-3.2 节](/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+
 ### 2. 垂直切片规则
 
-每个功能切片（Feature）应该：
+根据 ADR-0001，每个功能切片（Feature）应该：
 
 - 包含该用例的所有逻辑（端点、命令/查询、Handler、验证等）
 - 自包含，不依赖横向的 Service

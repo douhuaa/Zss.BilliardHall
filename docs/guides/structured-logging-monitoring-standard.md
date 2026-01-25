@@ -1,10 +1,15 @@
 # 结构化日志与监控工程标准
 
+> ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
+> 所有架构决策以 [ADR-340](../adr/technical/ADR-340-structured-logging-monitoring-constraints.md) 和 [ADR-350](../adr/technical/ADR-350-logging-observability-standards.md) 为准。
+
 **性质**：工程标准（Engineering Standard）- 非裁决性  
 **版本**：1.0  
 **最后更新**：2026-01-24  
 **状态**：Active  
-**相关 ADR**：[ADR-340](../adr/technical/ADR-340-structured-logging-monitoring-constraints.md)（裁决性规则）
+**相关 ADR**：
+- [ADR-340](../adr/technical/ADR-340-structured-logging-monitoring-constraints.md)（裁决性规则）
+- [ADR-350](../adr/technical/ADR-350-logging-observability-standards.md)（裁决性规则）
 
 ---
 
