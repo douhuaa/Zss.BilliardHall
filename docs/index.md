@@ -541,3 +541,47 @@ dotnet run --project src/Host/Worker/Worker.csproj
 **维护人**：架构团队  
 **下次评审**：2026-04-22  
 **文档版本**：1.0
+
+---
+
+## 🤖 AI 治理体系
+
+本项目采用完整的 AI 驱动架构治理体系。
+
+### 核心文档
+
+| 文档 | 说明 | 适用人群 |
+|------|------|---------|
+| [架构治理系统总览](ARCHITECTURE-GOVERNANCE-SYSTEM.md) | 完整的五层体系说明 | 所有人 |
+| [AI 治理快速入门](AI-GOVERNANCE-QUICK-START.md) | 15 分钟快速上手 | 新成员 |
+| [Copilot 角色定位](copilot/README.md) | AI 在项目中的作用 | 开发者 |
+
+### 分层文档
+
+| 层级 | 文档 | 说明 |
+|------|------|------|
+| 第 0 层：ADR | [ADR 目录](adr/README.md) | 架构决策记录（宪法） |
+| 第 1 层：Instructions | [Instructions 体系](../.github/instructions/README.md) | AI 的行为边界 |
+| 第 2 层：Agents | [Agents 体系](../.github/agents/README.md) | 执行主体定义 |
+| 第 3 层：Prompts | [Prompts 库](copilot/README.md) | 场景化执行手册 |
+| 第 4 层：Skills | [Skills 体系](../.github/skills/README.md) | 工具能力定义 |
+
+### 标准 Agents
+
+| Agent | 用途 | 风险等级 |
+|-------|------|---------|
+| [architecture-guardian](../.github/agents/architecture-guardian.agent.md) | 架构守护者 | 极高 |
+| [module-boundary-checker](../.github/agents/module-boundary-checker.agent.md) | 模块边界检查器 | 极高 |
+| adr-reviewer | ADR 审查者 | 高 |
+| test-generator | 测试生成器 | 中 |
+| handler-pattern-enforcer | Handler 规范执行器 | 高 |
+| documentation-maintainer | 文档维护者 | 低 |
+
+### 使用场景
+
+| 场景 | 使用的 Agent | 参考文档 |
+|------|------------|---------|
+| 开发新功能前 | @architecture-guardian | [快速入门](AI-GOVERNANCE-QUICK-START.md#场景-1我想添加一个新功能) |
+| 架构测试失败 | @test-enforcer | [快速入门](AI-GOVERNANCE-QUICK-START.md#场景-2架构测试失败了) |
+| 跨模块调用 | @module-boundary-checker | [快速入门](AI-GOVERNANCE-QUICK-START.md#场景-3我想跨模块调用) |
+| 提交 PR 前 | @adr-reviewer | [快速入门](AI-GOVERNANCE-QUICK-START.md#场景-4我要提交-pr) |
