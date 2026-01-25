@@ -8,7 +8,11 @@
 
 ## ADR
 
-- [ADR-0350：日志与监控](ADR-0350-logging-monitoring.md)
+- [ADR-301：集成测试环境自动化与隔离约束](ADR-301-integration-test-automation.md)
+- [ADR-340：结构化日志与监控约束](ADR-340-structured-logging-monitoring-constraints.md)
+- [ADR-350：日志格式与监控规范](ADR-350-logging-observability-standards.md)
+- [ADR-360：CI/CD Pipeline 流程标准化](ADR-360-cicd-pipeline-standardization.md)
+
 
 ## 链接
 
