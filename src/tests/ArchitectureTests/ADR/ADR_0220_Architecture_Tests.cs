@@ -12,29 +12,27 @@ public sealed class ADR_0220_Architecture_Tests
     [ClassData(typeof(ModuleAssemblyData))]
     public void Modules_Must_Not_Depend_On_Concrete_EventBus(Assembly moduleAssembly)
     {
-        var result = Types
-            .InAssembly(moduleAssembly)
-            .ShouldNot()
-            .HaveDependencyOn("Wolverine")
-            .And()
-            .ShouldNot()
-            .HaveDependencyOn("RabbitMQ")
-            .And()
-            .ShouldNot()
-            .HaveDependencyOn("Kafka")
-            .GetResult();
+        var forbiddenDeps = new[] { "Wolverine", "RabbitMQ", "Kafka" };
+        
+        foreach (var dep in forbiddenDeps)
+        {
+            var result = Types
+                .InAssembly(moduleAssembly)
+                .ShouldNot()
+                .HaveDependencyOn(dep)
+                .GetResult();
 
-        Assert.True(result.IsSuccessful,
-            $"❌ ADR-220.1 违规: 模块直接依赖具体事件总线实现\n\n" +
-            $"违规依赖: {string.Join(", ", result.FailingTypeNames ?? new List<string>())}\n\n" +
-            $"修复建议:\n" +
-            $"通过 IEventBus 抽象接口使用事件总线\n\n" +
-            $"参考: docs/copilot/adr-0220.prompts.md");
+            Assert.True(result.IsSuccessful,
+                $"❌ ADR-220.1 违规: 模块直接依赖具体事件总线实现 {dep}\n\n" +
+                $"违规类型: {string.Join(", ", result.FailingTypeNames ?? new List<string>())}\n\n" +
+                $"修复建议:\n" +
+                $"通过 IEventBus 抽象接口使用事件总线\n\n" +
+                $"参考: docs/copilot/adr-0220.prompts.md");
+        }
     }
 
-    [Theory(DisplayName = "ADR-220.4: 事件订阅者必须注册为 Scoped 或 Transient")]
-    [ClassData(typeof(ModuleAssemblyData))]
-    public void EventHandlers_Must_Be_Scoped_Or_Transient(Assembly moduleAssembly)
+    [Fact(DisplayName = "ADR-220.4: 事件订阅者必须注册为 Scoped 或 Transient")]
+    public void EventHandlers_Must_Be_Scoped_Or_Transient()
     {
         // 此规则需要在集成测试中验证 DI 容器配置
         Assert.True(true,
