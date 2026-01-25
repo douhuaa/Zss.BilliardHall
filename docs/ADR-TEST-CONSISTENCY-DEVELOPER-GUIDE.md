@@ -60,7 +60,7 @@ dotnet test src/tests/ArchitectureTests/
 ```markdown
 ## 快速参考表（Quick Reference Table）
 
-| 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
+| 约束编号 | 约束描述 | 需要测试 | 测试覆盖 | ADR 章节 |
 |---------|---------|---------|---------|----------|
 | ADR-0001.1 | 模块不得相互引用 | ✅ | ADR_0001_Architecture_Tests::Modules_Should_Not_Reference_Other_Modules | 1 |
 | ADR-0001.3 | 跨模块禁止引用实体 | ✅ | ❌ 待补充 | 3 |
@@ -137,7 +137,7 @@ dotnet test src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
 
 #### 步骤 1：确保测试方法包含 ADR 引用
 
-测试方法名或 `DisplayName` 必须包含 `ADR-{编号}`：
+根据测试规范，测试方法名或 `DisplayName` 应包含 `ADR-{编号}`：
 
 ```csharp
 // 方式 1：在 DisplayName 中
@@ -149,7 +149,7 @@ public void Platform_Should_Not_Depend_On_Application()
 public void ADR_0002_1_Platform_Should_Not_Depend_On_Application()
 ```
 
-#### 步骤 2：测试失败消息必须包含 ADR 引用
+#### 步骤 2：测试失败消息应包含 ADR 引用
 
 ```csharp
 Assert.True(result.IsSuccessful,
