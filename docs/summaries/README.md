@@ -20,6 +20,7 @@ docs/summaries/
 ├── adr-restructure-summary.md                          # 架构 - ADR 重组
 ├── adr-numbering-optimization-summary.md               # 架构 - ADR 编号优化
 ├── adr-0000-0005-refactoring-summary.md                # 架构 - ADR 0000-0005 重构验证
+├── adr-proposals-implementation-summary.md             # 架构 - ADR 提案体系实施
 ├── adr-test-consistency-implementation.md              # 测试 - ADR-测试一致性实施
 ├── architecture-tests-improvement-summary.md           # 测试 - 架构测试改进
 ├── arch-violations.md                                  # 治理 - 架构违规记录
@@ -39,6 +40,7 @@ docs/summaries/
 | [ADR 重组总结](adr-restructure-summary.md)                       | ADR 文档体系重组，分离静态/动态/治理层 | v2.0 | 2026-01-21 |
 | [ADR 编号优化总结](adr-numbering-optimization-summary.md)          | ADR 编号体系优化，引入分段编号      | v3.0 | 2026-01-22 |
 | [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md) | 验证 ADR 文档与架构测试映射关系     | v1.0 | 2026-01-23 |
+| [ADR 提案体系实施总结](adr-proposals-implementation-summary.md)    | 10 个待落地 ADR 提案规划与跟踪体系建设 | v1.0 | 2026-01-24 |
 
 ---
 
@@ -78,6 +80,7 @@ docs/summaries/
 | ADR 文档管理   | [ADR 重组总结](adr-restructure-summary.md)                                                                       |
 | ADR 编号体系   | [ADR 编号优化总结](adr-numbering-optimization-summary.md)                                                          |
 | ADR 文档重构   | [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md)                                                 |
+| ADR 提案管理   | [ADR 提案体系实施总结](adr-proposals-implementation-summary.md)                                                      |
 | 架构测试优化     | [架构测试体系改进总结](architecture-tests-improvement-summary.md)                                                      |
 | ADR-测试映射   | [ADR-测试一致性实施总结](adr-test-consistency-implementation.md), [PR#126 待办事项完成总结](pr126-todo-completion-summary.md) |
 | 架构违规处理     | [架构违规记录表](arch-violations.md)                                                                                |
@@ -92,6 +95,7 @@ docs/summaries/
 
 | 日期         | 文档                                                           | 类型 |
 |------------|--------------------------------------------------------------|----|
+| 2026-01-24 | [ADR 提案体系实施总结](adr-proposals-implementation-summary.md)      | 架构 |
 | 2026-01-23 | [ADR 0000-0005 重构验证总结](adr-0000-0005-refactoring-summary.md) | 架构 |
 | 2026-01-23 | [ADR-测试一致性实施总结](adr-test-consistency-implementation.md)      | 测试 |
 | 2026-01-23 | [PR#126 待办事项完成总结](pr126-todo-completion-summary.md)          | 治理 |
@@ -227,8 +231,8 @@ docs/
 
 ### 文档统计
 
-- **总文档数**：9（不含 README）
-- **架构类**：3
+- **总文档数**：10（不含 README）
+- **架构类**：4
 - **测试类**：2
 - **治理类**：3
 - **文档类**：1

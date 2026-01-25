@@ -191,7 +191,8 @@ public sealed class ADR_0340_Architecture_Tests
     public void Application_Cannot_Configure_Serilog()
     {
         var root = ModuleAssemblyData.GetSolutionRoot();
-        var applicationDll = Path.Combine(root, "src", "Application", "bin", "Debug", "net10.0", "Application.dll");
+        var configuration = GetBuildConfiguration();
+        var applicationDll = Path.Combine(root, "src", "Application", "bin", configuration, "net10.0", "Application.dll");
         
         if (!File.Exists(applicationDll))
         {
@@ -222,7 +223,8 @@ public sealed class ADR_0340_Architecture_Tests
     public void Application_Cannot_Configure_OpenTelemetry()
     {
         var root = ModuleAssemblyData.GetSolutionRoot();
-        var applicationDll = Path.Combine(root, "src", "Application", "bin", "Debug", "net10.0", "Application.dll");
+        var configuration = GetBuildConfiguration();
+        var applicationDll = Path.Combine(root, "src", "Application", "bin", configuration, "net10.0", "Application.dll");
         
         if (!File.Exists(applicationDll))
         {
@@ -249,4 +251,24 @@ public sealed class ADR_0340_Architecture_Tests
     }
 
     #endregion
+
+    private static string GetBuildConfiguration()
+    {
+        // 检查环境变量（CI 会设置）
+        var configFromEnv = Environment.GetEnvironmentVariable("Configuration");
+        if (!string.IsNullOrEmpty(configFromEnv))
+        {
+            return configFromEnv;
+        }
+
+        // 尝试从当前程序集路径推断
+        var assemblyPath = typeof(ADR_0340_Architecture_Tests).Assembly.Location;
+        if (assemblyPath.Contains("/Release/") || assemblyPath.Contains("\\Release\\"))
+        {
+            return "Release";
+        }
+        
+        // 默认使用 Debug
+        return "Debug";
+    }
 }
