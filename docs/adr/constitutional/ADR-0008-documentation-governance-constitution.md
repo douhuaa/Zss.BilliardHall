@@ -208,7 +208,7 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 - [ADR-970：自动化工具日志集成标准](../governance/ADR-970-automation-log-integration-standard.md) - 日志文档约束基于本 ADR
 - [ADR-975：文档质量监控](../governance/ADR-975-documentation-quality-monitoring.md) - 质量监控基于本 ADR
 - [ADR-990：文档演进路线图](../governance/ADR-990-documentation-evolution-roadmap.md) - 演进规划基于本 ADR
-- [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md)
 - [ADR-930：代码审查与 ADR 合规自检流程](../governance/ADR-930-code-review-compliance.md)
 
 **替代（Supersedes）**：
@@ -219,7 +219,7 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 **相关（Related）**：
 - [ADR-0007：Agent 行为与权限宪法](./ADR-0007-agent-behavior-permissions-constitution.md) - Agent 行为与文档权威相互关联
-- [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md) - ADR 流程与文档治理相关
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - ADR 流程与文档治理相关
 
 ---
 

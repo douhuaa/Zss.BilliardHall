@@ -53,7 +53,7 @@
 |-----|---------|------------|----------|
 | ADR-0001 | 4.0 | 4.0 | v4.0 |
 | ADR-0000 | 2.0 | 2.0 | v2.0 |
-| ADR-0900 | 1.2 | 1.2 | v1.2 |
+| ADR-900 | 1.2 | 1.2 | v1.2 |
 | ADR-980 | 3.2 | 3.2 | - |
 
 ---
@@ -184,7 +184,7 @@ C# 分析 → JSON 报告 → Python 修复 → Bash 验证
 
 **问题**：两个文件共享 ADR-0005 编号
 - `ADR-0005-Application-Interaction-Model-Final.md`（主文档）
-- `ADR-0005-Enforcement-Levels.md`（补充说明）
+- `ADR-905-enforcement-level-classification.md`（补充说明）
 
 **影响**：
 - 触发 3 个假阳性错误

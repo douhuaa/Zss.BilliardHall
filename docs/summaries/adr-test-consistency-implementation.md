@@ -141,7 +141,7 @@ ADR 文档统计：
 - 明确三方同步要求（ADR ↔ 测试 ↔ Prompts）
 - 提供验证工具使用说明
 
-**ADR-0900（ADR 新增与修订流程）**：
+**ADR-900（ADR 新增与修订流程）**：
 
 - 新增"运行映射验证"步骤（2.8）
 - 强化 Prompts 文件中必须包含"测试覆盖自检清单"
@@ -404,7 +404,7 @@ Copilot 会参考：
 - [ADR-测试映射规范](../ADR-TEST-MAPPING-SPECIFICATION.md)
 - [ADR-测试一致性开发者指南](../ADR-TEST-CONSISTENCY-DEVELOPER-GUIDE.md)
 - [ADR-0000: 架构测试与 CI 治理](../adr/governance/ADR-0000-architecture-tests.md)
-- [ADR-0900: ADR 新增与修订流程](../adr/governance/ADR-0900-adr-process.md)
+- [ADR-900: ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
 
 ### 7.2 工具和脚本
 

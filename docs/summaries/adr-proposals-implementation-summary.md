@@ -255,7 +255,7 @@ graph LR
 
 本次实施严格遵循：
 
-1. **ADR-0900 流程**
+1. **ADR-900 流程**
    - 所有提案均按标准格式组织
    - 明确审批要求和前置依赖
    - 定义清晰的交付清单
@@ -272,7 +272,7 @@ graph LR
 
 ### 验证清单
 
-- [x] 所有提案符合 ADR-0900 格式要求
+- [x] 所有提案符合 ADR-900 格式要求
 - [x] 每个提案有明确的范围和约束示例
 - [x] 实施指南包含质量自检清单
 - [x] 所有文档链接正确且有效
@@ -387,7 +387,7 @@ graph LR
 ### 核心文档
 - [待落地 ADR 提案跟踪清单](../adr/PENDING-ADR-PROPOSALS.md)
 - [ADR 实施指南](../adr/ADR-IMPLEMENTATION-GUIDE.md)
-- [ADR-0900：ADR 新增与修订流程](../adr/governance/ADR-0900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
 
 ### 参考资料
 - [PR 常见问题总结](../copilot/pr-common-issues.prompts.md)

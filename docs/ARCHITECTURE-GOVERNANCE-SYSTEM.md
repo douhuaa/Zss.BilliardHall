@@ -123,7 +123,7 @@ docs/adr/
 - [ADR-0000: 架构测试与 CI 治理宪法](adr/governance/ADR-0000-architecture-tests.md)
 - [ADR-0007: Agent 行为与权限宪法](adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 - [ADR-0008: 文档编写与维护宪法](adr/constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-0900: ADR 新增与修订流程](adr/governance/ADR-0900-adr-process.md)
+- [ADR-900: ADR 新增与修订流程](adr/governance/ADR-900-adr-process.md)
 
 ---
 
@@ -195,11 +195,11 @@ Agent = Instructions + 特定职责域 + ADR 约束视角
 | Agent 名称                  | 职责域        | 监督的 ADR              | 风险等级 |
 |---------------------------|------------|----------------------|------|
 | architecture-guardian     | 架构约束守护     | 所有 ADR               | 极高   |
-| adr-reviewer              | ADR 文档审查   | ADR-0900             | 高    |
+| adr-reviewer              | ADR 文档审查   | ADR-900             | 高    |
 | test-generator            | 测试生成       | ADR-0000, 0122       | 中    |
 | module-boundary-checker   | 模块边界检查     | ADR-0001             | 极高   |
 | handler-pattern-enforcer  | Handler 规范执行 | ADR-0005             | 高    |
-| documentation-maintainer  | 文档维护       | ADR-0900, 文档规范       | 低    |
+| documentation-maintainer  | 文档维护       | ADR-900, 文档规范       | 低    |
 
 ### Agent 的硬性约束
 
@@ -435,7 +435,7 @@ graph TB
    ↓
 测试失败模式 → 更新 test-failures.md
    ↓
-架构演进 → 修订 ADR（ADR-0900 流程）
+架构演进 → 修订 ADR（ADR-900 流程）
    ↓
 新 ADR → 生成新 Prompts + 新测试
    ↓
@@ -514,7 +514,7 @@ ADR → Instructions → Agents → Prompts → Skills
 | 新成员  | 本文档 → [快速开始](QUICK-START.md) → [Copilot 使用](copilot/README.md)     |
 | 开发者  | [Instructions](../.github/instructions/) → [Prompts](copilot/)       |
 | 架构师  | [ADR 目录](adr/README.md) → [ADR-0000](adr/governance/ADR-0000-architecture-tests.md) |
-| 维护者  | [ADR-0900](adr/governance/ADR-0900-adr-process.md) → [Agents](.github/agents/) |
+| 维护者  | [ADR-900](adr/governance/ADR-900-adr-process.md) → [Agents](.github/agents/) |
 
 ### 按任务导航
 
@@ -523,7 +523,7 @@ ADR → Instructions → Agents → Prompts → Skills
 | 添加新功能       | [后端指令](../.github/instructions/backend.instructions.md) → [ADR-0001 Prompts](copilot/adr-0001.prompts.md) |
 | 编写测试        | [测试指令](../.github/instructions/testing.instructions.md) → [ADR-0000 Prompts](copilot/adr-0000.prompts.md) |
 | 审查 PR       | [评审指令](../.github/instructions/architecture-review.instructions.md) → [PR 流程](copilot/pr-review-pipeline.md) |
-| 新增 ADR      | [ADR-0900](adr/governance/ADR-0900-adr-process.md) |
+| 新增 ADR      | [ADR-900](adr/governance/ADR-900-adr-process.md) |
 | 配置 Agent    | [Agents 说明](.github/agents/README.md)        |
 | 开发 Skill    | [Skills 说明](.github/skills/README.md)        |
 

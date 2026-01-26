@@ -642,7 +642,7 @@ Windows 用户可使用：
 
 2. **查看文档**
    - [scripts/README.md](./README.md)
-   - [ADR 流程规范](../docs/adr/governance/ADR-0900-adr-process.md)
+   - [ADR 流程规范](../docs/adr/governance/ADR-900-adr-process.md)
 
 3. **联系支持**
    - 提交 Issue

@@ -210,7 +210,7 @@ ADR 中包含无法通过 CI、架构测试或 Analyzer 自动验证的规则。
 | 结构层         | ADR-0100~0199   | 结构与组织规范            | 命名规范、DTO 组织      |
 | 运行层         | ADR-0200~0299   | 运行时行为边界            | 异常传播、事务边界      |
 | 技术层         | ADR-0300~0399   | 技术选型与实现细节        | 日志框架、数据库选型    |
-| 治理层         | ADR-0900~0999   | ADR 自身治理与元规范      | ADR 模板、执行级别定义  |
+| 治理层         | ADR-900~0999   | ADR 自身治理与元规范      | ADR 模板、执行级别定义  |
 
 **Copilot 应该做什么**：
 
@@ -729,4 +729,4 @@ Copilot 提示词文件应包含：
 - [PR #143 - ADR-120 提示词补全](https://github.com/douhuaa/Zss.BilliardHall/pull/143)
 - [PR #142 - ADR-121 契约规范](https://github.com/douhuaa/Zss.BilliardHall/pull/142)
 - [Copilot README](./README.md)
-- [ADR-0900 治理规范](../adr/governance/ADR-0900-adr-governance.md)
+- [ADR-900 治理规范](../adr/governance/ADR-900-adr-governance.md)

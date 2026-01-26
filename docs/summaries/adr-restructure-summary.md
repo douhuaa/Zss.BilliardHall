@@ -218,7 +218,7 @@
 
 | 文件                                   | 类型 | 状态   |
 |--------------------------------------|----|------|
-| ADR-0005-Enforcement-Levels.md       | 补充 | ✅ 保留 |
+| ADR-905-enforcement-level-classification.md       | 补充 | ✅ 保留 |
 | ARCHITECTURE-CONSTITUTIONAL-LAYER.md | 补充 | ✅ 保留 |
 
 ---

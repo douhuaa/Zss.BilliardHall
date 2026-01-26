@@ -41,7 +41,7 @@
 **特殊编号处理**：
 
 - `ADR-0000`：架构测试元规则，保持原编号（治理层核心，特殊地位）
-- `ADR-0900`：ADR 流程管理（原 ADR-0000A，重新编号）
+- `ADR-900`：ADR 流程管理（原 ADR-0000A，重新编号）
 
 ### 2.2 目录层级结构
 
@@ -55,12 +55,12 @@ docs/adr/
 │   ├── ADR-0003-namespace-rules.md
 │   ├── ADR-0004-Cpm-Final.md
 │   ├── ADR-0005-Application-Interaction-Model-Final.md
-│   ├── ADR-0005-Enforcement-Levels.md
+│   ├── ADR-905-enforcement-level-classification.md
 │   └── ARCHITECTURE-CONSTITUTIONAL-LAYER.md
 ├── governance/                        # 治理层 ADR
 │   ├── README.md
 │   ├── ADR-0000-architecture-tests.md
-│   └── ADR-0900-adr-process.md
+│   └── ADR-900-adr-process.md
 ├── structure/                         # 结构层（未来扩展）
 │   └── README.md
 ├── runtime/                           # 运行层（未来扩展）
@@ -90,7 +90,7 @@ docs/adr/
 #### 阶段 3：文件迁移与重命名（已完成）
 
 - ✅ 使用 `git mv` 迁移文件（保留 Git 历史）
-- ✅ ADR-0000A 重新编号为 ADR-0900
+- ✅ ADR-0000A 重新编号为 ADR-900
 - ✅ 所有宪法层 ADR 迁移到 `constitutional/`
 - ✅ 所有治理层 ADR 迁移到 `governance/`
 
@@ -102,7 +102,7 @@ docs/adr/
   - 更新快速导航
   - 新增 FAQ（为什么分段、ADR-0000 为何不调整等）
   - 更新版本历史
-- ✅ 更新 ADR-0900 文档内容
+- ✅ 更新 ADR-900 文档内容
 - ✅ 更新所有 Copilot prompts 文件
 - ✅ 更新其他文档（architecture-guide.md, ci-cd-guide.md 等）
 
@@ -110,7 +110,7 @@ docs/adr/
 
 - ✅ 修改 ADR_0000_Architecture_Tests.cs
   - 支持递归搜索子目录中的 ADR 文件
-  - 添加 ADR-0900 到免测试白名单（流程 ADR 无需架构测试）
+  - 添加 ADR-900 到免测试白名单（流程 ADR 无需架构测试）
 - ✅ 运行测试验证：**81/81 全部通过**
 
 #### 阶段 6：文档完善（已完成）
@@ -131,7 +131,7 @@ docs/adr/
 ```bash
 # 使用 git mv 保留历史
 git mv docs/adr/ADR-0001-*.md docs/adr/constitutional/
-git mv docs/adr/ADR-0000A-adr-process.md docs/adr/governance/ADR-0900-adr-process.md
+git mv docs/adr/ADR-0000A-adr-process.md docs/adr/governance/ADR-900-adr-process.md
 ```
 
 #### 批量更新引用
@@ -154,7 +154,7 @@ Directory.GetFiles(adrDirectory, AdrFilePattern, SearchOption.AllDirectories)
 // 添加白名单
 private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.OrdinalIgnoreCase)
 {
-    "ADR-0900-adr-process"  // 流程规范，无需架构测试
+    "ADR-900-adr-process"  // 流程规范，无需架构测试
 };
 ```
 
@@ -241,7 +241,7 @@ private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.Ord
 
 1. **特殊编号处理**
   - ADR-0000 保持原编号（特殊地位）
-  - ADR-0900 豁免架构测试（流程 ADR）
+  - ADR-900 豁免架构测试（流程 ADR）
 
 2. **链接更新全面性**
   - 不仅更新 ADR 文档本身
@@ -280,7 +280,7 @@ private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.Ord
 ### 7.1 相关文档
 
 - [ADR 主索引](../adr/README.md)
-- [ADR-0900：ADR 新增与修订流程](../adr/governance/ADR-0900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
 - [宪法层说明](../adr/constitutional/ARCHITECTURE-CONSTITUTIONAL-LAYER.md)
 
 ### 7.2 实施提交

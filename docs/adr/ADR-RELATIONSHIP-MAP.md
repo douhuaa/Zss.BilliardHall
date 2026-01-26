@@ -159,7 +159,7 @@ graph TB
 
 ---
 
-#### ADR-0005 执行级别分类（Enforcement Level Classification）
+#### ADR-905 执行级别分类（Enforcement Level Classification）
 
 **状态**：✅ Active  
 
@@ -227,7 +227,7 @@ graph TB
 
 ---
 
-#### ADR-0900：ADR 新增与修订流程
+#### ADR-900：ADR 新增与修订流程
 
 **状态**：✅ Final（裁决型ADR）  
 
@@ -265,7 +265,7 @@ graph TB
 
 **依赖（Depends On）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于文档规范
-- [ADR-0900：ADR 新增与修订流程](ADR-0900-adr-process.md) - 集成到 ADR 流程
+- [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md) - 集成到 ADR 流程
 - [ADR-980：ADR 生命周期一体化同步机制](ADR-980-adr-lifecycle-synchronization-mechanism.md) - 需要关系图更新
 
 **被依赖（Depended By）**：
@@ -360,7 +360,7 @@ graph TB
 
 **依赖（Depends On）**：
 - [ADR-950：指南与 FAQ 文档治理宪法](ADR-950-guide-faq-documentation-governance.md) - 基于 Standard 类型定义
-- [ADR-0900：ADR 新增与修订流程](ADR-0900-adr-process.md) - Standard 提升为 ADR 流程
+- [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md) - Standard 提升为 ADR 流程
 
 **被依赖（Depended By）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档分级
@@ -494,7 +494,7 @@ graph TB
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 检测机制
-- [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md) - 基于其"三位一体交付"要求
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - 基于其"三位一体交付"要求
 
 **被依赖（Depended By）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档版本管理
@@ -519,7 +519,7 @@ graph TB
 
 **依赖（Depends On）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档管理标准
-- [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md) - 基于其 RFC 流程
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - 基于其 RFC 流程
 
 **被依赖（Depended By）**：
 - [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 路线图项目关联 ADR

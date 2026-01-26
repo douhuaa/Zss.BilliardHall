@@ -167,7 +167,7 @@ Pull Request **必须**至少获得一名具有审查权限的责任人批准。
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - 代码审查流程基于测试和 CI 机制
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档变更需遵循文档治理规则
-- [ADR-0900：ADR 新增与修订流程](./ADR-0900-adr-process.md) - ADR 相关 PR 需遵循 ADR 流程
+- [ADR-900：ADR 新增与修订流程](./ADR-900-adr-process.md) - ADR 相关 PR 需遵循 ADR 流程
 
 **被依赖（Depended By）**：
 - 无（代码审查规则是终端流程规则）

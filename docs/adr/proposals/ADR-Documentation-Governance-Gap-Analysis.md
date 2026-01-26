@@ -55,7 +55,7 @@
 |---------|------|---------|--------|
 | ADR-0000 | 架构测试与 CI 治理宪法 | 测试执法 | ✅ 高 |
 | ADR-0008 | 文档编写与维护宪法 | 文档分级、权限边界 | ✅ 高 |
-| ADR-0900 | ADR 新增与修订流程 | ADR 生命周期 | ✅ 高 |
+| ADR-900 | ADR 新增与修订流程 | ADR 生命周期 | ✅ 高 |
 | ADR-0910 | README 治理宪法 | README 专项治理 | ✅ 高 |
 | ADR-0920 | 示例代码治理宪法 | 示例代码专项治理 | ✅ 高 |
 | ADR-0930 | 代码审查与合规自检 | PR 审查流程 | ✅ 中 |
@@ -151,7 +151,7 @@ docs/
 ### 领域 5：ADR 生命周期一体化变更同步 🔴 P0
 
 **当前问题**：
-- ✗ ADR-0900 要求"三位一体交付"但缺少强制同步机制
+- ✗ ADR-900 要求"三位一体交付"但缺少强制同步机制
 - ✗ ADR 变更时，Prompt 和测试可能漏更新
 - ✗ 缺少自动化检测工具
 
@@ -512,7 +512,7 @@ docs/
 
 ```
 ADR-0008 → ADR-940, ADR-950
-ADR-0900 → ADR-980
+ADR-900 → ADR-980
 ADR-940 → ADR-945
 ADR-950 → ADR-960, ADR-951, ADR-952
 ADR-960 → ADR-965
@@ -552,7 +552,7 @@ ADR-0008 → ADR-975
 | ADR-951 | 案例库管理 | 🟡 P1 | 1-2天 | ADR-950 |
 | ADR-952 | 工程标准边界 | 🟡 P1 | 1-2天 | ADR-950 |
 | ADR-970 | 日志集成标准 | 🟡 P1 | 3-4天 | ADR-0000 |
-| ADR-990 | 演进路线图 | 🟡 P1 | 1-2天 | ADR-0900 |
+| ADR-990 | 演进路线图 | 🟡 P1 | 1-2天 | ADR-900 |
 | ADR-945 | 时间线与演进视图 | 🟢 P2 | 2-3天 | ADR-940 |
 | ADR-955 | 搜索优化 | 🟢 P2 | 2-3天 | ADR-940 |
 | ADR-965 | 互动式学习路径 | 🟢 P2 | 2-3天 | ADR-960 |
@@ -561,7 +561,7 @@ ADR-0008 → ADR-975
 ### B. 参考资料
 
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md)
 - [ADR-0910：README 编写与维护宪法](../governance/ADR-0910-readme-governance-constitution.md)
 - [ADR-0920：示例代码治理宪法](../governance/ADR-0920-examples-governance-constitution.md)
 

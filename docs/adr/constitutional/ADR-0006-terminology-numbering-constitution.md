@@ -116,7 +116,7 @@
 
 **规则**：
 - 非宪法层（100+）**不应**使用多余前导零
-- 特殊例外：ADR-0000 和 ADR-0900 允许使用前导零
+- 特殊例外：ADR-0000 和 ADR-900 允许使用前导零
 
 **判定**：
 - ❌ 非宪法层使用多余前导零（如 ADR-0120）
@@ -157,7 +157,7 @@
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
 
 **被依赖（Depended By）**：
-- [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md) - ADR 流程依赖编号规则
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - ADR 流程依赖编号规则
 - [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
 - [ADR-124：Endpoint 命名及参数约束规范](../structure/ADR-124-endpoint-naming-constraints.md)
 - [ADR-120：领域事件命名规范](../structure/ADR-120-domain-event-naming-convention.md)

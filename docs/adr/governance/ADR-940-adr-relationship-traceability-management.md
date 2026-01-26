@@ -293,7 +293,7 @@ jobs:
 - ADR 内容质量评审
 - ADR 版本号管理（由 ADR-980 管理）
 - ADR 文档格式（由 ADR-0008 管理）
-- ADR 审批流程（由 ADR-0900 管理）
+- ADR 审批流程（由 ADR-900 管理）
 
 ---
 
@@ -301,7 +301,7 @@ jobs:
 
 **依赖（Depends On）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于文档规范
-- [ADR-0900：ADR 新增与修订流程](ADR-0900-adr-process.md) - 集成到 ADR 流程
+- [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md) - 集成到 ADR 流程
 
 **被依赖（Depended By）**：
 - [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md)
