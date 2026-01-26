@@ -20,13 +20,18 @@ GRAPH_FILE="$TEMP_DIR/graph.txt"
 
 # 提取所有依赖关系
 while IFS= read -r adr_file; do
-    adr_id=$(basename "$adr_file" .md)
+    adr_filename=$(basename "$adr_file" .md)
+    # Extract just the ADR number (e.g., ADR-0001 from ADR-0001-modular-monolith-...)
+    adr_id=$(echo "$adr_filename" | grep -oE 'ADR-[0-9]+' || echo "")
+    
+    # Skip files without valid ADR numeric IDs (like ADR-RELATIONSHIP-MAP)
+    [ -z "$adr_id" ] && continue
     
     if grep -q "^## 关系声明" "$adr_file"; then
         # 提取 "依赖（Depends On）" 列表
         sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
             sed -n '/\*\*依赖（Depends On）\*\*/,/\*\*被依赖/p' | \
-            grep -oE 'ADR-[0-9]+' | \
+            { grep -oE 'ADR-[0-9]+' || true; } | \
             while read -r dep_id; do
                 echo "$adr_id $dep_id" >> "$GRAPH_FILE"
             done
