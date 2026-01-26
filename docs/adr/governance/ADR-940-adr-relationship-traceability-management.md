@@ -304,6 +304,7 @@ jobs:
 - [ADR-0900：ADR 新增与修订流程](ADR-0900-adr-process.md) - 集成到 ADR 流程
 
 **被依赖（Depended By）**：
+- [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md)
 - [ADR-955：文档搜索与可发现性优化](./ADR-955-documentation-search-discoverability.md)
 - [ADR-945：ADR 全局时间线与演进视图](./ADR-945-adr-timeline-evolution-view.md)
 - [ADR-980：ADR 生命周期一体化同步机制宪法](./ADR-980-adr-lifecycle-synchronization.md) - 版本同步需要关系图更新
