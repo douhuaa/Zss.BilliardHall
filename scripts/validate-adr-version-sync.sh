@@ -42,7 +42,12 @@ extract_prompt_version() {
 
 # 检查所有 ADR
 while IFS= read -r adr_file; do
-    adr_id=$(basename "$adr_file" .md)
+    adr_filename=$(basename "$adr_file" .md)
+    adr_id=$(echo "$adr_filename" | grep -oE 'ADR-[0-9]+' || echo "")
+    
+    # Skip files without valid ADR numeric IDs (like ADR-RELATIONSHIP-MAP)
+    [ -z "$adr_id" ] && continue
+    
     adr_number=$(echo "$adr_id" | grep -oE '[0-9]+' | head -1)
     
     # 提取 ADR 版本
@@ -52,7 +57,7 @@ while IFS= read -r adr_file; do
         echo "⚠️  警告：$adr_id 缺少版本号"
         echo "   请在 ADR 元数据中添加：**版本**：X.Y"
         echo ""
-        ((warnings++))
+        warnings=$((warnings + 1))
         continue
     fi
     
@@ -68,14 +73,14 @@ while IFS= read -r adr_file; do
             echo "   文件：$(basename "$test_file")"
             echo "   请在测试类注释中添加：// Version: X.Y"
             echo ""
-            ((warnings++))
+            warnings=$((warnings + 1))
         elif [ "$adr_version" != "$test_version" ]; then
             echo "❌ 错误：$adr_id 版本不一致"
             echo "   ADR 版本：$adr_version"
             echo "   测试版本：$test_version"
             echo "   请同步版本号"
             echo ""
-            ((errors++))
+            errors=$((errors + 1))
         fi
     fi
     
@@ -91,14 +96,14 @@ while IFS= read -r adr_file; do
             echo "   文件：$(basename "$prompt_file")"
             echo "   请在 Prompt 元数据中添加：**版本**：X.Y"
             echo ""
-            ((warnings++))
+            warnings=$((warnings + 1))
         elif [ "$adr_version" != "$prompt_version" ]; then
             echo "❌ 错误：$adr_id 版本不一致"
             echo "   ADR 版本：$adr_version"
             echo "   Prompt 版本：$prompt_version"
             echo "   请同步版本号"
             echo ""
-            ((errors++))
+            errors=$((errors + 1))
         fi
     fi
     
