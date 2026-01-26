@@ -1,19 +1,20 @@
 # ADR-0004：中央包管理（CPM）规范
 
-**状态**：✅ 已采纳（Final，不可随意修改）  
+**状态**：✅ Final（裁决型ADR）  
 **级别**：架构约束（Architectural Contract）  
 **适用范围**：所有 Platform / Application / Modules / Host / Tests 项目  
 **生效时间**：即刻
 
 ---
 
-## 聚焦内容（Focus）
+## 本章聚焦内容（Focus）
+
+仅定义适用于全生命周期自动化裁决/阻断的**包管理约束**：
 
 - 所有依赖包通过 Directory.Packages.props 集中管理
-- 层级依赖规则细化：Platform、Application、Modules、Host 各自明确边界
-- 包分组策略及管理
-- 强防御：禁止项目文件手动指定包版本
-- 自动化测试与 CI 校验内建
+- 层级依赖规则细化：Platform、Application、Modules、Host 各自边界
+- 禁止项目文件手动指定包版本
+- 所有规则必须架构测试覆盖
 
 ---
 
@@ -29,58 +30,75 @@
 
 ---
 
-## 决策（Decision）
+## 极简裁决性规则列表
 
-### 包集中管理与防御
+### 包集中管理与防御（ADR-0004.1, 0004.2, 0004.3, 0004.9）
 
-- 必须启用 CPM，禁用项目手动指定 Version
-- 所有包版本及分组写入 Directory.Packages.props
-- 任何项目文件出现 Version 即构建失败
-- 层级依赖关系必须反映体系结构：
+**规则**：
+- 必须启用 CPM
+- Directory.Packages.props 必须存在
+- 禁止项目文件手动指定 Version
+- 禁止私自覆盖中央包版本
 
-| 层级          | 允许依赖包类型                               | 禁止依赖                         |
-|-------------|---------------------------------------|------------------------------|
-| Platform    | 技术底座包（Logging、OpenTelemetry、基础异常处理等）  | Application/Module/Host 的业务包 |
-| Application | Wolverine、Marten、所有装配与 Pipeline       | Host/Http/业务模块               |
-| Modules     | 业务依赖、DTO、协议、契约                        | Platform 内部包、Host、其它模块       |
-| Host        | 仅调用 Platform+Application Bootstrapper | 业务模块、Handler                 |
-| Tests       | 被测模块+Platform/Application             | Host 内部实现                    |
+**判定**：
+- ❌ 未启用 CPM
+- ❌ 缺少 Directory.Packages.props
+- ❌ 项目文件包含 Version 属性
+- ❌ 项目覆盖中央包版本
+- ✅ 所有包版本集中管理
 
-### 包分组管理
+### 层级依赖规则（ADR-0004.4, 0004.8）
 
-- 所有包按功能或部门分组，集中表述
-- 用 `Label` 注释分组
-- 定期归档未使用包（自动检测）
+**规则**：
+- Platform：仅技术底座包（Logging、OpenTelemetry、基础异常处理）
+- Application：装配与 Pipeline 包（Wolverine、Marten）
+- Modules：业务依赖、DTO、协议、契约
+- Host：仅调用 Bootstrapper，不依赖业务包
+- Tests：被测模块 + Platform/Application
 
-### 防御规则
+**判定**：
+- ❌ Platform 依赖业务包
+- ❌ 层级依赖不符合规范
+- ✅ 所有层级依赖正确
 
-- 任何层级越界依赖包，CI 自动阻断
-- 违反上述规则，PR 自动拒绝
+### 包分组与统一（ADR-0004.5, 0004.6, 0004.7）
+
+**规则**：
+- Directory.Packages.props 必须包含包分组
+- 所有测试项目使用相同测试框架版本
+- 所有使用的包必须集中声明
+
+**判定**：
+- ❌ Directory.Packages.props 缺少分组
+- ❌ 测试框架版本不一致
+- ❌ 存在未声明的包依赖
+- ✅ 包分组完整、版本统一
 
 ---
 
-## 快速参考和架构测试映射
+## 快速参考表
 
-| 约束编号       | 描述                            | 层级 | 测试用例/自动化                                                  | 章节   |
-|------------|-------------------------------|----|-----------------------------------------------------------|------|
-| ADR-0004.1 | 必须启用 CPM                      | L1 | CPM_Should_Be_Enabled                                     | 管理规则 |
-| ADR-0004.2 | Directory.Packages.props 强制存在 | L1 | Repository_Should_Have_Directory_Packages_Props           | 管理规则 |
-| ADR-0004.3 | 不允许项目文件手动指定版本                 | L1 | Projects_Should_Not_Specify_Package_Versions              | 防御规则 |
-| ADR-0004.4 | 层级依赖必须严格遵守                    | L1 | Layer_Package_Dependencies_Should_Be_Valid                | 层级依赖 |
-| ADR-0004.5 | 包分组规范                         | L1 | Directory_Packages_Props_Should_Contain_Package_Groups    | 分组规则 |
-| ADR-0004.6 | 测试项目使用相同测试框架版本                | L1 | All_Test_Projects_Should_Use_Same_Test_Framework_Versions | 防御规则 |
-| ADR-0004.7 | 包依赖集中声明                       | L1 | Directory_Packages_Props_Should_Define_All_Used_Packages  | 分组管理 |
-| ADR-0004.8 | Platform 不得依赖业务包              | L1 | Platform_Projects_Should_Not_Reference_Business_Packages  | 层级依赖 |
-| ADR-0004.9 | 禁止私自覆盖中央包版本                   | L1 | Projects_Should_Not_Override_Central_Package_Versions     | 防御规则 |
+| 约束编号       | 约束描述                        | 测试方式           | 测试用例                                                  | 必须遵守 |
+|------------|-----------------------------|-----------------|---------------------------------------------------------|------|
+| ADR-0004.1 | 必须启用 CPM                    | L1 - 文件扫描        | CPM_Should_Be_Enabled                                   | ✅    |
+| ADR-0004.2 | Directory.Packages.props 强制存在 | L1 - 文件扫描        | Repository_Should_Have_Directory_Packages_Props         | ✅    |
+| ADR-0004.3 | 不允许项目文件手动指定版本               | L1 - 文件扫描        | Projects_Should_Not_Specify_Package_Versions            | ✅    |
+| ADR-0004.4 | 层级依赖必须严格遵守                  | L1 - 语义检查        | Layer_Package_Dependencies_Should_Be_Valid              | ✅    |
+| ADR-0004.5 | 包分组规范                       | L1 - 文件扫描        | Directory_Packages_Props_Should_Contain_Package_Groups  | ✅    |
+| ADR-0004.6 | 测试项目使用相同测试框架版本              | L1 - 文件扫描        | All_Test_Projects_Should_Use_Same_Test_Framework_Versions | ✅    |
+| ADR-0004.7 | 包依赖集中声明                     | L1 - 文件扫描        | Directory_Packages_Props_Should_Define_All_Used_Packages | ✅    |
+| ADR-0004.8 | Platform 不得依赖业务包            | L1 - 文件扫描        | Platform_Projects_Should_Not_Reference_Business_Packages | ✅    |
+| ADR-0004.9 | 禁止私自覆盖中央包版本                 | L1 - 文件扫描        | Projects_Should_Not_Override_Central_Package_Versions   | ✅    |
+
+> **级别说明**：L1=静态自动化（ArchitectureTests）
 
 ---
 
-## 依赖与相关ADR
+## 必测/必拦架构测试（Enforcement）
 
-- ADR-0002：层级装配分界的前提
-- ADR-0003：命名空间与依赖一致性
-- ADR-0005：运行时依赖语义补充
-- ADR-0000：自动化测试强关联
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0004_Architecture_Tests.cs` 强制验证。
+
+**有一项违规视为架构违规，CI 自动阻断。**
 
 ---
 
@@ -94,26 +112,32 @@
 
 ---
 
-## 扩展落地建议
+## 依赖与相关ADR
 
-- 将 CPM 配置做成模板，开新项目/新域可快速复用
-- 自动扫描未用包并归档避免依赖膨胀
-- 团队会议定期梳理架构包分层变更
-- 升级或迁移包需先归档再上线
+| 关联 ADR   | 关系        |
+|----------|-----------|
+| ADR-0000 | 自动化测试机制   |
+| ADR-0002 | 层级装配分界的前提 |
+| ADR-0003 | 命名空间与依赖一致性|
+| ADR-0005 | 运行时依赖语义补充 |
 
 ---
 
 ## 版本历史
 
-| 版本  | 日期         | 变更摘要         |
-|-----|------------|--------------|
+| 版本  | 日期         | 变更说明       |
+|-----|------------|------------|
+| 4.0 | 2026-01-26 | 裁决型重构，移除冗余 |
 | 3.0 | 2026-01-22 | 结构升级、统一结构和映射 |
 | 2.0 | 2026-01-20 | 分组细化，新增CI校验  |
-| 1.0 | 初版         | 初始发布         |
+| 1.0 | 初版         | 初始发布       |
 
 ---
 
-## 附件
+## 附注
 
-- [ADR-0002 三层启动体系规范](ADR-0002-platform-application-host-bootstrap.md)
-- [ADR-0003 命名空间标准](ADR-0003-namespace-rules.md)
+本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
+
+非裁决性参考（包分组策略、版本管理建议）请查阅：
+- [ADR-0004 Copilot Prompts](../../copilot/adr-0004.prompts.md)
+- 工程指南（如有）
