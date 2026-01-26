@@ -1,5 +1,7 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Unicode;
 using Zss.BilliardHall.AdrSemanticParser.Models;
 
 namespace Zss.BilliardHall.AdrSemanticParser;
@@ -14,7 +16,8 @@ public sealed class AdrSerializer
         WriteIndented = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        // 使用 JavaScriptEncoder 并允许中文字符，这样更安全且可读
+        Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
     };
 
     /// <summary>

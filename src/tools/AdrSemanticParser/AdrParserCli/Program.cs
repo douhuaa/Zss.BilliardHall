@@ -115,8 +115,15 @@ static async Task<int> BatchCommand(string[] args)
 
     Console.WriteLine($"📂 扫描目录: {inputDir}");
 
+    var excludedNames = new[] { "README", "RELATIONSHIP-MAP" };
     var adrFiles = Directory.GetFiles(inputDir, "ADR-*.md", SearchOption.AllDirectories)
-        .Where(f => !f.Contains("README") && !f.Contains("proposals"))
+        .Where(f =>
+        {
+            var fileName = Path.GetFileNameWithoutExtension(f);
+            return !excludedNames.Any(excluded => fileName.Contains(excluded, StringComparison.OrdinalIgnoreCase))
+                && !f.Contains("/proposals/", StringComparison.OrdinalIgnoreCase)
+                && !f.Contains("\\proposals\\", StringComparison.OrdinalIgnoreCase);
+        })
         .ToList();
 
     Console.WriteLine($"   找到 {adrFiles.Count} 个 ADR 文件");

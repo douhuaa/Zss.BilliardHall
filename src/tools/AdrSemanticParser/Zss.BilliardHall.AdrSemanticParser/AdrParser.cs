@@ -11,8 +11,10 @@ namespace Zss.BilliardHall.AdrSemanticParser;
 /// </summary>
 public sealed class AdrParser
 {
-    private static readonly Regex AdrIdRegex = new(@"ADR-(\d+)", RegexOptions.Compiled);
-    private static readonly Regex AdrLinkRegex = new(@"\[ADR-(\d+)[：:](.*?)\]", RegexOptions.Compiled);
+    private const int MetadataSearchLines = 20;
+    
+    private static readonly Regex AdrIdRegex = new(@"ADR-(\d+)", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+    private static readonly Regex AdrLinkRegex = new(@"\[ADR-(\d+)[：:](.*?)\]", RegexOptions.Compiled | RegexOptions.CultureInvariant);
     
     private readonly MarkdownPipeline _pipeline;
 
@@ -91,7 +93,7 @@ public sealed class AdrParser
             return $"ADR-{idMatch.Groups[1].Value}";
         }
 
-        throw new InvalidOperationException("无法从文档中提取 ADR 编号");
+        throw new InvalidOperationException("Unable to extract ADR number from document");
     }
 
     private static string ExtractTitle(MarkdownDocument document)
@@ -99,7 +101,7 @@ public sealed class AdrParser
         var heading = document.Descendants<HeadingBlock>().FirstOrDefault();
         if (heading == null)
         {
-            throw new InvalidOperationException("文档缺少标题");
+            throw new InvalidOperationException("Document is missing a title");
         }
 
         var title = heading.Inline?.FirstChild?.ToString() ?? "";
@@ -123,7 +125,7 @@ public sealed class AdrParser
 
         // 查找元数据部分（通常在文档开头）
         var lines = markdown.Split('\n');
-        foreach (var line in lines.Take(20)) // 前20行
+        foreach (var line in lines.Take(MetadataSearchLines)) // 前 N 行
         {
             var trimmed = line.Trim();
             
