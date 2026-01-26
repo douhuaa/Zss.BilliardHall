@@ -96,6 +96,9 @@
 - [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 命名空间规范基于三层体系
 - [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 包依赖规则基于三层依赖方向
 - [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 运行时交互基于三层装配
+- [ADR-123：Repository 接口与分层命名规范](../structure/ADR-123-repository-interface-layering.md)
+- [ADR-340：结构化日志与监控约束](../technical/ADR-340-structured-logging-monitoring-constraints.md)
+- [ADR-920：示例代码治理宪法](../governance/ADR-920-examples-governance-constitution.md)
 
 **替代（Supersedes）**：
 - 无

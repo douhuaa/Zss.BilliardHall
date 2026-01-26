@@ -68,10 +68,13 @@
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
 - [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 命名空间规范基于三层体系
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 
 **被依赖（Depended By）**：
 - [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 包管理依赖命名空间规范
 - [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 运行时注册依赖命名空间映射
+- [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
+- [ADR-121：契约（Contract）与 DTO 命名组织规范](../structure/ADR-121-contract-dto-naming-organization.md)
 
 **替代（Supersedes）**：
 - 无

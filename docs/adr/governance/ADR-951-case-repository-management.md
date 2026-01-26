@@ -265,6 +265,7 @@ docs/cases/
 
 **依赖（Depends On）**：
 - [ADR-950：指南与 FAQ 文档治理宪法](ADR-950-guide-faq-documentation-governance.md) - 基于 Case 类型定义
+- [ADR-920：示例代码治理宪法](../governance/ADR-920-examples-governance-constitution.md)
 
 **被依赖（Depended By）**：无
 

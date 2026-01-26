@@ -151,6 +151,11 @@
 **被依赖（Depended By）**：
 - [ADR-940：ADR 关系与溯源管理](./ADR-940-adr-relationship-traceability-management.md) - 关系管理依赖 ADR 流程
 - [ADR-990：文档演进路线图](./ADR-990-documentation-evolution-roadmap.md) - 演进规划依赖 ADR 流程
+- [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
+- [ADR-930：代码审查与 ADR 合规自检流程](../governance/ADR-930-code-review-compliance.md)
+- [ADR-952：工程标准与 ADR 分离边界](../governance/ADR-952-engineering-standard-adr-boundary.md)
+- [ADR-980：ADR 生命周期一体化同步机制宪法](../governance/ADR-980-adr-lifecycle-synchronization.md)
 
 **替代（Supersedes）**：
 - 无

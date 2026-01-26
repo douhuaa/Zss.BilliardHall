@@ -159,6 +159,16 @@
 **被依赖（Depended By）**：
 - [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md) - ADR 流程依赖编号规则
 - [ADR-940：ADR 关系与溯源管理](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系管理依赖编号体系
+- [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
+- [ADR-124：Endpoint 命名及参数约束规范](../structure/ADR-124-endpoint-naming-constraints.md)
+- [ADR-120：领域事件命名规范](../structure/ADR-120-domain-event-naming-convention.md)
+- [ADR-121：契约（Contract）与 DTO 命名组织规范](../structure/ADR-121-contract-dto-naming-organization.md)
+- [ADR-360：CI/CD Pipeline 流程标准化](../technical/ADR-360-cicd-pipeline-standardization.md)
+- [ADR-340：结构化日志与监控约束](../technical/ADR-340-structured-logging-monitoring-constraints.md)
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
+- [ADR-910：README 编写与维护宪法](../governance/ADR-910-readme-governance-constitution.md)
 - 所有 ADR - 编号规范适用于所有 ADR
 
 **替代（Supersedes）**：
