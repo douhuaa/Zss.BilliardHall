@@ -1,5 +1,7 @@
 # 测试编写指令
 
+> ⚠️ **权威声明与冲突处理**：参阅 [base.instructions.md](base.instructions.md) 顶部的权威声明和末尾的治理协同章节。
+
 ## 适用场景：编写和维护测试
 
 在协助测试时，在 `base.instructions.md` 的基础上应用这些额外约束。
@@ -68,6 +70,8 @@ tests/
 - 修复代码以符合架构
 - 参考相关 ADR 以了解正确模式
 - 查阅 `docs/copilot/adr-XXXX.prompts.md` 获取指导
+
+> 📌 **三态输出规则**：所有诊断输出必须明确使用 `✅ Allowed / ⚠️ Blocked / ❓ Uncertain`，并始终注明"以 ADR-0007 和相关 ADR 正文为最终权威"。
 
 ## 单元测试
 
