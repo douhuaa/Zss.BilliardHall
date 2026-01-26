@@ -1,5 +1,7 @@
 # 文档编写指令
 
+> ⚠️ **权威声明与冲突处理**：参阅 [base.instructions.md](base.instructions.md) 顶部的权威声明和末尾的治理协同章节。
+
 ## 适用场景：编写和维护文档
 
 在协助文档工作时，在 `base.instructions.md` 的基础上应用这些指南。
