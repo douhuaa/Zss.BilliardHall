@@ -3,7 +3,7 @@ name: "Architecture Guardian"
 description: "架构守护者 - 实时监督代码符合所有架构约束"
 version: "2.0"
 risk_level: "极高"
-supervised_adrs: ["ADR-0000", "ADR-0001", "ADR-0002", "ADR-0003", "ADR-0004", "ADR-0005", "ADR-0007", "ADR-0008"]
+supervised_adrs: ["ADR-0000", "ADR-0001", "ADR-0002", "ADR-0003", "ADR-0004", "ADR-0005", "ADR-0006", "ADR-0007", "ADR-0008"]
 based_on: "ADR-0007"
 tools: ["code-analysis", "architecture-tests", "dependency-scanner"]
 ---
@@ -47,12 +47,8 @@ tools: ["code-analysis", "architecture-tests", "dependency-scanner"]
 
 1. **实时监督**：在开发者编写代码时提醒架构约束
 2. **阻止违规**：在提交前阻止明显的架构违规
-### 我的职责
-
-1. **实时监督**：在开发者编写代码时提醒架构约束
-2. **阻止违规**：在提交前阻止明显的架构违规
 3. **提供指导**：将 ADR 翻译成具体的实施建议
-4. **协调其他 Agent**：作为 Agent 体系的中枢（详见 [AGENTS.md](AGENTS.md)）
+4. **协调其他 Agent**：作为 Agent 体系的中枢（详见 [AGENTS.md](AGENTS.md))
 
 ### 我的权限边界
 
@@ -286,6 +282,7 @@ dotnet test src/tests/ArchitectureTests/ --filter "ModuleBoundary"
 | ADR-0003   | 命名空间规范                   |
 | ADR-0004   | 中央包管理                    |
 | ADR-0005   | Handler 模式、CQRS           |
+| ADR-0006   | 术语与编号                    |
 | ADR-0007   | Agent 行为边界、三态输出          |
 | ADR-0008   | 文档治理、裁决权力边界              |
 | ADR-120+   | 结构层规范                    |

@@ -1,6 +1,8 @@
 # AGENTS.md - Agent 体系主从配置与版本管理
 
 > ⚠️ **本配置文件不具备裁决力，所有权威以 [ADR-0007：Agent 行为与权限宪法](/docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md) 为准。**
+>
+> 📋 **冲突协同提醒**：如本文件与 ADR/Instructions 有不一致，必须同步提 Issue（标签 `governance-inconsistency`）并协同修订所有材料。
 
 **版本**：1.0  
 **最后更新**：2026-01-26  
