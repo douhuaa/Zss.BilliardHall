@@ -1,6 +1,7 @@
 # ADR-121：契约（Contract）与 DTO 命名组织规范
 
 **状态**：✅ 已采纳（Adopted）  
+**版本**：1.0
 **级别**：结构约束（Structure Constraint）  
 **适用范围**：所有模块（Modules）、跨模块数据传递、API 层、事件与命令 Query 消息  
 **生效时间**：即刻  
