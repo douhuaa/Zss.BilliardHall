@@ -159,7 +159,6 @@
 
 **被依赖（Depended By）**：
 - [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md) - ADR 流程依赖编号规则
-- [ADR-940：ADR 关系与溯源管理](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系管理依赖编号体系
 - [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
 - [ADR-124：Endpoint 命名及参数约束规范](../structure/ADR-124-endpoint-naming-constraints.md)
 - [ADR-120：领域事件命名规范](../structure/ADR-120-domain-event-naming-convention.md)

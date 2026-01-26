@@ -46,18 +46,13 @@
 **标准格式**：
 
 ```markdown
-## 关系声明（Relationships）
+## Relationships
 
 **依赖（Depends On）**：
 - [ADR-XXXX：标题](相对路径) - 依赖原因说明
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md)
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md)
 
 **被依赖（Depended By）**：
 - [ADR-YYYY：标题](相对路径)
-- [ADR-955：文档搜索与可发现性优化](../governance/ADR-955-documentation-search-discoverability.md)
-- [ADR-945：ADR 全局时间线与演进视图](../governance/ADR-945-adr-timeline-evolution-view.md)
 
 **替代（Supersedes）**：
 - [ADR-ZZZZ：标题](相对路径) - 替代原因说明
