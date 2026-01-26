@@ -231,6 +231,28 @@ CI 失败时**必须**在失败消息中明确归属责任类别。
 
 ---
 
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - CI/CD 管道基于 CI 治理机制
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - CI/CD 术语遵循统一规范
+
+**被依赖（Depended By）**：
+- 无
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0930：代码审查合规](../governance/ADR-930-code-review-compliance.md) - 代码审查是 CI/CD 的一部分
+
+---
+
+
 ## 版本历史
 
 | 版本 | 日期 | 变更说明 | 修订人 |

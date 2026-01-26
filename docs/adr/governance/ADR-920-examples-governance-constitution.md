@@ -340,15 +340,26 @@ public class CreateOrderHandler { }
 
 ---
 
-## 依赖与相关ADR
+## 关系声明（Relationships）
 
-| 关联 ADR   | 关系          | 说明                         |
-|----------|-------------|----------------------------|
-| ADR-0001 | 约束源         | 示例必须遵守模块隔离规则 |
-| ADR-0002 | 约束源         | 示例必须遵守层级依赖规则 |
-| ADR-0005 | 约束源         | 示例必须遵守 Handler 模式 |
-| ADR-0910 | 关联         | README 治理（示例可出现在 README 中） |
-| ADR-0000 | 执行机制        | 架构测试与 CI 治理 |
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - 示例治理基于测试和 CI 机制
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 示例必须遵守模块隔离规则
+- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 示例必须遵守层级依赖规则
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 示例必须遵守 Handler 模式
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 示例治理是文档治理的一部分
+
+**被依赖（Depended By）**：
+- [ADR-951：案例库管理](./ADR-951-case-repository-management.md) - 案例管理参考示例治理规则
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-910：README 编写与维护](./ADR-910-readme-governance-constitution.md) - 示例可出现在 README 中
 
 ---
 

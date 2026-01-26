@@ -220,6 +220,28 @@
 
 ---
 
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件总线集成依赖事件命名规范
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 事件总线是模块间通信的实现
+
+**被依赖（Depended By）**：
+- 无
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0210：事件版本化与兼容性](./ADR-210-event-versioning-compatibility.md) - 事件序列化和版本化
+
+---
+
+
 ## 版本历史
 
 | 版本 | 日期 | 变更说明 | 修订人 |

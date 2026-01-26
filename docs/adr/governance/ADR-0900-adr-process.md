@@ -140,6 +140,29 @@
 
 ---
 
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - ADR 流程基于测试和 CI 机制
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - ADR 编号规则依赖编号宪法
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档标准依赖文档治理宪法
+- [ADR-980：ADR 生命周期一体化同步](./ADR-980-adr-lifecycle-synchronization.md) - ADR 流程包含版本同步机制
+
+**被依赖（Depended By）**：
+- [ADR-940：ADR 关系与溯源管理](./ADR-940-adr-relationship-traceability-management.md) - 关系管理依赖 ADR 流程
+- [ADR-990：文档演进路线图](./ADR-990-documentation-evolution-roadmap.md) - 演进规划依赖 ADR 流程
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md) - Copilot 在 ADR 流程中的角色
+
+---
+
 ## 版本历史
 
 | 版本  | 日期         | 变更说明              | 修订人      | 影响级别 |

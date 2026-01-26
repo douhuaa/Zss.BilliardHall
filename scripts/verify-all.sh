@@ -90,9 +90,57 @@ function main() {
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
     echo ""
     
-    # 3. 工具可用性检查
+    # 3. ADR 关系管理检查（ADR-940）
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    log_header "3. 工具可用性检查"
+    log_header "3. ADR 关系管理检查（ADR-940）"
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    if "$SCRIPT_DIR/verify-adr-relationships.sh"; then
+        log_success "ADR 关系声明检查通过"
+        PASSED_CHECKS=$((PASSED_CHECKS + 1))
+    else
+        log_error "ADR 关系声明检查失败"
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    fi
+    TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+    echo ""
+    
+    if "$SCRIPT_DIR/check-relationship-consistency.sh"; then
+        log_success "关系双向一致性检查通过"
+        PASSED_CHECKS=$((PASSED_CHECKS + 1))
+    else
+        log_error "关系双向一致性检查失败"
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    fi
+    TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+    echo ""
+    
+    if "$SCRIPT_DIR/detect-circular-dependencies.sh"; then
+        log_success "循环依赖检测通过"
+        PASSED_CHECKS=$((PASSED_CHECKS + 1))
+    else
+        log_error "循环依赖检测失败"
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    fi
+    TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+    echo ""
+    
+    # 4. 版本同步检查（ADR-980）
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    log_header "4. 版本同步检查（ADR-980）"
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    if "$SCRIPT_DIR/validate-adr-version-sync.sh"; then
+        log_success "版本同步检查通过"
+        PASSED_CHECKS=$((PASSED_CHECKS + 1))
+    else
+        log_error "版本同步检查失败"
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    fi
+    TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+    echo ""
+    
+    # 5. 工具可用性检查
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    log_header "5. 工具可用性检查"
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     
     run_check "ADR CLI 工具" "test -x $SCRIPT_DIR/adr-cli.sh"
@@ -100,11 +148,16 @@ function main() {
     run_check "速查手册生成器" "test -x $SCRIPT_DIR/generate-quick-reference.sh"
     run_check "一致性检查器" "test -x $SCRIPT_DIR/validate-adr-consistency.sh"
     run_check "映射验证器" "test -x $SCRIPT_DIR/validate-three-way-mapping.sh"
+    run_check "关系验证器（ADR-940）" "test -x $SCRIPT_DIR/verify-adr-relationships.sh"
+    run_check "关系一致性检查器（ADR-940）" "test -x $SCRIPT_DIR/check-relationship-consistency.sh"
+    run_check "循环依赖检测器（ADR-940）" "test -x $SCRIPT_DIR/detect-circular-dependencies.sh"
+    run_check "关系图生成器（ADR-940）" "test -x $SCRIPT_DIR/generate-adr-relationship-map.sh"
+    run_check "版本同步验证器（ADR-980）" "test -x $SCRIPT_DIR/validate-adr-version-sync.sh"
     echo ""
     
-    # 4. 文档完整性检查
+    # 6. 文档完整性检查
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    log_header "4. 文档完整性检查"
+    log_header "6. 文档完整性检查"
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     
     run_check "工具 README" "test -f $SCRIPT_DIR/README.md"
@@ -112,15 +165,22 @@ function main() {
     run_check "实施总结文档" "test -f $REPO_ROOT/docs/summaries/adr-automation-implementation.md"
     run_check "ADR 模板" "test -f $REPO_ROOT/docs/templates/adr-template.md"
     run_check "Prompt 模板" "test -f $REPO_ROOT/docs/templates/copilot-pormpts-template.md"
+    run_check "FAQs 目录（ADR-950）" "test -d $REPO_ROOT/docs/faqs"
+    run_check "Cases 目录（ADR-950）" "test -d $REPO_ROOT/docs/cases"
+    run_check "Guides 目录（ADR-950）" "test -d $REPO_ROOT/docs/guides"
+    run_check "ADR 关系图（ADR-940）" "test -f $REPO_ROOT/docs/adr/ADR-RELATIONSHIP-MAP.md"
     echo ""
     
-    # 5. CI 集成检查
+    # 7. CI 集成检查
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    log_header "5. CI/CD 集成检查"
+    log_header "7. CI/CD 集成检查"
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     
     run_check "GitHub Actions 工作流" "test -f $REPO_ROOT/.github/workflows/architecture-tests.yml"
+    run_check "ADR 关系检查工作流（ADR-940）" "test -f $REPO_ROOT/.github/workflows/adr-relationship-check.yml"
+    run_check "ADR 版本同步工作流（ADR-980）" "test -f $REPO_ROOT/.github/workflows/adr-version-sync.yml"
     run_check "PR 模板" "test -f $REPO_ROOT/.github/PULL_REQUEST_TEMPLATE.md"
+    run_check "CODEOWNERS（ADR-980）" "test -f $REPO_ROOT/CODEOWNERS"
     
     # 检查 CI 工作流中是否包含新工具
     if grep -q "validate-adr-consistency.sh" "$REPO_ROOT/.github/workflows/architecture-tests.yml"; then

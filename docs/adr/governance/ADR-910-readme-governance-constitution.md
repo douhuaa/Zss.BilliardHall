@@ -234,13 +234,24 @@ README 规则的破例**仅在以下情况允许**：
 
 ---
 
-## 依赖与相关ADR
+## 关系声明（Relationships）
 
-| 关联 ADR   | 关系          | 说明                         |
-|----------|-------------|----------------------------|
-| ADR-0008 | 上级约束        | ADR-0008 定义文档分级，README 从此 ADR 中独立 |
-| ADR-0000 | 执行机制        | ADR-0000 定义架构测试与 CI 治理 |
-| ADR-0006 | 术语定义        | ADR-0006 定义术语标准 |
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - README 治理基于测试和 CI 机制
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - README 术语使用遵循统一规范
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - README 约束是文档治理的细化
+
+**被依赖（Depended By）**：
+- 无（README 约束是终端规则，不被其他 ADR 依赖）
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-950：指南与 FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md) - 同为非裁决性文档治理
 
 ---
 

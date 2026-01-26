@@ -63,6 +63,27 @@
 
 ---
 
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 命名空间规范基于三层体系
+
+**被依赖（Depended By）**：
+- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 包管理依赖命名空间规范
+- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 运行时注册依赖命名空间映射
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 命名规范
+
+---
+
 ## 快速参考表
 
 | 约束编号       | 约束描述                            | 测试方式           | 测试用例                                                | 必须遵守 |
@@ -96,17 +117,6 @@
 - [ ] 项目名与目录/二级命名空间是否严格一致？
 - [ ] 全局无 Common、Shared、Utils 等命名空间？
 - [ ] CI 与架构测试是否已自动检验命名空间合规？
-
----
-
-## 依赖与相关ADR
-
-| 关联 ADR   | 关系         |
-|----------|------------|
-| ADR-0000 | 自动化测试机制    |
-| ADR-0002 | 启动体系与多Host |
-| ADR-0004 | 包管理的层级约束映射 |
-| ADR-0005 | 运行时分层与注册映射 |
 
 ---
 

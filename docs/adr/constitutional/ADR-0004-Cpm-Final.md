@@ -76,6 +76,27 @@
 
 ---
 
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 包管理规范基于层级装配边界
+- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 包管理依赖命名空间结构
+
+**被依赖（Depended By）**：
+- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 运行时依赖语义基于包管理规则
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- 无
+
+---
+
 ## 快速参考表
 
 | 约束编号       | 约束描述                        | 测试方式           | 测试用例                                                  | 必须遵守 |
@@ -109,17 +130,6 @@
 - [ ] 各层引入的依赖包完全符合层级规则？
 - [ ] 所有项目依赖包都在集中声明？
 - [ ] 相关架构测试和 CI 校验被正确拦截？
-
----
-
-## 依赖与相关ADR
-
-| 关联 ADR   | 关系        |
-|----------|-----------|
-| ADR-0000 | 自动化测试机制   |
-| ADR-0002 | 层级装配分界的前提 |
-| ADR-0003 | 命名空间与依赖一致性|
-| ADR-0005 | 运行时依赖语义补充 |
 
 ---
 
