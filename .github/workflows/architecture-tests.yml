@@ -33,9 +33,23 @@ jobs:
       - name: Build solution
         run: dotnet build --no-restore --configuration Release
 
-      - name: Validate ADR-Test Mapping
+      - name: Validate ADR Consistency
         run: |
-          echo "::group::ADR-测试映射一致性验证"
+          echo "::group::ADR 编号/目录/内容一致性验证"
+          chmod +x ./scripts/validate-adr-consistency.sh
+          ./scripts/validate-adr-consistency.sh
+          echo "::endgroup::"
+
+      - name: Validate Three-Way Mapping
+        run: |
+          echo "::group::ADR/测试/Prompt 三位一体映射验证"
+          chmod +x ./scripts/validate-three-way-mapping.sh
+          ./scripts/validate-three-way-mapping.sh
+          echo "::endgroup::"
+
+      - name: Validate ADR-Test Mapping (Legacy)
+        run: |
+          echo "::group::ADR-测试映射一致性验证（传统）"
           chmod +x ./scripts/validate-adr-test-mapping.sh
           ./scripts/validate-adr-test-mapping.sh
           echo "::endgroup::"
