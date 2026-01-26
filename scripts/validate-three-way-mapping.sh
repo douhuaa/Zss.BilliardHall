@@ -45,10 +45,14 @@ declare -a INCONSISTENT_MAPPINGS
 
 IS_VALID=true
 
-# 提取 ADR 编号
+# 提取 ADR 编号（支持 1-4 位数字，自动补齐到 4 位）
 function extract_adr_number() {
     local file="$1"
-    basename "$file" | sed -n 's/^ADR[-_]\?\([0-9]\{4\}\).*/\1/p'
+    local number=$(basename "$file" | sed -n 's/^ADR[-_]\?\([0-9]\+\).*/\1/p')
+    if [ -n "$number" ]; then
+        # 补齐到 4 位（使用 10# 前缀强制十进制，避免 0 开头被当作八进制）
+        printf "%04d" "$((10#$number))"
+    fi
 }
 
 # 查找所有 ADR 文件
