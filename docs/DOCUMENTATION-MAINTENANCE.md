@@ -288,7 +288,7 @@ graph TB
 提供查询表格
 ```
 
-**详见**：[ADR-0900：ADR 新增与修订流程](adr/governance/ADR-0900-adr-process.md)
+**详见**：[ADR-900：ADR 新增与修订流程](adr/governance/ADR-900-adr-process.md)
 
 ### Copilot Prompts
 
@@ -521,7 +521,7 @@ markdownlint $(git diff --cached --name-only --diff-filter=ACM | grep '\.md$')
 3. 创建对应的 `docs/copilot/adr-XXXX.prompts.md`
 4. 创建对应的 `src/tests/ArchitectureTests/ADR/ADR_XXXX_Architecture_Tests.cs`
 
-详见 [ADR-0900](adr/governance/ADR-0900-adr-process.md)
+详见 [ADR-900](adr/governance/ADR-900-adr-process.md)
 
 ### Q: 如何废弃旧文档？
 
@@ -571,7 +571,7 @@ markdownlint $(git diff --cached --name-only --diff-filter=ACM | grep '\.md$')
 ### 内部文档
 
 - [文档导航中心](index.md)
-- [ADR-0900：ADR 新增与修订流程](adr/governance/ADR-0900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](adr/governance/ADR-900-adr-process.md)
 - [改进总结目录](summaries/README.md)
 
 ### 外部参考

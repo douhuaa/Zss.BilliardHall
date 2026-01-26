@@ -106,7 +106,7 @@
 - **Level 2 语义半自动**：Roslyn Analyzer 等启发式，需人工二次确认
 - **Level 3 人工 Gate**：不可程控的约束，长期破例流程审计
 
-具体标准参见 [ADR-0005-Enforcement-Levels.md](/docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
+具体标准参见 [ADR-905-enforcement-level-classification.md](/docs/adr/governance/ADR-905-enforcement-level-classification.md)
 
 ---
 
@@ -156,6 +156,7 @@
 - [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 其测试执行基于本 ADR
 - [ADR-0004：中央包管理与层级依赖规则](../constitutional/ADR-0004-Cpm-Final.md) - 其测试执行基于本 ADR
 - [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 其测试执行基于本 ADR
+- [ADR-905：执行级别分类](./ADR-905-enforcement-level-classification.md) - 执行级别基于本 ADR
 - [ADR-970：自动化工具日志集成标准](./ADR-970-automation-log-integration-standard.md) - 测试报告标准基于本 ADR
 - [ADR-980：ADR 生命周期一体化同步机制](./ADR-980-adr-lifecycle-synchronization.md) - CI 检测机制基于本 ADR
 - [ADR-360：CI/CD Pipeline 流程标准化](../technical/ADR-360-cicd-pipeline-standardization.md)
@@ -164,7 +165,7 @@
 - [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
 - [ADR-920：示例代码治理宪法](../governance/ADR-920-examples-governance-constitution.md)
-- [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md)
 - [ADR-930：代码审查与 ADR 合规自检流程](../governance/ADR-930-code-review-compliance.md)
 - [ADR-910：README 编写与维护宪法](../governance/ADR-910-readme-governance-constitution.md)
 
@@ -191,5 +192,5 @@
 
 ## 附件与参考
 
-- [ADR-0005-Enforcement-Levels.md](/docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
+- [ADR-905-enforcement-level-classification.md](/docs/adr/governance/ADR-905-enforcement-level-classification.md)
 - [`ARCH-VIOLATIONS.md`](/docs/summaries/arch-violations.md)

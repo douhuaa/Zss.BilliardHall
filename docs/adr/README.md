@@ -53,7 +53,7 @@
 - [ADR-0006：术语与编号宪法](constitutional/ADR-0006-terminology-numbering-constitution.md)
 - [ADR-0007：Agent 行为与权限宪法](constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 - [ADR-0008：文档编写与维护宪法](constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-0900：ADR 新增与修订流程](governance/ADR-0900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](governance/ADR-900-adr-process.md)
 - [ADR-120：领域事件命名规范](structure/ADR-120-domain-event-naming-convention.md)
 - [ADR-121：契约（Contract）与 DTO 命名组织规范](structure/ADR-121-contract-dto-naming-organization.md)
 - [ADR-240：Handler 异常约束](runtime/ADR-240-handler-exception-constraints.md)
@@ -75,7 +75,7 @@
 ## 索引与维护
 
 - ADR 版本、层级、编号等重大事项以[ADR-0006](constitutional/ADR-0006-terminology-numbering-constitution.md)为主
-- 变更流程详见 [ADR-0900](governance/ADR-0900-adr-process.md)
+- 变更流程详见 [ADR-900](governance/ADR-900-adr-process.md)
 - 各层次变更均需相应审批���归档
 
 ---

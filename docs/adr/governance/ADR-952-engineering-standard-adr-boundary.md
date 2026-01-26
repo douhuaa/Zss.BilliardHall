@@ -202,7 +202,7 @@ Standard 满足以下条件时，应考虑提升为 ADR：
 
 **提升流程**：
 1. 创建 RFC，说明提升理由
-2. 走 ADR-0900 正式流程
+2. 走 ADR-900 正式流程
 3. 创建正式 ADR
 4. 更新或废弃原 Standard
 
@@ -277,7 +277,7 @@ Standard 引用 ADR-123 并细化实施
 
 **依赖（Depends On）**：
 - [ADR-950：指南与 FAQ 文档治理宪法](ADR-950-guide-faq-documentation-governance.md) - 基于 Standard 类型定义
-- [ADR-0900：ADR 新增与修订流程](ADR-0900-adr-process.md) - Standard 提升为 ADR 流程
+- [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md) - Standard 提升为 ADR 流程
 
 **被依赖（Depended By）**：无
 

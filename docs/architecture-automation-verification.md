@@ -10,7 +10,7 @@
 ## 三层防御体系
 
 根据 [ADR-0000](../adr/governance/ADR-0000-architecture-tests.md)
-和 [ADR-0005 执行级别分类](../adr/ADR-0005-Enforcement-Levels.md)，我们实施了三层自动化防御体系：
+和 [ADR-905 执行级别分类](../adr/ADR-905-enforcement-level-classification.md)，我们实施了三层自动化防御体系：
 
 ### 🛡️ Level 1: 静态可执行（Static Enforceable）
 
@@ -432,7 +432,7 @@ open TestResults/architecture-test-results.html
 
 - [ADR-0000: 架构测试与 CI 治理](../adr/governance/ADR-0000-architecture-tests.md)
 - [ADR-0005: 应用内交互模型](../adr/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-0005 执行级别分类](../adr/ADR-0005-Enforcement-Levels.md)
+- [ADR-905 执行级别分类](../adr/ADR-905-enforcement-level-classification.md)
 - [Architecture Tests README](../../src/tests/ArchitectureTests/README.md)
 - [Roslyn Analyzers README](../../src/tools/ArchitectureAnalyzers/README.md)
 - [CI/CD 集成指南](ci-cd-guide.md)

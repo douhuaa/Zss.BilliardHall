@@ -523,7 +523,7 @@ ADR 文档 ─→ 速查工具 ─→ 红线约束手册
 ### 12.2 参考资源
 
 - [ADR 目录](../docs/adr/README.md)
-- [ADR 流程规范](../docs/adr/governance/ADR-0900-adr-process.md)
+- [ADR 流程规范](../docs/adr/governance/ADR-900-adr-process.md)
 - [架构测试宪法](../docs/adr/governance/ADR-0000-architecture-tests.md)
 - [Copilot 治理体系](../docs/copilot/README.md)
 

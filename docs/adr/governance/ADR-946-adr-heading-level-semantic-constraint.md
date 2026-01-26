@@ -21,7 +21,7 @@
 
 ## 决策（Decision）
 
-### 标题级别即语义级别（ADR-946.1）
+### 标题级别即语义级别（条款 1）
 
 **规则**：
 
@@ -41,7 +41,7 @@
 
 ---
 
-### 关键语义块的标题级别约束（ADR-946.2）
+### 关键语义块的标题级别约束（条款 2）
 
 **规则**：
 
@@ -61,7 +61,7 @@
 
 ---
 
-### 模板与示例的结构约束（ADR-946.3）
+### 模板与示例的结构约束（条款 3）
 
 **规则**：
 
@@ -99,7 +99,7 @@
 
 ---
 
-### 解析工具的语义边界（ADR-946.4）
+### 解析工具的语义边界（条款 4）
 
 **规则**：
 
@@ -158,10 +158,10 @@ ADR 文档不是普通的 Markdown 文档，而是一种**机器可裁决的治�
 
 | 规则编号 | 执行级别 | 测试/手段 | 说明 |
 |---------|---------|----------|------|
-| ADR-946.1 | **L1** | `scripts/verify-adr-heading-semantics.sh` | CI 阻断：检测模板/示例中的 `##` 语义块误用 |
-| ADR-946.2 | **L1** | `scripts/verify-adr-heading-semantics.sh` | CI 阻断：检测关键语义块标题的重复或误用 |
-| ADR-946.3 | **L2** | Code Review | 人工审查：确保新 ADR 遵守模板约束 |
-| ADR-946.4 | **L1** | 解析工具单元测试 | 验证解析工具正确处理标题边界 |
+| 条款 1 | **L1** | `scripts/verify-adr-heading-semantics.sh` | CI 阻断：检测模板/示例中的 `##` 语义块误用 |
+| 条款 2 | **L1** | `scripts/verify-adr-heading-semantics.sh` | CI 阻断：检测关键语义块标题的重复或误用 |
+| 条款 3 | **L2** | Code Review | 人工审查：确保新 ADR 遵守模板约束 |
+| 条款 4 | **L1** | 解析工具单元测试 | 验证解析工具正确处理标题边界 |
 
 **执行时机**：
 - CI 阶段：每次 PR 提交时运行 `verify-adr-heading-semantics.sh`
@@ -176,7 +176,7 @@ ADR 文档不是普通的 Markdown 文档，而是一种**机器可裁决的治�
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档结构规范
 
 **被依赖（Depended By）**：
-- 无
+- [ADR-947：关系声明区的结构与解析安全规则](./ADR-947-relationship-section-structure-parsing-safety.md)
 
 **替代（Supersedes）**：
 - 无
@@ -186,7 +186,6 @@ ADR 文档不是普通的 Markdown 文档，而是一种**机器可裁决的治�
 
 **相关（Related）**：
 - [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 同为 ADR 结构约束
-- [ADR-940：ADR 关系与溯源管理宪法](./ADR-940-adr-relationship-traceability-management.md) - 关系解析依赖标题语义
 
 ---
 

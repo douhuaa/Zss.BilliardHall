@@ -76,7 +76,13 @@
 - [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 依赖管理遵循包管理规则
 
 **被依赖（Depended By）**：
-- [ADR-0005：执行级别分类](./ADR-0005-Enforcement-Levels.md) - 执行级别补充文档依赖本 ADR
+- [ADR-905：执行级别分类](../../governance/ADR-905-enforcement-level-classification.md) - 执行级别补充文档依赖本 ADR
+- [ADR-920：示例代码治理宪法](../../governance/ADR-920-examples-governance-constitution.md) - 示例治理依赖 CQRS 模式
+- [ADR-201：Handler 生命周期管理](../../runtime/ADR-201-handler-lifecycle-management.md) - Handler 管理基于 CQRS
+- [ADR-210：领域事件版本化与兼容性](../../runtime/ADR-210-event-versioning-compatibility.md) - 事件版本化基于 CQRS
+- [ADR-220：事件总线集成规范](../../runtime/ADR-220-event-bus-integration.md) - 事件总线基于 CQRS
+- [ADR-240：Handler 异常约束](../../runtime/ADR-240-handler-exception-constraints.md) - Handler 异常处理基于 CQRS
+- [ADR-124：Endpoint 命名及参数约束规范](../../structure/ADR-124-endpoint-naming-constraints.md) - Endpoint 基于 CQRS
 - [ADR-120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件命名基于 CQRS 模式
 - [ADR-121：契约 DTO 命名与组织](../structure/ADR-121-contract-dto-naming-organization.md) - DTO 组织基于 CQRS 分离
 

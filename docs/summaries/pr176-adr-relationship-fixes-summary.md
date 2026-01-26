@@ -51,7 +51,7 @@ constitutional/
   - ADR-0001, ADR-0002, ADR-0003, ADR-0005, ADR-0006, ADR-0008
 
 governance/
-  - ADR-0000, ADR-0900, ADR-940, ADR-951, ADR-960, ADR-980
+  - ADR-0000, ADR-900, ADR-940, ADR-951, ADR-960, ADR-980
 
 structure/
   - ADR-120, ADR-121, ADR-122, ADR-124
@@ -121,7 +121,7 @@ python3 /tmp/auto_fix_relationships.py
 
 **问题**：两个文件共享 ADR-0005 编号
 - `ADR-0005-Application-Interaction-Model-Final.md`（主文档）
-- `ADR-0005-Enforcement-Levels.md`（补充说明）
+- `ADR-905-enforcement-level-classification.md`（补充说明）
 
 **现象**：
 - Enforcement-Levels 引用 Application-Interaction-Model-Final
