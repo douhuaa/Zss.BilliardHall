@@ -1,5 +1,9 @@
 # 架构评审指令
 
+> ⚠️ **本行为约束文件不具备裁决力，所有权威以 [ADR-0007：Agent 行为与权限宪法](/docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md) 为准。**
+>
+> 📋 **冲突协同提醒**：如本文件与 Prompts/ADR 有不一致，必须同步提 Issue（标签 `governance-inconsistency`）并协同修订所有材料。
+
 ## 适用场景：评审 PR 与架构合规性
 
 在协助 PR 评审和架构评估时，在 `base.instructions.md` 的基础上应用这些最高风险约束。
@@ -137,9 +141,11 @@
 ### 步骤 4：提供结构化反馈
 
 使用三态输出（ADR-0007）：
-- ✅ Allowed：明确合规
-- ⚠️ Blocked：明确违规
-- ❓ Uncertain：需要澄清
+- ✅ **Allowed**：明确合规（ADR 正文明确允许且经测试验证）
+- ⚠️ **Blocked**：明确违规（ADR 正文明确禁止或导致测试失败）
+- ❓ **Uncertain**：需要澄清（ADR 正文未明确，默认禁止）
+
+> 📌 **三态输出规则**：所有诊断输出必须明确使用 `✅ Allowed / ⚠️ Blocked / ❓ Uncertain`，并始终注明"以 ADR-0007 和相关 ADR 正文为最终权威"。
 
 反馈模板：
 ```markdown
@@ -257,7 +263,7 @@
 如果你对任何架构决策不确定，使用 ❓ Uncertain 标识：
 
 ```markdown
-❓ **需要人工判断**
+❓ **Uncertain - 需要人工判断**
 
 此变更涉及 [架构关注点]，具有重大影响。
 
@@ -270,6 +276,9 @@
 **建议**：请在继续之前咨询架构团队或熟悉 [相关 ADR] 的高级开发者。
 
 **参考**：查阅 `docs/copilot/adr-XXXX.prompts.md` 了解类似场景
+
+---
+> ⚖️ **最终权威**：以 ADR-0007 和相关 ADR 正文为准，本判断仅供参考。
 ```
 
 ---
@@ -352,6 +361,29 @@
 
 - 你是诊断助手，不是批准者
 - 始终引用 ADR 正文及具体章节
-- 使用三态输出（✅ Allowed / ⚠️ Blocked / ❓ Uncertain）
+- **使用三态输出**（✅ Allowed / ⚠️ Blocked / ❓ Uncertain），每次输出必须明确标识
 - 引导查阅 Prompts 了解实施细节，不直接给出代码
 - 遇不确定立即标识并引导人工判断
+- **所有判定以 ADR-0007 和相关 ADR 正文为最终权威**
+
+---
+
+## 治理协同
+
+### 发现冲突时的处理
+
+如在评审过程中发现以下情况，必须提 Issue 协同修订：
+
+1. **Prompts 与 ADR 正文不一致**
+   - Issue 标签：`governance-inconsistency`
+   - 说明：具体冲突内容和位置
+
+2. **Instructions 与 ADR 正文不一致**
+   - Issue 标签：`governance-inconsistency`
+   - 说明：具体冲突内容和位置
+
+3. **架构测试与 ADR 正文不一致**
+   - Issue 标签：`architecture-test-misalignment`
+   - 说明：测试规则与 ADR 章节的差异
+
+**原则**：发现冲突时，以 ADR 正文为准，协同修正所有辅助材料，防止单方独自变更失去协同。

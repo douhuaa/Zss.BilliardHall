@@ -1,5 +1,9 @@
 # 文档编写指令
 
+> ⚠️ **本行为约束文件不具备裁决力，所有权威以 [ADR-0007：Agent 行为与权限宪法](/docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md) 为准。**
+>
+> 📋 **冲突协同提醒**：如本文件与 Prompts/ADR 有不一致，必须同步提 Issue（标签 `governance-inconsistency`）并协同修订所有材料。
+
 ## 适用场景：编写和维护文档
 
 在协助文档工作时，在 `base.instructions.md` 的基础上应用这些指南。
@@ -335,3 +339,25 @@ public class OrderService { }
 - 所有 ADR：`docs/adr/README.md`
 - Copilot 系统：`docs/copilot/README.md`
 - 实施总结：`docs/summaries/copilot-governance-implementation.md`
+
+---
+
+## 治理协同
+
+### 发现冲突时的处理
+
+如在文档协助过程中发现以下情况，必须提 Issue 协同修订：
+
+1. **Prompts 与 ADR 正文不一致**
+   - Issue 标签：`governance-inconsistency`
+   - 说明：具体冲突内容和位置
+
+2. **Instructions 与 ADR 正文不一致**
+   - Issue 标签：`governance-inconsistency`
+   - 说明：具体冲突内容和位置
+
+3. **文档交叉引用错误**
+   - Issue 标签：`documentation-error`
+   - 说明：断开的链接或不一致的引用
+
+**原则**：发现冲突时，以 ADR 正文为准，协同修正所有辅助材料，防止单方独自变更失去协同。

@@ -1,5 +1,9 @@
 # 测试编写指令
 
+> ⚠️ **本行为约束文件不具备裁决力，所有权威以 [ADR-0007：Agent 行为与权限宪法](/docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md) 为准。**
+>
+> 📋 **冲突协同提醒**：如本文件与 Prompts/ADR 有不一致，必须同步提 Issue（标签 `governance-inconsistency`）并协同修订所有材料。
+
 ## 适用场景：编写和维护测试
 
 在协助测试时，在 `base.instructions.md` 的基础上应用这些额外约束。
@@ -68,6 +72,8 @@ tests/
 - 修复代码以符合架构
 - 参考相关 ADR 以了解正确模式
 - 查阅 `docs/copilot/adr-XXXX.prompts.md` 获取指导
+
+> 📌 **三态输出规则**：所有诊断输出必须明确使用 `✅ Allowed / ⚠️ Blocked / ❓ Uncertain`，并始终注明"以 ADR-0007 和相关 ADR 正文为最终权威"。
 
 ## 单元测试
 
@@ -288,3 +294,25 @@ dotnet test
 
 - `docs/copilot/architecture-test-failures.md` - 诊断指南
 - `docs/copilot/adr-XXXX.prompts.md` - 特定 ADR 指导
+
+---
+
+## 治理协同
+
+### 发现冲突时的处理
+
+如在测试协助过程中发现以下情况，必须提 Issue 协同修订：
+
+1. **架构测试与 ADR 正文不一致**
+   - Issue 标签：`architecture-test-misalignment`
+   - 说明：测试规则与 ADR 章节的差异
+
+2. **Prompts 与 ADR 正文不一致**
+   - Issue 标签：`governance-inconsistency`
+   - 说明：具体冲突内容和位置
+
+3. **Instructions 与 ADR 正文不一致**
+   - Issue 标签：`governance-inconsistency`
+   - 说明：具体冲突内容和位置
+
+**原则**：发现冲突时，以 ADR 正文为准，协同修正所有辅助材料，防止单方独自变更失去协同。
