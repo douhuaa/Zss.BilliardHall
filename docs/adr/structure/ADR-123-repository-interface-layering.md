@@ -1,5 +1,7 @@
 # ADR-123：Repository 接口与分层命名规范
 
+> ⚖️ **本 ADR 定义 Repository 接口与实现的分层位置和命名的唯一裁决规则。**
+
 **状态**：✅ Accepted  
 **级别**：结构层  
 **影响范围**：所有 Repository 实现  
@@ -7,42 +9,63 @@
 
 ---
 
-## 规则本体（Rule）
+## 聚焦内容（Focus）
 
-> **这是本 ADR 唯一具有裁决力的部分。**
+- Repository 接口必须在 Domain 层
+- Repository 实现必须在 Infrastructure 层
+- Repository 接口与实现命名规范
+- Repository 方法命名必须表达领域意图
+- 禁止暴露技术细节的方法名
+
+---
+
+## 术语表（Glossary）
+
+| 术语         | 定义                          | 英文对照              |
+|------------|------------------------------|----------------------|
+| Repository | 领域对象持久化抽象接口，隔离技术实现        | Repository           |
+| 聚合根        | 聚合的根实体，是 Repository 操作的基本单位 | Aggregate Root       |
+| 领域意图       | 从业务角度表达操作语义，隐藏技术细节        | Domain Intent        |
+| L1 测试      | 静态可执行自动化测试                 | Level 1 Test         |
+| L2 测试      | 语义半自动化测试或人工审查             | Level 2 Test         |
+
+---
+
+## 决策（Decision）
 
 ### ADR-123.1：Repository 接口必须位于 Domain 层
 
-Repository 接口**必须**定义在 Domain 层，不得定义在其他层。
+**规则**：
+- Repository 接口**必须**定义在 Domain 层
+- 禁止在 Infrastructure 或 Application 层定义接口
+- 接口命名空间**必须**为 `{Root}.Domain.Repositories`
 
-**位置要求**：
-```
-✅ src/Modules/{Module}/Domain/Repositories/I{Aggregate}Repository.cs
-❌ src/Modules/{Module}/Infrastructure/...  （禁止）
-❌ src/Modules/{Module}/Application/...     （禁止）
-```
-
-**命名空间**：
-```csharp
-✅ namespace Zss.BilliardHall.Modules.Orders.Domain.Repositories;
-❌ namespace Zss.BilliardHall.Modules.Orders.Infrastructure.Repositories;
-```
+**判定**：
+- ✅ `src/Modules/{Module}/Domain/Repositories/I{Aggregate}Repository.cs`
+- ✅ `namespace Zss.BilliardHall.Modules.Orders.Domain.Repositories;`
+- ❌ `src/Modules/{Module}/Infrastructure/...`（禁止）
+- ❌ `src/Modules/{Module}/Application/...`（禁止）
 
 ### ADR-123.2：Repository 实现必须位于 Infrastructure 层
 
-Repository 具体实现**必须**位于 Infrastructure 层。
+**规则**：
+- Repository 具体实现**必须**位于 Infrastructure 层
+- 禁止在 Domain 层实现 Repository
+- 实现命名空间**必须**为 `{Root}.Infrastructure.Repositories`
 
-**位置要求**：
-```
-✅ src/Modules/{Module}/Infrastructure/Repositories/{Aggregate}Repository.cs
-❌ src/Modules/{Module}/Domain/...  （禁止）
-```
+**判定**：
+- ✅ `src/Modules/{Module}/Infrastructure/Repositories/{Aggregate}Repository.cs`
+- ✅ `namespace Zss.BilliardHall.Modules.Orders.Infrastructure.Repositories;`
+- ❌ `src/Modules/{Module}/Domain/...`（禁止）
 
 ### ADR-123.3：Repository 接口命名必须遵循 I{Aggregate}Repository 模式
 
-Repository 接口名称**必须**为 `I` + 聚合根名 + `Repository`。
+**规则**：
+- Repository 接口名称**必须**为 `I` + 聚合根名 + `Repository`
+- 禁止省略 `I` 前缀
+- 禁止使用缩写或其他后缀
 
-**命名规则**：
+**判定**：
 - ✅ `IOrderRepository`（Order 聚合根）
 - ✅ `IMemberRepository`（Member 聚合根）
 - ❌ `OrderRepository`（缺少 I 前缀）
@@ -51,68 +74,91 @@ Repository 接口名称**必须**为 `I` + 聚合根名 + `Repository`。
 
 ### ADR-123.4：Repository 实现命名禁止使用 Impl 后缀
 
-Repository 实现类名称**必须**直接使用聚合根名 + `Repository`，不得添加 Impl 等后缀。
+**规则**：
+- Repository 实现类名称**必须**直接使用聚合根名 + `Repository`
+- 禁止添加 `Impl` 等后缀
+- 多实现场景允许技术前缀（如 `Sql`、`Mongo`）
 
-**命名规则**：
+**判定**：
 - ✅ `OrderRepository` implements `IOrderRepository`
+- ✅ `SqlOrderRepository`（多实现场景）
+- ✅ `MongoOrderRepository`（多实现场景）
 - ❌ `OrderRepositoryImpl`
 - ❌ `OrderRepositoryImplementation`
-- ❌ `SqlOrderRepository`（除非有多种实现）
-
-**多实现例外**：
-如果确实有多种实现（如 SQL 和 NoSQL），允许：
-- ✅ `SqlOrderRepository`
-- ✅ `MongoOrderRepository`
 
 ### ADR-123.5：Repository 方法必须表达领域意图
 
-Repository 方法名**必须**表达领域意图，不得暴露技术细节。
+**规则**：
+- Repository 方法名**必须**表达领域意图
+- 禁止暴露技术细节（SQL、数据库概念）
+- 禁止使用 CRUD 术语
 
-**命名规则**：
+**判定**：
+
+**✅ 允许的方法名**：
 ```csharp
-// ✅ 正确：表达领域意图
 Task<Order?> GetByIdAsync(Guid orderId);
 Task<IReadOnlyList<Order>> GetActiveOrdersAsync();
 Task SaveAsync(Order order);
+Task<bool> ExistsAsync(Guid orderId);
+```
 
-// ❌ 错误：暴露技术细节
+**❌ 永久黑名单**：
+```csharp
 Task<Order?> SelectByIdAsync(Guid orderId);    // Select 是 SQL 术语
 Task<Order?> FindByPrimaryKeyAsync(Guid id);   // PrimaryKey 是数据库概念
 Task InsertOrUpdateAsync(Order order);          // Insert/Update 是 CRUD 术语
+Task<Order> QueryByIdAsync(Guid id);            // Query 暴露数据库操作
+Task ExecuteSqlAsync(string sql);               // 直接暴露 SQL
 ```
 
 **推荐动词**：
-- Get/Find（查询单个或多个）
+- Get/Find（查询）
 - Save（新增或更新）
 - Delete/Remove（删除）
 - Exists（存在性检查）
 
-**永久黑名单（严禁使用）**：
-- ❌ Select/SelectAll/SelectWhere（SQL 术语）
-- ❌ Insert/Update/Upsert（CRUD 术语）
-- ❌ Query/Execute/ExecuteSql（数据库操作暴露）
-- ❌ FindByPrimaryKey/FindByForeignKey（数据库概念）
-- ❌ Load/Fetch（ORM 实现细节）
+---
 
-**违规处理**：
-- 代码审查必须拒绝黑名单方法名
-- 建议使用 Roslyn Analyzer 自动检测黑名单
+## 快速参考表
+
+| 约束编号       | 约束描述                   | 测试方式       | 测试用例                                      | 必须遵守 |
+|------------|------------------------|------------|--------------------------------------------|------|
+| ADR-123.1  | Repository 接口必须在 Domain | L1 - 自动化测试 | Repository_Interfaces_Must_Be_In_Domain      | ✅    |
+| ADR-123.2  | Repository 实现必须在 Infrastructure | L1 - 自动化测试 | Repository_Implementations_Must_Be_In_Infrastructure | ✅    |
+| ADR-123.3  | Repository 接口命名规范     | L1 - 自动化测试 | Repository_Interfaces_Must_Follow_Naming     | ✅    |
+| ADR-123.4  | Repository 实现禁止 Impl 后缀 | L1 - 自动化测试 | Repository_Implementations_Must_Not_Have_Impl_Suffix | ✅    |
+| ADR-123.5  | Repository 方法表达领域意图   | L2 - Code Review | Repository_Methods_Must_Express_Domain_Intent | ✅    |
+
+> **级别说明**：L1=静态自动化（脚本检查），L2=语义半自动或人工审查
 
 ---
 
-## 执法模型（Enforcement）
+## 必测/必拦架构测试（Enforcement）
 
-> **规则如果无法执法，就不配存在。**
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_123_Architecture_Tests.cs` 强制验证：
 
-### 测试映射
+- Repository 接口必须在 Domain 层检查
+- Repository 实现必须在 Infrastructure 层检查
+- Repository 接口命名是否符合 `I{Aggregate}Repository` 模式
+- Repository 实现命名是否避免 `Impl` 后缀
+- 代码审查检查方法名是否在黑名单中
 
-| 规则编号 | 执行级 | 测试/手段 |
-|---------|--------|----------|
-| ADR-123.1 | L1 | `Repository_Interfaces_Must_Be_In_Domain` |
-| ADR-123.2 | L1 | `Repository_Implementations_Must_Be_In_Infrastructure` |
-| ADR-123.3 | L1 | `Repository_Interfaces_Must_Follow_Naming` |
-| ADR-123.4 | L1 | `Repository_Implementations_Must_Not_Have_Impl_Suffix` |
-| ADR-123.5 | L2 | Code Review |
+**L2 测试**：
+- 通过 Code Review 检查方法名是否表达领域意图
+- 建议使用 Roslyn Analyzer 自动检测黑名单方法名
+
+**有一项违规视为架构违规，CI 自动阻断。**
+
+---
+
+## 检查清单
+
+- [ ] Repository 接口是否在 Domain 层？
+- [ ] Repository 实现是否在 Infrastructure 层？
+- [ ] Repository 接口命名是否符合 `I{Aggregate}Repository`？
+- [ ] Repository 实现是否避免 Impl 后缀？
+- [ ] Repository 方法名是否表达领域意图，避免技术术语？
 
 ---
 
@@ -124,7 +170,7 @@ Task InsertOrUpdateAsync(Order order);          // Insert/Update 是 CRUD 术语
 
 破例**仅在以下情况允许**：
 
-1. **多种实现并存**：同时支持 SQL 和 NoSQL
+1. **多种实现并存**：同时支持 SQL 和 NoSQL，需技术前缀区分
 2. **遗留代码迁移**：大规模重构的过渡期
 3. **第三方框架约束**：框架强制要求特定命名
 
@@ -135,59 +181,32 @@ Task InsertOrUpdateAsync(Order order);          // Insert/Update 是 CRUD 术语
 - 记录在 `docs/summaries/arch-violations.md`
 - 说明特殊情况和技术原因
 - 提供迁移计划（如适用）
+- 指定失效日期（不超过 3 个月）
 
 ---
 
-## 变更政策（Change Policy）
+## 依赖与相关ADR
 
-> **ADR 不是"随时可改"的文档。**
-
-### 变更规则
-
-* **结构层 ADR**
-  * 修改需 Tech Lead 审批
-  * 需评估对现有 Repository 的影响
-
----
-
-## 明确不管什么（Non-Goals）
-
-> **防止 ADR 膨胀的关键段落。**
-
-本 ADR **不负责**：
-
-- ✗ Repository 的具体实现技术（EF Core/Dapper）
-- ✗ Repository 方法的具体实现逻辑
-- ✗ 数据库查询优化
-- ✗ 缓存策略
-
----
-
-## 非裁决性参考（References）
-
-> **仅供理解，不具裁决力。**
-
-### 相关 ADR
-- ADR-0001：模块化单体与垂直切片架构
-- ADR-0002：Platform/Application/Host 三层启动体系
-
-### Domain-Driven Design
-- [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html)
-- [DDD Aggregates](https://www.dddcommunity.org/library/vernon_2011/)
-
-### 实践指导
-- Repository 实现示例参见 `docs/copilot/adr-0123.prompts.md`
+| 关联 ADR   | 关系          | 说明                               |
+|----------|-------------|----------------------------------|
+| ADR-0001 | 结构细化关系      | ADR-0001 定义模块结构，本 ADR 细化 Repository 分层 |
+| ADR-0002 | 层级依赖        | 本 ADR 遵循 ADR-0002 定义的 Platform/Application/Host 三层体系 |
 
 ---
 
 ## 版本历史
 
-| 版本 | 日期 | 变更说明 | 修订人 |
-|-----|------|---------|--------|
-| 1.0 Draft | 2026-01-24 | 初始版本 | GitHub Copilot |
+| 版本  | 日期         | 变更说明       | 修订人 |
+|-----|------------|------------|-----|
+| 2.0 | 2026-01-26 | 裁决型重构，添加决策章节 | GitHub Copilot |
+| 1.0 | 2026-01-24 | 初始版本       | GitHub Copilot |
 
 ---
 
-# ADR 终极一句话定义
+## 附注
 
-> **ADR 是系统的法律条文，不是架构师的解释说明。**
+本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
+
+非裁决性参考（详细示例、Repository 实现最佳实践、DDD Repository Pattern）请查阅：
+- `docs/copilot/adr-0123.prompts.md`
+- [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html)

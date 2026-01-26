@@ -33,7 +33,7 @@
 
 ---
 
-## 极简裁决性规则列表
+## 决策（Decision）
 
 ### Use Case 执行与裁决权
 
@@ -112,14 +112,30 @@
 
 ## 快速参考表
 
-| 约束编号   | 约束描述                  | 测试/阻断方式            | 必须遵守 |
-|--------|-----------------------|--------------------|------|
-| 0005.1 | Use Case 唯一 Handler   | NetArchTest+人工     | ✅    |
-| 0005.2 | Handler 无状态/无Entity字段 | NetArchTest        | ✅    |
-| 0005.3 | 跨模块同步禁止               | NetArchTest+Roslyn | ✅    |
-| 0005.4 | Endpoint/Handler 不含业务 | Roslyn+人工          | ✅    |
-| 0005.5 | Contract 不含业务方法/决策    | Roslyn+人工          | ✅    |
-| 0005.6 | Command/Query 职责分离    | NetArchTest+人工     | ✅    |
+| 约束编号   | 约束描述                  | 测试方式            | 测试用例                                           | 必须遵守 |
+|--------|----------------------- |-----------------|------------------------------------------------|------|
+| 0005.1 | Handler 命名规范清晰        | L1 - NetArchTest | Handlers_Should_Have_Clear_Naming_Convention    | ✅    |
+| 0005.2 | Endpoint 不含业务逻辑       | L2 - 语义检查        | Endpoints_Should_Not_Contain_Business_Logic     | ✅    |
+| 0005.3 | Handler 不依赖 ASP.NET   | L1 - NetArchTest | Handlers_Should_Not_Depend_On_AspNet            | ✅    |
+| 0005.4 | Handler 无状态           | L1 - NetArchTest | Handlers_Should_Be_Stateless                    | ✅    |
+| 0005.5 | 跨模块同步调用禁止             | L2 - 语义检查        | Modules_Should_Not_Have_Synchronous_Cross_Module_Calls | ✅    |
+| 0005.6 | 异步方法遵循命名规范            | L1 - NetArchTest | Async_Methods_Should_Follow_Naming_Convention   | ✅    |
+| 0005.7 | 模块不共享领域实体             | L1 - NetArchTest | Modules_Should_Not_Share_Domain_Entities        | ✅    |
+| 0005.8 | Query Handler 可返回契约   | L1 - NetArchTest | QueryHandlers_Can_Return_Contracts              | ✅    |
+| 0005.9 | Command/Query 职责分离    | L1 - NetArchTest | Command_And_Query_Handlers_Should_Be_Separated  | ✅    |
+| 0005.10 | Command Handler 不返回业务数据 | L1 - NetArchTest | CommandHandlers_Should_Not_Return_Business_Data | ✅    |
+| 0005.11 | Handler 使用结构化异常       | L2 - 语义检查        | Handlers_Should_Use_Structured_Exceptions       | ✅    |
+| 0005.12 | Handler 仅在模块程序集       | L1 - NetArchTest | All_Handlers_Should_Be_In_Module_Assemblies     | ✅    |
+
+> **级别说明**：L1=静态自动化（ArchitectureTests），L2=语义半自动（Roslyn/启发式）
+
+---
+
+## 必测/必拦架构测试（Enforcement）
+
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0005_Architecture_Tests.cs` 强制验证。
+
+**有一项违规视为架构违规，CI 自动阻断。**
 
 ---
 
@@ -127,6 +143,7 @@
 
 | 版本  | 日期         | 变更说明             |
 |-----|------------|------------------|
+| 4.0 | 2026-01-26 | 同步测试映射，格式统一化  |
 | 3.0 | 2026-01-23 | 精简为极简判裁版，仅保裁决性规则 |
 | 2.0 | 2026-01-20 | 作为“经验/治理+裁决”混合版  |
 | 1.0 | 2026-01-20 | 初始发布             |
@@ -137,4 +154,6 @@
 
 本文件禁止添加示例/建议/FAQ，仅维护自动化可判定的架构红线。
 
-Guide/FAQ/Rationale 另行维护，不具裁决权力。
+非裁决性参考（详细示例、最佳实践、Saga/补偿模式）请查阅：
+- [ADR-0005 Copilot Prompts](../../copilot/adr-0005.prompts.md)
+- Guide/FAQ/Rationale 另行维护，不具裁决权力

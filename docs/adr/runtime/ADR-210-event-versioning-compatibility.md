@@ -1,139 +1,147 @@
 # ADR-210：领域事件版本化与兼容性
 
+> ⚖️ **本 ADR 定义领域事件的版本管理规则，确保跨版本兼容性和系统稳定性。**
+
 **状态**：✅ Accepted  
-**级别**：运行时层  
-**影响范围**：所有领域事件  
-**生效时间**：待审批通过后
+**级别**：运行时层（Runtime Constraint）  
+**适用范围**：所有领域事件  
+**生效时间**：待审批通过后  
+**依赖 ADR**：ADR-0001（模块化单体与垂直切片架构）
 
 ---
 
-## 规则本体（Rule）
+## 聚焦内容（Focus）
 
-> **这是本 ADR 唯一具有裁决力的部分。**
+- 事件破坏性变更与版本控制
+- SchemaVersion 属性要求
+- 旧版本事件保留策略
+- 订阅者多版本处理要求
+- 事件序列化兼容性
+- 版本异常容错机制
 
-### ADR-210.1：破坏性变更必须创建新版本事件
+---
 
-对领域事件的破坏性变更**必须**创建新版本的事件类型，原事件保持不变。
+## 术语表（Glossary）
 
-**破坏性变更定义**：
-- ❌ 删除字段
-- ❌ 修改字段类型
-- ❌ 重命名字段
-- ❌ 添加必需字段（无默认值）
+| 术语 | 定义 | 英文对照 |
+|-----|------|---------|
+| 破坏性变更 | 导致旧版本无法正常处理的事件变更 | Breaking Change |
+| SchemaVersion | 事件中标识版本号的属性 | Schema Version |
+| 语义化版本 | Major.Minor 格式的版本号体系 | Semantic Versioning |
+| 向前兼容 | 新代码能读取旧数据 | Forward Compatibility |
+| 活跃版本 | 当前系统中仍在使用的事件版本 | Active Version |
+| 死信队列 | 存储无法处理消息的队列 | Dead Letter Queue |
+| Fallback Handler | 处理未知版本事件的兜底处理器 | Fallback Handler |
 
-**非破坏性变更**：
-- ✅ 添加可选字段（有默认值）
-- ✅ 添加新的可选属性
+---
 
-**版本命名**：
-- ✅ `OrderCreated` → `OrderCreatedV2` → `OrderCreatedV3`
-- ❌ `OrderCreated2`、`OrderCreated_New`（不规范）
+## 决策（Decision）
 
-### ADR-210.2：事件必须包含 SchemaVersion 属性
+### 破坏性变更必须创建新版本（ADR-210.1）【必须架构测试覆盖】
 
-所有领域事件**必须**包含 `SchemaVersion` 属性标识事件版本。
+**规则**：
+- 破坏性变更定义：
+  - ❌ 删除字段
+  - ❌ 修改字段类型
+  - ❌ 重命名字段
+  - ❌ 添加必需字段（无默认值）
+  
+- 非破坏性变更：
+  - ✅ 添加可选字段（有默认值）
+  - ✅ 添加新的可选属性
+  
+- 版本命名：
+  - ✅ `OrderCreated` → `OrderCreatedV2` → `OrderCreatedV3`
+  - ❌ `OrderCreated2`、`OrderCreated_New`（不规范）
 
-**属性要求**：
-```csharp
-public record OrderCreated
-{
-    public string SchemaVersion { get; init; } = "1.0";
-    // 其他属性...
-}
-```
+**判定**：
+- ❌ 删除或修改现有事件字段
+- ❌ 重命名事件类型而不创建新版本
+- ❌ 添加必需字段无默认值
+- ❌ 版本命名不符合规范
+- ✅ 破坏性变更创建新版本事件
 
-**版本号规则**：
-- ✅ 使用语义化版本号（Major.Minor）
-- ✅ 破坏性变更递增 Major
-- ✅ 兼容性变更递增 Minor
+### 事件必须包含 SchemaVersion（ADR-210.2）【必须架构测试覆盖】
 
-### ADR-210.3：旧版本事件必须保持至少 2 个大版本
+**规则**：
+- 所有领域事件必须包含 `SchemaVersion` 属性
+- 版本号格式：语义化版本号（Major.Minor）
+- 破坏性变更递增 Major
+- 兼容性变更递增 Minor
 
-旧版本事件类型**必须**保持至少 2 个大版本周期才能删除。
+**判定**：
+- ❌ 事件类型无 `SchemaVersion` 属性
+- ❌ 版本号格式不符合 Major.Minor
+- ✅ 事件包含正确格式的 SchemaVersion
 
-**保留策略**：
-- ✅ V1 创建后，至少等到 V3 发布才能删除 V1
-- ✅ 标记为 `[Obsolete]` 在删除前至少一个版本
-- ❌ 禁止立即删除旧版本
+### 旧版本保留策略（ADR-210.3）【必须架构测试覆盖】
+
+**规则**：
+- 旧版本事件必须保持至少 2 个大版本周期
+- V1 创建后，至少等到 V3 发布才能删除 V1
+- 删除前至少一个版本标记为 `[Obsolete]`
+- 禁止立即删除旧版本
 
 **废弃流程**：
-```csharp
-// V2 发布时
-[Obsolete("Use OrderCreatedV2 instead", false)]
-public record OrderCreated { }
+1. V2 发布时：`[Obsolete("Use OrderCreatedV2", false)]`
+2. V3 发布时：`[Obsolete("Use OrderCreatedV2", true)]`（编译错误）
+3. V4 发布时：可删除 V1
 
-// V3 发布时
-[Obsolete("Use OrderCreatedV2 instead", true)]  // 编译错误
-public record OrderCreated { }
+**判定**：
+- ❌ 新版本发布后立即删除旧版本
+- ❌ 删除未经 Obsolete 标记的版本
+- ❌ 未满 2 个大版本周期删除
+- ✅ 遵循废弃流程并满足保留周期
 
-// V4 发布时可删除 V1
-```
+### 订阅者多版本处理（ADR-210.4）【必须架构测试覆盖】
 
-### ADR-210.4：事件订阅者必须处理所有活跃版本
+**规则**：
+- 订阅者必须处理所有活跃版本
+- 处理策略：
+  - ✅ 方式 1：为每个版本创建独立 Handler
+  - ✅ 方式 2：在 Handler 内部转换为统一版本
+- 禁止仅处理最新版本而忽略旧版本
 
-事件订阅者（EventHandler）**必须**能够处理所有当前活跃版本的事件。
+**判定**：
+- ❌ Handler 仅处理最新版本
+- ❌ Handler 对旧版本抛出异常
+- ✅ Handler 处理所有活跃版本
 
-**处理策略**：
-- ✅ 方式 1：为每个版本创建独立 Handler
-- ✅ 方式 2：在 Handler 内部转换为统一版本
-- ❌ 禁止仅处理最新版本而忽略旧版本
+### 事件序列化兼容性（ADR-210.5）【必须架构测试覆盖】
 
-**示例**：
-```csharp
-// 方式 1：独立 Handler
-public class OrderCreatedV1Handler : IEventHandler<OrderCreated> { }
-public class OrderCreatedV2Handler : IEventHandler<OrderCreatedV2> { }
+**规则**：
+- 序列化必须支持向前兼容（新代码读旧数据）
+- 序列化要求：
+  - ✅ 使用 JSON 作为默认格式
+  - ✅ 忽略未知字段（反序列化时）
+  - ✅ 为新字段提供默认值
+  - ❌ 禁止遇到未知字段抛出异常
 
-// 方式 2：统一处理
-public class OrderCreatedHandler : 
-    IEventHandler<OrderCreated>,
-    IEventHandler<OrderCreatedV2>
-{
-    public async Task Handle(OrderCreated evt) =>
-        await ProcessOrder(ConvertToV2(evt));
-    
-    public async Task Handle(OrderCreatedV2 evt) =>
-        await ProcessOrder(evt);
-}
-```
+**判定**：
+- ❌ 反序列化遇到未知字段抛出异常
+- ❌ 新字段无默认值导致反序列化失败
+- ✅ 序列化支持向前兼容
 
-### ADR-210.5：事件序列化必须向前兼容
+### 版本异常容错机制（ADR-210.6）【必须架构测试覆盖】
 
-事件序列化**必须**支持向前兼容（新代码能读取旧数据）。
+**规则**：
+- 版本异常必须降级处理，不得中断消费
+- 容错策略：
+  - ✅ 未识别 SchemaVersion → Warning + Fallback Handler
+  - ✅ 反序列化失败 → Error + 死信队列
+  - ✅ 语义不兼容 → Warning + 旧版本逻辑
+  - ❌ 禁止因版本异常停止消费者
 
-**序列化要求**：
-- ✅ 使用 JSON 作为默认序列化格式
-- ✅ 忽略未知字段（反序列化时）
-- ✅ 为新字段提供默认值
-- ❌ 禁止抛出异常在遇到未知字段时
-
-### ADR-210.6：事件版本异常必须降级处理不得中断消费
-
-事件处理遇到版本异常时**必须**记录告警并降级处理，不得中断消费流程。
-
-**容错策略**：
-- ✅ 未识别 SchemaVersion → 记录 Warning，使用 Fallback Handler
-- ✅ 反序列化失败 → 记录 Error，移入死信队列
-- ✅ 语义不兼容 → 记录 Warning，按旧版本逻辑处理
-- ❌ 禁止因版本异常导致消费者停止
-
-**Fallback Handler 要求**：
-```csharp
-// 必须提供未知版本兜底处理
-public class UnknownVersionEventHandler : IEventHandler<object>
-{
-    public async Task Handle(object evt)
-    {
-        _logger.LogWarning("Unknown event version: {EventType}", evt.GetType());
-        // 移入死信队列或人工审查队列
-    }
-}
-```
-
-**生产事故容错原则**：
+**生产原则**：
 - 事件系统第一原则：**不死**
 - 版本错误是数据问题，不是系统故障
-- 必须允许系统在版本异常时继续运行
+- 系统必须在版本异常时继续运行
+
+**判定**：
+- ❌ 版本异常导致消费者停止
+- ❌ 版本异常直接抛出未处理
+- ✅ 版本异常降级处理并记录日志
+- ✅ 系统在版本异常时继续运行
 
 ---
 
@@ -151,6 +159,22 @@ public class UnknownVersionEventHandler : IEventHandler<object>
 | ADR-210.4 | L2 | Code Review + 集成测试 |
 | ADR-210.5 | L3 | 集成测试验证 |
 | ADR-210.6 | L2 | 集成测试 + Runtime 监控 |
+
+### 执行说明
+
+**L1 测试**：
+- 检测所有领域事件是否包含 SchemaVersion 属性
+- 验证版本号格式符合 Major.Minor
+
+**L2 测试**：
+- Code Review 检查破坏性变更是否创建新版本
+- 审查旧版本保留周期是否满足要求
+- 验证订阅者是否处理所有活跃版本
+- 检查版本异常容错机制
+
+**L3 测试**：
+- 集成测试验证序列化向前兼容性
+- 压测验证版本异常不影响系统稳定性
 
 ---
 
@@ -173,6 +197,9 @@ public class UnknownVersionEventHandler : IEventHandler<object>
 - 记录在 `docs/summaries/arch-violations.md`
 - 提供迁移计划（不超过 3 个月）
 - 标注影响的事件和订阅者
+- 指定归还日期和责任人
+
+**未记录的破例 = 未授权架构违规。**
 
 ---
 
@@ -185,6 +212,12 @@ public class UnknownVersionEventHandler : IEventHandler<object>
 * **运行时层 ADR**
   * 修改需 Tech Lead/架构师审批
   * 需评估对现有事件的影响
+  * 必须更新相关架构测试
+
+### 失效与替代
+
+* 如有更优方案，可创建 ADR-21X 替代本 ADR
+* 被替代后，本 ADR 状态改为 Superseded
 
 ---
 
@@ -198,6 +231,7 @@ public class UnknownVersionEventHandler : IEventHandler<object>
 - ✗ 事件发布机制（参见 ADR-220）
 - ✗ 事件存储策略
 - ✗ 事件重放机制
+- ✗ 事件序列化的具体技术选型
 
 ---
 
@@ -206,8 +240,9 @@ public class UnknownVersionEventHandler : IEventHandler<object>
 > **仅供理解，不具裁决力。**
 
 ### 相关 ADR
-- ADR-120：领域事件命名规范
-- ADR-220：集成事件总线选型与适配规范
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-120：领域事件命名规范](../structure/ADR-120-event-naming-standard.md)
+- [ADR-220：事件总线集成规范](ADR-220-event-bus-integration.md)
 
 ### 技术资源
 - [语义化版本规范](https://semver.org/lang/zh-CN/)
@@ -222,6 +257,7 @@ public class UnknownVersionEventHandler : IEventHandler<object>
 
 | 版本 | 日期 | 变更说明 | 修订人 |
 |-----|------|---------|--------|
+| 2.0 | 2026-01-25 | 重构为裁决型格式，添加决策章节 | GitHub Copilot |
 | 1.0 Draft | 2026-01-24 | 初始版本 | GitHub Copilot |
 
 ---

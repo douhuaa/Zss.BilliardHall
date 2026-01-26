@@ -1,142 +1,155 @@
-# ADR-350：日志与可观测性标签与字段标准
+# ADR-350：日志与可观测性字段标准
 
 **状态**：✅ Accepted  
 **级别**：技术层  
-**影响范围**：所有日志输出  
+**影响范围**：所有日志输出、结构化日志字段  
 **生效时间**：待审批通过后
 
 ---
 
-## 规则本体（Rule）
+## 聚焦内容（Focus）
 
-> **这是本 ADR 唯一具有裁决力的部分。**
+- 日志字段命名规范与一致性约束
+- 敏感信息日志保护规则
+- 错误日志必需字段要求
+- 日志级别使用标准定义
+- CorrelationId 传播约束
 
-### ADR-350.1：所有请求日志必须包含 CorrelationId
+---
+
+## 决策（Decision）
+
+### ADR-350.1：请求日志必须包含 CorrelationId【必须架构测试覆盖】
 
 所有与请求相关的日志**必须**包含 `CorrelationId` 字段。
 
-**强制要求**：
-- ✅ 每个请求生成唯一的 CorrelationId
-- ✅ CorrelationId 在整个请求生命周期中传播
-- ✅ 所有日志语句包含此字段
-- ❌ 禁止遗漏 CorrelationId
+**规则**：
+- 每个请求**必须**生成唯一 CorrelationId
+- CorrelationId **必须**在请求生命周期中传播
+- 所有请求相关日志**必须**包含此字段
+- **禁止**遗漏 CorrelationId
 
-**日志示例**：
-```csharp
-// ✅ 正确
-_logger.LogInformation(
-    "Order created {OrderId} {CorrelationId}",
-    orderId, correlationId);
+**判定**：
+- ❌ 请求日志缺少 CorrelationId
+- ✅ 所有请求日志包含 CorrelationId
 
-// ❌ 错误：缺少 CorrelationId
-_logger.LogInformation("Order created {OrderId}", orderId);
-```
+**推荐实现**：使用 Serilog Enricher 全局注入，避免手动传递。
 
-### ADR-350.2：禁止记录敏感信息
+---
+
+### ADR-350.2：禁止记录敏感信息【必须架构测试覆盖】
 
 日志**禁止**包含敏感信息。
 
-**禁止记录的信息**：
-- ❌ 密码、密钥、Token
-- ❌ 信用卡号、身份证号
-- ❌ 完整的个人隐私信息
-- ❌ 加密密钥、API Secret
+**规则**：
+- **禁止**记录密码、密钥、Token
+- **禁止**记录信用卡号、身份证号
+- **禁止**记录完整个人隐私信息
+- **禁止**记录加密密钥、API Secret
 
 **允许记录**：
-- ✅ 脱敏后的信息（如手机号 138****1234）
-- ✅ 用户 ID（非 PII）
-- ✅ 业务标识符
+- 脱敏后的信息（如手机号 138****1234）
+- 用户 ID（非 PII）
+- 业务标识符
 
-### ADR-350.3：结构化日志字段必须使用 PascalCase 命名
+**判定**：
+- ❌ 日志包含明文密码或密钥
+- ❌ 日志包含完整信用卡号
+- ✅ 日志仅包含脱敏后的安全信息
 
-结构化日志的字段名**必须**使用 PascalCase 命名规范。
+---
 
-**命名规则**：
-- ✅ `UserId`、`OrderId`、`CorrelationId`
-- ❌ `user_id`（snake_case）
-- ❌ `userid`（全小写）
-- ❌ `USER_ID`（全大写）
+### ADR-350.3：日志字段必须使用 PascalCase 命名【必须架构测试覆盖】
+
+结构化日志字段名**必须**使用 PascalCase 命名规范。
+
+**规则**：
+- **必须**使用 PascalCase（如 `UserId`、`OrderId`）
+- **禁止**使用 snake_case（如 `user_id`）
+- **禁止**使用全小写（如 `userid`）
+- **禁止**使用全大写（如 `USER_ID`）
 
 **标准字段命名**：
-- `CorrelationId`
-- `UserId`
-- `TraceId`
-- `SpanId`
-- `ServiceName`
-- `Environment`
+- `CorrelationId`、`UserId`、`TraceId`、`SpanId`
+- `ServiceName`、`Environment`、`OrderId`
 
-### ADR-350.4：错误日志必须包含异常详情
+**判定**：
+- ❌ 字段命名 `user_id` 或 `userid`
+- ✅ 字段命名 `UserId`
+
+---
+
+### ADR-350.4：错误日志必须包含异常详情【必须架构测试覆盖】
 
 错误级别的日志**必须**包含完整的异常信息。
 
-**必需字段**：
-- ✅ `ExceptionType`（异常类型名）
-- ✅ `ExceptionMessage`（异常消息）
-- ✅ `StackTrace`（堆栈跟踪）
-- ✅ `InnerException`（内部异常，如有）
+**规则**：
+- **必须**传递 Exception 对象给日志方法
+- **必须**包含 ExceptionType（异常类型名）
+- **必须**包含 ExceptionMessage（异常消息）
+- **必须**包含 StackTrace（堆栈跟踪）
+- **必须**包含 InnerException（如有）
 
-**日志示例**：
-```csharp
-// ✅ 正确
-_logger.LogError(exception,
-    "Failed to create order {OrderId} {CorrelationId}",
-    orderId, correlationId);
+**判定**：
+- ❌ `_logger.LogError("Failed to create order {OrderId}", orderId)` - 缺少 Exception
+- ✅ `_logger.LogError(exception, "Failed to create order {OrderId}", orderId)` - 包含 Exception
 
-// ❌ 错误：未传递 exception 对象
-_logger.LogError(
-    "Failed to create order {OrderId}",
-    orderId);
-```
+**推荐实现**：使用 Roslyn Analyzer 禁止 `LogError(string)` 签名。
 
-### ADR-350.5：日志级别使用必须符合标准定义
+---
+
+### ADR-350.5：日志级别使用必须符合标准【必须架构测试覆盖】
 
 日志级别**必须**按标准定义使用。
 
-**级别定义**：
-- **Trace**：详细的调试信息（生产环境禁用）
+**规则**：
+- **Trace**：详细调试信息（生产环境禁用）
 - **Debug**：调试信息（生产环境禁用）
 - **Information**：一般信息（如请求开始/结束）
 - **Warning**：警告但不影响功能
 - **Error**：错误导致操作失败
 - **Critical**：严重错误影响系统运行
 
-**禁止行为**：
+**判定**：
 - ❌ 使用 Information 记录错误
 - ❌ 使用 Error 记录正常业务流程
 - ❌ 过度使用 Critical（仅用于系统级故障）
+- ✅ 级别使用符合定义
 
 ---
 
-## 执法模型（Enforcement）
+## 快速参考表
 
-> **规则如果无法执法，就不配存在。**
+| 约束编号       | 约束描述                | 测试方式             | 必须遵守 |
+|------------|---------------------|------------------|------|
+| ADR-350.1 | 请求日志必须包含 CorrelationId | L1 - Enricher 强制 + 扫描 | ✅    |
+| ADR-350.2 | 禁止记录敏感信息 | L2 - 自动扫描 + Code Review | ✅    |
+| ADR-350.3 | 字段命名必须 PascalCase | L1 - 日志输出扫描 | ✅    |
+| ADR-350.4 | 错误日志必须包含异常 | L1 - Roslyn Analyzer | ✅    |
+| ADR-350.5 | 日志级别使用符合标准 | L2 - Code Review | ✅    |
 
-### 测试映射
+---
 
-| 规则编号 | 执行级 | 测试/手段 |
-|---------|--------|----------|
-| ADR-350.1 | L1 | `Logs_Must_Include_CorrelationId` + Serilog Enricher 强制 |
-| ADR-350.2 | L2 | Code Review + 自动扫描 |
-| ADR-350.3 | L1 | `Log_Fields_Must_Use_PascalCase` |
-| ADR-350.4 | L1 | Roslyn Analyzer: 禁止 `LogError(string)` 仅允许 `LogError(exception, string)` |
-| ADR-350.5 | L2 | Code Review |
+## 必测/必拦架构测试（Enforcement）
 
-### 架构测试说明
+### 测试实现
 
-**ADR-350.1 L1 实现**：
-- 架构测试：扫描代码中的 `_logger.Log*(` 调用，验证包含 CorrelationId 参数
-- Serilog Enricher：全局注入 CorrelationId，无需手动传递
-- 推荐使用 Enricher 而非手动，降低遗漏风险
+**ADR-350.1 实现**：
+- 架构测试：扫描日志调用验证 CorrelationId 参数
+- Serilog Enricher：全局注入 CorrelationId（推荐）
+- 降低遗漏风险
 
-**ADR-350.4 L1 实现**：
+**ADR-350.4 实现**：
 - Roslyn Analyzer：检测 `LogError(string)` 模式并报编译错误
-- 强制使用 `LogError(Exception, string)` 确保异常信息完整
+- 强制使用 `LogError(Exception, string)` 确保异常完整
+
+**其他规则**：
+- L2 测试通过 Code Review 执行
+- 敏感信息扫描工具辅助检查
 
 ---
 
 ## 破例与归还（Exception）
-
-> **破例不是逃避，而是债务。**
 
 ### 允许破例的前提
 
@@ -151,40 +164,37 @@ _logger.LogError(
 每个破例**必须**：
 
 - 记录在 `docs/summaries/arch-violations.md`
-- 说明技术原因
-- 提供风险评估
+- 标明 ADR-350 + 具体规则编号
+- 说明技术原因和风险评估
 
 ---
 
 ## 变更政策（Change Policy）
-
-> **ADR 不是"随时可改"的文档。**
 
 ### 变更规则
 
 * **技术层 ADR**
   * 修改需 Tech Lead 审批
   * 日志框架升级可触发更新
+  * 字段命名标准调整需全局影响评估
 
 ---
 
 ## 明确不管什么（Non-Goals）
 
-> **防止 ADR 膨胀的关键段落。**
-
 本 ADR **不负责**：
 
 - ✗ 日志框架选择（Serilog/NLog）
 - ✗ 日志聚合工具（ELK/Splunk）
-- ✗ 日志保留策略
+- ✗ 日志保留策略和存储方案
 - ✗ 日志采样率配置
 - ✗ APM 工具集成
+- ✗ 日志消息的具体格式和模板
+- ✗ 监控指标定义和采集规则
 
 ---
 
 ## 非裁决性参考（References）
-
-> **仅供理解，不具裁决力。**
 
 ### 相关 ADR
 - ADR-340：结构化日志与监控约束
@@ -194,7 +204,7 @@ _logger.LogError(
 - [OpenTelemetry Specification](https://opentelemetry.io/docs/reference/specification/)
 
 ### 实践指导
-- 日志配置示例参见 `docs/copilot/adr-0350.prompts.md`
+- 日志配置示例参见 `docs/copilot/adr-0350.prompts.md`（待创建）
 
 ---
 
@@ -202,10 +212,15 @@ _logger.LogError(
 
 | 版本 | 日期 | 变更说明 | 修订人 |
 |-----|------|---------|--------|
+| 2.0 | 2026-01-26 | 裁决型重构，添加决策章节，移除冗余示例和说明 | GitHub Copilot |
 | 1.0 Draft | 2026-01-24 | 初始版本 | GitHub Copilot |
 
 ---
 
-# ADR 终极一句话定义
+## 附注
 
-> **ADR 是系统的法律条文，不是架构师的解释说明。**
+本文件禁止添加示例代码、配置详情、背景说明，仅维护自动化可判定的架构约束。
+
+非裁决性参考（详细配置示例、常见问题、技术选型讨论）请查阅：
+- [ADR-350 Copilot Prompts](../../copilot/adr-0350.prompts.md)（待创建）
+- 工程标准（如有）
