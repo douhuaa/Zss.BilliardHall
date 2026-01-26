@@ -91,9 +91,28 @@
 **核心原则**：
 > 依赖和替代关系必须双向一致，相关关系可以单向声明。
 
+**已废弃 ADR 的强制约束（裁决性条款）**：
+- 标记为 **Superseded**（被替代）的 ADR **禁止**作为新变更的依据
+- 标记为 **Superseded** 的 ADR **禁止**被新 ADR 引用为 Depends On
+- 违反此规则的 PR **必须**拒绝合并
+
+**示例**：
+```markdown
+❌ 禁止：
+- ADR-0005-v1 已被 ADR-0005-v2 替代
+- 新 ADR-XXX 声明依赖 ADR-0005-v1
+→ 违规，必须改为依赖 ADR-0005-v2
+
+✅ 允许：
+- ADR-0005-v1 已被 ADR-0005-v2 替代
+- 历史 ADR（替代前创建）依赖 ADR-0005-v1
+→ 合规，历史依赖保留
+```
+
 **判定**：
 - ❌ 使用未定义的关系类型
 - ❌ 依赖关系未双向声明
+- ❌ 新 ADR 依赖已废弃 ADR
 - ✅ 关系类型正确且双向一致
 
 ---
@@ -187,15 +206,28 @@ graph TB
 
 ## 执法模型（Enforcement）
 
-### 测试映射
+### 测试映射与执行级别
 
-| 规则编号 | 执行级 | 测试/手段 |
-|---------|--------|----------|
-| ADR-940.1 | L1 | `ADR_940_Relationship_Section_Required` |
-| ADR-940.2 | L1 | `ADR_940_Relationship_Types_Valid` |
-| ADR-940.3 | L1 | `ADR_940_Bidirectional_Consistency` |
-| ADR-940.4 | L1 | `ADR_940_No_Circular_Dependencies` |
-| ADR-940.5 | L2 | `scripts/generate-adr-relationship-map.sh` |
+| 规则编号 | 执行级 | 测试/手段 | CI 行为 |
+|---------|--------|----------|---------|
+| ADR-940.1 | **L1** | `ADR_940_Relationship_Section_Required` | **Structural Violation - 构建失败** |
+| ADR-940.2 | **L1** | `ADR_940_Relationship_Types_Valid` | **Structural Violation - 构建失败** |
+| ADR-940.2 已废弃 ADR 约束 | **L1** | `ADR_940_No_Superseded_ADR_Dependency` | **Structural Violation - 构建失败** |
+| ADR-940.3 | **L1** | `ADR_940_Bidirectional_Consistency` | **Structural Violation - 构建失败** |
+| ADR-940.4 | **L1** | `ADR_940_No_Circular_Dependencies` | **Structural Violation - 构建失败** |
+| ADR-940.5 | L2 | `scripts/generate-adr-relationship-map.sh` | **Governance Warning - 仅提示** |
+
+**执行级别说明**：
+- **L1 (Structural Violation)**：违反导致 **CI 构建失败**，PR 无法合并
+- **L2 (Governance Warning)**：仅记录警告，不阻断合并
+
+**明确裁决边界**：
+- **关系声明缺失** → 构建失败
+- **关系类型错误** → 构建失败
+- **新 ADR 依赖已废弃 ADR** → 构建失败
+- **双向一致性违反** → 构建失败
+- **循环依赖** → 构建失败
+- **关系图未生成** → 仅警告
 
 ### CI 集成
 
