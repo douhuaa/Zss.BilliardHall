@@ -1,6 +1,7 @@
 # ADR-0003：命名空间与项目边界规范
 
 **状态**：✅ Final（裁决型ADR）  
+**版本**：1.0
 **级别**：架构约束（Architectural Contract）  
 **适用范围**：所有 Platform / Application / Modules / Host / Tests 项目  
 **生效时间**：即刻

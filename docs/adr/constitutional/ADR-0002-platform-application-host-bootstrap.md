@@ -1,6 +1,7 @@
 # ADR-0002：Platform / Application / Host 三层启动体系
 
 **状态**：✅ Final（裁决型ADR）  
+**版本**：1.0
 **级别**：架构约束（Architectural Contract）  
 **适用范围**：所有 Host、模块、测试、未来子系统  
 **生效时间**：即刻

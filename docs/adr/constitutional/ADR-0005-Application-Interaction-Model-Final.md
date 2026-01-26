@@ -1,6 +1,7 @@
 # ADR-0005：应用内交互模型极简判裁版
 
 **状态**：✅ Final（仅保留裁决性规则，无“建议/经验”）  
+**版本**：1.0
 **级别**：根约束（Runtime Constitutional Rule）  
 **适用范围**：Application / Modules / Host  
 **生效时间**：即刻

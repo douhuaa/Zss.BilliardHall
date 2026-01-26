@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 是 Onboarding 互动式学习体验的标准，定义互动清单、可视化路径和进度跟踪机制。**
 
 **状态**：✅ Accepted  
+**版本**：1.0
 **级别**：体验优化 / 治理层  
 **适用范围**：Onboarding 文档的互动式增强  
 **生效时间**：即刻
@@ -674,3 +675,4 @@ docs/onboarding/leaderboard.md
 **维护**：Tech Lead & Onboarding Champion  
 **审核**：待定  
 **状态**：✅ Accepted
+**版本**：1.0

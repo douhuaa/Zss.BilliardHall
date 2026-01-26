@@ -4,7 +4,7 @@ using Xunit;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
-/// ADR-0000
+/// ADR-0000: 架构测试与 CI 治理宪法（v2.0）
 /// 架构宪法测试：每一条 ADR 文档，必须有唯一、严格对应的架构测试类
 /// </summary>
 public sealed class ADR_0000_Architecture_Tests

@@ -4,10 +4,10 @@ using System.Reflection;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
-/// ADR-0001: 模块化单体与垂直切片架构决策（v3.2）
+/// ADR-0001: 模块化单体与垂直切片架构决策（v4.0）
 /// 验证模块隔离、垂直切片、契约使用等核心架构约束
 /// 
-/// 约束映射（对应 ADR-0001 v3.2 快速参考和架构测试映射表）：
+/// 约束映射（对应 ADR-0001 v4.0 快速参考和架构测试映射表）：
 /// - ADR-0001.1: 模块不可相互引用 (L1) → Modules_Should_Not_Reference_Other_Modules
 /// - ADR-0001.2: 项目文件/程序集禁止引用其他模块 (L1) → Module_Csproj_Should_Not_Reference_Other_Modules
 /// - ADR-0001.3: 垂直切片/用例为最小单元 (L2) → Handlers_Should_Be_In_UseCases_Namespace
