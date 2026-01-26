@@ -43,29 +43,95 @@
 | ADR、指南、Prompt   | `documentation.instructions.md`       |
 | PR 评审、架构评估      | `architecture-review.instructions.md` |
 
-## 与 docs/copilot/ 的关系
+## 指令系统职责分层
+
+本章节明确 Instructions、Prompts、ADR 三者的职责边界和引用关系。
+
+### 职责定位
+
+| 层级 | 位置 | 职责 | 内容 | 变更频率 |
+|------|------|------|------|---------|
+| **宪法层** | `docs/adr/` | 架构决策记录 | 裁决型约束条款 | 极少，需架构委员会批准 |
+| **行为层** | `.github/instructions/` | Agent 角色边界 | 禁止/允许的行为边界 | 很少，随架构原则变化 |
+| **辅导层** | `docs/copilot/` | 场景实施指南 | "如何做"的具体方案 | 随团队经验演进 |
+| **执行层** | `ArchitectureTests` | 自动化验证 | 可执行的测试代码 | 跟随 ADR 演进 |
+
+### 核心原则
+
+1. **Instructions 不含实施细节**
+   - 只声明"禁止什么"、"允许什么"的边界
+   - 不包含代码示例、具体步骤、场景解法
+   - 所有"如何做"细节一律指向 Prompts
+
+2. **Prompts 不做裁决**
+   - 提供场景化的实施指南和代码示例
+   - 不能作为架构裁决的依据
+   - 与 ADR 冲突时，以 ADR 为准
+
+3. **引用必须有层级**
+   - 裁决必须引用 ADR 正文及章节
+   - 实施引用 Prompts 文件
+   - Instructions 不引用 Prompts 做裁决
+
+4. **Agent 权限仅参考 ADR-0007**
+   - Instructions 中关于 Agent 行为的描述仅做跳转引用
+   - 不在 Instructions 中内联复述 ADR-0007 内容
+   - 所有三态输出、禁止行为等规则完全遵循 ADR-0007
+
+### 与 docs/copilot/ 的关系
 
 这两个系统协同工作但目的不同：
 
 | `.github/instructions/` | `docs/copilot/`  |
 |-------------------------|------------------|
 | Copilot **是谁**          | Copilot **如何**工作 |
-| 个性与边界                   | 具体程序             |
-| 行为约束                    | 详细场景             |
-| 绝不做什么                   | 何时做什么            |
+| 行为边界                   | 场景实施             |
+| 禁止/允许什么                | 具体怎么做            |
+| 不含代码示例                  | 包含代码示例           |
 | 很少变更                    | 随经验演进            |
 
 ### 示例
 
-**基础指令说**：
-> "绝不引入跨模块依赖"
+**Instructions 说**：
+> "禁止跨模块直接依赖。详细实施方案参阅 `docs/copilot/adr-0001.prompts.md`"
 
-**Copilot Prompt（docs/copilot/adr-0001.prompts.md）说**：
+**Prompts 说**：
 > "当开发者想访问另一个模块时：
 > - ✅ 使用领域事件：`await _eventBus.Publish(...)`
 > - ✅ 使用契约：`await _queryBus.Send(...)`
 > - ✅ 使用原始类型：`Guid memberId`
 > - ❌ 不要使用直接引用"
+
+### 引用路径图
+
+```
+开发者请求 
+    ↓
+Copilot (Instructions) 
+    ↓
+判定：是否违反边界？
+    ├─ 是 → 引用 ADR 正文 + 章节（裁决依据）
+    │        ↓
+    │      引导查阅 Prompts（实施方案）
+    │
+    └─ 否 → 引导查阅 Prompts（实施指南）
+             ↓
+          提供代码示例和步骤
+```
+
+### 内容迁移原则
+
+从 Instructions 移至 Prompts 的内容：
+- ✅ 代码示例和实现模式
+- ✅ "如何做XX"的步骤说明
+- ✅ 场景化的决策树
+- ✅ 具体的修复方案
+
+Instructions 保留的内容：
+- ✅ "禁止XX"、"允许XX"的边界声明
+- ✅ 危险信号检查清单
+- ✅ 引用路径和优先级
+- ✅ ADR-0007 的跳转链接（不内联复述）
 
 ## 何时更新
 
