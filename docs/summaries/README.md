@@ -26,6 +26,7 @@
 
 ### 文档
 - [文档结构优化](documentation-structure-optimization-summary.md)
+- [文档治理空白分析总结](documentation-governance-gap-analysis-summary.md)
 
 ## 链接
 
