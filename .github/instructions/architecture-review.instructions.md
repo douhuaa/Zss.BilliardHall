@@ -1,8 +1,6 @@
 # 架构评审指令
 
-> ⚠️ **本行为约束文件不具备裁决力，所有权威以 [ADR-0007：Agent 行为与权限宪法](/docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md) 为准。**
->
-> 📋 **冲突协同提醒**：如本文件与 Prompts/ADR 有不一致，必须同步提 Issue（标签 `governance-inconsistency`）并协同修订所有材料。
+> ⚠️ **权威声明与冲突处理**：参阅 [base.instructions.md](base.instructions.md) 顶部的权威声明和末尾的治理协同章节。
 
 ## 适用场景：评审 PR 与架构合规性
 
@@ -365,25 +363,3 @@
 - 引导查阅 Prompts 了解实施细节，不直接给出代码
 - 遇不确定立即标识并引导人工判断
 - **所有判定以 ADR-0007 和相关 ADR 正文为最终权威**
-
----
-
-## 治理协同
-
-### 发现冲突时的处理
-
-如在评审过程中发现以下情况，必须提 Issue 协同修订：
-
-1. **Prompts 与 ADR 正文不一致**
-   - Issue 标签：`governance-inconsistency`
-   - 说明：具体冲突内容和位置
-
-2. **Instructions 与 ADR 正文不一致**
-   - Issue 标签：`governance-inconsistency`
-   - 说明：具体冲突内容和位置
-
-3. **架构测试与 ADR 正文不一致**
-   - Issue 标签：`architecture-test-misalignment`
-   - 说明：测试规则与 ADR 章节的差异
-
-**原则**：发现冲突时，以 ADR 正文为准，协同修正所有辅助材料，防止单方独自变更失去协同。
