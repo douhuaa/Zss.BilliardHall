@@ -176,7 +176,7 @@ ADR 文档不是普通的 Markdown 文档，而是一种**机器可裁决的治�
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档结构规范
 
 **被依赖（Depended By）**：
-- 无
+- [ADR-947：关系声明区的结构与解析安全规则](./ADR-947-relationship-section-structure-parsing-safety.md)
 
 **替代（Supersedes）**：
 - 无
