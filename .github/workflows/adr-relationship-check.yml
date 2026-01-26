@@ -64,14 +64,31 @@ jobs:
           name: adr-relationship-map
           path: docs/adr/ADR-RELATIONSHIP-MAP.md
 
+      - name: Debug PR context
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "PR head repo full_name=${{ github.event.pull_request.head.repo.full_name }}"
+          echo "github.repository=${{ github.repository }}"
+          echo "head.repo.fork=${{ github.event.pull_request.head.repo.fork }}"
+          echo "actor=${{ github.actor }}"
+
       - name: Comment on PR
-        if: steps.check_map.outputs.changed == 'true' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
+        if: steps.check_map.outputs.changed == 'true' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '⚠️ ADR 关系图已更新，请查看生成的 artifact 并提交到仓库。\n\n参考：ADR-940.5 - 全局关系图生成'
-            })
+            const core = require('@actions/core');
+            // 在同仓库 PR 上尝试创建评论；权限问题时捕获错误并记录，不让 job 失败
+            try {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: '⚠️ ADR 关系图已更新，请查看生成的 artifact 并提交到仓库。\n\n参考：ADR-940.5 - 全局关系图生成'
+              });
+              core.info('PR comment created successfully.');
+            } catch (err) {
+              core.info(`Failed to create comment: ${err.message}`);
+              core.info('Likely due to insufficient permissions or a restricted run context; skipping comment.');
+            }
