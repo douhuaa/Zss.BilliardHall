@@ -231,7 +231,8 @@ public class OrderCreatedEventAdapter
 - [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 
 **被依赖（Depended By）**：
-- [ADR-0210：事件版本化与兼容性](../runtime/ADR-210-event-versioning-compatibility.md) - 事件版本化依赖命名约定
+- [ADR-210：事件版本化与兼容性](../runtime/ADR-210-event-versioning-compatibility.md) - 事件版本化依赖命名约定
+- [ADR-220：事件总线集成规范](../runtime/ADR-220-event-bus-integration.md) - 事件总线集成依赖事件命名规范
 
 **替代（Supersedes）**：
 - 无
@@ -240,7 +241,7 @@ public class OrderCreatedEventAdapter
 - 无
 
 **相关（Related）**：
-- [ADR-0121：契约 DTO 命名与组织](./ADR-121-contract-dto-naming-organization.md) - 同为命名规范
+- [ADR-121：契约 DTO 命名与组织](./ADR-121-contract-dto-naming-organization.md) - 同为命名规范
 
 ---
 

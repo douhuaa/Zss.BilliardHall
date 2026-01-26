@@ -236,7 +236,7 @@ TestContainer 启动**必须**配置超时和健康检查。
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 集成测试基于测试治理机制
-- [ADR-0122：测试组织与命名](../structure/ADR-122-test-organization-naming.md) - 集成测试遵循测试组织规范
+- [ADR-122：测试组织与命名](../structure/ADR-122-test-organization-naming.md) - 集成测试遵循测试组织规范
 
 **被依赖（Depended By）**：
 - 无

@@ -212,7 +212,7 @@
 ## 关系声明（Relationships）
 
 **依赖（Depends On）**：
-- [ADR-0340：结构化日志与监控约束](./ADR-340-structured-logging-monitoring-constraints.md) - 可观测性标准基于结构化日志
+- [ADR-340：结构化日志与监控约束](./ADR-340-structured-logging-monitoring-constraints.md) - 可观测性标准基于结构化日志
 
 **被依赖（Depended By）**：
 - 无

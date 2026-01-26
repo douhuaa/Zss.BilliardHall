@@ -310,7 +310,7 @@ public record MemberInfoDto(Guid MemberId, string UserName) : IContract
 - [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 
 **被依赖（Depended By）**：
-- 无
+- [ADR-124：Endpoint 命名及参数约束规范](./ADR-124-endpoint-naming-constraints.md) - Endpoint 使用契约遵循命名规范
 
 **替代（Supersedes）**：
 - 无
@@ -319,7 +319,7 @@ public record MemberInfoDto(Guid MemberId, string UserName) : IContract
 - 无
 
 **相关（Related）**：
-- [ADR-0120：领域事件命名约定](./ADR-120-domain-event-naming-convention.md) - 同为命名规范
+- [ADR-120：领域事件命名约定](./ADR-120-domain-event-naming-convention.md) - 同为命名规范
 
 ---
 

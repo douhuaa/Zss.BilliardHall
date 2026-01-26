@@ -75,8 +75,8 @@
 - [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 依赖管理遵循包管理规则
 
 **被依赖（Depended By）**：
-- [ADR-0120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件命名基于 CQRS 模式
-- [ADR-0121：契约 DTO 命名与组织](../structure/ADR-121-contract-dto-naming-organization.md) - DTO 组织基于 CQRS 分离
+- [ADR-120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件命名基于 CQRS 模式
+- [ADR-121：契约 DTO 命名与组织](../structure/ADR-121-contract-dto-naming-organization.md) - DTO 组织基于 CQRS 分离
 
 **替代（Supersedes）**：
 - 无

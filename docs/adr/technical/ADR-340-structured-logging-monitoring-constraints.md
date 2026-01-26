@@ -228,7 +228,7 @@ Application 层和 Modules 层**禁止**配置日志框架或 OpenTelemetry。
 - [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 日志术语遵循统一规范
 
 **被依赖（Depended By）**：
-- [ADR-0350：日志可观测性标准](./ADR-350-logging-observability-standards.md) - 可观测性基于结构化日志
+- [ADR-350：日志可观测性标准](./ADR-350-logging-observability-standards.md) - 可观测性基于结构化日志
 
 **替代（Supersedes）**：
 - 无
