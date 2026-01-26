@@ -112,9 +112,37 @@ L3 Best Practice（推荐做法，无强制力）
 - ❌ 与 ADR 冲突的规则
 - ❌ 新的术语定义
 
+**精神条款（防止隐性立法）**：
+
+如果一个 Standard 的规则让读者在**不查阅 ADR 的情况下**，也能得出"必须/禁止"的结论，则该 Standard 已越权。
+
+**越权识别测试**：
+1. 遮住 Standard 中的"基于 ADR"引用
+2. 让不熟悉 ADR 的人阅读 Standard
+3. 询问：这是建议还是强制要求？
+4. 如果答案是"强制"且无法从 ADR 推导，则越权
+
+**示例**：
+```markdown
+❌ 越权示例：
+Standard：所有 API 必须返回统一的错误格式 ErrorResponse
+
+→ 读者会认为这是强制要求
+→ 但 ADR 未定义此约束
+→ Standard 在伪装成架构决策
+
+✅ 正确细化：
+ADR-XXX：API 必须返回结构化错误
+Standard：基于 ADR-XXX，错误格式实现为 ErrorResponse 类
+
+→ 读者知道约束来自 ADR
+→ Standard 仅细化实现方式
+```
+
 **判定**：
 - ❌ Standard 未声明基于的 ADR
 - ❌ Standard 引入新约束
+- ❌ Standard 规则无法从 ADR 推导
 - ✅ Standard 明确基于 ADR 并仅细化实施
 
 ---
