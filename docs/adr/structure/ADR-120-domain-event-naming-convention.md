@@ -223,6 +223,26 @@ public class OrderCreatedEventAdapter
 
 ---
 
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 事件命名基于 CQRS 和事件驱动模式
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 命名约定遵循术语规范
+
+**被依赖（Depended By）**：
+- [ADR-0210：事件版本化与兼容性](../runtime/ADR-210-event-versioning-compatibility.md) - 事件版本化依赖命名约定
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0121：契约 DTO 命名与组织](./ADR-121-contract-dto-naming-organization.md) - 同为命名规范
+
+---
+
 ## 版本历史
 
 | 版本  | 日期         | 变更摘要                                                                                           |
