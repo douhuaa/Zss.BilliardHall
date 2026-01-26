@@ -208,6 +208,27 @@
 
 ---
 
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0340：结构化日志与监控约束](./ADR-340-structured-logging-monitoring-constraints.md) - 可观测性标准基于结构化日志
+
+**被依赖（Depended By）**：
+- 无
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0970：自动化工具日志集成标准](../governance/ADR-970-automation-log-integration-standard.md) - 自动化工具日志与应用日志相关
+
+---
+
+
 ## 版本历史
 
 | 版本 | 日期 | 变更说明 | 修订人 |
