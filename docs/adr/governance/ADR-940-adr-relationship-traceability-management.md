@@ -314,6 +314,7 @@ jobs:
 
 **相关（Related）**：
 - [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
+- [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md) - 标题语义约束防止解析歧义
 
 ---
 

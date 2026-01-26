@@ -124,6 +124,17 @@ function main() {
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
     echo ""
     
+    # 3a. ADR 标题语义约束检查（ADR-946）
+    if "$SCRIPT_DIR/verify-adr-heading-semantics.sh"; then
+        log_success "标题语义约束检查通过（ADR-946）"
+        PASSED_CHECKS=$((PASSED_CHECKS + 1))
+    else
+        log_error "标题语义约束检查失败（ADR-946）"
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    fi
+    TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+    echo ""
+    
     # 4. 版本同步检查（ADR-980）
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     log_header "4. 版本同步检查（ADR-980）"
