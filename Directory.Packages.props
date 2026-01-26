@@ -59,4 +59,7 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0"/>
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0"/>
   </ItemGroup>
+  <ItemGroup Label="Markdown Processing">
+    <PackageVersion Include="Markdig" Version="0.40.0"/>
+  </ItemGroup>
 </Project>
