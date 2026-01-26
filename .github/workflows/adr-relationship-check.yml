@@ -1,0 +1,72 @@
+name: ADR Relationship Check
+
+on:
+  pull_request:
+    paths:
+      - 'docs/adr/**/*.md'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/adr/**/*.md'
+  workflow_dispatch:
+
+jobs:
+  check-relationships:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Verify Relationship Declarations
+        run: |
+          echo "::group::验证关系声明章节"
+          ./scripts/verify-adr-relationships.sh
+          echo "::endgroup::"
+      
+      - name: Check Bidirectional Consistency
+        run: |
+          echo "::group::检查双向一致性"
+          ./scripts/check-relationship-consistency.sh
+          echo "::endgroup::"
+      
+      - name: Detect Circular Dependencies
+        run: |
+          echo "::group::检测循环依赖"
+          ./scripts/detect-circular-dependencies.sh
+          echo "::endgroup::"
+      
+      - name: Generate Relationship Map
+        run: |
+          echo "::group::生成关系图"
+          ./scripts/generate-adr-relationship-map.sh
+          echo "::endgroup::"
+      
+      - name: Check if Relationship Map Changed
+        id: check_map
+        run: |
+          if git diff --quiet docs/adr/ADR-RELATIONSHIP-MAP.md; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Upload Relationship Map
+        if: steps.check_map.outputs.changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: adr-relationship-map
+          path: docs/adr/ADR-RELATIONSHIP-MAP.md
+      
+      - name: Comment on PR
+        if: steps.check_map.outputs.changed == 'true' && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '⚠️ ADR 关系图已更新，请查看生成的 artifact 并提交到仓库。\n\n参考：ADR-940.5 - 全局关系图生成'
+            })

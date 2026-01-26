@@ -1,0 +1,28 @@
+# CODEOWNERS - 根据 ADR-980.4 配置
+# 自动通知责任人
+
+# ADR 正文 - 架构委员会负责
+/docs/adr/constitutional/ @douhuaa
+/docs/adr/governance/ @douhuaa
+/docs/adr/structure/ @douhuaa
+/docs/adr/runtime/ @douhuaa
+/docs/adr/technical/ @douhuaa
+
+# 架构测试 - 架构委员会和 QA 负责
+/src/tests/ArchitectureTests/ @douhuaa
+
+# Copilot Prompts - Tech Lead 负责
+/docs/copilot/ @douhuaa
+
+# 文档系统
+/docs/summaries/ @douhuaa
+/docs/guides/ @douhuaa
+/docs/engineering-standards/ @douhuaa
+
+# 脚本和工具
+/scripts/ @douhuaa
+/.github/workflows/ @douhuaa
+
+# 配置文件
+/.editorconfig @douhuaa
+/Directory.*.props @douhuaa
