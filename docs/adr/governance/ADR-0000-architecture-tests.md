@@ -3,6 +3,7 @@
 > **唯一架构执法元规则**：本文件定义架构合法性评判的唯一基准。所有架构测试、CI 校验、Prompt 映射、破例治理均以本 ADR 正文为裁定源。
 
 **状态**：✅ Final（不可随意修改）  
+**版本**：2.0  
 **级别**：架构治理 / 宪法层  
 **生效时间**：即刻  
 **适用范围**：全体代码仓库及所有 ADR（ADR-0001 ~ 0005）
@@ -141,6 +142,32 @@
 - Copilot Prompts 与测试、ADR 同步迭代维护
 - 新增/变更ADR时，严格全链更新自检（ADR文档、测试代码、Prompts文件、映射脚本）
 - Onboarding 必须培训ADR-0000机制
+
+---
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- 无（本 ADR 为元规则，不依赖其他 ADR）
+
+**被依赖（Depended By）**：
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 其测试执行基于本 ADR
+- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 其测试执行基于本 ADR
+- [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 其测试执行基于本 ADR
+- [ADR-0004：中央包管理与层级依赖规则](../constitutional/ADR-0004-Cpm-Final.md) - 其测试执行基于本 ADR
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 其测试执行基于本 ADR
+- [ADR-970：自动化工具日志集成标准](./ADR-970-automation-log-integration-standard.md) - 测试报告标准基于本 ADR
+- [ADR-980：ADR 生命周期一体化同步机制](./ADR-980-adr-lifecycle-synchronization.md) - CI 检测机制基于本 ADR
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - ADR 编号规范
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档治理
 
 ---
 
