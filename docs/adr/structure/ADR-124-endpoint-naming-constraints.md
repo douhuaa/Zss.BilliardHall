@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 定义 HTTP Endpoint 命名、职责边界和单一调用约束的唯一裁决规则。**
 
 **状态**：✅ Accepted  
+**版本**：1.0
 **级别**：结构层  
 **影响范围**：所有 HTTP Endpoint  
 **生效时间**：待审批通过后
@@ -236,7 +237,7 @@ builder.MapPost("/orders/fulfill", async (request, bus) =>
 
 **依赖（Depends On）**：
 - [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - Endpoint 约束基于 Handler 模式
-- [ADR-0121：契约 DTO 命名与组织](./ADR-121-contract-dto-naming-organization.md) - Endpoint 使用契约遵循命名规范
+- [ADR-121：契约 DTO 命名与组织](./ADR-121-contract-dto-naming-organization.md) - Endpoint 使用契约遵循命名规范
 - [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - Endpoint 命名遵循术语规范
 
 **被依赖（Depended By）**：

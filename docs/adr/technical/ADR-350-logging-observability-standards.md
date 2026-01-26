@@ -1,6 +1,7 @@
 # ADR-350：日志与可观测性字段标准
 
 **状态**：✅ Accepted  
+**版本**：1.0
 **级别**：技术层  
 **影响范围**：所有日志输出、结构化日志字段  
 **生效时间**：待审批通过后
@@ -212,7 +213,7 @@
 ## 关系声明（Relationships）
 
 **依赖（Depends On）**：
-- [ADR-0340：结构化日志与监控约束](./ADR-340-structured-logging-monitoring-constraints.md) - 可观测性标准基于结构化日志
+- [ADR-340：结构化日志与监控约束](./ADR-340-structured-logging-monitoring-constraints.md) - 可观测性标准基于结构化日志
 
 **被依赖（Depended By）**：
 - 无

@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 定义测试代码组织与命名的唯一裁决规则。**
 
 **状态**：✅ Accepted  
+**版本**：1.0
 **级别**：结构层  
 **影响范围**：所有测试代码  
 **生效时间**：待审批通过后
@@ -187,7 +188,7 @@ tests/
 - [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 测试命名遵循术语规范
 
 **被依赖（Depended By）**：
-- 无
+- [ADR-301：集成测试环境自动化与隔离约束](../technical/ADR-301-integration-test-automation.md) - 集成测试遵循测试组织规范
 
 **替代（Supersedes）**：
 - 无
@@ -196,7 +197,7 @@ tests/
 - 无
 
 **相关（Related）**：
-- [ADR-0301：集成测试自动化](../technical/ADR-301-integration-test-automation.md) - 同为测试规范
+- [ADR-301：集成测试自动化](../technical/ADR-301-integration-test-automation.md) - 同为测试规范
 
 ---
 

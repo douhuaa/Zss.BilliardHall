@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 是文档搜索与可发现性的优化标准，定义索引、标签和智能跳转机制。**
 
 **状态**：✅ Accepted  
+**版本**：1.0
 **级别**：体验优化 / 治理层  
 **适用范围**：所有文档搜索和导航机制  
 **生效时间**：即刻
@@ -131,6 +132,7 @@ ADR 和主要文档 **必须**包含标准化标签。
 # ADR-0001：模块化单体与垂直切片架构
 
 **状态**：✅ Accepted
+**版本**：1.0
 **标签**：`architecture`, `module`, `isolation`, `vertical-slice`, `cqrs`
 ```
 
@@ -167,7 +169,7 @@ docs/TAGS.md
 
 ### testing
 - [ADR-0000：架构测试与 CI 治理](adr/governance/ADR-0000-architecture-tests.md)
-- [ADR-0122：测试组织与命名](adr/structure/ADR-122-test-organization-naming.md)
+- [ADR-122：测试组织与命名](adr/structure/ADR-122-test-organization-naming.md)
 
 ### module
 - [ADR-0001：模块化单体架构](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
@@ -184,7 +186,7 @@ docs/TAGS.md
 
 ### qa
 - [ADR-0000](...)
-- [ADR-0122](...)
+- [ADR-122](...)
 - [测试编写指南](...)
 ```
 
@@ -219,7 +221,7 @@ docs/TAGS.md
 
 以下文档依赖本 ADR：
 - → [ADR-0005：应用内交互模型](../constitutional/ADR-0005-Application-Interaction-Model-Final.md)
-- → [ADR-0122：测试组织与命名](../structure/ADR-122-test-organization-naming.md)
+- → [ADR-122：测试组织与命名](../structure/ADR-122-test-organization-naming.md)
 
 ### 主题相关
 基于标签 `architecture`, `module`, `isolation`，推荐：
@@ -499,3 +501,4 @@ docs/reports/discoverability/YYYY-MM.md
 **维护**：架构委员会 & 文档团队  
 **审核**：待定  
 **状态**：✅ Accepted
+**版本**：1.0

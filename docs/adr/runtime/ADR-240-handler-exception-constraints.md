@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 定义 Handler 异常处理的强制规则，确保异常可分类、可重试、可追溯。**
 
 **状态**：✅ Final  
+**版本**：1.0
 **级别**：运行时层（Runtime Constraint）  
 **适用范围**：所有 Handler（Command/Query/Event Handler）  
 **生效时间**：即刻  

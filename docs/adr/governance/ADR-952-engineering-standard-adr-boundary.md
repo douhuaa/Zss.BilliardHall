@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 定义工程标准（Engineering Standard）的定位、权限边界以及与 ADR 的关系规则。**
 
 **状态**：✅ Accepted（已采纳）  
+**版本**：1.0
 **级别**：治理层 / 架构元规则  
 **适用范围**：所有工程标准文档（docs/engineering-standards/）  
 **生效时间**：即刻
@@ -313,3 +314,4 @@ Standard 引用 ADR-123 并细化实施
 **维护**：架构委员会  
 **审核**：@douhuaa  
 **状态**：✅ Accepted
+**版本**：1.0

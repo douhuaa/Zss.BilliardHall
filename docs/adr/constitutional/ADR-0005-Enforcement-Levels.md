@@ -5,6 +5,7 @@
 > 同时参见：[ADR-0000：架构测试与 CI 治理](ADR-0000-architecture-tests.md)
 
 **状态**：✅ Active  
+**版本**：1.0
 **级别**：架构约束 / 补充说明  
 **适用范围**：ADR-0005 所有规则的验证和执行  
 **关联 ADR**：ADR-0005 应用内交互模型与执行边界  
@@ -211,9 +212,20 @@ public class EndpointBusinessLogicAnalyzer : DiagnosticAnalyzer
 **依赖（Depends On）**：
 - [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 本文档是 ADR-0005 的执行级别补充
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 执行级别基于测试和 CI 治理机制
+- [ADR-0002：Platform / Application / Host 三层启动体系](../constitutional/ADR-0002-platform-application-host-bootstrap.md)
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-0003：命名空间与项目边界规范](../constitutional/ADR-0003-namespace-rules.md)
+- [ADR-0004：中央包管理（CPM）规范](../constitutional/ADR-0004-Cpm-Final.md)
 
 **被依赖（Depended By）**：
-- 无
+- [ADR-124：Endpoint 命名及参数约束规范](../structure/ADR-124-endpoint-naming-constraints.md)
+- [ADR-120：领域事件命名规范](../structure/ADR-120-domain-event-naming-convention.md)
+- [ADR-121：契约（Contract）与 DTO 命名组织规范](../structure/ADR-121-contract-dto-naming-organization.md)
+- [ADR-210：领域事件版本化与兼容性](../runtime/ADR-210-event-versioning-compatibility.md)
+- [ADR-240：Handler 异常约束](../runtime/ADR-240-handler-exception-constraints.md)
+- [ADR-201：Handler 生命周期管理](../runtime/ADR-201-handler-lifecycle-management.md)
+- [ADR-220：事件总线集成规范](../runtime/ADR-220-event-bus-integration.md)
+- [ADR-920：示例代码治理宪法](../governance/ADR-920-examples-governance-constitution.md)
 
 **替代（Supersedes）**：
 - 无

@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 是所有 ADR 关系声明的唯一裁决源，定义 ADR 之间关系的标准化管理机制。**
 
 **状态**：✅ Accepted（已采纳）  
+**版本**：1.0
 **级别**：治理层 / 架构元规则  
 **适用范围**：所有 ADR 文档  
 **生效时间**：即刻
@@ -45,7 +46,7 @@
 **标准格式**：
 
 ```markdown
-## 关系声明（Relationships）
+## Relationships
 
 **依赖（Depends On）**：
 - [ADR-XXXX：标题](相对路径) - 依赖原因说明
@@ -303,7 +304,9 @@ jobs:
 - [ADR-0900：ADR 新增与修订流程](ADR-0900-adr-process.md) - 集成到 ADR 流程
 
 **被依赖（Depended By）**：
-- [ADR-980：ADR 生命周期一体化同步机制](ADR-980-adr-lifecycle-synchronization-mechanism.md) - 需要关系图更新
+- [ADR-955：文档搜索与可发现性优化](./ADR-955-documentation-search-discoverability.md)
+- [ADR-945：ADR 全局时间线与演进视图](./ADR-945-adr-timeline-evolution-view.md)
+- [ADR-980：ADR 生命周期一体化同步机制宪法](./ADR-980-adr-lifecycle-synchronization.md) - 版本同步需要关系图更新
 
 **替代（Supersedes）**：无
 
@@ -311,6 +314,7 @@ jobs:
 
 **相关（Related）**：
 - [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
+- [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md) - 标题语义约束防止解析歧义
 
 ---
 
@@ -341,3 +345,4 @@ jobs:
 **维护**：架构委员会  
 **审核**：@douhuaa  
 **状态**：✅ Accepted
+**版本**：1.0

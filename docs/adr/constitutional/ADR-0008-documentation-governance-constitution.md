@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 是所有文档的元规则，定义文档分级、边界与裁决权力的唯一裁决源。**
 
 **状态**：✅ Final（裁决型ADR）  
+**版本**：1.0
 **级别**：架构元规则 / 宪法层  
 **适用范围**：所有文档（ADR、Instructions、Agents、Skills、README、Guide）  
 **生效时间**：即刻
@@ -207,6 +208,8 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 - [ADR-975：文档质量监控](../governance/ADR-975-documentation-quality-monitoring.md) - 质量监控基于本 ADR
 - [ADR-980：ADR 生命周期一体化同步](../governance/ADR-980-adr-lifecycle-synchronization.md) - 同步机制是文档治理的一部分
 - [ADR-990：文档演进路线图](../governance/ADR-990-documentation-evolution-roadmap.md) - 演进规划基于本 ADR
+- [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md)
+- [ADR-930：代码审查与 ADR 合规自检流程](../governance/ADR-930-code-review-compliance.md)
 
 **替代（Supersedes）**：
 - 无

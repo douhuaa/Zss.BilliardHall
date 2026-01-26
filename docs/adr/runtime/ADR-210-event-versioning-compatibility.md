@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 定义领域事件的版本管理规则，确保跨版本兼容性和系统稳定性。**
 
 **状态**：✅ Accepted  
+**版本**：1.0
 **级别**：运行时层（Runtime Constraint）  
 **适用范围**：所有领域事件  
 **生效时间**：待审批通过后  
@@ -257,7 +258,7 @@
 ## 关系声明（Relationships）
 
 **依赖（Depends On）**：
-- [ADR-0120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件版本化基于事件命名规范
+- [ADR-120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件版本化基于事件命名规范
 - [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 事件版本化基于事件驱动模式
 
 **被依赖（Depended By）**：
@@ -270,7 +271,7 @@
 - 无
 
 **相关（Related）**：
-- [ADR-0220：事件总线集成](./ADR-220-event-bus-integration.md) - 事件序列化和版本化相关
+- [ADR-220：事件总线集成](./ADR-220-event-bus-integration.md) - 事件序列化和版本化相关
 
 ---
 

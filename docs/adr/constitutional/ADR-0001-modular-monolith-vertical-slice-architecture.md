@@ -140,6 +140,10 @@
 - [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 基于模块通信约束
 - [ADR-120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 基于模块通信机制
 - [ADR-121：契约 DTO 命名与组织](../structure/ADR-121-contract-dto-naming-organization.md) - 基于模块通信机制
+- [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
+- [ADR-123：Repository 接口与分层命名规范](../structure/ADR-123-repository-interface-layering.md)
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md)
+- [ADR-920：示例代码治理宪法](../governance/ADR-920-examples-governance-constitution.md)
 
 **替代（Supersedes）**：
 - 无

@@ -260,9 +260,11 @@ ADR-0001 版本不一致：
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 检测机制
 - [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md) - 基于其"三位一体交付"要求
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
+- [ADR-940：ADR 关系与溯源管理宪法](./ADR-940-adr-relationship-traceability-management.md) - 版本同步需要关系图更新
 
 **被依赖（Depended By）**：
-- 无
+- [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md)
 
 **替代（Supersedes）**：
 - 无

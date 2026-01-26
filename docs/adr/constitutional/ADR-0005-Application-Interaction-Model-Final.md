@@ -1,6 +1,7 @@
 # ADR-0005：应用内交互模型极简判裁版
 
 **状态**：✅ Final（仅保留裁决性规则，无“建议/经验”）  
+**版本**：1.0
 **级别**：根约束（Runtime Constitutional Rule）  
 **适用范围**：Application / Modules / Host  
 **生效时间**：即刻
@@ -75,8 +76,9 @@
 - [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 依赖管理遵循包管理规则
 
 **被依赖（Depended By）**：
-- [ADR-0120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件命名基于 CQRS 模式
-- [ADR-0121：契约 DTO 命名与组织](../structure/ADR-121-contract-dto-naming-organization.md) - DTO 组织基于 CQRS 分离
+- [ADR-0005：执行级别分类](./ADR-0005-Enforcement-Levels.md) - 执行级别补充文档依赖本 ADR
+- [ADR-120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件命名基于 CQRS 模式
+- [ADR-121：契约 DTO 命名与组织](../structure/ADR-121-contract-dto-naming-organization.md) - DTO 组织基于 CQRS 分离
 
 **替代（Supersedes）**：
 - 无

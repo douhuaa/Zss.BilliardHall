@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 定义案例库的组织、审核和维护标准。**
 
 **状态**：✅ Accepted（已采纳）  
+**版本**：1.0
 **级别**：治理层 / 内容管理  
 **适用范围**：所有案例文档（docs/cases/）  
 **生效时间**：即刻
@@ -265,6 +266,7 @@ docs/cases/
 
 **依赖（Depends On）**：
 - [ADR-950：指南与 FAQ 文档治理宪法](ADR-950-guide-faq-documentation-governance.md) - 基于 Case 类型定义
+- [ADR-920：示例代码治理宪法](../governance/ADR-920-examples-governance-constitution.md)
 
 **被依赖（Depended By）**：无
 
@@ -301,3 +303,4 @@ docs/cases/
 **维护**：Tech Lead  
 **审核**：@douhuaa  
 **状态**：✅ Accepted
+**版本**：1.0

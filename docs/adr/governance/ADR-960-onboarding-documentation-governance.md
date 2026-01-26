@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 是所有 Onboarding 文档（新人入职文档）的唯一治理标准，定义其结构、审计和反馈机制。**
 
 **状态**：✅ Accepted  
+**版本**：1.0
 **级别**：文档专项治理 / 治理层  
 **适用范围**：所有 Onboarding 相关文档  
 **生效时间**：即刻
@@ -340,7 +341,7 @@ Onboarding 文档 **必须**指定明确的责任人。
 - [ADR-950：指南与 FAQ 文档治理宪法](../governance/ADR-950-guide-faq-documentation-governance.md) - 基于其文档类型定义
 
 **被依赖（Depended By）**：
-- 无
+- [ADR-965：Onboarding 互动式学习路径](../governance/ADR-965-onboarding-interactive-learning-path.md)
 
 **替代（Supersedes）**：
 - 无
@@ -440,3 +441,4 @@ Onboarding 文档 **必须**指定明确的责任人。
 **维护**：Tech Lead & Onboarding Champion  
 **审核**：待定  
 **状态**：✅ Accepted
+**版本**：1.0

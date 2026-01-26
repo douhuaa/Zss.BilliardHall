@@ -1,6 +1,7 @@
 # ADR-301：集成测试环境自动化与隔离约束
 
 **状态**：✅ Accepted  
+**版本**：1.0
 **级别**：技术层  
 **影响范围**：所有集成测试、测试基础设施  
 **生效时间**：待审批通过后
@@ -236,7 +237,7 @@ TestContainer 启动**必须**配置超时和健康检查。
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 集成测试基于测试治理机制
-- [ADR-0122：测试组织与命名](../structure/ADR-122-test-organization-naming.md) - 集成测试遵循测试组织规范
+- [ADR-122：测试组织与命名](../structure/ADR-122-test-organization-naming.md) - 集成测试遵循测试组织规范
 
 **被依赖（Depended By）**：
 - 无
