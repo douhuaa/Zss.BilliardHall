@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 定义测试代码组织与命名的唯一裁决规则。**
 
 **状态**：✅ Accepted  
+**版本**：1.0
 **级别**：结构层  
 **影响范围**：所有测试代码  
 **生效时间**：待审批通过后
@@ -179,12 +180,24 @@ tests/
 
 ---
 
-## 依赖与相关ADR
+## 关系声明（Relationships）
 
-| 关联 ADR   | 关系          | 说明                         |
-|----------|-------------|----------------------------|
-| ADR-0001 | 结构细化关系      | ADR-0001 定义模块结构，本 ADR 细化测试组织 |
-| ADR-0003 | 命名空间依赖      | 测试命名空间遵循 ADR-0003 规范       |
+**依赖（Depends On）**：
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 测试组织基于模块和垂直切片结构
+- [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 测试命名空间遵循命名空间规范
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 测试命名遵循术语规范
+
+**被依赖（Depended By）**：
+- [ADR-301：集成测试环境自动化与隔离约束](../technical/ADR-301-integration-test-automation.md) - 集成测试遵循测试组织规范
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-301：集成测试自动化](../technical/ADR-301-integration-test-automation.md) - 同为测试规范
 
 ---
 

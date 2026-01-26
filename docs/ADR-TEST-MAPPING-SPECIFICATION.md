@@ -431,7 +431,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ## 七、参考资料
 
 - [ADR-0000: 架构测试与 CI 治理](../adr/governance/ADR-0000-architecture-tests.md)
-- [ADR-0900: ADR 新增与修订流程](../adr/governance/ADR-0900-adr-process.md)
+- [ADR-900: ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
 - [Copilot 治理体系](../copilot/README.md)
 - [PR 模板](../.github/PULL_REQUEST_TEMPLATE.md)
 

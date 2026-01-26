@@ -1,6 +1,7 @@
 # ADR-0001：模块化单体与垂直切片架构
 
 **状态**：✅ Final（裁决型ADR）  
+**版本**：4.0  
 **级别**：架构约束 / 系统级 Contract  
 **适用范围**：所有 Host、模块、各类测试、未来扩展子系统  
 **生效时间**：即刻
@@ -124,6 +125,34 @@
 | ADR-0003 | 模块命名空间自动映射及目录防御规则 |
 | ADR-0004 | 分层包依赖与 CPM        |
 | ADR-0005 | 运行时交互/Handler职责   |
+
+---
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 测试执行机制
+
+**被依赖（Depended By）**：
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 基于模块隔离规则
+- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 基于模块边界定义
+- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 基于模块通信约束
+- [ADR-120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 基于模块通信机制
+- [ADR-121：契约 DTO 命名与组织](../structure/ADR-121-contract-dto-naming-organization.md) - 基于模块通信机制
+- [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
+- [ADR-123：Repository 接口与分层命名规范](../structure/ADR-123-repository-interface-layering.md)
+- [ADR-920：示例代码治理宪法](../governance/ADR-920-examples-governance-constitution.md)
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 依赖管理补充
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 术语规范（注：ADR-0006 依赖本 ADR，此处为相关关系避免循环）
+- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - 文档治理
 
 ---
 

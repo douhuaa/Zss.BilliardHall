@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 是所有文档的元规则，定义文档分级、边界与裁决权力的唯一裁决源。**
 
 **状态**：✅ Final（裁决型ADR）  
+**版本**：1.0
 **级别**：架构元规则 / 宪法层  
 **适用范围**：所有文档（ADR、Instructions、Agents、Skills、README、Guide）  
 **生效时间**：即刻
@@ -188,6 +189,40 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 ---
 
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 文档术语遵循统一规范
+
+**被依赖（Depended By）**：
+- [ADR-910：README 编写与维护](../governance/ADR-910-readme-governance-constitution.md) - README 约束基于本 ADR
+- [ADR-920：示例治理](../governance/ADR-920-examples-governance-constitution.md) - 示例文档约束基于本 ADR
+- [ADR-940：ADR 关系与溯源管理](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系声明是文档的一部分
+- [ADR-946：ADR 标题级别即语义级别约束](../governance/ADR-946-adr-heading-level-semantic-constraint.md) - ADR 文档结构规范
+- [ADR-947：关系声明区的结构与解析安全规则](../governance/ADR-947-relationship-section-structure-parsing-safety.md) - 文档结构规范
+- [ADR-950：指南与 FAQ 文档治理](../governance/ADR-950-guide-faq-documentation-governance.md) - 非裁决性文档约束基于本 ADR
+- [ADR-955：文档搜索与可发现性](../governance/ADR-955-documentation-search-discoverability.md) - 文档组织规范基于本 ADR
+- [ADR-960：新人入职文档治理](../governance/ADR-960-onboarding-documentation-governance.md) - 入职文档约束基于本 ADR
+- [ADR-965：交互式学习路径](../governance/ADR-965-onboarding-interactive-learning-path.md) - 学习文档约束基于本 ADR
+- [ADR-970：自动化工具日志集成标准](../governance/ADR-970-automation-log-integration-standard.md) - 日志文档约束基于本 ADR
+- [ADR-975：文档质量监控](../governance/ADR-975-documentation-quality-monitoring.md) - 质量监控基于本 ADR
+- [ADR-990：文档演进路线图](../governance/ADR-990-documentation-evolution-roadmap.md) - 演进规划基于本 ADR
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md)
+- [ADR-930：代码审查与 ADR 合规自检流程](../governance/ADR-930-code-review-compliance.md)
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0007：Agent 行为与权限宪法](./ADR-0007-agent-behavior-permissions-constitution.md) - Agent 行为与文档权威相互关联
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - ADR 流程与文档治理相关
+
+---
+
 ## 快速参考表
 
 | 约束编号       | 约束描述              | 测试方式            | 测试用例                                  | 必须遵守 |
@@ -233,18 +268,6 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 - [ ] Skills 输出是否只有事实，无判断？
 - [ ] 文档变更是否按分级权限审批？
 - [ ] 是否更新了版本历史？
-
----
-
-## 依赖与相关ADR
-
-| 关联 ADR   | 关系    | 说明                               |
-|----------|---------|------------------------------------|
-| ADR-0000 | 补充关系  | ADR-0000 定义架构测试机制，本 ADR 定义文档治理规则 |
-| ADR-0006 | 术语提供关系 | ADR-0006 定义术语，本 ADR 定义文档术语      |
-| ADR-0007 | 相互依赖  | ADR-0007 定义 Agent 行为，本 ADR 约束文档权限 |
-| ADR-0900 | 依赖关系  | ADR-0900 依赖本 ADR 定义的文档变更规则       |
-| ADR-910  | 委托关系  | README 详细约束委托给 ADR-910          |
 
 ---
 

@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 定义 Handler 异常处理的强制规则，确保异常可分类、可重试、可追溯。**
 
 **状态**：✅ Final  
+**版本**：1.0
 **级别**：运行时层（Runtime Constraint）  
 **适用范围**：所有 Handler（Command/Query/Event Handler）  
 **生效时间**：即刻  
@@ -219,6 +220,27 @@
 - 异常处理详细示例参见 `docs/copilot/adr-0240.prompts.md`
 
 ---
+
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - Handler 异常约束基于 Handler 模式
+
+**被依赖（Depended By）**：
+- 无
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0201：Handler 生命周期管理](./ADR-201-handler-lifecycle-management.md) - 异常处理是生命周期的一部分
+
+---
+
 
 ## 版本历史
 

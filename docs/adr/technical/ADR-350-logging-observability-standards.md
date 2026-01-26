@@ -1,6 +1,7 @@
 # ADR-350：日志与可观测性字段标准
 
 **状态**：✅ Accepted  
+**版本**：1.0
 **级别**：技术层  
 **影响范围**：所有日志输出、结构化日志字段  
 **生效时间**：待审批通过后
@@ -207,6 +208,27 @@
 - 日志配置示例参见 `docs/copilot/adr-0350.prompts.md`（待创建）
 
 ---
+
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-340：结构化日志与监控约束](./ADR-340-structured-logging-monitoring-constraints.md) - 可观测性标准基于结构化日志
+
+**被依赖（Depended By）**：
+- 无
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0970：自动化工具日志集成标准](../governance/ADR-970-automation-log-integration-standard.md) - 自动化工具日志与应用日志相关
+
+---
+
 
 ## 版本历史
 

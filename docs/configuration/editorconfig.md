@@ -159,9 +159,9 @@ end_of_line = crlf           # Windows 脚本使用 CRLF
 
 ## 变更流程
 
-### 修改 .editorconfig 必须遵循 ADR-0900 流程
+### 修改 .editorconfig 必须遵循 ADR-900 流程
 
-根据 [ADR-0900（ADR 新增与修订流程）](../adr/governance/ADR-0900-adr-process.md)：
+根据 [ADR-900（ADR 新增与修订流程）](../adr/governance/ADR-900-adr-process.md)：
 
 #### 1. 评估变更级别
 
@@ -640,7 +640,7 @@ git commit -m "style: 应用 EditorConfig 到 Modules"
 - [ADR-0003：命名空间规则](../adr/constitutional/ADR-0003-namespace-rules.md)
 - [ADR-0004：中央包管理](../adr/constitutional/ADR-0004-Cpm-Final.md)
 - [ADR-0005：CQRS 和 Handler 模式](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-0900：ADR 新增与修订流程](../adr/governance/ADR-0900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
 
 ### 配置文件
 

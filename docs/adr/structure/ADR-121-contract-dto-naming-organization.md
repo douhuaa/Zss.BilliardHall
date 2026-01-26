@@ -1,6 +1,7 @@
 # ADR-121：契约（Contract）与 DTO 命名组织规范
 
 **状态**：✅ 已采纳（Adopted）  
+**版本**：1.0
 **级别**：结构约束（Structure Constraint）  
 **适用范围**：所有模块（Modules）、跨模块数据传递、API 层、事件与命令 Query 消息  
 **生效时间**：即刻  
@@ -298,6 +299,28 @@ public record MemberInfoDto(Guid MemberId, string UserName) : IContract
 - **L2（建议约束）**：架构测试可选覆盖，违反会影响代码可维护性
 
 **关于 ADR-121.6**：已从 L2 升级为 L1，建议实施 CI 验证脚本扫描 Platform.Contracts 确保命名空间与路径匹配。
+
+---
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 契约 DTO 基于 CQRS 模式
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 命名约定遵循术语规范
+- [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 命名空间规范
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+
+**被依赖（Depended By）**：
+- [ADR-124：Endpoint 命名及参数约束规范](./ADR-124-endpoint-naming-constraints.md) - Endpoint 使用契约遵循命名规范
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-120：领域事件命名约定](./ADR-120-domain-event-naming-convention.md) - 同为命名规范
 
 ---
 

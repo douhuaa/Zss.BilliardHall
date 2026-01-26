@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 定义 Repository 接口与实现的分层位置和命名的唯一裁决规则。**
 
 **状态**：✅ Accepted  
+**版本**：1.0
 **级别**：结构层  
 **影响范围**：所有 Repository 实现  
 **生效时间**：待审批通过后
@@ -185,12 +186,23 @@ Task ExecuteSqlAsync(string sql);               // 直接暴露 SQL
 
 ---
 
-## 依赖与相关ADR
+## 关系声明（Relationships）
 
-| 关联 ADR   | 关系          | 说明                               |
-|----------|-------------|----------------------------------|
-| ADR-0001 | 结构细化关系      | ADR-0001 定义模块结构，本 ADR 细化 Repository 分层 |
-| ADR-0002 | 层级依赖        | 本 ADR 遵循 ADR-0002 定义的 Platform/Application/Host 三层体系 |
+**依赖（Depends On）**：
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - Repository 分层基于模块结构
+- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - Repository 遵循三层体系
+
+**被依赖（Depended By）**：
+- 无
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- 无
 
 ---
 

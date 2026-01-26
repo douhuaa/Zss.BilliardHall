@@ -1,6 +1,7 @@
 # ADR-120：领域事件命名规范
 
 **状态**：✅ 已采纳（Adopted）  
+**版本**：1.0
 **级别**：结构约束（Structure Constraint）  
 **适用范围**：所有模块（Modules）、领域事件定义、事件处理器  
 **生效时间**：即刻  
@@ -220,6 +221,28 @@ public class OrderCreatedEventAdapter
 - 事件风暴和领域建模方法（DDD 最佳实践）
 - 事件存储和回放机制
 - 代码生成模板和 IDE 插件
+
+---
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 事件命名基于 CQRS 和事件驱动模式
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 命名约定遵循术语规范
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+
+**被依赖（Depended By）**：
+- [ADR-210：事件版本化与兼容性](../runtime/ADR-210-event-versioning-compatibility.md) - 事件版本化依赖命名约定
+- [ADR-220：事件总线集成规范](../runtime/ADR-220-event-bus-integration.md) - 事件总线集成依赖事件命名规范
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-121：契约 DTO 命名与组织](./ADR-121-contract-dto-naming-organization.md) - 同为命名规范
 
 ---
 

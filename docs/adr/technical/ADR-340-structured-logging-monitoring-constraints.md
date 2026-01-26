@@ -1,6 +1,7 @@
 # ADR-340：结构化日志与监控约束
 
 **状态**：✅ Final  
+**版本**：1.0
 **级别**：技术层  
 **影响范围**：Platform 层、所有运行时环境（Host.Web、Host.Worker）  
 **生效时间**：即刻
@@ -219,6 +220,28 @@ Application 层和 Modules 层**禁止**配置日志框架或 OpenTelemetry。
 - 详细配置示例参见 `docs/copilot/adr-0340.prompts.md`（待创建）
 
 ---
+
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 日志架构基于三层体系
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 日志术语遵循统一规范
+
+**被依赖（Depended By）**：
+- [ADR-350：日志可观测性标准](./ADR-350-logging-observability-standards.md) - 可观测性基于结构化日志
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- 无
+
+---
+
 
 ## 版本历史
 

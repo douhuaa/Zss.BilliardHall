@@ -1,6 +1,7 @@
 # ADR-0003：命名空间与项目边界规范
 
 **状态**：✅ Final（裁决型ADR）  
+**版本**：1.0
 **级别**：架构约束（Architectural Contract）  
 **适用范围**：所有 Platform / Application / Modules / Host / Tests 项目  
 **生效时间**：即刻
@@ -63,6 +64,30 @@
 
 ---
 
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 命名空间规范基于三层体系
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+
+**被依赖（Depended By）**：
+- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 包管理依赖命名空间规范
+- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 运行时注册依赖命名空间映射
+- [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
+- [ADR-121：契约（Contract）与 DTO 命名组织规范](../structure/ADR-121-contract-dto-naming-organization.md)
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 命名规范
+
+---
+
 ## 快速参考表
 
 | 约束编号       | 约束描述                            | 测试方式           | 测试用例                                                | 必须遵守 |
@@ -96,17 +121,6 @@
 - [ ] 项目名与目录/二级命名空间是否严格一致？
 - [ ] 全局无 Common、Shared、Utils 等命名空间？
 - [ ] CI 与架构测试是否已自动检验命名空间合规？
-
----
-
-## 依赖与相关ADR
-
-| 关联 ADR   | 关系         |
-|----------|------------|
-| ADR-0000 | 自动化测试机制    |
-| ADR-0002 | 启动体系与多Host |
-| ADR-0004 | 包管理的层级约束映射 |
-| ADR-0005 | 运行时分层与注册映射 |
 
 ---
 

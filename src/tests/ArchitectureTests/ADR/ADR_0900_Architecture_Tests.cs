@@ -4,7 +4,7 @@ using Xunit;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
-/// ADR-0900: ADR 新增与修订流程
+/// ADR-0900: ADR 新增与修订流程（v1.2）
 /// 验证 ADR 文档、架构测试、Copilot Prompts 的三位一体完整性
 /// 
 /// 【测试覆盖映射】

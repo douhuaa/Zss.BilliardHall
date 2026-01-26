@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 是所有 PR 和代码审查流程的唯一裁决源，定义 ADR 合规性检查的执行标准。**
 
 **状态**：✅ Final（裁决型ADR）  
+**版本**：1.0
 **级别**：治理层 / 架构元规则  
 **适用范围**：所有 Pull Request 和代码审查流程  
 **生效时间**：即刻
@@ -161,6 +162,27 @@ Pull Request **必须**至少获得一名具有审查权限的责任人批准。
 
 ---
 
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - 代码审查流程基于测试和 CI 机制
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档变更需遵循文档治理规则
+- [ADR-900：ADR 新增与修订流程](./ADR-900-adr-process.md) - ADR 相关 PR 需遵循 ADR 流程
+
+**被依赖（Depended By）**：
+- 无（代码审查规则是终端流程规则）
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md) - Copilot 在审查中的角色
+
+---
+
 ## 快速参考表
 
 | 约束编号       | 约束描述                | 测试方式             | 必须遵守 |
@@ -220,16 +242,6 @@ Pull Request **必须**至少获得一名具有审查权限的责任人批准。
 - 具体的编码规范
 - 性能优化建议
 - 业务逻辑的正确性验证
-
----
-
-## 依赖与相关ADR
-
-| 关联 ADR   | 关系          | 说明                         |
-|----------|-------------|----------------------------|
-| ADR-0000 | 执行机制        | 架构测试与 CI 治理 |
-| ADR-0900 | 流程定义        | ADR 新增与修订流程（如有） |
-| ADR-0008 | 文档治理        | 文档变更需遵循文档治理规则 |
 
 ---
 

@@ -1,0 +1,48 @@
+name: ADR Version Sync Check
+
+on:
+  pull_request:
+    paths:
+      - 'docs/adr/**/*.md'
+      - 'src/tests/ArchitectureTests/**/*.cs'
+      - 'docs/copilot/**/*.md'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/adr/**/*.md'
+      - 'src/tests/ArchitectureTests/**/*.cs'
+      - 'docs/copilot/**/*.md'
+  schedule:
+    # 每日检查一次
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-version-sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Validate ADR Version Synchronization
+        run: |
+          echo "::group::验证版本同步"
+          ./scripts/validate-adr-version-sync.sh
+          echo "::endgroup::"
+      
+      - name: Report Status
+        if: always()
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "✅ 版本同步检查通过"
+          else
+            echo "❌ 版本同步检查失败"
+            echo ""
+            echo "请确保："
+            echo "1. ADR 正文、架构测试、Copilot Prompt 版本号一致"
+            echo "2. 使用标准版本号格式"
+            echo "3. 参考 ADR-980 变更传播清单"
+            exit 1
+          fi

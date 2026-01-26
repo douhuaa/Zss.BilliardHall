@@ -3,6 +3,7 @@
 > ⚖️ **本 ADR 是所有 ADR 的元规则，定义术语语义和编号体系的唯一裁决源。**
 
 **状态**：✅ Final（裁决型ADR）  
+**版本**：1.0
 **级别**：架构元规则 / 宪法层  
 **适用范围**：所有 ADR（0000~999）及架构治理体系  
 **生效时间**：即刻
@@ -115,7 +116,7 @@
 
 **规则**：
 - 非宪法层（100+）**不应**使用多余前导零
-- 特殊例外：ADR-0000 和 ADR-0900 允许使用前导零
+- 特殊例外：ADR-0000 和 ADR-900 允许使用前导零
 
 **判定**：
 - ❌ 非宪法层使用多余前导零（如 ADR-0120）
@@ -147,6 +148,39 @@
 - ❌ 未授权使用 0007~0009
 - ❌ ADR-0000 添加非元机制内容
 - ✅ 特殊编号按规则使用
+
+---
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+
+**被依赖（Depended By）**：
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - ADR 流程依赖编号规则
+- [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
+- [ADR-124：Endpoint 命名及参数约束规范](../structure/ADR-124-endpoint-naming-constraints.md)
+- [ADR-120：领域事件命名规范](../structure/ADR-120-domain-event-naming-convention.md)
+- [ADR-121：契约（Contract）与 DTO 命名组织规范](../structure/ADR-121-contract-dto-naming-organization.md)
+- [ADR-360：CI/CD Pipeline 流程标准化](../technical/ADR-360-cicd-pipeline-standardization.md)
+- [ADR-340：结构化日志与监控约束](../technical/ADR-340-structured-logging-monitoring-constraints.md)
+- [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
+- [ADR-910：README 编写与维护宪法](../governance/ADR-910-readme-governance-constitution.md)
+- 所有 ADR - 编号规范适用于所有 ADR
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0001：模块化单体与垂直切片架构](./ADR-0001-modular-monolith-vertical-slice-architecture.md) - 术语定义参考核心架构（注：避免循环依赖，使用相关关系）
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 层级术语
+- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 命名规范
+- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - CQRS 术语
+- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - 文档术语
 
 ---
 
@@ -189,17 +223,6 @@
 - [ ] 技术层 ADR 是否正确使用 300~399？
 - [ ] 术语使用是否与 ADR-0006 一致？
 - [ ] 是否更新了相关索引文件？
-
----
-
-## 依赖与相关ADR
-
-| 关联 ADR   | 关系          | 说明                         |
-|----------|-------------|----------------------------|
-| ADR-0000 | 补充关系        | ADR-0000 定义架构测试机制，本 ADR 定义编号规则 |
-| ADR-0900 | 依赖关系        | ADR-0900 依赖本 ADR 定义的编号规则     |
-| ADR-0001~0005 | 术语提供关系 | 宪法层 ADR 定义的术语被本 ADR 汇总       |
-| 所有 ADR   | 元规则关系       | 本 ADR 是所有 ADR 的元规则           |
 
 ---
 
