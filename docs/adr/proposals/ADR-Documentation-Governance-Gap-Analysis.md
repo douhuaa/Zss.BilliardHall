@@ -16,8 +16,8 @@
 
 **已完善领域** ✅：
 - ADR 正文治理（ADR-0008, 0900）
-- README 治理（ADR-0910）
-- 示例代码治理（ADR-0920）
+- README 治理（ADR-910）
+- 示例代码治理（ADR-920）
 
 **缺失领域** ❌：
 1. **ADR 关系管理** - 交叉引用、依赖追溯、替代关系标准化
@@ -56,9 +56,9 @@
 | ADR-0000 | 架构测试与 CI 治理宪法 | 测试执法 | ✅ 高 |
 | ADR-0008 | 文档编写与维护宪法 | 文档分级、权限边界 | ✅ 高 |
 | ADR-900 | ADR 新增与修订流程 | ADR 生命周期 | ✅ 高 |
-| ADR-0910 | README 治理宪法 | README 专项治理 | ✅ 高 |
-| ADR-0920 | 示例代码治理宪法 | 示例代码专项治理 | ✅ 高 |
-| ADR-0930 | 代码审查与合规自检 | PR 审查流程 | ✅ 中 |
+| ADR-910 | README 治理宪法 | README 专项治理 | ✅ 高 |
+| ADR-920 | 示例代码治理宪法 | 示例代码专项治理 | ✅ 高 |
+| ADR-930 | 代码审查与合规自检 | PR 审查流程 | ✅ 中 |
 
 ### 文档体系结构
 
@@ -562,8 +562,8 @@ ADR-0008 → ADR-975
 
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
 - [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md)
-- [ADR-0910：README 编写与维护宪法](../governance/ADR-0910-readme-governance-constitution.md)
-- [ADR-0920：示例代码治理宪法](../governance/ADR-0920-examples-governance-constitution.md)
+- [ADR-910：README 编写与维护宪法](../governance/ADR-910-readme-governance-constitution.md)
+- [ADR-920：示例代码治理宪法](../governance/ADR-920-examples-governance-constitution.md)
 
 ---
 

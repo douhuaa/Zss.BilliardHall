@@ -3,7 +3,7 @@
 **文档类型**：改进总结  
 **创建日期**：2026-01-26  
 **状态**：✅ 已完成  
-**相关 ADR**：ADR-0008, ADR-900, ADR-0910, ADR-0920
+**相关 ADR**：ADR-0008, ADR-900, ADR-910, ADR-920
 
 ---
 
@@ -22,9 +22,9 @@
 | 治理机制 | ADR 编号 | 覆盖范围 |
 |---------|---------|---------|
 | ADR 正文治理 | ADR-0008, 0900 | 文档分级、权限边界、变更流程 |
-| README 治理 | ADR-0910 | 禁用裁决性语言、强制声明 |
-| 示例代码治理 | ADR-0920 | 分级执法、免责声明、责任人制度 |
-| 代码审查合规 | ADR-0930 | PR 审查流程 |
+| README 治理 | ADR-910 | 禁用裁决性语言、强制声明 |
+| 示例代码治理 | ADR-920 | 分级执法、免责声明、责任人制度 |
+| 代码审查合规 | ADR-930 | PR 审查流程 |
 
 **优势**：
 - 🎯 ADR 作为唯一裁决源的原则已确立
@@ -366,8 +366,8 @@ ADR-0000（测试治理） → ADR-970（日志集成）
 - **现有治理**：
   - [ADR-0008：文档编写与维护宪法](../adr/constitutional/ADR-0008-documentation-governance-constitution.md)
   - [ADR-900：ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
-  - [ADR-0910：README 编写与维护宪法](../adr/governance/ADR-0910-readme-governance-constitution.md)
-  - [ADR-0920：示例代码治理宪法](../adr/governance/ADR-0920-examples-governance-constitution.md)
+  - [ADR-910：README 编写与维护宪法](../adr/governance/ADR-910-readme-governance-constitution.md)
+  - [ADR-920：示例代码治理宪法](../adr/governance/ADR-920-examples-governance-constitution.md)
 
 ---
 
