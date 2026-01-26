@@ -65,6 +65,30 @@
 
 ---
 
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0001：模块化单体与垂直切片架构](./ADR-0001-modular-monolith-vertical-slice-architecture.md) - CQRS 模式基于模块隔离和垂直切片
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - Handler 装配基于三层体系
+- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - Handler 组织遵循命名空间规范
+- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 依赖管理遵循包管理规则
+
+**被依赖（Depended By）**：
+- [ADR-0120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件命名基于 CQRS 模式
+- [ADR-0121：契约 DTO 命名与组织](../structure/ADR-121-contract-dto-naming-organization.md) - DTO 组织基于 CQRS 分离
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- 无
+
+---
+
 ## 必测/必拦架构测试（Enforcement）
 
 - Handler 必须无状态、无领域持久字段
@@ -97,16 +121,6 @@
 - 所有治理建议、失败处理、Saga/补偿、最佳实践类内容须单独写 Guide/Rationale
 - 修订仅允许缩减内容或提升自动裁决性，禁止添加“仅建议性”内容
 - 审判权来自自动化检测，可扩充测试工具，但不得新增人工经验条款
-
----
-
-## 依赖与相关ADR
-
-- ADR-0001：静态模块切片与隔离宪法
-- ADR-0002：启动体系与装配边界
-- ADR-0003：命名空间与结构规范
-- ADR-0004：依赖与包治理规则
-- ADR-0000：自动化测试与 CI 验证
 
 ---
 

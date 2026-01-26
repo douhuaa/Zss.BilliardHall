@@ -86,6 +86,28 @@
 
 ---
 
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0001：模块化单体与垂直切片架构](./ADR-0001-modular-monolith-vertical-slice-architecture.md) - 三层体系与模块组织配合定义系统结构
+
+**被依赖（Depended By）**：
+- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 命名空间规范基于三层体系
+- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 包依赖规则基于三层依赖方向
+- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 运行时交互基于三层装配
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 层级命名规范
+
+---
+
 ## 快速参考表
 
 | 约束编号        | 约束描述                            | 测试方式           | 测试用例                                                    | 必须遵守 |
@@ -125,18 +147,6 @@
 - [ ] Program.cs 是否极简、只调用 Bootstrapper？
 - [ ] 每一层均有唯一 Bootstrapper 入口定义？
 - [ ] 所有依赖方向只允许单向流动？
-
----
-
-## 依赖与相关ADR
-
-| 关联 ADR   | 关系            |
-|----------|---------------|
-| ADR-0000 | 自动化测试机制       |
-| ADR-0001 | 模块组织与切片（配合定义） |
-| ADR-0003 | 命名空间自动推导      |
-| ADR-0004 | 包管理与依赖分层      |
-| ADR-0005 | 运行时交互模型       |
 
 ---
 
