@@ -146,6 +146,28 @@
 
 ---
 
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - Agent 术语使用统一规范
+- [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md) - Agent 变更流程参考 ADR 分级权限
+
+**被依赖（Depended By）**：
+- 所有 Copilot Instructions 和 Agents - Agent 行为必须遵循本 ADR
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - Prompts 文档治理
+- [ADR-940：ADR 关系与溯源管理](../governance/ADR-940-adr-relationship-traceability-management.md) - Agent 必须遵循关系声明规范
+
+---
+
 ## 快速参考表
 
 | 约束编号       | 约束描述                | 测试方式          | 测试用例                        | 必须遵守 |
@@ -191,17 +213,6 @@
 - [ ] Guardian 是否列出所有专业 Agent？
 - [ ] Agent 变更是否按分级权限审批？
 - [ ] Agent 配置文件是否记录版本历史？
-
----
-
-## 依赖与相关ADR
-
-| 关联 ADR   | 关系    | 说明                               |
-|----------|---------|------------------------------------|
-| ADR-0000 | 补充关系  | ADR-0000 定义架构测试机制，本 ADR 定义 Agent 行为边界 |
-| ADR-0006 | 术语提供关系 | ADR-0006 定义术语，本 ADR 定义 Agent 术语      |
-| ADR-0900 | 依赖关系  | Agent 变更流程参考 ADR-0900 分级权限模型       |
-| 所有 ADR   | 元规则关系 | 本 ADR 是所有 Agent 执行其他 ADR 的元规则       |
 
 ---
 

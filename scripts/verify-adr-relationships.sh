@@ -67,7 +67,7 @@ while IFS= read -r adr_file; do
             ((warnings++))
         fi
     fi
-done < <(find "$ADR_DIR" -name "ADR-*.md" -not -name "README.md" -not -path "*/proposals/*" | sort)
+done < <(find "$ADR_DIR" -name "ADR-*.md" -not -name "README.md" -not -name "ADR-RELATIONSHIP-MAP.md" -not -path "*/proposals/*" | sort)
 
 echo "================================"
 echo "验证完成！"

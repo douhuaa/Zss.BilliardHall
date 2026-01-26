@@ -235,6 +235,27 @@
 
 ---
 
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - Handler 生命周期基于 CQRS 和 Handler 模式
+
+**被依赖（Depended By）**：
+- 无
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0240：Handler 异常约束](./ADR-240-handler-exception-constraints.md) - Handler 异常处理是生命周期的一部分
+
+---
+
+
 ## 版本历史
 
 | 版本 | 日期 | 变更说明 | 修订人 |

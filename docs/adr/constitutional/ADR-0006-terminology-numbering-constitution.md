@@ -150,6 +150,31 @@
 
 ---
 
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0001：模块化单体与垂直切片架构](./ADR-0001-modular-monolith-vertical-slice-architecture.md) - 术语定义参考核心架构 ADR
+
+**被依赖（Depended By）**：
+- [ADR-0900：ADR 新增与修订流程](../governance/ADR-0900-adr-process.md) - ADR 流程依赖编号规则
+- [ADR-940：ADR 关系与溯源管理](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系管理依赖编号体系
+- 所有 ADR - 编号规范适用于所有 ADR
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 层级术语
+- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 命名规范
+- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - CQRS 术语
+- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - 文档术语
+
+---
+
 ## 快速参考表
 
 | 约束编号       | 约束描述                | 测试方式             | 测试用例                                         | 必须遵守 |
@@ -189,17 +214,6 @@
 - [ ] 技术层 ADR 是否正确使用 300~399？
 - [ ] 术语使用是否与 ADR-0006 一致？
 - [ ] 是否更新了相关索引文件？
-
----
-
-## 依赖与相关ADR
-
-| 关联 ADR   | 关系          | 说明                         |
-|----------|-------------|----------------------------|
-| ADR-0000 | 补充关系        | ADR-0000 定义架构测试机制，本 ADR 定义编号规则 |
-| ADR-0900 | 依赖关系        | ADR-0900 依赖本 ADR 定义的编号规则     |
-| ADR-0001~0005 | 术语提供关系 | 宪法层 ADR 定义的术语被本 ADR 汇总       |
-| 所有 ADR   | 元规则关系       | 本 ADR 是所有 ADR 的元规则           |
 
 ---
 

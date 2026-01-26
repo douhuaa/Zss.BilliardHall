@@ -301,6 +301,27 @@ public record MemberInfoDto(Guid MemberId, string UserName) : IContract
 
 ---
 
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 契约 DTO 基于 CQRS 模式
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 命名约定遵循术语规范
+- [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 命名空间规范
+
+**被依赖（Depended By）**：
+- 无
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-0120：领域事件命名约定](./ADR-120-domain-event-naming-convention.md) - 同为命名规范
+
+---
+
 ## 版本历史（Version History）
 
 | 版本  | 日期         | 变更说明                                                             | 修订人            |

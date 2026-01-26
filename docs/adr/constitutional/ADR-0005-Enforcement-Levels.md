@@ -203,3 +203,25 @@ public class EndpointBusinessLogicAnalyzer : DiagnosticAnalyzer
 - 我们建立了人机协作的架构治理体系
 
 这不是妥协，这是成熟。
+
+---
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 本文档是 ADR-0005 的执行级别补充
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 执行级别基于测试和 CI 治理机制
+
+**被依赖（Depended By）**：
+- 无
+
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- 无
+
+---
