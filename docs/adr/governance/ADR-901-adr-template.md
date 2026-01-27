@@ -1,12 +1,12 @@
 ﻿---
 adr: ADR-901
-title: ADR 编写与结构统一宪法
+title: "ADR 编写与结构统一宪法"
 status: Final
 level: Constitutional
-deciders: Architecture Board
+deciders: "Architecture Board"
 date: 2025-01-20
-supersedes:
-superseded_by:
+supersedes: null
+superseded_by: null
 ---
 
 # ADR-901：ADR 编写与结构统一宪法
