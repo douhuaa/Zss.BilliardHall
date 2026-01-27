@@ -1,12 +1,22 @@
+---
+adr: ADR-0000
+title: "架构测试与 CI 治理宪法"
+status: Final
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "2.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0000：架构测试与 CI 治理宪法
 
+---
 > **唯一架构执法元规则**：本文件定义架构合法性评判的唯一基准。所有架构测试、CI 校验、Prompt 映射、破例治理均以本 ADR 正文为裁定源。
 
-**状态**：✅ Final（不可随意修改）  
-**版本**：2.0  
-**级别**：架构治理 / 宪法层  
-**生效时间**：即刻  
-**适用范围**：全体代码仓库及所有 ADR（ADR-0001 ~ 0005）
 
 ---
 

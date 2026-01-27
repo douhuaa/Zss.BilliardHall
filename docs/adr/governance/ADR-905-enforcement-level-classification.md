@@ -1,16 +1,26 @@
+---
+adr: ADR-905
+title: "执行级别分类（Enforcement Level Classification）"
+status: Accepted
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-905：执行级别分类（Enforcement Level Classification）
 
+---
 > **注意**：本文档是 [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) 的补充文档。  
 > 主 ADR 定义"是什么"，本文档定义"如何验证"。  
 > 同时参见：[ADR-0000：架构测试与 CI 治理](./ADR-0000-architecture-tests.md)
 
-**状态**：✅ Active  
-**版本**：1.0
-**级别**：架构约束 / 补充说明  
-**适用范围**：ADR-0005 所有规则的验证和执行  
 **关联 ADR**：ADR-0005 应用内交互模型与执行边界  
 **目的**：明确定义 ADR-0005 各项规则的可执行性边界  
-**生效时间**：即刻
 
 ---
 

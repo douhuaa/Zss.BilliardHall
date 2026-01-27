@@ -1,13 +1,22 @@
+---
+adr: ADR-220
+title: "事件总线集成规范"
+status: Accepted
+level: Runtime
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-220：事件总线集成规范
 
+---
 > ⚖️ **本 ADR 定义事件总线集成的架构约束，确保模块间通信的松耦合和可靠性。**
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：运行时层（Runtime Constraint）  
-**适用范围**：所有模块间事件通信  
-**生效时间**：待审批通过后  
-**依赖 ADR**：ADR-0001（模块化单体与垂直切片架构）
 
 ---
 

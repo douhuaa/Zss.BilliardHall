@@ -1,12 +1,22 @@
+---
+adr: ADR-920
+title: "示例代码治理宪法"
+status: Final
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-920：示例代码治理宪法
 
+---
 > ⚖️ **本 ADR 是所有示例代码（Examples）的唯一裁决源，定义示例的边界、约束与执法机制。**
 
-**状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：治理层 / 架构元规则  
-**适用范围**：所有示例代码（examples/、docs/examples/、README 代码块、ADR 代码示例）  
-**生效时间**：即刻
 
 ---
 
@@ -379,4 +389,3 @@ public class CreateOrderHandler { }
 
 非裁决性参考（详细示例、场景说明）请查阅：
 - [ADR-0920 Copilot Prompts](../../copilot/adr-0920.prompts.md)
-

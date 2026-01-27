@@ -1,12 +1,22 @@
+---
+adr: ADR-930
+title: "代码审查与 ADR 合规自检流程"
+status: Final
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-930：代码审查与 ADR 合规自检流程
 
+---
 > ⚖️ **本 ADR 是所有 PR 和代码审查流程的唯一裁决源，定义 ADR 合规性检查的执行标准。**
 
-**状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：治理层 / 架构元规则  
-**适用范围**：所有 Pull Request 和代码审查流程  
-**生效时间**：即刻
 
 ---
 
@@ -261,4 +271,3 @@ Pull Request **必须**至少获得一名具有审查权限的责任人批准。
 非裁决性参考（详细示例、审查清单）请查阅：
 - PR 模板参见 `.github/PULL_REQUEST_TEMPLATE.md`
 - 审查清单参见 `docs/copilot/adr-0930.prompts.md`
-

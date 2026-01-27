@@ -1,10 +1,18 @@
-# ADR-0001：模块化单体与垂直切片架构
+---
+adr: ADR-0001
+title: "模块化单体与垂直切片架构"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "4.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
 
-**状态**：✅ Final（裁决型ADR）  
-**版本**：4.0  
-**级别**：架构约束 / 系统级 Contract  
-**适用范围**：所有 Host、模块、各类测试、未来扩展子系统  
-**生效时间**：即刻
+# ADR-0001：模块化单体与垂直切片架构
 
 ---
 

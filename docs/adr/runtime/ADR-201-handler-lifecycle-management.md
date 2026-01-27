@@ -1,13 +1,22 @@
+---
+adr: ADR-201
+title: "Handler 生命周期管理"
+status: Accepted
+level: Runtime
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-201：Handler 生命周期管理
 
+---
 > ⚖️ **本 ADR 定义 Command Handler 生命周期规则，确保线程安全和资源正确管理。**
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：运行时层（Runtime Constraint）  
-**适用范围**：所有 Command Handler 实现  
-**生效时间**：待审批通过后  
-**依赖 ADR**：ADR-0005（应用内交互模型）
 
 ---
 

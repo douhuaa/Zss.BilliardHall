@@ -1,11 +1,18 @@
-# ADR-121：契约（Contract）与 DTO 命名组织规范
+---
+adr: ADR-121
+title: "契约（Contract）与 DTO 命名组织规范"
+status: Adopted
+level: Structure
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
 
-**状态**：✅ 已采纳（Adopted）  
-**版本**：1.0
-**级别**：结构约束（Structure Constraint）  
-**适用范围**：所有模块（Modules）、跨模块数据传递、API 层、事件与命令 Query 消息  
-**生效时间**：即刻  
-**依赖 ADR**：ADR-0001（模块化单体与垂直切片架构）、ADR-0003（命名空间规范）、ADR-0005（应用内交互模型）、ADR-120（领域事件命名规范）
+# ADR-121：契约（Contract）与 DTO 命名组织规范
 
 ---
 

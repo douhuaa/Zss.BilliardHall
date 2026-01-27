@@ -1,10 +1,18 @@
-# ADR-340：结构化日志与监控约束
+---
+adr: ADR-340
+title: "结构化日志与监控约束"
+status: Final
+level: Technical
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
 
-**状态**：✅ Final  
-**版本**：1.0
-**级别**：技术层  
-**影响范围**：Platform 层、所有运行时环境（Host.Web、Host.Worker）  
-**生效时间**：即刻
+# ADR-340：结构化日志与监控约束
 
 ---
 

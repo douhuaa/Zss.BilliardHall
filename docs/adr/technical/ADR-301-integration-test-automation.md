@@ -1,10 +1,18 @@
-# ADR-301：集成测试环境自动化与隔离约束
+---
+adr: ADR-301
+title: "集成测试环境自动化与隔离约束"
+status: Accepted
+level: Technical
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：技术层  
-**影响范围**：所有集成测试、测试基础设施  
-**生效时间**：待审批通过后
+# ADR-301：集成测试环境自动化与隔离约束
 
 ---
 

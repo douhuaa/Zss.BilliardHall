@@ -1,10 +1,18 @@
-# ADR-350：日志与可观测性字段标准
+---
+adr: ADR-350
+title: "日志与可观测性字段标准"
+status: Accepted
+level: Technical
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：技术层  
-**影响范围**：所有日志输出、结构化日志字段  
-**生效时间**：待审批通过后
+# ADR-350：日志与可观测性字段标准
 
 ---
 

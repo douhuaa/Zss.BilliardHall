@@ -1,5 +1,20 @@
-# 文档治理体系空白分析与建设建议
+---
+adr: ADR-Documentation-Governance-Gap-Analysis
+title: "文档治理体系空白分析与建设建议"
+status: Draft
+level: Proposal
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "0.1"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
 
+# ADR-Documentation-Governance-Gap-Analysis：文档治理体系空白分析与建设建议
+
+---
 **状态**：📋 Proposal（提案，非正式 ADR）  
 **级别**：分析报告（Analysis Report）  
 **版本**：1.0  

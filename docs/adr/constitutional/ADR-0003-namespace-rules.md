@@ -1,10 +1,18 @@
-# ADR-0003：命名空间与项目边界规范
+---
+adr: ADR-0003
+title: "命名空间与项目边界规范"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
 
-**状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构约束（Architectural Contract）  
-**适用范围**：所有 Platform / Application / Modules / Host / Tests 项目  
-**生效时间**：即刻
+# ADR-0003：命名空间与项目边界规范
 
 ---
 

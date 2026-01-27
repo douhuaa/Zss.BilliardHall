@@ -1,12 +1,23 @@
+---
+adr: ADR-123
+title: "Repository 接口与分层命名规范"
+status: Accepted
+level: Structure
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-123：Repository 接口与分层命名规范
 
+---
 > ⚖️ **本 ADR 定义 Repository 接口与实现的分层位置和命名的唯一裁决规则。**
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：结构层  
 **影响范围**：所有 Repository 实现  
-**生效时间**：待审批通过后
 
 ---
 

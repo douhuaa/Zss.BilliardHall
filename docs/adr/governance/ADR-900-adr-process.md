@@ -1,13 +1,23 @@
+---
+adr: ADR-900
+title: "ADR 新增与修订流程"
+status: Final
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.2"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-900：ADR 新增与修订流程
 
+---
 > ⚖️ 本流程是 Zss.BilliardHall 唯一有效 ADR 生命周期闭环规范。任何未走本流程的 ADR 在本项目中视为无效，不具约束力。
 
-**状态**：✅ Final（裁决型ADR）  
-**级别**：治理层 / 生命周期最高约束  
-**版本**：1.2  
 **修订日期**：2026-01-23  
-**适用范围**：所有 ADR（0000~999）  
-**生效时间**：即刻
 
 ---
 

@@ -1,10 +1,18 @@
-# ADR-0005：应用内交互模型极简判裁版
+---
+adr: ADR-0005
+title: "应用内交互模型极简判裁版"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
 
-**状态**：✅ Final（仅保留裁决性规则，无“建议/经验”）  
-**版本**：1.0
-**级别**：根约束（Runtime Constitutional Rule）  
-**适用范围**：Application / Modules / Host  
-**生效时间**：即刻
+# ADR-0005：应用内交互模型极简判裁版
 
 ---
 

@@ -1,12 +1,23 @@
+---
+adr: ADR-122
+title: "测试代码组织与命名规范"
+status: Accepted
+level: Structure
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-122：测试代码组织与命名规范
 
+---
 > ⚖️ **本 ADR 定义测试代码组织与命名的唯一裁决规则。**
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：结构层  
 **影响范围**：所有测试代码  
-**生效时间**：待审批通过后
 
 ---
 
