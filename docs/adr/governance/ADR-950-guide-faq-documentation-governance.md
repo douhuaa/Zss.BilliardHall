@@ -1,3 +1,17 @@
+---
+adr: ADR-950
+title: "指南与 FAQ 文档治理宪法"
+status: Accepted
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "架构委员会"
+reviewer: "@douhuaa"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-950：指南与 FAQ 文档治理宪法
 
 > ⚖️ **本 ADR 是所有非裁决性文档（Guide、FAQ、Case、Standard）的唯一治理标准，定义其与 ADR 的分离边界。**
@@ -473,9 +487,4 @@ Standard（工程标准，不得引入新约束）
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初始版本，定义非裁决性文档治理标准 | GitHub Copilot |
 
----
 
-**维护**：架构委员会  
-**审核**：@douhuaa  
-**状态**：✅ Accepted
-**版本**：1.0

@@ -1,3 +1,17 @@
+---
+adr: ADR-960
+title: "Onboarding 文档治理宪法"
+status: Accepted
+level: Governance
+deciders: "Tech Lead & Onboarding Champion"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Tech Lead & Onboarding Champion"
+reviewer: "待定"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-960：Onboarding 文档治理宪法
 
 > ⚖️ **本 ADR 是所有 Onboarding 文档（新人入职文档）的唯一治理标准，定义其结构、审计和反馈机制。**
@@ -435,10 +449,3 @@ Onboarding 文档 **必须**指定明确的责任人。
 | 版本 | 日期 | 变更说明 | 作者 |
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初版：定义 Onboarding 文档治理机制 | GitHub Copilot |
-
----
-
-**维护**：Tech Lead & Onboarding Champion  
-**审核**：待定  
-**状态**：✅ Accepted
-**版本**：1.0

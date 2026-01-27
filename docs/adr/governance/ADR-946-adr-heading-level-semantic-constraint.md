@@ -1,3 +1,17 @@
+---
+adr: ADR-946
+title: "ADR 标题级别即语义级别约束"
+status: Accepted
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "架构委员会"
+reviewer: "@douhuaa"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-946：ADR 标题级别即语义级别约束
 
 > ⚖️ **本 ADR 定义 ADR 文档中标题层级与机器可解析语义之间的强制对应关系，用于防止解析歧义和治理规则污染。**
@@ -213,9 +227,4 @@ ADR 文档不是普通的 Markdown 文档，而是一种**机器可裁决的治�
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初始版本，定义标题级别语义约束 | GitHub Copilot |
 
----
 
-**维护**：架构委员会  
-**审核**：@douhuaa  
-**状态**：✅ Accepted  
-**版本**：1.0

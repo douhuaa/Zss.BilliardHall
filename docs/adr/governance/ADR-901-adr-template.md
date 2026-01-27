@@ -5,6 +5,9 @@ status: Final
 level: Constitutional
 deciders: "Architecture Board"
 date: 2025-01-20
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
 ---
@@ -186,10 +189,3 @@ ADR 中 **严禁**：
 | 版本  | 日期         | 变更说明   | 作者                 |
 | --- | ---------- | ------ | ------------------ |
 | 1.0 | 2025-01-20 | 初始正式版本 | Architecture Board |
-
----
-
-**维护**：Architecture Board
-**审核**：Architecture Board
-**状态**：Final
-**版本**：1.0

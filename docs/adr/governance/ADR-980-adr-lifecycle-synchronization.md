@@ -1,3 +1,17 @@
+---
+adr: ADR-980
+title: "ADR 生命周期一体化同步机制宪法"
+status: Accepted
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "架构委员会"
+reviewer: "待定"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-980：ADR 生命周期一体化同步机制宪法
 
 > ⚖️ **本 ADR 是 ADR 变更同步管理的唯一裁决源，定义 ADR/测试/Prompt 三位一体的强制同步机制。**
@@ -361,8 +375,3 @@ ADR-0001 版本不一致：
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初版：定义 ADR/测试/Prompt 三位一体同步机制 | GitHub Copilot |
 
----
-
-**维护**：架构委员会  
-**审核**：待定  
-**状态**：✅ Accepted
