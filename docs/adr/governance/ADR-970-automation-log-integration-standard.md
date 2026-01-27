@@ -458,9 +458,18 @@ jobs:
 - [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md)
 
 ### 实施工具
-- `scripts/convert-test-report.js` - 报告格式转换
-- `.github/workflows/` - CI Workflows
-- JSON Schema 定义文件
+
+**已实施**（2026-01-27）：
+- `scripts/lib/json-output.sh` - 通用 JSON 输出库（依据 ADR-970.2）
+- `scripts/validate-adr-consistency.sh` - ADR 一致性验证（支持 JSON 输出）
+- `scripts/validate-three-way-mapping.sh` - 三位一体映射验证（支持 JSON 输出）
+- `docs/reports/` - 标准化日志存储目录（依据 ADR-970.1）
+
+**待实施**：
+- `scripts/convert-test-report.js` - 报告格式转换（计划中）
+- `.github/workflows/` - CI Workflows 集成（计划中）
+- JSON Schema 定义文件（计划中）
+- 其他验证脚本的 JSON 输出支持（进行中）
 
 ### 背景材料
 - [ADR-Documentation-Governance-Gap-Analysis.md](../proposals/ADR-Documentation-Governance-Gap-Analysis.md) - 原始提案
