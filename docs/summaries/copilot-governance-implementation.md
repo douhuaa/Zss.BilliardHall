@@ -424,10 +424,10 @@ README.md                               ← 更新的主文档
 
 ### A. 相关资源
 
-- [Copilot 治理体系总览](docs/copilot/README.md)
-- [ADR 目录](docs/adr/)
-- [架构指南](docs/architecture-guide.md)
-- [CI/CD 指南](docs/ci-cd-guide.md)
+- [Copilot 治理体系总览](../copilot/README.md)
+- [ADR 目录](../adr/)
+- [架构指南](../guides/architecture-design-guide.md)
+- [CI/CD 指南](../guides/ci-cd-integration-guide.md)
 
 ### B. 术语表
 

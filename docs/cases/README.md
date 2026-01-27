@@ -24,12 +24,12 @@
 ## 案例分类
 
 ### 模块通信
-- 待添加：领域事件通信案例
-- 待添加：契约查询案例
+- [领域事件通信模式](domain-event-communication-case.md) - 🟡 中等难度 - 如何使用领域事件实现模块间异步通信
+- [契约查询模式](contract-query-pattern-case.md) - 🟢 简单难度 - 如何使用契约查询实现跨模块数据读取
 
 ### 测试实践
+- [Handler 单元测试](handler-unit-testing-case.md) - 🟢 简单难度 - 如何为 Command/Query Handler 编写单元测试
 - 待添加：架构测试编写案例
-- 待添加：Handler 单元测试案例
 
 ### 重构案例
 - 待添加：从分层架构到垂直切片的重构
