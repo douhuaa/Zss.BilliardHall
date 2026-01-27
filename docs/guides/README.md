@@ -27,14 +27,15 @@
 - [AI 治理指南](ai-governance-guide.md) - AI 治理系统快速入门
 
 ### 架构实践
-- [架构设计指南](architecture-design-guide.md) - 模块化单体架构设计指南
+- [架构治理系统](../ARCHITECTURE-GOVERNANCE-SYSTEM.md) - 治理体系设计：四层架构、角色定义、执行链路（面向架构师和治理维护者）
+- [架构设计指南](architecture-design-guide.md) - 代码架构设计：模块化单体、垂直切片、模块设计规则（面向开发者）
 - [架构验证指南](architecture-verification-guide.md) - 三层架构验证体系说明
 - [跨模块通信](cross-module-communication.md) - 如何实现跨模块通信
 
 ### 测试与质量
-- [测试框架指南](testing-framework-guide.md) - 测试策略与实践指南
-- [测试架构指南](test-architecture-guide.md) - 三层测试架构详解
-- [ADR 测试一致性指南](adr-test-consistency-guide.md) - ADR 与测试映射规范
+- [测试完整指南](testing-framework-guide.md) - 测试入口文档：测试策略概览、运行方法（面向所有开发者）
+- [三层测试架构说明](test-architecture-guide.md) - 测试架构深度解读：Governance/Enforcement/Heuristics 分层设计（面向测试维护者和架构师）
+- [ADR-测试一致性指南](adr-test-consistency-guide.md) - ADR-测试映射实操手册：编写测试的具体流程（面向 ADR 和测试编写者）
 - [ADR 测试映射指南](adr-test-mapping-guide.md) - ADR-测试-Prompt 三向映射规范
 
 ### 开发标准
