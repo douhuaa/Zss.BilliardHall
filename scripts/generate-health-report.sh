@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # ADR 健康报告生成器
+# 依据 ADR-970.2 支持 JSON 输出
 #
 # 此脚本生成 ADR 治理体系的综合健康报告，包括：
 # 1. ADR 文档统计和覆盖率
@@ -8,8 +9,17 @@
 # 3. 编号一致性状态
 # 4. 破例和技术债务统计
 # 5. 近期变更趋势
+#
+# 用法：
+#   ./generate-health-report.sh [OUTPUT_FILE] [--format text|json]
+#
+# 示例：
+#   ./generate-health-report.sh
+#   ./generate-health-report.sh docs/adr-health-report.md
+#   ./generate-health-report.sh --format json
+#   ./generate-health-report.sh docs/reports/architecture-tests/health-report.json --format json
 
-set -e
+set -eo pipefail
 
 # 定义路径
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -17,7 +27,56 @@ REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 ADR_PATH="$REPO_ROOT/docs/adr"
 TESTS_PATH="$REPO_ROOT/src/tests/ArchitectureTests/ADR"
 PROMPTS_PATH="$REPO_ROOT/docs/copilot"
-OUTPUT_FILE="${1:-$REPO_ROOT/docs/adr-health-report.md}"
+
+# 输出格式和路径
+OUTPUT_FORMAT="text"
+OUTPUT_FILE=""
+
+# 解析参数
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --format)
+            OUTPUT_FORMAT="$2"
+            shift 2
+            ;;
+        --help)
+            echo "用法: $0 [OUTPUT_FILE] [--format text|json]"
+            echo ""
+            echo "选项:"
+            echo "  OUTPUT_FILE        输出文件路径（可选）"
+            echo "  --format FORMAT    输出格式：text（默认）或 json"
+            echo "  --help             显示帮助信息"
+            echo ""
+            echo "示例:"
+            echo "  $0                                    # 生成默认文本报告"
+            echo "  $0 docs/my-report.md                  # 生成文本报告到指定文件"
+            echo "  $0 --format json                      # 生成 JSON 报告到默认位置"
+            echo "  $0 report.json --format json          # 生成 JSON 报告到指定文件"
+            exit 0
+            ;;
+        *)
+            if [ -z "$OUTPUT_FILE" ]; then
+                OUTPUT_FILE="$1"
+            fi
+            shift
+            ;;
+    esac
+done
+
+# 设置默认输出文件
+if [ -z "$OUTPUT_FILE" ]; then
+    if [ "$OUTPUT_FORMAT" = "json" ]; then
+        OUTPUT_FILE="$REPO_ROOT/docs/reports/architecture-tests/health-report.json"
+    else
+        OUTPUT_FILE="$REPO_ROOT/docs/adr-health-report.md"
+    fi
+fi
+
+# 加载 JSON 输出库（如果使用 JSON 格式）
+if [ "$OUTPUT_FORMAT" = "json" ]; then
+    source "$SCRIPT_DIR/lib/json-output.sh"
+    json_start "generate-health-report" "1.0.0" "health-report"
+fi
 
 # 颜色输出
 RED='\033[0;31m'
@@ -369,24 +428,143 @@ EOF
 
 # 主执行函数
 function main() {
-    log_info "生成 ADR 健康报告..."
-    log_info "输出文件：$OUTPUT_FILE"
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        log_info "生成 ADR 健康报告..."
+        log_info "输出文件：$OUTPUT_FILE"
+        
+        {
+            generate_header
+            analyze_adrs
+            analyze_test_coverage
+            analyze_prompt_mapping
+            analyze_numbering_consistency
+            generate_recommendations
+            generate_tools_guide
+            generate_footer
+        } > "$OUTPUT_FILE"
+        
+        log_info "✅ 报告生成完成：$OUTPUT_FILE"
+        echo ""
+        echo "查看报告："
+        echo "  cat $OUTPUT_FILE"
+    else
+        # JSON 模式
+        generate_json_report
+    fi
+}
+
+# 生成 JSON 报告
+function generate_json_report() {
+    # 统计 ADR 文档
+    local constitutional_count=$(find "$ADR_PATH/constitutional" -name "ADR-*.md" 2>/dev/null | wc -l)
+    local structure_count=$(find "$ADR_PATH/structure" -name "ADR-*.md" 2>/dev/null | wc -l)
+    local runtime_count=$(find "$ADR_PATH/runtime" -name "ADR-*.md" 2>/dev/null | wc -l)
+    local technical_count=$(find "$ADR_PATH/technical" -name "ADR-*.md" 2>/dev/null | wc -l)
+    local governance_count=$(find "$ADR_PATH/governance" -name "ADR-*.md" 2>/dev/null | wc -l)
+    local total_count=$((constitutional_count + structure_count + runtime_count + technical_count + governance_count))
     
-    {
-        generate_header
-        analyze_adrs
-        analyze_test_coverage
-        analyze_prompt_mapping
-        analyze_numbering_consistency
-        generate_recommendations
-        generate_tools_guide
-        generate_footer
-    } > "$OUTPUT_FILE"
+    # 添加 ADR 统计详情
+    json_add_detail "ADR_Count_Constitutional" "ADR-900" "info" \
+        "宪法层 ADR 数量: $constitutional_count" \
+        "" "" \
+        "docs/adr/governance/ADR-900-adr-process.md"
     
-    log_info "✅ 报告生成完成：$OUTPUT_FILE"
-    echo ""
-    echo "查看报告："
-    echo "  cat $OUTPUT_FILE"
+    json_add_detail "ADR_Count_Structure" "ADR-900" "info" \
+        "结构层 ADR 数量: $structure_count" \
+        "" "" \
+        "docs/adr/governance/ADR-900-adr-process.md"
+    
+    json_add_detail "ADR_Count_Runtime" "ADR-900" "info" \
+        "运行层 ADR 数量: $runtime_count" \
+        "" "" \
+        "docs/adr/governance/ADR-900-adr-process.md"
+    
+    json_add_detail "ADR_Count_Technical" "ADR-900" "info" \
+        "技术层 ADR 数量: $technical_count" \
+        "" "" \
+        "docs/adr/governance/ADR-900-adr-process.md"
+    
+    json_add_detail "ADR_Count_Governance" "ADR-900" "info" \
+        "治理层 ADR 数量: $governance_count" \
+        "" "" \
+        "docs/adr/governance/ADR-900-adr-process.md"
+    
+    json_add_detail "ADR_Count_Total" "ADR-900" "info" \
+        "ADR 总数: $total_count" \
+        "" "" \
+        "docs/adr/governance/ADR-900-adr-process.md"
+    
+    # 统计测试覆盖率
+    local total_tests=$(find "$TESTS_PATH" -name "ADR_*.cs" 2>/dev/null | wc -l)
+    local adr_with_must_test=0
+    local adr_with_test_file=0
+    
+    while IFS= read -r file; do
+        local temp_file=$(mktemp)
+        awk '/^```/ { in_code_block = !in_code_block; next } !in_code_block { print }' "$file" > "$temp_file"
+        local marked=$(grep -c "【必须架构测试覆盖】\|【必须测试】\|\[MUST_TEST\]" "$temp_file" 2>/dev/null || true)
+        rm -f "$temp_file"
+        
+        if [ -n "$marked" ] && [ "$marked" != "0" ]; then
+            adr_with_must_test=$((adr_with_must_test + 1))
+            local number=$(basename "$file" | sed -n 's/^ADR-\([0-9]\{4\}\).*/\1/p')
+            if [ -f "$TESTS_PATH/ADR_${number}_Architecture_Tests.cs" ]; then
+                adr_with_test_file=$((adr_with_test_file + 1))
+            fi
+        fi
+    done < <(find "$ADR_PATH" -name "ADR-*.md")
+    
+    local coverage_rate=0
+    if [ $adr_with_must_test -gt 0 ]; then
+        coverage_rate=$((adr_with_test_file * 100 / adr_with_must_test))
+    fi
+    
+    local coverage_severity="info"
+    if [ $coverage_rate -lt 80 ]; then
+        coverage_severity="warning"
+    fi
+    if [ $coverage_rate -lt 60 ]; then
+        coverage_severity="error"
+    fi
+    
+    json_add_detail "Test_Coverage" "ADR-0000" "$coverage_severity" \
+        "测试覆盖率: ${coverage_rate}% ($adr_with_test_file/$adr_with_must_test)" \
+        "" "" \
+        "docs/adr/governance/ADR-0000-architecture-tests.md"
+    
+    # 统计 Prompt 映射
+    local total_prompts=$(find "$PROMPTS_PATH" -name "adr-*.prompts.md" 2>/dev/null | wc -l)
+    local mapping_rate=0
+    if [ $total_count -gt 0 ]; then
+        mapping_rate=$((total_prompts * 100 / total_count))
+    fi
+    
+    local mapping_severity="info"
+    if [ $mapping_rate -lt 80 ]; then
+        mapping_severity="warning"
+    fi
+    
+    json_add_detail "Prompt_Mapping" "ADR-900" "$mapping_severity" \
+        "Prompt 映射率: ${mapping_rate}% ($total_prompts/$total_count)" \
+        "" "" \
+        "docs/adr/governance/ADR-900-adr-process.md"
+    
+    # 检查编号一致性
+    if "$SCRIPT_DIR/validate-adr-consistency.sh" > /dev/null 2>&1; then
+        json_add_detail "Numbering_Consistency" "ADR-930" "info" \
+            "编号与目录一致性: 通过" \
+            "" "" \
+            "docs/adr/governance/ADR-930-adr-numbering-convention.md"
+    else
+        json_add_detail "Numbering_Consistency" "ADR-930" "error" \
+            "编号与目录一致性: 失败" \
+            "" "" \
+            "docs/adr/governance/ADR-930-adr-numbering-convention.md"
+    fi
+    
+    # 输出 JSON
+    status=$(json_determine_status)
+    json_save "$status" "$OUTPUT_FILE"
 }
 
 # 执行
