@@ -55,9 +55,9 @@ dotnet run --project src/Host/Worker/Worker.csproj
 完整的架构文档请查看 [docs/](docs/) 目录：
 
 - **[📍 文档导航中心](docs/index.md)** - 按角色和任务的快速导航（主入口）
-- **[快速开始指南](docs/QUICK-START.md)** - 15 分钟极速上手 / 60 分钟完整入门
-- **[架构指南](docs/architecture-guide.md)** - 架构概述和开发指南
-- **[CI/CD 指南](docs/ci-cd-guide.md)** - 持续集成和测试
+- **[快速开始指南](docs/guides/quick-start-guide.md)** - 15 分钟极速上手 / 60 分钟完整入门
+- **[架构指南](docs/guides/architecture-design-guide.md)** - 架构概述和开发指南
+- **[CI/CD 指南](docs/guides/ci-cd-integration-guide.md)** - 持续集成和测试
 - **[ADR-0001](docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)** - 架构决策记录
 
 ## 🤖 AI 驱动的架构治理体系
@@ -329,7 +329,7 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 3. 实现 Command/Query、Handler 和 Endpoint
 4. 运行架构测试验证
 
-详见 [架构指南](docs/architecture-guide.md#开发指南)。
+详见 [架构指南](docs/guides/architecture-design-guide.md#开发指南)。
 
 ### 模块间通信
 
@@ -339,7 +339,7 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 2. **数据契约** - 只读数据传递（仅限查询）
 3. **命令编排** - 在 Application 层编排
 
-详见 [架构指南 - 模块间通信](docs/architecture-guide.md#模块间通信)。
+详见 [架构指南 - 模块间通信](docs/guides/architecture-design-guide.md#模块间通信)。
 
 ## 贡献
 
