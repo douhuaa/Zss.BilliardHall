@@ -260,7 +260,8 @@ public sealed class ADR_0003_Architecture_Tests
                                   projectName == "Web" ||
                                   projectName == "Worker" ||
                                   projectName == "ArchitectureTests" ||
-                                  projectName == "ArchitectureAnalyzers";  // Level 2 enforcement tool
+                                  projectName == "ArchitectureAnalyzers" ||  // Level 2 enforcement tool
+                                  projectName == "AdrParserCli";  // CLI tool in tools directory
 
                 Assert.True(isValidName,
                 $"❌ ADR-0003.8 违规: 项目命名不符合命名空间约定\n\n" +
