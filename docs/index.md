@@ -61,10 +61,10 @@
 
 | 我想...             | 查看文档                                                                        |
 |-------------------|-----------------------------------------------------------------------------|
-| 🚀 **快速了解项目**     | [README](../README.md) → [架构概览](architecture-guide.md)                      |
+| 🚀 **快速了解项目**     | [README](../README.md) → [架构概览](guides/architecture-design-guide.md)                      |
 | 📖 **学习架构决策**     | [ADR 目录](adr/README.md)                                                     |
-| 💻 **开发新功能**      | [架构指南](architecture-guide.md) → [模块开发](#-模块开发指南)                            |
-| 🧪 **运行测试**       | [架构测试指南](#-架构测试) → [CI/CD 指南](ci-cd-guide.md)                               |
+| 💻 **开发新功能**      | [架构指南](guides/architecture-design-guide.md) → [模块开发](#-模块开发指南)                            |
+| 🧪 **运行测试**       | [架构测试指南](#-架构测试) → [CI/CD 指南](guides/ci-cd-integration-guide.md)                               |
 | ❌ **处理测试失败**      | [测试失败诊断](#-测试失败诊断) → [Copilot 诊断](copilot/architecture-test-failures.md)    |
 | 🤖 **使用 Copilot** | [Copilot 角色定位](copilot/README.md) → [Prompts 库](copilot/)                   |
 | 🔍 **查看改进历史**     | [改进总结](summaries/README.md)                                                 |
@@ -74,17 +74,17 @@
 
 | 角色         | 典型任务     | 主要文档                                                                                                                      | 协作文档                                                                                                                                                                    |
 |------------|----------|---------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **开发者**    | 开发新功能    | [架构指南](architecture-guide.md), [模块 README](../src/Modules/)                                                               | [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md), [ADR-0005](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) |
-| **开发者**    | 修复 bug   | [测试指南](TESTING-GUIDE.md), [架构测试失败诊断](copilot/architecture-test-failures.md)                                               | [CI/CD 指南](ci-cd-guide.md)                                                                                                                                              |
-| **开发者**    | 提交 PR    | [PR 模板](../.github/PULL_REQUEST_TEMPLATE.md), [文档维护指南](DOCUMENTATION-MAINTENANCE.md)                                      | [Copilot 评审](copilot/pr-review-pipeline.md)                                                                                                                             |
-| **架构师**    | 制定架构决策   | [ADR-900](adr/governance/ADR-900-adr-process.md), [宪法层说明](adr/constitutional/README.md)                                 | [架构指南](architecture-guide.md)                                                                                                                                           |
+| **开发者**    | 开发新功能    | [架构指南](guides/architecture-design-guide.md), [模块 README](../src/Modules/)                                                               | [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md), [ADR-0005](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) |
+| **开发者**    | 修复 bug   | [测试指南](guides/testing-framework-guide.md), [架构测试失败诊断](copilot/architecture-test-failures.md)                                               | [CI/CD 指南](guides/ci-cd-integration-guide.md)                                                                                                                                              |
+| **开发者**    | 提交 PR    | [PR 模板](../.github/PULL_REQUEST_TEMPLATE.md), [文档维护指南](engineering-standards/documentation-maintenance-standard.md)                                      | [Copilot 评审](copilot/pr-review-pipeline.md)                                                                                                                             |
+| **架构师**    | 制定架构决策   | [ADR-900](adr/governance/ADR-900-adr-process.md), [宪法层说明](adr/constitutional/README.md)                                 | [架构指南](guides/architecture-design-guide.md)                                                                                                                                           |
 | **架构师**    | 架构评审     | [ADR 目录](adr/README.md), [架构测试](../src/tests/ArchitectureTests/README.md)                                                 | [违规记录](summaries/arch-violations.md)                                                                                                                                    |
-| **QA/测试**  | 编写测试     | [测试指南](TESTING-GUIDE.md), [.github/instructions/testing.instructions.md](../.github/instructions/testing.instructions.md) | [架构测试 README](../src/tests/ArchitectureTests/README.md)                                                                                                                 |
-| **QA/测试**  | 调查测试失败   | [架构测试失败诊断](copilot/architecture-test-failures.md), [测试指南-故障处理](TESTING-GUIDE.md#-测试失败处理流程)                                | [Copilot Prompts](copilot/)                                                                                                                                             |
-| **DevOps** | 配置 CI/CD | [CI/CD 指南](ci-cd-guide.md), [架构自动化验证](architecture-automation-verification.md)                                            | [GitHub Actions](../.github/workflows/)                                                                                                                                 |
-| **DevOps** | 监控健康度    | [文档健康度度量](DOCUMENTATION-MAINTENANCE.md#-文档健康度度量)                                                                          | [ADR-0000](adr/governance/ADR-0000-architecture-tests.md)                                                                                                               |
-| **新成员**    | 快速入门     | [快速开始](QUICK-START.md), [README](../README.md)                                                                            | [架构指南前3章](architecture-guide.md)                                                                                                                                        |
-| **新成员**    | 理解架构     | [ADR-0001~0005](adr/constitutional/), [架构指南](architecture-guide.md)                                                       | [Copilot 角色定位](copilot/README.md)                                                                                                                                       |
+| **QA/测试**  | 编写测试     | [测试指南](guides/testing-framework-guide.md), [.github/instructions/testing.instructions.md](../.github/instructions/testing.instructions.md) | [架构测试 README](../src/tests/ArchitectureTests/README.md)                                                                                                                 |
+| **QA/测试**  | 调查测试失败   | [架构测试失败诊断](copilot/architecture-test-failures.md), [测试指南-故障处理](guides/testing-framework-guide.md#-测试失败处理流程)                                | [Copilot Prompts](copilot/)                                                                                                                                             |
+| **DevOps** | 配置 CI/CD | [CI/CD 指南](guides/ci-cd-integration-guide.md), [架构自动化验证](guides/architecture-verification-guide.md)                                            | [GitHub Actions](../.github/workflows/)                                                                                                                                 |
+| **DevOps** | 监控健康度    | [文档健康度度量](engineering-standards/documentation-maintenance-standard.md#-文档健康度度量)                                                                          | [ADR-0000](adr/governance/ADR-0000-architecture-tests.md)                                                                                                               |
+| **新成员**    | 快速入门     | [快速开始](guides/quick-start-guide.md), [README](../README.md)                                                                            | [架构指南前3章](guides/architecture-design-guide.md)                                                                                                                                        |
+| **新成员**    | 理解架构     | [ADR-0001~0005](adr/constitutional/), [架构指南](guides/architecture-design-guide.md)                                                       | [Copilot 角色定位](copilot/README.md)                                                                                                                                       |
 
 > 💡 **使用提示**：此映射表帮助团队成员快速定位跨角色协作所需的文档，减少沟通成本。
 
@@ -134,13 +134,13 @@ graph TB
 
 ## 🚀 新人快速开始
 
-> 💡 **完整指南**：查看 **[快速开始指南 (QUICK-START.md)](QUICK-START.md)** 获取 60 分钟完整入门教程
+> 💡 **完整指南**：查看 **[快速开始指南 (guides/quick-start-guide.md)](guides/quick-start-guide.md)** 获取 60 分钟完整入门教程
 
 ### 第一步：理解项目（10 分钟）
 
-1. 📄 [快速开始指南](QUICK-START.md) - 60 分钟完整入门
+1. 📄 [快速开始指南](guides/quick-start-guide.md) - 60 分钟完整入门
 2. 📄 [项目 README](../README.md) - 项目概述、技术栈
-3. 📐 [架构指南](architecture-guide.md) - 架构概述（重点阅读前 3 章）
+3. 📐 [架构指南](guides/architecture-design-guide.md) - 架构概述（重点阅读前 3 章）
 4. 🏛️ [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 核心架构决策
 
 ### 第二步：环境搭建（15 分钟）
@@ -198,8 +198,8 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 
 ### 核心文档
 
-- 📘 **[快速开始指南](QUICK-START.md)** - 60 分钟快速入门
-- 📘 **[架构设计指南](architecture-guide.md)** - 完整架构说明
+- 📘 **[快速开始指南](guides/quick-start-guide.md)** - 60 分钟快速入门
+- 📘 **[架构设计指南](guides/architecture-design-guide.md)** - 完整架构说明
 - 📋 **[架构决策记录 (ADR)](adr/README.md)** - 所有架构决策
 - 🏗️ **[模块开发指南](#-模块开发指南)** - 如何开发业务模块
 
@@ -260,11 +260,11 @@ graph LR
 
 ## 🧪 测试与 CI/CD
 
-> 💡 **完整指南**：查看 **[测试完整指南 (TESTING-GUIDE.md)](TESTING-GUIDE.md)** 获取所有测试相关信息
+> 💡 **完整指南**：查看 **[测试完整指南 (guides/testing-framework-guide.md)](guides/testing-framework-guide.md)** 获取所有测试相关信息
 
 ### 架构测试
 
-- 📘 **[测试完整指南](TESTING-GUIDE.md)** - 所有测试类型的完整说明
+- 📘 **[测试完整指南](guides/testing-framework-guide.md)** - 所有测试类型的完整说明
 - 📘 **[架构测试 README](../src/tests/ArchitectureTests/README.md)** - 测试说明
 - 🏛️ **[ADR-0000](adr/governance/ADR-0000-architecture-tests.md)** - 架构测试治理
 
@@ -280,8 +280,8 @@ dotnet test --filter "FullyQualifiedName~ADR_0001"
 
 ### CI/CD 集成
 
-- 📘 **[CI/CD 指南](ci-cd-guide.md)** - CI 流程和本地开发
-- 🤖 **[自动化验证系统](architecture-automation-verification.md)** - 三层防御体系
+- 📘 **[CI/CD 指南](guides/ci-cd-integration-guide.md)** - CI 流程和本地开发
+- 🤖 **[自动化验证系统](guides/architecture-verification-guide.md)** - 三层防御体系
 
 **CI 流程**：
 
@@ -480,7 +480,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 ### CI/CD
 
 - 🔧 **[.github/workflows/](../.github/workflows/)** - GitHub Actions 工作流
-- 📘 **[CI/CD 指南](ci-cd-guide.md)** - 详细集成说明
+- 📘 **[CI/CD 指南](guides/ci-cd-integration-guide.md)** - 详细集成说明
 
 ---
 
@@ -556,7 +556,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 | 文档 | 说明 | 适用人群 |
 |------|------|---------|
 | [架构治理系统总览](ARCHITECTURE-GOVERNANCE-SYSTEM.md) | 完整的五层体系说明 | 所有人 |
-| [AI 治理快速入门](AI-GOVERNANCE-QUICK-START.md) | 15 分钟快速上手 | 新成员 |
+| [AI 治理快速入门](AI-GOVERNANCE-guides/quick-start-guide.md) | 15 分钟快速上手 | 新成员 |
 | [Copilot 角色定位](copilot/README.md) | AI 在项目中的作用 | 开发者 |
 
 ### 分层文档
@@ -584,7 +584,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 
 | 场景 | 使用的 Agent | 参考文档 |
 |------|------------|---------|
-| 开发新功能前 | @architecture-guardian | [快速入门](AI-GOVERNANCE-QUICK-START.md#场景-1我想添加一个新功能) |
-| 架构测试失败 | @test-enforcer | [快速入门](AI-GOVERNANCE-QUICK-START.md#场景-2架构测试失败了) |
-| 跨模块调用 | @module-boundary-checker | [快速入门](AI-GOVERNANCE-QUICK-START.md#场景-3我想跨模块调用) |
-| 提交 PR 前 | @adr-reviewer | [快速入门](AI-GOVERNANCE-QUICK-START.md#场景-4我要提交-pr) |
+| 开发新功能前 | @architecture-guardian | [快速入门](AI-GOVERNANCE-guides/quick-start-guide.md#场景-1我想添加一个新功能) |
+| 架构测试失败 | @test-enforcer | [快速入门](AI-GOVERNANCE-guides/quick-start-guide.md#场景-2架构测试失败了) |
+| 跨模块调用 | @module-boundary-checker | [快速入门](AI-GOVERNANCE-guides/quick-start-guide.md#场景-3我想跨模块调用) |
+| 提交 PR 前 | @adr-reviewer | [快速入门](AI-GOVERNANCE-guides/quick-start-guide.md#场景-4我要提交-pr) |
