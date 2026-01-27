@@ -1,0 +1,171 @@
+name: Architecture Violations Scanner
+
+# 根据 ADR-0000.Y 破例成本管理，定期扫描过期破例
+# 每月第一天自动运行，发现过期破例则构建失败
+
+on:
+  schedule:
+    # 每月第一天 UTC 00:00 运行
+    - cron: '0 0 1 * *'
+  workflow_dispatch: # 允许手动触发
+  push:
+    paths:
+      - 'docs/summaries/arch-violations.md'
+      - '.github/workflows/arch-violations-scanner.yml'
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  scan-violations:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Scan for overdue violations
+        id: scan
+        run: |
+          python3 << 'EOF'
+          import re
+          import sys
+          from datetime import datetime
+          
+          # 读取 arch-violations.md
+          try:
+              with open('docs/summaries/arch-violations.md', 'r', encoding='utf-8') as f:
+                  content = f.read()
+          except FileNotFoundError:
+              print("❌ arch-violations.md 文件不存在")
+              sys.exit(1)
+          
+          # 提取版本号（假设格式为 vX.Y.Z）
+          def parse_version(version_str):
+              """解析版本号字符串，返回 (major, minor, patch) 元组"""
+              match = re.match(r'v?(\d+)\.(\d+)\.(\d+)', version_str.strip())
+              if match:
+                  return tuple(map(int, match.groups()))
+              return None
+          
+          # 模拟当前版本（实际应从 Directory.Build.props 或其他地方读取）
+          # 为演示目的，使用固定版本
+          CURRENT_VERSION = (2, 0, 0)  # v2.0.0
+          
+          # 查找活跃破例（状态为 🚧 Active）
+          active_pattern = r'\|\s*([A-Z]+-\d+)\s*\|\s*([^\|]+)\|\s*([^\|]+)\|\s*([^\|]+)\|\s*([^\|]+)\|\s*(v[\d\.]+)\s*\|\s*([^\|]+)\|\s*([^\|]+)\|\s*([^\|]+)\|\s*🚧\s*\|'
+          
+          overdue_violations = []
+          lines = content.split('\n')
+          
+          for line_num, line in enumerate(lines, 1):
+              match = re.search(active_pattern, line)
+              if match:
+                  violation_id = match.group(1).strip()
+                  due_version_str = match.group(6).strip()
+                  due_version = parse_version(due_version_str)
+                  
+                  if due_version and due_version <= CURRENT_VERSION:
+                      overdue_violations.append({
+                          'id': violation_id,
+                          'due_version': due_version_str,
+                          'line': line_num,
+                          'content': line.strip()
+                      })
+          
+          # 输出结果
+          if overdue_violations:
+              print("❌ 发现过期破例：")
+              print("")
+              for v in overdue_violations:
+                  print(f"  - {v['id']} (到期版本: {v['due_version']}, 行: {v['line']})")
+              print("")
+              print(f"当前版本: v{'.'.join(map(str, CURRENT_VERSION))}")
+              print("")
+              print("根据 ADR-0000.Y，过期破例必须偿还或申请延期。")
+              print("")
+              
+              # 设置 GitHub Actions 输出
+              with open('overdue_violations.txt', 'w') as f:
+                  for v in overdue_violations:
+                      f.write(f"{v['id']}\n")
+              
+              sys.exit(1)
+          else:
+              print("✅ 未发现过期破例")
+              sys.exit(0)
+          EOF
+
+      - name: Create Issue for overdue violations
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let violations = [];
+            try {
+              const content = fs.readFileSync('overdue_violations.txt', 'utf8');
+              violations = content.trim().split('\n').filter(v => v);
+            } catch (error) {
+              console.log('无法读取过期破例列表');
+            }
+            
+            if (violations.length > 0) {
+              const body = `## ⚠️ 发现过期架构破例
+            
+            根据 [ADR-0000.Y 破例成本管理](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/governance/ADR-0000-architecture-tests.md)，以下破例已过期：
+            
+            ${violations.map(v => `- ${v}`).join('\n')}
+            
+            ### 📋 必须行动
+            
+            1. **偿还技术债**：修复违规代码，移除破例
+            2. **申请延期**：如有技术障碍，提供延期理由并重新审批（最多延期 2 次）
+            
+            ### 📚 相关资源
+            
+            - [arch-violations.md](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/summaries/arch-violations.md)
+            - [ADR-0000：架构测试与 CI 治理宪法](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/governance/ADR-0000-architecture-tests.md)
+            
+            ### ⏰ 截止时间
+            
+            - 必须在 7 天内完成偿还或延期申请
+            - 否则将触发强制架构审查
+            
+            ---
+            
+            **自动生成于**: ${new Date().toISOString()}
+            `;
+              
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `[ARCH-VIOLATION] 发现 ${violations.length} 个过期架构破例`,
+                body: body,
+                labels: ['architecture', 'tech-debt', 'urgent']
+              });
+            }
+
+      - name: Report scan results
+        if: always()
+        run: |
+          echo "::group::架构破例扫描结果"
+          if [ -f overdue_violations.txt ]; then
+            echo "❌ 发现过期破例，详见上方日志"
+            echo ""
+            echo "根据 ADR-0000.Y："
+            echo "- 过期破例必须立即偿还或申请延期"
+            echo "- 延期需 Tech Lead/架构师重新审批"
+            echo "- 最多延期 2 次"
+            echo "- 超过 2 次必须强制偿还"
+          else
+            echo "✅ 所有架构破例均在有效期内"
+          fi
+          echo "::endgroup::"

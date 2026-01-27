@@ -207,6 +207,16 @@ public class EndpointBusinessLogicAnalyzer : DiagnosticAnalyzer
 
 ---
 
+## 变更政策（Change Policy）
+
+- **ADR-905**（补充性文档）
+  - 本 ADR 是 ADR-0005 的补充说明，定义执行级别分类
+  - 修改需 Tech Lead 审批
+  - 修改时需同步更新 ADR-0005 的相关章节
+  - 需要更新对应的架构测试和 Roslyn Analyzer
+
+---
+
 ## 关系声明（Relationships）
 
 **依赖（Depends On）**：

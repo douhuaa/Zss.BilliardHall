@@ -22,6 +22,7 @@
 ### 治理
 - [架构违规记录](arch-violations.md)
 - [Copilot 治理实施](copilot-governance-implementation.md)
+- [治理层 ADR 改进实施](governance-adr-improvement-implementation.md)
 - [PR#126 完成](pr126-todo-completion-summary.md)
 
 ### 文档
