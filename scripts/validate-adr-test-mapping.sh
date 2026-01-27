@@ -1,11 +1,20 @@
 #!/bin/bash
 
 # ADR-测试映射一致性校验工具
+# 依据 ADR-970.2 支持 JSON 输出
 #
 # 此脚本用于验证 ADR 文档与架构测试之间的一致性，确保：
 # 1. 每条 ADR 中标记为【必须架构测试覆盖】的条款都有对应的测试
 # 2. 每个测试方法都正确引用了对应的 ADR 编号和条款
 # 3. 测试失败消息包含正确的 ADR 引用
+#
+# 用法：
+#   ./validate-adr-test-mapping.sh [--format text|json] [--output FILE]
+#
+# 示例：
+#   ./validate-adr-test-mapping.sh
+#   ./validate-adr-test-mapping.sh --format json
+#   ./validate-adr-test-mapping.sh --format json --output docs/reports/architecture-tests/adr-test-mapping.json
 
 set -e
 
@@ -16,6 +25,42 @@ ADR_PATH="$REPO_ROOT/docs/adr"
 TESTS_PATH="$REPO_ROOT/src/tests/ArchitectureTests/ADR"
 PROMPTS_PATH="$REPO_ROOT/docs/copilot"
 
+# 输出格式和路径
+OUTPUT_FORMAT="text"
+OUTPUT_FILE=""
+
+# 解析参数
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --format)
+            OUTPUT_FORMAT="$2"
+            shift 2
+            ;;
+        --output)
+            OUTPUT_FILE="$2"
+            shift 2
+            ;;
+        --help)
+            echo "用法: $0 [--format text|json] [--output FILE]"
+            echo ""
+            echo "选项:"
+            echo "  --format FORMAT    输出格式：text（默认）或 json"
+            echo "  --output FILE      输出到文件（仅在 json 格式时有效）"
+            echo "  --help             显示帮助信息"
+            exit 0
+            ;;
+        *)
+            echo "未知选项: $1"
+            exit 1
+            ;;
+    esac
+done
+
+# 加载 JSON 输出库（如果使用 JSON 格式）
+if [ "$OUTPUT_FORMAT" = "json" ]; then
+    source "$SCRIPT_DIR/lib/json-output.sh"
+fi
+
 # 颜色输出
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -24,11 +69,27 @@ CYAN='\033[0;36m'
 GRAY='\033[0;90m'
 NC='\033[0m' # No Color
 
-# 输出函数
-function log_success() { echo -e "${GREEN}✅ $1${NC}"; }
-function log_warning() { echo -e "${YELLOW}⚠️  $1${NC}"; }
-function log_error() { echo -e "${RED}❌ $1${NC}"; }
-function log_info() { echo -e "${CYAN}ℹ️  $1${NC}"; }
+# 输出函数（仅用于文本模式）
+function log_success() { 
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${GREEN}✅ $1${NC}"
+    fi
+}
+function log_warning() { 
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${YELLOW}⚠️  $1${NC}"
+    fi
+}
+function log_error() { 
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${RED}❌ $1${NC}"
+    fi
+}
+function log_info() { 
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${CYAN}ℹ️  $1${NC}"
+    fi
+}
 
 # 统计变量
 TOTAL_ADRS=0
@@ -130,8 +191,15 @@ function extract_test_assertions() {
 
 # 主验证函数
 function validate_mapping() {
+    # 初始化 JSON 输出（如果使用 JSON 格式）
+    if [ "$OUTPUT_FORMAT" = "json" ]; then
+        json_start "validate-adr-test-mapping" "1.0.0" "adr-test-mapping"
+    fi
+    
     log_info "开始 ADR-测试映射验证..."
-    echo ""
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo ""
+    fi
     
     # 获取所有 ADR 文件
     local adr_files=()
@@ -149,7 +217,9 @@ function validate_mapping() {
     
     log_info "发现 $TOTAL_ADRS 个 ADR 文档"
     log_info "发现 ${#test_files[@]} 个测试文件"
-    echo ""
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo ""
+    fi
     
     # 构建测试文件映射
     declare -A test_file_map
@@ -168,7 +238,9 @@ function validate_mapping() {
             continue
         fi
         
-        echo -e "${GRAY}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            echo -e "${GRAY}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        fi
         log_info "检查 ADR-$adr_number ($(basename "$adr_file"))"
         
         # 提取 ADR 要求
@@ -177,6 +249,12 @@ function validate_mapping() {
         
         if [ "$req_count" -eq 0 ]; then
             log_warning "  未发现标记为【必须架构测试覆盖】的条款"
+            if [ "$OUTPUT_FORMAT" = "json" ]; then
+                json_add_detail "No_Test_Requirements" "ADR-$adr_number" "info" \
+                    "未发现标记为【必须架构测试覆盖】的条款" \
+                    "$adr_file" "" \
+                    "docs/adr/governance/ADR-0000-architecture-tests.md"
+            fi
         else
             log_info "  发现 $req_count 条必须测试的约束"
         fi
@@ -186,13 +264,23 @@ function validate_mapping() {
             log_error "  缺少测试文件: ADR_${adr_number}_Architecture_Tests.cs"
             IS_VALID=false
             REQUIREMENTS_WITHOUT_TESTS=$((REQUIREMENTS_WITHOUT_TESTS + req_count))
-            echo ""
+            if [ "$OUTPUT_FORMAT" = "json" ]; then
+                json_add_detail "Missing_Test_File" "ADR-$adr_number" "error" \
+                    "缺少测试文件: ADR_${adr_number}_Architecture_Tests.cs" \
+                    "$adr_file" "" \
+                    "docs/adr/governance/ADR-0000-architecture-tests.md"
+            fi
+            if [ "$OUTPUT_FORMAT" = "text" ]; then
+                echo ""
+            fi
             continue
         fi
         
         # 如果没有标记约束，跳过测试文件检查
         if [ "$req_count" -eq 0 ]; then
-            echo ""
+            if [ "$OUTPUT_FORMAT" = "text" ]; then
+                echo ""
+            fi
             continue
         fi
         
@@ -218,8 +306,20 @@ function validate_mapping() {
         if [ "$methods_without_ref" -gt 0 ]; then
             log_warning "  $methods_without_ref 个测试方法可能缺少 ADR 引用"
             IS_VALID=false
+            if [ "$OUTPUT_FORMAT" = "json" ]; then
+                json_add_detail "Missing_ADR_References" "ADR-$adr_number" "warning" \
+                    "$methods_without_ref 个测试方法可能缺少 ADR 引用" \
+                    "$test_file" "" \
+                    "docs/adr/governance/ADR-0000-architecture-tests.md"
+            fi
         else
             log_success "  所有测试方法都包含 ADR 引用"
+            if [ "$OUTPUT_FORMAT" = "json" ]; then
+                json_add_detail "ADR_References_Complete" "ADR-$adr_number" "info" \
+                    "所有 $total_methods 个测试方法都包含 ADR 引用" \
+                    "$test_file" "" \
+                    "docs/adr/governance/ADR-0000-architecture-tests.md"
+            fi
         fi
         
         # 简单检查：如果有要求但测试数量为 0，标记为问题
@@ -227,57 +327,78 @@ function validate_mapping() {
             log_error "  ADR 有 $req_count 条约束需要测试，但未发现任何测试方法"
             REQUIREMENTS_WITHOUT_TESTS=$((REQUIREMENTS_WITHOUT_TESTS + req_count))
             IS_VALID=false
+            if [ "$OUTPUT_FORMAT" = "json" ]; then
+                json_add_detail "No_Test_Methods" "ADR-$adr_number" "error" \
+                    "ADR 有 $req_count 条约束需要测试，但未发现任何测试方法" \
+                    "$test_file" "" \
+                    "docs/adr/governance/ADR-0000-architecture-tests.md"
+            fi
         else
             REQUIREMENTS_WITH_TESTS=$((REQUIREMENTS_WITH_TESTS + req_count))
         fi
         
-        echo ""
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            echo ""
+        fi
     done
     
     # 输出总结
-    echo -e "${GRAY}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo ""
-    echo -e "${CYAN}📊 验证总结${NC}"
-    echo -e "${GRAY}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo ""
-    echo "ADR 文档统计："
-    echo "  总 ADR 数：$TOTAL_ADRS"
-    echo "  总约束条款数：$TOTAL_REQUIREMENTS"
-    echo -e "  有测试覆盖：${GREEN}$REQUIREMENTS_WITH_TESTS${NC}"
-    if [ "$REQUIREMENTS_WITHOUT_TESTS" -gt 0 ]; then
-        echo -e "  缺少测试：${RED}$REQUIREMENTS_WITHOUT_TESTS${NC}"
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${GRAY}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        echo ""
+        echo -e "${CYAN}📊 验证总结${NC}"
+        echo -e "${GRAY}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        echo ""
+        echo "ADR 文档统计："
+        echo "  总 ADR 数：$TOTAL_ADRS"
+        echo "  总约束条款数：$TOTAL_REQUIREMENTS"
+        echo -e "  有测试覆盖：${GREEN}$REQUIREMENTS_WITH_TESTS${NC}"
+        if [ "$REQUIREMENTS_WITHOUT_TESTS" -gt 0 ]; then
+            echo -e "  缺少测试：${RED}$REQUIREMENTS_WITHOUT_TESTS${NC}"
+        else
+            echo -e "  缺少测试：${GREEN}$REQUIREMENTS_WITHOUT_TESTS${NC}"
+        fi
+        echo ""
+        echo "测试文件统计："
+        echo "  总测试方法数：$TOTAL_TESTS"
+        echo -e "  有 ADR 引用：${GREEN}$TESTS_WITH_ADR_REF${NC}"
+        if [ "$TESTS_WITHOUT_ADR_REF" -gt 0 ]; then
+            echo -e "  缺少 ADR 引用：${RED}$TESTS_WITHOUT_ADR_REF${NC}"
+        else
+            echo -e "  缺少 ADR 引用：${GREEN}$TESTS_WITHOUT_ADR_REF${NC}"
+        fi
+        echo ""
+        
+        if [ "$IS_VALID" = true ]; then
+            log_success "验证通过：ADR 文档与测试映射一致！"
+        else
+            log_error "验证失败：发现 ADR-测试映射不一致问题"
+            echo ""
+            echo -e "${YELLOW}请执行以下操作：${NC}"
+            echo "  1. 为缺少测试的 ADR 约束编写对应的架构测试"
+            echo "  2. 为缺少 ADR 引用的测试方法添加正确的 ADR 编号"
+            echo "  3. 确保测试失败消息包含 ADR 引用（格式：ADR-XXXX 违规：...）"
+            echo ""
+            echo -e "${CYAN}参考文档：${NC}"
+            echo "  - docs/adr/governance/ADR-0000-architecture-tests.md"
+            echo "  - docs/copilot/README.md"
+            echo ""
+        fi
     else
-        echo -e "  缺少测试：${GREEN}$REQUIREMENTS_WITHOUT_TESTS${NC}"
+        # JSON 输出
+        local status=$(json_determine_status)
+        if [ -n "$OUTPUT_FILE" ]; then
+            json_save "$status" "$OUTPUT_FILE"
+        else
+            json_finalize "$status"
+        fi
     fi
-    echo ""
-    echo "测试文件统计："
-    echo "  总测试方法数：$TOTAL_TESTS"
-    echo -e "  有 ADR 引用：${GREEN}$TESTS_WITH_ADR_REF${NC}"
-    if [ "$TESTS_WITHOUT_ADR_REF" -gt 0 ]; then
-        echo -e "  缺少 ADR 引用：${RED}$TESTS_WITHOUT_ADR_REF${NC}"
-    else
-        echo -e "  缺少 ADR 引用：${GREEN}$TESTS_WITHOUT_ADR_REF${NC}"
-    fi
-    echo ""
     
     if [ "$IS_VALID" = true ]; then
-        log_success "验证通过：ADR 文档与测试映射一致！"
+        return 0
     else
-        log_error "验证失败：发现 ADR-测试映射不一致问题"
-        echo ""
-        echo -e "${YELLOW}请执行以下操作：${NC}"
-        echo "  1. 为缺少测试的 ADR 约束编写对应的架构测试"
-        echo "  2. 为缺少 ADR 引用的测试方法添加正确的 ADR 编号"
-        echo "  3. 确保测试失败消息包含 ADR 引用（格式：ADR-XXXX 违规：...）"
-        echo ""
-        echo -e "${CYAN}参考文档：${NC}"
-        echo "  - docs/adr/governance/ADR-0000-architecture-tests.md"
-        echo "  - docs/copilot/README.md"
-        echo ""
         return 1
     fi
-    
-    return 0
 }
 
 # 主执行
