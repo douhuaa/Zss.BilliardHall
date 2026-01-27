@@ -302,9 +302,10 @@ cat docs/reports/architecture-tests/latest.json | jq '.details[] | select(.sever
 - [scripts/README.md](../../scripts/README.md) - 工具使用指南
 - [docs/reports/README.md](../reports/README.md) - 日志存储说明
 - [scripts/lib/json-output.sh](../../scripts/lib/json-output.sh) - JSON 输出库
+- **[脚本 JSON 输出对齐实施总结（续）](./script-json-alignment-continuation.md)** - 后续对齐工作和中期计划完成情况
 
 ---
 
 **维护**：架构委员会  
 **完成日期**：2026-01-27  
-**状态**：✅ 核心对齐完成
+**状态**：✅ 核心对齐完成（续篇工作见 script-json-alignment-continuation.md）
