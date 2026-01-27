@@ -184,6 +184,29 @@ function create_adr() {
     # 获取当前日期
     local date=$(date +%Y-%m-%d)
     
+    # 根据层级设置级别
+    local level
+    case "$tier" in
+        constitutional)
+            level="Constitutional"
+            ;;
+        governance)
+            level="Governance"
+            ;;
+        structure)
+            level="Structure"
+            ;;
+        runtime)
+            level="Runtime"
+            ;;
+        technical)
+            level="Technical"
+            ;;
+        *)
+            level="Governance"
+            ;;
+    esac
+    
     # 从模板创建，填充基本信息
     if [ -f "$TEMPLATE_PATH" ]; then
         cp "$TEMPLATE_PATH" "$filepath"
@@ -191,35 +214,57 @@ function create_adr() {
         sed -i "s/ADR-XXXX/ADR-$number/g" "$filepath"
         sed -i "s/〈裁决型标题〉/$title/g" "$filepath"
         sed -i "s/YYYY-MM-DD/$date/g" "$filepath"
-        
-        # 设置状态为 Draft
-        sed -i "s/Draft | Accepted | Final | Superseded/Draft/g" "$filepath"
-        
-        # 根据层级设置级别
-        case "$tier" in
-            constitutional)
-                sed -i "s/宪法层 | 决策层/宪法层/g" "$filepath"
-                ;;
-            *)
-                sed -i "s/宪法层 | 决策层/决策层/g" "$filepath"
-                ;;
-        esac
+        sed -i "s/level: Constitutional/level: $level/g" "$filepath"
     else
         log_warning "模板文件不存在，创建简单版本"
         cat > "$filepath" << EOF
+---
+adr: ADR-$number
+title: "$title"
+status: Draft
+level: $level
+deciders: "Architecture Board"
+date: $date
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "待定"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-$number：$title
 
-**状态**：Draft  
-**级别**：宪法层  
-**生效时间**：$date
+> ⚖️ 权威声明：〈一句话说明本 ADR 的权威性和适用范围〉
 
 ---
 
-## 规则本体（Rule）
+## 聚焦内容（Focus）
 
-> **这是本 ADR 唯一具有裁决力的部分。**
+本 ADR 聚焦于解决以下问题：
 
-（待填写规则...）
+* 〈待填写〉
+
+**适用范围**：
+
+* 〈明确列出适用的模块 / 层 / 仓库〉
+
+---
+
+## 术语表（Glossary）
+
+| 术语 | 定义 | 英文对照 |
+|-----|-----|---------|
+
+---
+
+## 裁决（Decision）
+
+> ⚠️ **本节是唯一裁决来源，其他章节不得产生新规则。**
+
+### 规则列表
+
+**ADR-$number.1：〈规则标题〉**
+〈使用"必须 / 禁止 / 不允许 / 应当"等明确语义描述规则〉
 
 ---
 
@@ -227,17 +272,63 @@ function create_adr() {
 
 ### 测试映射
 
-| 规则编号 | 执行级 | 测试/手段 |
-|---------|-------|----------|
+| 规则编号 | 执行级 | 测试 / 手段 |
+|---------|-------|-----------|
 | ADR-$number.1 | L1 | （待定） |
 
 ---
 
-## 历史记录
+## 明确不管什么（Non-Goals）
 
-| 版本 | 日期 | 变更说明 |
-|-----|------|---------|
-| 1.0 | $date | 初始版本 |
+本 ADR **不负责**：
+
+* （待填写）
+
+---
+
+## 禁止行为（Prohibited）
+
+ADR 中 **严禁**：
+
+* （待填写）
+
+---
+
+## 关系声明（Relationships）
+
+**依赖（Depends On）**：
+
+* 无
+
+**被依赖（Depended By）**：
+
+* 无
+
+**替代（Supersedes）**：
+
+* 无
+
+**被替代（Superseded By）**：
+
+* 无
+
+**相关（Related）**：
+
+* 无
+
+---
+
+## 非裁决性参考（References）
+
+* （待填写）
+
+---
+
+## 版本历史（History）
+
+| 版本 | 日期 | 变更说明 | 作者 |
+|-----|------|---------|------|
+| 1.0 | $date | 初始版本 | 〈作者〉 |
 EOF
     fi
     

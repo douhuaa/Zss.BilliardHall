@@ -236,7 +236,7 @@ docs/reports/
 每个 ADR **应该**包含相关测试和日志位置：
 
 ```markdown
-## 执法模型（Enforcement）
+### Enforcement Section Example
 
 | 规则编号 | 执行级别 | 测试/手段 | 说明 |
 |---------|---------|----------|------|
