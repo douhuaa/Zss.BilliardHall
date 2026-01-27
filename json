@@ -1,0 +1,37 @@
+{
+  "type": "health-report",
+  "timestamp": "2026-01-27T05:37:23Z",
+  "source": "generate-health-report",
+  "version": "1.0.0",
+  "status": "failure",
+  "summary": {
+    "total": 9,
+    "passed": 8,
+    "failed": 1,
+    "warnings": 0
+  },
+  "details": [
+    {"test":"ADR_Count_Constitutional","adr":"ADR-900","severity":"info","message":"宪法层 ADR 数量: 8","fix_guide":"docs/adr/governance/ADR-900-adr-process.md"}
+,
+    {"test":"ADR_Count_Structure","adr":"ADR-900","severity":"info","message":"结构层 ADR 数量: 5","fix_guide":"docs/adr/governance/ADR-900-adr-process.md"}
+,
+    {"test":"ADR_Count_Runtime","adr":"ADR-900","severity":"info","message":"运行层 ADR 数量: 4","fix_guide":"docs/adr/governance/ADR-900-adr-process.md"}
+,
+    {"test":"ADR_Count_Technical","adr":"ADR-900","severity":"info","message":"技术层 ADR 数量: 4","fix_guide":"docs/adr/governance/ADR-900-adr-process.md"}
+,
+    {"test":"ADR_Count_Governance","adr":"ADR-900","severity":"info","message":"治理层 ADR 数量: 20","fix_guide":"docs/adr/governance/ADR-900-adr-process.md"}
+,
+    {"test":"ADR_Count_Total","adr":"ADR-900","severity":"info","message":"ADR 总数: 41","fix_guide":"docs/adr/governance/ADR-900-adr-process.md"}
+,
+    {"test":"Test_Coverage","adr":"ADR-0000","severity":"error","message":"测试覆盖率: 10% (1/10)","fix_guide":"docs/adr/governance/ADR-0000-architecture-tests.md"}
+,
+    {"test":"Prompt_Mapping","adr":"ADR-900","severity":"info","message":"Prompt 映射率: 100% (41/41)","fix_guide":"docs/adr/governance/ADR-900-adr-process.md"}
+,
+    {"test":"Numbering_Consistency","adr":"ADR-930","severity":"info","message":"编号与目录一致性: 通过","fix_guide":"docs/adr/governance/ADR-930-adr-numbering-convention.md"}
+  ],
+  "metadata": {
+    "branch": "copilot/continue-json-alignment-script",
+    "commit": "ce97ecd",
+    "author": "copilot-swe-agent[bot]"
+  }
+}
