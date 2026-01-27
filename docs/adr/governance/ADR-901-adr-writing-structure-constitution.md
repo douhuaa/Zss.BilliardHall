@@ -1,19 +1,17 @@
-﻿---
-adr: ADR-901
-title: ADR 编写与结构统一宪法
-status: Final
-level: Constitutional
-deciders: Architecture Board
-date: 2025-01-20
-supersedes:
-superseded_by:
----
-
 # ADR-901：ADR 编写与结构统一宪法
 
-> **这是 ADR 体系的“写作宪法”。**
+> ⚖️ **这是 ADR 体系的"写作宪法"。**
 > 本 ADR 定义：**ADR 应该长什么样、必须包含什么、禁止出现什么，以及如何被执行与审计。**
 > 任何不符合本 ADR 的文档，**不具备治理裁决力**。
+
+**状态**：✅ Final（裁决型ADR）  
+**版本**：1.0  
+**级别**：治理层 / 宪法层  
+**适用范围**：所有 ADR（0000~999）  
+**生效时间**：即刻  
+**决策者**：Architecture Board  
+**决策日期**：2025-01-20
+
 
 ---
 
@@ -158,11 +156,16 @@ ADR 中 **严禁**：
 
 **Depends On**：
 
-* ADR-0000（架构治理宪法）
+* [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md)
 
 **Depended By**：
 
-* 所有文档类 ADR（09xx）
+* [ADR-910：README 编写与维护宪法](./ADR-910-readme-governance-constitution.md)
+* [ADR-920：示例代码治理宪法](./ADR-920-examples-governance-constitution.md)
+* [ADR-940：ADR 关系追溯与治理](./ADR-940-adr-relationship-traceability-management.md)
+* [ADR-946：ADR 标题级别语义约束](./ADR-946-adr-heading-level-semantic-constraint.md)
+* [ADR-950：Guide 与 FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md)
+* 所有其他文档类 ADR（09xx）
 
 **Supersedes**：
 
@@ -170,7 +173,9 @@ ADR 中 **严禁**：
 
 **Related**：
 
-* ADR-0900（文档治理总则）
+* [ADR-900：ADR 新增与修订流程](./ADR-900-adr-process.md)
+* [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md)
+* [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
 
 ---
 
