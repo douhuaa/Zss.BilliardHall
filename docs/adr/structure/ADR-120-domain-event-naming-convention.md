@@ -1,11 +1,18 @@
-# ADR-120：领域事件命名规范
+---
+adr: ADR-120
+title: "领域事件命名规范"
+status: Adopted
+level: Structure
+deciders: "Architecture Board"
+date: 2026-01-24
+version: "1.2"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
 
-**状态**：✅ 已采纳（Adopted）  
-**版本**：1.0
-**级别**：结构约束（Structure Constraint）  
-**适用范围**：所有模块（Modules）、领域事件定义、事件处理器  
-**生效时间**：即刻  
-**依赖 ADR**：ADR-0001、ADR-0003、ADR-0005
+# ADR-120：领域事件命名规范
 
 ---
 
@@ -168,7 +175,7 @@ public class OrderCreatedEventAdapter
 
 ---
 
-## 快速参考表（Quick Reference）
+## 执法模型（Enforcement）
 
 | 约束编号      | 描述                     | 层级 | 测试用例                                      | 章节       |
 |-----------|------------------------|----|--------------------------------------------|----------|
@@ -185,33 +192,6 @@ public class OrderCreatedEventAdapter
 
 ---
 
-## 依赖与相关 ADR
-
-| 关联 ADR   | 关系          |
-|----------|-------------|
-| ADR-0001 | 定义模块隔离和通信原则 |
-| ADR-0003 | 定义命名空间映射规则  |
-| ADR-0005 | 定义事件通信机制    |
-| ADR-0000 | 定义架构约束测试方法  |
-
----
-
-## 检查清单（Checklist）
-
-- [ ] 事件名称遵循 {AggregateRoot}{Action}Event 模式
-- [ ] 动词使用过去式
-- [ ] 事件在 Zss.BilliardHall.Modules.{ModuleName}.Events 命名空间
-- [ ] 文件路径与命名空间严格对应
-- [ ] 事件使用 record 定义
-- [ ] 事件只包含原始类型、DTO
-- [ ] 事件不包含业务方法
-- [ ] 事件处理器命名为 {EventName}Handler
-- [ ] 跨模块订阅仅通过事件
-- [ ] 版本演进使用 V{N} 后缀
-- [ ] L1 级约束有架构测试覆盖
-
----
-
 ## 明确不管什么（Non-Goals）
 
 本 ADR **不负责**：
@@ -221,6 +201,20 @@ public class OrderCreatedEventAdapter
 - 事件风暴和领域建模方法（DDD 最佳实践）
 - 事件存储和回放机制
 - 代码生成模板和 IDE 插件
+
+---
+
+## 禁止行为（Prohibited）
+
+本 ADR **严禁**：
+
+* 在事件类中添加业务逻辑方法
+* 在事件中直接引用领域实体（Entity/Aggregate/ValueObject）
+* 使用非过去式动词命名事件
+* 在非 Events 命名空间下定义事件类型
+* 事件处理器使用 Processor、Service 等错误后缀
+* 直接修改已发布的事件结构（应使用版本化）
+* 在事件中嵌入跨模块的业务判断字段
 
 ---
 
@@ -246,10 +240,17 @@ public class OrderCreatedEventAdapter
 
 ---
 
-## 版本历史
+## 非裁决性参考（References）
+
+* [ADR-0000：架构治理宪法](../governance/ADR-0000-architecture-tests.md) - 定义架构约束测试方法
+
+---
+
+## 版本历史（History）
 
 | 版本  | 日期         | 变更摘要                                                                                           |
 |-----|------------|------------------------------------------------------------------------------------------------|
+| 1.2 | 2026-01-26 | 按照 ADR-901 标准统一格式 - 添加 YAML Front Matter，调整章节顺序，新增禁止行为章节                                |
 | 1.2 | 2026-01-24 | 精简版本：移除冗长说明，只保留规则本体；ADR-120.2 升级至 L1；ADR-120.7 降级至 L2；强化事件处理器命名规则支持多订阅场景；明确类型版本 ≠ 序列化兼容 |
 | 1.1 | 2026-01-24 | 强化版本：扩展 EventHandler 命名规则；明确版本命名不等于序列化策略；升级动词过去式约束至 L1                                       |
 | 1.0 | 2026-01-24 | 初始版本                                                                                           |
