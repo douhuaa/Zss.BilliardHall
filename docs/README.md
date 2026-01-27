@@ -18,7 +18,7 @@ graph TB
     NewDev -->|开发功能| DevGuide[开发指南]
     NewDev -->|处理CI失败| CIFix[CI/CD指南]
     
-    QuickStart --> ArchGuide[📘 架构指南<br/>architecture-guide.md]
+    QuickStart --> ArchGuide[📘 架构指南<br/>guides/architecture-design-guide.md]
     QuickStart --> ADR001[📘 ADR-0001<br/>模块化单体架构]
     QuickStart --> ADR002[📘 ADR-0002<br/>平台应用主机]
     QuickStart --> AutoVerify[📘 架构自动化验证系统]
@@ -28,7 +28,7 @@ graph TB
     DevGuide --> ArchTests[📁 架构测试说明]
     
     CIFix --> AutoVerify
-    CIFix --> CIGuide[📘 CI/CD 指南<br/>ci-cd-guide.md]
+    CIFix --> CIGuide[📘 CI/CD 指南<br/>guides/ci-cd-integration-guide.md]
     
     ArchGuide --> ADRIndex[📁 ADR 目录]
     ADRIndex --> ADR001
@@ -95,12 +95,12 @@ graph LR
 ### 核心文档
 
 - **[📍 文档导航中心 (index.md)](index.md)** - 按角色和任务的快速导航入口
-- **[快速开始指南](QUICK-START.md)** - 60 分钟快速入门教程
-- **[架构指南](architecture-guide.md)** - 项目架构概述、设计规则和开发指南
-- **[测试完整指南](TESTING-GUIDE.md)** - 架构测试、单元测试、集成测试完整说明
-- **[CI/CD 指南](ci-cd-guide.md)** - 持续集成、架构测试集成和违规处理
-- **[架构自动化验证系统](architecture-automation-verification.md)** - 三层自动化防御体系和完整执行指南
-- **[文档维护指南](DOCUMENTATION-MAINTENANCE.md)** - 文档更新流程和长效维护机制
+- **[快速开始指南](guides/quick-start-guide.md)** - 60 分钟快速入门教程
+- **[架构指南](guides/architecture-design-guide.md)** - 项目架构概述、设计规则和开发指南
+- **[测试完整指南](guides/testing-framework-guide.md)** - 架构测试、单元测试、集成测试完整说明
+- **[CI/CD 指南](guides/ci-cd-integration-guide.md)** - 持续集成、架构测试集成和违规处理
+- **[架构自动化验证系统](guides/architecture-verification-guide.md)** - 三层自动化防御体系和完整执行指南
+- **[文档维护指南](engineering-standards/documentation-maintenance-standard.md)** - 文档更新流程和长效维护机制
 
 ### 架构决策记录 (ADR)
 
@@ -138,21 +138,21 @@ graph LR
 
 ### 理解架构
 
-1. 阅读 [架构指南](architecture-guide.md) 了解整体架构
+1. 阅读 [架构指南](guides/architecture-design-guide.md) 了解整体架构
 2. 阅读 [ADR-0001](adr/ADR-0001-modular-monolith-vertical-slice-architecture.md) 了解架构决策背景
 3. 阅读 [ADR-0002](adr/ADR-0002-platform-application-host-bootstrap.md) 了解启动器架构决策
-4. 阅读 [架构自动化验证系统](architecture-automation-verification.md) 了解自动化执行体系
+4. 阅读 [架构自动化验证系统](guides/architecture-verification-guide.md) 了解自动化执行体系
 
 ### 开发新功能
 
-1. 参考 [架构指南 - 开发指南](architecture-guide.md#开发指南)
+1. 参考 [架构指南 - 开发指南](guides/architecture-design-guide.md#开发指南)
 2. 查看模块示例代码（Members/Orders）
 3. 运行架构测试验证
 
 ### 处理 CI 失败
 
-1. 参考 [架构自动化验证系统 - 故障排除](architecture-automation-verification.md#故障排除)
-2. 参考 [CI/CD 指南 - 处理架构违规](ci-cd-guide.md#处理架构违规)
+1. 参考 [架构自动化验证系统 - 故障排除](guides/architecture-verification-guide.md#故障排除)
+2. 参考 [CI/CD 指南 - 处理架构违规](guides/ci-cd-integration-guide.md#处理架构违规)
 3. 理解失败原因并修复
 
 ## 架构原则

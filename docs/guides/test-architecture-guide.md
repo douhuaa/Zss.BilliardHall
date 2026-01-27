@@ -1,5 +1,8 @@
 # 三层测试架构说明
 
+> ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
+> 所有架构决策以相关 ADR 正文为准。详见 [ADR-905](adr/governance/ADR-905-enforcement-level-classification.md) 和 [ADR-0000](adr/governance/ADR-0000-architecture-tests.md)。
+
 > **治理层级已经开始打架了。现在拆还来得及。**
 
 **版本**：1.0  
@@ -19,11 +22,13 @@
 
 ## 三层架构定义
 
-| 层级 | 本质 | 是否允许破例 | 失败策略 |
-|------|------|------------|----------|
-| **Governance** | 宪法级规则 | ❌ 不允许 | 架构宪法违规 |
-| **Enforcement** | 可执行硬约束 | ⚠️ 允许登记 | CI 阻断 |
-| **Heuristics** | 风格/质量启发 | ✅ 允许 | 永不失败，仅警告 |
+根据 [ADR-905：执行级别分类宪法](adr/governance/ADR-905-enforcement-level-classification.md) 和 [ADR-0000：架构测试与 CI 治理宪法](adr/governance/ADR-0000-architecture-tests.md)，测试架构划分为三层：
+
+| 层级 | 本质 | 是否允许破例 | 失败策略 | 依据 |
+|------|------|------------|----------|------|
+| **Governance** | 宪法级规则 | ❌ 不允许 | 架构宪法违规 | ADR-905, ADR-0000 |
+| **Enforcement** | 可执行硬约束 | ⚠️ 允许登记 | CI 阻断 | ADR-905, ADR-0000 |
+| **Heuristics** | 风格/质量启发 | ✅ 允许 | 永不失败，仅警告 | ADR-905 |
 
 **拆层是为了"治理权力分级"，不是为了文件好看。**
 
@@ -31,13 +36,15 @@
 
 ## Governance（治理宪法层）
 
+根据 [ADR-0000：架构测试与 CI 治理宪法](adr/governance/ADR-0000-architecture-tests.md)，Governance 层负责验证治理宪法本身的存在性和完整性。
+
 ### 定位（一句话）
 
 > **定义什么是"合法的治理边界"，而不是怎么写文档。**
 
 ### Governance 层该干什么
 
-只干三件事：
+根据 ADR-0000 和 ADR-905，只干三件事：
 
 1. 定义裁决权归属
 2. 定义文档角色边界
@@ -74,11 +81,15 @@ public void Decision_Authority_Principle_Is_Defined()
 
 ## Enforcement（强制执行层）
 
+根据 [ADR-905：执行级别分类宪法](adr/governance/ADR-905-enforcement-level-classification.md)，Enforcement 层负责将 ADR 规则转换为可自动化执行的测试。
+
 ### 定位
 
 > **把 Governance 的"不可讨论结论"变成可执行规则。**
 
 ### Enforcement 层该干什么
+
+根据 ADR-905 和 ADR-0000 的要求：
 
 - 精确、机械、可失败
 - 失败信息必须能定位到：
@@ -150,12 +161,16 @@ public void README_Must_Not_Use_Decision_Language()
 
 ## Heuristics（启发式层）
 
+根据 [ADR-905：执行级别分类宪法](adr/governance/ADR-905-enforcement-level-classification.md)，Heuristics 层提供改进建议但不阻断构建。
+
 ### 定位
 
 > **不是规则，是品味。  
 > 不是裁决，是提醒。**
 
 ### Heuristics 层应该做什么
+
+根据 ADR-905 的定义：
 
 - 语言质量建议
 - 可读性

@@ -22,17 +22,28 @@
 
 ## Guide 分类
 
+### 快速入门
+- [快速开始指南](quick-start-guide.md) - 项目快速上手指南
+- [AI 治理指南](ai-governance-guide.md) - AI 治理系统快速入门
+
 ### 架构实践
-- 待添加：如何创建新模块
-- 待添加：如何实现跨模块通信
+- [架构设计指南](architecture-design-guide.md) - 模块化单体架构设计指南
+- [架构验证指南](architecture-verification-guide.md) - 三层架构验证体系说明
+- [跨模块通信](cross-module-communication.md) - 如何实现跨模块通信
+
+### 测试与质量
+- [测试框架指南](testing-framework-guide.md) - 测试策略与实践指南
+- [测试架构指南](test-architecture-guide.md) - 三层测试架构详解
+- [ADR 测试一致性指南](adr-test-consistency-guide.md) - ADR 与测试映射规范
+- [ADR 测试映射指南](adr-test-mapping-guide.md) - ADR-测试-Prompt 三向映射规范
 
 ### 开发标准
-- [Handler 异常与重试标准](handler-exception-retry-standard.md)
-- [结构化日志与监控标准](structured-logging-monitoring-standard.md)
+- [Handler 异常与重试标准](handler-exception-retry-standard.md) - Handler 异常处理规范
+- [结构化日志与监控标准](structured-logging-monitoring-standard.md) - 日志与监控标准
 
-### 工具使用
-- 待添加：如何运行架构测试
-- 待添加：如何使用 ADR CLI
+### 工具与自动化
+- [ADR 自动化工具指南](adr-automation-tools-guide.md) - ADR 自动化工具使用指南
+- [CI/CD 集成指南](ci-cd-integration-guide.md) - CI/CD 流程与配置指南
 
 ---
 
