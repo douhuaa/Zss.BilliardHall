@@ -130,8 +130,8 @@ cat src/tools/ArchitectureAnalyzers/README.md
 
 1. **PR 提交阶段**
   - 开发者填写 `.github/PULL_REQUEST_TEMPLATE.md`
-  - 必须声明架构测试状态
-  - 如有架构破例，必须详细说明
+  - 根据 ADR-0000，应声明架构测试状态
+  - 如有架构破例，应详细说明
 
 2. **自动检查阶段**
   - CI 运行 Level 1 测试

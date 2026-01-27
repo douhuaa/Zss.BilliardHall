@@ -323,7 +323,7 @@ var member = await _memberRepository.GetByIdAsync(memberId);
 
 ---
 
-## 五、关键原则（必须记住）
+## 五、关键原则（建议牢记）
 
 ### 原则 1：ADR 优先级最高
 
@@ -343,7 +343,7 @@ Agent 放大理解能力，不替代理解
 
 - ✅ 使用 Agent 快速理解 ADR
 - ✅ 使用 Agent 提前发现问题
-- ❌ 不要完全依赖 Agent，必须阅读 ADR
+- ❌ 不要完全依赖 Agent，应主动阅读 ADR
 - ❌ 不要认为"Agent 没说不行"就是合规
 
 ### 原则 3：架构测试是最终仲裁
@@ -352,7 +352,7 @@ Agent 放大理解能力，不替代理解
 Architecture Tests > Agent 建议 > 口头约定
 ```
 
-- ✅ 测试失败 = 必须修复
+- ✅ 根据 ADR-0000，测试失败需要修复
 - ❌ 不要试图绕过测试
 - ❌ 不要"先 ignore 再说"
 
@@ -396,7 +396,7 @@ Architecture Tests > Agent 建议 > 口头约定
 
 **正确认知**：
 - Agent 也有盲点
-- 必须主动学习 ADR
+- 应主动学习 ADR
 - 架构测试是最终保障
 
 ---

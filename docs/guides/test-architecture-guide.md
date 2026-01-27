@@ -44,7 +44,7 @@
 
 | 层级 | 本质 | 是否允许破例 | 失败策略 | 依据 |
 |------|------|------------|----------|------|
-| **Governance** | 宪法级规则 | ❌ 不允许 | 架构宪法违规 | ADR-905, ADR-0000 |
+| **Governance** | 宪法级规则 | ❌ 不可破例 | 架构宪法违规 | ADR-905, ADR-0000 |
 | **Enforcement** | 可执行硬约束 | ⚠️ 允许登记 | CI 阻断 | ADR-905, ADR-0000 |
 | **Heuristics** | 风格/质量启发 | ✅ 允许 | 永不失败，仅警告 | ADR-905 |
 
@@ -87,10 +87,10 @@ public void Decision_Authority_Principle_Is_Defined()
 }
 ```
 
-### 禁止出现
+### 不应出现
 
 - ❌ "README 不得使用 XXX 词"（这是 Enforcement 层）
-- ❌ "必须 / 禁止 / 一律"等检测细节（这是 Enforcement 层）
+- ❌ 裁决词的检测细节（这是 Enforcement 层）
 - ❌ 正则表达式、词表、测试实现（这是 Enforcement 层）
 
 **Governance 不写正则、不写词表、不写测试实现。**
@@ -110,7 +110,7 @@ public void Decision_Authority_Principle_Is_Defined()
 根据 ADR-905 和 ADR-0000 的要求：
 
 - 精确、机械、可失败
-- 失败信息必须能定位到：
+- 根据 ADR-0000，失败信息应能定位到：
   - 文件
   - 行号
   - 对应 ADR
@@ -163,7 +163,7 @@ public void README_Must_Not_Use_Decision_Language()
   3. 使用描述性语言代替命令性语言
 ```
 
-### 破例机制（必须显式）
+### 破例机制（应显式声明）
 
 ```markdown
 ## Exception
@@ -226,7 +226,7 @@ public void README_Should_Prefer_Descriptive_Language()
 
 > **没有 Heuristics 的治理体系，最后一定会走向"要么放水、要么内耗"。**
 
-- 不允许 → 团队绕规则
+- 规则太严 → 团队绕规则
 - 太严格 → ADR 被嫌弃
 - 没建议 → README 越写越烂
 
@@ -317,7 +317,7 @@ public class ADR_0008_Architecture_Tests
    └─ 是 → Governance
 
 2. 这个测试会检查具体代码/文档违规吗？
-   └─ 是 → 违规必须修复吗？
+   └─ 是 → 根据 ADR-905，违规需要修复吗？
        ├─ 是 → Enforcement
        └─ 否 → Heuristics
 
@@ -330,7 +330,7 @@ public class ADR_0008_Architecture_Tests
 | 测试内容 | 层级 | 原因 |
 |---------|------|------|
 | "ADR-0008 文档存在" | Governance | 验证治理宪法定义 |
-| "README 使用了'必须'词" | Enforcement | 可执行硬约束，必须修复 |
+| "README 使用裁决词" | Enforcement | 可执行硬约束，需要修复 |
 | "ADR 缺少示例" | Heuristics | 品味建议，不强制 |
 | "裁决权归属已定义" | Governance | 宪法级原则 |
 | "Instructions 缺少权威声明" | Enforcement | 可执行硬约束 |
