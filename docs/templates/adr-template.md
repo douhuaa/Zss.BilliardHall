@@ -6,6 +6,8 @@ level: Constitutional
 deciders: "Architecture Board"
 date: YYYY-MM-DD
 version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "待定"
 supersedes: null
 superseded_by: null
 ---

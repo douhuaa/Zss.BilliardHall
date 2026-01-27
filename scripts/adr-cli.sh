@@ -214,7 +214,7 @@ function create_adr() {
         sed -i "s/ADR-XXXX/ADR-$number/g" "$filepath"
         sed -i "s/〈裁决型标题〉/$title/g" "$filepath"
         sed -i "s/YYYY-MM-DD/$date/g" "$filepath"
-        sed -i "s/level: Constitutional/level: $level/g" "$filepath"
+        sed -i "s/level: [^ ]*/level: $level/g" "$filepath"
     else
         log_warning "模板文件不存在，创建简单版本"
         cat > "$filepath" << EOF
