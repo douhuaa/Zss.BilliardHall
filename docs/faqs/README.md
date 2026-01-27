@@ -22,13 +22,13 @@
 ## FAQ 分类
 
 ### 架构相关
-- [模块化架构 FAQ](architecture-faq.md) - 模块隔离、垂直切片等问题
+- [模块化架构 FAQ](architecture-faq.md) - 模块隔离、垂直切片、模块通信等问题
 
 ### 开发实践
-- 待添加
+- [开发实践 FAQ](development-practices-faq.md) - 代码组织、测试编写、依赖注入、日志记录等问题
 
 ### 工具和流程
-- 待添加
+- 待添加：CI/CD 流程、架构测试工具、自动化脚本等
 
 ---
 

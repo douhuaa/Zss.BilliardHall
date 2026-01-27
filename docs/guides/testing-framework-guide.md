@@ -3,9 +3,35 @@
 > ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
 > 所有架构决策以相关 ADR 正文为准。详见 [ADR 目录](adr/README.md)。
 
-**版本**：1.0  
-**最后更新**：2026-01-22  
+**版本**：1.1  
+**最后更新**：2026-01-27  
 **状态**：Active
+
+---
+
+## 📍 文档定位
+
+> **本文档作为测试的「入口文档」，提供测试全景概述**
+
+### 本文档涵盖的内容
+
+- ✅ 测试策略和测试金字塔
+- ✅ 各类测试的概述和运行方法
+- ✅ ADR-测试映射表（概览）
+- ✅ 常见测试场景和问题
+
+### 深度内容请参阅
+
+需要深入了解特定主题时，请参阅以下专项文档：
+
+- 📘 **测试架构设计**：[三层测试架构说明](test-architecture-guide.md)
+  - 深入讲解 Governance/Enforcement/Heuristics 三层架构
+  - 测试分层原理和设计原则
+  
+- 📘 **ADR-测试映射**：[ADR-测试一致性指南](adr-test-consistency-guide.md)
+  - ADR 约束到测试的映射流程
+  - 新增 ADR 时的测试编写指导
+  - 场景化实操手册
 
 ---
 
@@ -73,6 +99,8 @@ graph TB
   - 新成员可能不了解约束
   - 老成员可能疏忽
 
+> 💡 **深入了解测试架构**：如需了解架构测试的分层设计（Governance/Enforcement/Heuristics），请参阅 [三层测试架构说明](test-architecture-guide.md)。
+
 ### ADR 与测试映射
 
 每个 ADR 都有对应的测试类：
@@ -84,6 +112,8 @@ graph TB
 | [ADR-0003](adr/constitutional/ADR-0003-namespace-rules.md)                              | `ADR_0003_Architecture_Tests.cs` | 命名空间规则          |
 | [ADR-0004](adr/constitutional/ADR-0004-Cpm-Final.md)                                    | `ADR_0004_Architecture_Tests.cs` | 包管理             |
 | [ADR-0005](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)          | `ADR_0005_Architecture_Tests.cs` | Handler 模式、CQRS |
+
+> 💡 **ADR-测试映射实操**：新增 ADR 约束时如何编写测试？请参阅 [ADR-测试一致性指南](adr-test-consistency-guide.md)。
 
 ### 运行架构测试
 
