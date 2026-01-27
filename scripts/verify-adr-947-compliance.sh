@@ -126,16 +126,16 @@ fi
 while IFS= read -r adr_file; do
     adr_name=$(basename "$adr_file")
     
-    # 检查关系声明区内是否包含子标题（### 或 ####）
-    # 使用更简单的方法：检查是否有 ## 关系声明，然后在其后查找 ###
-    has_relation_section=$(grep -n "^## 关系声明" "$adr_file" 2>/dev/null | head -1 | cut -d: -f1 || echo "0")
-    
-    if [ "$has_relation_section" != "0" ]; then
-        # 找到下一个 ## 的行号
-        next_section=$(tail -n +$((has_relation_section+1)) "$adr_file" 2>/dev/null | grep -n "^## " | head -1 | cut -d: -f1 || echo "999999")
+    # 简化检查：如果文件包含 ## 关系声明，检查其后是否有 ### （在下一个 ## 之前）
+    if grep -q "^## 关系声明" "$adr_file" 2>/dev/null; then
+        # 使用 awk 一次性完成检查
+        has_subheading=$(awk '
+            /^## 关系声明/ { in_section=1; next }
+            /^## / && in_section { exit }
+            /^###/ && in_section { print "yes"; exit }
+        ' "$adr_file" 2>/dev/null)
         
-        # 在关系声明区范围内查找 ###
-        if tail -n +$((has_relation_section+1)) "$adr_file" 2>/dev/null | head -n "$next_section" 2>/dev/null | grep -q "^###" 2>/dev/null; then
+        if [ "$has_subheading" = "yes" ]; then
             if [ "$OUTPUT_FORMAT" = "text" ]; then
                 echo "❌ 违反条款 2：$adr_name"
                 echo "   关系声明区内包含子标题（###）"
@@ -143,7 +143,7 @@ while IFS= read -r adr_file; do
                 echo ""
             fi
             if [ "$OUTPUT_FORMAT" = "json" ]; then
-                json_add_detail "Clause_2_Subheadings_In_Section_${adr_name}" "ADR-947" "error" \
+                json_add_detail "Clause_2_Subheadings_${adr_name}" "ADR-947" "error" \
                     "关系声明区内包含子标题（###），应移到关系声明区外" \
                     "$adr_file" "" "docs/adr/governance/ADR-947-relationship-section-structure-parsing-safety.md"
             fi
@@ -160,24 +160,30 @@ if [ "$OUTPUT_FORMAT" = "text" ]; then
 fi
 
 # 简化检查：仅检查章节标题中的 ADR 编号
-while IFS= read -r adr_file; do
-    adr_name=$(basename "$adr_file")
-    
-    # 检查章节标题（### 或 ####）中是否包含具体 ADR 编号
-    if grep -qE '^###.*ADR-[0-9]{1,4}\.' "$adr_file" 2>/dev/null; then
+# 收集匹配的文件
+CLAUSE3_FILES=$(find "$ADR_DIR" -name "ADR-*.md" -not -name "README.md" -not -path "*/proposals/*" 2>/dev/null | while read -r f; do
+    if grep -qE '^###.*ADR-[0-9]{1,4}\.' "$f" 2>/dev/null; then
+        echo "$f"
+    fi
+done)
+
+if [ -n "$CLAUSE3_FILES" ]; then
+    while IFS= read -r file; do
+        [ -z "$file" ] && continue
+        adr_name=$(basename "$file")
         if [ "$OUTPUT_FORMAT" = "text" ]; then
             echo "⚠️  警告条款 3：$adr_name"
             echo "   章节标题中使用了具体 ADR 编号（建议使用条款编号）"
             echo ""
         fi
         if [ "$OUTPUT_FORMAT" = "json" ]; then
-            json_add_detail "Clause_3_ADR_Number_In_Heading" "ADR-947" "warning" \
+            json_add_detail "Clause_3_ADR_Number_In_Heading_${adr_name}" "ADR-947" "warning" \
                 "章节标题中使用了具体 ADR 编号（建议使用条款编号）" \
-                "$adr_file" "" "docs/adr/governance/ADR-947-relationship-section-structure-parsing-safety.md"
+                "$file" "" "docs/adr/governance/ADR-947-relationship-section-structure-parsing-safety.md"
         fi
-        ((warnings++))
-    fi
-done < <(find "$ADR_DIR" -name "ADR-*.md" -not -name "README.md" -not -path "*/proposals/*" 2>/dev/null | sort)
+        warnings=$((warnings + 1))
+    done <<< "$CLAUSE3_FILES"
+fi
 
 # ============================================================================
 # 条款 4：禁止同编号多文档
