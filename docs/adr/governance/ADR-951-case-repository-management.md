@@ -1,3 +1,17 @@
+---
+adr: ADR-951
+title: "案例库管理规范"
+status: Accepted
+level: Governance
+deciders: "Tech Lead"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Tech Lead"
+reviewer: "@douhuaa"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-951：案例库管理规范
 
 > ⚖️ **本 ADR 定义案例库的组织、审核和维护标准。**
@@ -298,9 +312,4 @@ docs/cases/
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初始版本，定义案例库管理规范 | GitHub Copilot |
 
----
 
-**维护**：Tech Lead  
-**审核**：@douhuaa  
-**状态**：✅ Accepted
-**版本**：1.0

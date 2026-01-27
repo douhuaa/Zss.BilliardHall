@@ -1,3 +1,17 @@
+---
+adr: ADR-965
+title: "Onboarding 互动式学习路径"
+status: Accepted
+level: Governance
+deciders: "Tech Lead & Onboarding Champion"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Tech Lead & Onboarding Champion"
+reviewer: "待定"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-965：Onboarding 互动式学习路径
 
 > ⚖️ **本 ADR 是 Onboarding 互动式学习体验的标准，定义互动清单、可视化路径和进度跟踪机制。**
@@ -669,10 +683,3 @@ docs/onboarding/leaderboard.md
 | 版本 | 日期 | 变更说明 | 作者 |
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初版：定义 Onboarding 互动式学习路径 | GitHub Copilot |
-
----
-
-**维护**：Tech Lead & Onboarding Champion  
-**审核**：待定  
-**状态**：✅ Accepted
-**版本**：1.0

@@ -1,3 +1,17 @@
+---
+adr: ADR-940
+title: "ADR 关系与溯源管理宪法"
+status: Accepted
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "架构委员会"
+reviewer: "@douhuaa"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-940：ADR 关系与溯源管理宪法
 
 > ⚖️ **本 ADR 是所有 ADR 关系声明的唯一裁决源，定义 ADR 之间关系的标准化管理机制。**
@@ -342,10 +356,3 @@ jobs:
 | 版本 | 日期 | 变更说明 | 作者 |
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初始版本，定义 ADR 关系管理机制 | GitHub Copilot |
-
----
-
-**维护**：架构委员会  
-**审核**：@douhuaa  
-**状态**：✅ Accepted
-**版本**：1.0

@@ -1,3 +1,17 @@
+---
+adr: ADR-947
+title: "关系声明区的结构与解析安全规则"
+status: Accepted
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "架构委员会"
+reviewer: "@douhuaa"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-947：关系声明区的结构与解析安全规则
 
 > ⚖️ **本 ADR 是防止解析歧义、自指、模板污染、循环链放大的最小可执行规则集。**
@@ -225,9 +239,4 @@
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初始版本，定义关系声明区结构与解析安全规则 | GitHub Copilot |
 
----
 
-**维护**：架构委员会  
-**审核**：@douhuaa  
-**状态**：✅ Accepted  
-**版本**：1.0

@@ -1,3 +1,17 @@
+---
+adr: ADR-955
+title: "文档搜索与可发现性优化"
+status: Accepted
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board & Documentation Team"
+reviewer: "待定"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-955：文档搜索与可发现性优化
 
 > ⚖️ **本 ADR 是文档搜索与可发现性的优化标准，定义索引、标签和智能跳转机制。**
@@ -495,10 +509,3 @@ docs/reports/discoverability/YYYY-MM.md
 | 版本 | 日期 | 变更说明 | 作者 |
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初版：定义文档搜索与可发现性优化标准 | GitHub Copilot |
-
----
-
-**维护**：架构委员会 & 文档团队  
-**审核**：待定  
-**状态**：✅ Accepted
-**版本**：1.0
