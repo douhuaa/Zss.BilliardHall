@@ -1,3 +1,17 @@
+---
+adr: ADR-945
+title: "ADR 全局时间线与演进视图"
+status: Accepted
+level: Governance
+deciders: "Tech Lead"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Tech Lead"
+reviewer: "@douhuaa"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-945：ADR 全局时间线与演进视图
 
 > ⚖️ **本 ADR 定义 ADR 演进历史的可视化标准和自动化生成机制。**
@@ -304,9 +318,4 @@ jobs:
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初始版本，定义 ADR 演进视图 | GitHub Copilot |
 
----
 
-**维护**：Tech Lead  
-**审核**：@douhuaa  
-**状态**：✅ Accepted
-**版本**：1.0

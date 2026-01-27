@@ -1,3 +1,17 @@
+---
+adr: ADR-990
+title: "文档演进路线图管理规范"
+status: Accepted
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "架构委员会"
+reviewer: "待定"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-990：文档演进路线图管理规范
 
 > ⚖️ **本 ADR 是文档体系演进路线图的唯一管理标准，定义路线图的结构、更新机制和与 ADR 的关联。**
@@ -449,10 +463,3 @@ RFC 示例：
 | 版本 | 日期 | 变更说明 | 作者 |
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初版：定义文档演进路线图管理规范 | GitHub Copilot |
-
----
-
-**维护**：架构委员会  
-**审核**：待定  
-**状态**：✅ Accepted
-**版本**：1.0

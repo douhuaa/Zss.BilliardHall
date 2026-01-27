@@ -1,3 +1,17 @@
+---
+adr: ADR-952
+title: "工程标准与 ADR 分离边界"
+status: Accepted
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "1.0"
+maintainer: "架构委员会"
+reviewer: "@douhuaa"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-952：工程标准与 ADR 分离边界
 
 > ⚖️ **本 ADR 定义工程标准（Engineering Standard）的定位、权限边界以及与 ADR 的关系规则。**
@@ -309,9 +323,4 @@ Standard 引用 ADR-123 并细化实施
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初始版本，定义工程标准与 ADR 边界 | GitHub Copilot |
 
----
 
-**维护**：架构委员会  
-**审核**：@douhuaa  
-**状态**：✅ Accepted
-**版本**：1.0

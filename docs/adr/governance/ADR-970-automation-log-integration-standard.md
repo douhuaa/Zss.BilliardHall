@@ -1,3 +1,17 @@
+---
+adr: ADR-970
+title: "自动化工具日志集成标准"
+status: Accepted
+level: Governance
+deciders: "Architecture Board & DevOps Team"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board & DevOps Team"
+reviewer: "待定"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-970：自动化工具日志集成标准
 
 > ⚖️ **本 ADR 是自动化工具日志管理的唯一裁决源，定义测试报告、CI 日志、工具输出的结构化存储和关联机制。**
@@ -222,7 +236,7 @@ docs/reports/
 每个 ADR **应该**包含相关测试和日志位置：
 
 ```markdown
-## 执法模型（Enforcement）
+### Enforcement Section Example
 
 | 规则编号 | 执行级别 | 测试/手段 | 说明 |
 |---------|---------|----------|------|
@@ -481,10 +495,3 @@ jobs:
 | 版本 | 日期 | 变更说明 | 作者 |
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初版：定义自动化工具日志集成标准 | GitHub Copilot |
-
----
-
-**维护**：架构委员会 & DevOps Team  
-**审核**：待定  
-**状态**：✅ Accepted
-**版本**：1.0

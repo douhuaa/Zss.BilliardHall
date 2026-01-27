@@ -1,3 +1,17 @@
+---
+adr: ADR-975
+title: "文档质量指标与监控"
+status: Accepted
+level: Governance
+deciders: "Architecture Board & Documentation Team"
+date: 2026-01-26
+version: "1.0"
+maintainer: "Architecture Board & Documentation Team"
+reviewer: "待定"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-975：文档质量指标与监控
 
 > ⚖️ **本 ADR 是文档质量监控的唯一标准，定义质量指标、自动化检测和定期报告机制。**
@@ -713,10 +727,3 @@ graph TB
 | 版本 | 日期 | 变更说明 | 作者 |
 |------|------|----------|------|
 | 1.0 | 2026-01-26 | 初版：定义文档质量指标与监控机制 | GitHub Copilot |
-
----
-
-**维护**：架构委员会 & 文档团队  
-**审核**：待定  
-**状态**：✅ Accepted
-**版本**：1.0
