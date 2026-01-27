@@ -1,6 +1,68 @@
 # ADR 自动化工具集
 
+> 依据 [ADR-970：自动化工具日志集成标准](../docs/adr/governance/ADR-970-automation-log-integration-standard.md)
+
 本目录包含用于管理和维护 ADR 治理体系的自动化工具。所有工具遵循最小化变更原则，确保 ADR 文档、架构测试和 Copilot Prompts 的一致性。
+
+---
+
+## 🆕 JSON 输出支持
+
+**所有验证脚本现已支持结构化 JSON 输出（依据 ADR-970.2）**：
+
+### 使用方法
+
+```bash
+# 默认文本模式（向后兼容）
+./scripts/validate-adr-consistency.sh
+
+# JSON 格式输出到控制台
+./scripts/validate-adr-consistency.sh --format json
+
+# JSON 格式保存到文件
+./scripts/validate-adr-consistency.sh --format json --output docs/reports/architecture-tests/adr-consistency.json
+```
+
+### JSON 输出格式
+
+符合 ADR-970.2 标准：
+
+```json
+{
+  "type": "adr-validation | three-way-mapping | ...",
+  "timestamp": "2026-01-27T12:00:00Z",
+  "source": "validate-adr-consistency",
+  "version": "1.0.0",
+  "status": "success | failure | warning",
+  "summary": {
+    "total": 43,
+    "passed": 43,
+    "failed": 0,
+    "warnings": 0
+  },
+  "details": [
+    {
+      "test": "ADR_Numbering_Format",
+      "adr": "ADR-0001",
+      "severity": "info | warning | error",
+      "message": "详细消息",
+      "file": "path/to/file",
+      "fix_guide": "docs/adr/..."
+    }
+  ],
+  "metadata": {
+    "branch": "main",
+    "commit": "abc123",
+    "author": "user"
+  }
+}
+```
+
+### 已支持 JSON 输出的脚本
+
+- ✅ `validate-adr-consistency.sh` - ADR 一致性检查
+- ✅ `validate-three-way-mapping.sh` - 三位一体映射验证
+- 🚧 其他脚本正在对齐中...
 
 ---
 
@@ -21,19 +83,24 @@
 
 **使用方法**：
 ```bash
-# Linux/macOS
+# 文本模式（默认）
 ./scripts/validate-adr-consistency.sh
 
-# Windows PowerShell
-./scripts/validate-adr-consistency.ps1
+# JSON 模式
+./scripts/validate-adr-consistency.sh --format json
+
+# JSON 保存到文件
+./scripts/validate-adr-consistency.sh --format json --output docs/reports/architecture-tests/adr-consistency.json
 ```
 
-**输出示例**：
+**输出示例（文本）**：
 ```
 ✅ 编号格式正确：0001
 ✅ 目录位置正确：constitutional (范围: 0001-0099)
 ✅ 元数据完整
 ```
+
+**JSON 输出**：支持 ✅（依据 ADR-970.2）
 
 ---
 
@@ -52,13 +119,19 @@
 
 **使用方法**：
 ```bash
+# 文本模式（默认）
 ./scripts/validate-three-way-mapping.sh
+
+# JSON 模式
+./scripts/validate-three-way-mapping.sh --format json --output docs/reports/architecture-tests/three-way-mapping.json
 ```
 
 **输出**：
 - 映射关系分析
 - 问题修正清单
 - 健康度报告
+
+**JSON 输出**：支持 ✅（依据 ADR-970.2）
 
 ---
 
