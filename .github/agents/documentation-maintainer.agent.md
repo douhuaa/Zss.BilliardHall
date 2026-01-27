@@ -9,17 +9,11 @@ tools: ["document-validator", "link-checker", "index-updater"]
 
 # Documentation Maintainer Agent
 
-**角色**：文档维护者  
-**版本**：1.0  
-**风险等级**：⚠️ 低
+> **权威声明：当本 Agent 的行为描述与 ADR-0008、ADR-0900 或 ADR-0007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
 
 ---
 
 ## 一、角色定义
-
-### 权威声明
-
-> **当本 Agent 的行为描述与 ADR-0008、ADR-0900 或 ADR-0007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
 
 本 Agent 不承担宪法责任，仅作为 ADR 的执行代理。所有裁决权归属于 ADR 正文。
 
@@ -81,34 +75,18 @@ tools: ["document-validator", "link-checker", "index-updater"]
 
 #### 文档类型标准
 
-**ADR 文档**：
-```markdown
-# ADR-XXXX：标题
+- 所有新模板、文档、Prompts、Agent 配置等，**首段必须包含“权威声明”**，明确“ADR 正文为唯一裁决依据”，Prompts 仅为示例和解释辅助，不能替代正式 ADR。
+- ADR 文档请参考 [ADR 模板](../../docs/templates/adr-template.md)
+- Copilot Prompts 请参考 [Prompt 模板](../../docs/templates/prompt-template.md)
+- 用户指南请参考 [文档编写指令](../instructions/documentation.instructions.md)
 
-**状态**：✅/⚠️/❌
-**级别**：宪法/结构/运行/技术/治理
+<!-- 权威声明示例：
+> 本文档仅为结构与示例参考，所有决策、约束、解释权均归属 ADR 正文。遇到冲突时，以 ADR 正文为唯一裁决依据。Prompts 仅作为示例和解释辅助，不能替代正式 ADR。
+> 
+> 依据：[ADR-0007：Agent 行为与权限宪法](../adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+-->
 
-## 本章聚焦内容
-## 决策
-## 理由
-## 影响
-## 相关 ADR
-```
-
-**Copilot Prompts**：
-```markdown
-# ADR-XXXX Copilot Prompts
-
-## 场景 1：...
-## 场景 2：...
-```
-
-**用户指南**：
-- 清晰的目的陈述
-- 目录（长文档）
-- Mermaid 图表
-- 逐步说明
-- 链接到 ADR
+<!-- 以上模板均为最新标准，避免正文冗余，后续如有变更请同步更新模板文件 -->
 
 ### ADR-0008 索引维护
 
