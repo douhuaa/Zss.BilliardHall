@@ -2,11 +2,15 @@
 
 # 三位一体映射扫描增强工具
 # ADR / 架构测试 / Copilot Prompts 映射一致性与 diff 检测
+# 依据 ADR-970.2 支持 JSON 输出
 #
 # 此脚本用于：
 # 1. 验证 ADR、架构测试、Copilot Prompts 三者映射一致性
 # 2. 检测变更前后的不一致并生成修正清单
 # 3. 发现废弃、未映射、冗余的测试和 Prompts
+#
+# 用法：
+#   ./validate-three-way-mapping.sh [--format text|json] [--output FILE]
 
 set -e
 
@@ -17,6 +21,42 @@ ADR_PATH="$REPO_ROOT/docs/adr"
 TESTS_PATH="$REPO_ROOT/src/tests/ArchitectureTests/ADR"
 PROMPTS_PATH="$REPO_ROOT/docs/copilot"
 
+# 输出格式和路径
+OUTPUT_FORMAT="text"
+OUTPUT_FILE=""
+
+# 解析参数
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --format)
+            OUTPUT_FORMAT="$2"
+            shift 2
+            ;;
+        --output)
+            OUTPUT_FILE="$2"
+            shift 2
+            ;;
+        --help)
+            echo "用法: $0 [--format text|json] [--output FILE]"
+            echo ""
+            echo "选项:"
+            echo "  --format FORMAT    输出格式：text（默认）或 json"
+            echo "  --output FILE      输出到文件（仅在 json 格式时有效）"
+            echo "  --help             显示帮助信息"
+            exit 0
+            ;;
+        *)
+            echo "未知选项: $1"
+            exit 1
+            ;;
+    esac
+done
+
+# 如果是 JSON 模式，加载 JSON 输出库
+if [ "$OUTPUT_FORMAT" = "json" ]; then
+    source "$SCRIPT_DIR/lib/json-output.sh"
+fi
+
 # 颜色输出
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -26,12 +66,37 @@ GRAY='\033[0;90m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# 输出函数
-function log_success() { echo -e "${GREEN}✅ $1${NC}"; }
-function log_warning() { echo -e "${YELLOW}⚠️  $1${NC}"; }
-function log_error() { echo -e "${RED}❌ $1${NC}"; }
-function log_info() { echo -e "${CYAN}ℹ️  $1${NC}"; }
-function log_debug() { echo -e "${GRAY}🔍 $1${NC}"; }
+# 输出函数 - 根据输出格式选择
+function log_success() { 
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${GREEN}✅ $1${NC}"
+    fi
+}
+function log_warning() { 
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${YELLOW}⚠️  $1${NC}"
+    fi
+}
+function log_error() { 
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${RED}❌ $1${NC}"
+    fi
+}
+function log_info() { 
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${CYAN}ℹ️  $1${NC}"
+    fi
+}
+function log_debug() { 
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${GRAY}🔍 $1${NC}"
+    fi
+}
+function log_plain() {
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo "$1"
+    fi
+}
 
 # 统计变量
 declare -A ADR_MAP
@@ -135,7 +200,12 @@ function adr_requires_test() {
 # 分析映射关系
 function analyze_mappings() {
     log_info "分析三位一体映射关系..."
-    echo ""
+    log_plain ""
+    
+    # 如果是 JSON 模式，初始化 JSON 输出
+    if [ "$OUTPUT_FORMAT" = "json" ]; then
+        json_start "validate-three-way-mapping" "1.0.0" "three-way-mapping"
+    fi
     
     # 检查每个 ADR
     for number in "${!ADR_MAP[@]}"; do
@@ -153,15 +223,30 @@ function analyze_mappings() {
         if [ "$needs_test" = true ] && [ -z "$has_test" ]; then
             MISSING_TESTS+=("$number")
             log_warning "  ADR-$number：需要测试但缺少测试文件"
+            if [ "$OUTPUT_FORMAT" = "json" ]; then
+                json_add_detail "Three_Way_Mapping_Test" "ADR-$number" "error" \
+                    "需要测试但缺少测试文件" "$adr_file" "" \
+                    "docs/adr/governance/ADR-0000-architecture-tests.md"
+            fi
             IS_VALID=false
         elif [ "$needs_test" = false ] && [ -n "$has_test" ]; then
             log_debug "  ADR-$number：有测试但未标记为【必须测试】（可能是额外的验证）"
+            if [ "$OUTPUT_FORMAT" = "json" ]; then
+                json_add_detail "Three_Way_Mapping_Test" "ADR-$number" "info" \
+                    "有测试但未标记为【必须测试】（可能是额外的验证）" "$adr_file"
+            fi
         fi
         
         # 检查 Prompt 映射（所有 ADR 都应有 Prompt）
         if [ -z "$has_prompt" ]; then
             MISSING_PROMPTS+=("$number")
             log_warning "  ADR-$number：缺少 Prompt 文件"
+            if [ "$OUTPUT_FORMAT" = "json" ]; then
+                local num_no_leading=$(echo $number | sed 's/^0*//')
+                json_add_detail "Three_Way_Mapping_Prompt" "ADR-$number" "warning" \
+                    "缺少 Prompt 文件: docs/copilot/adr-$num_no_leading.prompts.md" "$adr_file" "" \
+                    "docs/templates/copilot-prompts-template.md"
+            fi
             IS_VALID=false
         fi
     done
@@ -171,6 +256,11 @@ function analyze_mappings() {
         if [ -z "${ADR_MAP[$number]:-}" ]; then
             ORPHAN_TESTS+=("$number")
             log_warning "  测试文件 ADR_${number}_Architecture_Tests.cs：对应的 ADR 不存在"
+            if [ "$OUTPUT_FORMAT" = "json" ]; then
+                json_add_detail "Orphan_Test" "" "warning" \
+                    "测试文件 ADR_${number}_Architecture_Tests.cs：对应的 ADR 不存在" \
+                    "${TEST_MAP[$number]}"
+            fi
             IS_VALID=false
         fi
     done
@@ -180,6 +270,12 @@ function analyze_mappings() {
         if [ -z "${ADR_MAP[$number]:-}" ]; then
             ORPHAN_PROMPTS+=("$number")
             log_warning "  Prompt 文件 adr-$number.prompts.md：对应的 ADR 不存在"
+            if [ "$OUTPUT_FORMAT" = "json" ]; then
+                local num_no_leading=$(echo $number | sed 's/^0*//')
+                json_add_detail "Orphan_Prompt" "" "warning" \
+                    "Prompt 文件 adr-$num_no_leading.prompts.md：对应的 ADR 不存在" \
+                    "${PROMPT_MAP[$number]}"
+            fi
             IS_VALID=false
         fi
     done
@@ -322,26 +418,49 @@ function generate_health_summary() {
 
 # 主执行函数
 function main() {
-    echo -e "${CYAN}╔═══════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║   三位一体映射扫描增强工具                                ║${NC}"
-    echo -e "${CYAN}║   ADR / 架构测试 / Copilot Prompts 一致性验证             ║${NC}"
-    echo -e "${CYAN}╚═══════════════════════════════════════════════════════════╝${NC}"
-    echo ""
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${CYAN}╔═══════════════════════════════════════════════════════════╗${NC}"
+        echo -e "${CYAN}║   三位一体映射扫描增强工具                                ║${NC}"
+        echo -e "${CYAN}║   ADR / 架构测试 / Copilot Prompts 一致性验证             ║${NC}"
+        echo -e "${CYAN}╚═══════════════════════════════════════════════════════════╝${NC}"
+        echo ""
+    fi
     
     # 扫描所有文件
     scan_adrs
     scan_tests
     scan_prompts
-    echo ""
+    log_plain ""
     
     # 分析映射关系
     analyze_mappings
     
-    # 生成修正清单
-    generate_correction_list
+    # 生成修正清单（仅文本模式）
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        generate_correction_list
+    fi
     
-    # 生成健康报告
-    generate_health_summary
+    # 生成健康报告（仅文本模式）
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        generate_health_summary
+    fi
+    
+    # 确定最终状态
+    local final_status
+    if [ "$IS_VALID" = true ]; then
+        final_status="success"
+    else
+        final_status="failure"
+    fi
+    
+    # 如果是 JSON 模式，输出或保存 JSON
+    if [ "$OUTPUT_FORMAT" = "json" ]; then
+        if [ -n "$OUTPUT_FILE" ]; then
+            json_save "$final_status" "$OUTPUT_FILE"
+        else
+            json_finalize "$final_status"
+        fi
+    fi
     
     if [ "$IS_VALID" = true ]; then
         return 0
