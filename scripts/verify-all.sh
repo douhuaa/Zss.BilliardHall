@@ -134,7 +134,14 @@ function main() {
         log_header "1. ADR 编号/目录/内容一致性检查"
         echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     fi
-    if "$SCRIPT_DIR/validate-adr-consistency.sh" > /dev/null 2>&1; then
+    
+    # 根据输出格式决定是否传递 --format 参数
+    local format_flag=""
+    if [ "$OUTPUT_FORMAT" = "json" ]; then
+        format_flag="--format json"
+    fi
+    
+    if eval "$SCRIPT_DIR/validate-adr-consistency.sh $format_flag" > /dev/null 2>&1; then
         if [ "$OUTPUT_FORMAT" = "text" ]; then
             log_success "ADR 一致性检查通过"
         fi
@@ -163,82 +170,201 @@ function main() {
     fi
     
     # 2. 三位一体映射验证
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    log_header "2. ADR/测试/Prompt 三位一体映射验证"
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    if "$SCRIPT_DIR/validate-three-way-mapping.sh"; then
-        log_success "三位一体映射验证通过"
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        log_header "2. ADR/测试/Prompt 三位一体映射验证"
+        echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    fi
+    
+    if eval "$SCRIPT_DIR/validate-three-way-mapping.sh $format_flag" > /dev/null 2>&1; then
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_success "三位一体映射验证通过"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "Three_Way_Mapping_Check" "ADR-900" "info" \
+                "ADR/测试/Prompt 三位一体映射验证通过" \
+                "" "" \
+                "docs/adr/governance/ADR-900-adr-process.md"
+        fi
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        log_error "三位一体映射验证失败"
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_error "三位一体映射验证失败"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "Three_Way_Mapping_Check" "ADR-900" "error" \
+                "ADR/测试/Prompt 三位一体映射验证失败" \
+                "" "" \
+                "docs/adr/governance/ADR-900-adr-process.md"
+        fi
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    echo ""
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo ""
+    fi
     
     # 3. ADR 关系管理检查（ADR-940）
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    log_header "3. ADR 关系管理检查（ADR-940）"
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    if "$SCRIPT_DIR/verify-adr-relationships.sh"; then
-        log_success "ADR 关系声明检查通过"
-        PASSED_CHECKS=$((PASSED_CHECKS + 1))
-    else
-        log_error "ADR 关系声明检查失败"
-        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        log_header "3. ADR 关系管理检查（ADR-940）"
+        echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     fi
-    TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    echo ""
     
-    if "$SCRIPT_DIR/check-relationship-consistency.sh"; then
-        log_success "关系双向一致性检查通过"
+    if eval "$SCRIPT_DIR/verify-adr-relationships.sh $format_flag" > /dev/null 2>&1; then
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_success "ADR 关系声明检查通过"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "ADR_Relationships_Check" "ADR-940" "info" \
+                "ADR 关系声明检查通过" \
+                "" "" \
+                "docs/adr/governance/ADR-940-adr-relationship-management.md"
+        fi
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        log_error "关系双向一致性检查失败"
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_error "ADR 关系声明检查失败"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "ADR_Relationships_Check" "ADR-940" "error" \
+                "ADR 关系声明检查失败" \
+                "" "" \
+                "docs/adr/governance/ADR-940-adr-relationship-management.md"
+        fi
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    echo ""
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo ""
+    fi
     
-    if "$SCRIPT_DIR/detect-circular-dependencies.sh"; then
-        log_success "循环依赖检测通过"
+    if eval "$SCRIPT_DIR/check-relationship-consistency.sh $format_flag" > /dev/null 2>&1; then
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_success "关系双向一致性检查通过"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "Relationship_Consistency_Check" "ADR-940" "info" \
+                "关系双向一致性检查通过" \
+                "" "" \
+                "docs/adr/governance/ADR-940-adr-relationship-management.md"
+        fi
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        log_error "循环依赖检测失败"
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_error "关系双向一致性检查失败"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "Relationship_Consistency_Check" "ADR-940" "error" \
+                "关系双向一致性检查失败" \
+                "" "" \
+                "docs/adr/governance/ADR-940-adr-relationship-management.md"
+        fi
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    echo ""
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo ""
+    fi
+    
+    if eval "$SCRIPT_DIR/detect-circular-dependencies.sh $format_flag" > /dev/null 2>&1; then
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_success "循环依赖检测通过"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "Circular_Dependency_Check" "ADR-940" "info" \
+                "循环依赖检测通过" \
+                "" "" \
+                "docs/adr/governance/ADR-940-adr-relationship-management.md"
+        fi
+        PASSED_CHECKS=$((PASSED_CHECKS + 1))
+    else
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_error "循环依赖检测失败"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "Circular_Dependency_Check" "ADR-940" "error" \
+                "循环依赖检测失败" \
+                "" "" \
+                "docs/adr/governance/ADR-940-adr-relationship-management.md"
+        fi
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    fi
+    TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo ""
+    fi
     
     # 3a. ADR 标题语义约束检查（ADR-946）
-    if "$SCRIPT_DIR/verify-adr-heading-semantics.sh"; then
-        log_success "标题语义约束检查通过（ADR-946）"
+    if eval "$SCRIPT_DIR/verify-adr-heading-semantics.sh $format_flag" > /dev/null 2>&1; then
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_success "标题语义约束检查通过（ADR-946）"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "Heading_Semantics_Check" "ADR-946" "info" \
+                "标题语义约束检查通过（ADR-946）" \
+                "" "" \
+                "docs/adr/governance/ADR-946-adr-heading-semantics.md"
+        fi
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        log_error "标题语义约束检查失败（ADR-946）"
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_error "标题语义约束检查失败（ADR-946）"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "Heading_Semantics_Check" "ADR-946" "error" \
+                "标题语义约束检查失败（ADR-946）" \
+                "" "" \
+                "docs/adr/governance/ADR-946-adr-heading-semantics.md"
+        fi
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    echo ""
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo ""
+    fi
     
     # 4. 版本同步检查（ADR-980）
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    log_header "4. 版本同步检查（ADR-980）"
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    if "$SCRIPT_DIR/validate-adr-version-sync.sh"; then
-        log_success "版本同步检查通过"
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        log_header "4. 版本同步检查（ADR-980）"
+        echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    fi
+    
+    if eval "$SCRIPT_DIR/validate-adr-version-sync.sh $format_flag" > /dev/null 2>&1; then
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_success "版本同步检查通过"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "Version_Sync_Check" "ADR-980" "info" \
+                "版本同步检查通过" \
+                "" "" \
+                "docs/adr/governance/ADR-980-adr-version-sync.md"
+        fi
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        log_error "版本同步检查失败"
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_error "版本同步检查失败"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "Version_Sync_Check" "ADR-980" "error" \
+                "版本同步检查失败" \
+                "" "" \
+                "docs/adr/governance/ADR-980-adr-version-sync.md"
+        fi
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    echo ""
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo ""
+    fi
     
     # 5. 工具可用性检查
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    log_header "5. 工具可用性检查"
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        log_header "5. 工具可用性检查"
+        echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    fi
     
     run_check "ADR CLI 工具" "test -x $SCRIPT_DIR/adr-cli.sh"
     run_check "健康报告生成器" "test -x $SCRIPT_DIR/generate-health-report.sh"
@@ -250,12 +376,16 @@ function main() {
     run_check "循环依赖检测器（ADR-940）" "test -x $SCRIPT_DIR/detect-circular-dependencies.sh"
     run_check "关系图生成器（ADR-940）" "test -x $SCRIPT_DIR/generate-adr-relationship-map.sh"
     run_check "版本同步验证器（ADR-980）" "test -x $SCRIPT_DIR/validate-adr-version-sync.sh"
-    echo ""
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo ""
+    fi
     
     # 6. 文档完整性检查
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    log_header "6. 文档完整性检查"
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        log_header "6. 文档完整性检查"
+        echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    fi
     
     run_check "工具 README" "test -f $SCRIPT_DIR/README.md"
     run_check "工具使用指南" "test -f $REPO_ROOT/docs/ADR-TOOLING-GUIDE.md"
@@ -266,12 +396,16 @@ function main() {
     run_check "Cases 目录（ADR-950）" "test -d $REPO_ROOT/docs/cases"
     run_check "Guides 目录（ADR-950）" "test -d $REPO_ROOT/docs/guides"
     run_check "ADR 关系图（ADR-940）" "test -f $REPO_ROOT/docs/adr/ADR-RELATIONSHIP-MAP.md"
-    echo ""
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo ""
+    fi
     
     # 7. CI 集成检查
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    log_header "7. CI/CD 集成检查"
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        log_header "7. CI/CD 集成检查"
+        echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    fi
     
     run_check "GitHub Actions 工作流" "test -f $REPO_ROOT/.github/workflows/architecture-tests.yml"
     run_check "ADR 关系检查工作流（ADR-940）" "test -f $REPO_ROOT/.github/workflows/adr-relationship-check.yml"
@@ -281,23 +415,57 @@ function main() {
     
     # 检查 CI 工作流中是否包含新工具
     if grep -q "validate-adr-consistency.sh" "$REPO_ROOT/.github/workflows/architecture-tests.yml"; then
-        log_success "CI 工作流已集成一致性检查"
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_success "CI 工作流已集成一致性检查"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "CI_Consistency_Integration" "ADR-900" "info" \
+                "CI 工作流已集成一致性检查" \
+                "" "" \
+                "docs/adr/governance/ADR-900-adr-process.md"
+        fi
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        log_warning "CI 工作流未集成一致性检查"
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_warning "CI 工作流未集成一致性检查"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "CI_Consistency_Integration" "ADR-900" "warning" \
+                "CI 工作流未集成一致性检查" \
+                "" "" \
+                "docs/adr/governance/ADR-900-adr-process.md"
+        fi
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
     
     if grep -q "validate-three-way-mapping.sh" "$REPO_ROOT/.github/workflows/architecture-tests.yml"; then
-        log_success "CI 工作流已集成三位一体映射验证"
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_success "CI 工作流已集成三位一体映射验证"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "CI_Three_Way_Mapping_Integration" "ADR-900" "info" \
+                "CI 工作流已集成三位一体映射验证" \
+                "" "" \
+                "docs/adr/governance/ADR-900-adr-process.md"
+        fi
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        log_warning "CI 工作流未集成三位一体映射验证"
+        if [ "$OUTPUT_FORMAT" = "text" ]; then
+            log_warning "CI 工作流未集成三位一体映射验证"
+        fi
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            json_add_detail "CI_Three_Way_Mapping_Integration" "ADR-900" "warning" \
+                "CI 工作流未集成三位一体映射验证" \
+                "" "" \
+                "docs/adr/governance/ADR-900-adr-process.md"
+        fi
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    echo ""
+    if [ "$OUTPUT_FORMAT" = "text" ]; then
+        echo ""
+    fi
     
     # 输出总结
     if [ "$OUTPUT_FORMAT" = "text" ]; then
