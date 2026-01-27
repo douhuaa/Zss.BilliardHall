@@ -90,7 +90,7 @@ while IFS= read -r adr_file; do
                 "发现 $count 个顶级关系声明区（只允许 1 个），修复：删除重复的 ## 关系声明" \
                 "$adr_file" "" "docs/adr/governance/ADR-947-relationship-section-structure-parsing-safety.md"
         fi
-        ((errors++))
+        errors=$((errors + 1))
     else
         if [ "$OUTPUT_FORMAT" = "json" ]; then
             json_add_detail "Clause_1_Unique_Section_${adr_name}" "ADR-947" "info" \
@@ -112,7 +112,7 @@ while IFS= read -r adr_file; do
                 "代码块中使用了 ## 关系声明（建议使用占位符或降级）" \
                 "$adr_file" "" "docs/adr/governance/ADR-947-relationship-section-structure-parsing-safety.md"
         fi
-        ((warnings++))
+        warnings=$((warnings + 1))
     fi
 done < <(find "$ADR_DIR" -name "ADR-*.md" -not -name "README.md" -not -path "*/proposals/*" 2>/dev/null | sort)
 
@@ -147,7 +147,7 @@ while IFS= read -r adr_file; do
                     "关系声明区内包含子标题（###），应移到关系声明区外" \
                     "$adr_file" "" "docs/adr/governance/ADR-947-relationship-section-structure-parsing-safety.md"
             fi
-            ((errors++))
+            errors=$((errors + 1))
         fi
     fi
 done < <(find "$ADR_DIR" -name "ADR-*.md" -not -name "README.md" -not -path "*/proposals/*" 2>/dev/null | sort)
@@ -215,7 +215,7 @@ while IFS= read -r adr_file; do
                     "重复的 ADR 编号 $adr_num - 文件 1: $(basename "${adr_numbers[$adr_num]}"), 文件 2: $(basename "$adr_file")" \
                     "$adr_file" "" "docs/adr/governance/ADR-947-relationship-section-structure-parsing-safety.md"
             fi
-            ((errors++))
+            errors=$((errors + 1))
         else
             adr_numbers[$adr_num]=$adr_file
         fi
@@ -274,7 +274,7 @@ if [ -f "$DEPS_FILE" ] && [ -s "$DEPS_FILE" ]; then
                     "检测到显式循环声明：$from ↔ $to (双向依赖)，修复：保留单向依赖，另一侧改为相关关系" \
                     "" "" "docs/adr/governance/ADR-947-relationship-section-structure-parsing-safety.md"
             fi
-            ((errors++))
+            errors=$((errors + 1))
         fi
     done < "$DEPS_FILE"
 fi
