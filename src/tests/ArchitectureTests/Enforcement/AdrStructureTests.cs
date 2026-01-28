@@ -4,15 +4,15 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
 /// <summary>
 /// ADR 结构验证 - Enforcement 层测试
-/// 
+///
 /// 【定位】：执行 ADR-0008 对 ADR 文档结构的约束
 /// 【来源】：ADR-0008 决策 4
 /// 【执法】：失败 = CI 阻断
-/// 
+///
 /// 本测试类检查：
 /// 1. ADR 必须包含必需章节
 /// 2. ADR 结构符合规范
-/// 
+///
 /// 【关联文档】
 /// - ADR: docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md
 /// - 来源决策: ADR-0008 决策 4.1
@@ -24,7 +24,7 @@ public sealed class AdrStructureTests
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDir = Path.Combine(repoRoot, "docs/adr");
-        
+
         if (!Directory.Exists(adrDir))
         {
             Assert.Fail($"ADR 目录不存在：{adrDir}");
@@ -46,7 +46,7 @@ public sealed class AdrStructureTests
 
             // 检查必需章节（根据 ADR-0008 决策 4.1）
             // 注意：部分 ADR 使用"地位"而非"状态"
-            if (!content.Contains("状态") && !content.Contains("Status") && !content.Contains("地位"))
+            if (!content.Contains("状态") && !content.Contains("status") && !content.Contains("地位"))
             {
                 missingSections.Add("状态");
             }
@@ -64,7 +64,7 @@ public sealed class AdrStructureTests
 
             // ADR 应包含"核心决策"或"规则本体"之一
             // 注意：模板使用"规则本体"，ADR-0008要求"核心决策"，两者均可接受
-            if (!content.Contains("决策") && !content.Contains("Decision") && 
+            if (!content.Contains("决策") && !content.Contains("Decision") &&
                 !content.Contains("规则本体") && !content.Contains("Rule"))
             {
                 missingSections.Add("决策或规则本体");
@@ -107,7 +107,7 @@ public sealed class AdrStructureTests
         var currentDir = Directory.GetCurrentDirectory();
         while (currentDir != null)
         {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
+            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
                 Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
             {
                 return currentDir;
