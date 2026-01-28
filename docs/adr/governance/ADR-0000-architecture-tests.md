@@ -1,16 +1,24 @@
+---
+adr: ADR-0000
+title: "架构测试与 CI 治理宪法"
+status: Final
+level: Governance
+deciders: "Architecture Board"
+date: 2026-01-23
+version: "2.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0000：架构测试与 CI 治理宪法
 
 > **唯一架构执法元规则**：本文件定义架构合法性评判的唯一基准。所有架构测试、CI 校验、Prompt 映射、破例治理均以本 ADR 正文为裁定源。
 
-**状态**：✅ Final（不可随意修改）  
-**版本**：2.0  
-**级别**：架构治理 / 宪法层  
-**生效时间**：即刻  
-**适用范围**：全体代码仓库及所有 ADR（ADR-0001 ~ 0005）
-
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - ADR-测试一一映射与唯一性
 - 自动化校验与 CI 阻断机制
@@ -20,7 +28,7 @@
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语       | 定义                   |
 |----------|----------------------|
@@ -31,7 +39,7 @@
 
 ---
 
-## 核心决策（Decision）
+## Decision（裁决）
 
 - 所有【必须架构测试覆盖】的 ADR 条款，须有自动化测试（静态/语义/人工 Gate）
 - 测试类、方法名、失败消息必须显式标注 ADR 编号
@@ -40,7 +48,8 @@
 - 测试组织须按 ADR 编号、内容、类型归档
 - 三级执行级（L1静态、L2语义半自动、L3人工Gate），覆盖范围与映射表公开
 
-### ADR-0000.X：规则冲突时的优先级裁决
+
+### ADR-0000.1:L1 规则冲突时的优先级裁决
 
 当 ADR 规则发生冲突时，**必须**按以下优先级从高到低裁决：
 
@@ -60,7 +69,9 @@
 - ADR-220.2（事务性发布）vs ADR-201.4（资源释放）→ 优先 220.2
 - ADR-210.3（版本保留）vs ADR-122.1（代码清理）→ 优先 210.3
 
-### ADR-0000.Y：破例必须绑定偿还计划与到期监控
+---
+
+### ADR-0000.2:L1 破例必须绑定偿还计划与到期监控
 
 所有架构破例**必须**绑定明确的偿还计划和到期监控机制。
 
@@ -86,130 +97,63 @@
 
 ---
 
-## 测试映射与执行分级
+## Enforcement（执法模型）
 
-### 1. ADR-测试映射
+### ADR-0000 测试方法映射表
 
-| ADR 编号   | 测试类                            | 关键测试用例                 | 必须测试 |
-|----------|--------------------------------|------------------------|------|
-| ADR-0001 | ADR_0001_Architecture_Tests.cs | 模块隔离、契约合规、垂直切片         | ✅    |
-| ADR-0002 | ADR_0002_Architecture_Tests.cs | 层级依赖、Host 装配边界         | ✅    |
-| ADR-0003 | ADR_0003_Architecture_Tests.cs | 命名空间映射、防御性规则           | ✅    |
-| ADR-0004 | ADR_0004_Architecture_Tests.cs | CPM、层级依赖、版本唯一性         | ✅    |
-| ADR-0005 | ADR_0005_Architecture_Tests.cs | Handler、CQRS、模块通信、状态约束 | ✅    |
+| ADR 条款 | 执行级别 | 测试类型 | 测试名称 | 失败即 |
+|---------|----------|----------|----------|--------|
+| ADR-0000.1 | L1 | 静态规则 | ADR0000_Conflict_Priority_Tests | CI 阻断 |
+| ADR-0000.2 | L1 | 语义/配置 | ADR0000_Exception_Repayment_Tests | CI 阻断 |
 
-> 新增ADR/变更，必须同步补测。遗漏即视为流程错误。
-
-### 2. 执行分级（Enforcement Level）
-
-- **Level 1 静态可执行**：NetArchTest 强制，CI 阻断
-- **Level 2 语义半自动**：Roslyn Analyzer 等启发式，需人工二次确认
-- **Level 3 人工 Gate**：不可程控的约束，长期破例流程审计
-
-具体标准参见 [ADR-905-enforcement-level-classification.md](/docs/adr/governance/ADR-905-enforcement-level-classification.md)
+| 测试方法 | 说明 |
+|----------|------|
+| Each_ADR_Must_Have_Exact_And_Unique_Architecture_Test | 每条 ADR 必须有且仅有唯一对应的架构测试类 |
+| Architecture_Test_Classes_Must_Have_Minimum_Assertions | 架构测试类必须包含最少断言数（反作弊） |
+| Test_Failure_Messages_Must_Include_ADR_Number | 测试失败消息必须包含 ADR 编号（反作弊） |
+| Architecture_Tests_Must_Not_Be_Skipped | 禁止跳过架构测试（反作弊） |
 
 ---
 
-## 测试组织与自治原则
+## Non-Goals（明确不管什么）
 
-- 所有架构测试目录、类、用例均以 `ADR-XXXX` 前缀命名
-- 测试失败消息格式：`ADR-XXXX 违规：{原因} 修复建议：{建议}`
-- 禁止架构测试跳过（需显式记录在ARCH-VIOLATIONS，季度审计）
-- 登录、变更、废弃测试用例，均需同步更新ADR映射表及Prompts
-
----
-
-## 破例治理与归还
-
-根据 **ADR-0000.Y 破例成本管理**，所有架构破例必须遵循严格的治理流程：
-
-### 破例申请与记录
-- 破例需在 PR 标题和描述中声明，填写《破例表单》
-- 必须在代码中添加 `// ARCH-EXCEPTION: ADR-XXX.Y` 注释
-- 所有破例记录归档于 [`ARCH-VIOLATIONS.md`](/docs/summaries/arch-violations.md)
-- 每个破例必须包含：到期版本号、偿还负责人、偿还计划、审批人
-
-### 自动监控与预警
-- **CI 定期扫描**：每月第一天自动扫描 `arch-violations.md`
-- **过期检测**：发现过期破例 → 构建失败，必须立即处理
-- **提前预警**：本地和 CI 均需预警破例即将到期（建议 2 周前）
-
-### 延期与归还
-- **偿还优先**：破例到期必须完成代码修复，移除违规
-- **延期限制**：最多延期 2 次，每次需重新审批
-- **强制归还**：连续延期超过 2 次，必须强制偿还或触发架构审查
-- **归还记录**：所有已偿还破例移至"已归还破例"区，保留审计记录
-
-### 责任追溯
-- **责任人制度**：每个破例指定明确的偿还负责人
-- **定期审计**：季度审计破例执行情况，纳入绩效考核
-- **治理报告**：破例统计数据纳入治理健康度报告
+- 业务功能测试、性能测试、UI 测试等非架构约束测试
+- 团队协作流程、代码风格、文档排版等非结构性约束
+- 个人偏好、历史遗留、非治理范围内容
 
 ---
 
-## 自动校验与CI策略
+## Prohibited（禁止行为）
 
-- 所有 PR、主分支合并前自动执行所有架构测试
-- 失败即阻断，无例外
-- 映射脚本/shell同步比对 ADR→Test→Prompt → 显示不一致列表，强制责任人修正
-
----
-
-## 企业级行动建议
-
-- 建议设定每季度架构健康度报告，统计测试失效、破例量、CI 通过率
-- Copilot Prompts 与测试、ADR 同步迭代维护
-- 新增/变更ADR时，严格全链更新自检（ADR文档、测试代码、Prompts文件、映射脚本）
-- Onboarding 必须培训ADR-0000机制
+- 跳过架构测试（除非显式记录在 ARCH-VIOLATIONS，季度审计）
+- 架构测试失败不阻断 CI
+- 破例无偿还计划或负责人
+- 未同步更新 ADR 映射表、Prompts
+- 破例延期超过 2 次
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
-**依赖（Depends On）**：
+**Depends On**：
 - 无（本 ADR 为元规则，不依赖其他 ADR）
 
-**被依赖（Depended By）**：
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 其测试执行基于本 ADR
-- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 其测试执行基于本 ADR
-- [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 其测试执行基于本 ADR
-- [ADR-0004：中央包管理与层级依赖规则](../constitutional/ADR-0004-Cpm-Final.md) - 其测试执行基于本 ADR
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 其测试执行基于本 ADR
-- [ADR-905：执行级别分类](./ADR-905-enforcement-level-classification.md) - 执行级别基于本 ADR
-- [ADR-970：自动化工具日志集成标准](./ADR-970-automation-log-integration-standard.md) - 测试报告标准基于本 ADR
-- [ADR-980：ADR 生命周期一体化同步机制](./ADR-980-adr-lifecycle-synchronization.md) - CI 检测机制基于本 ADR
-- [ADR-360：CI/CD Pipeline 流程标准化](../technical/ADR-360-cicd-pipeline-standardization.md)
-- [ADR-301：集成测试环境自动化与隔离约束](../technical/ADR-301-integration-test-automation.md)
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md)
-- [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-920：示例代码治理宪法](../governance/ADR-920-examples-governance-constitution.md)
-- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md)
-- [ADR-930：代码审查与 ADR 合规自检流程](../governance/ADR-930-code-review-compliance.md)
-- [ADR-910：README 编写与维护宪法](../governance/ADR-910-readme-governance-constitution.md)
+**Depended By**：
+- 所有架构 ADR（作为架构测试与治理的基础）
+- 所有文档治理 ADR（如 ADR-0008 文档治理宪法）
 
-**替代（Supersedes）**：
+**Supersedes（替代）**：
 - 无
 
-**被替代（Superseded By）**：
+**Superseded By（被替代）**：
 - 无
-
-**相关（Related）**：
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - ADR 编号规范
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档治理
 
 ---
 
-## 版本历史
+## History（版本历史）
 
 | 版本  | 日期         | 变更说明              |
 |-----|------------|-------------------|
+|2.1  | 2026-02-10 | 补充 ADR-0000.X/Y 规则 |
 | 2.0 | 2026-01-23 | 聚焦自动化与治理闭环，细化执行分级 |
 | 1.0 | 2026-01-20 | 初版                |
-
----
-
-## 附件与参考
-
-- [ADR-905-enforcement-level-classification.md](/docs/adr/governance/ADR-905-enforcement-level-classification.md)
-- [`ARCH-VIOLATIONS.md`](/docs/summaries/arch-violations.md)
