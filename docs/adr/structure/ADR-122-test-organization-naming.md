@@ -1,219 +1,186 @@
-# ADR-122：测试代码组织与命名规范
+---
+adr: ADR-122
+title: "ArchitectureTests 命名与组织规范（ARD）"
+status: Superseded
+level: Governance
+version: "1.0"
+deciders: "Architecture Board"
+date: 2026-01-28
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: ADR-903
+---
 
-> ⚖️ **本 ADR 定义测试代码组织与命名的唯一裁决规则。**
+# ADR-122：ArchitectureTests 命名与组织规范（ARD）
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：结构层  
-**影响范围**：所有测试代码  
-**生效时间**：待审批通过后
+> ⚖️ 本 ADR 的全部裁决已被 ADR-903 吸收并强化，不再具有独立裁决力。
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
-- 测试目录结构必须镜像源码
-- 测试类与方法命名规范
-- 架构测试独立组织要求
-- 测试项目命名约束
-- 自动化执法机制
-
----
-
-## 术语表（Glossary）
-
-| 术语      | 定义                          | 英文对照                |
-|---------|-------------------------------|------------------------|
-| 镜像结构    | 测试目录与源码目录保持完全一致的相对路径关系 | Mirror Structure       |
-| 架构测试    | 验证架构约束的专用测试，独立于业务测试    | Architecture Test      |
-| L1 测试   | 静态可执行自动化测试              | Level 1 Test           |
-| L2 测试   | 语义半自动化测试或人工审查          | Level 2 Test           |
+统一 ArchitectureTests 的命名、组织结构与 ADR 映射方式，确保：
+- 架构规则可追溯到具体 ADR
+- 测试失败信息直接指向被违反的 ADR
+- CI 能进行自动治理裁决
 
 ---
 
-## 决策（Decision）
+## Glossary（术语表）
 
-### ADR-122.1：测试目录必须镜像源码结构
+| 术语 | 定义 | 英文对照 |
+|------|------|----------|
+| ArchitectureTests | 用于验证架构约束、依赖关系、分层规则的测试集合 | ArchitectureTests |
+| ARD | ADR 在测试层的可执行映射形式 | Architecture Rule Definition |
+| RuleId | 与 ADR 条目一一对应的规则编号（如 ADR-240.1） | RuleId |
+
+---
+
+## Decision（裁决）
+
+> ⚠️ **本节是唯一裁决来源，其他章节不得产生新规则。**
+
+### ADR-122.1:L1 ArchitectureTests 必须按 ADR 编号分组
+
+- ArchitectureTests 必须以 ADR 编号作为最小组织单元
+- 每个 ADR 至少对应一个测试类或测试文件
+
+**结构示例**：
+
+```text
+Tests/
+└── ArchitectureTests/
+    ├── ADR_240_HandlerRules/
+    │   ├── ADR_240_1_HandlerExceptionRuleTests.cs
+    │   └── ADR_240_2_HandlerDependencyRuleTests.cs
+    └── ADR_340_LoggingRules/
+        └── ADR_340_1_LoggingScopeRuleTests.cs
+```
+
+---
+
+### ADR-122.2:L1 测试类命名必须显式包含 ADR 编号与条目号
 
 **规则**：
-- 测试项目的目录结构**必须**完全镜像被测源码的目录结构
-- 测试类文件路径与源码文件路径保持相同的相对路径
-- 测试命名空间与源码命名空间对应
+- 测试类命名格式必须为：ADR_<ADR编号>_<条目号>_<RuleName>Tests
+- 禁止使用模糊名称或隐藏 ADR 编号
 
-**判定**：
-- ✅ 测试文件路径与源码文件路径保持相同相对结构
-- ❌ 不同模块的测试混合在同一目录
-- ❌ 测试目录结构与源码不一致
+```csharp
+public class ADR_240_1_HandlerMustNotCatchExceptionTests
+```
+
+禁止：
+- 使用模糊名称（如 `HandlerRulesTests`）
+- 隐藏 ADR 编号
+
+---
+
+### ADR-122.3:L1 每个测试类必须声明对应 ADR 条目
+
+- 每个 ArchitectureTest 必须在注释或常量中声明其 ADR 对应关系
+
+```csharp
+/// <summary>
+/// Enforces ADR-240.1: Handler 禁止捕获异常
+/// </summary>
+public class ADR_240_1_HandlerMustNotCatchExceptionTests
+{
+}
+```
+
+或：
+
+```csharp
+private const string RuleId = "ADR-240.1";
+```
+
+---
+
+### ADR-122.4:L1 一个测试类只允许验证一个 ADR 条目
+
+**规则**：
+- 禁止一个测试类覆盖多个 ADR 条目
+- 禁止在同一测试中混合不同 ADR 的规则
+
+> ADR 是治理裁决单元，测试必须与裁决单元一一对应。
+
+---
+
+### ADR-122.5:L1 测试失败信息必须可反向定位 ADR
+
+**规则**：
+- 测试断言失败信息必须包含 ADR 编号
 
 **示例**：
-```
-源码: src/Modules/Orders/UseCases/CreateOrder/CreateOrderHandler.cs
-测试: tests/Modules.Orders.Tests/UseCases/CreateOrder/CreateOrderHandlerTests.cs
-```
-
-### ADR-122.2：测试类命名必须遵循 {TypeName}Tests 模式
-
-**规则**：
-- 测试类名称**必须**为被测类名加 `Tests` 后缀
-- 禁止使用 `Test` 前缀或单数形式
-- 禁止使用其他后缀（如 `Spec`）
-
-**判定**：
-- ✅ `CreateOrderHandler` → `CreateOrderHandlerTests`
-- ✅ `Order` → `OrderTests`
-- ❌ `TestCreateOrderHandler`（禁止 Test 前缀）
-- ❌ `CreateOrderHandlerTest`（禁止单数 Test）
-- ❌ `CreateOrderHandlerSpec`（禁止其他后缀）
-
-### ADR-122.3：测试方法命名必须清晰表达意图
-
-**规则**：
-- 测试方法名称**必须**使用 `{MethodName}_{Scenario}_{ExpectedResult}` 模式
-- 方法名必须清晰描述测试场景和预期结果
-- 中文项目允许使用中文命名
-
-**判定**：
-- ✅ `Handle_ValidCommand_CreatesOrder`
-- ✅ `ApplyDiscount_NegativePercentage_ThrowsException`
-- ✅ `Handle_有效命令_创建订单`（中文项目）
-- ❌ `Test1`、`TestHandle`（不清晰）
-- ❌ `TestValidCase`（过于泛化）
-
-### ADR-122.4：架构测试必须单独组织
-
-**规则**：
-- 架构测试**必须**位于独立的 `ArchitectureTests` 项目中
-- 架构测试**必须**按 ADR 编号组织
-- 禁止将架构测试混入业务测试项目
-
-**判定**：
-- ✅ 架构测试位于 `tests/ArchitectureTests/ADR/`
-- ✅ 测试类命名：`ADR_XXXX_Architecture_Tests.cs`
-- ❌ 架构测试混入 `Modules.*.Tests` 项目
-- ❌ 架构测试分散在多个项目
-
-**目录结构**：
-```
-tests/
-  ArchitectureTests/
-    ADR/
-      ADR_0001_Architecture_Tests.cs
-      ADR_0002_Architecture_Tests.cs
+```csharp
+.Should().BeTrue("违反 ADR-240.1：Handler 不允许捕获异常");
 ```
 
-### ADR-122.5：测试项目命名必须遵循 {Module}.Tests 模式
+---
+
+### ADR-122.6:L1 被废弃 ADR 的测试必须同步处理
 
 **规则**：
-- 测试项目名称**必须**为模块名加 `.Tests` 后缀
-- 必须保持命名空间前缀
-- `ArchitectureTests` 为特例，不加 `.Tests` 后缀
-
-**判定**：
-- ✅ `Modules.Orders.Tests`（测试 Orders 模块）
-- ✅ `Platform.Tests`（测试 Platform 层）
-- ✅ `ArchitectureTests`（架构测试特例）
-- ❌ `OrdersTests`（缺少命名空间前缀）
-- ❌ `Tests.Orders`（顺序错误）
+- ADR 状态变为 Superseded / Deprecated 时，对应 ArchitectureTests 必须删除或标记为 [Obsolete] 并指向替代 ADR
+- 禁止出现“孤儿测试”或无 ADR 来源的架构测试
 
 ---
 
-## 快速参考表
+## Enforcement（执法模型）
 
-| 约束编号       | 约束描述             | 测试方式       | 测试用例                                    | 必须遵守 |
-|------------|------------------|------------|------------------------------------------|------|
-| ADR-122.1  | 测试目录必须镜像源码结构     | L1 - 自动化测试 | Test_Directory_Structure_Must_Mirror_Source | ✅    |
-| ADR-122.2  | 测试类必须以 Tests 结尾 | L1 - 自动化测试 | Test_Classes_Must_End_With_Tests           | ✅    |
-| ADR-122.3  | 测试方法命名必须清晰       | L2 - Code Review | Test_Method_Naming_Clarity_Check          | ✅    |
-| ADR-122.4  | 架构测试必须独立组织       | L1 - 自动化测试 | Architecture_Tests_Must_Be_In_Separate_Project | ✅    |
-| ADR-122.5  | 测试项目命名规范         | L1 - 自动化测试 | Test_Projects_Must_Follow_Naming_Convention  | ✅    |
+> 本节为唯一架构执法映射表，所有必测/必拦规则均需在此列明。
 
-> **级别说明**：L1=静态自动化（脚本检查），L2=语义半自动或人工审查
-
----
-
-## 必测/必拦架构测试（Enforcement）
-
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_122_Architecture_Tests.cs` 强制验证：
-
-- 测试文件路径与源码文件路径的映射关系验证
-- 测试类名是否以 `Tests` 结尾
-- 架构测试是否在专用项目中
-- 测试项目命名是否符合规范
-
-**L2 测试**：
-- 通过 Code Review 检查测试方法命名的清晰度
-
-**有一项违规视为架构违规，CI 自动阻断。**
+| 规则编号 | 执行级 | 执法方式 | 关键测试用例/流程 | 必须遵守 |
+|---------|------|----------------|--------------------------|------|
+| ADR-122.1 | L1   | 目录结构自动化校验 | Test_Directory_Structure_Must_Mirror_ADR | ✅    |
+| ADR-122.2 | L1   | 类名自动化校验 | Test_Class_Naming_Must_Contain_ADR | ✅    |
+| ADR-122.3 | L1   | 注释/常量自动化校验 | Test_Class_Must_Declare_RuleId | ✅    |
+| ADR-122.4 | L1   | 单一 ADR 校验 | Test_Class_Must_Only_Validate_One_ADR | ✅    |
+| ADR-122.5 | L1   | 断言消息自动化校验 | Test_Assertion_Message_Must_Contain_ADR | ✅    |
+| ADR-122.6 | L1   | ADR 状态变更自动化校验 | Test_Obsolete_Or_Delete_On_ADR_Superseded | ✅    |
 
 ---
 
-## 检查清单
+## Non-Goals（明确不管什么）
 
-- [ ] 测试目录结构是否完全镜像源码？
-- [ ] 测试类名是否以 Tests 结尾？
-- [ ] 测试方法命名是否清晰表达意图？
-- [ ] 架构测试是否在独立项目中？
-- [ ] 测试项目命名是否符合规范？
+- 单元测试 / 集成测试命名
+- 具体断言库选型
+- 架构规则本身的内容设计
 
 ---
 
-## 破例与归还（Exception）
+## Prohibited（禁止行为）
 
-> **破例不是逃避，而是债务。**
-
-### 允许破例的前提
-
-破例**仅在以下情况允许**：
-
-1. **遗留测试迁移**：大规模重构前的临时过渡
-2. **第三方测试框架限制**：框架强制要求特定结构
-3. **集成测试特殊需求**：需要特殊目录组织
-
-### 破例要求（不可省略）
-
-每个破例**必须**：
-
-- 记录在 `docs/summaries/arch-violations.md`
-- 指明 ADR-122 + 具体规则编号
-- 提供迁移计划和时间表
-- 指定失效日期（不超过 3 个月）
+- 无 ADR 编号的 ArchitectureTests
+- 一个测试类对应多个 ADR
+- ADR 已删除但测试仍存在
+- 使用自然语言描述而无 RuleId
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
-**依赖（Depends On）**：
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 测试组织基于模块和垂直切片结构
-- [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 测试命名空间遵循命名空间规范
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 测试命名遵循术语规范
+**上位裁决（Supersedes）**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md)
 
-**被依赖（Depended By）**：
-- [ADR-301：集成测试环境自动化与隔离约束](../technical/ADR-301-integration-test-automation.md) - 集成测试遵循测试组织规范
+**Depends On**：
+- [ADR-902：ADR 结构与章节规范](../governance/ADR-902-adr-template-structure-contract.md)
 
-**替代（Supersedes）**：
-- 无
-
-**被替代（Superseded By）**：
-- 无
-
-**相关（Related）**：
-- [ADR-301：集成测试自动化](../technical/ADR-301-integration-test-automation.md) - 同为测试规范
+**Depended By**：
+- 所有包含 Enforcement 章节的 ADR
 
 ---
 
-## 版本历史
+## References（非裁决性参考）
+
+- NetArchTest.Rules
+- xUnit / NUnit Architecture Test Practices
+
+---
+
+## History（版本历史）
 
 | 版本  | 日期         | 变更说明       | 修订人 |
 |-----|------------|------------|-----|
-| 2.0 | 2026-01-26 | 裁决型重构，添加决策章节 | GitHub Copilot |
-| 1.0 | 2026-01-24 | 初始版本       | GitHub Copilot |
-
----
-
-## 附注
-
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（详细示例、测试组织最佳实践、常见问题排查）请查阅：
-- `docs/copilot/adr-0122.prompts.md`
-- `docs/TESTING-GUIDE.md`
+| 1.0 | 2026-01-28 | 首次发布（Final） | GitHub Copilot |
