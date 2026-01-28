@@ -29,10 +29,13 @@ docs/reports/
 ├── builds/                   # 构建日志
 │   └── YYYY-MM-DD-HH-MM.json
 │
-└── tests/                    # 测试执行报告
-    ├── unit/
-    ├── integration/
-    └── e2e/
+├── tests/                    # 测试执行报告
+│   ├── unit/
+│   ├── integration/
+│   └── e2e/
+│
+├── adr-test-architecture-review.md  # ADR测试架构审视报告
+└── adr-test-architecture-review-summary.md  # 执行摘要
 ```
 
 ---
@@ -159,8 +162,13 @@ GitHub Actions 自动生成并上传报告：
 - [ADR-0000：架构测试与 CI 治理宪法](../adr/governance/ADR-0000-architecture-tests.md)
 - [脚本工具文档](../../scripts/README.md)
 
+### 架构审视报告
+
+- [ADR 测试架构审视报告（完整版）](./adr-test-architecture-review.md) - 2026-01-28
+- [ADR 测试架构审视报告（执行摘要）](./adr-test-architecture-review-summary.md) - 2026-01-28
+
 ---
 
 **维护**：架构委员会  
-**最后更新**：2026-01-27  
+**最后更新**：2026-01-28  
 **依据**：ADR-970
