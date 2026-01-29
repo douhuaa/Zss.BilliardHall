@@ -33,11 +33,13 @@ jobs:
       - name: Build solution
         run: dotnet build --no-restore --configuration Release
 
-      - name: Validate ADR Consistency
+      - name: Validate ADR Consistency (Architecture Tests)
         run: |
-          echo "::group::ADR 编号/目录/内容一致性验证"
-          chmod +x ./scripts/validate-adr-consistency.sh
-          ./scripts/validate-adr-consistency.sh
+          echo "::group::ADR 编号/目录/内容一致性验证（架构测试）"
+          dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj \
+            --filter "FullyQualifiedName~AdrConsistencyTests" \
+            --logger "console;verbosity=normal" \
+            --configuration Release
           echo "::endgroup::"
 
       - name: Validate Three-Way Mapping
@@ -47,11 +49,13 @@ jobs:
           ./scripts/validate-three-way-mapping.sh
           echo "::endgroup::"
 
-      - name: Validate ADR-Test Mapping (Legacy)
+      - name: Validate ADR-Test Mapping (Architecture Tests)
         run: |
-          echo "::group::ADR-测试映射一致性验证（传统）"
-          chmod +x ./scripts/validate-adr-test-mapping.sh
-          ./scripts/validate-adr-test-mapping.sh
+          echo "::group::ADR-测试映射一致性验证（架构测试）"
+          dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj \
+            --filter "FullyQualifiedName~AdrTestMappingTests" \
+            --logger "console;verbosity=normal" \
+            --configuration Release
           echo "::endgroup::"
 
       - name: Run architecture tests
