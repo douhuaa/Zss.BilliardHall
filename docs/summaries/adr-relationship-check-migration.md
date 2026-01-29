@@ -2,21 +2,142 @@
 
 ## 概述
 
-本文档记录了将 ADR 关系双向一致性检查从 bash 脚本迁移到 .NET 架构测试的过程和原因。
+本文档记录了将 ADR 验证脚本从 bash 迁移到 .NET 架构测试的完整过程。
 
 ## 背景
 
-原有的 `scripts/check-relationship-consistency.sh` 脚本在 CI 环境中遇到了兼容性问题：
-- 在 GitHub Actions 中静默失败（exit code 1 但无错误输出）
+原有的 bash 脚本在 CI 环境中遇到了多个问题：
+- `check-relationship-consistency.sh` 在 GitHub Actions 中静默失败
 - 依赖 bash 特定行为（`set -eo pipefail`）
 - 字符串解析逻辑复杂且易出错
 - 难以调试和维护
+- 跨平台兼容性问题
 
 ## 解决方案：治理级别跃迁
 
 这不是简单的"语言迁移"，而是**治理级别的跃迁**。
 
-### 架构对比
+---
+
+## 迁移完成的脚本
+
+### 第一批：关系验证（Batch 1）
+
+| Bash 脚本 | .NET 测试类 | 测试数量 | 状态 |
+|-----------|-------------|---------|------|
+| `check-relationship-consistency.sh` | `AdrRelationshipConsistencyTests` | 4 | ✅ 完成 |
+| `verify-adr-relationships.sh` | `AdrRelationshipDeclarationTests` | 1 | ✅ 完成 |
+| `detect-circular-dependencies.sh` | `AdrCircularDependencyTests` | 1 | ✅ 完成 |
+| `validate-adr-consistency.sh` | `AdrConsistencyTests` | 2 | ⚠️ 部分 |
+
+**总计**: 8 个架构测试，替代 4 个 bash 脚本
+
+---
+
+## 新架构
+
+```
+tests/ArchitectureTests/Adr/
+├── AdrDocument.cs                           # 强类型 ADR 模型
+├── AdrParser.cs                             # Markdig AST 解析器
+├── AdrRepository.cs                         # ADR 文档扫描器
+├── AdrRelationshipConsistencyTests.cs       # 双向一致性（4 tests）
+├── AdrRelationshipDeclarationTests.cs       # 章节验证（1 test）
+├── AdrCircularDependencyTests.cs            # 循环检测（1 test）
+└── AdrConsistencyTests.cs                   # 结构验证（2 tests）
+```
+
+### 职责分离
+
+1. **AdrDocument** - 强类型模型
+   - 表示一个 ADR 及其关系声明
+   - 使用 `HashSet<string>` 存储关系
+   - 提供清晰的属性访问
+
+2. **AdrRepository** - 文档扫描
+   - 扫描 `docs/adr/` 目录
+   - 过滤无效文件（README、proposals）
+   - 批量加载所有 ADR
+
+3. **AdrParser** - AST 解析
+   - 使用 Markdig 解析 Markdown
+   - 支持中英文双语格式
+   - 提取关系声明到强类型模型
+
+4. **测试类** - 治理测试
+   - 独立的测试方法
+   - 直接 Assert，失败即裁决
+   - 精确的错误消息
+
+---
+
+## 详细测试覆盖
+
+### 1️⃣ AdrRelationshipConsistencyTests（双向一致性）
+
+原脚本：`check-relationship-consistency.sh`
+
+```csharp
+✅ DependsOn_Must_Be_Declared_Bidirectionally()
+   验证：A 依赖 B ⇔ B 被 A 依赖
+
+✅ DependedBy_Must_Be_Declared_Bidirectionally()
+   验证：A 被 B 依赖 ⇔ B 依赖 A
+
+✅ Supersedes_Must_Be_Declared_Bidirectionally()
+   验证：A 替代 B ⇔ B 被 A 替代
+
+✅ SupersededBy_Must_Be_Declared_Bidirectionally()
+   验证：A 被 B 替代 ⇔ B 替代 A
+```
+
+### 2️⃣ AdrRelationshipDeclarationTests（章节验证）
+
+原脚本：`verify-adr-relationships.sh`
+
+```csharp
+✅ All_ADRs_Must_Have_Relationship_Section()
+   ADR-940.1: 每个 ADR 必须包含关系声明章节
+```
+
+### 3️⃣ AdrCircularDependencyTests（循环依赖检测）
+
+原脚本：`detect-circular-dependencies.sh`
+
+```csharp
+✅ ADR_Dependencies_Must_Not_Form_Cycles()
+   ADR-940.4: 使用 DFS 算法检测循环依赖
+   报告完整的循环路径
+```
+
+**技术亮点**：
+- 深度优先搜索（DFS）算法
+- 递归栈跟踪
+- 精确的循环路径报告
+
+### 4️⃣ AdrConsistencyTests（结构一致性）
+
+原脚本：`validate-adr-consistency.sh`
+
+```csharp
+✅ ADR_Files_Must_Use_Four_Digit_Numbering()
+   验证：ADR-XXXX 四位编号格式
+
+✅ ADR_Number_Must_Match_Directory_Range()
+   验证：编号与目录匹配
+   - constitutional: 0001-0099
+   - structure: 0100-0199
+   - runtime: 0200-0299
+   - technical: 0300-0399
+   - governance: 0000, 0400+
+
+⚠️ ADR_Documents_Must_Have_Valid_FrontMatter()
+   验证：Front Matter 完整性（开发中）
+```
+
+---
+
+## 架构对比
 
 | 维度 | Bash 脚本 | .NET 架构测试 |
 |------|-----------|--------------|
