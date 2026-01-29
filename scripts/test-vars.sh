@@ -1,0 +1,12 @@
+#!/bin/bash
+SCRIPT_PATH="${BASH_SOURCE[0]:-$0}"
+echo "BASH_SOURCE[0]: ${BASH_SOURCE[0]}"
+echo "\$0: $0"
+echo "SCRIPT_PATH: $SCRIPT_PATH"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
+echo "SCRIPT_DIR: $SCRIPT_DIR"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+echo "REPO_ROOT: $REPO_ROOT"
+ADR_DIR="$REPO_ROOT/docs/adr"
+echo "ADR_DIR: $ADR_DIR"
+ls -d "$ADR_DIR" 2>&1 || echo "ERROR: Directory not found"
