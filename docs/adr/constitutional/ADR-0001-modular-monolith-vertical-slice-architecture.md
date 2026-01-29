@@ -218,15 +218,17 @@ superseded_by: null
 
 ## References（非裁决性参考）
 
-非裁决性参考（建议、最佳实践、详细示例）请查阅：
-- [ADR-0001 Copilot Prompts](../../copilot/adr-0001.prompts.md) - Copilot 场景化指导
-- [模块化单体架构案例](../../cases/README.md) - 实际案例参考
-
 **相关外部资源**：
 - [Simon Brown - Modular Monoliths](https://www.codingthearchitecture.com/presentations/sa2015-modular-monoliths) - 模块化单体理论基础
 - [Kamil Grzybek - Modular Monolith Architecture](https://github.com/kgrzybek/modular-monolith-with-ddd) - 参考实现
 - [Vertical Slice Architecture by Jimmy Bogard](https://www.youtube.com/watch?v=SUiWfhAhgQw) - 垂直切片架构讲解
 - [Mark Seemann - Dependency Rejection](https://blog.ploeh.dk/2017/02/02/dependency-rejection/) - 模块隔离原则
+
+**相关内部文档**：
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 三层架构体系
+- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 模块命名空间规范
+- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 模块依赖管理
+- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 模块间通信
 
 ---
 
