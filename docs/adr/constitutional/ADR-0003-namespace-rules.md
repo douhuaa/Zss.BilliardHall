@@ -1,8 +1,24 @@
+---
+adr: ADR-0003
+title: "命名空间与项目边界规范"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "2.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0003：命名空间与项目边界规范
 
+> ⚖️ **本 ADR 是命名空间组织的基本法，定义命名空间规则和自动推导机制的唯一裁决源。**
+>
+> **裁决权威声明**：本 ADR 正文是关于命名空间和项目边界的最高权威。所有架构测试、CI验证、人工评审均以本 ADR 正文为唯一依据。Copilot Prompts、README、GUIDE 等辅导材料不具备裁决力，若与本 ADR 冲突，以本 ADR 为准。
+
 **状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构约束（Architectural Contract）  
 **适用范围**：所有 Platform / Application / Modules / Host / Tests 项目  
 **生效时间**：即刻
 
@@ -21,12 +37,14 @@
 
 ## 术语表（Glossary）
 
-| 术语                    | 定义                                   |
-|-----------------------|--------------------------------------|
-| BaseNamespace         | 公司+产品根命名空间（`Zss.BilliardHall`）       |
-| RootNamespace         | 项目根命名空间，由BaseNamespace及目录自动推导        |
-| Directory.Build.props | MSBuild全局配置文件，统一定义BaseNamespace      |
-| MSBuild 推导            | 通过 MSBuild 条件和目录映射自动赋值 RootNamespace |
+| 术语                    | 定义                                          | 英文对照                |
+|-----------------------|---------------------------------------------|----------------------|
+| BaseNamespace         | 公司+产品根命名空间（`Zss.BilliardHall`），所有项目的共同前缀 | Base Namespace       |
+| RootNamespace         | 项目根命名空间，由 BaseNamespace 及目录自动推导           | Root Namespace       |
+| Directory.Build.props | MSBuild 全局配置文件，统一定义 BaseNamespace          | Directory.Build.props |
+| MSBuild 推导            | 通过 MSBuild 条件和目录映射自动赋值 RootNamespace       | MSBuild Inference    |
+| 命名空间边界                | 命名空间与物理目录结构的强制对应关系                          | Namespace Boundary   |
+| 项目层级                  | Platform/Application/Modules/Host 的层级结构    | Project Hierarchy    |
 
 ---
 
@@ -126,12 +144,10 @@
 
 ## 版本历史
 
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 4.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 3.0 | 2026-01-22 | 完全去编号、结构升级 |
-| 2.0 | 2026-01-20 | 机制细化       |
-| 1.0 | 初版         | 初始发布       |
+| 版本  | 日期         | 变更说明                        |
+|-----|------------|------------------------------|
+| 2.0 | 2026-01-29 | 添加标准 Front Matter，完善术语表英文对照，增加裁决权威声明，符合 ADR-902/0006/0007/0008 |
+| 1.0 | 2026-01-26 | 裁决型重构，移除冗余                 |
 
 ---
 
