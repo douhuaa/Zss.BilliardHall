@@ -1,10 +1,20 @@
+---
+adr: ADR-0002
+title: "Platform / Application / Host 三层启动体系"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-29
+version: "2.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0002：Platform / Application / Host 三层启动体系
 
-**状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构约束（Architectural Contract）  
-**适用范围**：所有 Host、模块、测试、未来子系统  
-**生效时间**：即刻
+> ⚖️ **本 ADR 是架构宪法的核心，定义三层启动体系的唯一裁决源。**
 
 ---
 
@@ -22,13 +32,13 @@
 
 ## 术语表（Glossary）
 
-| 术语           | 定义                             |
-|--------------|--------------------------------|
-| Platform     | 技术基座，仅提供技术能力，不感知业务             |
-| Application  | 应用装配层，定义"系统是什么"，聚合模块和用例        |
-| Host         | 进程外壳，决定"怎么跑"，如 Web/Worker/Test |
-| Bootstrapper | 唯一的装配入口，负责注册服务和配置              |
-| 单向依赖         | Host → Application → Platform  |
+| 术语           | 定义                             | 英文对照             |
+|--------------|--------------------------------|------------------|
+| Platform     | 技术基座，仅提供技术能力，不感知业务             | Platform Layer   |
+| Application  | 应用装配层，定义"系统是什么"，聚合模块和用例        | Application Layer |
+| Host         | 进程外壳，决定"怎么跑"，如 Web/Worker/Test | Host Layer       |
+| Bootstrapper | 唯一的装配入口，负责注册服务和配置              | Bootstrapper     |
+| 单向依赖         | Host → Application → Platform  | Unidirectional Dependency |
 
 ---
 
@@ -154,14 +164,12 @@
 
 ---
 
-## 版本历史
+## 版本历史（History）
 
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 4.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 3.0 | 2026-01-22 | 结构升级、测试映射  |
-| 2.0 | 2026-01-20 | 目录与依赖方向细化  |
-| 1.0 | 初版         | 初始发布       |
+| 版本  | 日期         | 变更说明                                         |
+|-----|------------|----------------------------------------------|
+| 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 |
+| 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
 
 ---
 

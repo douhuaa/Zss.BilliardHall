@@ -1,10 +1,20 @@
+---
+adr: ADR-0004
+title: "中央包管理（CPM）规范"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-29
+version: "2.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0004：中央包管理（CPM）规范
 
-**状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构约束（Architectural Contract）  
-**适用范围**：所有 Platform / Application / Modules / Host / Tests 项目  
-**生效时间**：即刻
+> ⚖️ **本 ADR 是架构宪法的核心，定义中央包管理的唯一裁决源。**
 
 ---
 
@@ -21,13 +31,13 @@
 
 ## 术语表（Glossary）
 
-| 术语                       | 定义                               |
-|--------------------------|----------------------------------|
-| CPM                      | Central Package Management，中央包管理 |
-| Directory.Packages.props | NuGet 配置文件，集中定义全局依赖包版本           |
-| 传递依赖固定                   | 通过 CPM 禁止传递依赖的漂移                 |
-| 层级依赖                     | 不同层项目允许的包类型约束                    |
-| 包分组                      | 依赖包按技术栈、场景分隔分组                   |
+| 术语                       | 定义                               | 英文对照                    |
+|--------------------------|----------------------------------|-----------------------|
+| CPM                      | Central Package Management，中央包管理 | CPM                   |
+| Directory.Packages.props | NuGet 配置文件，集中定义全局依赖包版本           | Directory.Packages.props |
+| 传递依赖固定                   | 通过 CPM 禁止传递依赖的漂移                 | Transitive Dependency Lock |
+| 层级依赖                     | 不同层项目允许的包类型约束                    | Layered Dependencies  |
+| 包分组                      | 依赖包按技术栈、场景分隔分组                   | Package Grouping      |
 
 ---
 
@@ -134,14 +144,12 @@
 
 ---
 
-## 版本历史
+## 版本历史（History）
 
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 4.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 3.0 | 2026-01-22 | 结构升级、统一结构和映射 |
-| 2.0 | 2026-01-20 | 分组细化，新增CI校验  |
-| 1.0 | 初版         | 初始发布       |
+| 版本  | 日期         | 变更说明                                         |
+|-----|------------|----------------------------------------------|
+| 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 |
+| 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
 
 ---
 
