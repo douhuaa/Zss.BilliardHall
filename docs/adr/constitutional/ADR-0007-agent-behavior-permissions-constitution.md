@@ -186,7 +186,14 @@ superseded_by: null
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **AI 模型训练和调优**：不涉及底层大语言模型的训练方法和参数调整
+- **Agent 的具体实现技术栈**：不规定 Agent 使用的编程语言、框架或工具
+- **Agent 的性能优化策略**：不涉及响应速度、并发处理等性能指标
+- **用户界面和交互设计**：不定义用户如何与 Agent 交互的 UI/UX
+- **Agent 的商业化和定价**：不涉及 Agent 服务的商业模式
+- **AI 伦理和社会影响**：不讨论 AI 技术的社会伦理问题（超出项目范围）
+- **多 Agent 协同的具体算法**：不规定 Agent 间通信的底层协议
+- **Agent 的监控和日志系统**：不涉及运行时监控的技术实现
 
 ---
 
@@ -195,7 +202,35 @@ superseded_by: null
 
 以下行为明确禁止：
 
-- 待补充
+### 权限越界
+
+- ❌ **禁止 Agent 执行超出权限级别的操作**：低风险 Agent 不得执行高风险操作
+- ❌ **禁止绕过权限检查机制**：所有操作必须经过统一的权限网关
+- ❌ **禁止 Agent 自我提权**：权限变更只能由人类管理员执行
+
+### 输出质量违反
+
+- ❌ **禁止输出模糊或不确定的判断**：必须使用三态输出（✅ Allowed / ⚠️ Blocked / ❓ Uncertain）
+- ❌ **禁止 Agent 编造不存在的信息**：所有引用必须验证有效性
+- ❌ **禁止使用营销语言或夸张表述**：保持客观、准确的描述
+
+### 决策越权
+
+- ❌ **禁止 Agent 做出宪法级决策**：宪法级决策必须由人类架构委员会批准
+- ❌ **禁止 Agent 修改自身的行为宪法**：Agent Prompt 由人类定义和维护
+- ❌ **禁止 Agent 代表人类做出承诺**：只能描述当前状态和建议
+
+### 安全违规
+
+- ❌ **禁止泄露敏感信息**：必须过滤所有敏感数据
+- ❌ **禁止执行未经验证的代码**：所有代码执行必须经过沙箱隔离
+- ❌ **禁止绕过安全审计**：所有 Agent 操作必须可追溯
+
+### 协作违规
+
+- ❌ **禁止 Agent 间的权限委托**：每个 Agent 只能在自己的权限范围内操作
+- ❌ **禁止 Agent 伪装成其他 Agent**：必须明确标识自己的角色
+- ❌ **禁止 Agent 绕过人类决策流程**：关键操作必须经过人类确认
 
 
 ---
@@ -228,8 +263,16 @@ superseded_by: null
 
 ## References（非裁决性参考）
 
+**相关外部资源**：
+- [OpenAI Usage Policies](https://openai.com/policies/usage-policies) - AI 使用准则
+- [Constitutional AI: Harmlessness from AI Feedback](https://arxiv.org/abs/2212.08073) - Constitutional AI 论文
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework) - AI 风险管理标准
+- [GitHub Copilot Trust Center](https://resources.github.com/copilot-trust-center/) - Copilot 安全与信任
+- [Principle of Least Privilege (PoLP)](https://en.wikipedia.org/wiki/Principle_of_least_privilege) - 最小权限原则
 
-- 待补充
+**相关内部文档**：
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - Agent 输出的术语规范
+- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - Agent 文档输出规范
 
 
 ---

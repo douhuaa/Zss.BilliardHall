@@ -229,7 +229,14 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **文档托管平台选择**：不规定使用 GitHub、GitLab 还是其他平台
+- **文档渲染工具和主题**：不涉及 MkDocs、Docusaurus 等工具的配置
+- **文档的 SEO 优化**：不涉及搜索引擎优化策略
+- **文档的自动化翻译**：不建立多语言文档的翻译流程
+- **文档的版权和许可证**：不定义文档的开源许可证类型
+- **文档的阅读分析和统计**：不涉及文档访问量、阅读时长等指标
+- **文档的评论和反馈系统**：不建立用户评论和反馈的技术实现
+- **文档的打印和导出格式**：不规定 PDF、Word 等导出格式的样式
 
 ---
 
@@ -238,7 +245,37 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 以下行为明确禁止：
 
-- 待补充
+### 格式违规
+
+- ❌ **禁止使用非简体中文撰写文档正文**：统一使用简体中文（代码、专有名词除外）
+- ❌ **禁止使用营销语言和夸张修辞**：保持客观、专业的表述
+- ❌ **禁止缺少代码语言标记**：代码块必须标记语言类型
+- ❌ **禁止使用绝对路径链接**：使用相对路径链接
+
+### 内容质量违规
+
+- ❌ **禁止文档缺少核心章节**：ADR 必须包含状态、级别、决策等必需章节
+- ❌ **禁止使用模糊不清的描述**：提供具体、可验证的描述
+- ❌ **禁止文档内容自相矛盾**：保持逻辑一致性
+- ❌ **禁止抄袭外部内容而不注明出处**：引用来源并注明链接
+
+### 维护流程违规
+
+- ❌ **禁止直接修改已批准的 ADR 决策部分**：创建新 ADR 替代或补充
+- ❌ **禁止跳过文档审核流程**：经过至少一名审核者批准
+- ❌ **禁止删除文档而不标记为废弃**：标记为 Deprecated 并说明原因
+
+### 索引和链接违规
+
+- ❌ **禁止新增文档后不更新索引**：同时更新相关索引文件
+- ❌ **禁止使用失效的链接**：定期检查并修复失效链接
+- ❌ **禁止缺少双向引用**：在相关文档中添加双向链接
+
+### 可访问性违规
+
+- ❌ **禁止图片缺少 alt 文本**：为所有图片添加描述性文本
+- ❌ **禁止使用纯表情符号传递关键信息**：表情符号需配合文字说明
+- ❌ **禁止表格过于复杂无法阅读**：拆分为多个表格或使用列表
 
 
 ---
@@ -285,8 +322,19 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 ## References（非裁决性参考）
 
+**写作指南**：
+- [Microsoft Writing Style Guide](https://learn.microsoft.com/en-us/style-guide/welcome/) - 技术写作标准
+- [Google Developer Documentation Style Guide](https://developers.google.com/style) - 文档风格指南
+- [Write the Docs](https://www.writethedocs.org/) - 文档工程社区
+- [Diátaxis Documentation Framework](https://diataxis.fr/) - 文档架构方法论
+- [Markdown Guide](https://www.markdownguide.org/) - Markdown 语法规范
+- [CommonMark Spec](https://spec.commonmark.org/) - Markdown 标准规范
+- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/) - Web 内容可访问性指南
 
-- 待补充
+**相关内部文档**：
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 术语一致性规范
+- [ADR-0007：Agent 行为与权限宪法](./ADR-0007-agent-behavior-permissions-constitution.md) - Agent 文档生成规范
+- [ADR-902：ADR 模板结构契约](../governance/ADR-902-adr-template-structure-contract.md) - ADR 结构规范
 
 
 ---
