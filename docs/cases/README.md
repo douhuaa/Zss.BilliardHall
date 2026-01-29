@@ -23,13 +23,14 @@
 
 ## 案例分类
 
-### 模块通信
+### 模块开发
+- [创建新模块](module-creation-case.md) - 🟡 中等难度 - 如何创建符合架构规范的新模块
 - [领域事件通信模式](domain-event-communication-case.md) - 🟡 中等难度 - 如何使用领域事件实现模块间异步通信
 - [契约查询模式](contract-query-pattern-case.md) - 🟢 简单难度 - 如何使用契约查询实现跨模块数据读取
 
 ### 测试实践
 - [Handler 单元测试](handler-unit-testing-case.md) - 🟢 简单难度 - 如何为 Command/Query Handler 编写单元测试
-- 待添加：架构测试编写案例
+- [架构测试编写](architecture-test-writing-case.md) - 🟡 中等难度 - 如何使用 NetArchTest 编写架构测试
 
 ### 重构案例
 - 待添加：从分层架构到垂直切片的重构

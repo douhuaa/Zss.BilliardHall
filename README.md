@@ -55,6 +55,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 完整的架构文档请查看 [docs/](docs/) 目录：
 
 - **[📍 文档导航中心](docs/index.md)** - 按角色和任务的快速导航（主入口）
+- **[🗺️ 文档演进路线图](docs/ROADMAP.md)** - 文档体系的发展规划和当前进度
 - **[快速开始指南](docs/guides/quick-start-guide.md)** - 15 分钟极速上手 / 60 分钟完整入门
 - **[架构指南](docs/guides/architecture-design-guide.md)** - 架构概述和开发指南
 - **[CI/CD 指南](docs/guides/ci-cd-integration-guide.md)** - 持续集成和测试
