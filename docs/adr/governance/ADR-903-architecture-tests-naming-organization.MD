@@ -8,7 +8,7 @@ deciders: "Architecture Board"
 date: 2026-01-28
 maintainer: "Architecture Board"
 reviewer: "GitHub Copilot"
-supersedes: null
+supersedes: ADR-122
 superseded_by: ADR-903-906
 ---
 
@@ -239,16 +239,24 @@ ADR_0000_2_Architecture_Tests_Must_Not_Be_Skipped
 
 ## Relationships（关系声明）
 
-**Depends On**：
+**依赖（Depends On）**：
 
 - [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md)
 - [ADR-902：ADR 模板与结构契约](./ADR-902-adr-template-structure-contract.md)
 
-**Depended By**：
+**被依赖（Depended By）**：
 
 - 所有【必须架构测试覆盖】的 ADR
 
-**Related**：
+**替代（Supersedes）**：
+
+- [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
+
+**被替代（Superseded By）**：
+
+- [ADR-903-906：ArchitectureTests 执法治理体系](./ADR-903-906.md)
+
+**相关（Related）**：
 
 - [ADR-905：执行级别分类](./ADR-905-enforcement-level-classification.md)
 

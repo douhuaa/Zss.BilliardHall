@@ -59,7 +59,7 @@ def extract_relationships(adr_file: Path) -> ADRRelationship:
     in_relationship = False
     
     for line in content.split('\n'):
-        if re.match(r'^##\s+(ADR\s*)?关系', line):
+        if re.match(r'^##\s+(ADR\s*)?关系', line) or re.match(r'^##\s+Relationships', line):
             in_relationship = True
             continue
         elif in_relationship and re.match(r'^##\s+', line):
@@ -84,21 +84,50 @@ def extract_relationships(adr_file: Path) -> ADRRelationship:
                         rel.superseded_by.add(extract_adr_id(value))
     
     # 解析关系声明
-    # 格式：**依赖**：ADR-XXXX
-    patterns = {
-        'depends_on': r'\*\*依赖\*\*[：:].*?ADR-(\d+)',
-        'depended_by': r'\*\*被依赖\*\*[：:].*?ADR-(\d+)',
-        'supersedes': r'\*\*替代\*\*[：:].*?ADR-(\d+)',
-        'superseded_by': r'\*\*被替代\*\*[：:].*?ADR-(\d+)',
-        'related': r'\*\*相关\*\*[：:].*?ADR-(\d+)',
-        'inherits': r'\*\*继承\*\*[：:].*?ADR-(\d+)',
-        'inherited_by': r'\*\*被继承\*\*[：:].*?ADR-(\d+)',
-    }
-    
-    for rel_type, pattern in patterns.items():
-        matches = re.findall(pattern, relationship_section + content)
-        for match in matches:
-            getattr(rel, rel_type).add(match)
+    # 新的解析方法：逐段解析，支持多行格式
+    if relationship_section:
+        # 分割成不同的关系类型段落
+        rel_types_map = {
+            '依赖': 'depends_on',
+            'Depends On': 'depends_on',
+            '被依赖': 'depended_by',
+            'Depended By': 'depended_by',
+            '替代': 'supersedes',
+            'Supersedes': 'supersedes',
+            '被替代': 'superseded_by',
+            'Superseded By': 'superseded_by',
+            '相关': 'related',
+            'Related': 'related',
+            '继承': 'inherits',
+            'Inherits': 'inherits',
+            '被继承': 'inherited_by',
+            'Inherited By': 'inherited_by',
+        }
+        
+        current_rel_type = None
+        for line in relationship_section.split('\n'):
+            # 检查是否是关系类型标题
+            found_rel_type = False
+            for cn_name, en_name in rel_types_map.items():
+                if re.match(rf'^\*\*{re.escape(cn_name)}', line):
+                    current_rel_type = en_name
+                    found_rel_type = True
+                    # 尝试在同一行找到 ADR 引用
+                    adrs = re.findall(r'ADR-(\d+)', line)
+                    for adr in adrs:
+                        getattr(rel, current_rel_type).add(adr)
+                    break
+            
+            if not found_rel_type:
+                # 如果在某个关系类型段落中，查找 ADR 引用
+                if current_rel_type and line.strip().startswith('-'):
+                    adrs = re.findall(r'ADR-(\d+)', line)
+                    for adr in adrs:
+                        getattr(rel, current_rel_type).add(adr)
+                # 空行或其他标记结束当前段落
+                elif line.strip() == '' or (line.strip() and not line.startswith('-') and not line.startswith('*')):
+                    if current_rel_type and not line.strip().startswith('-'):
+                        current_rel_type = None
     
     return rel
 
