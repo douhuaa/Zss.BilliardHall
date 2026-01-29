@@ -1,10 +1,21 @@
+---
+adr: ADR-240
+title: "Handler 异常约束"
+status: Final
+level: Runtime
+version: "3.0"
+deciders: "Architecture Board"
+date: 2026-01-25
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-240：Handler 异常约束
 
 > ⚖️ **本 ADR 定义 Handler 异常处理的强制规则，确保异常可分类、可重试、可追溯。**
 
-**状态**：✅ Final  
-**版本**：1.0
-**级别**：运行时层（Runtime Constraint）  
 **适用范围**：所有 Handler（Command/Query/Event Handler）  
 **生效时间**：即刻  
 **依赖 ADR**：ADR-0005（应用内交互模型）

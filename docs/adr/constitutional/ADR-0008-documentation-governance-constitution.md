@@ -1,3 +1,17 @@
+---
+adr: ADR-0008
+title: "文档编写与维护宪法"
+status: Final
+level: Constitutional
+version: "1.0"
+deciders: "Architecture Board"
+date: 2026-01-23
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0008：文档编写与维护宪法
 
 > ⚖️ **本 ADR 是所有文档的元规则，定义文档分级、边界与裁决权力的唯一裁决源。**

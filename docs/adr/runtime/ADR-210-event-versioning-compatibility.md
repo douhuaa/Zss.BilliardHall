@@ -1,12 +1,23 @@
+---
+adr: ADR-210
+title: "领域事件版本化与兼容性"
+status: Final
+level: Runtime
+version: "2.0"
+deciders: "Architecture Board"
+date: 2026-01-25
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-210：领域事件版本化与兼容性
 
 > ⚖️ **本 ADR 定义领域事件的版本管理规则，确保跨版本兼容性和系统稳定性。**
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：运行时层（Runtime Constraint）  
 **适用范围**：所有领域事件  
-**生效时间**：待审批通过后  
+**生效时间**：即刻  
 **依赖 ADR**：ADR-0001（模块化单体与垂直切片架构）
 
 ---

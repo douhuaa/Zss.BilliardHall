@@ -1,14 +1,13 @@
-﻿---
+---
 adr: ADR-901
 title: "语义宪法（Constraint / Warning / Notice）"
 status: Final
-level: Constitutional
+level: Governance
 deciders: "Architecture Board"
-date: 2025-01-28
+date: 2026-01-27
 version: "1.0"
 maintainer: "Architecture Board"
-primary_enforcement: L2
-reviewer: "Architecture Board"
+reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
 ---

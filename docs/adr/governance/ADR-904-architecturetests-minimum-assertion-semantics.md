@@ -1,11 +1,11 @@
-﻿---
+---
 adr: ADR-904
 title: "ArchitectureTests 最小断言语义规范"
 status: Superseded
 level: Governance
 version: "1.0"
 deciders: "Architecture Board"
-date: 2026-01-28
+date: 2026-01-27
 maintainer: "Architecture Board"
 reviewer: "GitHub Copilot"
 supersedes: null

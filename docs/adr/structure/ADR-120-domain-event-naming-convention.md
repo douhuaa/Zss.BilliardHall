@@ -1,8 +1,19 @@
+---
+adr: ADR-120
+title: "领域事件命名规范"
+status: Final
+level: Structure
+version: "1.2"
+deciders: "Architecture Board"
+date: 2026-01-24
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-120：领域事件命名规范
 
-**状态**：✅ 已采纳（Adopted）  
-**版本**：1.0
-**级别**：结构约束（Structure Constraint）  
 **适用范围**：所有模块（Modules）、领域事件定义、事件处理器  
 **生效时间**：即刻  
 **依赖 ADR**：ADR-0001、ADR-0003、ADR-0005

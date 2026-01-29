@@ -1,3 +1,17 @@
+---
+adr: ADR-930
+title: "代码审查与 ADR 合规自检流程"
+status: Final
+level: Governance
+version: "1.0"
+deciders: "Architecture Board"
+date: 2026-01-27
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-930：代码审查与 ADR 合规自检流程
 
 > ⚖️ **本 ADR 是所有 PR 和代码审查流程的唯一裁决源，定义 ADR 合规性检查的执行标准。**

@@ -1,3 +1,17 @@
+---
+adr: ADR-0006
+title: "术语与编号宪法"
+status: Final
+level: Constitutional
+version: "1.0"
+deciders: "Architecture Board"
+date: 2026-01-23
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0006：术语与编号宪法
 
 > ⚖️ **本 ADR 是所有 ADR 的元规则，定义术语语义和编号体系的唯一裁决源。**

@@ -1,10 +1,21 @@
+---
+adr: ADR-360
+title: "CI/CD Pipeline 流程标准化"
+status: Final
+level: Technical
+version: "2.0"
+deciders: "Architecture Board"
+date: 2026-01-26
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-360：CI/CD Pipeline 流程标准化
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：技术层  
 **影响范围**：所有 CI/CD 流程、PR 合并流程  
-**生效时间**：待审批通过后
+**生效时间**：即刻
 
 ---
 

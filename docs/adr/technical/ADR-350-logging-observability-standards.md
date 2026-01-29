@@ -1,10 +1,21 @@
+---
+adr: ADR-350
+title: "日志与可观测性字段标准"
+status: Final
+level: Technical
+version: "2.0"
+deciders: "Architecture Board"
+date: 2026-01-26
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-350：日志与可观测性字段标准
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：技术层  
 **影响范围**：所有日志输出、结构化日志字段  
-**生效时间**：待审批通过后
+**生效时间**：即刻
 
 ---
 

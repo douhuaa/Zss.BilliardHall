@@ -1,3 +1,17 @@
+---
+adr: ADR-920
+title: "示例代码治理宪法"
+status: Final
+level: Governance
+version: "1.0"
+deciders: "Architecture Board"
+date: 2026-01-27
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-920：示例代码治理宪法
 
 > ⚖️ **本 ADR 是所有示例代码（Examples）的唯一裁决源，定义示例的边界、约束与执法机制。**

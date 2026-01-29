@@ -1,3 +1,17 @@
+---
+adr: ADR-910
+title: "README 编写与维护宪法"
+status: Final
+level: Governance
+version: "1.0"
+deciders: "Architecture Board"
+date: 2026-01-27
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-910：README 编写与维护宪法
 
 > ⚖️ **本 ADR 是所有 README 文档的唯一裁决源，定义 README 的边界、约束与执法机制。**
