@@ -192,10 +192,11 @@ Notice 中 **严禁** 出现任何强制或隐性约束。
 
 **Depends On**：
 
-- [ADR-000: 架构治宪](ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0000：架构测试与 CI 治理宪法](ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
 
 **Depended By**：
 
+- [ADR-902：ADR 结构与章节规范](./ADR-902-adr-template-structure-contract.md) - ADR 语义定义被 ADR 结构规范依赖
 - 所有文档类 ADR
 - 所有治理与校验规则
 

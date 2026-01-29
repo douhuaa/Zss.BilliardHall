@@ -149,9 +149,10 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 
 **Depends On**：
 
-- [ADR-903：ArchitectureTests 命名与组织规范](../governance/ADR-903-architecture-tests-naming-organization.md)
+- [ADR-903：ArchitectureTests 命名与组织规范](../governance/ADR-903-architecture-tests-naming-organization.MD)
 
 **Depended By**：
+- [ADR-906：Analyzer 与 CI Gate 映射协议](../governance/ADR-906-analyzer-ci-gate-mapping-protocol.md) - CI Gate 映射依赖断言语义规范
 - 所有【必须架构测试覆盖】ADR
 - CI / Analyzer 校验规则
 

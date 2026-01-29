@@ -196,6 +196,7 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 - [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 文档术语遵循统一规范
 
 **被依赖（Depended By）**：
+- [ADR-902：ADR 结构与章节规范](../governance/ADR-902-adr-template-structure-contract.md) - ADR 结构规范基于文档治理
 - [ADR-905：架构约束分类与裁决实施映射](../governance/ADR-905-constraint-classification.md) - 约束分类基于文档治理
 - [ADR-910：README 编写与维护](../governance/ADR-910-readme-governance-constitution.md) - README 约束基于本 ADR
 - [ADR-920：示例治理](../governance/ADR-920-examples-governance-constitution.md) - 示例文档约束基于本 ADR
