@@ -75,10 +75,10 @@ while IFS= read -r adr_file; do
     # Skip files without valid ADR numeric IDs (like ADR-RELATIONSHIP-MAP)
     [ -z "$adr_id" ] && continue
     
-    if grep -q "^## 关系声明" "$adr_file"; then
-        # 提取 "依赖（Depends On）" 列表
-        sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-            sed -n '/\*\*依赖（Depends On）\*\*/,/\*\*被依赖/p' | \
+    if grep -qE "^## 关系声明|^## Relationships" "$adr_file"; then
+        # 提取 "依赖（Depends On）" 或 "Depends On" 列表
+        sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+            sed -n '/\*\*依赖（Depends On）\*\*\|\*\*Depends On\*\*/,/\*\*被依赖\|\*\*Depended By/p' | \
             { grep -oE 'ADR-[0-9]+' || true; } | \
             while read -r dep_id; do
                 echo "$adr_id $dep_id" >> "$GRAPH_FILE"
