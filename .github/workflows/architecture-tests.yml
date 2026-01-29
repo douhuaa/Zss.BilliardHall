@@ -33,11 +33,13 @@ jobs:
       - name: Build solution
         run: dotnet build --no-restore --configuration Release
 
-      - name: Validate ADR Consistency
+      - name: Validate ADR Consistency (Architecture Tests)
         run: |
-          echo "::group::ADR 编号/目录/内容一致性验证"
-          chmod +x ./scripts/validate-adr-consistency.sh
-          ./scripts/validate-adr-consistency.sh
+          echo "::group::ADR 编号/目录/内容一致性验证（架构测试）"
+          dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj \
+            --filter "FullyQualifiedName~AdrConsistencyTests" \
+            --logger "console;verbosity=normal" \
+            --configuration Release
           echo "::endgroup::"
 
       - name: Validate Three-Way Mapping
