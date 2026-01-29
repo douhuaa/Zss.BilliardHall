@@ -252,7 +252,7 @@
 - 无
 
 **相关（Related）**：
-- [ADR-0240：Handler 异常约束](./ADR-240-handler-exception-constraints.md) - Handler 异常处理是生命周期的一部分
+- [ADR-240：Handler 异常约束](./ADR-240-handler-exception-constraints.md) - Handler 异常处理是生命周期的一部分
 
 ---
 

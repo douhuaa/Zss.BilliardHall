@@ -157,7 +157,7 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 
 **Related**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md)
-- [ADR-122：测试代码组织与命名规范（ARD）](../structure/ADR-0122-architecture-tests-naming-organization-ard.md)
+- [ADR-122：测试代码组织与命名规范（ARD）](../structure/ADR-122-test-organization-naming.md)
 
 ---
 

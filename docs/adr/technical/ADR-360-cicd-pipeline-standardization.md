@@ -249,7 +249,7 @@ CI 失败时**必须**在失败消息中明确归属责任类别。
 - 无
 
 **相关（Related）**：
-- [ADR-0930：代码审查合规](../governance/ADR-930-code-review-compliance.md) - 代码审查是 CI/CD 的一部分
+- [ADR-930：代码审查合规](../governance/ADR-930-code-review-compliance.md) - 代码审查是 CI/CD 的一部分
 
 ---
 

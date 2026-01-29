@@ -237,7 +237,7 @@
 - 无
 
 **相关（Related）**：
-- [ADR-0201：Handler 生命周期管理](./ADR-201-handler-lifecycle-management.md) - 异常处理是生命周期的一部分
+- [ADR-201：Handler 生命周期管理](./ADR-201-handler-lifecycle-management.md) - 异常处理是生命周期的一部分
 
 ---
 

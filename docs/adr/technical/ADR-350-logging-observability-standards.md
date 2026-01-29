@@ -225,7 +225,7 @@
 - 无
 
 **相关（Related）**：
-- [ADR-0970：自动化工具日志集成标准](../governance/ADR-970-automation-log-integration-standard.md) - 自动化工具日志与应用日志相关
+- [ADR-970：自动化工具日志集成标准](../governance/ADR-970-automation-log-integration-standard.md) - 自动化工具日志与应用日志相关
 
 ---
 
