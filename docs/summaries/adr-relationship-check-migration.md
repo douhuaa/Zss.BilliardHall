@@ -28,9 +28,16 @@
 | `check-relationship-consistency.sh` | `AdrRelationshipConsistencyTests` | 4 | ✅ 完成 |
 | `verify-adr-relationships.sh` | `AdrRelationshipDeclarationTests` | 1 | ✅ 完成 |
 | `detect-circular-dependencies.sh` | `AdrCircularDependencyTests` | 1 | ✅ 完成 |
-| `validate-adr-consistency.sh` | `AdrConsistencyTests` | 2 | ⚠️ 部分 |
+| `validate-adr-consistency.sh` | `AdrConsistencyTests` | 3 | ⚠️ 部分 |
 
-**总计**: 8 个架构测试，替代 4 个 bash 脚本
+### 第二批：映射和生成（Batch 2）
+
+| Bash 脚本 | .NET 实现 | 类型 | 测试数量 | 状态 |
+|-----------|-----------|------|---------|------|
+| `validate-adr-test-mapping.sh` | `AdrTestMappingTests` | 测试 | 2 | ✅ 完成 |
+| `generate-adr-relationship-map.sh` | `AdrRelationshipMapGenerator` | 工具 | 1 | ✅ 完成 |
+
+**总计**: 5 个 bash 脚本 → 11 个架构测试 + 1 个工具类
 
 ---
 
@@ -132,7 +139,42 @@ tests/ArchitectureTests/Adr/
    - governance: 0000, 0400+
 
 ⚠️ ADR_Documents_Must_Have_Valid_FrontMatter()
-   验证：Front Matter 完整性（开发中）
+   验证：Front Matter 完整性（部分实现）
+```
+
+### 5️⃣ AdrTestMappingTests（ADR-测试映射）
+
+原脚本：`validate-adr-test-mapping.sh`
+
+```csharp
+✅ Core_ADRs_Must_Have_Architecture_Test_Classes()
+   ADR-0000: 确保核心 ADR（0000-0099）有测试类
+   使用反射检查 ADR_XXXX_Architecture_Tests 类
+
+✅ Architecture_Test_Classes_Must_Have_Substantial_Test_Methods()
+   确保测试类包含实质性测试方法
+   检查 [Fact] 和 [Theory] 特性
+```
+
+### 6️⃣ AdrRelationshipMapGenerator（关系图生成）
+
+原脚本：`generate-adr-relationship-map.sh`
+
+**工具类**（非测试）:
+```csharp
+AdrRelationshipMapGenerator.GenerateRelationshipMap(adrPath, outputPath);
+```
+
+**功能**：
+- 扫描所有 ADR 关系声明
+- 生成 Markdown 格式文档
+- 包含统计信息和分类列表
+- 支持所有关系类型
+
+**测试验证**：
+```csharp
+✅ ADR_Relationship_Map_Can_Be_Generated()
+   验证：关系图可以成功生成并包含基本结构
 ```
 
 ---
