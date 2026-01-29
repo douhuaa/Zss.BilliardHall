@@ -269,7 +269,19 @@ superseded_by: null
 ## References（非裁决性参考）
 
 
-- 待补充
+**官方标准**：
+- [Semantic Versioning 2.0.0](https://semver.org/) - 语义化版本规范
+- [RFC 2119: Key words for use in RFCs](https://www.ietf.org/rfc/rfc2119.txt) - 规范性语言标准（MUST/SHOULD/MAY）
+- [IEEE Standard Glossary of Software Engineering Terminology](https://ieeexplore.ieee.org/document/159342) - IEEE 软件工程术语标准
+
+**写作指南**：
+- [Microsoft Writing Style Guide](https://learn.microsoft.com/en-us/style-guide/welcome/) - 技术写作风格指南
+- [Google Developer Documentation Style Guide](https://developers.google.com/style) - 术语一致性最佳实践
+- [ADR GitHub Organization](https://adr.github.io/) - ADR 社区标准
+
+**相关内部文档**：
+- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - 文档风格规范
+- [ADR-902：ADR 模板结构契约](../governance/ADR-902-adr-template-structure-contract.md) - ADR 结构规范
 
 
 ---
