@@ -1,13 +1,22 @@
-# ADR-0005：应用内交互模型极简判裁版
-
-**状态**：✅ Final（仅保留裁决性规则，无“建议/经验”）  
-**版本**：1.0
-**级别**：根约束（Runtime Constitutional Rule）  
-**适用范围**：Application / Modules / Host  
-**生效时间**：即刻
-
+---
+adr: ADR-0005
+title: "应用内交互模型与执行边界"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-29
+version: "2.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
 ---
 
+# ADR-0005：应用内交互模型极简判裁版
+
+> ⚖️ **本 ADR 是架构宪法的核心，定义应用内交互模型的唯一裁决源。**
+
+---
 ## 本章聚焦内容（Focus）
 
 仅定义适用于全生命周期自动化裁决/阻断的**运行时交互约束**：
@@ -22,15 +31,15 @@
 
 ## 术语表（Glossary）
 
-| 术语            | 定义             |
-|---------------|----------------|
-| Use Case      | 端到端业务用例        |
-| Handler       | 业务用例的唯一决策实现    |
-| Command/Query | 分别代表写/读单一职责    |
-| CQRS          | 命令-查询职责分离      |
-| 合约（Contract）  | 模块间只读通信对象      |
-| 领域实体          | 业务内聚的复杂类型，不跨模块 |
-| 模块间通信         | 只允许事件、合约、原始类型  |
+| 术语            | 定义             | 英文对照         |
+|---------------|----------------|--------------|
+| Use Case      | 端到端业务用例        | Use Case     |
+| Handler       | 业务用例的唯一决策实现    | Handler      |
+| Command/Query | 分别代表写/读单一职责    | Command/Query |
+| CQRS          | 命令-查询职责分离      | CQRS         |
+| 合约（Contract）  | 模块间只读通信对象      | Contract     |
+| 领域实体          | 业务内聚的复杂类型，不跨模块 | Domain Entity |
+| 模块间通信         | 只允许事件、合约、原始类型  | Inter-Module Communication |
 
 ---
 
@@ -152,14 +161,12 @@
 > **级别说明**：L1=静态自动化（ArchitectureTests），L2=语义半自动（Roslyn/启发式）
 
 ---
+## 版本历史（History）
 
-## 必测/必拦架构测试（Enforcement）
-
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0005_Architecture_Tests.cs` 强制验证。
-
-**有一项违规视为架构违规，CI 自动阻断。**
-
----
+| 版本  | 日期         | 变更说明                                         |
+|-----|------------|----------------------------------------------|
+| 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 |
+| 1.0 | 2026-01-26 | 同步测试映射，格式统一化                                 |
 
 ## 版本历史
 

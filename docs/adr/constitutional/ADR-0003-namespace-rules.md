@@ -1,10 +1,20 @@
+---
+adr: ADR-0003
+title: "命名空间与项目边界规范"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-29
+version: "2.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0003：命名空间与项目边界规范
 
-**状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构约束（Architectural Contract）  
-**适用范围**：所有 Platform / Application / Modules / Host / Tests 项目  
-**生效时间**：即刻
+> ⚖️ **本 ADR 是架构宪法的核心，定义命名空间与项目边界的唯一裁决源。**
 
 ---
 
@@ -21,12 +31,12 @@
 
 ## 术语表（Glossary）
 
-| 术语                    | 定义                                   |
-|-----------------------|--------------------------------------|
-| BaseNamespace         | 公司+产品根命名空间（`Zss.BilliardHall`）       |
-| RootNamespace         | 项目根命名空间，由BaseNamespace及目录自动推导        |
-| Directory.Build.props | MSBuild全局配置文件，统一定义BaseNamespace      |
-| MSBuild 推导            | 通过 MSBuild 条件和目录映射自动赋值 RootNamespace |
+| 术语                    | 定义                                   | 英文对照                  |
+|-----------------------|--------------------------------------|----------------------|
+| BaseNamespace         | 公司+产品根命名空间（`Zss.BilliardHall`）       | Base Namespace       |
+| RootNamespace         | 项目根命名空间，由BaseNamespace及目录自动推导        | Root Namespace       |
+| Directory.Build.props | MSBuild全局配置文件，统一定义BaseNamespace      | Directory.Build.props |
+| MSBuild 推导            | 通过 MSBuild 条件和目录映射自动赋值 RootNamespace | MSBuild Inference    |
 
 ---
 
@@ -124,14 +134,12 @@
 
 ---
 
-## 版本历史
+## 版本历史（History）
 
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 4.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 3.0 | 2026-01-22 | 完全去编号、结构升级 |
-| 2.0 | 2026-01-20 | 机制细化       |
-| 1.0 | 初版         | 初始发布       |
+| 版本  | 日期         | 变更说明                                         |
+|-----|------------|----------------------------------------------|
+| 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 |
+| 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
 
 ---
 
