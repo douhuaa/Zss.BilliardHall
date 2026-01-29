@@ -4,19 +4,19 @@ title: "架构测试与 CI 治理宪法"
 status: Final
 level: Governance
 deciders: "Architecture Board"
-date: 2026-01-23
-version: "2.0"
+date: 2026-01-29
+version: "3.0"
 maintainer: "Architecture Board"
-primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
 ---
 
-
 # ADR-0000：架构测试与 CI 治理宪法
 
-> **唯一架构执法元规则**：本文件定义架构合法性评判的唯一基准。所有架构测试、CI 校验、Prompt 映射、破例治理均以本 ADR 正文为裁定源。
+>⚖️ 唯一架构裁决源声明 
+>本 ADR 是关于「架构合法性判定、CI 执法、破例治理」的最高宪法级规则。
+所有架构测试、CI Gate、Analyzer、Prompt、文档与流程 不得凌驾于本 ADR 之上。
 
 ---
 
@@ -30,8 +30,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语       | 定义                   |
@@ -40,8 +38,6 @@ superseded_by: null
 | ADR-测试映射 | ADR 【必须架构测试覆盖】→ 测试用例 |
 | CI 阻断    | 测试失败即阻断 PR / 发布      |
 | 破例       | 已批准的临时性违规（需归还）       |
-
----
 
 ---
 
@@ -89,40 +85,136 @@ superseded_by: null
 
 **实施机制**：
 ```markdown
+## arch-violations.md 格式
+
+| ADR | 规则 | 到期版本 | 负责人 | 偿还计划 | 状态 |
+|-----|------|---------|--------|---------|------|
+| ADR-201.1 | Handler Scoped | v2.5.0 | @dev | 迁移至 Scoped | 🚧 |
+```
+
+**CI 强制检查**：
+- 每月第一次构建扫描 arch-violations.md
+- 发现过期破例 → 构建失败
+- 强制团队偿还或延期（需重新审批）
+
+---## Decision（核心裁决）
+
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
 
 ---
+
+### ADR-0000.1:L1 审判权唯一性
+
+- **ADR 正文是唯一裁决依据**
+- README、Prompt、示例、脚本 **不具备裁决权**
+- 若出现冲突，**以 ADR 正文为准**
+
+
+> 判定理由：  
+> 这是**确定性、静态可校验规则**，CI 可直接阻断 → **L1**
+
+---
+
+### ADR-0000.2:L1 架构违规的判定原则
+
+以下任一条件成立，即构成架构违规：
+
+- 必须架构测试失败
+- CI Gate / Analyzer 判定失败
+- 人工 Gate 明确否决
+- 存在未记录或已过期的破例
+
+
+**架构违规 = CI 阻断（无例外）**
+
+> 判定理由：  
+> 结果确定、可自动阻断 → **L1**
+
+---
+
+### ADR-0000.3:L1 执行级别分离原则
+
+所有架构规则 **必须**被归类到执行级别之一：
+
+- **L1**：静态、确定性、可自动阻断
+- **L2**：语义型、需人工确认
+- **L3**：不可程控、仅人工 Gate
+
+
+> 执行级别的定义、判定标准与适用范围  
+> **由 ADR-905 唯一裁定**
+
+> 判定理由：  
+> 这是**分类强制规则**，不允许模糊 → **L1**
+
+---
+
+### ADR-0000.4:L1 ADR ↔ 测试 ↔ CI 的一一映射
+
+- 所有【必须架构测试覆盖】的 ADR 条款：
+  - 必须存在可追溯的测试或 Gate
+  - 测试与失败信息必须显式标注 ADR 编号
+
+- 映射缺失 = 流程违规
+
+
+> 判定理由：  
+> 映射关系可被工具扫描 → **L1**
+
+---
+
+### ADR-0000.5:L1 破例治理宪法规则
+
+任何架构破例 **必须同时满足**：
+
+- 显式记录（ADR + ARCH-VIOLATIONS）
+- 明确到期版本
+- 明确责任人
+- 明确归还方案
+- 可被 CI 自动扫描
+
+
+**过期破例 = 架构违规**
+
+> 判定理由：  
+> 破例是否存在、是否过期是确定事实 → **L1**
+
+---
+
+### ADR-0000.6:L3 冲突裁决优先级
+
+当 ADR 规则发生冲突时，裁决顺序为：
+
+1. 架构安全与数据一致性
+2. 系统稳定性与演进能力
+3. 生命周期与资源安全
+4. 结构一致性与可维护性
+5. 流程与治理便利性
+
+低优先级规则 **可以被临时牺牲，但必须记录破例**。
+
+> 判定理由：  
+> 冲突裁决 **必然涉及语境判断与权衡**，不可自动化 → **L3**
+
+---
+
 
 ## Enforcement（执法模型）
 
 ### ADR-0000 测试方法映射表
 
-| ADR 条款 | 执行级别 | 测试类型 | 测试名称 | 失败即 |
-|---------|----------|----------|----------|--------|
-| ADR-0000.1 | L1 | 静态规则 | ADR0000_Conflict_Priority_Tests | CI 阻断 |
-| ADR-0000.2 | L1 | 语义/配置 | ADR0000_Exception_Repayment_Tests | CI 阻断 |
+- 本 ADR 不实现任何工具
+- 但所有 CI / Analyzer / Test 必须遵守本 ADR 的裁决结果
+- 具体实现由下级 ADR 负责
 
-| 测试方法 | 说明 |
-|----------|------|
-| Each_ADR_Must_Have_Exact_And_Unique_Architecture_Test | 每条 ADR 必须有且仅有唯一对应的架构测试类 |
-| Architecture_Test_Classes_Must_Have_Minimum_Assertions | 架构测试类必须包含最少断言数（反作弊） |
-| Test_Failure_Messages_Must_Include_ADR_Number | 测试失败消息必须包含 ADR 编号（反作弊） |
-| Architecture_Tests_Must_Not_Be_Skipped | 禁止跳过架构测试（反作弊） |
-
----
 ---
 
 ## Non-Goals（明确不管什么）
 
-本 ADR 明确不涉及以下内容：
-
-- **单元测试和集成测试的编写规范**：不涉及业务逻辑测试的具体实现方式
-- **代码覆盖率目标**：不强制要求特定的代码覆盖率百分比
-- **性能测试和负载测试**：不涉及系统性能和负载方面的测试要求
-- **测试框架的具体选型**：不限定使用 xUnit、NUnit 或其他特定测试框架
-- **CI/CD 平台的选择**：不规定使用 GitHub Actions、Azure DevOps 还是其他 CI 工具
-- **测试环境的基础设施配置**：不涉及测试环境的服务器、网络等基础设施细节
-- **手动测试流程**：不涉及人工测试、UAT、探索性测试等非自动化测试
-- **测试数据管理策略**：不涉及测试数据的生成、清理和维护机制
+- 不定义具体架构规则
+- 不规定测试技术选型
+- 不描述 CI Pipeline 细节
+- 不提供教学或示例代码
 
 ---
 
@@ -131,10 +223,7 @@ superseded_by: null
 - 跳过架构测试（除非显式记录在 ARCH-VIOLATIONS，季度审计）
 - 架构测试失败不阻断 CI
 - 破例无偿还计划或负责人
-- 未同步更新 ADR 映射表、Prompts
 - 破例延期超过 2 次
-
----
 
 ---
 
@@ -174,29 +263,7 @@ superseded_by: null
 
 ---
 
-
----
-
----
-
-## References（非裁决性参考）
-
-**相关外部资源**：
-- [ArchUnit](https://www.archunit.org/) - Java 架构测试框架，理念参考
-- [NetArchTest](https://github.com/BenMorris/NetArchTest) - .NET 架构测试库
-- [Architecture Decision Records](https://adr.github.io/) - ADR 社区标准和最佳实践
-- [Continuous Compliance](https://www.thoughtworks.com/insights/blog/continuous-compliance) - CI 中的合规性自动化
-
-**相关内部文档**：
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 核心架构约束
-- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 层级依赖规则
-- [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 命名空间约束
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - CQRS 和 Handler 约束
-- [ADR-904：架构测试最小断言语义](./ADR-904-architecturetests-minimum-assertion-semantics.md) - 测试断言规范
-- [ADR-906：Analyzer/CI Gate 映射协议](./ADR-906-analyzer-ci-gate-mapping-protocol.md) - CI 集成机制
-
-
----
+## References
 
 ---
 
@@ -204,6 +271,7 @@ superseded_by: null
 
 | 版本  | 日期         | 变更说明              |
 |-----|------------|-------------------|
+|3.0| 2026-01-29 | 宪法级重写，剥离实现细节 |
 |2.1  | 2026-02-10 | 补充 ADR-0000.X/Y 规则 |
 | 2.0 | 2026-01-23 | 聚焦自动化与治理闭环，细化执行分级 |
 | 1.0 | 2026-01-20 | 初版                |
