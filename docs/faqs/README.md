@@ -28,7 +28,7 @@
 - [开发实践 FAQ](development-practices-faq.md) - 代码组织、测试编写、依赖注入、日志记录等问题
 
 ### 工具和流程
-- 待添加：CI/CD 流程、架构测试工具、自动化脚本等
+- [CI/CD 与工具使用 FAQ](ci-cd-tools-faq.md) - CI/CD 流程、架构测试工具、自动化脚本、依赖管理等问题
 
 ---
 
