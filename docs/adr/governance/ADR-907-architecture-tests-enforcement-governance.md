@@ -1,5 +1,5 @@
 ---
-adr: ADR-- 
+adr: ADR-907
 title: "ArchitectureTests 执法治理体系"
 status: Final
 level: Governance
@@ -182,10 +182,16 @@ superseded_by: null
 
 **Supersedes**：
 
-- [ADR-903：ArchitectureTests 命名与组织规范](ADR-903-architecture-tests-naming-organization.md)
-- [ADR-904：ArchitectureTests 最小断言语义规范](ADR-904-architecturetests-minimum-assertion-semantics.md) - 被本体系替代但仍保留引用关系
-- [ADR-906：Analyzer 与 CI Gate 映射协议](ADR-906-analyzer-ci-gate-mapping-protocol.md) - 被本体系替代但仍保留引用关系
-> ADR-903 / 904 / 906 已正式归档，仅用于历史追溯，不得单独引用或执法。
+- [ADR-903：ArchitectureTests 命名与组织规范](../archive/governance/ADR-903-architecture-tests-naming-organization.MD)
+- [ADR-904：ArchitectureTests 最小断言语义规范](../archive/governance/ADR-904-architecturetests-minimum-assertion-semantics.md)
+- [ADR-906：Analyzer 与 CI Gate 映射协议](../archive/governance/ADR-906-analyzer-ci-gate-mapping-protocol.md)
+
+> ⚖️ **治理级宣告**：
+> 
+> ADR-903 / 904 / 906 不得被单独引用。
+> 所有 ArchitectureTests、Analyzer 规则、CI Gate 只允许引用 ADR-907。
+> 
+> 上述 ADR 已正式归档，仅用于历史追溯与设计演进说明，不再具备任何裁决力或执法权。
 
 ---
 

@@ -18,7 +18,7 @@ superseded_by: ADR-903-906
 
 > 🏛️ **Archived Notice**
 >
-> 本 ADR 已被 [ADR-907](ADR-907-architecture-tests-enforcement-governance.md) 完全吸收并取代。
+> 本 ADR 已被 [ADR-907](../../governance/ADR-907-architecture-tests-enforcement-governance.md) 完全吸收并取代。
 >
 > - 本文件 **不再具备任何裁决力**
 > - **不得** 编写或维护对应 ArchitectureTests
@@ -162,18 +162,18 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 
 ## Relationships（关系声明）
 
-**Depends On**：
+> 🏛️ **归档文档声明**：
+> 本节仅保留历史追溯所需的最小关系集。所有执法、测试、CI 映射关系均已失效。
 
-- [ADR-903：ArchitectureTests 命名与组织规范](../governance/ADR-903-architecture-tests-naming-organization.MD)
+**被替代（Superseded By）**：
 
-**Depended By**：
-- [ADR-906：Analyzer 与 CI Gate 映射协议](../governance/ADR-906-analyzer-ci-gate-mapping-protocol.md) - CI Gate 映射依赖断言语义规范
-- 所有【必须架构测试覆盖】ADR
-- CI / Analyzer 校验规则
+- [ADR-907：ArchitectureTests 执法治理体系](../../governance/ADR-907-architecture-tests-enforcement-governance.md)
 
-**Related**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md)
-- [ADR-122：测试代码组织与命名规范（ARD）](../structure/ADR-122-test-organization-naming.md)
+**历史依赖（Historical Context）**：
+
+- [ADR-903：ArchitectureTests 命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD)
+- [ADR-0000：架构测试与 CI 治理宪法](../../governance/ADR-0000-architecture-tests.md)
+- [ADR-122：测试代码组织与命名规范](../../structure/ADR-122-test-organization-naming.md)
 
 ---
 

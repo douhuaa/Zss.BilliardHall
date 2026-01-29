@@ -16,7 +16,7 @@ superseded_by: ADR-903-906
 
 > 🏛️ **Archived Notice**
 >
-> 本 ADR 已被 [ADR-907](ADR-907-architecture-tests-enforcement-governance.md) 完全吸收并取代。
+> 本 ADR 已被 [ADR-907](../../governance/ADR-907-architecture-tests-enforcement-governance.md) 完全吸收并取代。
 >
 > - 本文件 **不再具备任何裁决力**
 > - **不得** 编写或维护对应 ArchitectureTests
@@ -245,29 +245,22 @@ ADR_0000_2_Architecture_Tests_Must_Not_Be_Skipped
 
 ## Relationships（关系声明）
 
-**依赖（Depends On）**：
-
-- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md)
-- [ADR-902：ADR 模板与结构契约](./ADR-902-adr-template-structure-contract.md)
-- [ADR-905：执行级别分类](./ADR-905-enforcement-level-classification.md) - 架构测试组织需要明确执行级别
-
-**被依赖（Depended By）**：
-
-- [ADR-904：ArchitectureTests 最小断言语义规范](./ADR-904-architecturetests-minimum-assertion-semantics.md) - 断言语义基于命名组织规范
-- [ADR-906：Analyzer 与 CI Gate 映射协议](./ADR-906-analyzer-ci-gate-mapping-protocol.md) - CI Gate 映射依赖测试命名组织
-- 所有【必须架构测试覆盖】的 ADR
-
-**替代（Supersedes）**：
-
-- [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
+> 🏛️ **归档文档声明**：
+> 本节仅保留历史追溯所需的最小关系集。所有执法、测试、CI 映射关系均已失效。
 
 **被替代（Superseded By）**：
 
-- [ADR-903-906：ArchitectureTests 执法治理体系](./ADR-903-906.md)
+- [ADR-907：ArchitectureTests 执法治理体系](../../governance/ADR-907-architecture-tests-enforcement-governance.md)
 
-**相关（Related）**：
+**历史依赖（Historical Context）**：
 
-- [ADR-905：执行级别分类](./ADR-905-enforcement-level-classification.md)
+- [ADR-0000：架构测试与 CI 治理宪法](../../governance/ADR-0000-architecture-tests.md)
+- [ADR-902：ADR 模板与结构契约](../../governance/ADR-902-adr-template-structure-contract.md)
+- [ADR-905：执行级别分类](../../governance/ADR-905-enforcement-level-classification.md)
+
+**历史替代（Historical Supersedes）**：
+
+- [ADR-122：测试代码组织与命名规范](../../structure/ADR-122-test-organization-naming.md)
 
 ---
 
