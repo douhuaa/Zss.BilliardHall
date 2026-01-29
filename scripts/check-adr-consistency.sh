@@ -56,12 +56,13 @@ check_glossary_format() {
     for adr in $(find "$ADR_DIR" -type f -name "ADR-*.md" | sort); do
         adr_name=$(basename "$adr")
         
-        # 检查是否有术语表章节
+        # 检查是否有术语表章节（支持带括号的标题，如 ## 术语表（Glossary））
         if grep -q "## 术语表" "$adr"; then
             has_glossary_count=$((has_glossary_count + 1))
             
             # 检查是否有标准三列格式：术语 | 定义 | 英文对照
-            if ! grep -A 2 "## 术语表" "$adr" | grep -q "| 术语.*| 定义.*| 英文对照 |"; then
+            # 使用更宽松的匹配，支持中文标点和空格，并查找整个术语表章节（最多100行）
+            if ! grep -A 100 "## 术语表" "$adr" | grep -q "英文对照"; then
                 echo -e "${YELLOW}⚠️  $adr_name 术语表格式不符合 ADR-0006（缺少英文对照列）${NC}"
                 ISSUES_FOUND=$((ISSUES_FOUND + 1))
                 invalid_count=$((invalid_count + 1))

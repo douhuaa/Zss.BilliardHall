@@ -1,12 +1,26 @@
+---
+adr: ADR-0000
+title: "架构测试与 CI 治理宪法"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "2.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0000：架构测试与 CI 治理宪法
 
-> **唯一架构执法元规则**：本文件定义架构合法性评判的唯一基准。所有架构测试、CI 校验、Prompt 映射、破例治理均以本 ADR 正文为裁定源。
+> ⚖️ **唯一架构执法元规则**：本文件定义架构合法性评判的唯一基准。所有架构测试、CI 校验、Prompt 映射、破例治理均以本 ADR 正文为裁定源。
+>
+> **裁决权威声明**：本 ADR 正文是关于架构测试和 CI 治理的最高权威。所有架构测试、CI验证、人工评审均以本 ADR 正文为唯一依据。Copilot Prompts、README、GUIDE 等辅导材料不具备裁决力，若与本 ADR 冲突，以本 ADR 为准。
 
 **状态**：✅ Final（不可随意修改）  
-**版本**：2.0  
-**级别**：架构治理 / 宪法层  
-**生效时间**：即刻  
-**适用范围**：全体代码仓库及所有 ADR（ADR-0001 ~ 0005）
+**适用范围**：全体代码仓库及所有 ADR（ADR-0001 ~ 0005）  
+**生效时间**：即刻
 
 ---
 
@@ -22,12 +36,12 @@
 
 ## 术语表（Glossary）
 
-| 术语       | 定义                   |
-|----------|----------------------|
-| 架构测试     | 可自动执行的结构约束型测试        |
-| ADR-测试映射 | ADR 【必须架构测试覆盖】→ 测试用例 |
-| CI 阻断    | 测试失败即阻断 PR / 发布      |
-| 破例       | 已批准的临时性违规（需归还）       |
+| 术语       | 定义                   | 英文对照                      |
+|----------|----------------------|---------------------------|
+| 架构测试     | 可自动执行的结构约束型测试        | Architecture Test         |
+| ADR-测试映射 | ADR 【必须架构测试覆盖】→ 测试用例 | ADR-Test Mapping          |
+| CI 阻断    | 测试失败即阻断 PR / 发布      | CI Blocking               |
+| 破例       | 已批准的临时性违规（需归还）       | Exception / Exemption     |
 
 ---
 
