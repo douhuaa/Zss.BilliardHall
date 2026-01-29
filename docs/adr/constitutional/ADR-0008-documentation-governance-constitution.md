@@ -7,24 +7,19 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-23
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
 ---
+
 
 # ADR-0008：文档编写与维护宪法
 
 > ⚖️ **本 ADR 是所有文档的元规则，定义文档分级、边界与裁决权力的唯一裁决源。**
 
 **状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构元规则 / 宪法层  
-**适用范围**：所有文档（ADR、Instructions、Agents、Skills、README、Guide）  
-**生效时间**：即刻
-
----
-
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 文档分级与唯一裁决权划分
 - 各类文档允许表达的内容边界
@@ -34,7 +29,9 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+---
+
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------------|------------------------------------------------|---------------------------|
@@ -48,7 +45,9 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+---
+
+## Decision（裁决）
 
 ### 文档分级与裁决权（ADR-0008.1）
 
@@ -203,7 +202,87 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 ---
 
-## 关系声明（Relationships）
+---
+
+## Enforcement（执法模型）
+
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0008_Architecture_Tests.cs` 强制验证：
+
+- ADR 必需章节检查（Status/Level/Focus/Decision/Enforcement）
+- ADR 禁用语言检查（suggest/recommend/usually/might）
+- 非 ADR 文档权威声明检查
+- Skills 输出判断性词汇检查
+- README/Guide 裁决性语言检查
+- 文档变更版本历史记录检查
+
+**CI 强制检查**：
+- 所有非 ADR 文档是否包含权威依据或无裁决力声明
+- Skills 输出是否包含判断性词汇
+- README/Guide 是否使用裁决性语言
+
+**有一项违规视为架构违规，CI 自动阻断。**
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- **文档托管平台选择**：不规定使用 GitHub、GitLab 还是其他平台
+- **文档渲染工具和主题**：不涉及 MkDocs、Docusaurus 等工具的配置
+- **文档的 SEO 优化**：不涉及搜索引擎优化策略
+- **文档的自动化翻译**：不建立多语言文档的翻译流程
+- **文档的版权和许可证**：不定义文档的开源许可证类型
+- **文档的阅读分析和统计**：不涉及文档访问量、阅读时长等指标
+- **文档的评论和反馈系统**：不建立用户评论和反馈的技术实现
+- **文档的打印和导出格式**：不规定 PDF、Word 等导出格式的样式
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+### 格式违规
+
+- ❌ **禁止使用非简体中文撰写文档正文**：统一使用简体中文（代码、专有名词除外）
+- ❌ **禁止使用营销语言和夸张修辞**：保持客观、专业的表述
+- ❌ **禁止缺少代码语言标记**：代码块必须标记语言类型
+- ❌ **禁止使用绝对路径链接**：使用相对路径链接
+
+### 内容质量违规
+
+- ❌ **禁止文档缺少核心章节**：ADR 必须包含状态、级别、决策等必需章节
+- ❌ **禁止使用模糊不清的描述**：提供具体、可验证的描述
+- ❌ **禁止文档内容自相矛盾**：保持逻辑一致性
+- ❌ **禁止抄袭外部内容而不注明出处**：引用来源并注明链接
+
+### 维护流程违规
+
+- ❌ **禁止直接修改已批准的 ADR 决策部分**：创建新 ADR 替代或补充
+- ❌ **禁止跳过文档审核流程**：经过至少一名审核者批准
+- ❌ **禁止删除文档而不标记为废弃**：标记为 Deprecated 并说明原因
+
+### 索引和链接违规
+
+- ❌ **禁止新增文档后不更新索引**：同时更新相关索引文件
+- ❌ **禁止使用失效的链接**：定期检查并修复失效链接
+- ❌ **禁止缺少双向引用**：在相关文档中添加双向链接
+
+### 可访问性违规
+
+- ❌ **禁止图片缺少 alt 文本**：为所有图片添加描述性文本
+- ❌ **禁止使用纯表情符号传递关键信息**：表情符号需配合文字说明
+- ❌ **禁止表格过于复杂无法阅读**：拆分为多个表格或使用列表
+
+
+---
+
+---
+
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
@@ -239,69 +318,32 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 ---
 
-## 快速参考表
+---
 
-| 约束编号       | 约束描述              | 测试方式            | 测试用例                                  | 必须遵守 |
-|------------|-------------------|-----------------|---------------------------------------|------|
-| ADR-0008.1 | 只有 ADR 具备裁决力      | L3 - 人工审查       | Documentation_Authority_Check         | ✅    |
-| ADR-0008.2 | ADR 内容边界          | L3 - 人工审查       | ADR_Content_Boundary_Check            | ✅    |
-| ADR-0008.3 | 非 ADR 文档权限边界      | L2 - 脚本检查+人工审查  | Non_ADR_Document_Boundary_Check       | ✅    |
-| ADR-0008.4 | ADR 必需章节          | L1 - 脚本检查       | ADR_Required_Sections_Check           | ✅    |
-| ADR-0008.5 | ADR 禁用语言          | L2 - 脚本检查禁用词    | ADR_Prohibited_Language_Check         | ✅    |
-| ADR-0008.6 | 文档变更治理            | L3 - 人工审查       | Documentation_Change_Governance_Check | ✅    |
-| ADR-0008.7 | 违规处理              | L2 - 脚本检查+人工审查  | Documentation_Violation_Check         | ✅    |
+## References（非裁决性参考）
 
-> **级别说明**：L1=静态自动化（脚本检查），L2=语义半自动（脚本+启发式），L3=人工Gate
+**写作指南**：
+- [Microsoft Writing Style Guide](https://learn.microsoft.com/en-us/style-guide/welcome/) - 技术写作标准
+- [Google Developer Documentation Style Guide](https://developers.google.com/style) - 文档风格指南
+- [Write the Docs](https://www.writethedocs.org/) - 文档工程社区
+- [Diátaxis Documentation Framework](https://diataxis.fr/) - 文档架构方法论
+- [Markdown Guide](https://www.markdownguide.org/) - Markdown 语法规范
+- [CommonMark Spec](https://spec.commonmark.org/) - Markdown 标准规范
+- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/) - Web 内容可访问性指南
+
+**相关内部文档**：
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 术语一致性规范
+- [ADR-0007：Agent 行为与权限宪法](./ADR-0007-agent-behavior-permissions-constitution.md) - Agent 文档生成规范
+- [ADR-902：ADR 模板结构契约](../governance/ADR-902-adr-template-structure-contract.md) - ADR 结构规范
+
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
-
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0008_Architecture_Tests.cs` 强制验证：
-
-- ADR 必需章节检查（Status/Level/Focus/Decision/Enforcement）
-- ADR 禁用语言检查（suggest/recommend/usually/might）
-- 非 ADR 文档权威声明检查
-- Skills 输出判断性词汇检查
-- README/Guide 裁决性语言检查
-- 文档变更版本历史记录检查
-
-**CI 强制检查**：
-- 所有非 ADR 文档是否包含权威依据或无裁决力声明
-- Skills 输出是否包含判断性词汇
-- README/Guide 是否使用裁决性语言
-
-**有一项违规视为架构违规，CI 自动阻断。**
-
 ---
 
-## 检查清单
+## History（版本历史）
 
-- [ ] ADR 是否包含所有必需章节？
-- [ ] ADR 是否只使用裁决性语言（必须/禁止/允许）？
-- [ ] 非 ADR 文档是否声明所服从的 ADR？
-- [ ] README/Guide 是否声明"无裁决力"？
-- [ ] Skills 输出是否只有事实，无判断？
-- [ ] 文档变更是否按分级权限审批？
-- [ ] 是否更新了版本历史？
 
----
-
-## 版本历史
-
-| 版本  | 日期         | 变更说明                                  |
-|-----|------------|---------------------------------------|
-| 2.0 | 2026-01-26 | 裁决型重构，移除冗余，聚焦核心规则                   |
-| 1.1 | 2026-01-25 | README 约束独立为 ADR-910，本 ADR 仅保留核心原则  |
-| 1.0 | 2026-01-25 | 初版，定义文档治理                             |
-
----
-
-## 附注
-
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（详细示例、文档边界案例、变更流程详解）请查阅：
-- [ADR-0008 Copilot Prompts](../../copilot/adr-0008.prompts.md)
-- [ADR-910: README 编写与维护宪法](../../governance/ADR-910-readme-governance-constitution.md)
-- `docs/templates/adr-template.md`：ADR 编写模板
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 2026-01-29 | 初始版本 |

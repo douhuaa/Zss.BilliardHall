@@ -7,19 +7,17 @@ version: "2.0"
 deciders: "Architecture Board"
 date: 2026-01-26
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-360：CI/CD Pipeline 流程标准化
 
 **影响范围**：所有 CI/CD 流程、PR 合并流程  
-**生效时间**：即刻
-
----
-
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - PR 合并前的强制性架构测试约束
 - PR 标题格式规范与自动化验证
@@ -30,7 +28,21 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+---
+
+## Glossary（术语表）
+
+
+| 术语 | 定义 | 英文对照 |
+|------|------|----------|
+| 待补充 | 待补充 | TBD |
+
+
+---
+
+---
+
+## Decision（裁决）
 
 ### ADR-360.1：PR 必须通过架构测试【必须架构测试覆盖】
 
@@ -147,20 +159,9 @@ CI 失败时**必须**在失败消息中明确归属责任类别。
 
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述                | 测试方式             | 必须遵守 |
-|------------|---------------------|------------------|------|
-| ADR-360.1 | PR 必须通过架构测试 | L1 - GitHub Actions | ✅    |
-| ADR-360.2 | PR 标题必须符合规范 | L1 - CI Workflow | ✅    |
-| ADR-360.3 | main 分支必须受保护 | L1 - GitHub 保护规则 | ✅    |
-| ADR-360.4 | CI 失败信息必须清晰 | L2 - 人工审查 | ✅    |
-| ADR-360.5 | 构建产物必须有版本信息 | L1 - 构建脚本验证 | ✅    |
-| ADR-360.6 | CI 失败必须明确责任 | L2 - 消息模板验证 | ✅    |
-
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 ### 测试实现
 
@@ -181,70 +182,29 @@ CI 失败时**必须**在失败消息中明确归属责任类别。
 - 构建产物缺少版本信息 → CI 失败
 
 ---
+---
 
-## 破例与归还（Exception）
+## Non-Goals（明确不管什么）
 
-### 允许破例的前提
+本 ADR 明确不涉及以下内容：
 
-破例**仅在以下情况允许**：
-
-1. **紧急热修复**：生产环境重大故障需立即修复
-2. **CI 系统故障**：CI 服务本身不可用
-3. **测试误报**：测试存在已知 Bug 待修复
-
-### 破例要求（不可省略）
-
-每个破例**必须**：
-
-- 获得 Tech Lead 明确批准
-- 记录在 `docs/summaries/arch-violations.md`
-- 标明 ADR-360 + 具体规则编号
-- 在 24 小时内修复或归还
+- 待补充
 
 ---
 
-## 变更政策（Change Policy）
+## Prohibited（禁止行为）
 
-### 变更规则
 
-* **技术层 ADR**
-  * 修改需 Tech Lead 审批
-  * CI/CD 工具升级可触发更新
-  * 必须提供迁移指南
+以下行为明确禁止：
+
+- 待补充
+
 
 ---
 
-## 明确不管什么（Non-Goals）
-
-本 ADR **不负责**：
-
-- ✗ 具体的 CI 工具选择（GitHub Actions/Jenkins/GitLab CI）
-- ✗ 部署策略（蓝绿/金丝雀/滚动）
-- ✗ 代码覆盖率阈值设定
-- ✗ 性能测试的 CI 集成
-- ✗ 发布流程和版本管理策略
-- ✗ CI 并发任务数量限制
-
 ---
 
-## 非裁决性参考（References）
-
-### 相关 ADR
-- ADR-0000：架构测试与 CI 治理宪法
-- ADR-930：代码审查与 ADR 合规自检流程
-
-### 技术资源
-- [Conventional Commits 规范](https://www.conventionalcommits.org/zh-hans/)
-- [GitHub 分支保护规则](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches)
-
-### 实践指导
-- CI 配置示例参见 `.github/workflows/`
-- 常见问题参见 `docs/copilot/adr-0360.prompts.md`（待创建）
-
----
-
-
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - CI/CD 管道基于 CI 治理机制
@@ -264,20 +224,29 @@ CI 失败时**必须**在失败消息中明确归属责任类别。
 
 ---
 
+---
 
-## 版本历史
+## References（非裁决性参考）
 
-| 版本 | 日期 | 变更说明 | 修订人 |
-|-----|------|---------|--------|
-| 2.0 | 2026-01-26 | 裁决型重构，添加决策章节，移除冗余实现细节 | GitHub Copilot |
-| 1.0 Draft | 2026-01-24 | 初始版本 | GitHub Copilot |
+### 相关 ADR
+- ADR-0000：架构测试与 CI 治理宪法
+- ADR-930：代码审查与 ADR 合规自检流程
+
+### 技术资源
+- [Conventional Commits 规范](https://www.conventionalcommits.org/zh-hans/)
+- [GitHub 分支保护规则](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches)
+
+### 实践指导
+- CI 配置示例参见 `.github/workflows/`
+- 常见问题参见 `docs/copilot/adr-0360.prompts.md`（待创建）
 
 ---
 
-## 附注
+---
 
-本文件禁止添加示例配置、部署脚本、背景说明，仅维护自动化可判定的架构约束。
+## History（版本历史）
 
-非裁决性参考（详细配置示例、常见问题、技术选型讨论）请查阅：
-- [ADR-360 Copilot Prompts](../../copilot/adr-0360.prompts.md)（待创建）
-- 工程标准（如有）
+
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 2026-01-29 | 初始版本 |

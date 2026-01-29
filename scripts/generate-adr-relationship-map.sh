@@ -4,7 +4,9 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# 获取脚本目录，处理 BASH_SOURCE[0] 为空的情况（如在 GitHub Actions 中）
+SCRIPT_PATH="${BASH_SOURCE[0]:-$0}"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 ADR_DIR="$REPO_ROOT/docs/adr"
 OUTPUT_FILE="$ADR_DIR/ADR-RELATIONSHIP-MAP.md"

@@ -7,10 +7,12 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-27
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: ADR-903-906
 ---
+
 
 # ADR-906：Analyzer / CI Gate 与 ADR 映射协议
 
@@ -31,6 +33,8 @@ superseded_by: ADR-903-906
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -41,6 +45,8 @@ superseded_by: ADR-903-906
 | Enforcement Level | 执行等级 L1 / L2，L1 可自动阻断，L2 半自动审核 | Enforcement Level |
 | ADR 可追溯性 | 测试失败必须能定位到具体 ADR 子规则 | ADR Traceability |
 | Exception Mechanism | ADR-0000 定义的破例/补救机制 | Exception Mechanism |
+
+---
 
 ---
 
@@ -125,6 +131,8 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 
 ---
 
+---
+
 ## Enforcement（执法模型）
 
 |规则编号|执行级|执法方式|描述|
@@ -137,13 +145,20 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 |ADR-906.6|L2|ADR 生命周期同步|自动废弃 / 提醒迁移|
 
 ---
+---
 
 ## Non-Goals（明确不管什么）
 
-- 架构规则本身的设计或变更    
-- 测试框架或断言库选型    
-- 性能优化或测试速度
-    
+本 ADR 明确不涉及以下内容：
+
+- **CI平台的具体选择**：不规定使用GitHub Actions、Azure DevOps还是其他CI工具
+- **Analyzer工具的内部实现**：不涉及Roslyn Analyzer的具体代码实现细节
+- **测试框架的具体配置**：不规定xUnit、NUnit等框架的详细配置参数
+- **CI Pipeline的性能优化**：不涉及构建速度、并行执行等性能优化策略
+- **错误报告的格式和样式**：不规定测试失败、Analyzer警告的具体输出格式
+- **开发环境的IDE集成**：不涉及Visual Studio、Rider等IDE中的Analyzer集成方式
+- **代码质量工具的选择**：不规定使用SonarQube、CodeClimate等代码质量平台
+- **通知和警报机制**：不涉及CI失败时的邮件通知、Slack集成等通知方式
 
 ---
 
@@ -154,6 +169,8 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 - 未注册或孤儿 ArchitectureTests    
 - 未记录破例 / 补救机制
     
+
+---
 
 ---
 
@@ -173,11 +190,18 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 
 ---
 
+---
+
 ## References（非裁决性参考）
 
 - GitHub Actions / Azure DevOps / Jenkins CI Gate 实践
 - NetArchTest.Rules 自动化扫描
 - xUnit / NUnit Architecture Test Practices
+
+---
+
+
+---
 
 ---
 

@@ -7,24 +7,19 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-27
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
 ---
+
 
 # ADR-910：README 编写与维护宪法
 
 > ⚖️ **本 ADR 是所有 README 文档的唯一裁决源，定义 README 的边界、约束与执法机制。**
 
 **状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：治理层 / 架构元规则  
-**适用范围**：所有 README 文档（仓库根目录、模块、工具、文档目录）  
-**生效时间**：即刻
-
----
-
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - README 的定位与权限边界
 - README 禁用的语言与表达
@@ -34,7 +29,9 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+---
+
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------------|------------------------------------------------|---------------------------|
@@ -46,7 +43,9 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+---
+
+## Decision（裁决）
 
 ### README 是使用说明，不是架构裁决书（ADR-910.1）
 
@@ -184,19 +183,9 @@ README 引用 ADR 必须遵循：
 
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述                | 测试方式             | 必须遵守 |
-|------------|---------------------|------------------|------|
-| ADR-910.1  | README 只允许解释使用，禁止定义架构规则 | L3 - Code Review | ✅    |
-| ADR-910.2  | README 禁止使用裁决性语言（除非引用 ADR） | L2 - CI 脚本检查 | ✅    |
-| ADR-910.3  | README 必须包含无裁决力声明    | L2 - CI 脚本检查 | ✅    |
-| ADR-910.4  | README 引用 ADR 必须明确源头  | L3 - Code Review | ✅    |
-| ADR-910.5  | README 冲突时必须修正 README | L3 - Code Review | ✅    |
-
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 所有规则通过以下方式强制验证：
 
@@ -210,46 +199,49 @@ README 引用 ADR 必须遵循：
 **有一项违规视为架构违规，CI 自动阻断。**
 
 ---
+---
 
-## 破例与归还（Exception）
+## Non-Goals（明确不管什么）
 
-### 允许破例的前提
+本 ADR 明确不涉及以下内容：
 
-README 规则的破例**仅在以下情况允许**：
-- 临时性迁移文档（标注 `[DRAFT]` 或 `[迁移中]`）
-- 历史遗留 README 的过渡期（不超过 1 个月）
-- 第三方生成的 README
-
-### 破例要求
-
-每个破例**必须**：
-- 记录在 `ARCH-VIOLATIONS.md` 的"README 治理破例"章节
-- 指明破例的具体文件和原因
-- 指定失效日期（不超过 1 个月）
-- 给出归还计划
+- **README 的视觉设计和排版**：不涉及字体、颜色、图标等视觉元素的设计规范
+- **README 的长度限制**：不规定 README 文档的最大或最小字数要求
+- **README 的多语言版本**：不涉及多语言 README 的创建和维护流程
+- **README 的自动化生成工具**：不规定使用特定的文档生成或模板工具
+- **README 中的代码示例风格**：不约束代码示例的具体编写风格和格式
+- **README 的更新频率**：不规定 README 必须多久更新一次
+- **README 在不同平台的适配**：不涉及 GitHub、GitLab、Bitbucket 等平台的特殊格式要求
+- **README 的SEO优化**：不涉及搜索引擎优化、关键词布局等营销相关内容
 
 ---
 
-## 变更政策（Change Policy）
+## Prohibited（禁止行为）
 
-- **ADR-910**（治理层）
-  - 修改需 Tech Lead 审批
-  - 需要全量 README 回归检查
-  - 需要更新对应的架构测试
+
+以下行为明确禁止：
+
+### 越权行为
+- ❌ **禁止 README 使用裁决性语言**：不得使用"必须"、"禁止"、"不允许"等定义规则的词汇
+- ❌ **禁止 README 定义架构约束**：不得在 README 中引入新的架构规则或限制
+- ❌ **禁止 README 覆盖 ADR 规则**：不得与 ADR 冲突或试图修改 ADR 定义的规则
+
+### 内容质量违规
+- ❌ **禁止 README 缺少权威声明**：必须明确声明"若与 ADR 冲突，以 ADR 为准"
+- ❌ **禁止 README 引用不存在的 ADR**：所有 ADR 引用必须指向真实存在的文件
+- ❌ **禁止 README 使用模糊的相对路径**：ADR 引用必须使用清晰的相对或绝对路径
+
+### 维护违规
+- ❌ **禁止 README 与实际代码严重不符**：示例代码必须能实际运行或明确标注为伪代码
+- ❌ **禁止 README 包含过期信息而不标注**：过期内容必须移除或明确标记为已废弃
+- ❌ **禁止 README 复制粘贴 ADR 内容**：应该引用 ADR 而不是复制其内容
+
 
 ---
 
-## 明确不管什么（Non-Goals）
-
-本 ADR **不负责**：
-- README 的写作风格和美学
-- README 的长度限制
-- README 的多语言版本
-- README 的格式工具选择
-
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - README 治理基于测试和 CI 机制
@@ -270,19 +262,29 @@ README 规则的破例**仅在以下情况允许**：
 
 ---
 
-## 版本历史
+---
 
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 2.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 1.0 | 2026-01-25 | 初版，从 ADR-0008 中独立 README 治理 |
+## References（非裁决性参考）
+
+**相关外部资源**：
+- [Make a README](https://www.makeareadme.com/) - README 编写指南和最佳实践
+- [Awesome README](https://github.com/matiassingers/awesome-readme) - 优秀 README 示例集合
+- [GitHub's Guide to README](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes) - GitHub 官方 README 指南
+
+**相关内部文档**：
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档分级与权限划分
+- [ADR-920：示例代码治理宪法](./ADR-920-examples-governance-constitution.md) - README 中代码示例的约束
+- [ADR-950：Guide/FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md) - 与 Guide 文档的边界
+- [ADR-960：入职文档治理](./ADR-960-onboarding-documentation-governance.md) - 入职文档与 README 的关系
+
 
 ---
 
-## 附注
+---
 
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
+## History（版本历史）
 
-非裁决性参考（详细示例、场景说明）请查阅：
-- [ADR-0910 Copilot Prompts](../../copilot/adr-0910.prompts.md)
 
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 2026-01-29 | 初始版本 |

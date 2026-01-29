@@ -7,10 +7,12 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-27
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: ADR-903-906
 ---
+
 
 # ADR-904：ArchitectureTests 最小断言语义规范
 
@@ -28,6 +30,8 @@ superseded_by: ADR-903-906
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -36,6 +40,8 @@ superseded_by: ADR-903-906
 | 有效断言 | 断言必须验证架构约束或 ADR 条款，而非空断言或形式化断言 | Effective Assertion |
 | 反作弊 | 自动检测空断言、弱断言或跳过逻辑，确保测试有效性 | Anti-Cheating |
 | ADR 镜像 | 测试结构与 ADR 条目一一对应 | ADR Mirror |
+
+---
 
 ---
 
@@ -111,6 +117,8 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 
 ---
 
+---
+
 ## Enforcement（执法模型）
 
 |规则编号|执行级|执法方式|
@@ -126,12 +134,20 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 - 审计阶段确保 ADR 测试覆盖完整性
 
 ---
+---
 
 ## Non-Goals（明确不管什么）
 
-- 业务逻辑正确性
-- 测试性能或运行效率
-- 单元测试 / 集成测试命名或组织
+本 ADR 明确不涉及以下内容：
+
+- **单元测试和集成测试的编写规范**：不涉及业务逻辑测试的具体实现方式和测试方法论
+- **测试框架的具体API使用**：不规定如何使用xUnit、NUnit等框架的具体API
+- **测试覆盖率指标**：不设定代码覆盖率、分支覆盖率等具体数值目标
+- **测试数据生成策略**：不涉及测试数据的创建、Mock对象的使用等具体技术
+- **测试运行性能优化**：不涉及测试并行化、测试缓存等性能优化手段
+- **测试报告的格式**：不规定测试结果报告的视觉呈现和输出格式
+- **测试用例的命名规范**：不约束测试方法、测试类的具体命名风格
+- **测试代码的组织结构**：不涉及测试项目的目录结构和文件组织方式
 
 ---
 
@@ -142,6 +158,8 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 - 单方法覆盖多个 ADR
 - 断言信息不包含 ADR 编号
 - 弃用或删除的 ADR 测试未同步处理
+
+---
 
 ---
 
@@ -162,11 +180,18 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 
 ---
 
+---
+
 ## References（非裁决性参考）
 
 - NetArchTest.Rules
 - xUnit / NUnit 架构测试实践
 - FluentAssertions 断言语义规范
+
+---
+
+
+---
 
 ---
 

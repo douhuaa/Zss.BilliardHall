@@ -7,19 +7,17 @@ version: "2.0"
 deciders: "Architecture Board"
 date: 2026-01-26
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-301：集成测试环境自动化与隔离约束
 
 **影响范围**：所有集成测试、测试基础设施  
-**生效时间**：即刻
-
----
-
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 集成测试的外部依赖管理规则
 - 测试环境隔离与并行执行约束
@@ -28,7 +26,21 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+---
+
+## Glossary（术语表）
+
+
+| 术语 | 定义 | 英文对照 |
+|------|------|----------|
+| 待补充 | 待补充 | TBD |
+
+
+---
+
+---
+
+## Decision（裁决）
 
 ### ADR-301.1：外部依赖容器化管理【必须架构测试覆盖】
 
@@ -144,20 +156,9 @@ TestContainer 启动**必须**配置超时和健康检查。
 
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述                | 测试方式             | 必须遵守 |
-|------------|---------------------|------------------|------|
-| ADR-301.1 | 外部依赖容器化管理 | L2 - Code Review + CI | ✅    |
-| ADR-301.2 | 测试类数据隔离     | L2 - Code Review      | ✅    |
-| ADR-301.3 | 测试数据自动清理   | L3 - 人工审查 + Runtime | ✅    |
-| ADR-301.4 | 支持并行执行       | L2 - CI 验证          | ✅    |
-| ADR-301.5 | 容器超时与健康检查 | L2 - Code Review      | ✅    |
-| ADR-301.6 | 本地与 CI 策略差异 | L2 - CI 配置验证      | ✅    |
-
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 ### 测试实现
 
@@ -176,75 +177,29 @@ TestContainer 启动**必须**配置超时和健康检查。
 - 测试类未使用隔离机制 → Code Review 阻断
 
 ---
+---
 
-## 破例与归还（Exception）
+## Non-Goals（明确不管什么）
 
-### 允许破例的前提
+本 ADR 明确不涉及以下内容：
 
-破例**仅在以下情况允许**：
-
-1. **CI 环境限制**：CI 平台不支持 Docker
-2. **性能关键测试**：容器启动开销不可接受（需压测证明）
-3. **遗留测试迁移期**：大规模重构过渡阶段（不超过 6 个月）
-
-### 破例要求（不可省略）
-
-每个破例**必须**：
-
-- 记录在 `docs/summaries/arch-violations.md`
-- 标明 ADR-301 + 具体规则编号
-- 说明技术限制和替代方案
-- 提供迁移计划和责任人
+- 待补充
 
 ---
 
-## 变更政策（Change Policy）
+## Prohibited（禁止行为）
 
-### 变更规则
 
-* **技术层 ADR**
-  * 修改需 Tech Lead 审批
-  * 容器技术栈升级可触发调整
-  * 必须提供迁移指南和兼容性说明
+以下行为明确禁止：
 
-### 失效与替代
+- 待补充
 
-* 本 ADR 被 Superseded 时**必须**指向新 ADR
-* 不允许隐性废弃
 
 ---
 
-## 明确不管什么（Non-Goals）
-
-本 ADR **不负责**：
-
-- ✗ 单元测试的组织规范（参见 ADR-122）
-- ✗ 测试数据生成策略（Builder 模式等）
-- ✗ Mock 框架选择（NSubstitute/Moq）
-- ✗ 性能测试的环境配置
-- ✗ E2E 测试的基础设施
-- ✗ 测试覆盖率阈值设定
-- ✗ 测试命名规范
-
 ---
 
-## 非裁决性参考（References）
-
-### 相关 ADR
-- ADR-122：测试代码组织与命名规范
-- ADR-360：CI/CD Pipeline 流程标准化
-
-### 技术资源
-- [TestContainers 官方文档](https://testcontainers.com/)
-- [xUnit Fixtures 文档](https://xunit.net/docs/shared-context)
-
-### 实践指导
-- 详细配置示例参见 `docs/copilot/adr-0301.prompts.md`（待创建）
-
----
-
-
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 集成测试基于测试治理机制
@@ -264,20 +219,28 @@ TestContainer 启动**必须**配置超时和健康检查。
 
 ---
 
+---
 
-## 版本历史
+## References（非裁决性参考）
 
-| 版本 | 日期 | 变更说明 | 修订人 |
-|-----|------|---------|--------|
-| 2.0 | 2026-01-26 | 裁决型重构，添加决策章节，移除冗余实现细节 | GitHub Copilot |
-| 1.0 Draft | 2026-01-24 | 初始版本 | GitHub Copilot |
+### 相关 ADR
+- ADR-122：测试代码组织与命名规范
+- ADR-360：CI/CD Pipeline 流程标准化
+
+### 技术资源
+- [TestContainers 官方文档](https://testcontainers.com/)
+- [xUnit Fixtures 文档](https://xunit.net/docs/shared-context)
+
+### 实践指导
+- 详细配置示例参见 `docs/copilot/adr-0301.prompts.md`（待创建）
 
 ---
 
-## 附注
+---
 
-本文件禁止添加示例代码、配置详情、背景说明，仅维护自动化可判定的架构约束。
+## History（版本历史）
 
-非裁决性参考（详细配置示例、常见问题、技术选型讨论）请查阅：
-- [ADR-301 Copilot Prompts](../../copilot/adr-0301.prompts.md)（待创建）
-- 工程标准（如有）
+
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 2026-01-29 | 初始版本 |

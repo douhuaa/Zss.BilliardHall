@@ -7,10 +7,12 @@ deciders: "Architecture Board"
 date: 2026-01-26
 version: "2.0"
 maintainer: "架构委员会"
+primary_enforcement: L1
 reviewer: "@douhuaa"
 supersedes: null
 superseded_by: null
 ---
+
 
 # ADR-905：执行级别分类
 
@@ -34,6 +36,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -44,6 +48,8 @@ superseded_by: null
 | L3 人工 Gate | 无法或不应该完全自动化，需人工裁决 | Level 3: Manual Gate |
 | NetArchTest | .NET 架构测试静态分析工具 | NetArchTest |
 | Roslyn Analyzer | C# 编译器语义分析器 | Roslyn Analyzer |
+
+---
 
 ---
 
@@ -193,6 +199,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## Enforcement（执法模型）
 
 > 本节为唯一架构执法映射表，所有必测/必拦规则均需在此列明。
@@ -206,18 +214,20 @@ superseded_by: null
 | ADR-905.5 | L2   | Code Review + 教育培训 | 规则分级宣贯/人工审核 | ✅    |
 
 ---
+---
 
 ## Non-Goals（明确不管什么）
 
-> **这是防止 ADR 腐化的关键防线。**
+本 ADR 明确不涉及以下内容：
 
-本 ADR **不负责**：
-
-* 具体业务规则的定义（由各业务 ADR 负责）
-* 测试工具的技术实现细节
-* 团队培训和沟通方式
-* 开发者绩效考核标准
-* 代码风格和命名审美
+- **具体技术的执行级别判定**：不为每一个具体技术栈或工具指定执行级别
+- **业务逻辑的重要性分级**：不涉及业务功能的优先级或重要性评估
+- **团队能力和成熟度评估**：不评估团队是否有能力执行特定级别的规则
+- **执行成本的量化分析**：不计算每个级别规则的实施成本和ROI
+- **执行级别的动态调整机制**：不建立根据项目阶段动态调整级别的流程
+- **人工审查的详细流程**：不规定人工Gate的具体审查步骤和检查清单
+- **CI工具的具体配置**：不涉及GitHub Actions、Azure Pipelines等工具的配置细节
+- **警告信息的展示方式**：不规定L2/L3警告在开发环境中的具体展示形式
 
 ---
 
@@ -231,6 +241,8 @@ superseded_by: null
 * 跳过人工 Gate 流程直接合并破例代码
 * 破例不记录或不设归还计划
 * 混淆不同级别的执行标准
+
+---
 
 ---
 
@@ -266,6 +278,8 @@ superseded_by: null
 - [ADR-201：Handler 生命周期管理](../runtime/ADR-201-handler-lifecycle-management.md) - 参考本文档的执行级别
 - [ADR-920：示例代码治理宪法](./ADR-920-examples-governance-constitution.md) - 参考本文档的执行级别
 - [ADR-930：代码审查与 ADR 合规自检流程](./ADR-930-code-review-compliance.md) - 人工 Gate 流程依赖代码审查
+
+---
 
 ---
 
@@ -321,6 +335,11 @@ public class EndpointBusinessLogicAnalyzer : DiagnosticAnalyzer
 **⚠️ 待完善（可选）**：
 - 扩展更多 Roslyn Analyzer（Command Handler 返回值检查、异步方法命名约定检查等）
 - 定期评审和优化（收集 Analyzer 误报案例、根据团队反馈调整严重级别）
+
+---
+
+
+---
 
 ---
 

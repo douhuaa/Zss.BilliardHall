@@ -60,7 +60,9 @@ if [ "$OUTPUT_FORMAT" = "text" ]; then
 fi
 
 # 启用调试模式
-[ "${DEBUG:-}" = "1" ] && set -x
+if [ "${DEBUG:-}" = "1" ]; then
+    set -x
+fi
 
 errors=0
 warnings=0

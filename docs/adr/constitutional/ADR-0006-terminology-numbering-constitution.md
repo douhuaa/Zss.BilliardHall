@@ -7,24 +7,19 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-23
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
 ---
+
 
 # ADR-0006：术语与编号宪法
 
 > ⚖️ **本 ADR 是所有 ADR 的元规则，定义术语语义和编号体系的唯一裁决源。**
 
 **状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构元规则 / 宪法层  
-**适用范围**：所有 ADR（0000~999）及架构治理体系  
-**生效时间**：即刻
-
----
-
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 架构术语的唯一权威定义（Glossary）
 - ADR 编号分层规则与语义约束
@@ -34,7 +29,9 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+---
+
+## Glossary（术语表）
 
 本节定义本架构体系中所有核心术语的**唯一权威含义**。
 
@@ -87,7 +84,9 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+---
+
+## Decision（裁决）
 
 ### 编号分层规则（ADR-0006.1）
 
@@ -165,7 +164,74 @@ superseded_by: null
 
 ---
 
-## 关系声明（Relationships）
+---
+
+## Enforcement（执法模型）
+
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0006_Architecture_Tests.cs` 强制验证：
+
+- ADR-0006.1: 编号段与层级匹配检查
+- ADR-0006.2: 文件名与编号一致性检查
+- ADR-0006.3: 宪法层前导零使用检查
+- ADR-0006.4: 非宪法层前导零禁用检查
+- ADR-0006.5: ADR 文件目录归属检查
+- ADR-0006.6: 术语使用一致性审查（人工）
+
+**有一项违规视为架构违规，CI 自动阻断。**
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- **自然语言写作风格规范**：不规定文档的语气、修辞手法或写作技巧
+- **编程语言命名规范**：不涉及代码变量、函数、类的命名约定
+- **版本号语义规则**：不定义 Semver 或其他版本号格式的具体规则
+- **翻译和多语言术语对照**：不建立术语的多语言翻译映射表
+- **术语的历史溯源**：不追溯技术术语的来源和演变历史
+- **行业标准术语的引入时机**：不规定何时采用新兴技术术语
+- **缩写词的读音规范**：不定义缩写词应如何发音
+- **术语的过时淘汰流程**：不建立术语废弃和替换的流程机制
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+### 编号规则违反
+
+- ❌ **禁止使用非标准编号格式**：如 `ADR_001`、`adr-1`、`ADR-A-001`，正确格式为 `ADR-0001`（四位数字，补零）
+- ❌ **禁止跳号或重复编号**：必须按顺序递增（0001, 0002, 0003...）
+- ❌ **禁止私自修改已发布 ADR 的编号**：保持编号不变，使用"已废弃"状态
+
+### 术语使用违反
+
+- ❌ **禁止在同一文档中混用同义术语**：统一使用术语表中的标准术语
+- ❌ **禁止创造未经审批的新术语**：使用标准术语或提交新术语申请
+- ❌ **禁止使用模糊不清的指代**：明确引用具体的 ADR 或概念
+
+### 一致性违反
+
+- ❌ **禁止在不同文档中对同一概念使用不同术语**：保持术语一致性
+- ❌ **禁止缩写词不加注释直接使用**：首次出现时注明全称
+- ❌ **禁止使用未定义的专有名词**：添加必要的解释说明
+
+### 文档引用违反
+
+- ❌ **禁止使用模糊的文档引用**：使用明确的文件路径和链接
+- ❌ **禁止使用失效的编号引用**：引用前验证文档存在性
+- ❌ **禁止循环引用形成死锁**：梳理依赖关系，必要时拆分文档
+
+
+---
+
+---
+
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
@@ -198,61 +264,33 @@ superseded_by: null
 
 ---
 
-## 快速参考表
+---
 
-| 约束编号       | 约束描述                | 测试方式             | 测试用例                                         | 必须遵守 |
-|------------|---------------------|------------------|----------------------------------------------|------|
-| ADR-0006.1 | 编号段必须匹配架构层级         | L1 - 脚本检查        | All_ADR_Files_Should_Match_Numbering_Rules   | ✅    |
-| ADR-0006.2 | ADR 文件名必须与编号一致      | L1 - 脚本检查        | All_ADR_Files_Should_Have_Correct_Filename_Format | ✅    |
-| ADR-0006.3 | 宪法层 ADR 应使用前导零      | L1 - 脚本检查        | Constitutional_ADRs_Should_Use_Leading_Zeros | ✅    |
-| ADR-0006.4 | 非宪法层 ADR 不应使用多余前导零  | L1 - 脚本检查        | Non_Constitutional_ADRs_Should_Not_Use_Leading_Zeros | ✅    |
-| ADR-0006.5 | ADR 文件应位于正确的目录      | L1 - 脚本检查        | All_ADR_Files_Should_Be_In_Correct_Directory | ✅    |
-| ADR-0006.6 | 术语使用一致性             | L3 - 人工审查        | Terminology_Should_Be_Consistent             | ✅    |
+## References（非裁决性参考）
 
-> **级别说明**：L1=静态自动化（脚本检查），L3=人工Gate
+
+**官方标准**：
+- [Semantic Versioning 2.0.0](https://semver.org/) - 语义化版本规范
+- [RFC 2119: Key words for use in RFCs](https://www.ietf.org/rfc/rfc2119.txt) - 规范性语言标准（MUST/SHOULD/MAY）
+- [IEEE Standard Glossary of Software Engineering Terminology](https://ieeexplore.ieee.org/document/159342) - IEEE 软件工程术语标准
+
+**写作指南**：
+- [Microsoft Writing Style Guide](https://learn.microsoft.com/en-us/style-guide/welcome/) - 技术写作风格指南
+- [Google Developer Documentation Style Guide](https://developers.google.com/style) - 术语一致性最佳实践
+- [ADR GitHub Organization](https://adr.github.io/) - ADR 社区标准
+
+**相关内部文档**：
+- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - 文档风格规范
+- [ADR-902：ADR 模板结构契约](../governance/ADR-902-adr-template-structure-contract.md) - ADR 结构规范
+
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
-
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0006_Architecture_Tests.cs` 强制验证：
-
-- ADR-0006.1: 编号段与层级匹配检查
-- ADR-0006.2: 文件名与编号一致性检查
-- ADR-0006.3: 宪法层前导零使用检查
-- ADR-0006.4: 非宪法层前导零禁用检查
-- ADR-0006.5: ADR 文件目录归属检查
-- ADR-0006.6: 术语使用一致性审查（人工）
-
-**有一项违规视为架构违规，CI 自动阻断。**
-
 ---
 
-## 检查清单
+## History（版本历史）
 
-- [ ] 新增 ADR 编号是否符合分段规则？
-- [ ] 编号是否与内容层级匹配？
-- [ ] 文件名是否与编号一致？
-- [ ] 治理层 ADR 是否正确使用 0000 或 900~999？
-- [ ] 技术层 ADR 是否正确使用 300~399？
-- [ ] 术语使用是否与 ADR-0006 一致？
-- [ ] 是否更新了相关索引文件？
 
----
-
-## 版本历史
-
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 2.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 1.0 | 2026-01-25 | 初始版本，定义术语与编号宪法 |
-
----
-
-## 附注
-
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（详细示例、编号边界案例、术语演进历史）请查阅：
-- [ADR-0006 Copilot Prompts](../../copilot/adr-0006.prompts.md)
-- 工程指南（如有）
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 2026-01-29 | 初始版本 |

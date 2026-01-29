@@ -13,7 +13,9 @@
 
 set -eo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# 获取脚本目录，处理 BASH_SOURCE[0] 为空的情况（如在 GitHub Actions 中）
+SCRIPT_PATH="${BASH_SOURCE[0]:-$0}"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 ADR_DIR="$REPO_ROOT/docs/adr"
 
@@ -60,7 +62,9 @@ if [ "$OUTPUT_FORMAT" = "text" ]; then
 fi
 
 # Enable debug if DEBUG env var is set
-[ "${DEBUG:-}" = "1" ] && set -x
+if [ "${DEBUG:-}" = "1" ]; then
+    set -x
+fi
 
 # 临时文件
 TEMP_DIR=$(mktemp -d)
@@ -82,32 +86,36 @@ while IFS= read -r adr_file; do
     
     if grep -qE "^## 关系声明|^## Relationships" "$adr_file"; then
         # 提取 "依赖（Depends On）" 或 "Depends On" 列表
-        sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
-            sed -n '/\*\*依赖（Depends On）\*\*\|\*\*Depends On\*\*/,/\*\*被依赖\|\*\*Depended By/p' | \
+        sed -n '/^## 关系声明\|^## Relationships/,/^##/p' "$adr_file" | \
+            sed -n '/\*\*依赖（Depends On）\*\*\|\*\*Depends On\*\*/,/\*\*被依赖\|\*\*Depended By\|\*\*替代\|\*\*Supersedes\|\*\*被替代\|\*\*Superseded By\|\*\*相关\|\*\*Related/p' | \
+            grep -v '^\*\*被依赖\|\*\*Depended By\|\*\*替代\|\*\*Supersedes\|\*\*被替代\|\*\*Superseded By\|\*\*相关\|\*\*Related' | \
             { grep -oE 'ADR-[0-9]+' || true; } | \
             while read -r dep_id; do
                 echo "$adr_id|DEPENDS_ON|$dep_id" >> "$DEPENDENCIES_FILE"
             done
         
         # 提取 "被依赖（Depended By）" 或 "Depended By" 列表
-        sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
-            sed -n '/\*\*被依赖（Depended By）\*\*\|\*\*Depended By\*\*/,/\*\*替代\|\*\*Supersedes/p' | \
+        sed -n '/^## 关系声明\|^## Relationships/,/^##/p' "$adr_file" | \
+            sed -n '/\*\*被依赖（Depended By）\*\*\|\*\*Depended By\*\*/,/\*\*替代\|\*\*Supersedes\|\*\*被替代\|\*\*Superseded By\|\*\*相关\|\*\*Related/p' | \
+            grep -v '^\*\*替代\|\*\*Supersedes\|\*\*被替代\|\*\*Superseded By\|\*\*相关\|\*\*Related' | \
             { grep -oE 'ADR-[0-9]+' || true; } | \
             while read -r dep_id; do
                 echo "$adr_id|DEPENDED_BY|$dep_id" >> "$DEPENDENCIES_FILE"
             done
         
         # 提取 "替代（Supersedes）" 或 "Supersedes" 列表
-        sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
-            sed -n '/\*\*替代（Supersedes）\*\*\|\*\*Supersedes/,/\*\*被替代\|\*\*Superseded By/p' | \
+        sed -n '/^## 关系声明\|^## Relationships/,/^##/p' "$adr_file" | \
+            sed -n '/\*\*替代（Supersedes）\*\*\|\*\*Supersedes/,/\*\*被替代\|\*\*Superseded By\|\*\*相关\|\*\*Related/p' | \
+            grep -v '^\*\*被替代\|\*\*Superseded By\|\*\*相关\|\*\*Related' | \
             { grep -oE 'ADR-[0-9]+' || true; } | \
             while read -r sup_id; do
                 echo "$adr_id|SUPERSEDES|$sup_id" >> "$SUPERSEDES_FILE"
             done
         
         # 提取 "被替代（Superseded By）" 或 "Superseded By" 列表
-        sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+        sed -n '/^## 关系声明\|^## Relationships/,/^##/p' "$adr_file" | \
             sed -n '/\*\*被替代（Superseded By）\*\*\|\*\*Superseded By\*\*/,/\*\*相关\|\*\*Related/p' | \
+            grep -v '^\*\*相关\|\*\*Related' | \
             { grep -oE 'ADR-[0-9]+' || true; } | \
             while read -r sup_id; do
                 echo "$adr_id|SUPERSEDED_BY|$sup_id" >> "$SUPERSEDES_FILE"
@@ -191,8 +199,6 @@ if [ -f "$SUPERSEDES_FILE" ] && [ -s "$SUPERSEDES_FILE" ]; then
     if [ "$OUTPUT_FORMAT" = "text" ]; then
         echo "检查替代关系双向一致性..."
     fi
-    
-    ERROR_FILE="$TEMP_DIR/errors.txt"
     
     # A SUPERSEDES B => B should have SUPERSEDED_BY A
     while IFS='|' read -r from rel to; do

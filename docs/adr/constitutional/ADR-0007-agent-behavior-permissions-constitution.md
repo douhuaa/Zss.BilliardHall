@@ -7,24 +7,19 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-23
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
 ---
+
 
 # ADR-0007：Agent 行为与权限宪法
 
 > ⚖️ **本 ADR 是所有 Agent 的元规则，定义 Agent 行为边界和权限约束的唯一裁决源。**
 
 **状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构元规则 / 宪法层  
-**适用范围**：所有 GitHub Copilot Agents 及 AI 辅助工具  
-**生效时间**：即刻
-
----
-
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - Agent 角色定位与权限边界
 - 三态输出规则（Allowed/Blocked/Uncertain）
@@ -35,7 +30,9 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+---
+
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |-----------------|------------------------------------------------|-------------------------|
@@ -49,7 +46,9 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+---
+
+## Decision（裁决）
 
 ### Agent 根本定位（ADR-0007.0）
 
@@ -161,7 +160,84 @@ superseded_by: null
 
 ---
 
-## 关系声明（Relationships）
+---
+
+## Enforcement（执法模型）
+
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0007_Architecture_Tests.cs` 强制验证：
+
+- Agent 响应必须包含三态标识
+- Agent 输出禁用词汇检查
+- Prompts 与 ADR 正文一致性检查
+- Guardian 配置文件层级关系检查
+- Agent 配置文件版本历史记录检查
+
+**人工审查**（季度）：
+- 解释性扩权审查
+- 替代性裁决审查
+- 发明规则审查
+
+**有一项违规视为架构违规，CI 自动阻断。**
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- **AI 模型训练和调优**：不涉及底层大语言模型的训练方法和参数调整
+- **Agent 的具体实现技术栈**：不规定 Agent 使用的编程语言、框架或工具
+- **Agent 的性能优化策略**：不涉及响应速度、并发处理等性能指标
+- **用户界面和交互设计**：不定义用户如何与 Agent 交互的 UI/UX
+- **Agent 的商业化和定价**：不涉及 Agent 服务的商业模式
+- **AI 伦理和社会影响**：不讨论 AI 技术的社会伦理问题（超出项目范围）
+- **多 Agent 协同的具体算法**：不规定 Agent 间通信的底层协议
+- **Agent 的监控和日志系统**：不涉及运行时监控的技术实现
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+### 权限越界
+
+- ❌ **禁止 Agent 执行超出权限级别的操作**：低风险 Agent 不得执行高风险操作
+- ❌ **禁止绕过权限检查机制**：所有操作必须经过统一的权限网关
+- ❌ **禁止 Agent 自我提权**：权限变更只能由人类管理员执行
+
+### 输出质量违反
+
+- ❌ **禁止输出模糊或不确定的判断**：必须使用三态输出（✅ Allowed / ⚠️ Blocked / ❓ Uncertain）
+- ❌ **禁止 Agent 编造不存在的信息**：所有引用必须验证有效性
+- ❌ **禁止使用营销语言或夸张表述**：保持客观、准确的描述
+
+### 决策越权
+
+- ❌ **禁止 Agent 做出宪法级决策**：宪法级决策必须由人类架构委员会批准
+- ❌ **禁止 Agent 修改自身的行为宪法**：Agent Prompt 由人类定义和维护
+- ❌ **禁止 Agent 代表人类做出承诺**：只能描述当前状态和建议
+
+### 安全违规
+
+- ❌ **禁止泄露敏感信息**：必须过滤所有敏感数据
+- ❌ **禁止执行未经验证的代码**：所有代码执行必须经过沙箱隔离
+- ❌ **禁止绕过安全审计**：所有 Agent 操作必须可追溯
+
+### 协作违规
+
+- ❌ **禁止 Agent 间的权限委托**：每个 Agent 只能在自己的权限范围内操作
+- ❌ **禁止 Agent 伪装成其他 Agent**：必须明确标识自己的角色
+- ❌ **禁止 Agent 绕过人类决策流程**：关键操作必须经过人类确认
+
+
+---
+
+---
+
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
@@ -183,67 +259,29 @@ superseded_by: null
 
 ---
 
-## 快速参考表
+---
 
-| 约束编号       | 约束描述                | 测试方式          | 测试用例                        | 必须遵守 |
-|------------|---------------------|---------------|-------------------------------|------|
-| ADR-0007.1 | 三态输出规则              | L2 - 脚本检查输出格式 | Agent_Response_Must_Have_State_Label | ✅    |
-| ADR-0007.2 | 禁止解释性扩权             | L3 - 人工审查     | Agent_No_Semantic_Escalation  | ✅    |
-| ADR-0007.3 | 禁止替代性裁决             | L3 - 人工审查     | Agent_No_Override_Authority   | ✅    |
-| ADR-0007.4 | 禁止模糊输出              | L2 - 脚本检查禁用词 | Agent_No_Ambiguous_Output     | ✅    |
-| ADR-0007.5 | Prompts 不作为裁决依据      | L3 - 人工审查     | Agent_Must_Cite_ADR_Not_Prompts | ✅    |
-| ADR-0007.6 | 禁止发明架构规则            | L3 - 人工审查     | Agent_No_Invented_Rules       | ✅    |
-| ADR-0007.7 | Prompts 与 ADR 一致性    | L2 - 脚本比对     | Prompts_ADR_Consistency_Check | ✅    |
-| ADR-0007.8 | Guardian 主从关系声明      | L1 - 脚本检查配置   | Guardian_Agent_Hierarchy_Check | ✅    |
-| ADR-0007.9 | Agent 变更版本历史记录       | L1 - 脚本检查元数据  | Agent_Version_History_Check   | ✅    |
+## References（非裁决性参考）
 
-> **级别说明**：L1=静态自动化（脚本检查），L2=语义半自动（脚本+启发式），L3=人工Gate
+**相关外部资源**：
+- [OpenAI Usage Policies](https://openai.com/policies/usage-policies) - AI 使用准则
+- [Constitutional AI: Harmlessness from AI Feedback](https://arxiv.org/abs/2212.08073) - Constitutional AI 论文
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework) - AI 风险管理标准
+- [GitHub Copilot Trust Center](https://resources.github.com/copilot-trust-center/) - Copilot 安全与信任
+- [Principle of Least Privilege (PoLP)](https://en.wikipedia.org/wiki/Principle_of_least_privilege) - 最小权限原则
+
+**相关内部文档**：
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - Agent 输出的术语规范
+- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - Agent 文档输出规范
+
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
-
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0007_Architecture_Tests.cs` 强制验证：
-
-- Agent 响应必须包含三态标识
-- Agent 输出禁用词汇检查
-- Prompts 与 ADR 正文一致性检查
-- Guardian 配置文件层级关系检查
-- Agent 配置文件版本历史记录检查
-
-**人工审查**（季度）：
-- 解释性扩权审查
-- 替代性裁决审查
-- 发明规则审查
-
-**有一项违规视为架构违规，CI 自动阻断。**
-
 ---
 
-## 检查清单
+## History（版本历史）
 
-- [ ] Agent 响应是否明确标识三态之一？
-- [ ] Agent 是否在 Uncertain 场景默认禁止？
-- [ ] Agent 裁决是否引用 ADR 正文而非 Prompts？
-- [ ] Guardian 是否列出所有专业 Agent？
-- [ ] Agent 变更是否按分级权限审批？
-- [ ] Agent 配置文件是否记录版本历史？
 
----
-
-## 版本历史
-
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 2.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 1.0 | 2026-01-25 | 初始版本，定义 Agent 行为与权限宪法 |
-
----
-
-## 附注
-
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（详细示例、Agent 配置模板、常见问题）请查阅：
-- [ADR-0007 Copilot Prompts](../../copilot/adr-0007.prompts.md)
-- Agent 配置文件（`.github/agents/`）
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 2026-01-29 | 初始版本 |

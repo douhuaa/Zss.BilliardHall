@@ -7,10 +7,12 @@ deciders: "Architecture Board"
 date: 2026-01-29
 version: "2.0"
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
 ---
+
 
 # ADR-0003：命名空间与项目边界规范
 
@@ -18,7 +20,7 @@ superseded_by: null
 
 ---
 
-## 本章聚焦内容（Focus）
+## Focus（聚焦内容）
 
 仅定义适用于全生命周期自动化裁决/阻断的**命名空间约束**：
 
@@ -29,7 +31,9 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+---
+
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |-----------------------|--------------------------------------|----------------------|
@@ -40,7 +44,9 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+---
+
+## Decision（裁决）
 
 ### 命名空间自动推导与一致性（ADR-0003.1, 0003.2, 0003.3, 0003.4, 0003.5）
 
@@ -74,7 +80,71 @@ superseded_by: null
 
 ---
 
-## 关系声明（Relationships）
+---
+
+## Enforcement（执法模型）
+
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0003_Architecture_Tests.cs` 强制验证。
+
+**有一项违规视为架构违规，CI 自动阻断。**
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- **代码风格与格式化**：不规定命名约定（如 PascalCase、camelCase）、缩进、换行等代码格式规则，这些由代码规范（如 .editorconfig）管理
+- **业务逻辑命名**：不规定业务类型、方法、变量的具体命名方式，仅管理命名空间结构
+- **包版本管理**：不管理 NuGet 包的版本选择和依赖关系，这些由 [ADR-0004](./ADR-0004-Cpm-Final.md) 管理
+- **依赖注入配置**：不规定服务注册、生命周期管理等 DI 细节，这些由 [ADR-0002](./ADR-0002-platform-application-host-bootstrap.md) 和 [ADR-0005](./ADR-0005-Application-Interaction-Model-Final.md) 管理
+- **模块间通信方式**：不规定模块如何通信（事件、契约），这些由 [ADR-0001](./ADR-0001-modular-monolith-vertical-slice-architecture.md) 管理
+- **文件组织结构**：不规定文件在命名空间内的具体组织方式（如按用例、按层），仅管理命名空间边界
+- **多语言项目**：本 ADR 仅适用于 C# 项目，不涉及前端、脚本或其他语言项目的命名空间规范
+- **测试命名空间详细规则**：测试项目的详细命名规范由 [ADR-122](../structure/ADR-122-test-organization-naming.md) 管理
+- **运行时命名空间验证**：本 ADR 仅在编译时和架构测试中验证，不涉及运行时的命名空间检查
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+### 命名空间配置违规
+
+- ❌ **手动覆盖 RootNamespace**：在项目文件（.csproj）中手动设置 `<RootNamespace>`，违反自动推导原则
+- ❌ **硬编码 BaseNamespace**：在代码中硬编码完整命名空间字符串，应通过 MSBuild 自动推导
+- ❌ **删除或修改 Directory.Build.props**：未经架构委员会批准，不得删除或修改仓库根目录的 Directory.Build.props 文件
+
+### 不规范命名空间模式
+
+- ❌ **使用通用命名空间**：使用 `Common`、`Shared`、`Utils`、`Helpers` 等违反垂直切片原则的命名空间
+- ❌ **跨层命名空间引用**：命名空间层级与项目层级不匹配
+
+### 项目命名违规
+
+- ❌ **项目名与目录名不一致**：项目文件名必须与其所在目录的最后一级名称完全一致
+- ❌ **项目命名不符合层级规范**：项目名称不遵循 BaseNamespace + 层级路径的规范
+
+### 目录结构违规
+
+- ❌ **绕过标准目录层级**：在 src/ 下创建不符合 Platform/Application/Modules/Host/Tests 层级的目录
+- ❌ **模块目录扁平化**：将多个模块代码混合在同一目录中，违反物理隔离原则
+
+### 架构测试规避
+
+- ❌ **排除架构测试**：尝试通过修改测试代码、添加忽略标记或修改 CI 配置来规避 ADR-0003 的架构测试
+- ❌ **注释掉失败的测试**：当架构测试失败时，注释掉测试而不是修复违规代码
+- ❌ **使用反射绕过检查**：使用反射或其他动态技术绕过命名空间约束
+
+
+---
+
+---
+
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
@@ -98,43 +168,35 @@ superseded_by: null
 
 ---
 
-## 快速参考表
+---
 
-| 约束编号       | 约束描述                            | 测试方式           | 测试用例                                                | 必须遵守 |
-|------------|--------------------------------- |----------------|----------------------------------------------------|------|
-| ADR-0003.1 | 所有类型命名空间以 BaseNamespace 开头       | L1 - NetArchTest | All_Types_Should_Start_With_Base_Namespace          | ✅    |
-| ADR-0003.2 | Platform 类型以 Platform 命名空间为前缀    | L1 - NetArchTest | Platform_Types_Should_Have_Platform_Namespace       | ✅    |
-| ADR-0003.3 | Application 类型以 Application 命名空间为前缀 | L1 - NetArchTest | Application_Types_Should_Have_Application_Namespace | ✅    |
-| ADR-0003.4 | Modules 类型对应 Modules.{Name} 命名空间  | L1 - NetArchTest | Module_Types_Should_Have_Module_Namespace           | ✅    |
-| ADR-0003.5 | Host 类型对应 Host.{Name} 命名空间        | L1 - NetArchTest | Host_Types_Should_Have_Host_Namespace               | ✅    |
-| ADR-0003.6 | Directory.Build.props 必须位于仓库根目录   | L1 - 文件扫描        | Directory_Build_Props_Should_Exist_At_Repository_Root | ✅    |
-| ADR-0003.7 | Directory.Build.props 定义 BaseNamespace | L1 - 文件扫描        | Directory_Build_Props_Should_Define_Base_Namespace  | ✅    |
-| ADR-0003.8 | 项目命名需遵循命名空间映射                    | L1 - 文件扫描        | All_Projects_Should_Follow_Namespace_Convention     | ✅    |
-| ADR-0003.9 | 不得出现不规范命名空间                      | L1 - NetArchTest | Modules_Should_Not_Contain_Irregular_Namespace_Patterns | ✅    |
+## References（非裁决性参考）
 
-> **级别说明**：L1=静态自动化（ArchitectureTests）
+### 官方文档
+
+- [MSBuild Directory.Build.props](https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory) - MSBuild 自定义属性和目录级配置
+- [.NET Project Structure Best Practices](https://learn.microsoft.com/en-us/dotnet/core/extensions/project-structure) - .NET 项目结构最佳实践
+- [C# Namespaces](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/namespaces) - C# 命名空间基础
+
+### 相关 ADR
+
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 了解架构测试的执行机制
+- [ADR-0001：模块化单体与垂直切片架构](./ADR-0001-modular-monolith-vertical-slice-architecture.md) - 了解模块物理隔离的原因
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 了解三层体系的职责划分
+- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 了解包管理如何与命名空间协同工作
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 了解术语的标准定义
+
+### 设计模式与理念
+
+- [Screaming Architecture](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html) - Robert C. Martin 关于目录结构应体现业务意图的理念
+- [Package by Feature](https://phauer.com/2020/package-by-feature/) - 按功能组织代码而非按层组织
+
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
-
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0003_Architecture_Tests.cs` 强制验证。
-
-**有一项违规视为架构违规，CI 自动阻断。**
-
 ---
 
-## 检查清单
-
-- [ ] 是否用 Directory.Build.props 统一 BaseNamespace？
-- [ ] 根命名空间是否由目录自动推导？
-- [ ] 项目名与目录/二级命名空间是否严格一致？
-- [ ] 全局无 Common、Shared、Utils 等命名空间？
-- [ ] CI 与架构测试是否已自动检验命名空间合规？
-
----
-
-## 版本历史（History）
+## History（版本历史）
 
 | 版本  | 日期         | 变更说明                                         |
 |-----|------------|----------------------------------------------|
@@ -142,11 +204,3 @@ superseded_by: null
 | 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
 
 ---
-
-## 附注
-
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（MSBuild 推导逻辑、项目配置示例）请查阅：
-- [ADR-0003 Copilot Prompts](../../copilot/adr-0003.prompts.md)
-- 工程指南（如有）
