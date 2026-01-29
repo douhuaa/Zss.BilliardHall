@@ -199,7 +199,7 @@ superseded_by: ADR-xxx | null
 **Depended By**：
 
 - [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md) - 测试组织遵循 ADR 结构
-- [ADR-905：架构约束分类与裁决实施映射](ADR-905-constraint-classification.md) - 约束分类基于本 ADR 的结构
+- [ADR-905：架构约束分类与裁决实施映射](ADR-905-enforcement-level-classification.md) - 约束分类基于本 ADR 的结构
 - 所有 ADR（强制）
 
 **Related**：

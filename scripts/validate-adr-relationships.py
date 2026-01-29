@@ -124,9 +124,9 @@ def extract_relationships(adr_file: Path) -> ADRRelationship:
                     adrs = re.findall(r'ADR-(\d+)', line)
                     for adr in adrs:
                         getattr(rel, current_rel_type).add(adr)
-                # 空行或其他标记结束当前段落
-                elif line.strip() == '' or (line.strip() and not line.startswith('-') and not line.startswith('*')):
-                    if current_rel_type and not line.strip().startswith('-'):
+                # 非空行且不是列表项且不是加粗标记结束当前段落
+                elif line.strip() and not line.strip().startswith('-') and not line.strip().startswith('*'):
+                    if current_rel_type:
                         current_rel_type = None
     
     return rel

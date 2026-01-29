@@ -60,7 +60,7 @@ superseded_by: null
 **标准格式**：
 
 ```markdown
-## Relationships
+### 关系声明（Relationships）
 
 **依赖（Depends On）**：
 - [ADR-XXXX：标题](相对路径) - 依赖原因说明
