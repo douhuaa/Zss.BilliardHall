@@ -122,7 +122,6 @@ public sealed class ADR_0907_Architecture_Tests
             
             // 查找测试方法的 DisplayName
             var displayNames = Regex.Matches(content, @"DisplayName\s*=\s*""([^""]+)""");
-            var testingDifferentAdr = false;
             
             foreach (Match match in displayNames)
             {
@@ -135,7 +134,6 @@ public sealed class ADR_0907_Architecture_Tests
                     var normalizedFileAdr = fileAdr.PadLeft(4, '0');
                     if (testAdr != normalizedFileAdr)
                     {
-                        testingDifferentAdr = true;
                         violations.Add($"  • {fileName} - DisplayName 测试了不同的 ADR: ADR-{testAdr}");
                         break;
                     }
