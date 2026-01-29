@@ -13,7 +13,6 @@ supersedes: null
 superseded_by: null
 ---
 
-
 # ADR-901：语义宪法（Constraint / Warning / Notice）
 
 > ⚖️ **这是 ADR 体系中“风险与约束语言”的宪法。**  
@@ -40,68 +39,168 @@ superseded_by: null
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |----|----|----|
-| Constraint | 违反即不允许的强制规则 | Constraint |
-| Warning | 强烈风险提示，可能阻断 | Warning |
-| Notice | 信息性提示，不构成约束 | Notice |
+| 约束 | 违反即不允许的强制规则 | Constraint |
+| 警告 | 强烈风险提示，可能阻断 | Warning |
+| 提示 | 信息性提示，不构成约束 | Notice |
 | Enforcement Level | 执行强度等级 | Enforcement Level |
-
----
 
 ---
 
 ## Decision（裁决）
 
-
 > ⚠️ **本节是唯一裁决来源，其他章节不得产生新规则。**
 
-### 待补充规则
+### ADR-901.1:L1 风险表达必须使用三态语义模型
 
-待补充...
+所有风险与提示 **必须** 明确归类为以下三种之一：
+
+- `Constraint`
+- `Warning`
+- `Notice`
+
+❌ 禁止出现：
+- Suggestion
+- Recommendation
+- Attention
+- Soft Rule
+- Best Practice（若具约束性）
+
+### ADR-901.2:L1 Constraint 的合法性条件
+
+只有同时满足以下条件，才允许声明为 Constraint：
+
+- 明确禁止 / 必须 / 不允许
+- 明确适用范围
+- 明确违反后果
+- 明确执行级别
+- 可被测试 / CI / Review 执行
+
+否则 **必须降级**。
+
+### ADR-901.3:L1 Warning 的边界
+
+Warning **必须**：
+- 明确风险后果
+- 明确是否允许放行
+- 明确放行责任主体
+- 明确执行级别
+
+❌ 禁止使用：
+- “建议”
+- “可以考虑”
+- “最好”
+- 暗含强制但不声明的表述
+
+### ADR-901.4:L1 Notice 的纯信息性约束
+
+Notice **只能**用于：
+- 背景说明
+- 设计动机
+- 经验性解释
+
+❌ Notice 中 **严禁**：
+- MUST / SHOULD / SHALL
+- 隐性规则
+- 流程性约束
+
+### ADR-901.5:L1 统一语义声明块
+
+所有 Constraint / Warning / Notice  
+**必须** 使用统一结构块，不允许自由文本表达。
+
+#### 标准格式
+
+```md
+> 🚨 **Constraint | L1**
+> **规则**：……
+> **范围**：……
+> **后果**：……
+````
+
+```md
+> ⚠️ **Warning | L2**
+> **风险**：……
+> **放行**：……
+```
+
+```md
+> ℹ️ **Notice**
+> ……
+```
+
+### ADR-901.6:L1 不可识别语义等同不存在
+
+任何风险表达如果：
+- 无统一结构
+- 无语义类型
+- 无执行级别
+
+→ **治理系统视为不存在**。
+
+### ADR-901.7:L1 执行级别强制声明
+
+所有 Constraint / Warning  
+**必须显式声明执行级别**（L1 / L2 / L3）。
+
+执行级别定义 **完全依赖 ADR-905**。
+
+### ADR-901.8:L1 判定输出三态模型
+
+所有风险表达在治理系统中 **必须被判定为**：
+
+- ✅ **Allowed**：语义 + 格式 + 执行级别全部合规
+- ⛔ **Blocked**：语义非法 / 伪装裁决
+- ❓ **Uncertain**：语义合规但执行信息不完整
 
 ---
 
 ## Enforcement（执法模型）
 
+### 执法责任
 
-### 执行方式
-
-待补充...
-
+|阶段|执法内容|
+|---|---|
+|PR|语义结构扫描|
+|CI|执行级别与格式校验|
+|Review|Warning 放行合法性|
+|Audit|语义一致性审计|
 
 ---
----
+
+### 自动化执法
+
+|规则|方式|
+|---|---|
+|三态识别|文档扫描|
+|结构合法|Markdown AST|
+|执行级别|正则 + Schema|
+|降级/升级|差异检测|
+
 
 ## Non-Goals（明确不管什么）
 
-本 ADR 明确不涉及以下内容：
-
-- **自然语言处理算法**：不涉及如何用 NLP 技术解析语义的具体算法实现
-- **UI 设计中的视觉提示**：不规定警告图标、颜色、字体等视觉元素的设计规范
-- **国际化和本地化**：不涉及多语言环境下的语义表达和翻译规范
-- **日志记录的格式**：不规定日志系统中的警告级别格式和输出方式
-- **用户体验设计**：不涉及如何让用户更好理解和响应警告信息的交互设计
-- **机器学习模型的置信度表达**：不涉及 AI 模型输出的不确定性表达方式
-- **法律合规性声明**：不涉及法律文件中的免责声明、合规声明等格式要求
-- **错误处理机制**：不涉及系统运行时的异常处理、错误恢复等技术细节
+- NLP 算法实现
+- UI / 视觉表现
+- 日志级别映射
+- 国际化翻译
+- 用户体验设计
+- AI 置信度表达
+- 法律免责声明
+- 运行期异常处理
 
 ---
 
 ## Prohibited（禁止行为）
 
-严禁：
 - 用 Warning 代替 Constraint
 - 用 Notice 偷塞规则
 - 不声明执行级别
-- 使用“建议但实际上必须”的双关语
-- 同一风险在不同文档中语义降级或升级
-
----
+- 双关语规避裁决
+- 同一风险跨文档语义漂移
 
 ---
 
@@ -110,16 +209,18 @@ superseded_by: null
 **Depends On**：
 
 - [ADR-0000：架构测试与 CI 治理宪法](ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-905：架构执法等级定义](ADR-905-enforcement-level-classification.md) - 本 ADR 的执行级别定义依赖 ADR-905
 
 **Depended By**：
 
 - [ADR-902：ADR 结构与章节规范](./ADR-902-adr-template-structure-contract.md) - ADR 语义定义被 ADR 结构规范依赖
+- [ADR-903：ArchitectureTests 命名与组织规范](ADR-903-architecture-tests-naming-organization.md) - 测试组织需要明确语义分类
+- [ADR-904：ArchitectureTests 断言规范](ADR-904-architecturetests-minimum-assertion-semantics.md) - 断言规范需要明确语义分类
+- [ADR-906：Analyzer 与 CI 阻断映射协议](ADR-906-analyzer-ci-gate-mapping-protocol.md) - 自动化阻断需要明确语义分类
 - 所有文档类 ADR
-- 所有治理与校验规则
 
 ---
 
----
 
 ## References（非裁决性参考）
 
@@ -128,13 +229,8 @@ superseded_by: null
 
 ---
 
-
----
-
----
-
 ## History（版本历史）
 
 | 版本 | 日期         | 变更说明 | 作者 |
 |----|------------|----|----|
-| 1.0 | 2025-01-28 | 初始正式版本 | Architecture Board |
+| 1.0 | 2025-01-30 | 初始正式版本 | Architecture Board |
