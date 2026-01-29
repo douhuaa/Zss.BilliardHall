@@ -108,7 +108,14 @@ superseded_by: null
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **具体包版本号选择**：不约束应该使用哪个具体版本号（如 8.0.0 vs 8.0.1），仅确保版本集中管理
+- **包的安全漏洞扫描**：不涉及如何检测和修复包的安全漏洞，这由安全流程管理
+- **私有 NuGet 源配置**：不约束是否使用私有源、如何配置源优先级等
+- **包升级审批流程**：不规定谁有权限升级包、升级需要哪些审批，这由治理流程定义
+- **包缓存和离线构建**：不涉及如何优化包下载、缓存策略或离线场景构建
+- **包许可证合规性**：不检查包的开源许可证是否符合公司政策
+- **多目标框架兼容性**：不约束如何处理针对不同 .NET 版本的包兼容性问题
+- **包性能基准测试**：不涉及包对构建时间、运行时性能的影响评估
 
 ---
 
@@ -117,7 +124,32 @@ superseded_by: null
 
 以下行为明确禁止：
 
-- 待补充
+### 包版本管理违规
+
+- ❌ **在项目文件中指定包版本**：禁止在 `.csproj` 中使用 `<PackageReference Include="..." Version="x.y.z" />`
+- ❌ **覆盖中央包版本**：禁止在项目文件中使用 `<PackageReference Update="..." VersionOverride="..." />`
+- ❌ **删除或修改 Directory.Packages.props**：未经架构委员会批准，不得删除或修改根目录的 Directory.Packages.props
+- ❌ **禁用 CPM**：禁止在项目文件中添加 `<ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>`
+
+### 层级依赖违规
+
+- ❌ **Platform 依赖业务包**：Platform 项目禁止引用任何业务相关的 NuGet 包（如 FluentValidation、MediatR 等）
+- ❌ **Host 直接依赖模块包**：Host 项目禁止引用模块特定的包，只能依赖 Platform 和 Application
+- ❌ **模块依赖 Host 包**：Modules 禁止引用 ASP.NET Core、Kestrel 等 Host 专属包
+- ❌ **测试项目引用生产包**：测试项目禁止引用生产环境专用的包（如监控、APM 等）
+
+### 包分组与配置违规
+
+- ❌ **不使用包分组注释**：Directory.Packages.props 中的包必须按技术栈分组并添加注释
+- ❌ **测试框架版本不统一**：所有测试项目必须使用相同版本的 xUnit、NUnit 或 MSTest
+- ❌ **传递依赖版本不固定**：禁止让传递依赖自动升级，必须在 Directory.Packages.props 中显式声明
+- ❌ **包引用缺少用途说明**：新增包时必须在 Directory.Packages.props 中添加注释说明用途
+
+### 架构测试规避
+
+- ❌ **注释架构测试**：禁止注释或删除 ADR_0004_Architecture_Tests.cs 中的测试
+- ❌ **添加测试排除项**：禁止通过 `[Fact(Skip = "...")]` 或条件编译跳过包管理测试
+- ❌ **修改测试阈值**：禁止修改测试中的层级依赖规则（如允许 Platform 依赖更多包）
 
 
 ---
@@ -149,8 +181,20 @@ superseded_by: null
 
 ## References（非裁决性参考）
 
+**官方文档**：
+- [NuGet Central Package Management](https://learn.microsoft.com/en-us/nuget/consume-packages/central-package-management) - NuGet CPM 官方文档
+- [MSBuild Directory.Packages.props](https://learn.microsoft.com/en-us/nuget/consume-packages/central-package-management#enabling-central-package-management) - CPM 配置详解
+- [NuGet Package Versioning](https://learn.microsoft.com/en-us/nuget/concepts/package-versioning) - 包版本管理最佳实践
+- [Transitive Dependencies](https://learn.microsoft.com/en-us/nuget/concepts/dependency-resolution) - 传递依赖解析机制
 
-- 待补充
+**依赖管理最佳实践**：
+- [Dependency Management Best Practices](https://www.thoughtworks.com/insights/blog/dependency-management) - ThoughtWorks 依赖管理指南
+- [Managing .NET Dependencies at Scale](https://devblogs.microsoft.com/dotnet/managing-package-dependency-updates-at-scale/) - 大规模依赖管理
+
+**相关内部文档**：
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 了解测试执行机制
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 了解层级职责划分
+- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 了解项目组织结构
 
 
 ---
