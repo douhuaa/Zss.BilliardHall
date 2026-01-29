@@ -3,6 +3,8 @@ using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
+// Version: 4.0
+// ADR: ADR-0001
 /// <summary>
 /// ADR-0001: 模块化单体与垂直切片架构决策（v4.0）
 /// 验证模块隔离、垂直切片、契约使用等核心架构约束

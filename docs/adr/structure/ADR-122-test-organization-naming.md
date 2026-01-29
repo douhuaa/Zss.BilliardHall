@@ -14,6 +14,8 @@ superseded_by: ADR-903
 
 # ADR-122：ArchitectureTests 命名与组织规范（ARD）
 
+**版本**：1.0
+
 > ⚖️ 本 ADR 的全部裁决已被 ADR-903 吸收并强化，不再具有独立裁决力。
 
 ---

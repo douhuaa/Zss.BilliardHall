@@ -2,6 +2,8 @@
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
+// Version: 1.0
+// ADR: ADR-0004
 /// <summary>
 /// ADR-0004: 中央包管理 (CPM) 规范
 /// 验证 Directory.Packages.props 存在且配置正确，所有项目统一管理包版本

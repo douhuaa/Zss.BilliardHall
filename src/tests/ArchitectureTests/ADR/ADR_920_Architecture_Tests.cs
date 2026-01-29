@@ -3,6 +3,8 @@ using Xunit;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
+// Version: 1.0
+// ADR: ADR-920
 /// <summary>
 /// ADR-920: 示例代码治理宪法
 /// 验证所有示例代码符合 ADR-920 的约束

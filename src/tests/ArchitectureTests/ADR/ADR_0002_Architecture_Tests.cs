@@ -3,6 +3,8 @@ using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
+// Version: 1.0
+// ADR: ADR-0002
 /// <summary>
 /// ADR-0002: Platform / Application / Host 三层启动体系
 /// 验证三层依赖约束和启动职责分工

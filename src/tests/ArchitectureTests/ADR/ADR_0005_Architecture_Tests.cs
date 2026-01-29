@@ -3,6 +3,8 @@ using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
+// Version: 1.0
+// ADR: ADR-0005
 /// <summary>
 /// ADR-0005: 应用内交互模型与执行边界
 /// 验证运行时规则：Handler 职责、同步/异步边界、模块通信契约

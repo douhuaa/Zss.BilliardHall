@@ -3,6 +3,8 @@ using Xunit;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
+// Version: 1.0
+// ADR: ADR-910
 /// <summary>
 /// ADR-910: README 编写与维护宪法
 /// 验证所有 README 文档符合 ADR-910 的约束

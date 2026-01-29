@@ -2,6 +2,8 @@ using System.Text.RegularExpressions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
+// Version: 1.0
+// ADR: ADR-0007
 /// <summary>
 /// ADR-0007: Agent 行为与权限宪法
 /// 验证所有 Agent 配置文件符合 ADR-0007 的行为约束和权限边界

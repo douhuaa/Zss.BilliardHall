@@ -3,6 +3,8 @@ using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
+// Version: 1.0
+// ADR: ADR-0003
 /// <summary>
 /// ADR-0003: 命名空间与项目边界规范
 /// 验证所有类型的命名空间遵循 BaseNamespace 约定

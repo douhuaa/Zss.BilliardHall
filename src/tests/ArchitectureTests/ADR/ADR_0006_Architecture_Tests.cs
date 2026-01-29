@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
+// Version: 1.0
+// ADR: ADR-0006
 /// <summary>
 /// ADR-0006: 术语与编号宪法
 /// 验证 ADR 编号体系和文件命名规范

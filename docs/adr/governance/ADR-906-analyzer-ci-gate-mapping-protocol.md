@@ -14,6 +14,8 @@ superseded_by: ADR-903-906
 
 # ADR-906：Analyzer / CI Gate 与 ADR 映射协议
 
+**版本**：1.0
+
 > 本 ADR 的全部裁决已被 [ADR-903-906](ADR-903-906.md) 吸收并强化，不再具有独立裁决力。
 > ⚖️ **本 ADR 定义 CI / Analyzer 如何识别、执行、报告 ArchitectureTests 与 ADR 的映射关系，确保裁决自动化、可追溯、可阻断。**
 

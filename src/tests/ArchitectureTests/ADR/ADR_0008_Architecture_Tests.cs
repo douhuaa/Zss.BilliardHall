@@ -2,6 +2,8 @@ using Xunit;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
+// Version: 1.0
+// ADR: ADR-0008
 /// <summary>
 /// ADR-0008: 文档编写与维护宪法 - 测试重定向
 /// 
