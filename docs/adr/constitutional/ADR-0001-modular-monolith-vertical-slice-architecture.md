@@ -1,8 +1,24 @@
+---
+adr: ADR-0001
+title: "模块化单体与垂直切片架构"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "5.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0001：模块化单体与垂直切片架构
 
+> ⚖️ **本 ADR 是系统架构的基本法，定义模块隔离和组织方式的唯一裁决源。**
+>
+> **裁决权威声明**：本 ADR 正文是关于模块化单体架构和垂直切片组织的最高权威。所有架构测试、CI验证、人工评审均以本 ADR 正文为唯一依据。Copilot Prompts、README、GUIDE 等辅导材料不具备裁决力，若与本 ADR 冲突，以本 ADR 为准。
+
 **状态**：✅ Final（裁决型ADR）  
-**版本**：4.0  
-**级别**：架构约束 / 系统级 Contract  
 **适用范围**：所有 Host、模块、各类测试、未来扩展子系统  
 **生效时间**：即刻
 
@@ -22,14 +38,17 @@
 
 ## 术语表（Glossary）
 
-| 术语            | 定义                             |
-|---------------|--------------------------------|
-| 模块化单体         | 单进程，按业务能力独立模块，物理分离             |
-| 垂直切片          | 以单个业务用例为最小组织单元，端到端实现           |
-| 契约（Contract）  | 只读数据 DTO，仅用于模块间信息传递            |
-| 领域事件          | 描述业务事实，供其他模块异步订阅               |
-| 横向分层          | Controller/Service/Repository 抽象 |
-| 依赖隔离          | 模块内部不可被外部引用、反射或直接调用            |
+| 术语            | 定义                                           | 英文对照              |
+|---------------|----------------------------------------------|--------------------|
+| 模块化单体         | 单进程部署，按业务能力划分独立模块，物理分离，逻辑松耦合               | Modular Monolith   |
+| 垂直切片          | 以单个业务用例为最小组织单元，端到端实现，横穿所有技术层             | Vertical Slice     |
+| Use Case      | 端到端业务用例，是业务功能的最小单元                         | Use Case           |
+| 契约（Contract）  | 只读、单向、版本化的数据 DTO，仅用于模块间信息传递，不含业务决策       | Contract           |
+| 领域事件          | 描述已发生的业务事实，供其他模块异步订阅                       | Domain Event       |
+| 领域模型          | 业务内聚的复杂类型，封装业务不变量，不允许跨模块共享                 | Domain Model       |
+| 横向分层          | Controller/Service/Repository 传统分层抽象，本架构禁止 | Horizontal Layering |
+| 依赖隔离          | 模块内部不可被外部引用、反射或直接调用                        | Dependency Isolation |
+| 模块边界          | 物理程序集边界，由目录结构和命名空间定义                       | Module Boundary    |
 
 ---
 
@@ -75,15 +94,15 @@
 
 ## 快速参考表
 
-| 约束编号       | 约束描述          | 测试方式                                         | 测试用例                                           | 必须遵守 |
-|------------|---------------|----------------------------------------------|------------------------------------------------|------|
-| ADR-0001.1 | 模块不可相互引用      | L1 - NetArchTest                             | Modules_Should_Not_Reference_Other_Modules     | ✅    |
-| ADR-0001.2 | 项目文件禁止引用其他模块  | L1 - 项目文件扫描                                  | Module_Csproj_Should_Not_Reference_Other_Modules | ✅    |
-| ADR-0001.3 | 垂直切片/用例为最小单元  | L2 - NetArchTest                             | Handlers_Should_Be_In_UseCases_Namespace       | ✅    |
-| ADR-0001.4 | 禁止横向 Service 抽象 | L1 - NetArchTest                             | Modules_Should_Not_Contain_Service_Classes     | ✅    |
-| ADR-0001.5 | 只允许事件/契约/原始类型通信 | L2 - 语义检查                                    | Contract_Rules_Semantic_Check                  | ✅    |
-| ADR-0001.6 | Contract 不含业务判断字段 | L2/L3 - Roslyn分析 + 人工                        | Contract_Business_Field_Analyzer               | ✅    |
-| ADR-0001.7 | 命名空间/目录强制隔离    | L1 - NetArchTest                             | Namespace_Should_Match_Module_Boundaries       | ✅    |
+| 约束编号       | 约束描述          | 执行级别 | 测试方式           | 测试用例                                           | 必须遵守 |
+|------------|---------------|------|----------------|-------------------------------------------------|------|
+| ADR-0001.1 | 模块不可相互引用      | L1   | NetArchTest    | Modules_Should_Not_Reference_Other_Modules     | ✅    |
+| ADR-0001.2 | 项目文件禁止引用其他模块  | L1   | 项目文件扫描         | Module_Csproj_Should_Not_Reference_Other_Modules | ✅    |
+| ADR-0001.3 | 垂直切片/用例为最小单元  | L2   | NetArchTest    | Handlers_Should_Be_In_UseCases_Namespace       | ✅    |
+| ADR-0001.4 | 禁止横向 Service 抽象 | L1   | NetArchTest    | Modules_Should_Not_Contain_Service_Classes     | ✅    |
+| ADR-0001.5 | 只允许事件/契约/原始类型通信 | L2   | 语义检查           | Contract_Rules_Semantic_Check                  | ✅    |
+| ADR-0001.6 | Contract 不含业务判断字段 | L2/L3 | Roslyn分析 + 人工 | Contract_Business_Field_Analyzer               | ✅    |
+| ADR-0001.7 | 命名空间/目录强制隔离    | L1   | NetArchTest    | Namespace_Should_Match_Module_Boundaries       | ✅    |
 
 > **级别说明**：L1=静态自动化（ArchitectureTests），L2=语义半自动（Roslyn/启发式），L3=人工Gate
 
@@ -158,12 +177,13 @@
 
 ## 版本历史
 
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 4.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 3.2 | 2026-01-23 | 术语&执行等级补充  |
-| 3.0 | 2026-01-20 | 分层体系与目录规则固化 |
-| 1.0 | 初始         | 初版发布       |
+| 版本  | 日期         | 变更说明                        |
+|-----|------------|------------------------------|
+| 5.0 | 2026-01-29 | 添加标准 Front Matter，完善术语表英文对照，增加裁决权威声明，符合 ADR-902/0006/0007/0008 |
+| 4.0 | 2026-01-26 | 裁决型重构，移除冗余                 |
+| 3.2 | 2026-01-23 | 术语&执行等级补充                  |
+| 3.0 | 2026-01-20 | 分层体系与目录规则固化                |
+| 1.0 | 初始         | 初版发布                       |
 
 ---
 

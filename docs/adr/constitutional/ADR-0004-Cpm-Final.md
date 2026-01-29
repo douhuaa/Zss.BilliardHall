@@ -1,8 +1,24 @@
+---
+adr: ADR-0004
+title: "中央包管理与层级依赖规则"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "2.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0004：中央包管理（CPM）规范
 
+> ⚖️ **本 ADR 是依赖包管理的基本法，定义中央包管理机制和层级依赖规则的唯一裁决源。**
+>
+> **裁决权威声明**：本 ADR 正文是关于依赖包管理和层级依赖的最高权威。所有架构测试、CI验证、人工评审均以本 ADR 正文为唯一依据。Copilot Prompts、README、GUIDE 等辅导材料不具备裁决力，若与本 ADR 冲突，以本 ADR 为准。
+
 **状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构约束（Architectural Contract）  
 **适用范围**：所有 Platform / Application / Modules / Host / Tests 项目  
 **生效时间**：即刻
 
@@ -21,13 +37,14 @@
 
 ## 术语表（Glossary）
 
-| 术语                       | 定义                               |
-|--------------------------|----------------------------------|
-| CPM                      | Central Package Management，中央包管理 |
-| Directory.Packages.props | NuGet 配置文件，集中定义全局依赖包版本           |
-| 传递依赖固定                   | 通过 CPM 禁止传递依赖的漂移                 |
-| 层级依赖                     | 不同层项目允许的包类型约束                    |
-| 包分组                      | 依赖包按技术栈、场景分隔分组                   |
+| 术语                       | 定义                                     | 英文对照                    |
+|--------------------------|----------------------------------------|--------------------------|
+| CPM                      | Central Package Management，中央包管理，统一管理依赖 | CPM                      |
+| Directory.Packages.props | NuGet 配置文件，集中定义全局依赖包版本               | Directory.Packages.props |
+| 传递依赖固定                   | 通过 CPM 禁止传递依赖的漂移，确保版本一致性             | Transitive Dependency Lock |
+| 层级依赖                     | 不同层项目允许的包类型约束，防止依赖污染                 | Layered Dependency       |
+| 包分组                      | 依赖包按技术栈、场景分隔分组                         | Package Grouping         |
+| 版本覆盖                     | 项目文件覆盖中央定义的包版本（禁止行为）                 | Version Override         |
 
 ---
 
@@ -136,12 +153,10 @@
 
 ## 版本历史
 
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 4.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 3.0 | 2026-01-22 | 结构升级、统一结构和映射 |
-| 2.0 | 2026-01-20 | 分组细化，新增CI校验  |
-| 1.0 | 初版         | 初始发布       |
+| 版本  | 日期         | 变更说明                        |
+|-----|------------|------------------------------|
+| 2.0 | 2026-01-29 | 添加标准 Front Matter，完善术语表英文对照，增加裁决权威声明，符合 ADR-902/0006/0007/0008 |
+| 1.0 | 2026-01-26 | 裁决型重构，移除冗余                 |
 
 ---
 

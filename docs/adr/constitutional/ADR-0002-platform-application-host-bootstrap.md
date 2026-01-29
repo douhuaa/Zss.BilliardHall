@@ -1,8 +1,24 @@
+---
+adr: ADR-0002
+title: "Platform / Application / Host 三层启动体系"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "2.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0002：Platform / Application / Host 三层启动体系
 
+> ⚖️ **本 ADR 是系统启动和装配的基本法，定义三层职责和依赖方向的唯一裁决源。**
+>
+> **裁决权威声明**：本 ADR 正文是关于 Platform/Application/Host 三层体系的最高权威。所有架构测试、CI验证、人工评审均以本 ADR 正文为唯一依据。Copilot Prompts、README、GUIDE 等辅导材料不具备裁决力，若与本 ADR 冲突，以本 ADR 为准。
+
 **状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构约束（Architectural Contract）  
 **适用范围**：所有 Host、模块、测试、未来子系统  
 **生效时间**：即刻
 
@@ -22,13 +38,14 @@
 
 ## 术语表（Glossary）
 
-| 术语           | 定义                             |
-|--------------|--------------------------------|
-| Platform     | 技术基座，仅提供技术能力，不感知业务             |
-| Application  | 应用装配层，定义"系统是什么"，聚合模块和用例        |
-| Host         | 进程外壳，决定"怎么跑"，如 Web/Worker/Test |
-| Bootstrapper | 唯一的装配入口，负责注册服务和配置              |
-| 单向依赖         | Host → Application → Platform  |
+| 术语           | 定义                                         | 英文对照          |
+|--------------|--------------------------------------------|-----------------|
+| Platform     | 技术基座，仅提供技术能力（日志、追踪、序列化等），不感知业务          | Platform Layer  |
+| Application  | 应用装配层，定义"系统是什么"，聚合模块和用例，负责模块间协调          | Application Layer |
+| Host         | 进程外壳，决定"怎么跑"，如 Web/Worker/Test，负责协议适配    | Host Layer      |
+| Bootstrapper | 唯一的装配入口，负责注册服务和配置，每层必须有且仅有一个             | Bootstrapper    |
+| 单向依赖         | 严格的依赖方向：Host → Application → Platform，禁止反向 | Unidirectional Dependency |
+| 进程模型         | 系统运行方式（Web API、Worker、测试等）              | Process Model   |
 
 ---
 
@@ -114,22 +131,22 @@
 
 ## 快速参考表
 
-| 约束编号        | 约束描述                            | 测试方式           | 测试用例                                                    | 必须遵守 |
-|-------------|-------------------------------- |-----------------|---------------------------------------------------------|------|
-| ADR-0002.1  | Platform 不应依赖 Application        | L1 - NetArchTest | Platform_Should_Not_Depend_On_Application               | ✅    |
-| ADR-0002.2  | Platform 不应依赖 Host               | L1 - NetArchTest | Platform_Should_Not_Depend_On_Host                      | ✅    |
-| ADR-0002.3  | Platform 不应依赖任何 Modules          | L1 - NetArchTest | Platform_Should_Not_Depend_On_Modules                   | ✅    |
-| ADR-0002.4  | Platform 应有唯一 Bootstrapper 入口   | L1 - NetArchTest | Platform_Should_Have_Single_Bootstrapper_Entry_Point    | ✅    |
-| ADR-0002.5  | Application 不依赖 Host             | L1 - NetArchTest | Application_Should_Not_Depend_On_Host                   | ✅    |
-| ADR-0002.6  | Application 不依赖 Modules          | L1 - NetArchTest | Application_Should_Not_Depend_On_Modules                | ✅    |
-| ADR-0002.7  | Application 应有唯一 Bootstrapper 入口 | L1 - NetArchTest | Application_Should_Have_Single_Bootstrapper_Entry_Point | ✅    |
-| ADR-0002.8  | Application 不含 Host 专属类型         | L1 - NetArchTest | Application_Should_Not_Use_HttpContext                  | ✅    |
-| ADR-0002.9  | Host 不依赖 Modules                 | L1 - NetArchTest | Host_Should_Not_Depend_On_Modules                       | ✅    |
-| ADR-0002.10 | Host 不含业务类型                      | L1 - NetArchTest | Host_Should_Not_Contain_Business_Types                  | ✅    |
-| ADR-0002.11 | Host 项目文件不应引用 Modules            | L1 - 项目文件扫描      | Host_Csproj_Should_Not_Reference_Modules                | ✅    |
-| ADR-0002.12 | Program.cs 建议 ≤30行               | L1 - 文件扫描        | Program_Cs_Should_Be_Concise                            | ✅    |
-| ADR-0002.13 | Program.cs 只应调用 Bootstrapper     | L1 - 语义检查        | Program_Cs_Should_Only_Call_Bootstrapper                | ✅    |
-| ADR-0002.14 | 三层唯一依赖方向验证                       | L1 - NetArchTest | Verify_Complete_Three_Layer_Dependency_Direction        | ✅    |
+| 约束编号        | 约束描述                            | 执行级别 | 测试方式      | 测试用例                                                    | 必须遵守 |
+|-------------|-------------------------------- |------|-----------|----------------------------------------------------------|------|
+| ADR-0002.1  | Platform 不应依赖 Application        | L1   | NetArchTest | Platform_Should_Not_Depend_On_Application               | ✅    |
+| ADR-0002.2  | Platform 不应依赖 Host               | L1   | NetArchTest | Platform_Should_Not_Depend_On_Host                      | ✅    |
+| ADR-0002.3  | Platform 不应依赖任何 Modules          | L1   | NetArchTest | Platform_Should_Not_Depend_On_Modules                   | ✅    |
+| ADR-0002.4  | Platform 应有唯一 Bootstrapper 入口   | L1   | NetArchTest | Platform_Should_Have_Single_Bootstrapper_Entry_Point    | ✅    |
+| ADR-0002.5  | Application 不依赖 Host             | L1   | NetArchTest | Application_Should_Not_Depend_On_Host                   | ✅    |
+| ADR-0002.6  | Application 不依赖 Modules          | L1   | NetArchTest | Application_Should_Not_Depend_On_Modules                | ✅    |
+| ADR-0002.7  | Application 应有唯一 Bootstrapper 入口 | L1   | NetArchTest | Application_Should_Have_Single_Bootstrapper_Entry_Point | ✅    |
+| ADR-0002.8  | Application 不含 Host 专属类型         | L1   | NetArchTest | Application_Should_Not_Use_HttpContext                  | ✅    |
+| ADR-0002.9  | Host 不依赖 Modules                 | L1   | NetArchTest | Host_Should_Not_Depend_On_Modules                       | ✅    |
+| ADR-0002.10 | Host 不含业务类型                      | L1   | NetArchTest | Host_Should_Not_Contain_Business_Types                  | ✅    |
+| ADR-0002.11 | Host 项目文件不应引用 Modules            | L1   | 项目文件扫描    | Host_Csproj_Should_Not_Reference_Modules                | ✅    |
+| ADR-0002.12 | Program.cs 建议 ≤30行               | L1   | 文件扫描      | Program_Cs_Should_Be_Concise                            | ✅    |
+| ADR-0002.13 | Program.cs 只应调用 Bootstrapper     | L1   | 语义检查      | Program_Cs_Should_Only_Call_Bootstrapper                | ✅    |
+| ADR-0002.14 | 三层唯一依赖方向验证                       | L1   | NetArchTest | Verify_Complete_Three_Layer_Dependency_Direction        | ✅    |
 
 > **级别说明**：L1=静态自动化（ArchitectureTests）
 
@@ -156,12 +173,10 @@
 
 ## 版本历史
 
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 4.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 3.0 | 2026-01-22 | 结构升级、测试映射  |
-| 2.0 | 2026-01-20 | 目录与依赖方向细化  |
-| 1.0 | 初版         | 初始发布       |
+| 版本  | 日期         | 变更说明                        |
+|-----|------------|------------------------------|
+| 2.0 | 2026-01-29 | 添加标准 Front Matter，完善术语表英文对照，增加裁决权威声明，符合 ADR-902/0006/0007/0008 |
+| 1.0 | 2026-01-26 | 裁决型重构，移除冗余                 |
 
 ---
 
