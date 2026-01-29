@@ -115,7 +115,14 @@ superseded_by: null
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **单元测试和集成测试的编写规范**：不涉及业务逻辑测试的具体实现方式
+- **代码覆盖率目标**：不强制要求特定的代码覆盖率百分比
+- **性能测试和负载测试**：不涉及系统性能和负载方面的测试要求
+- **测试框架的具体选型**：不限定使用 xUnit、NUnit 或其他特定测试框架
+- **CI/CD 平台的选择**：不规定使用 GitHub Actions、Azure DevOps 还是其他 CI 工具
+- **测试环境的基础设施配置**：不涉及测试环境的服务器、网络等基础设施细节
+- **手动测试流程**：不涉及人工测试、UAT、探索性测试等非自动化测试
+- **测试数据管理策略**：不涉及测试数据的生成、清理和维护机制
 
 ---
 
@@ -174,8 +181,19 @@ superseded_by: null
 
 ## References（非裁决性参考）
 
+**相关外部资源**：
+- [ArchUnit](https://www.archunit.org/) - Java 架构测试框架，理念参考
+- [NetArchTest](https://github.com/BenMorris/NetArchTest) - .NET 架构测试库
+- [Architecture Decision Records](https://adr.github.io/) - ADR 社区标准和最佳实践
+- [Continuous Compliance](https://www.thoughtworks.com/insights/blog/continuous-compliance) - CI 中的合规性自动化
 
-- 待补充
+**相关内部文档**：
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 核心架构约束
+- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 层级依赖规则
+- [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 命名空间约束
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - CQRS 和 Handler 约束
+- [ADR-904：架构测试最小断言语义](./ADR-904-architecturetests-minimum-assertion-semantics.md) - 测试断言规范
+- [ADR-906：Analyzer/CI Gate 映射协议](./ADR-906-analyzer-ci-gate-mapping-protocol.md) - CI 集成机制
 
 
 ---

@@ -205,7 +205,14 @@ README 引用 ADR 必须遵循：
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **README 的视觉设计和排版**：不涉及字体、颜色、图标等视觉元素的设计规范
+- **README 的长度限制**：不规定 README 文档的最大或最小字数要求
+- **README 的多语言版本**：不涉及多语言 README 的创建和维护流程
+- **README 的自动化生成工具**：不规定使用特定的文档生成或模板工具
+- **README 中的代码示例风格**：不约束代码示例的具体编写风格和格式
+- **README 的更新频率**：不规定 README 必须多久更新一次
+- **README 在不同平台的适配**：不涉及 GitHub、GitLab、Bitbucket 等平台的特殊格式要求
+- **README 的SEO优化**：不涉及搜索引擎优化、关键词布局等营销相关内容
 
 ---
 
@@ -214,7 +221,20 @@ README 引用 ADR 必须遵循：
 
 以下行为明确禁止：
 
-- 待补充
+### 越权行为
+- ❌ **禁止 README 使用裁决性语言**：不得使用"必须"、"禁止"、"不允许"等定义规则的词汇
+- ❌ **禁止 README 定义架构约束**：不得在 README 中引入新的架构规则或限制
+- ❌ **禁止 README 覆盖 ADR 规则**：不得与 ADR 冲突或试图修改 ADR 定义的规则
+
+### 内容质量违规
+- ❌ **禁止 README 缺少权威声明**：必须明确声明"若与 ADR 冲突，以 ADR 为准"
+- ❌ **禁止 README 引用不存在的 ADR**：所有 ADR 引用必须指向真实存在的文件
+- ❌ **禁止 README 使用模糊的相对路径**：ADR 引用必须使用清晰的相对或绝对路径
+
+### 维护违规
+- ❌ **禁止 README 与实际代码严重不符**：示例代码必须能实际运行或明确标注为伪代码
+- ❌ **禁止 README 包含过期信息而不标注**：过期内容必须移除或明确标记为已废弃
+- ❌ **禁止 README 复制粘贴 ADR 内容**：应该引用 ADR 而不是复制其内容
 
 
 ---
@@ -246,8 +266,16 @@ README 引用 ADR 必须遵循：
 
 ## References（非裁决性参考）
 
+**相关外部资源**：
+- [Make a README](https://www.makeareadme.com/) - README 编写指南和最佳实践
+- [Awesome README](https://github.com/matiassingers/awesome-readme) - 优秀 README 示例集合
+- [GitHub's Guide to README](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes) - GitHub 官方 README 指南
 
-- 待补充
+**相关内部文档**：
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档分级与权限划分
+- [ADR-920：示例代码治理宪法](./ADR-920-examples-governance-constitution.md) - README 中代码示例的约束
+- [ADR-950：Guide/FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md) - 与 Guide 文档的边界
+- [ADR-960：入职文档治理](./ADR-960-onboarding-documentation-governance.md) - 入职文档与 README 的关系
 
 
 ---
@@ -259,4 +287,4 @@ README 引用 ADR 必须遵循：
 
 | 版本  | 日期         | 变更说明   |
 |-----|------------|--------|
-| 1.0 | 待补充 | 初始版本 |
+| 1.0 | 2026-01-29 | 初始版本 |

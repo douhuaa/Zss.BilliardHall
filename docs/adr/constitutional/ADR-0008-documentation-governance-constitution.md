@@ -346,4 +346,4 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 | 版本  | 日期         | 变更说明   |
 |-----|------------|--------|
-| 1.0 | 待补充 | 初始版本 |
+| 1.0 | 2026-01-29 | 初始版本 |
