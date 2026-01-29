@@ -151,7 +151,14 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **CI平台的具体选择**：不规定使用GitHub Actions、Azure DevOps还是其他CI工具
+- **Analyzer工具的内部实现**：不涉及Roslyn Analyzer的具体代码实现细节
+- **测试框架的具体配置**：不规定xUnit、NUnit等框架的详细配置参数
+- **CI Pipeline的性能优化**：不涉及构建速度、并行执行等性能优化策略
+- **错误报告的格式和样式**：不规定测试失败、Analyzer警告的具体输出格式
+- **开发环境的IDE集成**：不涉及Visual Studio、Rider等IDE中的Analyzer集成方式
+- **代码质量工具的选择**：不规定使用SonarQube、CodeClimate等代码质量平台
+- **通知和警报机制**：不涉及CI失败时的邮件通知、Slack集成等通知方式
 
 ---
 
