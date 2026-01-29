@@ -265,6 +265,10 @@ ADR_0000_2_Architecture_Tests_Must_Not_Be_Skipped
 
 ---
 
+## References（非裁决性参考）
+
+---
+
 ## History（版本历史）
 
 | 版本  | 日期         | 说明     |

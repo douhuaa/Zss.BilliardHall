@@ -30,8 +30,6 @@ superseded_by: ADR-903-906
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -40,8 +38,6 @@ superseded_by: ADR-903-906
 | 有效断言 | 断言必须验证架构约束或 ADR 条款，而非空断言或形式化断言 | Effective Assertion |
 | 反作弊 | 自动检测空断言、弱断言或跳过逻辑，确保测试有效性 | Anti-Cheating |
 | ADR 镜像 | 测试结构与 ADR 条目一一对应 | ADR Mirror |
-
----
 
 ---
 
@@ -117,8 +113,6 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 
 ---
 
----
-
 ## Enforcement（执法模型）
 
 |规则编号|执行级|执法方式|
@@ -133,7 +127,6 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 - Code Review 发现语义不清断言
 - 审计阶段确保 ADR 测试覆盖完整性
 
----
 ---
 
 ## Non-Goals（明确不管什么）
@@ -161,8 +154,6 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 
 ---
 
----
-
 ## Relationships（关系声明）
 
 **Depends On**：
@@ -180,18 +171,11 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 
 ---
 
----
-
 ## References（非裁决性参考）
 
 - NetArchTest.Rules
 - xUnit / NUnit 架构测试实践
 - FluentAssertions 断言语义规范
-
----
-
-
----
 
 ---
 

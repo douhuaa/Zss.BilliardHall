@@ -6,19 +6,17 @@ level: Governance
 deciders: "Architecture Board"
 date: 2026-01-26
 version: "1.0"
+author: "GitHub Copilot"
 maintainer: "架构委员会"
-primary_enforcement: L1
 reviewer: "@douhuaa"
 supersedes: null
 superseded_by: null
 ---
 
-
 # ADR-940：ADR 关系与溯源管理宪法
 
 > ⚖️ **本 ADR 是所有 ADR 关系声明的唯一裁决源，定义 ADR 之间关系的标准化管理机制。**
 
-**状态**：✅ Accepted（已采纳）  
 ## Focus（聚焦内容）
 
 - ADR 关系类型定义与标准化
@@ -26,8 +24,6 @@ superseded_by: null
 - 关系双向一致性验证
 - 全局关系图生成机制
 - 循环依赖检测
-
----
 
 ---
 
@@ -41,14 +37,15 @@ superseded_by: null
 | 替代关系 | 本 ADR 取代另一个已废弃的 ADR | Supersedes |
 | 被替代关系 | 本 ADR 已被新 ADR 取代 | Superseded By |
 | 相关关系 | 与本 ADR 相关但不存在依赖 | Related |
+| 冲突关系 | 与本 ADR 冲突的关系 | Conflicts |
 | 双向一致性 | A 依赖 B 则 B 必须声明被 A 依赖 | Bidirectional Consistency |
 | 关系图 | ADR 之间关系的可视化表示 | Relationship Map |
 
 ---
 
----
-
 ## Decision（裁决）
+>本 ADR 仅在 ADR-902 结构合规的前提下生效。
+>不合规的 ADR 视为不存在，其关系不进入本 ADR 的裁决范围。
 
 ### 每个 ADR 必须包含关系声明章节（ADR-940.1）
 
@@ -59,7 +56,7 @@ superseded_by: null
 **标准格式**：
 
 ```markdown
-### Relationships（关系声明）
+### 关系声明（Relationships）
 
 **依赖（Depends On）**：
 - [ADR-XXXX：标题](相对路径) - 依赖原因说明
@@ -201,7 +198,7 @@ ADR **禁止**形成循环依赖：
 graph TB
     ADR0001[ADR-0001: 模块化架构] --> ADR0005[ADR-0005: 交互模型]
     ADR0005 --> ADR0201[ADR-0201: Handler 生命周期]
-    
+
     style ADR0001 fill:#90EE90
     style ADR0005 fill:#87CEEB
     style ADR0201 fill:#FFD700
@@ -218,83 +215,94 @@ graph TB
 
 ---
 
----
-
 ## Enforcement（执法模型）
 
+### 测试映射与执行级别
 
-### 执行方式
+| 规则编号 | 执行级 | 测试/手段 | CI 行为 |
+|---------|--------|----------|---------|
+| ADR-940.1 | **L1** | `ADR_940_Relationship_Section_Required` | **Structural Violation - 构建失败** |
+| ADR-940.2 | **L1** | `ADR_940_Relationship_Types_Valid` | **Structural Violation - 构建失败** |
+| ADR-940.2 已废弃 ADR 约束 | **L1** | `ADR_940_No_Superseded_ADR_Dependency` | **Structural Violation - 构建失败** |
+| ADR-940.3 | **L1** | `ADR_940_Bidirectional_Consistency` | **Structural Violation - 构建失败** |
+| ADR-940.4 | **L1** | `ADR_940_No_Circular_Dependencies` | **Structural Violation - 构建失败** |
+| ADR-940.5 | L2 | `scripts/generate-adr-relationship-map.sh` | **Governance Warning - 仅提示** |
 
-待补充...
+**执行级别说明**：
+- **L1 (Structural Violation)**：违反导致 **CI 构建失败**，PR 无法合并
+- **L2 (Governance Warning)**：仅记录警告，不阻断合并
 
+**明确裁决边界**：
+- **关系声明缺失** → 构建失败
+- **关系类型错误** → 构建失败
+- **新 ADR 依赖已废弃 ADR** → 构建失败
+- **双向一致性违反** → 构建失败
+- **循环依赖** → 构建失败
+- **关系图未生成** → 仅警告
 
----
+### CI 集成
+
+```yaml
+# .github/workflows/adr-relationship-check.yml
+name: ADR Relationship Check
+
+on: [pull_request]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Verify Relationship Declarations
+        run: ./scripts/verify-adr-relationships.sh
+      - name: Check Bidirectional Consistency
+        run: ./scripts/check-relationship-consistency.sh
+      - name: Detect Circular Dependencies
+        run: ./scripts/detect-circular-dependencies.sh
+      - name: Generate Relationship Map
+        run: ./scripts/generate-adr-relationship-map.sh
+```
+
 ---
 
 ## Non-Goals（明确不管什么）
 
-本 ADR 明确不涉及以下内容：
-
-- **ADR 内容质量的评判**：不涉及 ADR 内容本身的架构决策质量评估
-- **ADR 的详细编写指南**：不提供 ADR 写作技巧和最佳实践（由 ADR-902 规定）
-- **关系图的可视化工具**：不规定使用哪种工具来可视化 ADR 关系图谱
-- **关系变更的审批流程**：不涉及修改 ADR 关系时的具体审批权限（由 ADR-900 规定）
-- **跨项目的 ADR 关系管理**：不涉及不同代码仓库之间 ADR 的关系管理
-- **关系的历史演化追溯**：不建立 ADR 关系变更的详细历史记录机制
-- **关系的自动化推断**：不使用AI或其他技术自动推断ADR之间的隐含关系
-- **关系的权重或优先级**：不为不同类型的关系分配重要性级别或权重
+本 ADR **不负责**：
+- ADR 内容质量评审
+- ADR 版本号管理（由 ADR-980 管理）
+- ADR 文档格式（由 ADR-0008 管理）
+- ADR 审批流程（由 ADR-900 管理）
 
 ---
 
 ## Prohibited（禁止行为）
 
-
-以下行为明确禁止：
-
-### 关系声明违规
-- ❌ **禁止使用未定义的关系类型**：只能使用 Depends On、Depended By、Supersedes、Superseded By、Related 五种标准关系
-- ❌ **禁止单向声明依赖关系**：若 ADR-A 依赖 ADR-B，则 ADR-B 必须声明被 ADR-A 依赖
-- ❌ **禁止新 ADR 依赖已废弃的 ADR**：不得将 Deprecated/Superseded 状态的 ADR 列为依赖
-
-### 关系一致性违规
-- ❌ **禁止双向声明不一致**：若 ADR-A 声明替代 ADR-B，则 ADR-B 必须声明被 ADR-A 替代
-- ❌ **禁止引用不存在的 ADR**：所有关系引用必须指向真实存在的 ADR 文件
-- ❌ **禁止循环依赖**：不得出现 A→B→C→A 的循环依赖链
-
-### 维护违规
-- ❌ **禁止修改 ADR 关系后不更新相关 ADR**：修改关系必须同步更新双向引用
-- ❌ **禁止废弃 ADR 后不处理其关系**：废弃 ADR 必须处理其所有依赖关系
-- ❌ **禁止在 PR 中遗漏关系声明**：新增 ADR 必须包含完整的关系声明章节
-
-
----
-
 ---
 
 ## Relationships（关系声明）
 
-**依赖（Depends On）**：
+### 依赖（Depends On）
 - [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - 关系管理基于 CI 治理机制
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于文档规范
 - [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md) - 集成到 ADR 流程
 
-**被依赖（Depended By）**：
+### 被依赖（Depended By）
 - [ADR-945：ADR 全局时间线与演进视图](./ADR-945-adr-timeline-evolution-view.md) - 时间线视图依赖关系图
 - [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md) - 标题语义约束防止解析歧义
 - [ADR-947：关系声明区的结构与解析安全规则](./ADR-947-relationship-section-structure-parsing-safety.md) - 关系声明结构规范
 - [ADR-955：文档搜索与可发现性优化](./ADR-955-documentation-search-discoverability.md) - 搜索依赖关系图
 - [ADR-980：ADR 生命周期一体化同步机制宪法](./ADR-980-adr-lifecycle-synchronization.md) - 版本同步需要关系图更新
 
-**替代（Supersedes）**：无
+### 替代（Supersedes）
+无
 
-**被替代（Superseded By）**：无
+### 被替代（Superseded By）
+无
 
-**相关（Related）**：
+### 相关（Related）
 - [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档规范相关
 - [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md) - 标题语义约束防止解析歧义
-
----
 
 ---
 
@@ -314,11 +322,8 @@ graph TB
 
 ---
 
----
-
 ## History（版本历史）
 
-
-| 版本  | 日期         | 变更说明   |
-|-----|------------|--------|
-| 1.0 | 2026-01-29 | 初始版本 |
+| 版本 | 日期 | 变更说明 | 作者 |
+|------|------|----------|------|
+| 1.0 | 2026-01-26 | 初始版本，定义 ADR 关系管理机制 | GitHub Copilot |
