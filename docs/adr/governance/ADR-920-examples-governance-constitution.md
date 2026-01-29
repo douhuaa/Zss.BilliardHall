@@ -223,7 +223,14 @@ public class CreateOrderHandler { }
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **示例代码的编程风格**：不规定示例代码的缩进、命名等代码风格细节
+- **示例代码的测试覆盖率**：不要求示例代码必须有单元测试或达到特定覆盖率
+- **示例代码的性能优化**：不要求示例必须是最优化或最高效的实现
+- **示例代码的完整性**：不要求示例必须是可独立运行的完整应用（允许代码片段）
+- **示例代码的版本维护**：不建立示例代码随主代码库同步更新的强制机制
+- **示例文档的格式和排版**：不规定示例文档的视觉呈现和排版细节
+- **示例代码的语言选择**：不限制示例只能使用特定编程语言（只要不违反架构）
+- **示例代码的复杂度**：不规定示例的复杂度级别（入门/中级/高级）
 
 ---
 
@@ -232,7 +239,20 @@ public class CreateOrderHandler { }
 
 以下行为明确禁止：
 
-- 待补充
+### 示例质量违规
+- ❌ **禁止示例代码违反架构约束**：示例必须完全遵守所有 ADR 定义的架构规则
+- ❌ **禁止示例代码缺少免责声明**：所有示例必须明确标注"仅供参考，不保证生产可用"
+- ❌ **禁止示例代码引用其他模块**：示例代码必须自包含，不得依赖其他业务模块
+
+### 示例边界违规
+- ❌ **禁止将实际业务代码标记为示例**：示例只能是教学用途，不能是生产代码的别名
+- ❌ **禁止示例目录包含生产依赖**：示例不得被生产代码引用或依赖
+- ❌ **禁止示例代码进入发布包**：构建和发布流程必须排除示例目录
+
+### 示例维护违规
+- ❌ **禁止示例代码过时未更新**：与当前架构规则冲突的示例必须更新或删除
+- ❌ **禁止示例缺少所有者信息**：每个示例必须标明创建者和维护联系方式
+- ❌ **禁止 Copilot 从示例学习不良模式**：必须配置 Copilot 忽略示例目录以防污染
 
 
 ---
@@ -266,8 +286,16 @@ public class CreateOrderHandler { }
 
 ## References（非裁决性参考）
 
+**相关外部资源**：
+- [Example Code Best Practices](https://google.github.io/styleguide/docguide/best_practices.html) - Google 文档风格指南中的示例代码部分
+- [Microsoft Docs Contributor Guide](https://learn.microsoft.com/en-us/contribute/code-in-docs) - 微软文档中代码示例的编写规范
+- [The Twelve-Factor App](https://12factor.net/) - 示例应用的架构原则参考
 
-- 待补充
+**相关内部文档**：
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 示例必须遵守的核心架构
+- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - 示例的测试和验证机制
+- [ADR-910：README 编写与维护宪法](./ADR-910-readme-governance-constitution.md) - README 中的示例规范
+- [ADR-950：Guide/FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md) - Guide 文档中的示例规范
 
 
 ---
@@ -279,4 +307,4 @@ public class CreateOrderHandler { }
 
 | 版本  | 日期         | 变更说明   |
 |-----|------------|--------|
-| 1.0 | 待补充 | 初始版本 |
+| 1.0 | 2026-01-29 | 初始版本 |

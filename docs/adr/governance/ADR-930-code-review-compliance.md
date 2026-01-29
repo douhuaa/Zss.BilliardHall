@@ -83,7 +83,14 @@ superseded_by: null
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **代码审查工具的选择**：不规定使用 GitHub PR Review、GitLab MR 还是其他代码审查工具
+- **代码审查的详细检查清单**：不提供逐项的代码质量检查项（如命名、注释等）
+- **代码审查的时效性要求**：不规定审查必须在多长时间内完成
+- **代码审查的人员资格**：不规定谁有资格进行代码审查或需要什么级别审批
+- **代码审查的沟通技巧**：不涉及如何给出建设性反馈等软技能
+- **代码审查的会议流程**：不规定是否需要同步会议讨论代码
+- **非架构相关的代码质量**：不涉及性能优化、安全漏洞等非架构约束的审查
+- **代码审查的工作量统计**：不建立代码审查工作量的度量和考核机制
 
 ---
 
@@ -92,7 +99,20 @@ superseded_by: null
 
 以下行为明确禁止：
 
-- 待补充
+### 审查绕过
+- ❌ **禁止未经代码审查直接合并**：所有包含代码变更的 PR 必须经过至少一次审查
+- ❌ **禁止自行批准自己的 PR**：代码作者不得批准自己的变更
+- ❌ **禁止以"紧急修复"为由跳过架构审查**：紧急修复也必须符合架构约束
+
+### 审查质量违规
+- ❌ **禁止未运行架构测试就批准 PR**：审查者必须确认架构测试通过
+- ❌ **禁止忽视明显的架构违规**：审查者发现架构违规必须拒绝批准
+- ❌ **禁止"看起来没问题"式的敷衍审查**：必须实际验证代码是否符合 ADR
+
+### 记录违规
+- ❌ **禁止不记录审查决策依据**：重要的审查意见必须引用具体的 ADR 编号
+- ❌ **禁止口头批准代码变更**：所有批准必须在 PR 系统中正式记录
+- ❌ **禁止修改代码后不重新审查**：代码有实质性修改后必须重新请求审查
 
 
 ---
@@ -124,8 +144,16 @@ superseded_by: null
 
 ## References（非裁决性参考）
 
+**相关外部资源**：
+- [Google Code Review Guidelines](https://google.github.io/eng-practices/review/) - Google 工程实践中的代码审查指南
+- [GitHub Pull Request Best Practices](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/getting-started/best-practices-for-pull-requests) - GitHub PR 最佳实践
+- [The Art of Code Review](https://www.atlassian.com/agile/software-development/code-reviews) - Atlassian 关于代码审查的指南
 
-- 待补充
+**相关内部文档**：
+- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - 审查中的测试验证要求
+- [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md) - Copilot 在审查中的辅助角色
+- [ADR-900：ADR 新增与修订流程](./ADR-900-adr-process.md) - ADR 相关变更的审查流程
+- [ADR-905：执行级别分类](./ADR-905-enforcement-level-classification.md) - 不同级别违规的审查处理
 
 
 ---
@@ -137,4 +165,4 @@ superseded_by: null
 
 | 版本  | 日期         | 变更说明   |
 |-----|------------|--------|
-| 1.0 | 待补充 | 初始版本 |
+| 1.0 | 2026-01-29 | 初始版本 |
