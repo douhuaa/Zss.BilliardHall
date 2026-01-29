@@ -155,14 +155,11 @@ public sealed class ADR_902_Architecture_Tests
         "Technical"
     };
 
-    private const int MaxAdrFilesToCheck = 50;
-
     // ADR-902 发布前的遗留 ADR 可以豁免严格的模板检查
     // 只检查 governance 目录下的新 ADR（包括 ADR-902 本身）
-    private static readonly HashSet<string> StrictTemplateCheckPaths = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "governance"  // 仅检查 governance 目录下的 ADR
-    };
+    
+    private const int MaxAdrFilesToCheckL1 = 50;  // L1 阻断级测试
+    private const int MaxAdrFilesToCheckL2 = 20;  // L2 警告级测试
 
     [Fact(DisplayName = "ADR-902.3:L1 ADR 文档必须包含标准 Front Matter（执法级）")]
     public void ADR_Documents_Must_Have_Standard_FrontMatter()
@@ -187,7 +184,7 @@ public sealed class ADR_902_Architecture_Tests
                 .GetFiles(governanceDir, "ADR-*.md", SearchOption.AllDirectories)
                 .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
                 .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
-                .Take(MaxAdrFilesToCheck));
+                .Take(MaxAdrFilesToCheckL1));
         }
 
         foreach (var file in adrFiles)
@@ -204,11 +201,11 @@ public sealed class ADR_902_Architecture_Tests
                 continue;
             }
             
-            // 检查必需字段
+            // 检查必需字段（YAML 是区分大小写的）
             var missingFields = new List<string>();
             foreach (var field in RequiredFrontMatterFields)
             {
-                if (!Regex.IsMatch(frontMatter, $@"^{field}:\s*.+", RegexOptions.Multiline | RegexOptions.IgnoreCase))
+                if (!Regex.IsMatch(frontMatter, $@"^{field}:\s*.+", RegexOptions.Multiline))
                 {
                     missingFields.Add(field);
                 }
@@ -219,23 +216,23 @@ public sealed class ADR_902_Architecture_Tests
                 violations.Add($"  • {relativePath} - 缺少字段: {string.Join(", ", missingFields)}");
             }
             
-            // 验证 status 字段的值
-            var statusMatch = Regex.Match(frontMatter, @"^status:\s*(.+)$", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+            // 验证 status 字段的值（区分大小写）
+            var statusMatch = Regex.Match(frontMatter, @"^status:\s*(.+)$", RegexOptions.Multiline);
             if (statusMatch.Success)
             {
                 var status = statusMatch.Groups[1].Value.Trim();
-                if (!ValidStatusValues.Contains(status, StringComparer.OrdinalIgnoreCase))
+                if (!ValidStatusValues.Contains(status, StringComparer.Ordinal))
                 {
                     violations.Add($"  • {relativePath} - status 值 '{status}' 不合法，必须是: {string.Join(", ", ValidStatusValues)}");
                 }
             }
             
-            // 验证 level 字段的值
-            var levelMatch = Regex.Match(frontMatter, @"^level:\s*(.+)$", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+            // 验证 level 字段的值（区分大小写）
+            var levelMatch = Regex.Match(frontMatter, @"^level:\s*(.+)$", RegexOptions.Multiline);
             if (levelMatch.Success)
             {
                 var level = levelMatch.Groups[1].Value.Trim();
-                if (!ValidLevelValues.Contains(level, StringComparer.OrdinalIgnoreCase))
+                if (!ValidLevelValues.Contains(level, StringComparer.Ordinal))
                 {
                     violations.Add($"  • {relativePath} - level 值 '{level}' 不合法，必须是: {string.Join(", ", ValidLevelValues)}");
                 }
@@ -290,7 +287,7 @@ public sealed class ADR_902_Architecture_Tests
                 .GetFiles(governanceDir, "ADR-*.md", SearchOption.AllDirectories)
                 .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
                 .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
-                .Take(MaxAdrFilesToCheck));
+                .Take(MaxAdrFilesToCheckL1));
         }
 
         foreach (var file in adrFiles)
@@ -298,12 +295,13 @@ public sealed class ADR_902_Architecture_Tests
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
             
-            // 检查必需章节（Canonical Name）
+            // 检查必需章节（Canonical Name，区分大小写）
             var missingSections = new List<string>();
             foreach (var section in RequiredSections)
             {
                 // 章节标题格式：## Section 或 ## Section（中文别名）
-                var sectionPattern = $@"^##\s+{Regex.Escape(section)}(\s*（.+?）)?";
+                // 使用词边界确保完整匹配
+                var sectionPattern = $@"^##\s+{Regex.Escape(section)}(\s*（.+?）)?(\s|$)";
                 if (!Regex.IsMatch(content, sectionPattern, RegexOptions.Multiline))
                 {
                     missingSections.Add(section);
@@ -315,10 +313,10 @@ public sealed class ADR_902_Architecture_Tests
                 violations.Add($"  • {relativePath} - 缺少章节: {string.Join(", ", missingSections)}");
             }
             
-            // 验证章节顺序
+            // 验证章节顺序（仅当至少有2个必需章节时进行顺序检查）
             var sections = ExtractSections(content);
             var expectedOrder = RequiredSections.ToList();
-            var actualOrder = sections.Where(s => expectedOrder.Contains(s, StringComparer.OrdinalIgnoreCase)).ToList();
+            var actualOrder = sections.Where(s => expectedOrder.Contains(s, StringComparer.Ordinal)).ToList();
             
             if (actualOrder.Count >= 2)
             {
@@ -327,7 +325,7 @@ public sealed class ADR_902_Architecture_Tests
                 
                 foreach (var section in actualOrder)
                 {
-                    var expectedIndex = expectedOrder.FindIndex(s => s.Equals(section, StringComparison.OrdinalIgnoreCase));
+                    var expectedIndex = expectedOrder.FindIndex(s => s.Equals(section, StringComparison.Ordinal));
                     if (expectedIndex < lastExpectedIndex)
                     {
                         hasCorrectOrder = false;
@@ -389,7 +387,7 @@ public sealed class ADR_902_Architecture_Tests
             .GetFiles(adrDirectory, "ADR-*.md", SearchOption.AllDirectories)
             .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
             .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
-            .Take(20); // L2 级别测试，限制检查数量
+            .Take(MaxAdrFilesToCheckL2); // L2 级别测试，限制检查数量
 
         foreach (var file in adrFiles)
         {
@@ -443,8 +441,7 @@ public sealed class ADR_902_Architecture_Tests
             Console.WriteLine();
         }
         
-        // L2 警告：总是通过
-        Assert.True(true);
+        // L2 警告：测试总是通过，但已输出警告信息
     }
 
     [Fact(DisplayName = "ADR-902.1:L1 规则条目必须独立编号（执法级）")]
@@ -465,7 +462,7 @@ public sealed class ADR_902_Architecture_Tests
             .GetFiles(adrDirectory, "ADR-*.md", SearchOption.AllDirectories)
             .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
             .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
-            .Take(MaxAdrFilesToCheck);
+            .Take(MaxAdrFilesToCheckL1);
 
         foreach (var file in adrFiles)
         {
@@ -482,8 +479,9 @@ public sealed class ADR_902_Architecture_Tests
             if (string.IsNullOrEmpty(decisionSection))
                 continue;
             
-            // 检查规则标题格式：### ADR-XXX.Y:L? <规则标题>
-            var rulePattern = $@"^###\s+{Regex.Escape(adrNumber)}\.(\d+):L\d+\s+.+";
+            // 检查规则标题格式：### ADR-XXX.Y:L[12] <规则标题>
+            // 根据 ADR-902，级别应该是 L1 或 L2
+            var rulePattern = $@"^###\s+{Regex.Escape(adrNumber)}\.(\d+):L[12]\s+.+";
             var ruleMatches = Regex.Matches(decisionSection, rulePattern, RegexOptions.Multiline);
             
             if (ruleMatches.Count > 0)
@@ -508,12 +506,17 @@ public sealed class ADR_902_Architecture_Tests
             var headingPattern = @"^###\s+.+";
             var headings = Regex.Matches(decisionSection, headingPattern, RegexOptions.Multiline);
             
+            // 启发式阈值：如果一个章节有超过此数量的列表项，可能包含多条合并的规则
+            const int MergedRuleListItemThreshold = 3;
+            
+            var localWarnings = new List<string>();
+            
             foreach (Match heading in headings)
             {
                 var headingText = heading.Value;
                 
                 // 如果标题不符合独立编号格式，但包含多条规则特征（如使用列表或多个"必须"）
-                if (!Regex.IsMatch(headingText, $@"{Regex.Escape(adrNumber)}\.\d+:L\d+"))
+                if (!Regex.IsMatch(headingText, $@"{Regex.Escape(adrNumber)}\.\d+:L[12]"))
                 {
                     // 获取该标题下的内容
                     var nextHeadingIndex = decisionSection.IndexOf("\n###", heading.Index + 1);
@@ -523,14 +526,14 @@ public sealed class ADR_902_Architecture_Tests
                     
                     // 简单启发式：如果包含多个列表项且有裁决性语言，可能是合并的规则
                     var listItems = Regex.Matches(sectionContent, @"^\s*[-*]\s+", RegexOptions.Multiline);
-                    var hasMultipleDecisions = listItems.Count > 3;
+                    var hasMultipleDecisions = listItems.Count > MergedRuleListItemThreshold;
                     
                     if (hasMultipleDecisions)
                     {
                         var hasDecisionWords = Regex.IsMatch(sectionContent, @"(必须|MUST|禁止|不允许)");
                         if (hasDecisionWords)
                         {
-                            warnings.Add($"  ⚠️ {relativePath} - 可能包含未独立编号的多条规则：{headingText.Trim()}");
+                            localWarnings.Add($"  ⚠️ {relativePath} - 可能包含未独立编号的多条规则：{headingText.Trim()}");
                         }
                     }
                 }
@@ -618,7 +621,4 @@ public sealed class ADR_902_Architecture_Tests
         var match = Regex.Match(fileName, @"(ADR-\d{4})");
         return match.Success ? match.Groups[1].Value : string.Empty;
     }
-
-    // 用于记录警告的列表（在 L1 测试中使用）
-    private static readonly List<string> warnings = new();
 }
