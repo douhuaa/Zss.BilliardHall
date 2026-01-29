@@ -314,14 +314,15 @@ jobs:
 ## 关系声明（Relationships）
 
 **依赖（Depends On）**：
+- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - 关系管理基于 CI 治理机制
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于文档规范
 - [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md) - 集成到 ADR 流程
 
 **被依赖（Depended By）**：
-- [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md)
-- [ADR-947：关系声明区的结构与解析安全规则](./ADR-947-relationship-section-structure-parsing-safety.md)
-- [ADR-955：文档搜索与可发现性优化](./ADR-955-documentation-search-discoverability.md)
-- [ADR-945：ADR 全局时间线与演进视图](./ADR-945-adr-timeline-evolution-view.md)
+- [ADR-945：ADR 全局时间线与演进视图](./ADR-945-adr-timeline-evolution-view.md) - 时间线视图依赖关系图
+- [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md) - 标题语义约束防止解析歧义
+- [ADR-947：关系声明区的结构与解析安全规则](./ADR-947-relationship-section-structure-parsing-safety.md) - 关系声明结构规范
+- [ADR-955：文档搜索与可发现性优化](./ADR-955-documentation-search-discoverability.md) - 搜索依赖关系图
 - [ADR-980：ADR 生命周期一体化同步机制宪法](./ADR-980-adr-lifecycle-synchronization.md) - 版本同步需要关系图更新
 
 **替代（Supersedes）**：无
