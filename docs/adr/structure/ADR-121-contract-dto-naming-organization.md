@@ -333,4 +333,4 @@ public record MemberInfoDto(Guid MemberId, string UserName) : IContract
 
 | 版本  | 日期         | 变更说明   |
 |-----|------------|--------|
-| 1.0 | 待补充 | 初始版本 |
+| 1.0 | 2026-01-29 | 初始版本 |
