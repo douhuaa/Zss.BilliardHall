@@ -230,3 +230,168 @@ python3 ./scripts/validate-adr-relationships.py
 **维护者**：架构委员会  
 **最后更新**：2026-01-29  
 **状态**：✅ Active
+
+---
+
+### 4. ADR 测试覆盖率检查器 (`check-adr-test-coverage.sh`)
+
+**用途**：扫描 ADR 文档与对应架构测试的映射关系，识别缺失的测试
+
+**检查项**：
+- ✅ ADR 与测试文件一对一映射验证
+- ✅ 按层级统计测试覆盖率
+- ✅ 识别标注【必须架构测试覆盖】但缺失测试的 ADR
+- ✅ 生成缺失测试详细清单
+
+**使用方法**：
+```bash
+./scripts/check-adr-test-coverage.sh
+```
+
+**输出示例**：
+```
+======================================
+  ADR 测试覆盖率检查
+======================================
+
+📁 项目路径: /path/to/Zss.BilliardHall
+⏰ 检查时间: 2026-01-29 10:30:00
+
+======================================
+  统计概览
+======================================
+
+📊 ADR 文档总数:    45
+📊 架构测试总数:    26
+
+======================================
+  按层级统计
+======================================
+
+📁 constitutional:
+   - ADR 总数: 8
+   - 已测试: 8
+   - 覆盖率: 100%
+   - 状态: ✅ 完全覆盖
+
+📁 governance:
+   - ADR 总数: 25
+   - 已测试: 3
+   - 覆盖率: 12%
+   - 状态: ❌ 严重不足
+
+...
+
+======================================
+  缺失测试详细列表
+======================================
+
+📁 governance 层（缺失 22 个）:
+
+   ❌ ADR-900: ADR 流程
+      - 标注必须测试: ✅
+      - 优先级: 🔴 P0
+      - 期望文件: src/tests/ArchitectureTests/ADR/ADR_0900_Architecture_Tests.cs
+
+...
+
+======================================
+  判定结果
+======================================
+
+❌ 严重问题：发现 7 个标注【必须架构测试覆盖】的 ADR 缺少测试
+
+⚠️  建议：
+   1. 立即为标注【必须架构测试覆盖】的 ADR 补充测试
+   2. 参考修复计划: docs/reports/adr-test-gap-analysis-2026-01-29.md
+   3. 使用测试模板: src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
+```
+
+**退出代码**：
+- `0`：所有检查通过或覆盖率 ≥ 80%
+- `1`：发现标注【必须架构测试覆盖】的 ADR 缺少测试
+
+**依据 ADR**：
+- ADR-0000（架构测试与 CI 治理宪法）
+- ADR-904（架构测试最小断言语义）
+
+**相关文档**：
+- 📘 [ADR 测试缺失详细分析](../docs/reports/adr-test-gap-analysis-2026-01-29.md)
+- 📘 [ADR 测试缺失执行摘要](../docs/reports/adr-test-gap-summary.md)
+
+---
+
+## CI/CD 集成建议
+
+### GitHub Actions 工作流示例
+
+创建 `.github/workflows/adr-validation.yml`：
+
+```yaml
+name: ADR Validation
+
+on:
+  pull_request:
+    paths:
+      - 'docs/adr/**/*.md'
+      - 'src/tests/ArchitectureTests/**/*.cs'
+  schedule:
+    - cron: '0 0 * * 1'  # 每周一运行
+
+jobs:
+  validate-adrs:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Check ADR Consistency
+        run: ./scripts/check-adr-consistency.sh
+        
+      - name: Validate ADR Relationships
+        run: python3 ./scripts/validate-adr-relationships.py
+        
+      - name: Check Terminology
+        run: ./scripts/check-terminology.sh
+        
+      - name: Check Test Coverage
+        run: ./scripts/check-adr-test-coverage.sh
+```
+
+### Pre-commit Hook
+
+将工具集成到 Git pre-commit hook：
+
+```bash
+#!/bin/bash
+# .git/hooks/pre-commit
+
+echo "Running ADR validation..."
+
+# 只检查有变更的 ADR 文件
+changed_adrs=$(git diff --cached --name-only | grep "docs/adr/.*\.md$")
+
+if [ -n "$changed_adrs" ]; then
+    ./scripts/check-adr-consistency.sh || exit 1
+    python3 ./scripts/validate-adr-relationships.py || exit 1
+    ./scripts/check-adr-test-coverage.sh || exit 1
+fi
+
+echo "✅ ADR validation passed"
+```
+
+---
+
+## 工具版本历史
+
+| 版本 | 日期 | 变更内容 |
+|-----|------|---------|
+| 3.0 | 2026-01-29 | 新增 ADR 测试覆盖率检查器 |
+| 2.0 | 2026-01-29 | 改进关系验证器，支持多行关系声明 |
+| 1.0 | 2026-01-29 | 初始版本，包含一致性、关系、术语检查器 |
+
+---
+
+**维护者**：架构委员会  
+**最后更新**：2026-01-29  
+**状态**：✅ Active
