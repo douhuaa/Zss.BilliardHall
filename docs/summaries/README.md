@@ -36,6 +36,7 @@
 ### 文档
 - [文档结构优化](documentation-structure-optimization-summary.md)
 - [文档治理空白分析总结](documentation-governance-gap-analysis-summary.md)
+- [P1 阶段实施总结](p1-implementation-summary.md)
 
 ### PR 记录
 - [PR#126 完成总结](pr126-todo-completion-summary.md)
