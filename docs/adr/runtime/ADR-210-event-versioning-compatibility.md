@@ -13,16 +13,12 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-210：领域事件版本化与兼容性
 
 > ⚖️ **本 ADR 定义领域事件的版本管理规则，确保跨版本兼容性和系统稳定性。**
 
 **适用范围**：所有领域事件  
-**生效时间**：即刻  
-**依赖 ADR**：ADR-0001（模块化单体与垂直切片架构）
-
----
-
 ## Focus（聚焦内容）
 
 - 事件破坏性变更与版本控制
@@ -31,6 +27,8 @@ superseded_by: null
 - 订阅者多版本处理要求
 - 事件序列化兼容性
 - 版本异常容错机制
+
+---
 
 ---
 
@@ -45,6 +43,8 @@ superseded_by: null
 | 活跃版本 | 当前系统中仍在使用的事件版本 | Active Version |
 | 死信队列 | 存储无法处理消息的队列 | Dead Letter Queue |
 | Fallback Handler | 处理未知版本事件的兜底处理器 | Fallback Handler |
+
+---
 
 ---
 
@@ -158,114 +158,38 @@ superseded_by: null
 
 ---
 
-## 执法模型（Enforcement）
-
-> **规则如果无法执法，就不配存在。**
-
-### 测试映射
-
-| 规则编号 | 执行级 | 测试/手段 |
-|---------|--------|----------|
-| ADR-210.1 | L2 | Code Review |
-| ADR-210.2 | L1 | `Events_Must_Have_SchemaVersion_Property` |
-| ADR-210.3 | L2 | 人工审查 + 版本跟踪 |
-| ADR-210.4 | L2 | Code Review + 集成测试 |
-| ADR-210.5 | L3 | 集成测试验证 |
-| ADR-210.6 | L2 | 集成测试 + Runtime 监控 |
-
-### 执行说明
-
-**L1 测试**：
-- 检测所有领域事件是否包含 SchemaVersion 属性
-- 验证版本号格式符合 Major.Minor
-
-**L2 测试**：
-- Code Review 检查破坏性变更是否创建新版本
-- 审查旧版本保留周期是否满足要求
-- 验证订阅者是否处理所有活跃版本
-- 检查版本异常容错机制
-
-**L3 测试**：
-- 集成测试验证序列化向前兼容性
-- 压测验证版本异常不影响系统稳定性
-
 ---
 
-## 破例与归还（Exception）
+## Enforcement（执法模型）
 
-> **破例不是逃避，而是债务。**
 
-### 允许破例的前提
+### 执行方式
 
-破例**仅在以下情况允许**：
+待补充...
 
-1. **首次版本化**：为现有事件添加版本控制
-2. **数据迁移期**：大规模重构的过渡阶段
-3. **外部系统约束**：第三方系统强制要求特定格式
-
-### 破例要求（不可省略）
-
-每个破例**必须**：
-
-- 记录在 `docs/summaries/arch-violations.md`
-- 提供迁移计划（不超过 3 个月）
-- 标注影响的事件和订阅者
-- 指定归还日期和责任人
-
-**未记录的破例 = 未授权架构违规。**
 
 ---
-
-## 变更政策（Change Policy）
-
-> **ADR 不是"随时可改"的文档。**
-
-### 变更规则
-
-* **运行时层 ADR**
-  * 修改需 Tech Lead/架构师审批
-  * 需评估对现有事件的影响
-  * 必须更新相关架构测试
-
-### 失效与替代
-
-* 如有更优方案，可创建 ADR-21X 替代本 ADR
-* 被替代后，本 ADR 状态改为 Superseded
-
 ---
 
 ## Non-Goals（明确不管什么）
 
-> **防止 ADR 膨胀的关键段落。**
+本 ADR 明确不涉及以下内容：
 
-本 ADR **不负责**：
-
-- ✗ 事件命名规范（参见 ADR-120）
-- ✗ 事件发布机制（参见 ADR-220）
-- ✗ 事件存储策略
-- ✗ 事件重放机制
-- ✗ 事件序列化的具体技术选型
+- 待补充
 
 ---
 
-## References（非裁决性参考）
+## Prohibited（禁止行为）
 
-> **仅供理解，不具裁决力。**
 
-### 相关 ADR
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-120：领域事件命名规范](../structure/ADR-120-event-naming-standard.md)
-- [ADR-220：事件总线集成规范](ADR-220-event-bus-integration.md)
+以下行为明确禁止：
 
-### 技术资源
-- [语义化版本规范](https://semver.org/lang/zh-CN/)
-- [JSON Schema 文档](https://json-schema.org/)
+- 待补充
 
-### 实践指导
-- 事件版本化详细示例参见 `docs/copilot/adr-0210.prompts.md`
 
 ---
 
+---
 
 ## Relationships（关系声明）
 
@@ -287,50 +211,25 @@ superseded_by: null
 
 ---
 
-
-## 版本历史
-
-| 版本 | 日期 | 变更说明 | 修订人 |
-|-----|------|---------|--------|
-| 2.0 | 2026-01-25 | 重构为裁决型格式，添加决策章节 | GitHub Copilot |
-| 1.0 Draft | 2026-01-24 | 初始版本 | GitHub Copilot |
-
 ---
 
-# ADR 终极一句话定义
+## References（非裁决性参考）
 
-> **ADR 是系统的法律条文，不是架构师的解释说明。**
+> **仅供理解，不具裁决力。**
 
+### 相关 ADR
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-120：领域事件命名规范](../structure/ADR-120-event-naming-standard.md)
+- [ADR-220：事件总线集成规范](ADR-220-event-bus-integration.md)
 
----
+### 技术资源
+- [语义化版本规范](https://semver.org/lang/zh-CN/)
+- [JSON Schema 文档](https://json-schema.org/)
 
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
----
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
+### 实践指导
+- 事件版本化详细示例参见 `docs/copilot/adr-0210.prompts.md`
 
 ---
-
-## Enforcement（执法模型）
-
-
-### 执行方式
-
-待补充...
-
 
 ---
 

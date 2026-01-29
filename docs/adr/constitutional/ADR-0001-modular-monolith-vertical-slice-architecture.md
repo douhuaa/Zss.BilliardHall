@@ -13,6 +13,7 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-0001：模块化单体与垂直切片架构
 
 > ⚖️ **本 ADR 是架构宪法的核心，定义模块隔离与垂直切片的唯一裁决源。**
@@ -31,6 +32,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -41,6 +44,8 @@ superseded_by: null
 | 领域事件          | 描述业务事实，供其他模块异步订阅               | Domain Event      |
 | 横向分层          | Controller/Service/Repository 抽象 | Horizontal Layers |
 | 依赖隔离          | 模块内部不可被外部引用、反射或直接调用            | Dependency Isolation |
+
+---
 
 ---
 
@@ -117,20 +122,6 @@ superseded_by: null
 
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述          | 测试方式                                         | 测试用例                                           | 必须遵守 |
-|------------|---------------|----------------------------------------------|------------------------------------------------|------|
-| ADR-0001.1 | 模块不可相互引用      | L1 - NetArchTest                             | Modules_Should_Not_Reference_Other_Modules     | ✅    |
-| ADR-0001.2 | 项目文件禁止引用其他模块  | L1 - 项目文件扫描                                  | Module_Csproj_Should_Not_Reference_Other_Modules | ✅    |
-| ADR-0001.3 | 垂直切片/用例为最小单元  | L2 - NetArchTest                             | Handlers_Should_Be_In_UseCases_Namespace       | ✅    |
-| ADR-0001.4 | 禁止横向 Service 抽象 | L1 - NetArchTest                             | Modules_Should_Not_Contain_Service_Classes     | ✅    |
-| ADR-0001.5 | 只允许事件/契约/原始类型通信 | L2 - 语义检查                                    | Contract_Rules_Semantic_Check                  | ✅    |
-| ADR-0001.6 | Contract 不含业务判断字段 | L2/L3 - Roslyn分析 + 人工                        | Contract_Business_Field_Analyzer               | ✅    |
-| ADR-0001.7 | 命名空间/目录强制隔离    | L1 - NetArchTest                             | Namespace_Should_Match_Module_Boundaries       | ✅    |
-
-> **级别说明**：L1=静态自动化（ArchitectureTests），L2=语义半自动（Roslyn/启发式），L3=人工Gate
-
 ---
 
 ## Enforcement（执法模型）
@@ -148,15 +139,25 @@ superseded_by: null
 **有一项违规视为架构违规，CI 自动阻断。**
 
 ---
+---
 
-## 检查清单
+## Non-Goals（明确不管什么）
 
-- [ ] 模块按业务能力划分且物理完全隔离？
-- [ ] 垂直切片以用例（UseCase）为唯一最小组织单元？
-- [ ] 杜绝了横向 Service、领域模型共享、同步耦合？
-- [ ] 模块间通信仅允许事件、契约和原始类型？
-- [ ] 合约和事件定义无业务决策字段？
-- [ ] 所有隔离规则有自动化测试覆盖？
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
 
 ---
 
@@ -188,6 +189,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## References（非裁决性参考）
 
 非裁决性参考（建议、最佳实践、详细示例）请查阅：
@@ -203,23 +206,7 @@ superseded_by: null
 
 ---
 
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
 ---
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
 
 ## History（版本历史）
 

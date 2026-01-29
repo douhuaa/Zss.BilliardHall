@@ -13,13 +13,10 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-350：日志与可观测性字段标准
 
 **影响范围**：所有日志输出、结构化日志字段  
-**生效时间**：即刻
-
----
-
 ## Focus（聚焦内容）
 
 - 日志字段命名规范与一致性约束
@@ -27,6 +24,20 @@ superseded_by: null
 - 错误日志必需字段要求
 - 日志级别使用标准定义
 - CorrelationId 传播约束
+
+---
+
+---
+
+## Glossary（术语表）
+
+
+| 术语 | 定义 | 英文对照 |
+|------|------|----------|
+| 待补充 | 待补充 | TBD |
+
+
+---
 
 ---
 
@@ -131,16 +142,6 @@ superseded_by: null
 
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述                | 测试方式             | 必须遵守 |
-|------------|---------------------|------------------|------|
-| ADR-350.1 | 请求日志必须包含 CorrelationId | L1 - Enricher 强制 + 扫描 | ✅    |
-| ADR-350.2 | 禁止记录敏感信息 | L2 - 自动扫描 + Code Review | ✅    |
-| ADR-350.3 | 字段命名必须 PascalCase | L1 - 日志输出扫描 | ✅    |
-| ADR-350.4 | 错误日志必须包含异常 | L1 - Roslyn Analyzer | ✅    |
-| ADR-350.5 | 日志级别使用符合标准 | L2 - Code Review | ✅    |
-
 ---
 
 ## Enforcement（执法模型）
@@ -161,66 +162,27 @@ superseded_by: null
 - 敏感信息扫描工具辅助检查
 
 ---
-
-## 破例与归还（Exception）
-
-### 允许破例的前提
-
-破例**仅在以下情况允许**：
-
-1. **第三方库日志**：无法控制的第三方输出
-2. **遗留系统集成**：外部系统要求特定格式
-3. **性能关键路径**：经过压测证明日志导致性能问题
-
-### 破例要求（不可省略）
-
-每个破例**必须**：
-
-- 记录在 `docs/summaries/arch-violations.md`
-- 标明 ADR-350 + 具体规则编号
-- 说明技术原因和风险评估
-
----
-
-## 变更政策（Change Policy）
-
-### 变更规则
-
-* **技术层 ADR**
-  * 修改需 Tech Lead 审批
-  * 日志框架升级可触发更新
-  * 字段命名标准调整需全局影响评估
-
 ---
 
 ## Non-Goals（明确不管什么）
 
-本 ADR **不负责**：
+本 ADR 明确不涉及以下内容：
 
-- ✗ 日志框架选择（Serilog/NLog）
-- ✗ 日志聚合工具（ELK/Splunk）
-- ✗ 日志保留策略和存储方案
-- ✗ 日志采样率配置
-- ✗ APM 工具集成
-- ✗ 日志消息的具体格式和模板
-- ✗ 监控指标定义和采集规则
+- 待补充
 
 ---
 
-## References（非裁决性参考）
+## Prohibited（禁止行为）
 
-### 相关 ADR
-- ADR-340：结构化日志与监控约束
 
-### 技术资源
-- [Structured Logging](https://messagetemplates.org/)
-- [OpenTelemetry Specification](https://opentelemetry.io/docs/reference/specification/)
+以下行为明确禁止：
 
-### 实践指导
-- 日志配置示例参见 `docs/copilot/adr-0350.prompts.md`（待创建）
+- 待补充
+
 
 ---
 
+---
 
 ## Relationships（关系声明）
 
@@ -241,54 +203,21 @@ superseded_by: null
 
 ---
 
-
-## 版本历史
-
-| 版本 | 日期 | 变更说明 | 修订人 |
-|-----|------|---------|--------|
-| 2.0 | 2026-01-26 | 裁决型重构，添加决策章节，移除冗余示例和说明 | GitHub Copilot |
-| 1.0 Draft | 2026-01-24 | 初始版本 | GitHub Copilot |
-
 ---
 
-## 附注
+## References（非裁决性参考）
 
-本文件禁止添加示例代码、配置详情、背景说明，仅维护自动化可判定的架构约束。
+### 相关 ADR
+- ADR-340：结构化日志与监控约束
 
-非裁决性参考（详细配置示例、常见问题、技术选型讨论）请查阅：
-- [ADR-350 Copilot Prompts](../../copilot/adr-0350.prompts.md)（待创建）
-- 工程标准（如有）
+### 技术资源
+- [Structured Logging](https://messagetemplates.org/)
+- [OpenTelemetry Specification](https://opentelemetry.io/docs/reference/specification/)
 
-
----
-
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
+### 实践指导
+- 日志配置示例参见 `docs/copilot/adr-0350.prompts.md`（待创建）
 
 ---
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
-
----
-
-## Glossary（术语表）
-
-
-| 术语 | 定义 | 英文对照 |
-|------|------|----------|
-| 待补充 | 待补充 | TBD |
-
 
 ---
 

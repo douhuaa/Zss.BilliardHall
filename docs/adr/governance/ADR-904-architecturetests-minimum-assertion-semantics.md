@@ -13,6 +13,7 @@ supersedes: null
 superseded_by: ADR-903-906
 ---
 
+
 # ADR-904：ArchitectureTests 最小断言语义规范
 
 > 本 ADR 的全部裁决已被 [ADR-903-906](ADR-903-906.md) 吸收并强化，不再具有独立裁决力。
@@ -29,6 +30,8 @@ superseded_by: ADR-903-906
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -37,6 +40,8 @@ superseded_by: ADR-903-906
 | 有效断言 | 断言必须验证架构约束或 ADR 条款，而非空断言或形式化断言 | Effective Assertion |
 | 反作弊 | 自动检测空断言、弱断言或跳过逻辑，确保测试有效性 | Anti-Cheating |
 | ADR 镜像 | 测试结构与 ADR 条目一一对应 | ADR Mirror |
+
+---
 
 ---
 
@@ -112,6 +117,8 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 
 ---
 
+---
+
 ## Enforcement（执法模型）
 
 |规则编号|执行级|执法方式|
@@ -127,12 +134,13 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 - 审计阶段确保 ADR 测试覆盖完整性
 
 ---
+---
 
 ## Non-Goals（明确不管什么）
 
-- 业务逻辑正确性
-- 测试性能或运行效率
-- 单元测试 / 集成测试命名或组织
+本 ADR 明确不涉及以下内容：
+
+- 待补充
 
 ---
 
@@ -143,6 +151,8 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 - 单方法覆盖多个 ADR
 - 断言信息不包含 ADR 编号
 - 弃用或删除的 ADR 测试未同步处理
+
+---
 
 ---
 
@@ -163,6 +173,8 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 
 ---
 
+---
+
 ## References（非裁决性参考）
 
 - NetArchTest.Rules
@@ -174,13 +186,7 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 
 ---
 
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
+---
 
 ## History（版本历史）
 

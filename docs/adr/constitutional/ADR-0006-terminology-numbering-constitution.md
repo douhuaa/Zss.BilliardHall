@@ -13,18 +13,12 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-0006：术语与编号宪法
 
 > ⚖️ **本 ADR 是所有 ADR 的元规则，定义术语语义和编号体系的唯一裁决源。**
 
 **状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构元规则 / 宪法层  
-**适用范围**：所有 ADR（0000~999）及架构治理体系  
-**生效时间**：即刻
-
----
-
 ## Focus（聚焦内容）
 
 - 架构术语的唯一权威定义（Glossary）
@@ -32,6 +26,8 @@ superseded_by: null
 - 编号格式标准与一致性要求
 - 编号语义边界与禁止跨界
 - 违规判定依据
+
+---
 
 ---
 
@@ -85,6 +81,8 @@ superseded_by: null
 | L1 测试      | 静态可执行自动化测试（如 NetArchTest）                       | Level 1 Test          |
 | L2 测试      | 语义半自动化测试（如 Roslyn Analyzer、启发式检查）             | Level 2 Test          |
 | L3 测试      | 人工 Gate，需要人工审查判断                               | Level 3 Test          |
+
+---
 
 ---
 
@@ -166,6 +164,44 @@ superseded_by: null
 
 ---
 
+---
+
+## Enforcement（执法模型）
+
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0006_Architecture_Tests.cs` 强制验证：
+
+- ADR-0006.1: 编号段与层级匹配检查
+- ADR-0006.2: 文件名与编号一致性检查
+- ADR-0006.3: 宪法层前导零使用检查
+- ADR-0006.4: 非宪法层前导零禁用检查
+- ADR-0006.5: ADR 文件目录归属检查
+- ADR-0006.6: 术语使用一致性审查（人工）
+
+**有一项违规视为架构违规，CI 自动阻断。**
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+---
+
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
@@ -199,66 +235,6 @@ superseded_by: null
 
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述                | 测试方式             | 测试用例                                         | 必须遵守 |
-|------------|---------------------|------------------|----------------------------------------------|------|
-| ADR-0006.1 | 编号段必须匹配架构层级         | L1 - 脚本检查        | All_ADR_Files_Should_Match_Numbering_Rules   | ✅    |
-| ADR-0006.2 | ADR 文件名必须与编号一致      | L1 - 脚本检查        | All_ADR_Files_Should_Have_Correct_Filename_Format | ✅    |
-| ADR-0006.3 | 宪法层 ADR 应使用前导零      | L1 - 脚本检查        | Constitutional_ADRs_Should_Use_Leading_Zeros | ✅    |
-| ADR-0006.4 | 非宪法层 ADR 不应使用多余前导零  | L1 - 脚本检查        | Non_Constitutional_ADRs_Should_Not_Use_Leading_Zeros | ✅    |
-| ADR-0006.5 | ADR 文件应位于正确的目录      | L1 - 脚本检查        | All_ADR_Files_Should_Be_In_Correct_Directory | ✅    |
-| ADR-0006.6 | 术语使用一致性             | L3 - 人工审查        | Terminology_Should_Be_Consistent             | ✅    |
-
-> **级别说明**：L1=静态自动化（脚本检查），L3=人工Gate
-
----
-
-## Enforcement（执法模型）
-
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0006_Architecture_Tests.cs` 强制验证：
-
-- ADR-0006.1: 编号段与层级匹配检查
-- ADR-0006.2: 文件名与编号一致性检查
-- ADR-0006.3: 宪法层前导零使用检查
-- ADR-0006.4: 非宪法层前导零禁用检查
-- ADR-0006.5: ADR 文件目录归属检查
-- ADR-0006.6: 术语使用一致性审查（人工）
-
-**有一项违规视为架构违规，CI 自动阻断。**
-
----
-
-## 检查清单
-
-- [ ] 新增 ADR 编号是否符合分段规则？
-- [ ] 编号是否与内容层级匹配？
-- [ ] 文件名是否与编号一致？
-- [ ] 治理层 ADR 是否正确使用 0000 或 900~999？
-- [ ] 技术层 ADR 是否正确使用 300~399？
-- [ ] 术语使用是否与 ADR-0006 一致？
-- [ ] 是否更新了相关索引文件？
-
----
-
-## 版本历史
-
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 2.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 1.0 | 2026-01-25 | 初始版本，定义术语与编号宪法 |
-
----
-
-## 附注
-
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（详细示例、编号边界案例、术语演进历史）请查阅：
-- [ADR-0006 Copilot Prompts](../../copilot/adr-0006.prompts.md)
-- 工程指南（如有）
-
-
 ---
 
 ## References（非裁决性参考）
@@ -268,24 +244,6 @@ superseded_by: null
 
 
 ---
-
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
----
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
 
 ---
 

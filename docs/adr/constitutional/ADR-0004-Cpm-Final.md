@@ -13,6 +13,7 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-0004：中央包管理（CPM）规范
 
 > ⚖️ **本 ADR 是架构宪法的核心，定义中央包管理的唯一裁决源。**
@@ -30,6 +31,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -39,6 +42,8 @@ superseded_by: null
 | 传递依赖固定                   | 通过 CPM 禁止传递依赖的漂移                 | Transitive Dependency Lock |
 | 层级依赖                     | 不同层项目允许的包类型约束                    | Layered Dependencies  |
 | 包分组                      | 依赖包按技术栈、场景分隔分组                   | Package Grouping      |
+
+---
 
 ---
 
@@ -88,6 +93,37 @@ superseded_by: null
 
 ---
 
+---
+
+## Enforcement（执法模型）
+
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0004_Architecture_Tests.cs` 强制验证。
+
+**有一项违规视为架构违规，CI 自动阻断。**
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+---
+
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
@@ -109,43 +145,6 @@ superseded_by: null
 
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述                        | 测试方式           | 测试用例                                                  | 必须遵守 |
-|------------|-----------------------------|-----------------|---------------------------------------------------------|------|
-| ADR-0004.1 | 必须启用 CPM                    | L1 - 文件扫描        | CPM_Should_Be_Enabled                                   | ✅    |
-| ADR-0004.2 | Directory.Packages.props 强制存在 | L1 - 文件扫描        | Repository_Should_Have_Directory_Packages_Props         | ✅    |
-| ADR-0004.3 | 不允许项目文件手动指定版本               | L1 - 文件扫描        | Projects_Should_Not_Specify_Package_Versions            | ✅    |
-| ADR-0004.4 | 层级依赖必须严格遵守                  | L1 - 语义检查        | Layer_Package_Dependencies_Should_Be_Valid              | ✅    |
-| ADR-0004.5 | 包分组规范                       | L1 - 文件扫描        | Directory_Packages_Props_Should_Contain_Package_Groups  | ✅    |
-| ADR-0004.6 | 测试项目使用相同测试框架版本              | L1 - 文件扫描        | All_Test_Projects_Should_Use_Same_Test_Framework_Versions | ✅    |
-| ADR-0004.7 | 包依赖集中声明                     | L1 - 文件扫描        | Directory_Packages_Props_Should_Define_All_Used_Packages | ✅    |
-| ADR-0004.8 | Platform 不得依赖业务包            | L1 - 文件扫描        | Platform_Projects_Should_Not_Reference_Business_Packages | ✅    |
-| ADR-0004.9 | 禁止私自覆盖中央包版本                 | L1 - 文件扫描        | Projects_Should_Not_Override_Central_Package_Versions   | ✅    |
-
-> **级别说明**：L1=静态自动化（ArchitectureTests）
-
----
-
-## Enforcement（执法模型）
-
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0004_Architecture_Tests.cs` 强制验证。
-
-**有一项违规视为架构违规，CI 自动阻断。**
-
----
-
-## 检查清单
-
-- [ ] 是否使用 Directory.Packages.props 管理所有包？
-- [ ] 项目文件无手动 Version？
-- [ ] 各层引入的依赖包完全符合层级规则？
-- [ ] 所有项目依赖包都在集中声明？
-- [ ] 相关架构测试和 CI 校验被正确拦截？
-
----
-
-
 ---
 
 ## References（非裁决性参考）
@@ -156,23 +155,7 @@ superseded_by: null
 
 ---
 
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
 ---
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
 
 ## History（版本历史）
 
@@ -182,11 +165,3 @@ superseded_by: null
 | 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
 
 ---
-
-## 附注
-
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（包分组策略、版本管理建议）请查阅：
-- [ADR-0004 Copilot Prompts](../../copilot/adr-0004.prompts.md)
-- 工程指南（如有）

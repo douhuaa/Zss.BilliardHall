@@ -13,18 +13,12 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-0007：Agent 行为与权限宪法
 
 > ⚖️ **本 ADR 是所有 Agent 的元规则，定义 Agent 行为边界和权限约束的唯一裁决源。**
 
 **状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构元规则 / 宪法层  
-**适用范围**：所有 GitHub Copilot Agents 及 AI 辅助工具  
-**生效时间**：即刻
-
----
-
 ## Focus（聚焦内容）
 
 - Agent 角色定位与权限边界
@@ -33,6 +27,8 @@ superseded_by: null
 - Prompts 法律地位
 - Guardian 与其他 Agent 主从关系
 - Agent 变更治理流程
+
+---
 
 ---
 
@@ -47,6 +43,8 @@ superseded_by: null
 | Prompts         | Copilot 提示词文件，仅作为示例和场景解释，不具备裁决权               | Copilot Prompts         |
 | ADR 正文          | 架构决策记录的正式文本，是唯一的裁决依据                          | ADR Body                |
 | Agent 配置文件      | 定义 Agent 角色和职责的配置文件                 | Agent Configuration     |
+
+---
 
 ---
 
@@ -162,6 +160,48 @@ superseded_by: null
 
 ---
 
+---
+
+## Enforcement（执法模型）
+
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0007_Architecture_Tests.cs` 强制验证：
+
+- Agent 响应必须包含三态标识
+- Agent 输出禁用词汇检查
+- Prompts 与 ADR 正文一致性检查
+- Guardian 配置文件层级关系检查
+- Agent 配置文件版本历史记录检查
+
+**人工审查**（季度）：
+- 解释性扩权审查
+- 替代性裁决审查
+- 发明规则审查
+
+**有一项违规视为架构违规，CI 自动阻断。**
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+---
+
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
@@ -184,72 +224,6 @@ superseded_by: null
 
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述                | 测试方式          | 测试用例                        | 必须遵守 |
-|------------|---------------------|---------------|-------------------------------|------|
-| ADR-0007.1 | 三态输出规则              | L2 - 脚本检查输出格式 | Agent_Response_Must_Have_State_Label | ✅    |
-| ADR-0007.2 | 禁止解释性扩权             | L3 - 人工审查     | Agent_No_Semantic_Escalation  | ✅    |
-| ADR-0007.3 | 禁止替代性裁决             | L3 - 人工审查     | Agent_No_Override_Authority   | ✅    |
-| ADR-0007.4 | 禁止模糊输出              | L2 - 脚本检查禁用词 | Agent_No_Ambiguous_Output     | ✅    |
-| ADR-0007.5 | Prompts 不作为裁决依据      | L3 - 人工审查     | Agent_Must_Cite_ADR_Not_Prompts | ✅    |
-| ADR-0007.6 | 禁止发明架构规则            | L3 - 人工审查     | Agent_No_Invented_Rules       | ✅    |
-| ADR-0007.7 | Prompts 与 ADR 一致性    | L2 - 脚本比对     | Prompts_ADR_Consistency_Check | ✅    |
-| ADR-0007.8 | Guardian 主从关系声明      | L1 - 脚本检查配置   | Guardian_Agent_Hierarchy_Check | ✅    |
-| ADR-0007.9 | Agent 变更版本历史记录       | L1 - 脚本检查元数据  | Agent_Version_History_Check   | ✅    |
-
-> **级别说明**：L1=静态自动化（脚本检查），L2=语义半自动（脚本+启发式），L3=人工Gate
-
----
-
-## Enforcement（执法模型）
-
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0007_Architecture_Tests.cs` 强制验证：
-
-- Agent 响应必须包含三态标识
-- Agent 输出禁用词汇检查
-- Prompts 与 ADR 正文一致性检查
-- Guardian 配置文件层级关系检查
-- Agent 配置文件版本历史记录检查
-
-**人工审查**（季度）：
-- 解释性扩权审查
-- 替代性裁决审查
-- 发明规则审查
-
-**有一项违规视为架构违规，CI 自动阻断。**
-
----
-
-## 检查清单
-
-- [ ] Agent 响应是否明确标识三态之一？
-- [ ] Agent 是否在 Uncertain 场景默认禁止？
-- [ ] Agent 裁决是否引用 ADR 正文而非 Prompts？
-- [ ] Guardian 是否列出所有专业 Agent？
-- [ ] Agent 变更是否按分级权限审批？
-- [ ] Agent 配置文件是否记录版本历史？
-
----
-
-## 版本历史
-
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 2.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 1.0 | 2026-01-25 | 初始版本，定义 Agent 行为与权限宪法 |
-
----
-
-## 附注
-
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（详细示例、Agent 配置模板、常见问题）请查阅：
-- [ADR-0007 Copilot Prompts](../../copilot/adr-0007.prompts.md)
-- Agent 配置文件（`.github/agents/`）
-
-
 ---
 
 ## References（非裁决性参考）
@@ -259,24 +233,6 @@ superseded_by: null
 
 
 ---
-
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
----
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
 
 ---
 

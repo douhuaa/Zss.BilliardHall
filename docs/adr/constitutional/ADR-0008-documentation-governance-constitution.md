@@ -13,18 +13,12 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-0008：文档编写与维护宪法
 
 > ⚖️ **本 ADR 是所有文档的元规则，定义文档分级、边界与裁决权力的唯一裁决源。**
 
 **状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构元规则 / 宪法层  
-**适用范围**：所有文档（ADR、Instructions、Agents、Skills、README、Guide）  
-**生效时间**：即刻
-
----
-
 ## Focus（聚焦内容）
 
 - 文档分级与唯一裁决权划分
@@ -32,6 +26,8 @@ superseded_by: null
 - 非 ADR 文档的强制约束
 - ADR 必需章节与禁用语言
 - 文档变更治理与冲突裁决
+
+---
 
 ---
 
@@ -46,6 +42,8 @@ superseded_by: null
 | 说明级文档      | 无裁决力的辅助文档，如 README/Guide                        | Descriptive Document      |
 | 语义扩权       | 非 ADR 文档试图定义、修改或解释架构规则                          | Semantic Privilege Escalation |
 | 文档越界       | 文档在其权限边界外定义规则或做出裁决                             | Document Boundary Violation |
+
+---
 
 ---
 
@@ -204,6 +202,49 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 ---
 
+---
+
+## Enforcement（执法模型）
+
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0008_Architecture_Tests.cs` 强制验证：
+
+- ADR 必需章节检查（Status/Level/Focus/Decision/Enforcement）
+- ADR 禁用语言检查（suggest/recommend/usually/might）
+- 非 ADR 文档权威声明检查
+- Skills 输出判断性词汇检查
+- README/Guide 裁决性语言检查
+- 文档变更版本历史记录检查
+
+**CI 强制检查**：
+- 所有非 ADR 文档是否包含权威依据或无裁决力声明
+- Skills 输出是否包含判断性词汇
+- README/Guide 是否使用裁决性语言
+
+**有一项违规视为架构违规，CI 自动阻断。**
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+---
+
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
@@ -240,74 +281,6 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述              | 测试方式            | 测试用例                                  | 必须遵守 |
-|------------|-------------------|-----------------|---------------------------------------|------|
-| ADR-0008.1 | 只有 ADR 具备裁决力      | L3 - 人工审查       | Documentation_Authority_Check         | ✅    |
-| ADR-0008.2 | ADR 内容边界          | L3 - 人工审查       | ADR_Content_Boundary_Check            | ✅    |
-| ADR-0008.3 | 非 ADR 文档权限边界      | L2 - 脚本检查+人工审查  | Non_ADR_Document_Boundary_Check       | ✅    |
-| ADR-0008.4 | ADR 必需章节          | L1 - 脚本检查       | ADR_Required_Sections_Check           | ✅    |
-| ADR-0008.5 | ADR 禁用语言          | L2 - 脚本检查禁用词    | ADR_Prohibited_Language_Check         | ✅    |
-| ADR-0008.6 | 文档变更治理            | L3 - 人工审查       | Documentation_Change_Governance_Check | ✅    |
-| ADR-0008.7 | 违规处理              | L2 - 脚本检查+人工审查  | Documentation_Violation_Check         | ✅    |
-
-> **级别说明**：L1=静态自动化（脚本检查），L2=语义半自动（脚本+启发式），L3=人工Gate
-
----
-
-## Enforcement（执法模型）
-
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0008_Architecture_Tests.cs` 强制验证：
-
-- ADR 必需章节检查（Status/Level/Focus/Decision/Enforcement）
-- ADR 禁用语言检查（suggest/recommend/usually/might）
-- 非 ADR 文档权威声明检查
-- Skills 输出判断性词汇检查
-- README/Guide 裁决性语言检查
-- 文档变更版本历史记录检查
-
-**CI 强制检查**：
-- 所有非 ADR 文档是否包含权威依据或无裁决力声明
-- Skills 输出是否包含判断性词汇
-- README/Guide 是否使用裁决性语言
-
-**有一项违规视为架构违规，CI 自动阻断。**
-
----
-
-## 检查清单
-
-- [ ] ADR 是否包含所有必需章节？
-- [ ] ADR 是否只使用裁决性语言（必须/禁止/允许）？
-- [ ] 非 ADR 文档是否声明所服从的 ADR？
-- [ ] README/Guide 是否声明"无裁决力"？
-- [ ] Skills 输出是否只有事实，无判断？
-- [ ] 文档变更是否按分级权限审批？
-- [ ] 是否更新了版本历史？
-
----
-
-## 版本历史
-
-| 版本  | 日期         | 变更说明                                  |
-|-----|------------|---------------------------------------|
-| 2.0 | 2026-01-26 | 裁决型重构，移除冗余，聚焦核心规则                   |
-| 1.1 | 2026-01-25 | README 约束独立为 ADR-910，本 ADR 仅保留核心原则  |
-| 1.0 | 2026-01-25 | 初版，定义文档治理                             |
-
----
-
-## 附注
-
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（详细示例、文档边界案例、变更流程详解）请查阅：
-- [ADR-0008 Copilot Prompts](../../copilot/adr-0008.prompts.md)
-- [ADR-910: README 编写与维护宪法](../../governance/ADR-910-readme-governance-constitution.md)
-- `docs/templates/adr-template.md`：ADR 编写模板
-
-
 ---
 
 ## References（非裁决性参考）
@@ -317,24 +290,6 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 
 ---
-
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
----
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
 
 ---
 

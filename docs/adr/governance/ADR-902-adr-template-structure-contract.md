@@ -13,6 +13,7 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-902：ADR 标准模板与结构契约
 
 > **这是 ADR 体系的“结构接口定义”。**
@@ -37,6 +38,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语           | 定义                         | 英文对照                  |
@@ -45,6 +48,8 @@ superseded_by: null
 | Front Matter | ADR 文件头部的元信息区块             | Front Matter          |
 | 结构合规         | ADR 是否满足模板与顺序要求            | Structural Compliance |
 | 治理接口         | 可被 CI / Review / 工具消费的文档结构 | Governance Interface  |
+
+---
 
 ---
 
@@ -147,6 +152,8 @@ superseded_by: ADR-xxx | null
 
 ---
 
+---
+
 ## Enforcement（执法模型）
 
 > **模板本身不做语义裁决，只验证结构与格式。**
@@ -168,14 +175,13 @@ superseded_by: ADR-xxx | null
 - **审计阶段**：历史 ADR 结构一致性检查
 
 ---
+---
 
 ## Non-Goals（明确不管什么）
 
-- ADR 内容质量高低
-- 架构决策是否正确
-- 示例代码与教学说明
-- 团队沟通与培训方式
-- 文档美观与排版风格
+本 ADR 明确不涉及以下内容：
+
+- 待补充
 
 ---
 
@@ -186,6 +192,8 @@ superseded_by: ADR-xxx | null
 - 使用非标准 Front Matter
 - 通过注释或正文绕过模板约束
 - 创建“特殊 ADR 例外模板”
+
+---
 
 ---
 
@@ -208,6 +216,8 @@ superseded_by: ADR-xxx | null
 
 ---
 
+---
+
 ## References（非裁决性参考）
 
 - ISO/IEC/IEEE 42010
@@ -218,13 +228,7 @@ superseded_by: ADR-xxx | null
 
 ---
 
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
+---
 
 ## History（版本历史）
 

@@ -13,6 +13,7 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-0003：命名空间与项目边界规范
 
 > ⚖️ **本 ADR 是架构宪法的核心，定义命名空间与项目边界的唯一裁决源。**
@@ -30,6 +31,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -38,6 +41,8 @@ superseded_by: null
 | RootNamespace         | 项目根命名空间，由BaseNamespace及目录自动推导        | Root Namespace       |
 | Directory.Build.props | MSBuild全局配置文件，统一定义BaseNamespace      | Directory.Build.props |
 | MSBuild 推导            | 通过 MSBuild 条件和目录映射自动赋值 RootNamespace | MSBuild Inference    |
+
+---
 
 ---
 
@@ -75,6 +80,37 @@ superseded_by: null
 
 ---
 
+---
+
+## Enforcement（执法模型）
+
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0003_Architecture_Tests.cs` 强制验证。
+
+**有一项违规视为架构违规，CI 自动阻断。**
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+---
+
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
@@ -99,43 +135,6 @@ superseded_by: null
 
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述                            | 测试方式           | 测试用例                                                | 必须遵守 |
-|------------|--------------------------------- |----------------|----------------------------------------------------|------|
-| ADR-0003.1 | 所有类型命名空间以 BaseNamespace 开头       | L1 - NetArchTest | All_Types_Should_Start_With_Base_Namespace          | ✅    |
-| ADR-0003.2 | Platform 类型以 Platform 命名空间为前缀    | L1 - NetArchTest | Platform_Types_Should_Have_Platform_Namespace       | ✅    |
-| ADR-0003.3 | Application 类型以 Application 命名空间为前缀 | L1 - NetArchTest | Application_Types_Should_Have_Application_Namespace | ✅    |
-| ADR-0003.4 | Modules 类型对应 Modules.{Name} 命名空间  | L1 - NetArchTest | Module_Types_Should_Have_Module_Namespace           | ✅    |
-| ADR-0003.5 | Host 类型对应 Host.{Name} 命名空间        | L1 - NetArchTest | Host_Types_Should_Have_Host_Namespace               | ✅    |
-| ADR-0003.6 | Directory.Build.props 必须位于仓库根目录   | L1 - 文件扫描        | Directory_Build_Props_Should_Exist_At_Repository_Root | ✅    |
-| ADR-0003.7 | Directory.Build.props 定义 BaseNamespace | L1 - 文件扫描        | Directory_Build_Props_Should_Define_Base_Namespace  | ✅    |
-| ADR-0003.8 | 项目命名需遵循命名空间映射                    | L1 - 文件扫描        | All_Projects_Should_Follow_Namespace_Convention     | ✅    |
-| ADR-0003.9 | 不得出现不规范命名空间                      | L1 - NetArchTest | Modules_Should_Not_Contain_Irregular_Namespace_Patterns | ✅    |
-
-> **级别说明**：L1=静态自动化（ArchitectureTests）
-
----
-
-## Enforcement（执法模型）
-
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0003_Architecture_Tests.cs` 强制验证。
-
-**有一项违规视为架构违规，CI 自动阻断。**
-
----
-
-## 检查清单
-
-- [ ] 是否用 Directory.Build.props 统一 BaseNamespace？
-- [ ] 根命名空间是否由目录自动推导？
-- [ ] 项目名与目录/二级命名空间是否严格一致？
-- [ ] 全局无 Common、Shared、Utils 等命名空间？
-- [ ] CI 与架构测试是否已自动检验命名空间合规？
-
----
-
-
 ---
 
 ## References（非裁决性参考）
@@ -146,23 +145,7 @@ superseded_by: null
 
 ---
 
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
 ---
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
 
 ## History（版本历史）
 
@@ -172,11 +155,3 @@ superseded_by: null
 | 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
 
 ---
-
-## 附注
-
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（MSBuild 推导逻辑、项目配置示例）请查阅：
-- [ADR-0003 Copilot Prompts](../../copilot/adr-0003.prompts.md)
-- 工程指南（如有）

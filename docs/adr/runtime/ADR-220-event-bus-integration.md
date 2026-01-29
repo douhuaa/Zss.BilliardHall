@@ -13,16 +13,12 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-220：事件总线集成规范
 
 > ⚖️ **本 ADR 定义事件总线集成的架构约束，确保模块间通信的松耦合和可靠性。**
 
 **适用范围**：所有模块间事件通信  
-**生效时间**：即刻  
-**依赖 ADR**：ADR-0001（模块化单体与垂直切片架构）
-
----
-
 ## Focus（聚焦内容）
 
 - 事件总线抽象与依赖隔离
@@ -31,6 +27,8 @@ superseded_by: null
 - 事件订阅者生命周期
 - 跨模块数据契约约束
 - 事件总线测试执法
+
+---
 
 ---
 
@@ -44,6 +42,8 @@ superseded_by: null
 | 发送即忘记 | 发送消息后不保证送达的模式 | Fire-and-Forget |
 | 数据契约 | 只读、版本化的跨模块数据传输对象 | Data Contract / DTO |
 | 幂等性 | 重复执行产生相同结果的特性 | Idempotency |
+
+---
 
 ---
 
@@ -131,108 +131,38 @@ superseded_by: null
 
 ---
 
-## 执法模型（Enforcement）
-
-> **规则如果无法执法，就不配存在。**
-
-### 测试映射
-
-| 规则编号 | 执行级 | 测试/手段 |
-|---------|--------|----------|
-| ADR-220.1 | L1 | `Modules_Must_Not_Depend_On_Concrete_EventBus` |
-| ADR-220.2 | L2 | 架构审查 + 集成测试 |
-| ADR-220.3 | L2 | Code Review |
-| ADR-220.4 | L1 | `EventHandlers_Must_Be_Scoped_Or_Transient` |
-| ADR-220.5 | L1 | `Events_Must_Not_Contain_Domain_Entities` |
-
-### 执行说明
-
-**L1 测试**：
-- 检测模块是否依赖具体事件总线包
-- 验证 EventHandler 注册生命周期
-- 检查事件是否包含领域实体
-
-**L2 测试**：
-- 架构审查验证 Outbox Pattern 实现
-- Code Review 检查是否存在同步等待
-- 集成测试验证至少一次传递
-
 ---
 
-## 破例与归还（Exception）
+## Enforcement（执法模型）
 
-> **破例不是逃避，而是债务。**
 
-### 允许破例的前提
+### 执行方式
 
-破例**仅在以下情况允许**：
+待补充...
 
-1. **性能关键路径**：经过压测证明异步导致不可接受的延迟
-2. **外部系统约束**：第三方系统要求同步响应
-3. **迁移期**：从同步架构向异步架构过渡
-
-### 破例要求（不可省略）
-
-每个破例**必须**：
-
-- 记录在 `docs/summaries/arch-violations.md`
-- 提供性能测试数据
-- 指定迁移计划（不超过 6 个月）
-- 标注影响范围和风险
-
-**未记录的破例 = 未授权架构违规。**
 
 ---
-
-## 变更政策（Change Policy）
-
-> **ADR 不是"随时可改"的文档。**
-
-### 变更规则
-
-* **运行时层 ADR**
-  * 修改需 Tech Lead/架构师审批
-  * 更换事件总线实现不需要修改本 ADR
-  * 必须更新相关架构测试
-
-### 失效与替代
-
-* 如有更优方案，可创建 ADR-22X 替代本 ADR
-* 被替代后，本 ADR 状态改为 Superseded
-
 ---
 
 ## Non-Goals（明确不管什么）
 
-> **防止 ADR 膨胀的关键段落。**
+本 ADR 明确不涉及以下内容：
 
-本 ADR **不负责**：
-
-- ✗ 具体的事件总线选型（Wolverine/Kafka/RabbitMQ）
-- ✗ 消息队列的运维配置
-- ✗ 事件重放策略
-- ✗ 事件的持久化存储方案
-- ✗ Outbox Pattern 的具体实现细节
+- 待补充
 
 ---
 
-## References（非裁决性参考）
+## Prohibited（禁止行为）
 
-> **仅供理解，不具裁决力。**
 
-### 相关 ADR
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-210：领域事件版本化与兼容性](ADR-210-event-versioning-compatibility.md)
+以下行为明确禁止：
 
-### 技术资源
-- [Outbox Pattern](https://microservices.io/patterns/data/transactional-outbox.html)
-- [At-Least-Once Delivery](https://docs.microsoft.com/en-us/azure/service-bus-messaging/message-sessions)
+- 待补充
 
-### 实践指导
-- 事件总线配置示例参见 `docs/copilot/adr-0220.prompts.md`
 
 ---
 
+---
 
 ## Relationships（关系声明）
 
@@ -254,50 +184,24 @@ superseded_by: null
 
 ---
 
-
-## 版本历史
-
-| 版本 | 日期 | 变更说明 | 修订人 |
-|-----|------|---------|--------|
-| 2.0 | 2026-01-25 | 重构为裁决型格式，添加决策章节 | GitHub Copilot |
-| 1.0 Draft | 2026-01-24 | 初始版本 | GitHub Copilot |
-
 ---
 
-# ADR 终极一句话定义
+## References（非裁决性参考）
 
-> **ADR 是系统的法律条文，不是架构师的解释说明。**
+> **仅供理解，不具裁决力。**
 
+### 相关 ADR
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-210：领域事件版本化与兼容性](ADR-210-event-versioning-compatibility.md)
 
----
+### 技术资源
+- [Outbox Pattern](https://microservices.io/patterns/data/transactional-outbox.html)
+- [At-Least-Once Delivery](https://docs.microsoft.com/en-us/azure/service-bus-messaging/message-sessions)
 
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
----
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
+### 实践指导
+- 事件总线配置示例参见 `docs/copilot/adr-0220.prompts.md`
 
 ---
-
-## Enforcement（执法模型）
-
-
-### 执行方式
-
-待补充...
-
 
 ---
 

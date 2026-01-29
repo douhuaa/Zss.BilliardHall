@@ -13,6 +13,7 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-0002：Platform / Application / Host 三层启动体系
 
 > ⚖️ **本 ADR 是架构宪法的核心，定义三层启动体系的唯一裁决源。**
@@ -31,6 +32,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -40,6 +43,8 @@ superseded_by: null
 | Host         | 进程外壳，决定"怎么跑"，如 Web/Worker/Test | Host Layer       |
 | Bootstrapper | 唯一的装配入口，负责注册服务和配置              | Bootstrapper     |
 | 单向依赖         | Host → Application → Platform  | Unidirectional Dependency |
+
+---
 
 ---
 
@@ -98,6 +103,37 @@ superseded_by: null
 
 ---
 
+---
+
+## Enforcement（执法模型）
+
+所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0002_Architecture_Tests.cs` 强制验证。
+
+**有一项违规视为架构违规，CI 自动阻断。**
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+---
+
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
@@ -123,49 +159,6 @@ superseded_by: null
 
 ---
 
-## 快速参考表
-
-| 约束编号        | 约束描述                            | 测试方式           | 测试用例                                                    | 必须遵守 |
-|-------------|-------------------------------- |-----------------|---------------------------------------------------------|------|
-| ADR-0002.1  | Platform 不应依赖 Application        | L1 - NetArchTest | Platform_Should_Not_Depend_On_Application               | ✅    |
-| ADR-0002.2  | Platform 不应依赖 Host               | L1 - NetArchTest | Platform_Should_Not_Depend_On_Host                      | ✅    |
-| ADR-0002.3  | Platform 不应依赖任何 Modules          | L1 - NetArchTest | Platform_Should_Not_Depend_On_Modules                   | ✅    |
-| ADR-0002.4  | Platform 应有唯一 Bootstrapper 入口   | L1 - NetArchTest | Platform_Should_Have_Single_Bootstrapper_Entry_Point    | ✅    |
-| ADR-0002.5  | Application 不依赖 Host             | L1 - NetArchTest | Application_Should_Not_Depend_On_Host                   | ✅    |
-| ADR-0002.6  | Application 不依赖 Modules          | L1 - NetArchTest | Application_Should_Not_Depend_On_Modules                | ✅    |
-| ADR-0002.7  | Application 应有唯一 Bootstrapper 入口 | L1 - NetArchTest | Application_Should_Have_Single_Bootstrapper_Entry_Point | ✅    |
-| ADR-0002.8  | Application 不含 Host 专属类型         | L1 - NetArchTest | Application_Should_Not_Use_HttpContext                  | ✅    |
-| ADR-0002.9  | Host 不依赖 Modules                 | L1 - NetArchTest | Host_Should_Not_Depend_On_Modules                       | ✅    |
-| ADR-0002.10 | Host 不含业务类型                      | L1 - NetArchTest | Host_Should_Not_Contain_Business_Types                  | ✅    |
-| ADR-0002.11 | Host 项目文件不应引用 Modules            | L1 - 项目文件扫描      | Host_Csproj_Should_Not_Reference_Modules                | ✅    |
-| ADR-0002.12 | Program.cs 建议 ≤30行               | L1 - 文件扫描        | Program_Cs_Should_Be_Concise                            | ✅    |
-| ADR-0002.13 | Program.cs 只应调用 Bootstrapper     | L1 - 语义检查        | Program_Cs_Should_Only_Call_Bootstrapper                | ✅    |
-| ADR-0002.14 | 三层唯一依赖方向验证                       | L1 - NetArchTest | Verify_Complete_Three_Layer_Dependency_Direction        | ✅    |
-
-> **级别说明**：L1=静态自动化（ArchitectureTests）
-
----
-
-## Enforcement（执法模型）
-
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0002_Architecture_Tests.cs` 强制验证。
-
-**有一项违规视为架构违规，CI 自动阻断。**
-
----
-
-## 检查清单
-
-- [ ] Platform 是否只提供技术能力，不依赖业务？
-- [ ] Application 只做装配，无 Host/业务依赖？
-- [ ] Host 仅负责装配和启动，无业务逻辑、无服务注册？
-- [ ] Program.cs 是否极简、只调用 Bootstrapper？
-- [ ] 每一层均有唯一 Bootstrapper 入口定义？
-- [ ] 所有依赖方向只允许单向流动？
-
----
-
-
 ---
 
 ## References（非裁决性参考）
@@ -176,23 +169,7 @@ superseded_by: null
 
 ---
 
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
 ---
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
 
 ## History（版本历史）
 
@@ -202,11 +179,3 @@ superseded_by: null
 | 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
 
 ---
-
-## 附注
-
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（目录结构、命名规范、详细示例）请查阅：
-- [ADR-0002 Copilot Prompts](../../copilot/adr-0002.prompts.md)
-- 工程指南（如有）

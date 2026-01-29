@@ -13,15 +13,12 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-124：Endpoint 命名及参数约束规范
 
 > ⚖️ **本 ADR 定义 HTTP Endpoint 命名、职责边界和单一调用约束的唯一裁决规则。**
 
 **影响范围**：所有 HTTP Endpoint  
-**生效时间**：即刻
-
----
-
 ## Focus（聚焦内容）
 
 - Endpoint 类命名必须遵循 {UseCase}Endpoint 模式
@@ -29,6 +26,8 @@ superseded_by: null
 - Endpoint 禁止包含业务逻辑
 - 一个 Endpoint 只能调用一个 Command 或 Query
 - 复杂流程必须使用 Saga/Workflow 显式建模
+
+---
 
 ---
 
@@ -42,6 +41,8 @@ superseded_by: null
 | Saga       | 长事务协调器，用于管理跨多个聚合的业务流程      | Saga                   |
 | L1 测试      | 静态可执行自动化测试                   | Level 1 Test           |
 | L2 测试      | 语义半自动化测试或人工审查               | Level 2 Test           |
+
+---
 
 ---
 
@@ -180,18 +181,6 @@ builder.MapPost("/orders/fulfill", async (request, bus) =>
 
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述                   | 测试方式       | 测试用例                                      | 必须遵守 |
-|------------|------------------------|------------|--------------------------------------------|------|
-| ADR-124.1  | Endpoint 类命名规范        | L1 - 自动化测试 | Endpoints_Must_Follow_Naming_Convention      | ✅    |
-| ADR-124.2  | Request DTO 命名规范      | L1 - 自动化测试 | Request_DTOs_Must_End_With_Request           | ✅    |
-| ADR-124.3  | Response DTO 命名规范     | L1 - 自动化测试 | Response_DTOs_Must_End_With_Response         | ✅    |
-| ADR-124.4  | Endpoint 禁止包含业务逻辑    | L2 - Code Review + Roslyn | Endpoints_Must_Not_Contain_Business_Logic  | ✅    |
-| ADR-124.5  | 一个 Endpoint 只能调用一个操作 | L2 - Code Review | Endpoints_Must_Call_Single_Operation       | ✅    |
-
-> **级别说明**：L1=静态自动化（脚本检查），L2=语义半自动或人工审查
-
 ---
 
 ## Enforcement（执法模型）
@@ -210,38 +199,25 @@ builder.MapPost("/orders/fulfill", async (request, bus) =>
 **有一项违规视为架构违规，CI 自动阻断。**
 
 ---
+---
 
-## 检查清单
+## Non-Goals（明确不管什么）
 
-- [ ] Endpoint 类名是否遵循 {UseCase}Endpoint 模式？
-- [ ] Request DTO 是否以 Request 结尾？
-- [ ] Response DTO 是否以 Response 结尾？
-- [ ] Endpoint 是否只做 HTTP 映射，无业务逻辑？
-- [ ] Endpoint 是否只调用一个 Command 或 Query？
-- [ ] 复杂流程是否使用 Saga/Workflow？
+本 ADR 明确不涉及以下内容：
+
+- 待补充
 
 ---
 
-## 破例与归还（Exception）
+## Prohibited（禁止行为）
 
-> **破例不是逃避，而是债务。**
 
-### 允许破例的前提
+以下行为明确禁止：
 
-破例**仅在以下情况允许**：
+- 待补充
 
-1. **遗留 API 兼容**：保持向后兼容性
-2. **框架约束**：第三方框架强制要求
-3. **批量操作端点**：合理的批量处理场景
 
-### 破例要求（不可省略）
-
-每个破例**必须**：
-
-- 记录在 `docs/summaries/arch-violations.md`
-- 说明兼容性或技术原因
-- 提供迁移计划（如适用）
-- 指定失效日期（不超过 3 个月）
+---
 
 ---
 
@@ -266,25 +242,6 @@ builder.MapPost("/orders/fulfill", async (request, bus) =>
 
 ---
 
-## 版本历史
-
-| 版本  | 日期         | 变更说明       | 修订人 |
-|-----|------------|------------|-----|
-| 2.0 | 2026-01-26 | 裁决型重构，添加决策章节 | GitHub Copilot |
-| 1.0 | 2026-01-24 | 初始版本       | GitHub Copilot |
-
----
-
-## 附注
-
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（详细示例、Endpoint 实现最佳实践、REST API 设计）请查阅：
-- `docs/copilot/adr-0124.prompts.md`
-- [REST API Guidelines](https://restfulapi.net/)
-- [Microsoft REST API Guidelines](https://github.com/microsoft/api-guidelines)
-
-
 ---
 
 ## References（非裁决性参考）
@@ -294,24 +251,6 @@ builder.MapPost("/orders/fulfill", async (request, bus) =>
 
 
 ---
-
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
----
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
 
 ---
 

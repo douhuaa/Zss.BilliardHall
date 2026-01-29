@@ -13,16 +13,12 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-240：Handler 异常约束
 
 > ⚖️ **本 ADR 定义 Handler 异常处理的强制规则，确保异常可分类、可重试、可追溯。**
 
 **适用范围**：所有 Handler（Command/Query/Event Handler）  
-**生效时间**：即刻  
-**依赖 ADR**：ADR-0005（应用内交互模型）
-
----
-
 ## Focus（聚焦内容）
 
 - Handler 结构化异常要求
@@ -31,6 +27,8 @@ superseded_by: null
 - 异常命名空间规范
 - 跨模块事件异常隔离
 - 异常处理测试执法
+
+---
 
 ---
 
@@ -45,6 +43,8 @@ superseded_by: null
 | IRetryable | 标记异常可重试的接口 | Retryable Interface |
 | 异常吞噬 | 捕获异常后不重新抛出 | Exception Swallowing |
 | 异常传播 | 异常向上层调用者传递 | Exception Propagation |
+
+---
 
 ---
 
@@ -126,113 +126,38 @@ superseded_by: null
 
 ---
 
-## 执法模型（Enforcement）
-
-> **规则如果无法执法，就不配存在。**
-
-### 测试映射
-
-| 规则编号 | 执行级 | 测试/手段 |
-|---------|-------|----------|
-| ADR-240.1 | L2 | `StructuredExceptionAnalyzer` (Roslyn) |
-| ADR-240.2 | L1 | `ADR_240_Architecture_Tests.Retryable_Must_Be_Infrastructure` |
-| ADR-240.3 | L2 | Roslyn Analyzer (待实现) |
-| ADR-240.4 | L1 | `ADR_240_Architecture_Tests.Exceptions_Must_Be_In_Exceptions_Namespace` |
-| ADR-240.5 | L3 | ARCH-GATE（架构审查） |
-
-### 执行说明
-
-**L1 测试**：
-- 检测可重试异常是否继承自 InfrastructureException
-- 验证异常类命名空间是否为 `*.Exceptions`
-
-**L2 测试**：
-- Roslyn Analyzer 检测是否抛出通用异常
-- 静态分析检测异常吞噬模式
-
-**L3 测试**：
-- 架构审查验证事件异常隔离
-- 人工审查跨模块通信异常处理
-
 ---
 
-## 破例与归还（Exception）
+## Enforcement（执法模型）
 
-> **破例不是逃避，而是债务。**
 
-### 允许破例的前提
+### 执行方式
 
-破例**仅在以下情况允许**：
+待补充...
 
-1. **遗留系统集成**：与遗留系统集成，无法使用结构化异常
-2. **外部库约束**：外部库强制的异常处理模式
-3. **迁移期**：从旧异常体系向新体系迁移的过渡阶段
-
-### 破例要求（不可省略）
-
-每个破例**必须**：
-
-- 记录在 `docs/summaries/arch-violations.md`
-- 指明 ADR-240 + 具体规则编号（如 ADR-240.1）
-- 指定失效日期（不超过 6 个月）
-- 给出归还计划和责任人
-
-**未记录的破例 = 未授权架构违规。**
 
 ---
-
-## 变更政策（Change Policy）
-
-> **ADR 不是"随时可改"的文档。**
-
-### 变更规则
-
-* **运行时层 ADR**
-  * 修改需 Tech Lead/架构师审批
-  * 新增规则必须满足可自动判定性
-  * 必须更新相关架构测试
-
-### 失效与替代
-
-* 如有更优方案，可创建 ADR-24X 替代本 ADR
-* 被替代后，本 ADR 状态改为 Superseded
-
 ---
 
 ## Non-Goals（明确不管什么）
 
-> **防止 ADR 膨胀的关键段落。**
+本 ADR 明确不涉及以下内容：
 
-本 ADR **不负责**：
-
-- ✗ 异常消息内容和格式
-- ✗ 重试策略的具体实现（指数退避、延迟时间等）
-- ✗ 日志记录的具体字段和格式
-- ✗ 幂等性的具体实现方式
-- ✗ HTTP 状态码映射规则
-- ✗ 异常的序列化和传输格式
-
-> 上述内容属于工程标准与实践指南，参见《Handler 异常处理与重试工程标准》。
+- 待补充
 
 ---
 
-## References（非裁决性参考）
+## Prohibited（禁止行为）
 
-> **仅供理解，不具裁决力。**
 
-### 相关 ADR
-- [ADR-0005：应用内交互模型](../constitutional/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-201：Handler 生命周期管理](ADR-201-handler-lifecycle-management.md)
+以下行为明确禁止：
 
-### 技术资源
-- [Handler 异常处理与重试工程标准](../../guides/handler-exception-retry-standard.md)（非裁决性）
-- [StructuredExceptionAnalyzer](../../../src/tools/ArchitectureAnalyzers/StructuredExceptionAnalyzer.cs)
+- 待补充
 
-### 实践指导
-- 异常处理详细示例参见 `docs/copilot/adr-0240.prompts.md`
 
 ---
 
+---
 
 ## Relationships（关系声明）
 
@@ -253,51 +178,24 @@ superseded_by: null
 
 ---
 
-
-## 版本历史
-
-| 版本 | 日期 | 变更说明 | 修订人 | 影响级别 |
-|------|------|----------|--------|---------|
-| 3.0 | 2026-01-25 | 重构为裁决型格式，添加决策章节 | GitHub Copilot | High |
-| 2.0 | 2026-01-24 | 精简为裁决型规则，将工程指南分离 | @copilot | High |
-| 1.0 | 2026-01-24 | 初始版本（已废弃，内容过于详细） | @copilot | High |
-
 ---
 
-# ADR 终极一句话定义
+## References（非裁决性参考）
 
-> **ADR 是系统的法律条文，不是架构师的解释说明。**
+> **仅供理解，不具裁决力。**
 
+### 相关 ADR
+- [ADR-0005：应用内交互模型](../constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-201：Handler 生命周期管理](ADR-201-handler-lifecycle-management.md)
 
----
+### 技术资源
+- [Handler 异常处理与重试工程标准](../../guides/handler-exception-retry-standard.md)（非裁决性）
+- [StructuredExceptionAnalyzer](../../../src/tools/ArchitectureAnalyzers/StructuredExceptionAnalyzer.cs)
 
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
----
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
+### 实践指导
+- 异常处理详细示例参见 `docs/copilot/adr-0240.prompts.md`
 
 ---
-
-## Enforcement（执法模型）
-
-
-### 执行方式
-
-待补充...
-
 
 ---
 

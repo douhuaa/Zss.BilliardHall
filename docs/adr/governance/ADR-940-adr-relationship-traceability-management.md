@@ -13,18 +13,12 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-940：ADR 关系与溯源管理宪法
 
 > ⚖️ **本 ADR 是所有 ADR 关系声明的唯一裁决源，定义 ADR 之间关系的标准化管理机制。**
 
 **状态**：✅ Accepted（已采纳）  
-**版本**：1.0
-**级别**：治理层 / 架构元规则  
-**适用范围**：所有 ADR 文档  
-**生效时间**：即刻
-
----
-
 ## Focus（聚焦内容）
 
 - ADR 关系类型定义与标准化
@@ -32,6 +26,8 @@ superseded_by: null
 - 关系双向一致性验证
 - 全局关系图生成机制
 - 循环依赖检测
+
+---
 
 ---
 
@@ -47,6 +43,8 @@ superseded_by: null
 | 相关关系 | 与本 ADR 相关但不存在依赖 | Related |
 | 双向一致性 | A 依赖 B 则 B 必须声明被 A 依赖 | Bidirectional Consistency |
 | 关系图 | ADR 之间关系的可视化表示 | Relationship Map |
+
+---
 
 ---
 
@@ -220,95 +218,36 @@ graph TB
 
 ---
 
-## 执法模型（Enforcement）
-
-### 测试映射与执行级别
-
-| 规则编号 | 执行级 | 测试/手段 | CI 行为 |
-|---------|--------|----------|---------|
-| ADR-940.1 | **L1** | `ADR_940_Relationship_Section_Required` | **Structural Violation - 构建失败** |
-| ADR-940.2 | **L1** | `ADR_940_Relationship_Types_Valid` | **Structural Violation - 构建失败** |
-| ADR-940.2 已废弃 ADR 约束 | **L1** | `ADR_940_No_Superseded_ADR_Dependency` | **Structural Violation - 构建失败** |
-| ADR-940.3 | **L1** | `ADR_940_Bidirectional_Consistency` | **Structural Violation - 构建失败** |
-| ADR-940.4 | **L1** | `ADR_940_No_Circular_Dependencies` | **Structural Violation - 构建失败** |
-| ADR-940.5 | L2 | `scripts/generate-adr-relationship-map.sh` | **Governance Warning - 仅提示** |
-
-**执行级别说明**：
-- **L1 (Structural Violation)**：违反导致 **CI 构建失败**，PR 无法合并
-- **L2 (Governance Warning)**：仅记录警告，不阻断合并
-
-**明确裁决边界**：
-- **关系声明缺失** → 构建失败
-- **关系类型错误** → 构建失败
-- **新 ADR 依赖已废弃 ADR** → 构建失败
-- **双向一致性违反** → 构建失败
-- **循环依赖** → 构建失败
-- **关系图未生成** → 仅警告
-
-### CI 集成
-
-```yaml
-# .github/workflows/adr-relationship-check.yml
-name: ADR Relationship Check
-
-on: [pull_request]
-
-jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Verify Relationship Declarations
-        run: ./scripts/verify-adr-relationships.sh
-      - name: Check Bidirectional Consistency
-        run: ./scripts/check-relationship-consistency.sh
-      - name: Detect Circular Dependencies
-        run: ./scripts/detect-circular-dependencies.sh
-      - name: Generate Relationship Map
-        run: ./scripts/generate-adr-relationship-map.sh
-```
-
 ---
 
-## 破例与归还（Exception）
+## Enforcement（执法模型）
 
-### 允许破例的前提
 
-破例 **仅在以下情况允许**：
-- 历史遗留 ADR 的关系梳理需要时间
-- 正在进行大规模 ADR 重构
+### 执行方式
 
-### 破例要求
+待补充...
 
-每个破例 **必须**：
-- 记录在 `ARCH-VIOLATIONS.md`
-- 指明 ADR 编号 + 规则编号
-- 指定失效日期（不超过 3 个月）
-- 给出归还计划
 
 ---
-
-## 变更政策（Change Policy）
-
-### 变更规则
-
-- **新增关系类型**：需架构委员会批准
-- **修改关系定义**：需架构委员会批准
-- **格式调整**：Tech Lead 可批准
-
-### 失效与替代
-
-- 本 ADR 一旦被替代，必须在所有 ADR 的关系声明中更新引用
-
 ---
 
 ## Non-Goals（明确不管什么）
 
-本 ADR **不负责**：
-- ADR 内容质量评审
-- ADR 版本号管理（由 ADR-980 管理）
-- ADR 文档格式（由 ADR-0008 管理）
-- ADR 审批流程（由 ADR-900 管理）
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
 
 ---
 
@@ -337,6 +276,8 @@ jobs:
 
 ---
 
+---
+
 ## References（非裁决性参考）
 
 ### 工具和脚本
@@ -352,43 +293,6 @@ jobs:
 - [ADR 模板](../../templates/adr-template.md) - 包含关系声明章节
 
 ---
-
-## 版本历史
-
-| 版本 | 日期 | 变更说明 | 作者 |
-|------|------|----------|------|
-| 1.0 | 2026-01-26 | 初始版本，定义 ADR 关系管理机制 | GitHub Copilot |
-
-
----
-
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
----
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
-
----
-
-## Enforcement（执法模型）
-
-
-### 执行方式
-
-待补充...
-
 
 ---
 

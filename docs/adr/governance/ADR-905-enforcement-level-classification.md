@@ -13,6 +13,7 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-905：执行级别分类
 
 > ⚖️ **本 ADR 定义架构规则的执行级别分类体系，明确静态测试、语义分析和人工审查的边界。**
@@ -35,6 +36,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -45,6 +48,8 @@ superseded_by: null
 | L3 人工 Gate | 无法或不应该完全自动化，需人工裁决 | Level 3: Manual Gate |
 | NetArchTest | .NET 架构测试静态分析工具 | NetArchTest |
 | Roslyn Analyzer | C# 编译器语义分析器 | Roslyn Analyzer |
+
+---
 
 ---
 
@@ -194,6 +199,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## Enforcement（执法模型）
 
 > 本节为唯一架构执法映射表，所有必测/必拦规则均需在此列明。
@@ -207,18 +214,13 @@ superseded_by: null
 | ADR-905.5 | L2   | Code Review + 教育培训 | 规则分级宣贯/人工审核 | ✅    |
 
 ---
+---
 
 ## Non-Goals（明确不管什么）
 
-> **这是防止 ADR 腐化的关键防线。**
+本 ADR 明确不涉及以下内容：
 
-本 ADR **不负责**：
-
-* 具体业务规则的定义（由各业务 ADR 负责）
-* 测试工具的技术实现细节
-* 团队培训和沟通方式
-* 开发者绩效考核标准
-* 代码风格和命名审美
+- 待补充
 
 ---
 
@@ -232,6 +234,8 @@ superseded_by: null
 * 跳过人工 Gate 流程直接合并破例代码
 * 破例不记录或不设归还计划
 * 混淆不同级别的执行标准
+
+---
 
 ---
 
@@ -267,6 +271,8 @@ superseded_by: null
 - [ADR-201：Handler 生命周期管理](../runtime/ADR-201-handler-lifecycle-management.md) - 参考本文档的执行级别
 - [ADR-920：示例代码治理宪法](./ADR-920-examples-governance-constitution.md) - 参考本文档的执行级别
 - [ADR-930：代码审查与 ADR 合规自检流程](./ADR-930-code-review-compliance.md) - 人工 Gate 流程依赖代码审查
+
+---
 
 ---
 
@@ -328,13 +334,7 @@ public class EndpointBusinessLogicAnalyzer : DiagnosticAnalyzer
 
 ---
 
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
+---
 
 ## History（版本历史）
 

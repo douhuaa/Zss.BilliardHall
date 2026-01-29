@@ -13,6 +13,7 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-0000：架构测试与 CI 治理宪法
 
 > **唯一架构执法元规则**：本文件定义架构合法性评判的唯一基准。所有架构测试、CI 校验、Prompt 映射、破例治理均以本 ADR 正文为裁定源。
@@ -29,6 +30,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语       | 定义                   |
@@ -37,6 +40,8 @@ superseded_by: null
 | ADR-测试映射 | ADR 【必须架构测试覆盖】→ 测试用例 |
 | CI 阻断    | 测试失败即阻断 PR / 发布      |
 | 破例       | 已批准的临时性违规（需归还）       |
+
+---
 
 ---
 
@@ -84,17 +89,6 @@ superseded_by: null
 
 **实施机制**：
 ```markdown
-## arch-violations.md 格式
-
-| ADR | 规则 | 到期版本 | 负责人 | 偿还计划 | 状态 |
-|-----|------|---------|--------|---------|------|
-| ADR-201.1 | Handler Scoped | v2.5.0 | @dev | 迁移至 Scoped | 🚧 |
-```
-
-**CI 强制检查**：
-- 每月第一次构建扫描 arch-violations.md
-- 发现过期破例 → 构建失败
-- 强制团队偿还或延期（需重新审批）
 
 ---
 
@@ -115,12 +109,13 @@ superseded_by: null
 | Architecture_Tests_Must_Not_Be_Skipped | 禁止跳过架构测试（反作弊） |
 
 ---
+---
 
 ## Non-Goals（明确不管什么）
 
-- 业务功能测试、性能测试、UI 测试等非架构约束测试
-- 团队协作流程、代码风格、文档排版等非结构性约束
-- 个人偏好、历史遗留、非治理范围内容
+本 ADR 明确不涉及以下内容：
+
+- 待补充
 
 ---
 
@@ -131,6 +126,8 @@ superseded_by: null
 - 破例无偿还计划或负责人
 - 未同步更新 ADR 映射表、Prompts
 - 破例延期超过 2 次
+
+---
 
 ---
 
@@ -173,6 +170,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## References（非裁决性参考）
 
 
@@ -181,13 +180,7 @@ superseded_by: null
 
 ---
 
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
+---
 
 ## History（版本历史）
 

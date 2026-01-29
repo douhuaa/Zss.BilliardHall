@@ -13,16 +13,12 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-201：Handler 生命周期管理
 
 > ⚖️ **本 ADR 定义 Command Handler 生命周期规则，确保线程安全和资源正确管理。**
 
 **适用范围**：所有 Command Handler 实现  
-**生效时间**：即刻  
-**依赖 ADR**：ADR-0005（应用内交互模型）
-
----
-
 ## Focus（聚焦内容）
 
 - Handler 生命周期与执行上下文匹配规则
@@ -30,6 +26,8 @@ superseded_by: null
 - 静态字段和跨请求状态共享限制
 - 资源释放要求
 - 生命周期测试执法
+
+---
 
 ---
 
@@ -43,6 +41,8 @@ superseded_by: null
 | Context-free | 无状态纯计算，无执行上下文依赖 | Context-free Handler |
 | 有状态服务 | 包含可变字段的服务实例 | Stateful Service |
 | 跨请求状态 | 在不同请求间共享的可变数据 | Cross-Request State |
+
+---
 
 ---
 
@@ -143,111 +143,38 @@ superseded_by: null
 
 ---
 
-## 执法模型（Enforcement）
-
-> **规则如果无法执法，就不配存在。**
-
-### 测试映射
-
-| 规则编号 | 执行级 | 测试/手段 |
-|---------|--------|----------|
-| ADR-201.1 | L1 | `Handlers_Must_Be_Registered_As_Scoped` (HTTP) / L2 (Background) |
-| ADR-201.2 | L2 | Roslyn Analyzer + 人工审查 |
-| ADR-201.3 | L1 | `Handlers_Must_Not_Have_Static_Fields` |
-| ADR-201.4 | L2 | 人工审查（Code Review） |
-| ADR-201.5 | L2 | 人工审查 + Runtime 监控 |
-
-### 执行说明
-
-**L1 测试**：
-- 验证 Request-driven Handler 在 DI 容器中注册为 Scoped
-- 检测 Handler 类中的 static 字段（排除 const/readonly 不可变类型）
-- Background Handler 如使用 Transient 需注释说明
-
-**L2 测试**：
-- 通过 Code Review 检查 Singleton 依赖是否有状态
-- 审查 IDisposable 实现的正确性
-- 检查是否存在跨请求状态共享
-
 ---
 
-## 破例与归还（Exception）
+## Enforcement（执法模型）
 
-> **破例不是逃避，而是债务。**
 
-### 允许破例的前提
+### 执行方式
 
-破例**仅在以下情况允许**：
+待补充...
 
-1. **性能关键路径**：经过基准测试证明 Transient 生命周期导致不可接受的性能损失
-2. **遗留系统集成**：与外部 Singleton 服务强制集成
-3. **框架限制**：第三方框架要求特定生命周期
-
-### 破例要求（不可省略）
-
-每个破例**必须**：
-
-- 记录在 `docs/summaries/arch-violations.md`
-- 指明 ADR-201 + 具体规则编号（如 ADR-201.1）
-- 提供性能测试数据或技术说明
-- 指定失效日期（不超过 6 个月）
-- 给出归还计划
-
-**未记录的破例 = 未授权架构违规。**
 
 ---
-
-## 变更政策（Change Policy）
-
-> **ADR 不是"随时可改"的文档。**
-
-### 变更规则
-
-* **运行时层 ADR**
-  * 修改需 Tech Lead/架构师审批
-  * 需评估对现有 Handler 的影响
-  * 必须更新相关架构测试
-
-### 失效与替代
-
-* 如有更优方案，可创建 ADR-20X 替代本 ADR
-* 被替代后，本 ADR 状态改为 Superseded
-* 必须在文档开头指向替代 ADR
-
 ---
 
 ## Non-Goals（明确不管什么）
 
-> **防止 ADR 膨胀的关键段落。**
+本 ADR 明确不涉及以下内容：
 
-本 ADR **不负责**：
-
-- ✗ Handler 的命名规范（参见 ADR-0005）
-- ✗ Handler 的目录组织（参见 ADR-0001）
-- ✗ Handler 的具体业务逻辑实现
-- ✗ Query Handler 的生命周期（仅管 Command Handler）
-- ✗ 幂等性的具体实现机制（将由 ADR-202 定义）
+- 待补充
 
 ---
 
-## References（非裁决性参考）
+## Prohibited（禁止行为）
 
-> **仅供理解，不具裁决力。**
 
-### 相关 ADR
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-240：Handler 异常约束](ADR-240-handler-exception-constraints.md)
+以下行为明确禁止：
 
-### 技术背景
-- [Microsoft DI Lifetime 文档](https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection#service-lifetimes)
-- [IDisposable 模式](https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose)
+- 待补充
 
-### 实践指导
-- 详细的 Handler 生命周期实现示例参见工程标准文档
-- 常见问题排查参见 `docs/copilot/adr-0201.prompts.md`
 
 ---
 
+---
 
 ## Relationships（关系声明）
 
@@ -268,50 +195,25 @@ superseded_by: null
 
 ---
 
-
-## 版本历史
-
-| 版本 | 日期 | 变更说明 | 修订人 |
-|-----|------|---------|--------|
-| 2.0 | 2026-01-25 | 重构为裁决型格式，添加决策章节 | GitHub Copilot |
-| 1.0 Draft | 2026-01-24 | 初始版本 | GitHub Copilot |
-
 ---
 
-# ADR 终极一句话定义
+## References（非裁决性参考）
 
-> **ADR 是系统的法律条文，不是架构师的解释说明。**
+> **仅供理解，不具裁决力。**
 
+### 相关 ADR
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-240：Handler 异常约束](ADR-240-handler-exception-constraints.md)
 
----
+### 技术背景
+- [Microsoft DI Lifetime 文档](https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection#service-lifetimes)
+- [IDisposable 模式](https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose)
 
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
----
-
-## Non-Goals（明确不管什么）
-
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
+### 实践指导
+- 详细的 Handler 生命周期实现示例参见工程标准文档
+- 常见问题排查参见 `docs/copilot/adr-0201.prompts.md`
 
 ---
-
-## Enforcement（执法模型）
-
-
-### 执行方式
-
-待补充...
-
 
 ---
 
