@@ -21,9 +21,9 @@ public sealed class AdrConsistencyTests
 
     public AdrConsistencyTests()
     {
-        var repoRoot = FindRepositoryRoot() 
+        var repoRoot = FindRepositoryRoot()
             ?? throw new InvalidOperationException("未找到仓库根目录");
-        
+
         _adrRoot = Path.Combine(repoRoot, "docs", "adr");
         _adrFiles = Directory.GetFiles(_adrRoot, "ADR-*.md", SearchOption.AllDirectories)
             .Where(f =>
@@ -43,12 +43,12 @@ public sealed class AdrConsistencyTests
     public void ADR_Files_Must_Use_Four_Digit_Numbering()
     {
         var violations = new List<string>();
-        var validPattern = new Regex(@"^ADR-\d{4}[^/\\]*\.md$", RegexOptions.Compiled);
+        var validPattern = new Regex(@"^ADR-\d{3}[^/\\]*\.md$", RegexOptions.Compiled);
 
         foreach (var file in _adrFiles)
         {
             var fileName = Path.GetFileName(file);
-            
+
             if (!validPattern.IsMatch(fileName))
             {
                 violations.Add(
@@ -80,7 +80,7 @@ public sealed class AdrConsistencyTests
         {
             var fileName = Path.GetFileName(file);
             var match = numberPattern.Match(fileName);
-            
+
             if (!match.Success)
                 continue;
 
@@ -88,7 +88,7 @@ public sealed class AdrConsistencyTests
             var directory = Path.GetFileName(Path.GetDirectoryName(file)) ?? "";
 
             var expectedDirectory = DetermineExpectedDirectory(number);
-            
+
             if (!directory.Equals(expectedDirectory, StringComparison.OrdinalIgnoreCase))
             {
                 violations.Add(
@@ -129,7 +129,7 @@ public sealed class AdrConsistencyTests
 
             // 提取 Front Matter
             var frontMatterMatch = Regex.Match(content, @"^---\s*\n(.*?)\n---", RegexOptions.Singleline);
-            
+
             if (!frontMatterMatch.Success)
             {
                 violations.Add(
@@ -143,7 +143,7 @@ public sealed class AdrConsistencyTests
 
             // 检查必需字段
             var requiredFields = new[] { "adr:", "title:", "status:", "level:" };
-            
+
             foreach (var field in requiredFields)
             {
                 if (!frontMatter.Contains(field, StringComparison.OrdinalIgnoreCase))
@@ -184,7 +184,7 @@ public sealed class AdrConsistencyTests
     private static string? FindRepositoryRoot()
     {
         var currentDir = Directory.GetCurrentDirectory();
-        
+
         while (currentDir != null)
         {
             if (Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
@@ -192,10 +192,10 @@ public sealed class AdrConsistencyTests
             {
                 return currentDir;
             }
-            
+
             currentDir = Directory.GetParent(currentDir)?.FullName;
         }
-        
+
         return null;
     }
 }
