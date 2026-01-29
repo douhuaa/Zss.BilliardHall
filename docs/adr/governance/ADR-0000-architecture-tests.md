@@ -120,7 +120,9 @@ superseded_by: null
 - **Level 2 语义半自动**：Roslyn Analyzer 等启发式，需人工二次确认
 - **Level 3 人工 Gate**：不可程控的约束，长期破例流程审计
 
-具体标准参见 [ADR-905-enforcement-level-classification.md](/docs/adr/governance/ADR-905-enforcement-level-classification.md)
+具体标准参见：
+- [ADR-905：执行级别分类](/docs/adr/governance/ADR-905-enforcement-level-classification.md) - 详细定义
+- [ADR-907：架构测试执行治理宪章](/docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md) - 唯一执法入口
 
 ---
 

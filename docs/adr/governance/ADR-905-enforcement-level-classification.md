@@ -2,7 +2,9 @@
 
 > **注意**：本文档是 [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) 的补充文档。  
 > 主 ADR 定义"是什么"，本文档定义"如何验证"。  
-> 同时参见：[ADR-0000：架构测试与 CI 治理](./ADR-0000-architecture-tests.md)
+> 同时参见：
+> - [ADR-0000：架构测试与 CI 治理](./ADR-0000-architecture-tests.md)
+> - [ADR-907：架构测试执行治理宪章](./ADR-907-architecture-tests-enforcement-governance.md) - 唯一执法入口
 
 **状态**：✅ Active  
 **版本**：1.0
