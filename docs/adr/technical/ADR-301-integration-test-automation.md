@@ -1,10 +1,21 @@
+---
+adr: ADR-301
+title: "集成测试环境自动化与隔离约束"
+status: Final
+level: Technical
+version: "2.0"
+deciders: "Architecture Board"
+date: 2026-01-26
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-301：集成测试环境自动化与隔离约束
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：技术层  
 **影响范围**：所有集成测试、测试基础设施  
-**生效时间**：待审批通过后
+**生效时间**：即刻
 
 ---
 

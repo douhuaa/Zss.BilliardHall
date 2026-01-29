@@ -139,8 +139,27 @@ superseded_by: null
 - 无（本 ADR 为元规则，不依赖其他 ADR）
 
 **Depended By**：
-- 所有架构 ADR（作为架构测试与治理的基础）
-- 所有文档治理 ADR（如 ADR-0008 文档治理宪法）
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-0002：Platform / Application / Host 三层启动体系](../constitutional/ADR-0002-platform-application-host-bootstrap.md)
+- [ADR-0003：命名空间规则](../constitutional/ADR-0003-namespace-rules.md)
+- [ADR-0004：CPM 架构合约](../constitutional/ADR-0004-Cpm-Final.md)
+- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md)
+- [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
+- [ADR-900：ADR 流程与生命周期](./ADR-900-adr-process.md)
+- [ADR-901：ADR 语义宪法](./ADR-901-warning-constraint-semantics.md)
+- [ADR-903：架构测试命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD)
+- [ADR-905：架构约束分类与裁决实施映射](./ADR-905-enforcement-level-classification.md)
+- [ADR-906：Analyzer 与 CI Gate 映射协议](./ADR-906-analyzer-ci-gate-mapping-protocol.md)
+- [ADR-910：README 编写与维护宪法](./ADR-910-readme-governance-constitution.md)
+- [ADR-920：示例治理宪法](./ADR-920-examples-governance-constitution.md)
+- [ADR-930：代码审查与 ADR 合规自检流程](./ADR-930-code-review-compliance.md)
+- [ADR-940：ADR 关系与溯源管理](./ADR-940-adr-relationship-traceability-management.md)
+- [ADR-970：自动化工具日志集成标准](./ADR-970-automation-log-integration-standard.md)
+- [ADR-980：ADR 生命周期同步与版本管理](./ADR-980-adr-lifecycle-synchronization.md)
+- [ADR-301：集成测试自动化](../technical/ADR-301-integration-test-automation.md)
+- [ADR-360：CI/CD Pipeline 流程标准化](../technical/ADR-360-cicd-pipeline-standardization.md)
 
 **Supersedes（替代）**：
 - 无

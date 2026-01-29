@@ -1,12 +1,23 @@
+---
+adr: ADR-201
+title: "Handler 生命周期管理"
+status: Final
+level: Runtime
+version: "2.0"
+deciders: "Architecture Board"
+date: 2026-01-25
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-201：Handler 生命周期管理
 
 > ⚖️ **本 ADR 定义 Command Handler 生命周期规则，确保线程安全和资源正确管理。**
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：运行时层（Runtime Constraint）  
 **适用范围**：所有 Command Handler 实现  
-**生效时间**：待审批通过后  
+**生效时间**：即刻  
 **依赖 ADR**：ADR-0005（应用内交互模型）
 
 ---
@@ -252,7 +263,7 @@
 - 无
 
 **相关（Related）**：
-- [ADR-0240：Handler 异常约束](./ADR-240-handler-exception-constraints.md) - Handler 异常处理是生命周期的一部分
+- [ADR-240：Handler 异常约束](./ADR-240-handler-exception-constraints.md) - Handler 异常处理是生命周期的一部分
 
 ---
 

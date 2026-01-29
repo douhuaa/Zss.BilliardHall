@@ -165,9 +165,13 @@ private const string RuleId = "ADR-240.1";
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md)
 
 **Depends On**：
-- [ADR-902：ADR 结构与章节规范](../governance/ADR-902-adr-template-structure-contract.md)
+- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 测试代码组织遵循模块化架构
+- [ADR-0003：命名空间规则](../constitutional/ADR-0003-namespace-rules.md) - 测试代码命名空间遵循规则
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 测试命名遵循术语规范
+- [ADR-902：ADR 结构与章节规范](../governance/ADR-902-adr-template-structure-contract.md) - ADR 测试组织遵循 ADR 结构
 
 **Depended By**：
+- [ADR-301：集成测试自动化](../technical/ADR-301-integration-test-automation.md) - 集成测试组织基于本 ADR
 - 所有包含 Enforcement 章节的 ADR
 
 ---

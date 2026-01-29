@@ -243,6 +243,8 @@ superseded_by: null
 - [ADR-902：治理类 ADR 标准格式](./ADR-902-adr-template-structure-contract.md) - 本文档标准来源
 
 **Depended By**：
+- [ADR-903：ArchitectureTests 命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD) - 测试组织需要明确执行级别
+- [ADR-906：Analyzer 与 CI Gate 映射协议](./ADR-906-analyzer-ci-gate-mapping-protocol.md) - CI Gate 映射依赖执行级别分类
 - 无
 
 **Supersedes（替代）**：

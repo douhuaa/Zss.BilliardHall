@@ -1,3 +1,17 @@
+---
+adr: ADR-0007
+title: "Agent 行为与权限宪法"
+status: Final
+level: Constitutional
+version: "1.0"
+deciders: "Architecture Board"
+date: 2026-01-23
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0007：Agent 行为与权限宪法
 
 > ⚖️ **本 ADR 是所有 Agent 的元规则，定义 Agent 行为边界和权限约束的唯一裁决源。**
@@ -23,7 +37,7 @@
 
 ## 术语表（Glossary）
 
-| 术语              | 定义                                             | 英文对照                    |
+| 术语 | 定义 | 英文对照 |
 |-----------------|------------------------------------------------|-------------------------|
 | Agent           | 在特定职责下工作的 GitHub Copilot 角色实例                 | Agent                   |
 | Guardian        | 架构守护者 Agent，负责协调和监督所有架构约束                     | Architecture Guardian   |

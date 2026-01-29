@@ -1,8 +1,19 @@
+---
+adr: ADR-120
+title: "领域事件命名规范"
+status: Final
+level: Structure
+version: "1.2"
+deciders: "Architecture Board"
+date: 2026-01-24
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-120：领域事件命名规范
 
-**状态**：✅ 已采纳（Adopted）  
-**版本**：1.0
-**级别**：结构约束（Structure Constraint）  
 **适用范围**：所有模块（Modules）、领域事件定义、事件处理器  
 **生效时间**：即刻  
 **依赖 ADR**：ADR-0001、ADR-0003、ADR-0005
@@ -20,13 +31,13 @@
 
 ## 术语表（Glossary）
 
-| 术语         | 定义                       |
-|------------|--------------------------|
-| 领域事件       | 描述已发生业务事实的不可变对象          |
-| 集成事件       | 跨系统事件，由领域事件转换            |
-| 事件命名空间     | 必须与物理文件结构对应              |
-| 事件版本       | V{N} 格式，用于向后兼容演进         |
-| 事件聚合根      | 事件所属聚合根实体，决定业务语义边界       |
+| 术语 | 定义 | 英文对照 |
+|------------|--------------------------|----------------------|
+| 领域事件       | 描述已发生业务事实的不可变对象          | Domain Event      |
+| 集成事件       | 跨系统事件，由领域事件转换            | Integration Event |
+| 事件命名空间     | 必须与物理文件结构对应              | Event Namespace   |
+| 事件版本       | V{N} 格式，用于向后兼容演进         | Event Version     |
+| 事件聚合根      | 事件所属聚合根实体，决定业务语义边界       | Event Aggregate Root |
 
 ---
 

@@ -243,9 +243,12 @@ ADR_0000_2_Architecture_Tests_Must_Not_Be_Skipped
 
 - [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md)
 - [ADR-902：ADR 模板与结构契约](./ADR-902-adr-template-structure-contract.md)
+- [ADR-905：执行级别分类](./ADR-905-enforcement-level-classification.md) - 架构测试组织需要明确执行级别
 
 **被依赖（Depended By）**：
 
+- [ADR-904：ArchitectureTests 最小断言语义规范](./ADR-904-architecturetests-minimum-assertion-semantics.md) - 断言语义基于命名组织规范
+- [ADR-906：Analyzer 与 CI Gate 映射协议](./ADR-906-analyzer-ci-gate-mapping-protocol.md) - CI Gate 映射依赖测试命名组织
 - 所有【必须架构测试覆盖】的 ADR
 
 **替代（Supersedes）**：

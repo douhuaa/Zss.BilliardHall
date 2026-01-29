@@ -1,8 +1,19 @@
+---
+adr: ADR-121
+title: "契约（Contract）与 DTO 命名组织规范"
+status: Final
+level: Structure
+version: "1.2"
+deciders: "Architecture Board"
+date: 2026-01-24
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-121：契约（Contract）与 DTO 命名组织规范
 
-**状态**：✅ 已采纳（Adopted）  
-**版本**：1.0
-**级别**：结构约束（Structure Constraint）  
 **适用范围**：所有模块（Modules）、跨模块数据传递、API 层、事件与命令 Query 消息  
 **生效时间**：即刻  
 **依赖 ADR**：ADR-0001（模块化单体与垂直切片架构）、ADR-0003（命名空间规范）、ADR-0005（应用内交互模型）、ADR-120（领域事件命名规范）
@@ -22,14 +33,14 @@
 
 ## 术语表（Glossary）
 
-| 术语               | 定义                                    |
-|------------------|---------------------------------------|
-| 契约（Contract）     | 跨模块数据传递的只读、版本化的数据 DTO，只用于信息传递       |
-| DTO              | 数据传输对象，用于在不同层次或模块间传递数据，不包含业务逻辑      |
-| 模块内 DTO          | 仅在模块内部使用的 DTO，不对外暴露                 |
-| 跨模块契约            | 在模块间传递的契约，必须严格遵守命名和组织规范             |
-| 契约版本             | 契约结构的版本标识（如 V2、V3），用于支持向后兼容和演进     |
-| 业务含义后缀           | 反映数据用途的后缀，如 `InfoDto`、`DetailContract` |
+| 术语 | 定义 | 英文对照 |
+|------------------|---------------------------------------|---------------------------|
+| 契约（Contract）     | 跨模块数据传递的只读、版本化的数据 DTO，只用于信息传递       | Contract               |
+| DTO              | 数据传输对象，用于在不同层次或模块间传递数据，不包含业务逻辑      | Data Transfer Object   |
+| 模块内 DTO          | 仅在模块内部使用的 DTO，不对外暴露                 | Internal DTO           |
+| 跨模块契约            | 在模块间传递的契约，必须严格遵守命名和组织规范             | Cross-Module Contract  |
+| 契约版本             | 契约结构的版本标识（如 V2、V3），用于支持向后兼容和演进     | Contract Version       |
+| 业务含义后缀           | 反映数据用途的后缀，如 `InfoDto`、`DetailContract` | Business Meaning Suffix |
 
 ---
 

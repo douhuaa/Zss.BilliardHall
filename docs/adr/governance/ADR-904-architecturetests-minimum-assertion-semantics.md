@@ -1,11 +1,11 @@
-﻿---
+---
 adr: ADR-904
 title: "ArchitectureTests 最小断言语义规范"
 status: Superseded
 level: Governance
 version: "1.0"
 deciders: "Architecture Board"
-date: 2026-01-28
+date: 2026-01-27
 maintainer: "Architecture Board"
 reviewer: "GitHub Copilot"
 supersedes: null
@@ -149,15 +149,16 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 
 **Depends On**：
 
-- [ADR-903：ArchitectureTests 命名与组织规范](../governance/ADR-903-architecture-tests-naming-organization.md)
+- [ADR-903：ArchitectureTests 命名与组织规范](../governance/ADR-903-architecture-tests-naming-organization.MD)
 
 **Depended By**：
+- [ADR-906：Analyzer 与 CI Gate 映射协议](../governance/ADR-906-analyzer-ci-gate-mapping-protocol.md) - CI Gate 映射依赖断言语义规范
 - 所有【必须架构测试覆盖】ADR
 - CI / Analyzer 校验规则
 
 **Related**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md)
-- [ADR-122：测试代码组织与命名规范（ARD）](../structure/ADR-0122-architecture-tests-naming-organization-ard.md)
+- [ADR-122：测试代码组织与命名规范（ARD）](../structure/ADR-122-test-organization-naming.md)
 
 ---
 

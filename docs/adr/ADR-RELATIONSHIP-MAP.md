@@ -1,3 +1,17 @@
+---
+adr: ADR-RELATIONSHIP-MAP
+title: "ADR 关系图"
+status: Active
+level: Tool
+version: "1.0"
+deciders: "Auto-generated"
+date: 2026-01-26
+maintainer: "scripts/generate-adr-relationship-map.sh"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR 关系图（ADR Relationship Map）
 
 > ⚠️ **无裁决力声明**：本文档为自动生成的可视化工具，不具备架构裁决权。所有架构决策以 ADR 正文为准。

@@ -1,12 +1,23 @@
+---
+adr: ADR-124
+title: "Endpoint 命名及参数约束规范"
+status: Final
+level: Structure
+version: "2.0"
+deciders: "Architecture Board"
+date: 2026-01-26
+maintainer: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-124：Endpoint 命名及参数约束规范
 
 > ⚖️ **本 ADR 定义 HTTP Endpoint 命名、职责边界和单一调用约束的唯一裁决规则。**
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：结构层  
 **影响范围**：所有 HTTP Endpoint  
-**生效时间**：待审批通过后
+**生效时间**：即刻
 
 ---
 
@@ -22,7 +33,7 @@
 
 ## 术语表（Glossary）
 
-| 术语         | 定义                            | 英文对照                |
+| 术语 | 定义 | 英文对照 |
 |------------|-------------------------------|------------------------|
 | Endpoint   | HTTP/gRPC 等协议的入口点，仅做请求适配      | Endpoint               |
 | Request DTO | 请求数据传输对象，用于接收客户端请求          | Request DTO            |

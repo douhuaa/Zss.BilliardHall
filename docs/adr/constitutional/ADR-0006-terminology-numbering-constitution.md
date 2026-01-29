@@ -1,3 +1,17 @@
+---
+adr: ADR-0006
+title: "术语与编号宪法"
+status: Final
+level: Constitutional
+version: "1.0"
+deciders: "Architecture Board"
+date: 2026-01-23
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0006：术语与编号宪法
 
 > ⚖️ **本 ADR 是所有 ADR 的元规则，定义术语语义和编号体系的唯一裁决源。**
@@ -26,7 +40,7 @@
 
 ### 架构组织术语
 
-| 术语            | 定义                                                   | 英文对照              |
+| 术语 | 定义 | 英文对照 |
 |---------------|------------------------------------------------------|--------------------|
 | ADR           | Architecture Decision Record，架构决策记录，定义架构约束的宪法级文档      | ADR                |
 | 宪法层 ADR       | ADR-0001~0009，系统根基，不可推翻，只能细化，破例需特批                  | Constitutional ADR |

@@ -1,11 +1,11 @@
-﻿---
+---
 adr: ADR-906
 title: "Analyzer / CI Gate 与 ADR 映射协议"
 status: Superseded
 level: Governance
 version: "1.0"
 deciders: "Architecture Board"
-date: 2026-01-28
+date: 2026-01-27
 maintainer: "Architecture Board"
 reviewer: "GitHub Copilot"
 supersedes: null
