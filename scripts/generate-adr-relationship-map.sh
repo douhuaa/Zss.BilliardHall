@@ -26,22 +26,22 @@ while IFS= read -r adr_file; do
     adr_id=$(basename "$adr_file" | sed 's/\.md$//')
     
     # 提取关系声明章节
-    if grep -q "## 关系声明" "$adr_file"; then
+    if grep -qE "## 关系声明|## Relationships" "$adr_file"; then
         # 提取依赖关系
-        sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-            grep -A 10 "**依赖（Depends On）**" | \
+        sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+            grep -A 10 "\*\*依赖（Depends On）\*\*\|\*\*Depends On\*\*" | \
             grep -E "\[ADR-[0-9]+" | \
             sed "s/.*\[ADR-\([0-9]*\).*/DEPENDS|$adr_id|ADR-\1/" >> "$RELATIONSHIPS_FILE" || true
         
         # 提取替代关系
-        sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-            grep -A 10 "**替代（Supersedes）**" | \
+        sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+            grep -A 10 "\*\*替代（Supersedes）\*\*\|\*\*Supersedes\*\*" | \
             grep -E "\[ADR-[0-9]+" | \
             sed "s/.*\[ADR-\([0-9]*\).*/SUPERSEDES|$adr_id|ADR-\1/" >> "$RELATIONSHIPS_FILE" || true
         
         # 提取相关关系
-        sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-            grep -A 10 "**相关（Related）**" | \
+        sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+            grep -A 10 "\*\*相关（Related）\*\*\|\*\*Related\*\*" | \
             grep -E "\[ADR-[0-9]+" | \
             sed "s/.*\[ADR-\([0-9]*\).*/RELATED|$adr_id|ADR-\1/" >> "$RELATIONSHIPS_FILE" || true
     fi
@@ -119,34 +119,34 @@ while IFS= read -r adr_file; do
     echo "" >> "$OUTPUT_FILE"
     
     # 检查是否有关系声明
-    if grep -q "## 关系声明" "$adr_file"; then
+    if grep -qE "## 关系声明|## Relationships" "$adr_file"; then
         # 提取依赖
-        depends=$(sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-                  grep -A 10 "**依赖（Depends On）**" | \
+        depends=$(sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+                  grep -A 10 "\*\*依赖（Depends On）\*\*\|\*\*Depends On\*\*" | \
                   grep -E "\[ADR-[0-9]+" | \
                   sed 's/^[[:space:]]*//' || echo "")
         
         # 提取被依赖
-        depended=$(sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-                   grep -A 10 "**被依赖（Depended By）**" | \
+        depended=$(sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+                   grep -A 10 "\*\*被依赖（Depended By）\*\*\|\*\*Depended By\*\*" | \
                    grep -E "\[ADR-[0-9]+" | \
                    sed 's/^[[:space:]]*//' || echo "")
         
         # 提取替代
-        supersedes=$(sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-                     grep -A 10 "**替代（Supersedes）**" | \
+        supersedes=$(sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+                     grep -A 10 "\*\*替代（Supersedes）\*\*\|\*\*Supersedes\*\*" | \
                      grep -E "\[ADR-[0-9]+" | \
                      sed 's/^[[:space:]]*//' || echo "")
         
         # 提取被替代
-        superseded=$(sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-                     grep -A 10 "**被替代（Superseded By）**" | \
+        superseded=$(sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+                     grep -A 10 "\*\*被替代（Superseded By）\*\*\|\*\*Superseded By\*\*" | \
                      grep -E "\[ADR-[0-9]+" | \
                      sed 's/^[[:space:]]*//' || echo "")
         
         # 提取相关
-        related=$(sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-                  grep -A 10 "**相关（Related）**" | \
+        related=$(sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+                  grep -A 10 "\*\*相关（Related）\*\*\|\*\*Related\*\*" | \
                   grep -E "\[ADR-[0-9]+" | \
                   sed 's/^[[:space:]]*//' || echo "")
         
@@ -204,8 +204,8 @@ cat >> "$OUTPUT_FILE" << EOF
 ## 统计信息（Statistics）
 
 - **ADR 总数**：$(wc -l < "$ADR_LIST_FILE")
-- **包含关系声明的 ADR**：$(while IFS= read -r f; do grep -q "## 关系声明" "$f" && echo 1; done < "$ADR_LIST_FILE" | wc -l)
-- **缺少关系声明的 ADR**：$(while IFS= read -r f; do grep -q "## 关系声明" "$f" || echo 1; done < "$ADR_LIST_FILE" | wc -l)
+- **包含关系声明的 ADR**：$(while IFS= read -r f; do grep -qE "## 关系声明|## Relationships" "$f" && echo 1; done < "$ADR_LIST_FILE" | wc -l)
+- **缺少关系声明的 ADR**：$(while IFS= read -r f; do grep -qE "## 关系声明|## Relationships" "$f" || echo 1; done < "$ADR_LIST_FILE" | wc -l)
 - **依赖关系数**：$(grep -c "^DEPENDS" "$RELATIONSHIPS_FILE" 2>/dev/null || echo 0)
 - **替代关系数**：$(grep -c "^SUPERSEDES" "$RELATIONSHIPS_FILE" 2>/dev/null || echo 0)
 - **相关关系数**：$(grep -c "^RELATED" "$RELATIONSHIPS_FILE" 2>/dev/null || echo 0)
@@ -220,7 +220,7 @@ EOF
 echo "✅ 关系图已生成：$OUTPUT_FILE"
 
 # 显示警告信息
-missing_count=$(while IFS= read -r f; do grep -q "## 关系声明" "$f" || echo 1; done < "$ADR_LIST_FILE" | wc -l)
+missing_count=$(while IFS= read -r f; do grep -qE "## 关系声明|## Relationships" "$f" || echo 1; done < "$ADR_LIST_FILE" | wc -l)
 if [ "$missing_count" -gt 0 ]; then
     echo ""
     echo "⚠️  警告：$missing_count 个 ADR 缺少关系声明章节"

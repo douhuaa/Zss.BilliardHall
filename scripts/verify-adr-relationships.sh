@@ -70,9 +70,14 @@ while IFS= read -r adr_file; do
     adr_number=$(echo "$adr_name" | sed -n 's/^ADR-\([0-9]\{4\}\).*/\1/p')
     
     # 检查是否包含关系声明章节
+    # 支持两种格式：
+    # 1. ## 关系声明（Relationships） - 标准格式（ADR-940）
+    # 2. ## Relationships（关系声明） - 旧格式
     has_relationship_section=false
     if grep -q "^## 关系声明（Relationships）" "$adr_file" 2>/dev/null || \
-       grep -q "^## 关系声明" "$adr_file" 2>/dev/null; then
+       grep -q "^## 关系声明" "$adr_file" 2>/dev/null || \
+       grep -q "^## Relationships（关系声明）" "$adr_file" 2>/dev/null || \
+       grep -q "^## Relationships" "$adr_file" 2>/dev/null; then
         has_relationship_section=true
     fi
     
@@ -92,8 +97,9 @@ while IFS= read -r adr_file; do
         errors=$((errors + 1))
     else
         # 检查关系声明章节的位置（应在决策章节之后）
-        decision_line=$(grep -n "^## 决策" "$adr_file" 2>/dev/null | head -1 | cut -d: -f1 || echo "0")
-        relationship_line=$(grep -n "^## 关系声明" "$adr_file" 2>/dev/null | head -1 | cut -d: -f1 || echo "0")
+        decision_line=$(grep -n "^## 决策\|^## Decision" "$adr_file" 2>/dev/null | head -1 | cut -d: -f1 || echo "0")
+        # 支持两种格式：中文在前或英文在前
+        relationship_line=$(grep -n "^## 关系声明\|^## Relationships" "$adr_file" 2>/dev/null | head -1 | cut -d: -f1 || echo "0")
         
         if [ "$decision_line" -gt 0 ] && [ "$relationship_line" -gt 0 ]; then
             if [ "$relationship_line" -lt "$decision_line" ]; then
@@ -114,22 +120,30 @@ while IFS= read -r adr_file; do
         fi
         
         # 检查是否包含所有必需的子章节
+        # 支持两种格式：
+        # 1. **依赖（Depends On）** - 标准格式
+        # 2. **Depends On** - 旧格式
         subsections=(
-            "依赖（Depends On）"
-            "被依赖（Depended By）"
-            "替代（Supersedes）"
-            "被替代（Superseded By）"
-            "相关（Related）"
+            "依赖（Depends On）:Depends On"
+            "被依赖（Depended By）:Depended By"
+            "替代（Supersedes）:Supersedes"
+            "被替代（Superseded By）:Superseded By"
+            "相关（Related）:Related"
         )
         
-        for subsection in "${subsections[@]}"; do
-            if ! grep -A 100 "^## 关系声明" "$adr_file" 2>/dev/null | grep -q "**$subsection**"; then
+        for subsection_pair in "${subsections[@]}"; do
+            cn_subsection="${subsection_pair%%:*}"
+            en_subsection="${subsection_pair##*:}"
+            
+            # 支持两种格式：中文在前或英文单独
+            # 需要转义星号并使用扩展正则表达式
+            if ! grep -A 100 "^## 关系声明\|^## Relationships" "$adr_file" 2>/dev/null | grep -qE "\*\*$cn_subsection|\*\*$en_subsection"; then
                 if [ "$OUTPUT_FORMAT" = "text" ]; then
-                    echo "⚠️  警告：$adr_name 缺少'$subsection'子章节"
+                    echo "⚠️  警告：$adr_name 缺少'$cn_subsection'子章节"
                 fi
                 if [ "$OUTPUT_FORMAT" = "json" ]; then
                     json_add_detail "Missing_Subsection" "ADR-$adr_number" "warning" \
-                        "缺少'$subsection'子章节" \
+                        "缺少'$cn_subsection'子章节" \
                         "$adr_file" "" \
                         "docs/adr/governance/ADR-940-adr-relationship-traceability.md"
                 fi

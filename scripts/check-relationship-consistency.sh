@@ -80,34 +80,34 @@ while IFS= read -r adr_file; do
     # Skip files without valid ADR numeric IDs (like ADR-RELATIONSHIP-MAP)
     [ -z "$adr_id" ] && continue
     
-    if grep -q "^## 关系声明" "$adr_file"; then
-        # 提取 "依赖（Depends On）" 列表
-        sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-            sed -n '/\*\*依赖（Depends On）\*\*/,/\*\*被依赖/p' | \
+    if grep -qE "^## 关系声明|^## Relationships" "$adr_file"; then
+        # 提取 "依赖（Depends On）" 或 "Depends On" 列表
+        sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+            sed -n '/\*\*依赖（Depends On）\*\*\|\*\*Depends On\*\*/,/\*\*被依赖\|\*\*Depended By/p' | \
             { grep -oE 'ADR-[0-9]+' || true; } | \
             while read -r dep_id; do
                 echo "$adr_id|DEPENDS_ON|$dep_id" >> "$DEPENDENCIES_FILE"
             done
         
-        # 提取 "被依赖（Depended By）" 列表
-        sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-            sed -n '/\*\*被依赖（Depended By）\*\*/,/\*\*替代/p' | \
+        # 提取 "被依赖（Depended By）" 或 "Depended By" 列表
+        sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+            sed -n '/\*\*被依赖（Depended By）\*\*\|\*\*Depended By\*\*/,/\*\*替代\|\*\*Supersedes/p' | \
             { grep -oE 'ADR-[0-9]+' || true; } | \
             while read -r dep_id; do
                 echo "$adr_id|DEPENDED_BY|$dep_id" >> "$DEPENDENCIES_FILE"
             done
         
-        # 提取 "替代（Supersedes）" 列表
-        sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-            sed -n '/\*\*替代（Supersedes）\*\*/,/\*\*被替代/p' | \
+        # 提取 "替代（Supersedes）" 或 "Supersedes" 列表
+        sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+            sed -n '/\*\*替代（Supersedes）\*\*\|\*\*Supersedes/,/\*\*被替代\|\*\*Superseded By/p' | \
             { grep -oE 'ADR-[0-9]+' || true; } | \
             while read -r sup_id; do
                 echo "$adr_id|SUPERSEDES|$sup_id" >> "$SUPERSEDES_FILE"
             done
         
-        # 提取 "被替代（Superseded By）" 列表
-        sed -n '/## 关系声明/,/^##/p' "$adr_file" | \
-            sed -n '/\*\*被替代（Superseded By）\*\*/,/\*\*相关/p' | \
+        # 提取 "被替代（Superseded By）" 或 "Superseded By" 列表
+        sed -n '/## 关系声明\|## Relationships/,/^##/p' "$adr_file" | \
+            sed -n '/\*\*被替代（Superseded By）\*\*\|\*\*Superseded By\*\*/,/\*\*相关\|\*\*Related/p' | \
             { grep -oE 'ADR-[0-9]+' || true; } | \
             while read -r sup_id; do
                 echo "$adr_id|SUPERSEDED_BY|$sup_id" >> "$SUPERSEDES_FILE"
