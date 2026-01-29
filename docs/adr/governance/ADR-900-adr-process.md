@@ -7,25 +7,19 @@ version: "1.2"
 deciders: "Architecture Board"
 date: 2026-01-27
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
 ---
+
 
 # ADR-900：ADR 新增与修订流程
 
 > ⚖️ 本流程是 Zss.BilliardHall 唯一有效 ADR 生命周期闭环规范。任何未走本流程的 ADR 在本项目中视为无效，不具约束力。
 
 **状态**：✅ Final（裁决型ADR）  
-**级别**：治理层 / 生命周期最高约束  
-**版本**：1.2  
-**修订日期**：2026-01-23  
-**适用范围**：所有 ADR（0000~999）  
-**生效时间**：即刻
-
----
-
-## 本章聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - ADR 新增/修订/废弃全流程唯一标准
 - 分层权限表与破例登记机制
@@ -35,7 +29,9 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+---
+
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |-----------|-------------------------------------|----------------------------|
@@ -48,113 +44,79 @@ superseded_by: null
 
 ---
 
-## ADR 层级与修订权限（Hard Limits）
+---
 
-| 层级/类型     | 新增权限          | 修订权限          | 公示期 | 审批要求 |
-|-----------|---------------|---------------|-----|------|
-| 宪法层 ADR   | 架构委员会         | 架构委员会全体       | 2 周 | 全体一致 |
-| 治理层 ADR   | Tech Lead/架构师 | Tech Lead/架构师 | 1 周 | 多数同意 |
-| 结构/运行/技术层 | Tech Lead/架构师 | Tech Lead/架构师 | 无   | 单人批准 |
+## Decision（裁决）
 
-- 宪法层仅可细化，不得削弱/推翻，特批需走破例登记流程
-- 治理与细化层任何试图更改宪法层规则者，自动无效
+
+> ⚠️ **本节是唯一裁决来源，其他章节不得产生新规则。**
+
+### 待补充规则
+
+待补充...
+
 
 ---
 
-## 新增 ADR 流程
+---
 
-1. **需求识别与分级分类**
-  - 影响全局/跨模块/将被依赖 → 宪法层
-  - 仅改进流程/治理 → 治理层
-  - 特定领域/实现细节 → 结构/运行/技术层
+## Enforcement（执法模型）
 
-2. **RFC 草案与公示**
-  - 使用标准 RFC 模板，提交至 GitHub Issues
-  - 宪法/治理层需严格公示，记录讨论与决议
 
-3. **审查与审批**
-  - 宪法层：架构委员会 100% 同意
-  - 治理层：Tech Lead/架构师大多数
-  - 结构/运行/技术层：单人可批，但留审计记录
+### 执行方式
 
-4. **文档/测试/Prompt 三位一体交付**
-  - 标准结构 ADR 文档，关键约束带【必须架构测试覆盖】标记
-  - 同步生成架构测试、Prompt 触发自查/CI
-  - 漏任一项，视为未完成，PR 不得合并
+待补充...
 
-5. **映射校验与最终审查**
-  - 执行映射校验脚本，确保 ADR、测试、Prompt 一致
-  - Copilot 先自检，最终责任由人工负责人确认并签字
 
-6. **合并与团队公告**
-  - 合并后 README/导航必须更新
-  - 团队渠道公告上线，必要时培训同步
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- **代码实现的技术细节**：不涉及代码如何编写、测试如何实现的具体技术规范
+- **项目管理工具的选择**：不规定使用 Jira、Trello、GitHub Projects 还是其他项目管理工具
+- **ADR 写作的文学风格**：不涉及写作技巧、修辞手法等文学层面的要求
+- **团队协作的软技能**：不涉及沟通技巧、会议组织、冲突解决等软技能培训
+- **多语言翻译流程**：不建立 ADR 的多语言翻译和维护流程
+- **版本控制系统的内部机制**：不涉及 Git 的分支策略、合并策略等具体操作细节
+- **ADR 工具链的选择**：不强制使用特定的 ADR 管理工具或插件
+- **文档托管平台的选择**：不规定使用 GitHub Pages、GitBook 还是其他文档托管服务
 
 ---
 
-## ADR 修订与废弃流程
+## Prohibited（禁止行为）
 
-### 修订（必须走完整流程）
 
-- 发现歧义、错误或重大演进需求时，走 RFC→公示→审批→文档/测试/Prompt 三位一体→映射校验闭环
-- 禁止通过简易变更、直接编辑、只补测试/Prompt 不补正文等方式“修订ADR”
-- 所有修改（包括细节）须更新版本历史，简要记录影响面
+以下行为明确禁止：
 
-### 废弃
+### 流程违规
+- ❌ **禁止绕过审批流程直接合并 ADR**：所有 ADR 必须经过规定的审批流程和同行评审
+- ❌ **禁止未经架构委员会批准修改宪法层 ADR**：宪法层 ADR 变更需架构委员会全体一致同意
+- ❌ **禁止一个 PR 包含多个不相关的 ADR**：每个 PR 只能包含一个 ADR 及其相关测试和文档
 
-- 新建替代 ADR 并链接废弃原因，原文标记已废弃，不可删除
-- 废弃时同步移除相关测试/Prompt，并更新导航/映射表
+### 文档质量违规
+- ❌ **禁止提交不完整的 ADR**：ADR 必须包含所有 ADR-902 规定的必需章节
+- ❌ **禁止 ADR 缺少对应的架构测试**：标记为需要测试覆盖的 ADR 必须提供架构测试
+- ❌ **禁止 ADR 使用模糊或歧义语言**：必须使用明确的裁决性语言（参考 ADR-901）
 
----
+### 版本管理违规
+- ❌ **禁止删除已发布的 ADR**：使用状态标记为 Deprecated/Superseded 而不是删除文件
+- ❌ **禁止修改已分配的 ADR 编号**：ADR 编号一旦分配不得修改
+- ❌ **禁止跳号或重复使用 ADR 编号**：保持编号的连续性和唯一性
 
-## 权限与破例管理
+### 治理违规
+- ❌ **禁止口头约定替代正式 ADR**：所有架构决策必须文档化为正式 ADR
+- ❌ **禁止以"临时方案"为由跳过 ADR 流程**：临时方案也需要通过 ADR 记录和审批
+- ❌ **禁止在未废弃旧 ADR 的情况下创建冲突的新 ADR**：必须明确标记替代关系（Supersedes/Superseded By）
 
-- 仅架构委员会有权特批宪法层规则的破例
-- 所有破例需归档于 ARCH-VIOLATIONS.md，每季度审计
-- 连续延续三次以上必须强制归还或专项审议
-
----
-
-## 三位一体校验清单（Checklist）
-
-- [ ] 是否有完整 ADR（包含 Focus、术语、决策、关系、版本历史）
-- [ ] 关键约束均带【必须架构测试覆盖】标记
-- [ ] 是否已同步生成/更新架构测试
-- [ ] 是否有对应 Prompt 文件，并覆盖所有主场景
-- [ ] 映射校验/CI 流程全部通过
-- [ ] Copilot 及人工审查报告均已归档
 
 ---
 
-## Copilot 的角色
-
-- 生成 RFC/ADR/Prompt/测试结构与范例
-- 触发映射一致性自检和报告
-- 提供典型决策树、流程提醒和重点清单
-- 最终结论和审批权归人工
-
 ---
 
-## FAQ（高频决策解答）
-
-- Q：只提交 ADR 文档，测试和 Prompt 可以后补吗？  
-  A：❌ 不可以，三位一体缺一不可，缺任一项视为无效 ADR。
-
-- Q：Copilot 审查结果可直接视为审批结论吗？  
-  A：❌ 不能，必须有人工责任人签字/记录。
-
-- Q：架构委员会可以随意调整宪法层规则吗？  
-  A：❌ 必须走 2 周公示与全体一致流程，留历史与公告。
-
-- Q：废弃的 ADR 可以删除吗？  
-  A：❌ 永远只做废弃标记和链路，不允许物理删除。
-
-- Q：如何辨别一个决策是否应为宪法层？  
-  A：只要它影响系统基础结构、依赖方向、约束开放性，或会被跨模块持久依赖，就应为宪法层。
-
----
-
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - ADR 流程基于测试和 CI 机制
@@ -182,18 +144,32 @@ superseded_by: null
 
 ---
 
-## 版本历史
+---
 
-| 版本  | 日期         | 变更说明              | 修订人      | 影响级别 |
-|-----|------------|-------------------|----------|------|
-| 1.2 | 2026-01-23 | 企业级闭环重构、三位一体交付与校验 | @douhuaa | High |
-| 1.1 | 2026-01-21 | 强调测试/Prompt/审查闭环  | @copilot | High |
-| 1.0 | 2026-01-21 | 定义ADR新增修订流程       | @douhuaa | None |
+## References（非裁决性参考）
+
+**相关外部资源**：
+- [ADR GitHub Organization](https://adr.github.io/) - ADR 社区标准和最佳实践
+- [Architectural Decision Records by Michael Nygard](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) - ADR 概念的原始论文
+- [Markdown Any Decision Records (MADR)](https://adr.github.io/madr/) - MADR 模板规范
+- [RFC 2119: Key words for use in RFCs](https://www.ietf.org/rfc/rfc2119.txt) - 规范性语言标准
+
+**相关内部文档**：
+- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - ADR 测试和 CI 执行机制
+- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - ADR 编号规范和术语定义
+- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档编写标准
+- [ADR-901：Warning 约束语义](./ADR-901-warning-constraint-semantics.md) - ADR 语义规范
+- [ADR-902：ADR 标准模板与结构契约](./ADR-902-adr-template-structure-contract.md) - ADR 结构要求
+- [ADR-905：执行级别分类](./ADR-905-enforcement-level-classification.md) - 执行级别定义
+
 
 ---
 
-## 附录
+---
 
-- [RFC 模板](/docs/templates/rcf-template.md)
-- [ADR 模板](/docs/templates/adr-template.md)
-- [Prompt 模板](/docs/templates/copilot-pormpts-template.md)
+## History（版本历史）
+
+
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 2026-01-29 | 初始版本 |

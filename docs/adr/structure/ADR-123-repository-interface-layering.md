@@ -7,21 +7,19 @@ version: "2.0"
 deciders: "Architecture Board"
 date: 2026-01-26
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
 ---
+
 
 # ADR-123：Repository 接口与分层命名规范
 
 > ⚖️ **本 ADR 定义 Repository 接口与实现的分层位置和命名的唯一裁决规则。**
 
 **影响范围**：所有 Repository 实现  
-**生效时间**：即刻
-
----
-
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - Repository 接口必须在 Domain 层
 - Repository 实现必须在 Infrastructure 层
@@ -31,7 +29,9 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+---
+
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------------|------------------------------|----------------------|
@@ -43,7 +43,9 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+---
+
+## Decision（裁决）
 
 ### ADR-123.1：Repository 接口必须位于 Domain 层
 
@@ -132,21 +134,9 @@ Task ExecuteSqlAsync(string sql);               // 直接暴露 SQL
 
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述                   | 测试方式       | 测试用例                                      | 必须遵守 |
-|------------|------------------------|------------|--------------------------------------------|------|
-| ADR-123.1  | Repository 接口必须在 Domain | L1 - 自动化测试 | Repository_Interfaces_Must_Be_In_Domain      | ✅    |
-| ADR-123.2  | Repository 实现必须在 Infrastructure | L1 - 自动化测试 | Repository_Implementations_Must_Be_In_Infrastructure | ✅    |
-| ADR-123.3  | Repository 接口命名规范     | L1 - 自动化测试 | Repository_Interfaces_Must_Follow_Naming     | ✅    |
-| ADR-123.4  | Repository 实现禁止 Impl 后缀 | L1 - 自动化测试 | Repository_Implementations_Must_Not_Have_Impl_Suffix | ✅    |
-| ADR-123.5  | Repository 方法表达领域意图   | L2 - Code Review | Repository_Methods_Must_Express_Domain_Intent | ✅    |
-
-> **级别说明**：L1=静态自动化（脚本检查），L2=语义半自动或人工审查
-
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_123_Architecture_Tests.cs` 强制验证：
 
@@ -163,41 +153,29 @@ Task ExecuteSqlAsync(string sql);               // 直接暴露 SQL
 **有一项违规视为架构违规，CI 自动阻断。**
 
 ---
+---
 
-## 检查清单
+## Non-Goals（明确不管什么）
 
-- [ ] Repository 接口是否在 Domain 层？
-- [ ] Repository 实现是否在 Infrastructure 层？
-- [ ] Repository 接口命名是否符合 `I{Aggregate}Repository`？
-- [ ] Repository 实现是否避免 Impl 后缀？
-- [ ] Repository 方法名是否表达领域意图，避免技术术语？
+本 ADR 明确不涉及以下内容：
+
+- 待补充
 
 ---
 
-## 破例与归还（Exception）
+## Prohibited（禁止行为）
 
-> **破例不是逃避，而是债务。**
 
-### 允许破例的前提
+以下行为明确禁止：
 
-破例**仅在以下情况允许**：
+- 待补充
 
-1. **多种实现并存**：同时支持 SQL 和 NoSQL，需技术前缀区分
-2. **遗留代码迁移**：大规模重构的过渡期
-3. **第三方框架约束**：框架强制要求特定命名
-
-### 破例要求（不可省略）
-
-每个破例**必须**：
-
-- 记录在 `docs/summaries/arch-violations.md`
-- 说明特殊情况和技术原因
-- 提供迁移计划（如适用）
-- 指定失效日期（不超过 3 个月）
 
 ---
 
-## 关系声明（Relationships）
+---
+
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - Repository 分层基于模块结构
@@ -217,19 +195,21 @@ Task ExecuteSqlAsync(string sql);               // 直接暴露 SQL
 
 ---
 
-## 版本历史
+---
 
-| 版本  | 日期         | 变更说明       | 修订人 |
-|-----|------------|------------|-----|
-| 2.0 | 2026-01-26 | 裁决型重构，添加决策章节 | GitHub Copilot |
-| 1.0 | 2026-01-24 | 初始版本       | GitHub Copilot |
+## References（非裁决性参考）
+
+
+- 待补充
+
 
 ---
 
-## 附注
+---
 
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
+## History（版本历史）
 
-非裁决性参考（详细示例、Repository 实现最佳实践、DDD Repository Pattern）请查阅：
-- `docs/copilot/adr-0123.prompts.md`
-- [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html)
+
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 2026-01-29 | 初始版本 |

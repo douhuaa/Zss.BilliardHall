@@ -13,6 +13,7 @@ supersedes: null
 superseded_by: null
 ---
 
+
 # ADR-902：ADR 标准模板与结构契约
 
 > **这是 ADR 体系的“结构接口定义”。**
@@ -37,6 +38,8 @@ superseded_by: null
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语           | 定义                         | 英文对照                  |
@@ -45,6 +48,8 @@ superseded_by: null
 | Front Matter | ADR 文件头部的元信息区块             | Front Matter          |
 | 结构合规         | ADR 是否满足模板与顺序要求            | Structural Compliance |
 | 治理接口         | 可被 CI / Review / 工具消费的文档结构 | Governance Interface  |
+
+---
 
 ---
 
@@ -147,6 +152,8 @@ superseded_by: ADR-xxx | null
 
 ---
 
+---
+
 ## Enforcement（执法模型）
 
 > **模板本身不做语义裁决，只验证结构与格式。**
@@ -168,14 +175,20 @@ superseded_by: ADR-xxx | null
 - **审计阶段**：历史 ADR 结构一致性检查
 
 ---
+---
 
 ## Non-Goals（明确不管什么）
 
-- ADR 内容质量高低
-- 架构决策是否正确
-- 示例代码与教学说明
-- 团队沟通与培训方式
-- 文档美观与排版风格
+本 ADR 明确不涉及以下内容：
+
+- **Markdown 渲染引擎的选择**：不规定使用哪个 Markdown 解析器或渲染工具
+- **文档的排版和美化**：不涉及字体、颜色、间距等视觉设计细节
+- **文档托管平台的功能**：不涉及 GitHub Pages、GitBook 等平台的具体功能要求
+- **ADR 内容的质量标准**：不评判 ADR 内容本身的架构决策质量（仅约束结构）
+- **文档编写工具的选择**：不限定使用的文本编辑器或 IDE
+- **文档搜索和索引技术**：不涉及全文搜索、标签索引等技术实现细节
+- **文档的自动化生成**：不涉及如何自动化生成 ADR 文档的工具和流程
+- **文档的版本控制策略**：不涉及 Git 分支策略、合并策略等版本控制细节
 
 ---
 
@@ -186,6 +199,8 @@ superseded_by: ADR-xxx | null
 - 使用非标准 Front Matter
 - 通过注释或正文绕过模板约束
 - 创建“特殊 ADR 例外模板”
+
+---
 
 ---
 
@@ -208,10 +223,17 @@ superseded_by: ADR-xxx | null
 
 ---
 
+---
+
 ## References（非裁决性参考）
 
 - ISO/IEC/IEEE 42010
 - Michael Nygard – Architecture Decision Records
+
+---
+
+
+---
 
 ---
 

@@ -7,24 +7,19 @@ deciders: "Tech Lead"
 date: 2026-01-26
 version: "1.0"
 maintainer: "Tech Lead"
+primary_enforcement: L1
 reviewer: "@douhuaa"
 supersedes: null
 superseded_by: null
 ---
+
 
 # ADR-951：案例库管理规范
 
 > ⚖️ **本 ADR 定义案例库的组织、审核和维护标准。**
 
 **状态**：✅ Accepted（已采纳）  
-**版本**：1.0
-**级别**：治理层 / 内容管理  
-**适用范围**：所有案例文档（docs/cases/）  
-**生效时间**：即刻
-
----
-
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 案例库结构组织
 - 案例文档标准
@@ -33,7 +28,9 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+---
+
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------|------|----------|
@@ -44,7 +41,9 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+---
+
+## Decision（裁决）
 
 ### 案例库结构组织（ADR-951.1）
 
@@ -228,55 +227,40 @@ docs/cases/
 
 ---
 
-## 执法模型（Enforcement）
+---
 
-### 测试映射
+## Enforcement（执法模型）
 
-| 规则编号 | 执行级 | 测试/手段 |
-|---------|--------|----------|
-| ADR-951.1 | L2 | 目录结构检查 |
-| ADR-951.2 | L2 | PR Review |
-| ADR-951.3 | L2 | PR Review Checklist |
-| ADR-951.4 | L2 | 年度审核日历 |
+
+### 执行方式
+
+待补充...
+
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
 
 ---
 
-## 破例与归还（Exception）
+## Prohibited（禁止行为）
 
-### 允许破例的前提
 
-破例 **仅在以下情况允许**：
-- 紧急案例，可先合并后补充审核
+以下行为明确禁止：
 
-### 破例要求
+- 待补充
 
-每个破例 **必须**：
-- 在 PR 中说明紧急原因
-- 在 1 周内补充完整审核
-- 记录在 Issue 中跟踪
 
 ---
 
-## 变更政策（Change Policy）
-
-### 变更规则
-
-- **修改案例结构标准**：Tech Lead 可批准
-- **修改审核标准**：Tech Lead 可批准
-- **新增分类**：Tech Lead 可批准
-
 ---
 
-## 明确不管什么（Non-Goals）
-
-本 ADR **不负责**：
-- 案例内容的技术准确性（由 Code Review 保证）
-- 案例写作风格
-- 案例优先级排序
-
----
-
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-950：指南与 FAQ 文档治理宪法](ADR-950-guide-faq-documentation-governance.md) - 基于 Case 类型定义
@@ -293,7 +277,9 @@ docs/cases/
 
 ---
 
-## 非裁决性参考（References）
+---
+
+## References（非裁决性参考）
 
 ### 模板
 
@@ -306,10 +292,11 @@ docs/cases/
 
 ---
 
-## 版本历史
+---
 
-| 版本 | 日期 | 变更说明 | 作者 |
-|------|------|----------|------|
-| 1.0 | 2026-01-26 | 初始版本，定义案例库管理规范 | GitHub Copilot |
+## History（版本历史）
 
 
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 2026-01-29 | 初始版本 |

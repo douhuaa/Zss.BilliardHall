@@ -7,10 +7,12 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-28
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: ADR-903
 ---
+
 
 # ADR-122：ArchitectureTests 命名与组织规范（ARD）
 
@@ -27,6 +29,8 @@ superseded_by: ADR-903
 
 ---
 
+---
+
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -34,6 +38,8 @@ superseded_by: ADR-903
 | ArchitectureTests | 用于验证架构约束、依赖关系、分层规则的测试集合 | ArchitectureTests |
 | ARD | ADR 在测试层的可执行映射形式 | Architecture Rule Definition |
 | RuleId | 与 ADR 条目一一对应的规则编号（如 ADR-240.1） | RuleId |
+
+---
 
 ---
 
@@ -127,6 +133,8 @@ private const string RuleId = "ADR-240.1";
 
 ---
 
+---
+
 ## Enforcement（执法模型）
 
 > 本节为唯一架构执法映射表，所有必测/必拦规则均需在此列明。
@@ -141,12 +149,13 @@ private const string RuleId = "ADR-240.1";
 | ADR-122.6 | L1   | ADR 状态变更自动化校验 | Test_Obsolete_Or_Delete_On_ADR_Superseded | ✅    |
 
 ---
+---
 
 ## Non-Goals（明确不管什么）
 
-- 单元测试 / 集成测试命名
-- 具体断言库选型
-- 架构规则本身的内容设计
+本 ADR 明确不涉及以下内容：
+
+- 待补充
 
 ---
 
@@ -156,6 +165,8 @@ private const string RuleId = "ADR-240.1";
 - 一个测试类对应多个 ADR
 - ADR 已删除但测试仍存在
 - 使用自然语言描述而无 RuleId
+
+---
 
 ---
 
@@ -176,10 +187,17 @@ private const string RuleId = "ADR-240.1";
 
 ---
 
+---
+
 ## References（非裁决性参考）
 
 - NetArchTest.Rules
 - xUnit / NUnit Architecture Test Practices
+
+---
+
+
+---
 
 ---
 

@@ -7,10 +7,12 @@ deciders: "Architecture Board"
 date: 2026-01-29
 version: "5.0"
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
 ---
+
 
 # ADR-0001：模块化单体与垂直切片架构
 
@@ -18,7 +20,7 @@ superseded_by: null
 
 ---
 
-## 本章聚焦内容（Focus）
+## Focus（聚焦内容）
 
 仅定义适用于全生命周期自动化裁决/阻断的**模块隔离约束**：
 
@@ -30,7 +32,9 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+---
+
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |---------------|--------------------------------|-------------------|
@@ -43,63 +47,84 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+---
 
-### 模块定义与隔离（ADR-0001.1, 0001.2, 0001.7）
+## Decision（裁决）
 
-**规则**：
+> ⚠️ **本节是唯一裁决来源，其他章节不得产生新规则。**
+
+### ADR-0001.1:L1 模块按业务能力独立划分
+
 - 模块按业务能力独立划分（如 Members/Orders）
 - 每模块 = 独立程序集 = 清晰目录边界
 - 模块间禁止直接引用代码、类型、资源
 
 **判定**：
 - ❌ 模块引用其他模块类型
-- ❌ 项目文件引用其他模块
-- ❌ 命名空间不匹配模块边界
 - ✅ 仅通过契约、事件、原始类型通信
 
-### 垂直切片组织（ADR-0001.3, 0001.4）
+### ADR-0001.2:L1 项目文件禁止引用其他模块
 
-**规则**：
+- 项目文件（.csproj）不得包含对其他模块的 ProjectReference
+- 确保模块在编译时物理隔离
+
+**判定**：
+- ❌ 项目文件引用其他模块
+- ✅ 模块编译时独立
+
+### ADR-0001.3:L2 垂直切片以用例为最小单元
+
 - 用例（Use Case）为最小组织单元
 - 每用例包含 Endpoint → Command/Query → Handler → 领域逻辑
-- 禁止横向 Service 层
+- Handler 必须在 UseCases 命名空间
 
 **判定**：
 - ❌ Handler 不在 UseCases 命名空间
-- ❌ 存在 *Service 类
 - ✅ 每用例自包含完整切片
 
-### 模块通信约束（ADR-0001.5, 0001.6）
+### ADR-0001.4:L1 禁止横向 Service 抽象
 
-**规则**：
+- 禁止使用 Service/Manager/Helper 类承载业务逻辑
+- 业务逻辑应在 Handler 或领域模型中
+
+**判定**：
+- ❌ 存在 *Service 类
+- ✅ 业务逻辑在正确位置
+
+### ADR-0001.5:L2 模块间通信仅允许事件/契约/原始类型
+
 - 模块间仅允许：领域事件、契约 DTO、原始类型（Guid/string/int）
-- 契约不含业务决策字段或行为方法
+- 禁止直接依赖其他模块的 Entity/Aggregate/VO
 
 **判定**：
 - ❌ 直接依赖 Entity/Aggregate/VO
-- ❌ 契约包含业务判断字段（如 CanRefund）
 - ✅ 仅传递只读数据
 
+### ADR-0001.6:L2 契约不含业务决策字段
+
+- 契约 DTO 不含业务判断字段（如 CanRefund）
+- 契约不含行为方法
+- 契约仅用于数据传递
+
+**判定**：
+- ❌ 契约包含业务判断字段
+- ✅ 契约仅传递数据
+
+### ADR-0001.7:L1 命名空间匹配模块边界
+
+- 命名空间必须与模块边界一致
+- 目录结构必须反映模块隔离
+- 确保命名空间不跨模块
+
+**判定**：
+- ❌ 命名空间不匹配模块边界
+- ✅ 命名空间清晰隔离
+
 ---
 
-## 快速参考表
-
-| 约束编号       | 约束描述          | 测试方式                                         | 测试用例                                           | 必须遵守 |
-|------------|---------------|----------------------------------------------|------------------------------------------------|------|
-| ADR-0001.1 | 模块不可相互引用      | L1 - NetArchTest                             | Modules_Should_Not_Reference_Other_Modules     | ✅    |
-| ADR-0001.2 | 项目文件禁止引用其他模块  | L1 - 项目文件扫描                                  | Module_Csproj_Should_Not_Reference_Other_Modules | ✅    |
-| ADR-0001.3 | 垂直切片/用例为最小单元  | L2 - NetArchTest                             | Handlers_Should_Be_In_UseCases_Namespace       | ✅    |
-| ADR-0001.4 | 禁止横向 Service 抽象 | L1 - NetArchTest                             | Modules_Should_Not_Contain_Service_Classes     | ✅    |
-| ADR-0001.5 | 只允许事件/契约/原始类型通信 | L2 - 语义检查                                    | Contract_Rules_Semantic_Check                  | ✅    |
-| ADR-0001.6 | Contract 不含业务判断字段 | L2/L3 - Roslyn分析 + 人工                        | Contract_Business_Field_Analyzer               | ✅    |
-| ADR-0001.7 | 命名空间/目录强制隔离    | L1 - NetArchTest                             | Namespace_Should_Match_Module_Boundaries       | ✅    |
-
-> **级别说明**：L1=静态自动化（ArchitectureTests），L2=语义半自动（Roslyn/启发式），L3=人工Gate
-
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs` 强制验证：
 
@@ -114,31 +139,54 @@ superseded_by: null
 **有一项违规视为架构违规，CI 自动阻断。**
 
 ---
+---
 
-## 检查清单
+## Non-Goals（明确不管什么）
 
-- [ ] 模块按业务能力划分且物理完全隔离？
-- [ ] 垂直切片以用例（UseCase）为唯一最小组织单元？
-- [ ] 杜绝了横向 Service、领域模型共享、同步耦合？
-- [ ] 模块间通信仅允许事件、契约和原始类型？
-- [ ] 合约和事件定义无业务决策字段？
-- [ ] 所有隔离规则有自动化测试覆盖？
+本 ADR 明确不涉及以下内容：
+
+- **微服务拆分策略**：不涉及何时将模块化单体拆分为微服务的决策标准
+- **模块内部实现细节**：不约束模块内部的具体业务逻辑实现方式
+- **数据库物理分离**：不强制要求模块使用独立数据库（Database per Module）
+- **团队组织结构**：不涉及团队如何组织或分配模块开发职责
+- **性能优化策略**：不涉及缓存、并发、异步等具体性能优化手段
+- **特定技术栈选型**：不约束特定的 ORM、消息队列或其他技术选型（除非违反隔离原则）
+- **模块粒度判定**：不提供如何判断"什么应该成为独立模块"的业务标准
+- **部署模式**：不涉及容器化、云原生或其他部署形式（仅确保单体可部署）
 
 ---
 
-## 依赖与相关ADR
+## Prohibited（禁止行为）
 
-| 关联 ADR   | 关系                |
-|----------|-------------------|
-| ADR-0000 | 自动化测试机制与执行分级      |
-| ADR-0002 | 定义装配/启动方式         |
-| ADR-0003 | 模块命名空间自动映射及目录防御规则 |
-| ADR-0004 | 分层包依赖与 CPM        |
-| ADR-0005 | 运行时交互/Handler职责   |
+
+以下行为明确禁止：
+
+### 模块依赖违规
+- ❌ **直接引用其他模块的类型**：禁止通过 `using` 引用其他模块的命名空间
+- ❌ **项目文件跨模块引用**：`.csproj` 中禁止 `<ProjectReference>` 指向其他模块
+- ❌ **通过反射访问其他模块**：禁止使用反射、动态加载等方式绕过编译时隔离
+- ❌ **共享领域对象**：禁止直接传递 Entity、Aggregate、ValueObject 到其他模块
+
+### 通信机制违规
+- ❌ **同步调用其他模块**：禁止直接方法调用、同步仓储查询等同步通信方式（除非经架构委员会审批）
+- ❌ **在契约中包含业务逻辑**：Contract DTO 中禁止包含计算属性、业务判断方法或行为
+- ❌ **事件携带领域对象**：领域事件禁止直接携带 Entity/Aggregate/VO，只允许原始类型和 DTO
+
+### 架构模式违规
+- ❌ **使用横向 Service 抽象**：禁止创建 `*Service`、`*Manager`、`*Helper` 等横向抽象类承载业务逻辑
+- ❌ **Handler 不在 UseCases 命名空间**：所有 Handler 必须在 `*.UseCases.*` 命名空间下
+- ❌ **模块命名空间混乱**：命名空间必须与目录结构和模块边界严格对应
+
+### 测试绕过
+- ❌ **修改 InternalsVisibleTo**：禁止为绕过模块隔离而暴露 internal 类型给其他模块
+- ❌ **添加 public 访问修饰符**：禁止仅为其他模块访问而将原本应该 internal 的类型标记为 public
+
 
 ---
 
-## 关系声明（Relationships）
+---
+
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 测试执行机制
@@ -161,27 +209,40 @@ superseded_by: null
 
 **相关（Related）**：
 - [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 依赖管理补充
-- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 术语规范（注：ADR-0006 依赖本 ADR，此处为相关关系避免循环）
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 术语规范
 - [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - 文档治理
 
 ---
 
-## 版本历史（History）
+---
 
-| 版本  | 日期         | 变更说明                                         |
-|-----|------------|----------------------------------------------|
-| 5.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 |
-| 4.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
-| 3.2 | 2026-01-23 | 术语&执行等级补充                                    |
-| 3.0 | 2026-01-20 | 分层体系与目录规则固化                                  |
-| 1.0 | 初始         | 初版发布                                         |
+## References（非裁决性参考）
+
+**相关外部资源**：
+- [Simon Brown - Modular Monoliths](https://www.codingthearchitecture.com/presentations/sa2015-modular-monoliths) - 模块化单体理论基础
+- [Kamil Grzybek - Modular Monolith Architecture](https://github.com/kgrzybek/modular-monolith-with-ddd) - 参考实现
+- [Vertical Slice Architecture by Jimmy Bogard](https://www.youtube.com/watch?v=SUiWfhAhgQw) - 垂直切片架构讲解
+- [Mark Seemann - Dependency Rejection](https://blog.ploeh.dk/2017/02/02/dependency-rejection/) - 模块隔离原则
+
+**相关内部文档**：
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 三层架构体系
+- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 模块命名空间规范
+- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 模块依赖管理
+- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 模块间通信
 
 ---
 
-## 附注
 
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
+---
 
-非裁决性参考（建议、最佳实践、详细示例）请查阅：
-- [ADR-0001 Copilot Prompts](../../copilot/adr-0001.prompts.md)
-- 工程指南（如有）
+---
+
+## History（版本历史）
+
+| 版本  | 日期         | 变更说明                                              |
+|-----|------------|---------------------------------------------------|
+| 5.0 | 2026-01-29 | 对齐 ADR-902 标准：添加 primary_enforcement、标准章节、规则独立编号 |
+| 4.0 | 2026-01-26 | 裁决型重构，移除冗余                                        |
+| 3.2 | 2026-01-23 | 术语&执行等级补充                                         |
+| 3.0 | 2026-01-20 | 分层体系与目录规则固化                                       |
+| 1.0 | 初始         | 初版发布                                              |
