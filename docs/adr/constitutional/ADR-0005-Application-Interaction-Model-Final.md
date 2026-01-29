@@ -1,12 +1,29 @@
+---
+adr: ADR-0005
+title: "应用内交互模型与执行边界"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-26
+version: "2.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0005：应用内交互模型极简判裁版
 
-**状态**：✅ Final（仅保留裁决性规则，无“建议/经验”）  
-**版本**：1.0
-**级别**：根约束（Runtime Constitutional Rule）  
+> ⚖️ **本 ADR 是运行时交互的基本法，定义 Handler 职责和模块通信规则的唯一裁决源。**
+>
+> **裁决权威声明**：本 ADR 正文是关于应用内交互模型和执行边界的最高权威。所有架构测试、CI验证、人工评审均以本 ADR 正文为唯一依据。Copilot Prompts、README、GUIDE 等辅导材料不具备裁决力，若与本 ADR 冲突，以本 ADR 为准。
+
+**状态**：✅ Final（仅保留裁决性规则，无"建议/经验"）  
 **适用范围**：Application / Modules / Host  
 **生效时间**：即刻
 
 ---
+
 
 ## 本章聚焦内容（Focus）
 
