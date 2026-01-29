@@ -102,7 +102,16 @@ superseded_by: null
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **Handler 内部实现细节**：不约束 Handler 内部如何组织代码、使用哪些设计模式（Strategy、Factory 等）
+- **具体 ORM 或数据访问技术**：不约束使用 Entity Framework、Dapper 还是其他数据访问技术
+- **事件存储实现**：不规定领域事件是否持久化、使用何种事件存储方案（EventStore、数据库等）
+- **DTO 序列化格式**：不约束 DTO 使用 JSON、Protobuf 还是其他序列化格式
+- **API 版本化策略**：不涉及 API 如何版本化（URI、Header、MediaType 等）
+- **身份验证和授权**：不管理认证机制（JWT、OAuth）或授权策略（基于角色、策略等）
+- **日志记录格式**：不约束日志的具体格式、日志级别或日志聚合方式
+- **性能监控和追踪**：不涉及 APM 工具选型、分布式追踪实现（OpenTelemetry、Jaeger 等）
+- **错误码和错误消息**：不规定错误的编码规范、多语言支持或用户友好消息格式
+- **事件重试和补偿**：不约束事件失败后的重试策略、补偿事务或 Saga 模式实现
 
 ---
 
@@ -111,7 +120,31 @@ superseded_by: null
 
 以下行为明确禁止：
 
-- 待补充
+### Handler 职责违规
+
+- ❌ **Handler 持有状态**：Handler 禁止使用实例字段存储业务状态（除依赖注入的服务外）
+- ❌ **Handler 作为跨模块粘合层**：Handler 禁止同步调用多个其他模块的 Handler 并聚合结果
+- ❌ **Handler 返回领域实体**：Handler 禁止将 Entity、Aggregate、ValueObject 直接作为返回值
+- ❌ **Handler 直接依赖 HttpContext**：Handler 禁止依赖 `HttpContext`、`ClaimsPrincipal` 等 ASP.NET 类型
+
+### 模块通信违规
+
+- ❌ **未审批的跨模块同步调用**：禁止直接调用其他模块的 Handler、Repository 或服务（必须通过事件）
+- ❌ **共享领域对象**：禁止直接传递或返回其他模块的 Entity/Aggregate/VO
+- ❌ **直接引用其他模块类型**：禁止通过 `using` 引用其他模块的内部类型（除 Contracts 外）
+- ❌ **同步查询其他模块数据**：禁止通过同步 Repository 或数据库视图查询其他模块的数据
+
+### CQRS 分离违规
+
+- ❌ **Command Handler 返回业务数据**：Command Handler 只能返回 `void`、`Task`、`Unit` 或唯一标识符（Guid/Id）
+- ❌ **Query Handler 执行写操作**：Query Handler 禁止调用 Repository 的 Add/Update/Delete 方法
+- ❌ **Command 和 Query 混用**：禁止在同一个 Handler 中同时处理 Command 和 Query
+
+### 契约设计违规
+
+- ❌ **Contract 包含业务逻辑**：Contract DTO 禁止包含计算属性、业务判断方法或行为
+- ❌ **Contract 携带领域对象**：事件或 DTO 禁止直接包含 Entity/Aggregate/VO 类型
+- ❌ **Endpoint 包含业务规则**：Endpoint/Controller 禁止包含 if/switch 等业务决策逻辑（应委托给 Handler）
 
 
 ---
@@ -153,8 +186,24 @@ superseded_by: null
 
 ## References（非裁决性参考）
 
+**CQRS 与领域驱动设计**：
+- [CQRS Pattern by Martin Fowler](https://martinfowler.com/bliki/CQRS.html) - CQRS 模式权威解释
+- [Greg Young - CQRS Documents](https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf) - CQRS 模式详细文档
+- [Domain-Driven Design by Eric Evans](https://www.domainlanguage.com/ddd/) - 领域驱动设计经典著作
+- [Implementing Domain-Driven Design by Vaughn Vernon](https://vaughnvernon.com/?page_id=168) - DDD 实践指南
 
-- 待补充
+**消息传递与事件驱动**：
+- [Enterprise Integration Patterns](https://www.enterpriseintegrationpatterns.com/) - 企业集成模式参考
+- [Event-Driven Architecture](https://martinfowler.com/articles/201701-event-driven.html) - 事件驱动架构概述
+- [Messaging Patterns](https://www.enterpriseintegrationpatterns.com/patterns/messaging/) - 消息传递模式
+
+**相关内部文档**：
+- [ADR-0001：模块化单体与垂直切片架构](./ADR-0001-modular-monolith-vertical-slice-architecture.md) - 了解模块隔离原则
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 了解三层装配体系
+- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 了解依赖管理规则
+- [ADR-120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件命名规范
+- [ADR-121：契约 DTO 命名与组织](../structure/ADR-121-contract-dto-naming-organization.md) - DTO 组织规范
+- [ADR-201：Handler 生命周期管理](../runtime/ADR-201-handler-lifecycle-management.md) - Handler 生命周期详解
 
 
 ---

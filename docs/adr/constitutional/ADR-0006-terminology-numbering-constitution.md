@@ -186,7 +186,14 @@ superseded_by: null
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **自然语言写作风格规范**：不规定文档的语气、修辞手法或写作技巧
+- **编程语言命名规范**：不涉及代码变量、函数、类的命名约定
+- **版本号语义规则**：不定义 Semver 或其他版本号格式的具体规则
+- **翻译和多语言术语对照**：不建立术语的多语言翻译映射表
+- **术语的历史溯源**：不追溯技术术语的来源和演变历史
+- **行业标准术语的引入时机**：不规定何时采用新兴技术术语
+- **缩写词的读音规范**：不定义缩写词应如何发音
+- **术语的过时淘汰流程**：不建立术语废弃和替换的流程机制
 
 ---
 
@@ -195,7 +202,29 @@ superseded_by: null
 
 以下行为明确禁止：
 
-- 待补充
+### 编号规则违反
+
+- ❌ **禁止使用非标准编号格式**：如 `ADR_001`、`adr-1`、`ADR-A-001`，正确格式为 `ADR-0001`（四位数字，补零）
+- ❌ **禁止跳号或重复编号**：必须按顺序递增（0001, 0002, 0003...）
+- ❌ **禁止私自修改已发布 ADR 的编号**：保持编号不变，使用"已废弃"状态
+
+### 术语使用违反
+
+- ❌ **禁止在同一文档中混用同义术语**：统一使用术语表中的标准术语
+- ❌ **禁止创造未经审批的新术语**：使用标准术语或提交新术语申请
+- ❌ **禁止使用模糊不清的指代**：明确引用具体的 ADR 或概念
+
+### 一致性违反
+
+- ❌ **禁止在不同文档中对同一概念使用不同术语**：保持术语一致性
+- ❌ **禁止缩写词不加注释直接使用**：首次出现时注明全称
+- ❌ **禁止使用未定义的专有名词**：添加必要的解释说明
+
+### 文档引用违反
+
+- ❌ **禁止使用模糊的文档引用**：使用明确的文件路径和链接
+- ❌ **禁止使用失效的编号引用**：引用前验证文档存在性
+- ❌ **禁止循环引用形成死锁**：梳理依赖关系，必要时拆分文档
 
 
 ---
@@ -240,7 +269,19 @@ superseded_by: null
 ## References（非裁决性参考）
 
 
-- 待补充
+**官方标准**：
+- [Semantic Versioning 2.0.0](https://semver.org/) - 语义化版本规范
+- [RFC 2119: Key words for use in RFCs](https://www.ietf.org/rfc/rfc2119.txt) - 规范性语言标准（MUST/SHOULD/MAY）
+- [IEEE Standard Glossary of Software Engineering Terminology](https://ieeexplore.ieee.org/document/159342) - IEEE 软件工程术语标准
+
+**写作指南**：
+- [Microsoft Writing Style Guide](https://learn.microsoft.com/en-us/style-guide/welcome/) - 技术写作风格指南
+- [Google Developer Documentation Style Guide](https://developers.google.com/style) - 术语一致性最佳实践
+- [ADR GitHub Organization](https://adr.github.io/) - ADR 社区标准
+
+**相关内部文档**：
+- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - 文档风格规范
+- [ADR-902：ADR 模板结构契约](../governance/ADR-902-adr-template-structure-contract.md) - ADR 结构规范
 
 
 ---

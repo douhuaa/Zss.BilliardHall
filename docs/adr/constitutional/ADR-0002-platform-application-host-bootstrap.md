@@ -118,7 +118,14 @@ superseded_by: null
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **具体框架选型**：不约束使用 ASP.NET Core、Wolverine 还是其他特定框架（仅约束分层边界）
+- **依赖注入容器选择**：不约束使用哪个 DI 容器（仅约束注册在哪一层）
+- **配置来源**：不约束配置来自 appsettings.json、环境变量还是其他来源
+- **日志实现**：不约束使用 Serilog、NLog 还是其他日志库（仅约束在 Platform 层）
+- **启动性能优化**：不涉及启动速度、懒加载等性能优化策略
+- **多进程模型**：不涉及是否运行多个 Host 实例或进程间通信
+- **Bootstrapper 内部实现**：不约束 Bootstrapper 的具体实现方式（仅约束其唯一性和职责）
+- **测试环境配置**：不约束测试环境如何模拟或替换 Bootstrapper
 
 ---
 
@@ -127,7 +134,29 @@ superseded_by: null
 
 以下行为明确禁止：
 
-- 待补充
+### Platform 层违规
+- ❌ **Platform 依赖 Application/Host/Modules**：禁止 Platform 项目引用业务层或宿主层
+- ❌ **Platform 包含业务逻辑**：禁止在 Platform 中实现任何业务规则或领域逻辑
+- ❌ **Platform 多个 Bootstrapper**：每个 Platform 项目只允许一个 Bootstrapper 入口
+- ❌ **Platform 直接访问数据库**：禁止 Platform 层直接实现数据访问逻辑
+
+### Application 层违规
+- ❌ **Application 依赖 Host**：禁止 Application 项目引用任何 Host 项目
+- ❌ **Application 使用 HttpContext**：禁止直接依赖 ASP.NET Core 的 HttpContext 或其他 Host 专属类型
+- ❌ **Application 多个 Bootstrapper**：每个 Application 项目只允许一个 Bootstrapper 入口
+- ❌ **Application 包含进程相关代码**：禁止包含中间件、路由配置等进程特定逻辑
+
+### Host 层违规
+- ❌ **Host 依赖 Modules**：Host 项目文件禁止 `<ProjectReference>` 指向 Modules
+- ❌ **Host 包含业务逻辑**：禁止在 Program.cs 或 Host 项目中实现业务规则
+- ❌ **Program.cs 臃肿**：Program.cs 超过 30 行视为违规（除注释和空行）
+- ❌ **Host 直接注册服务**：禁止在 Host 中直接调用 `services.AddScoped<T>()` 等（应委托给 Bootstrapper）
+- ❌ **Host 多个 Bootstrapper 调用点**：禁止在多处调用 Bootstrapper（必须集中在 Program.cs）
+
+### 反向依赖违规
+- ❌ **Application 回调 Host**：禁止 Application 通过接口、委托等方式回调 Host 层
+- ❌ **Platform 访问 Application 配置**：禁止 Platform 依赖 Application 的配置或状态
+- ❌ **跨层直接访问**：禁止通过 ServiceLocator 模式或静态访问器绕过依赖方向
 
 
 ---
@@ -164,7 +193,16 @@ superseded_by: null
 ## References（非裁决性参考）
 
 
-- 待补充
+**相关外部资源**：
+- [Clean Architecture by Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) - 分层架构理论基础
+- [Hexagonal Architecture (Ports and Adapters)](https://alistair.cockburn.us/hexagonal-architecture/) - 六边形架构参考
+- [ASP.NET Core Startup Best Practices](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/startup) - Microsoft 官方指导
+
+**相关内部文档**：
+- [ADR-0001：模块化单体与垂直切片架构](./ADR-0001-modular-monolith-vertical-slice-architecture.md) - 模块隔离与垂直切片
+- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 三层命名空间规范
+- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 层级包依赖规则
+- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 三层运行时交互
 
 
 ---
