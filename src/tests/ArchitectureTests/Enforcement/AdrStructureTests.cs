@@ -51,7 +51,7 @@ public sealed class AdrStructureTests
                 missingSections.Add("状态");
             }
 
-            if (!content.Contains("级别") && !content.Contains("Level"))
+            if (!content.Contains("级别") && !content.Contains("Level".ToLower()))
             {
                 missingSections.Add("级别");
             }
