@@ -37,14 +37,14 @@ superseded_by: null
 
 ## 术语表（Glossary）
 
-| 术语        | 定义                                  |
-|-----------|-------------------------------------|
-| ADR       | Architecture Decision Record，架构决策记录 |
-| 宪法层 ADR   | ADR-0001~0005，系统根基不可推翻约束            |
-| 治理层 ADR   | ADR-0000, 900~999，架构过程、CI、审批相关      |
-| 结构/运行/技术层 | ADR-100~399，架构细化和技术落地               |
-| RFC       | Request for Comments，架构决策草案         |
-| 架构委员会     | 宪法层唯一审批主体                           |
+| 术语 | 定义 | 英文对照 |
+|-----------|-------------------------------------|----------------------------|
+| ADR       | Architecture Decision Record，架构决策记录 | ADR                     |
+| 宪法层 ADR   | ADR-0001~0005，系统根基不可推翻约束            | Constitutional ADR      |
+| 治理层 ADR   | ADR-0000, 900~999，架构过程、CI、审批相关      | Governance ADR          |
+| 结构/运行/技术层 | ADR-100~399，架构细化和技术落地               | Structure/Runtime/Technical ADR |
+| RFC       | Request for Comments，架构决策草案         | RFC                     |
+| 架构委员会     | 宪法层唯一审批主体                           | Architecture Board      |
 
 ---
 

@@ -36,7 +36,7 @@ superseded_by: null
 
 ## 术语表（Glossary）
 
-| 术语         | 定义                                              | 英文对照                      |
+| 术语 | 定义 | 英文对照 |
 |------------|------------------------------------------------|---------------------------|
 | PR         | Pull Request，代码变更的审查单元                         | Pull Request              |
 | 变更类型       | PR 的分类标签（feat/fix/docs/refactor/test/chore）     | Change Type               |

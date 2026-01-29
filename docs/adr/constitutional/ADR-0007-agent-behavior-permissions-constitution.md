@@ -37,7 +37,7 @@ superseded_by: null
 
 ## 术语表（Glossary）
 
-| 术语              | 定义                                             | 英文对照                    |
+| 术语 | 定义 | 英文对照 |
 |-----------------|------------------------------------------------|-------------------------|
 | Agent           | 在特定职责下工作的 GitHub Copilot 角色实例                 | Agent                   |
 | Guardian        | 架构守护者 Agent，负责协调和监督所有架构约束                     | Architecture Guardian   |

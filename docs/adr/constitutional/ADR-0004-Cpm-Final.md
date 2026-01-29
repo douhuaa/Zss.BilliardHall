@@ -31,7 +31,7 @@ superseded_by: null
 
 ## 术语表（Glossary）
 
-| 术语                       | 定义                               | 英文对照                    |
+| 术语 | 定义 | 英文对照 |
 |--------------------------|----------------------------------|-----------------------|
 | CPM                      | Central Package Management，中央包管理 | CPM                   |
 | Directory.Packages.props | NuGet 配置文件，集中定义全局依赖包版本           | Directory.Packages.props |

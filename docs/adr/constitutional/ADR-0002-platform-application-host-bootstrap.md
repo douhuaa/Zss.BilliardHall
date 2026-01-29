@@ -32,7 +32,7 @@ superseded_by: null
 
 ## 术语表（Glossary）
 
-| 术语           | 定义                             | 英文对照             |
+| 术语 | 定义 | 英文对照 |
 |--------------|--------------------------------|------------------|
 | Platform     | 技术基座，仅提供技术能力，不感知业务             | Platform Layer   |
 | Application  | 应用装配层，定义"系统是什么"，聚合模块和用例        | Application Layer |

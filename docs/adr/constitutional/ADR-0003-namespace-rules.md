@@ -31,7 +31,7 @@ superseded_by: null
 
 ## 术语表（Glossary）
 
-| 术语                    | 定义                                   | 英文对照                  |
+| 术语 | 定义 | 英文对照 |
 |-----------------------|--------------------------------------|----------------------|
 | BaseNamespace         | 公司+产品根命名空间（`Zss.BilliardHall`）       | Base Namespace       |
 | RootNamespace         | 项目根命名空间，由BaseNamespace及目录自动推导        | Root Namespace       |
