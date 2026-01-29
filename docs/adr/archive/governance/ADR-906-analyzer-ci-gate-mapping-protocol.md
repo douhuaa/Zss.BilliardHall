@@ -17,7 +17,7 @@ superseded_by: ADR-903-906
 
 > 🏛️ **Archived Notice**
 >
-> 本 ADR 已被 [ADR-907](ADR-907-architecture-tests-enforcement-governance.md) 完全吸收并取代。
+> 本 ADR 已被 [ADR-907](../../governance/ADR-907-architecture-tests-enforcement-governance.md) 完全吸收并取代。
 >
 > - 本文件 **不再具备任何裁决力**
 > - **不得** 编写或维护对应 ArchitectureTests
@@ -170,17 +170,19 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 
 ## Relationships（关系声明）
 
-**Depends On**：
+> 🏛️ **归档文档声明**：
+> 本节仅保留历史追溯所需的最小关系集。所有执法、测试、CI 映射关系均已失效。
 
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md)
-- [ADR-903：ArchitectureTests 命名与组织规范](../governance/ADR-903-architecture-tests-naming-organization.MD)
-- [ADR-904：ArchitectureTests 最小断言语义规范](../governance/ADR-904-architecturetests-minimum-assertion-semantics.md)
-- [ADR-905：执行级别分类](../governance/ADR-905-enforcement-level-classification.md)
+**被替代（Superseded By）**：
 
-**Depended By**：
+- [ADR-907：ArchitectureTests 执法治理体系](../../governance/ADR-907-architecture-tests-enforcement-governance.md)
 
-- 所有 ArchitectureTests 执法流程
-- CI / Analyzer 自动裁决规则
+**历史依赖（Historical Context）**：
+
+- [ADR-0000：架构测试与 CI 治理宪法](../../governance/ADR-0000-architecture-tests.md)
+- [ADR-903：ArchitectureTests 命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD)
+- [ADR-904：ArchitectureTests 最小断言语义规范](./ADR-904-architecturetests-minimum-assertion-semantics.md)
+- [ADR-905：执行级别分类](../../governance/ADR-905-enforcement-level-classification.md)
 
 ---
 
