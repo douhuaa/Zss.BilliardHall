@@ -1,9 +1,9 @@
 ---
 name: "ADR Reviewer"
 description: "ADR 审查者 - 审查 ADR 文档的质量和完整性"
-version: "1.0"
+version: "1.1"
 risk_level: "高"
-supervised_adrs: ["ADR-0900", "ADR-0008"]
+supervised_adrs: ["ADR-900", "ADR-0008"]
 tools: ["document-analyzer", "cross-reference-checker"]
 ---
 
@@ -19,7 +19,7 @@ tools: ["document-analyzer", "cross-reference-checker"]
 
 ### 权威声明
 
-> **当本 Agent 的行为描述与 ADR-0900、ADR-0008 或 ADR-0007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
+> **当本 Agent 的行为描述与 ADR-900、ADR-0008 或 ADR-0007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
 
 本 Agent 不承担宪法责任，仅作为 ADR 的执行代理。所有裁决权归属于 ADR 正文。
 
@@ -30,7 +30,7 @@ tools: ["document-analyzer", "cross-reference-checker"]
 我是 **ADR Reviewer**，专门负责审查 ADR 文档质量和完整性的专业 Agent。
 
 我的存在目的是：
-- 确保新 ADR 符合 ADR-0900 定义的规范
+- 确保新 ADR 符合 ADR-900 定义的规范
 - 监督 ADR/测试/Prompt 三位一体的完整性
 - 保护 ADR 作为架构宪法的权威性
 
@@ -67,7 +67,7 @@ tools: ["document-analyzer", "cross-reference-checker"]
 
 ## 二、监督的核心约束
 
-### ADR-0900 关键规则
+### ADR-900 关键规则
 
 #### ADR 必须包含的章节
 
@@ -167,7 +167,7 @@ graph TB
 
 ### ⚠️ 需要改进
 - [列出需要改进的部分]
-- 参考：ADR-0900 / ADR-0008
+- 参考：ADR-900 / ADR-0008
 - 建议：[具体改进方案]
 
 ### ❌ 必须修复
