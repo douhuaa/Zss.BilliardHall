@@ -145,7 +145,14 @@ superseded_by: null
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **微服务拆分策略**：不涉及何时将模块化单体拆分为微服务的决策标准
+- **模块内部实现细节**：不约束模块内部的具体业务逻辑实现方式
+- **数据库物理分离**：不强制要求模块使用独立数据库（Database per Module）
+- **团队组织结构**：不涉及团队如何组织或分配模块开发职责
+- **性能优化策略**：不涉及缓存、并发、异步等具体性能优化手段
+- **特定技术栈选型**：不约束特定的 ORM、消息队列或其他技术选型（除非违反隔离原则）
+- **模块粒度判定**：不提供如何判断"什么应该成为独立模块"的业务标准
+- **部署模式**：不涉及容器化、云原生或其他部署形式（仅确保单体可部署）
 
 ---
 
@@ -154,7 +161,25 @@ superseded_by: null
 
 以下行为明确禁止：
 
-- 待补充
+### 模块依赖违规
+- ❌ **直接引用其他模块的类型**：禁止通过 `using` 引用其他模块的命名空间
+- ❌ **项目文件跨模块引用**：`.csproj` 中禁止 `<ProjectReference>` 指向其他模块
+- ❌ **通过反射访问其他模块**：禁止使用反射、动态加载等方式绕过编译时隔离
+- ❌ **共享领域对象**：禁止直接传递 Entity、Aggregate、ValueObject 到其他模块
+
+### 通信机制违规
+- ❌ **同步调用其他模块**：禁止直接方法调用、同步仓储查询等同步通信方式（除非经架构委员会审批）
+- ❌ **在契约中包含业务逻辑**：Contract DTO 中禁止包含计算属性、业务判断方法或行为
+- ❌ **事件携带领域对象**：领域事件禁止直接携带 Entity/Aggregate/VO，只允许原始类型和 DTO
+
+### 架构模式违规
+- ❌ **使用横向 Service 抽象**：禁止创建 `*Service`、`*Manager`、`*Helper` 等横向抽象类承载业务逻辑
+- ❌ **Handler 不在 UseCases 命名空间**：所有 Handler 必须在 `*.UseCases.*` 命名空间下
+- ❌ **模块命名空间混乱**：命名空间必须与目录结构和模块边界严格对应
+
+### 测试绕过
+- ❌ **修改 InternalsVisibleTo**：禁止为绕过模块隔离而暴露 internal 类型给其他模块
+- ❌ **添加 public 访问修饰符**：禁止仅为其他模块访问而将原本应该 internal 的类型标记为 public
 
 
 ---
@@ -198,8 +223,10 @@ superseded_by: null
 - [模块化单体架构案例](../../cases/README.md) - 实际案例参考
 
 **相关外部资源**：
-- Simon Brown - Modular Monoliths
-- Kamil Grzybek - Modular Monolith Architecture
+- [Simon Brown - Modular Monoliths](https://www.codingthearchitecture.com/presentations/sa2015-modular-monoliths) - 模块化单体理论基础
+- [Kamil Grzybek - Modular Monolith Architecture](https://github.com/kgrzybek/modular-monolith-with-ddd) - 参考实现
+- [Vertical Slice Architecture by Jimmy Bogard](https://www.youtube.com/watch?v=SUiWfhAhgQw) - 垂直切片架构讲解
+- [Mark Seemann - Dependency Rejection](https://blog.ploeh.dk/2017/02/02/dependency-rejection/) - 模块隔离原则
 
 ---
 

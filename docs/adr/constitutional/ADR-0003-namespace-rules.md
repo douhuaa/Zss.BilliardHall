@@ -95,7 +95,15 @@ superseded_by: null
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- **代码风格与格式化**：不规定命名约定（如 PascalCase、camelCase）、缩进、换行等代码格式规则，这些由代码规范（如 .editorconfig）管理
+- **业务逻辑命名**：不规定业务类型、方法、变量的具体命名方式，仅管理命名空间结构
+- **包版本管理**：不管理 NuGet 包的版本选择和依赖关系，这些由 [ADR-0004](./ADR-0004-Cpm-Final.md) 管理
+- **依赖注入配置**：不规定服务注册、生命周期管理等 DI 细节，这些由 [ADR-0002](./ADR-0002-platform-application-host-bootstrap.md) 和 [ADR-0005](./ADR-0005-Application-Interaction-Model-Final.md) 管理
+- **模块间通信方式**：不规定模块如何通信（事件、契约），这些由 [ADR-0001](./ADR-0001-modular-monolith-vertical-slice-architecture.md) 管理
+- **文件组织结构**：不规定文件在命名空间内的具体组织方式（如按用例、按层），仅管理命名空间边界
+- **多语言项目**：本 ADR 仅适用于 C# 项目，不涉及前端、脚本或其他语言项目的命名空间规范
+- **测试命名空间详细规则**：测试项目的详细命名规范由 [ADR-122](../structure/ADR-122-test-organization-naming.md) 管理
+- **运行时命名空间验证**：本 ADR 仅在编译时和架构测试中验证，不涉及运行时的命名空间检查
 
 ---
 
@@ -104,7 +112,32 @@ superseded_by: null
 
 以下行为明确禁止：
 
-- 待补充
+### 命名空间配置违规
+
+- ❌ **手动覆盖 RootNamespace**：在项目文件（.csproj）中手动设置 `<RootNamespace>`，违反自动推导原则
+- ❌ **硬编码 BaseNamespace**：在代码中硬编码完整命名空间字符串，应通过 MSBuild 自动推导
+- ❌ **删除或修改 Directory.Build.props**：未经架构委员会批准，不得删除或修改仓库根目录的 Directory.Build.props 文件
+
+### 不规范命名空间模式
+
+- ❌ **使用通用命名空间**：使用 `Common`、`Shared`、`Utils`、`Helpers` 等违反垂直切片原则的命名空间
+- ❌ **跨层命名空间引用**：命名空间层级与项目层级不匹配
+
+### 项目命名违规
+
+- ❌ **项目名与目录名不一致**：项目文件名必须与其所在目录的最后一级名称完全一致
+- ❌ **项目命名不符合层级规范**：项目名称不遵循 BaseNamespace + 层级路径的规范
+
+### 目录结构违规
+
+- ❌ **绕过标准目录层级**：在 src/ 下创建不符合 Platform/Application/Modules/Host/Tests 层级的目录
+- ❌ **模块目录扁平化**：将多个模块代码混合在同一目录中，违反物理隔离原则
+
+### 架构测试规避
+
+- ❌ **排除架构测试**：尝试通过修改测试代码、添加忽略标记或修改 CI 配置来规避 ADR-0003 的架构测试
+- ❌ **注释掉失败的测试**：当架构测试失败时，注释掉测试而不是修复违规代码
+- ❌ **使用反射绕过检查**：使用反射或其他动态技术绕过命名空间约束
 
 
 ---
@@ -139,8 +172,24 @@ superseded_by: null
 
 ## References（非裁决性参考）
 
+### 官方文档
 
-- 待补充
+- [MSBuild Directory.Build.props](https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory) - MSBuild 自定义属性和目录级配置
+- [.NET Project Structure Best Practices](https://learn.microsoft.com/en-us/dotnet/core/extensions/project-structure) - .NET 项目结构最佳实践
+- [C# Namespaces](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/namespaces) - C# 命名空间基础
+
+### 相关 ADR
+
+- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 了解架构测试的执行机制
+- [ADR-0001：模块化单体与垂直切片架构](./ADR-0001-modular-monolith-vertical-slice-architecture.md) - 了解模块物理隔离的原因
+- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 了解三层体系的职责划分
+- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 了解包管理如何与命名空间协同工作
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 了解术语的标准定义
+
+### 设计模式与理念
+
+- [Screaming Architecture](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html) - Robert C. Martin 关于目录结构应体现业务意图的理念
+- [Package by Feature](https://phauer.com/2020/package-by-feature/) - 按功能组织代码而非按层组织
 
 
 ---
