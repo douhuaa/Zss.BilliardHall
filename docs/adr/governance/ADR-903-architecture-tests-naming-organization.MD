@@ -14,8 +14,14 @@ superseded_by: ADR-903-906
 
 # ADR-903：ArchitectureTests 命名与组织规范
 
-> 本 ADR 的全部裁决已被 [ADR-903-906](ADR-903-906.md) 吸收并强化，不再具有独立裁决力。
-> ⚖️ **这是架构治理的“执行侧接口定义”。本 ADR 只裁定架构测试是否“长得合法”，是否具备执法资格。**
+> 🏛️ **Archived Notice**
+>
+> 本 ADR 已被 [ADR-907](ADR-907-architecture-tests-enforcement-governance.md) 完全吸收并取代。
+>
+> - 本文件 **不再具备任何裁决力**
+> - **不得** 编写或维护对应 ArchitectureTests
+> - **不得** 被 Analyzer / CI Gate 读取
+> - 仅用于 **历史追溯与设计演进说明**
 
 ---
 

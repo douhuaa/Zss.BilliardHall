@@ -13,11 +13,16 @@ supersedes: null
 superseded_by: ADR-903-906
 ---
 
-
 # ADR-906：Analyzer / CI Gate 与 ADR 映射协议
 
-> 本 ADR 的全部裁决已被 [ADR-903-906](ADR-903-906.md) 吸收并强化，不再具有独立裁决力。
-> ⚖️ **本 ADR 定义 CI / Analyzer 如何识别、执行、报告 ArchitectureTests 与 ADR 的映射关系，确保裁决自动化、可追溯、可阻断。**
+> 🏛️ **Archived Notice**
+>
+> 本 ADR 已被 [ADR-907](ADR-907-architecture-tests-enforcement-governance.md) 完全吸收并取代。
+>
+> - 本文件 **不再具备任何裁决力**
+> - **不得** 编写或维护对应 ArchitectureTests
+> - **不得** 被 Analyzer / CI Gate 读取
+> - 仅用于 **历史追溯与设计演进说明**
 
 ---
 
@@ -33,8 +38,6 @@ superseded_by: ADR-903-906
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -45,8 +48,6 @@ superseded_by: ADR-903-906
 | Enforcement Level | 执行等级 L1 / L2，L1 可自动阻断，L2 半自动审核 | Enforcement Level |
 | ADR 可追溯性 | 测试失败必须能定位到具体 ADR 子规则 | ADR Traceability |
 | Exception Mechanism | ADR-0000 定义的破例/补救机制 | Exception Mechanism |
-
----
 
 ---
 
@@ -127,9 +128,6 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
     - 提示迁移至替代 ADR
         
 - 禁止保留“孤儿测试”
-    
-
----
 
 ---
 
@@ -144,7 +142,6 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 |ADR-906.5|L2|断言数量 / 弱断言检测|自动标记无效测试|
 |ADR-906.6|L2|ADR 生命周期同步|自动废弃 / 提醒迁移|
 
----
 ---
 
 ## Non-Goals（明确不管什么）
@@ -168,9 +165,6 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 - 弱断言或空测试未被检测    
 - 未注册或孤儿 ArchitectureTests    
 - 未记录破例 / 补救机制
-    
-
----
 
 ---
 
@@ -190,18 +184,11 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 
 ---
 
----
-
 ## References（非裁决性参考）
 
 - GitHub Actions / Azure DevOps / Jenkins CI Gate 实践
 - NetArchTest.Rules 自动化扫描
 - xUnit / NUnit Architecture Test Practices
-
----
-
-
----
 
 ---
 

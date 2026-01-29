@@ -16,8 +16,14 @@ superseded_by: ADR-903-906
 
 # ADR-904：ArchitectureTests 最小断言语义规范
 
-> 本 ADR 的全部裁决已被 [ADR-903-906](ADR-903-906.md) 吸收并强化，不再具有独立裁决力。
-> ⚖️ **本 ADR 规范 ArchitectureTests 的最小断言数量与语义要求，确保每条测试具备实际裁决能力，防止空测试或弱断言。**
+> 🏛️ **Archived Notice**
+>
+> 本 ADR 已被 [ADR-907](ADR-907-architecture-tests-enforcement-governance.md) 完全吸收并取代。
+>
+> - 本文件 **不再具备任何裁决力**
+> - **不得** 编写或维护对应 ArchitectureTests
+> - **不得** 被 Analyzer / CI Gate 读取
+> - 仅用于 **历史追溯与设计演进说明**
 
 ---
 
