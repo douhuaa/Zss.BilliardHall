@@ -7,6 +7,7 @@ deciders: "Architecture Board"
 date: 2026-01-29
 version: "5.0"
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
@@ -18,7 +19,7 @@ superseded_by: null
 
 ---
 
-## 本章聚焦内容（Focus）
+## Focus（聚焦内容）
 
 仅定义适用于全生命周期自动化裁决/阻断的**模块隔离约束**：
 
@@ -30,7 +31,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |---------------|--------------------------------|-------------------|
@@ -43,43 +44,76 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
-### 模块定义与隔离（ADR-0001.1, 0001.2, 0001.7）
+> ⚠️ **本节是唯一裁决来源，其他章节不得产生新规则。**
 
-**规则**：
+### ADR-0001.1:L1 模块按业务能力独立划分
+
 - 模块按业务能力独立划分（如 Members/Orders）
 - 每模块 = 独立程序集 = 清晰目录边界
 - 模块间禁止直接引用代码、类型、资源
 
 **判定**：
 - ❌ 模块引用其他模块类型
-- ❌ 项目文件引用其他模块
-- ❌ 命名空间不匹配模块边界
 - ✅ 仅通过契约、事件、原始类型通信
 
-### 垂直切片组织（ADR-0001.3, 0001.4）
+### ADR-0001.2:L1 项目文件禁止引用其他模块
 
-**规则**：
+- 项目文件（.csproj）不得包含对其他模块的 ProjectReference
+- 确保模块在编译时物理隔离
+
+**判定**：
+- ❌ 项目文件引用其他模块
+- ✅ 模块编译时独立
+
+### ADR-0001.3:L2 垂直切片以用例为最小单元
+
 - 用例（Use Case）为最小组织单元
 - 每用例包含 Endpoint → Command/Query → Handler → 领域逻辑
-- 禁止横向 Service 层
+- Handler 必须在 UseCases 命名空间
 
 **判定**：
 - ❌ Handler 不在 UseCases 命名空间
-- ❌ 存在 *Service 类
 - ✅ 每用例自包含完整切片
 
-### 模块通信约束（ADR-0001.5, 0001.6）
+### ADR-0001.4:L1 禁止横向 Service 抽象
 
-**规则**：
+- 禁止使用 Service/Manager/Helper 类承载业务逻辑
+- 业务逻辑应在 Handler 或领域模型中
+
+**判定**：
+- ❌ 存在 *Service 类
+- ✅ 业务逻辑在正确位置
+
+### ADR-0001.5:L2 模块间通信仅允许事件/契约/原始类型
+
 - 模块间仅允许：领域事件、契约 DTO、原始类型（Guid/string/int）
-- 契约不含业务决策字段或行为方法
+- 禁止直接依赖其他模块的 Entity/Aggregate/VO
 
 **判定**：
 - ❌ 直接依赖 Entity/Aggregate/VO
-- ❌ 契约包含业务判断字段（如 CanRefund）
 - ✅ 仅传递只读数据
+
+### ADR-0001.6:L2 契约不含业务决策字段
+
+- 契约 DTO 不含业务判断字段（如 CanRefund）
+- 契约不含行为方法
+- 契约仅用于数据传递
+
+**判定**：
+- ❌ 契约包含业务判断字段
+- ✅ 契约仅传递数据
+
+### ADR-0001.7:L1 命名空间匹配模块边界
+
+- 命名空间必须与模块边界一致
+- 目录结构必须反映模块隔离
+- 确保命名空间不跨模块
+
+**判定**：
+- ❌ 命名空间不匹配模块边界
+- ✅ 命名空间清晰隔离
 
 ---
 
@@ -126,19 +160,7 @@ superseded_by: null
 
 ---
 
-## 依赖与相关ADR
-
-| 关联 ADR   | 关系                |
-|----------|-------------------|
-| ADR-0000 | 自动化测试机制与执行分级      |
-| ADR-0002 | 定义装配/启动方式         |
-| ADR-0003 | 模块命名空间自动映射及目录防御规则 |
-| ADR-0004 | 分层包依赖与 CPM        |
-| ADR-0005 | 运行时交互/Handler职责   |
-
----
-
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 测试执行机制
@@ -161,27 +183,29 @@ superseded_by: null
 
 **相关（Related）**：
 - [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 依赖管理补充
-- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 术语规范（注：ADR-0006 依赖本 ADR，此处为相关关系避免循环）
+- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 术语规范
 - [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - 文档治理
 
 ---
 
-## 版本历史（History）
+## References（非裁决性参考）
 
-| 版本  | 日期         | 变更说明                                         |
-|-----|------------|----------------------------------------------|
-| 5.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 |
-| 4.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
-| 3.2 | 2026-01-23 | 术语&执行等级补充                                    |
-| 3.0 | 2026-01-20 | 分层体系与目录规则固化                                  |
-| 1.0 | 初始         | 初版发布                                         |
+非裁决性参考（建议、最佳实践、详细示例）请查阅：
+- [ADR-0001 Copilot Prompts](../../copilot/adr-0001.prompts.md) - Copilot 场景化指导
+- [模块化单体架构案例](../../cases/README.md) - 实际案例参考
+
+**相关外部资源**：
+- Simon Brown - Modular Monoliths
+- Kamil Grzybek - Modular Monolith Architecture
 
 ---
 
-## 附注
+## History（版本历史）
 
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（建议、最佳实践、详细示例）请查阅：
-- [ADR-0001 Copilot Prompts](../../copilot/adr-0001.prompts.md)
-- 工程指南（如有）
+| 版本  | 日期         | 变更说明                                              |
+|-----|------------|---------------------------------------------------|
+| 5.0 | 2026-01-29 | 对齐 ADR-902 标准：添加 primary_enforcement、标准章节、规则独立编号 |
+| 4.0 | 2026-01-26 | 裁决型重构，移除冗余                                        |
+| 3.2 | 2026-01-23 | 术语&执行等级补充                                         |
+| 3.0 | 2026-01-20 | 分层体系与目录规则固化                                       |
+| 1.0 | 初始         | 初版发布                                              |
