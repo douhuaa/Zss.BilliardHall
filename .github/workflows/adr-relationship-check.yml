@@ -22,16 +22,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
       - name: Verify Relationship Declarations
         run: |
           echo "::group::验证关系声明章节"
           ./scripts/verify-adr-relationships.sh
           echo "::endgroup::"
 
-      - name: Check Bidirectional Consistency
+      - name: Check Bidirectional Consistency (Architecture Tests)
         run: |
-          echo "::group::检查双向一致性"
-          ./scripts/check-relationship-consistency.sh
+          echo "::group::检查双向一致性（通过架构测试）"
+          dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj \
+            --filter "FullyQualifiedName~AdrRelationshipConsistencyTests" \
+            --logger "console;verbosity=normal" \
+            --configuration Release
           echo "::endgroup::"
 
       - name: Detect Circular Dependencies
