@@ -27,25 +27,13 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Verify Relationship Declarations
+      - name: ADR Relationship Validation (Architecture Tests)
         run: |
-          echo "::group::验证关系声明章节"
-          ./scripts/verify-adr-relationships.sh
-          echo "::endgroup::"
-
-      - name: Check Bidirectional Consistency (Architecture Tests)
-        run: |
-          echo "::group::检查双向一致性（通过架构测试）"
+          echo "::group::ADR 关系验证（架构测试）"
           dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj \
-            --filter "FullyQualifiedName~AdrRelationshipConsistencyTests" \
+            --filter "FullyQualifiedName~Adr.AdrRelationship | FullyQualifiedName~Adr.AdrCircular" \
             --logger "console;verbosity=normal" \
             --configuration Release
-          echo "::endgroup::"
-
-      - name: Detect Circular Dependencies
-        run: |
-          echo "::group::检测循环依赖"
-          ./scripts/detect-circular-dependencies.sh
           echo "::endgroup::"
 
       - name: Generate Relationship Map
