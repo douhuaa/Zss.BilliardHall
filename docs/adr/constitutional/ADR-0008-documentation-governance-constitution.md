@@ -218,7 +218,7 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 - 无
 
 **相关（Related）**：
-- [ADR-0007：Agent 行为与权限宪法](./ADR-0007-agent-behavior-permissions-constitution.md) - Agent 行为与文档权威相互关联
+- [ADR-0007：Agent 行为与权限宪法](./ADR-0007-agent-behavior-permissions-constitution.md) - Agent 行为与文档权威相互关联，共同规范 Agent 输出与文档裁决力
 - [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - ADR 流程与文档治理相关
 
 ---

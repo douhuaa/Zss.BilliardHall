@@ -164,7 +164,7 @@
 - 无
 
 **相关（Related）**：
-- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - Prompts 文档治理
+- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - Agent 行为与文档权威相互关联，共同规范 Agent 输出与文档裁决力
 - [ADR-940：ADR 关系与溯源管理](../governance/ADR-940-adr-relationship-traceability-management.md) - Agent 必须遵循关系声明规范
 
 ---
