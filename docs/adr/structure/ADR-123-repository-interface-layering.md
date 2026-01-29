@@ -7,6 +7,7 @@ version: "2.0"
 deciders: "Architecture Board"
 date: 2026-01-26
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
@@ -21,7 +22,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - Repository 接口必须在 Domain 层
 - Repository 实现必须在 Infrastructure 层
@@ -31,7 +32,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------------|------------------------------|----------------------|
@@ -43,7 +44,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### ADR-123.1：Repository 接口必须位于 Domain 层
 
@@ -146,7 +147,7 @@ Task ExecuteSqlAsync(string sql);               // 直接暴露 SQL
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_123_Architecture_Tests.cs` 强制验证：
 
@@ -197,7 +198,7 @@ Task ExecuteSqlAsync(string sql);               // 直接暴露 SQL
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - Repository 分层基于模块结构

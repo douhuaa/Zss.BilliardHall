@@ -7,6 +7,7 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-28
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: ADR-903

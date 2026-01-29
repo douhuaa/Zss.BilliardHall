@@ -7,6 +7,7 @@ deciders: "Architecture Board"
 date: 2026-01-26
 version: "1.0"
 maintainer: "Architecture Board & Documentation Team"
+primary_enforcement: L1
 reviewer: "待定"
 supersedes: null
 superseded_by: null
@@ -24,7 +25,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 关键词索引生成
 - 标签系统标准化
@@ -34,7 +35,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------|------|----------|
@@ -46,7 +47,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### 关键词索引生成（ADR-955.1）
 
@@ -409,7 +410,7 @@ docs/reports/discoverability/YYYY-MM.md
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档组织
@@ -475,7 +476,7 @@ docs/reports/discoverability/YYYY-MM.md
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 - 文档内容质量（由 ADR-0008 负责）
@@ -486,7 +487,7 @@ docs/reports/discoverability/YYYY-MM.md
 
 ---
 
-## 非裁决性参考（References）
+## References（非裁决性参考）
 
 ### 相关 ADR
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)

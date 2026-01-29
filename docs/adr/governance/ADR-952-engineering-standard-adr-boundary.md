@@ -7,6 +7,7 @@ deciders: "Architecture Board"
 date: 2026-01-26
 version: "1.0"
 maintainer: "架构委员会"
+primary_enforcement: L1
 reviewer: "@douhuaa"
 supersedes: null
 superseded_by: null
@@ -24,7 +25,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 工程标准的层级定义
 - 工程标准与 ADR 的关系规则
@@ -33,7 +34,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------|------|----------|
@@ -44,7 +45,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### 层级定义与权威关系（ADR-952.1）
 
@@ -278,7 +279,7 @@ Standard 引用 ADR-123 并细化实施
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 - Standard 内容的技术准确性
@@ -287,7 +288,7 @@ Standard 引用 ADR-123 并细化实施
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-950：指南与 FAQ 文档治理宪法](ADR-950-guide-faq-documentation-governance.md) - 基于 Standard 类型定义
@@ -304,7 +305,7 @@ Standard 引用 ADR-123 并细化实施
 
 ---
 
-## 非裁决性参考（References）
+## References（非裁决性参考）
 
 ### 模板
 

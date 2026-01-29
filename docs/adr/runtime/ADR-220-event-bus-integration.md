@@ -7,6 +7,7 @@ version: "2.0"
 deciders: "Architecture Board"
 date: 2026-01-25
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
@@ -22,7 +23,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 事件总线抽象与依赖隔离
 - 至少一次传递保证
@@ -33,7 +34,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |-----|------|---------|
@@ -46,7 +47,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### 禁止直接依赖具体事件总线（ADR-220.1）【必须架构测试覆盖】
 
@@ -201,7 +202,7 @@ superseded_by: null
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 > **防止 ADR 膨胀的关键段落。**
 
@@ -215,7 +216,7 @@ superseded_by: null
 
 ---
 
-## 非裁决性参考（References）
+## References（非裁决性参考）
 
 > **仅供理解，不具裁决力。**
 
@@ -233,7 +234,7 @@ superseded_by: null
 ---
 
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件总线集成依赖事件命名规范

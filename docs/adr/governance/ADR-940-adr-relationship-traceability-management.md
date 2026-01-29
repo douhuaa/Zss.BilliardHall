@@ -7,6 +7,7 @@ deciders: "Architecture Board"
 date: 2026-01-26
 version: "1.0"
 maintainer: "架构委员会"
+primary_enforcement: L1
 reviewer: "@douhuaa"
 supersedes: null
 superseded_by: null
@@ -24,7 +25,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - ADR 关系类型定义与标准化
 - 关系声明的强制格式
@@ -34,7 +35,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------|------|----------|
@@ -49,7 +50,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### 每个 ADR 必须包含关系声明章节（ADR-940.1）
 
@@ -60,7 +61,7 @@ superseded_by: null
 **标准格式**：
 
 ```markdown
-### 关系声明（Relationships）
+### Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-XXXX：标题](相对路径) - 依赖原因说明
@@ -301,7 +302,7 @@ jobs:
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 - ADR 内容质量评审
@@ -311,7 +312,7 @@ jobs:
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - 关系管理基于 CI 治理机制
@@ -336,7 +337,7 @@ jobs:
 
 ---
 
-## 非裁决性参考（References）
+## References（非裁决性参考）
 
 ### 工具和脚本
 

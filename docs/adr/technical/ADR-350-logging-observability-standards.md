@@ -7,6 +7,7 @@ version: "2.0"
 deciders: "Architecture Board"
 date: 2026-01-26
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
@@ -19,7 +20,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 日志字段命名规范与一致性约束
 - 敏感信息日志保护规则
@@ -29,7 +30,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### ADR-350.1：请求日志必须包含 CorrelationId【必须架构测试覆盖】
 
@@ -142,7 +143,7 @@ superseded_by: null
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 ### 测试实现
 
@@ -192,7 +193,7 @@ superseded_by: null
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 
@@ -206,7 +207,7 @@ superseded_by: null
 
 ---
 
-## 非裁决性参考（References）
+## References（非裁决性参考）
 
 ### 相关 ADR
 - ADR-340：结构化日志与监控约束
@@ -221,7 +222,7 @@ superseded_by: null
 ---
 
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-340：结构化日志与监控约束](./ADR-340-structured-logging-monitoring-constraints.md) - 可观测性标准基于结构化日志

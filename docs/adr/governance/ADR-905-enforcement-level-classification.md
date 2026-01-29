@@ -7,6 +7,7 @@ deciders: "Architecture Board"
 date: 2026-01-26
 version: "2.0"
 maintainer: "架构委员会"
+primary_enforcement: L1
 reviewer: "@douhuaa"
 supersedes: null
 superseded_by: null

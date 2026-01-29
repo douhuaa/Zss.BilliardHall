@@ -7,6 +7,7 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-27
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
@@ -24,7 +25,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 示例代码的定位与权限边界
 - 示例代码禁止的架构违规行为
@@ -34,7 +35,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------------|------------------------------------------------|---------------------------|
@@ -48,7 +49,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### 示例代码的法律地位（ADR-920.1）
 
@@ -300,7 +301,7 @@ public class CreateOrderHandler { }
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 所有规则通过以下方式强制验证：
 
@@ -345,7 +346,7 @@ public class CreateOrderHandler { }
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 - 示例代码的写作风格和美学
@@ -355,7 +356,7 @@ public class CreateOrderHandler { }
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - 示例治理基于测试和 CI 机制

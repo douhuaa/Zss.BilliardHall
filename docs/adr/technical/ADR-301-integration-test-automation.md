@@ -7,6 +7,7 @@ version: "2.0"
 deciders: "Architecture Board"
 date: 2026-01-26
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
@@ -19,7 +20,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 集成测试的外部依赖管理规则
 - 测试环境隔离与并行执行约束
@@ -28,7 +29,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### ADR-301.1：外部依赖容器化管理【必须架构测试覆盖】
 
@@ -157,7 +158,7 @@ TestContainer 启动**必须**配置超时和健康检查。
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 ### 测试实现
 
@@ -214,7 +215,7 @@ TestContainer 启动**必须**配置超时和健康检查。
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 
@@ -228,7 +229,7 @@ TestContainer 启动**必须**配置超时和健康检查。
 
 ---
 
-## 非裁决性参考（References）
+## References（非裁决性参考）
 
 ### 相关 ADR
 - ADR-122：测试代码组织与命名规范
@@ -244,7 +245,7 @@ TestContainer 启动**必须**配置超时和健康检查。
 ---
 
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 集成测试基于测试治理机制

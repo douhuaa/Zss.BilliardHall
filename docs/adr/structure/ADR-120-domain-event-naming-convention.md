@@ -7,6 +7,7 @@ version: "1.2"
 deciders: "Architecture Board"
 date: 2026-01-24
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
@@ -20,7 +21,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 统一事件命名：动词过去式 + Event 后缀
 - 强制命名空间组织：Modules.{Name}.Events
@@ -29,7 +30,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------------|--------------------------|----------------------|
@@ -41,7 +42,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### 事件命名规则
 
@@ -223,7 +224,7 @@ public class OrderCreatedEventAdapter
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 
@@ -235,7 +236,7 @@ public class OrderCreatedEventAdapter
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 事件命名基于 CQRS 和事件驱动模式

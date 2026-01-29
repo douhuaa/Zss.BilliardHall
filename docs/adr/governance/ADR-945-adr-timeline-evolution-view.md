@@ -7,6 +7,7 @@ deciders: "Tech Lead"
 date: 2026-01-26
 version: "1.0"
 maintainer: "Tech Lead"
+primary_enforcement: L1
 reviewer: "@douhuaa"
 supersedes: null
 superseded_by: null
@@ -24,7 +25,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - ADR 演进历史时间线生成
 - 变更频率统计和分析
@@ -33,7 +34,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------|------|----------|
@@ -44,7 +45,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### 自动生成 ADR 演进时间线（ADR-945.1）
 
@@ -273,7 +274,7 @@ jobs:
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 - ADR 内容质量评审
@@ -282,7 +283,7 @@ jobs:
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-940：ADR 关系与溯源管理宪法](ADR-940-adr-relationship-traceability-management.md) - 基于关系图数据
@@ -298,7 +299,7 @@ jobs:
 
 ---
 
-## 非裁决性参考（References）
+## References（非裁决性参考）
 
 ### 工具和脚本
 

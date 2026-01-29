@@ -7,6 +7,7 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-27
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
@@ -24,7 +25,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - README 的定位与权限边界
 - README 禁用的语言与表达
@@ -34,7 +35,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------------|------------------------------------------------|---------------------------|
@@ -46,7 +47,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### README 是使用说明，不是架构裁决书（ADR-910.1）
 
@@ -196,7 +197,7 @@ README 引用 ADR 必须遵循：
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 所有规则通过以下方式强制验证：
 
@@ -239,7 +240,7 @@ README 规则的破例**仅在以下情况允许**：
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 - README 的写作风格和美学
@@ -249,7 +250,7 @@ README 规则的破例**仅在以下情况允许**：
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - README 治理基于测试和 CI 机制

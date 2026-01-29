@@ -7,6 +7,7 @@ deciders: "Architecture Board"
 date: 2026-01-29
 version: "2.0"
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
@@ -17,7 +18,7 @@ superseded_by: null
 > ⚖️ **本 ADR 是架构宪法的核心，定义应用内交互模型的唯一裁决源。**
 
 ---
-## 本章聚焦内容（Focus）
+## Focus（聚焦内容）
 
 仅定义适用于全生命周期自动化裁决/阻断的**运行时交互约束**：
 
@@ -29,7 +30,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |---------------|----------------|--------------|
@@ -43,7 +44,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### Use Case 执行与裁决权
 
@@ -75,7 +76,7 @@ superseded_by: null
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
@@ -106,7 +107,7 @@ superseded_by: null
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 - Handler 必须无状态、无领域持久字段
 - Endpoint 不得出现业务规则（有状态/决策分支/存储/调用其他模块等）
@@ -161,7 +162,7 @@ superseded_by: null
 > **级别说明**：L1=静态自动化（ArchitectureTests），L2=语义半自动（Roslyn/启发式）
 
 ---
-## 版本历史（History）
+## History（版本历史）
 
 | 版本  | 日期         | 变更说明                                         |
 |-----|------------|----------------------------------------------|

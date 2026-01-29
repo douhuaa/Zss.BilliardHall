@@ -7,6 +7,7 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-23
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
@@ -24,7 +25,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - Agent 角色定位与权限边界
 - 三态输出规则（Allowed/Blocked/Uncertain）
@@ -35,7 +36,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |-----------------|------------------------------------------------|-------------------------|
@@ -49,7 +50,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### Agent 根本定位（ADR-0007.0）
 
@@ -161,7 +162,7 @@ superseded_by: null
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
@@ -201,7 +202,7 @@ superseded_by: null
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0007_Architecture_Tests.cs` 强制验证：
 

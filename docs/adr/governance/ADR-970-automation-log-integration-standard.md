@@ -7,6 +7,7 @@ deciders: "Architecture Board & DevOps Team"
 date: 2026-01-26
 version: "1.0"
 maintainer: "Architecture Board & DevOps Team"
+primary_enforcement: L1
 reviewer: "待定"
 supersedes: null
 superseded_by: null
@@ -24,7 +25,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 日志分类与存储位置
 - 结构化日志格式（JSON）
@@ -34,7 +35,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------|------|----------|
@@ -47,7 +48,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### 日志分类与存储位置（ADR-970.1）
 
@@ -383,7 +384,7 @@ jobs:
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 测试机制
@@ -453,7 +454,7 @@ jobs:
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 - 日志内容的详细程度（由工具决定）
@@ -464,7 +465,7 @@ jobs:
 
 ---
 
-## 非裁决性参考（References）
+## References（非裁决性参考）
 
 ### 相关 ADR
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md)

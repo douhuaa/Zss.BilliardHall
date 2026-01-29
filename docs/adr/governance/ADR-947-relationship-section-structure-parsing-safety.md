@@ -7,6 +7,7 @@ deciders: "Architecture Board"
 date: 2026-01-26
 version: "1.0"
 maintainer: "架构委员会"
+primary_enforcement: L1
 reviewer: "@douhuaa"
 supersedes: null
 superseded_by: null
@@ -25,7 +26,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 关系声明区的唯一性与边界
 - ADR 编号的使用约束
@@ -35,7 +36,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------|------|----------|
@@ -47,13 +48,13 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### 唯一顶级关系区原则（条款 1）
 
 **规则**：
 
-每个 ADR **必须**且**只能**包含一个顶级二级标题（`## 关系声明（Relationships）`）。
+每个 ADR **必须**且**只能**包含一个顶级二级标题（`## Relationships（关系声明）`）。
 
 **禁止**：
 - ❌ 出现第二个同名 `## 关系声明`
@@ -76,7 +77,7 @@ superseded_by: null
 
 **规则**：
 
-"关系声明"区的有效内容**仅**存在于从 `## 关系声明（Relationships）` 到下一个 `##` 或 `#` 标题之间。
+"关系声明"区的有效内容**仅**存在于从 `## Relationships（关系声明）` 到下一个 `##` 或 `#` 标题之间。
 
 **约束**：
 - ❌ 任何 `###` / `####` 不允许作为关系声明的延伸内容
@@ -212,7 +213,7 @@ superseded_by: null
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-940：ADR 关系与溯源管理宪法](./ADR-940-adr-relationship-traceability-management.md) - 关系管理的基础规则

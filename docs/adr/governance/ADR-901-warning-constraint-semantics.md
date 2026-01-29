@@ -7,6 +7,7 @@ deciders: "Architecture Board"
 date: 2026-01-27
 version: "1.0"
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
@@ -20,7 +21,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 本 ADR 聚焦解决以下结构性问题：
 
@@ -38,7 +39,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |----|----|----|
@@ -135,7 +136,7 @@ Notice 中 **严禁** 出现任何强制或隐性约束。
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 - 文案措辞优雅程度
@@ -176,7 +177,7 @@ Notice 中 **严禁** 出现任何强制或隐性约束。
 
 ---
 
-## 禁止行为（Prohibited）
+## Prohibited（禁止行为）
 
 严禁：
 - 用 Warning 代替 Constraint
@@ -187,7 +188,7 @@ Notice 中 **严禁** 出现任何强制或隐性约束。
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **Depends On**：
 
@@ -201,14 +202,14 @@ Notice 中 **严禁** 出现任何强制或隐性约束。
 
 ---
 
-## 非裁决性参考（References）
+## References（非裁决性参考）
 
 - RFC 2119 / RFC 8174
 - ISO/IEC/IEEE 42010
 
 ---
 
-## 版本历史（History）
+## History（版本历史）
 
 | 版本 | 日期         | 变更说明 | 作者 |
 |----|------------|----|----|

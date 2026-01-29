@@ -7,6 +7,7 @@ deciders: "Architecture Board"
 date: 2026-01-23
 version: "2.0"
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null

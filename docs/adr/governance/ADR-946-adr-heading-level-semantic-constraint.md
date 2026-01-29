@@ -7,6 +7,7 @@ deciders: "Architecture Board"
 date: 2026-01-26
 version: "1.0"
 maintainer: "架构委员会"
+primary_enforcement: L1
 reviewer: "@douhuaa"
 supersedes: null
 superseded_by: null
@@ -24,7 +25,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - ADR 标题层级的语义含义
 - 机器解析边界的明确化
@@ -33,7 +34,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### 标题级别即语义级别（条款 1）
 
@@ -63,13 +64,13 @@ superseded_by: null
 
 | 语义块名称 | 标准标题 | 英文备选 | 机器解析用途 |
 |----------|---------|---------|-------------|
-| 关系声明 | `## 关系声明（Relationships）` | `## Relationships` | 提取 ADR 间依赖、替代等关系 |
-| 决策 | `## 决策（Decision）` | `## Decision` | 识别裁决性规则 |
+| 关系声明 | `## Relationships（关系声明）` | `## Relationships` | 提取 ADR 间依赖、替代等关系 |
+| 决策 | `## Decision（裁决）` | `## Decision` | 识别裁决性规则 |
 | 执法模型 | `## 执法模型（Enforcement）` | `## Enforcement` | 提取测试映射和执行级别 |
-| 术语表 | `## 术语表（Glossary）` | `## Glossary` | 提取技术术语定义 |
+| 术语表 | `## Glossary（术语表）` | `## Glossary` | 提取技术术语定义 |
 
 **判定**：
-- ✅ 正文中使用 `## 关系声明（Relationships）`
+- ✅ 正文中使用 `## Relationships（关系声明）`
 - ❌ 模板中使用 `## 关系声明` 或 `## Relationships`（应改为 `Relationships Example` 或使用 `###` 级别）
 - ❌ 代码块内使用 `## 关系声明`（应改为英文或占位符）
 
@@ -107,9 +108,9 @@ superseded_by: null
    ```
 
 **判定**：
-- ✅ 模板使用 `## Relationships` 而非 `## 关系声明（Relationships）`
+- ✅ 模板使用 `## Relationships` 而非 `## Relationships（关系声明）`
 - ✅ 示例使用 `### 关系声明示例`
-- ❌ 代码块内使用 `## 关系声明（Relationships）`
+- ❌ 代码块内使用 `## Relationships（关系声明）`
 
 ---
 
@@ -183,7 +184,7 @@ ADR 文档不是普通的 Markdown 文档，而是一种**机器可裁决的治�
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-940：ADR 关系与溯源管理宪法](./ADR-940-adr-relationship-traceability-management.md) - 关系解析依赖标题语义

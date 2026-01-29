@@ -133,7 +133,7 @@ superseded_by: null
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs` 强制验证：
 

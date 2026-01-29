@@ -7,6 +7,7 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-23
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
@@ -24,7 +25,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 文档分级与唯一裁决权划分
 - 各类文档允许表达的内容边界
@@ -34,7 +35,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------------|------------------------------------------------|---------------------------|
@@ -48,7 +49,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### 文档分级与裁决权（ADR-0008.1）
 
@@ -203,7 +204,7 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
@@ -255,7 +256,7 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_0008_Architecture_Tests.cs` 强制验证：
 

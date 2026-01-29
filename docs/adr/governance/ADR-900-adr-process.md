@@ -7,6 +7,7 @@ version: "1.2"
 deciders: "Architecture Board"
 date: 2026-01-27
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
@@ -25,7 +26,7 @@ superseded_by: null
 
 ---
 
-## 本章聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - ADR 新增/修订/废弃全流程唯一标准
 - 分层权限表与破例登记机制
@@ -35,7 +36,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |-----------|-------------------------------------|----------------------------|
@@ -154,7 +155,7 @@ superseded_by: null
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - ADR 流程基于测试和 CI 机制

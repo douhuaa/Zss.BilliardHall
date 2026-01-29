@@ -7,6 +7,7 @@ deciders: "Architecture Board"
 date: 2026-01-26
 version: "1.0"
 maintainer: "架构委员会"
+primary_enforcement: L1
 reviewer: "待定"
 supersedes: null
 superseded_by: null
@@ -23,7 +24,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - ADR/测试/Prompt 版本号关联规则
 - 同步检测自动化机制
@@ -33,7 +34,7 @@ superseded_by: null
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------|------|----------|
@@ -46,7 +47,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### 版本号关联规则（ADR-980.1）
 
@@ -269,7 +270,7 @@ ADR-0001 版本不一致：
 
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 检测机制
@@ -340,7 +341,7 @@ ADR-0001 版本不一致：
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 - 文档内容质量（由 ADR-0008 负责）
@@ -351,7 +352,7 @@ ADR-0001 版本不一致：
 
 ---
 
-## 非裁决性参考（References）
+## References（非裁决性参考）
 
 ### 相关 ADR
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md)

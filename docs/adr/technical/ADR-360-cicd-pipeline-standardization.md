@@ -7,6 +7,7 @@ version: "2.0"
 deciders: "Architecture Board"
 date: 2026-01-26
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
@@ -19,7 +20,7 @@ superseded_by: null
 
 ---
 
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - PR 合并前的强制性架构测试约束
 - PR 标题格式规范与自动化验证
@@ -30,7 +31,7 @@ superseded_by: null
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
 ### ADR-360.1：PR 必须通过架构测试【必须架构测试覆盖】
 
@@ -160,7 +161,7 @@ CI 失败时**必须**在失败消息中明确归属责任类别。
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Enforcement（执法模型）
 
 ### 测试实现
 
@@ -214,7 +215,7 @@ CI 失败时**必须**在失败消息中明确归属责任类别。
 
 ---
 
-## 明确不管什么（Non-Goals）
+## Non-Goals（明确不管什么）
 
 本 ADR **不负责**：
 
@@ -227,7 +228,7 @@ CI 失败时**必须**在失败消息中明确归属责任类别。
 
 ---
 
-## 非裁决性参考（References）
+## References（非裁决性参考）
 
 ### 相关 ADR
 - ADR-0000：架构测试与 CI 治理宪法
@@ -244,7 +245,7 @@ CI 失败时**必须**在失败消息中明确归属责任类别。
 ---
 
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
 - [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - CI/CD 管道基于 CI 治理机制

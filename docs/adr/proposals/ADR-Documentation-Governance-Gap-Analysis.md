@@ -7,6 +7,7 @@ version: "1.0"
 deciders: "Architecture Board"
 date: 2026-01-26
 maintainer: "Architecture Board"
+primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
@@ -233,7 +234,7 @@ docs/
 
 1. **强制关系声明章节**
    ```markdown
-   ## 关系声明（Relationships）
+   ## Relationships（关系声明）
    
    **依赖（Depends On）**：[列出本 ADR 基于的其他 ADR]
    **被依赖（Depended By）**：[列出依赖本 ADR 的其他 ADR]
