@@ -26,6 +26,11 @@
   - **核心**：测试映射、CI 阻断、破例管理、执行分级
   - **强制**：所有 ADR 必须遵循本 ADR 的测试和 CI 机制
 
+- [ADR-907：架构测试执行治理宪章](ADR-907-architecture-tests-enforcement-governance.md) ⭐
+  - **地位**：架构测试执行的唯一入口，完全取代 ADR-903/904/906
+  - **核心**：执行级别、组织命名、失败消息、ADR-测试映射、CI 流程、破例治理
+  - **强制**：所有架构测试、Analyzer、CI Gate 只允许引用 ADR-907
+
 ### 流程治理（Process Governance）
 
 - [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md)
@@ -70,11 +75,23 @@
 ### 质量与监控治理（Quality Governance）
 
 - [ADR-905：执行级别分类](ADR-905-enforcement-level-classification.md)
-  - L1 静态/L2 语义/L3 人工的执行分级标准
+  - L1 静态/L2 语义/L3 人工的执行分级标准（ADR-907 的补充文档）
 - [ADR-970：自动化工具日志集成标准](ADR-970-automation-log-integration-standard.md)
   - CI/测试/Copilot 日志的统一格式和集成
 - [ADR-975：文档质量监控](ADR-975-documentation-quality-monitoring.md)
   - 文档健康度指标和持续改进机制
+
+---
+
+## 归档 ADR（Archived ADRs）
+
+以下 ADR 已被取代，仅供历史追溯：
+
+- [ADR-903：架构测试分类标准](../archive/governance/ADR-903-architecture-tests-classification.md) ❌ Superseded by ADR-907
+- [ADR-904：架构测试命名规范](../archive/governance/ADR-904-architecture-tests-naming.md) ❌ Superseded by ADR-907
+- [ADR-906：架构测试执行流程](../archive/governance/ADR-906-architecture-tests-execution.md) ❌ Superseded by ADR-907
+
+> ⚠️ **重要**：归档 ADR 不再具备裁决力，不得生成架构测试或被 CI 引用。
 
 ---
 

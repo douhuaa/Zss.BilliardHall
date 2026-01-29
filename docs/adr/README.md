@@ -1,7 +1,7 @@
 # 架构决策记录（Architecture Decision Records）
 
-**版本**：3.1  
-**最后更新**：2026-01-22  
+**版本**：3.2  
+**最后更新**：2026-01-29  
 **状态**：Active
 
 ---
@@ -25,7 +25,8 @@
 | **结构层** | `ADR-100~199`       | `structure/`      | 2         |
 | **运行层** | `ADR-200~299`       | `runtime/`        | 1         |
 | **技术层** | `ADR-300~399`       | `technical/`      | 1         |
-| **治理层** | `ADR-0000, 900~999` | `governance/`     | 2         |
+| **治理层** | `ADR-0000, 900~999` | `governance/`     | 3         |
+| **归档**  | -                   | `archive/`        | 3         |
 
 编号含义、约束及变更政策以 [ADR-0006](constitutional/ADR-0006-terminology-numbering-constitution.md) 为准。
 
@@ -38,6 +39,7 @@
 - **运行层**：运行时模型、异常处理、生命周期等，[目录](runtime/)
 - **技术层**：具体实现与技术选型，[目录](technical/)
 - **治理层**：流程、测试、破例管理，[目录](governance/)
+- **归档**：已被取代的 ADR，仅供历史追溯，[目录](archive/)
 
 ---
 
@@ -45,6 +47,7 @@
 
 ### 主要 ADR 链接
 
+- [ADR-0000：架构测试与 CI 治理宪法](governance/ADR-0000-architecture-tests.md)
 - [ADR-0001：模块化单体与垂直切片架构](constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 - [ADR-0002：Platform / Application / Host 三层启动体系](constitutional/ADR-0002-platform-application-host-bootstrap.md)
 - [ADR-0003：命名空间与项目边界规范](constitutional/ADR-0003-namespace-rules.md)
@@ -54,6 +57,7 @@
 - [ADR-0007：Agent 行为与权限宪法](constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 - [ADR-0008：文档编写与维护宪法](constitutional/ADR-0008-documentation-governance-constitution.md)
 - [ADR-900：ADR 新增与修订流程](governance/ADR-900-adr-process.md)
+- [ADR-907：架构测试执行治理宪章](governance/ADR-907-architecture-tests-enforcement-governance.md) ⭐ 唯一执法入口
 - [ADR-120：领域事件命名规范](structure/ADR-120-domain-event-naming-convention.md)
 - [ADR-121：契约（Contract）与 DTO 命名组织规范](structure/ADR-121-contract-dto-naming-organization.md)
 - [ADR-240：Handler 异常约束](runtime/ADR-240-handler-exception-constraints.md)
@@ -69,6 +73,7 @@
 - [运行层 runtime/](runtime/)
 - [技术层 technical/](technical/)
 - [治理层 governance/](governance/)
+- [归档 archive/](archive/) - 已被取代的 ADR
 
 ---
 
