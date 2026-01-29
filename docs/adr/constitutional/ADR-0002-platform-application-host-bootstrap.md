@@ -196,7 +196,13 @@ superseded_by: null
 **相关外部资源**：
 - [Clean Architecture by Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) - 分层架构理论基础
 - [Hexagonal Architecture (Ports and Adapters)](https://alistair.cockburn.us/hexagonal-architecture/) - 六边形架构参考
-- [ASP.NET Core Startup Best Practices](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) - Microsoft 官方指导
+- [ASP.NET Core Startup Best Practices](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/startup) - Microsoft 官方指导
+
+**相关内部文档**：
+- [ADR-0001：模块化单体与垂直切片架构](./ADR-0001-modular-monolith-vertical-slice-architecture.md) - 模块隔离与垂直切片
+- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 三层命名空间规范
+- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 层级包依赖规则
+- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 三层运行时交互
 
 
 ---
