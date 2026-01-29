@@ -215,6 +215,17 @@ superseded_by: ADR-xxx | null
 
 ---
 
+
+---
+
+## Non-Goals（明确不管什么）
+
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+
 ## History（版本历史）
 
 | 版本  | 日期         | 变更说明                  | 作者                 |

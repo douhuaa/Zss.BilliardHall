@@ -234,3 +234,41 @@ Task ExecuteSqlAsync(string sql);               // 直接暴露 SQL
 非裁决性参考（详细示例、Repository 实现最佳实践、DDD Repository Pattern）请查阅：
 - `docs/copilot/adr-0123.prompts.md`
 - [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html)
+
+
+---
+
+## References（非裁决性参考）
+
+
+- 待补充
+
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+## Non-Goals（明确不管什么）
+
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+
+---
+
+## History（版本历史）
+
+
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 待补充 | 初始版本 |

@@ -306,3 +306,41 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 - [ADR-0008 Copilot Prompts](../../copilot/adr-0008.prompts.md)
 - [ADR-910: README 编写与维护宪法](../../governance/ADR-910-readme-governance-constitution.md)
 - `docs/templates/adr-template.md`：ADR 编写模板
+
+
+---
+
+## References（非裁决性参考）
+
+
+- 待补充
+
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+## Non-Goals（明确不管什么）
+
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+
+---
+
+## History（版本历史）
+
+
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 待补充 | 初始版本 |

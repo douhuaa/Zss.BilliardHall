@@ -198,3 +198,63 @@ superseded_by: null
 - [RFC 模板](/docs/templates/rcf-template.md)
 - [ADR 模板](/docs/templates/adr-template.md)
 - [Prompt 模板](/docs/templates/copilot-pormpts-template.md)
+
+
+---
+
+## References（非裁决性参考）
+
+
+- 待补充
+
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+## Non-Goals（明确不管什么）
+
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+
+---
+
+## Enforcement（执法模型）
+
+
+### 执行方式
+
+待补充...
+
+
+---
+
+## Decision（裁决）
+
+
+> ⚠️ **本节是唯一裁决来源，其他章节不得产生新规则。**
+
+### 待补充规则
+
+待补充...
+
+
+---
+
+## History（版本历史）
+
+
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 待补充 | 初始版本 |

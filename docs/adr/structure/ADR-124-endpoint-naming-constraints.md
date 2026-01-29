@@ -283,3 +283,41 @@ builder.MapPost("/orders/fulfill", async (request, bus) =>
 - `docs/copilot/adr-0124.prompts.md`
 - [REST API Guidelines](https://restfulapi.net/)
 - [Microsoft REST API Guidelines](https://github.com/microsoft/api-guidelines)
+
+
+---
+
+## References（非裁决性参考）
+
+
+- 待补充
+
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+## Non-Goals（明确不管什么）
+
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+
+---
+
+## History（版本历史）
+
+
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 待补充 | 初始版本 |

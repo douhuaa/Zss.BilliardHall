@@ -162,6 +162,34 @@ superseded_by: null
 > **级别说明**：L1=静态自动化（ArchitectureTests），L2=语义半自动（Roslyn/启发式）
 
 ---
+---
+
+## References（非裁决性参考）
+
+
+- 待补充
+
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+## Non-Goals（明确不管什么）
+
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+
 ## History（版本历史）
 
 | 版本  | 日期         | 变更说明                                         |

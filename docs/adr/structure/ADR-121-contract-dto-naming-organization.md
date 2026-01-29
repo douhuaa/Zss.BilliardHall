@@ -414,3 +414,51 @@ graph TB
 - [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
 - [DocFX](https://dotnet.github.io/docfx/)
 - [Roslyn Analyzers](https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/)
+
+
+---
+
+## References（非裁决性参考）
+
+
+- 待补充
+
+
+---
+
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+## Non-Goals（明确不管什么）
+
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
+
+
+---
+
+## Enforcement（执法模型）
+
+
+### 执行方式
+
+待补充...
+
+
+---
+
+## History（版本历史）
+
+
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 1.0 | 待补充 | 初始版本 |
