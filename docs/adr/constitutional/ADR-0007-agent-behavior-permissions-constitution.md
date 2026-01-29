@@ -1,10 +1,24 @@
+---
+adr: ADR-0007
+title: "Agent 行为与权限宪法"
+status: Final
+level: Constitutional
+deciders: "Architecture Board"
+date: 2026-01-28
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-0007：Agent 行为与权限宪法
 
 > ⚖️ **本 ADR 是所有 Agent 的元规则，定义 Agent 行为边界和权限约束的唯一裁决源。**
+>
+> **裁决权威声明**：本 ADR 正文是关于 Agent 行为和权限的最高权威。所有 Agent 执行、评审、CI验证均以本 ADR 正文为唯一依据。Copilot Prompts、README、GUIDE 等辅导材料不具备裁决力，若与本 ADR 冲突，以本 ADR 为准。
 
 **状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：架构元规则 / 宪法层  
 **适用范围**：所有 GitHub Copilot Agents 及 AI 辅助工具  
 **生效时间**：即刻
 
