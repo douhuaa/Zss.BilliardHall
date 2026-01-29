@@ -38,8 +38,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语           | 定义                         | 英文对照                  |
@@ -48,8 +46,6 @@ superseded_by: null
 | Front Matter | ADR 文件头部的元信息区块             | Front Matter          |
 | 结构合规         | ADR 是否满足模板与顺序要求            | Structural Compliance |
 | 治理接口         | 可被 CI / Review / 工具消费的文档结构 | Governance Interface  |
-
----
 
 ---
 
@@ -152,6 +148,14 @@ superseded_by: ADR-xxx | null
 
 ---
 
+### ADR-902.7:L1 Relationships 章节仅承担结构接口职责
+
+- ADR-902 仅裁决 `Relationships` 章节是否存在、名称是否合法、顺序是否正确。
+- `Relationships` 章节中出现的任何关系类型、依赖合法性、双向一致性、循环依赖、替代规则等 **语义性约束**：
+  - **不属于本 ADR 的裁决范围**
+  - **必须由专门的关系治理 ADR 裁决（如 ADR-940）**
+- 任何试图在 ADR-902 的测试或审查中引入关系语义判断的行为，视为越权。
+
 ---
 
 ## Enforcement（执法模型）
@@ -174,7 +178,6 @@ superseded_by: ADR-xxx | null
 - **PR Review**：L2 违规需人工裁定
 - **审计阶段**：历史 ADR 结构一致性检查
 
----
 ---
 
 ## Non-Goals（明确不管什么）
@@ -202,8 +205,6 @@ superseded_by: ADR-xxx | null
 
 ---
 
----
-
 ## Relationships（关系声明）
 
 **Depends On**：
@@ -223,17 +224,11 @@ superseded_by: ADR-xxx | null
 
 ---
 
----
 
 ## References（非裁决性参考）
 
 - ISO/IEC/IEEE 42010
 - Michael Nygard – Architecture Decision Records
-
----
-
-
----
 
 ---
 
