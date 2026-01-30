@@ -22,10 +22,10 @@
 | 层级      | 编号范围                | 目录                | 当前 ADR 数 |
 |---------|---------------------|-------------------|----------|
 | **宪法层** | `ADR-0001~0009`     | `constitutional/` | 8         |
-| **结构层** | `ADR-100~199`       | `structure/`      | 2         |
-| **运行层** | `ADR-200~299`       | `runtime/`        | 1         |
-| **技术层** | `ADR-300~399`       | `technical/`      | 1         |
-| **治理层** | `ADR-0000, 900~999` | `governance/`     | 2         |
+| **结构层** | `ADR-100~199`       | `structure/`      | 5         |
+| **运行层** | `ADR-200~299`       | `runtime/`        | 4         |
+| **技术层** | `ADR-300~399`       | `technical/`      | 4         |
+| **治理层** | `ADR-0000, 900~999` | `governance/`     | 23        |
 
 编号含义、约束及变更政策以 [ADR-0006](constitutional/ADR-0006-terminology-numbering-constitution.md) 为准。
 
