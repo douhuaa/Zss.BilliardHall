@@ -77,7 +77,7 @@ docs/adr/archive/
 ## 参考
 
 - [ADR-907：ArchitectureTests 执法治理体系](../governance/ADR-907-architecture-tests-enforcement-governance.md) - 替代了 ADR-903/904/906
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md)
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md)
 
 ---
 

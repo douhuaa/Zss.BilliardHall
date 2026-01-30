@@ -81,7 +81,7 @@
 
 ## 相关文档
 
-- [ADR-950：指南与 FAQ 文档治理宪法](../adr/governance/ADR-950-guide-faq-documentation-governance.md)
+- [ADR-950：指南与 FAQ 文档治理规范](../adr/governance/ADR-950-guide-faq-documentation-governance.md)
 - [FAQ 文档库](../faqs/README.md)
 - [案例库](../cases/README.md)
 - [ADR 目录](../adr/README.md)

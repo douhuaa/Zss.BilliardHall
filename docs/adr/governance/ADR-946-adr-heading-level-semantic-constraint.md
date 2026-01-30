@@ -183,7 +183,7 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-940：ADR 关系与溯源管理宪法](./ADR-940-adr-relationship-traceability-management.md) - 关系解析依赖标题语义
+- [ADR-940：ADR 关系与溯源管理治理规范](./ADR-940-adr-relationship-traceability-management.md) - 关系解析依赖标题语义
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档结构规范
 
 **被依赖（Depended By）**：

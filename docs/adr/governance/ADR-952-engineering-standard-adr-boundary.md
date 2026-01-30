@@ -133,7 +133,7 @@ L3 Best Practice（推荐做法，无强制力）
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-950：指南与 FAQ 文档治理宪法](ADR-950-guide-faq-documentation-governance.md) - 基于 Standard 类型定义
+- [ADR-950：指南与 FAQ 文档治理规范](ADR-950-guide-faq-documentation-governance.md) - 基于 Standard 类型定义
 - [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md) - Standard 提升为 ADR 流程
 
 **被依赖（Depended By）**：无

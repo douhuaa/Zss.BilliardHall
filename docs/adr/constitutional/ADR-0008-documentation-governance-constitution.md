@@ -285,7 +285,7 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
 - [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 文档术语遵循统一规范
 
 **被依赖（Depended By）**：

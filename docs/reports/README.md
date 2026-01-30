@@ -156,7 +156,7 @@ GitHub Actions 自动生成并上传报告：
 ## 相关资源
 
 - [ADR-970：自动化工具日志集成标准](../adr/governance/ADR-970-automation-log-integration-standard.md)
-- [ADR-0000：架构测试与 CI 治理宪法](../adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-0000：架构测试与 CI 治理元规则](../adr/governance/ADR-0000-architecture-tests.md)
 - [脚本工具文档](../../scripts/README.md)
 
 ---

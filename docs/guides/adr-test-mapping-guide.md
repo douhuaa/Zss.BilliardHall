@@ -4,7 +4,7 @@
 > 所有架构决策以相关 ADR 正文为准。详见 [ADR 目录](../adr/README.md)。
 >
 > 📘 **权威依据**：本指南说明如何实施以下 ADR：
-> - [ADR-0000：架构测试与 CI 治理宪法](../adr/governance/ADR-0000-architecture-tests.md)
+> - [ADR-0000：架构测试与 CI 治理元规则](../adr/governance/ADR-0000-architecture-tests.md)
 > - [ADR-900：ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
 >
 > 本文档中的"必须"/"禁止"等语言均指代上述 ADR 的要求，本文档不独立产生新规则。

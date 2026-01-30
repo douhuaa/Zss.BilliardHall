@@ -485,9 +485,9 @@ git commit -m "docs: 添加 2026 Q1 治理健康度报告"
 
 ### ADR 文档
 
-- [ADR-0000：架构测试与 CI 治理宪法](/docs/adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-0000：架构测试与 CI 治理元规则](/docs/adr/governance/ADR-0000-architecture-tests.md)
 - [ADR-900：ADR 新增与修订流程](/docs/adr/governance/ADR-900-adr-process.md)
-- [ADR-910：README 编写与维护宪法](/docs/adr/governance/ADR-910-readme-governance-constitution.md)
+- [ADR-910：README 编写与维护治理规范](/docs/adr/governance/ADR-910-readme-governance-constitution.md)
 - [ADR-930：代码审查与 ADR 合规自检流程](/docs/adr/governance/ADR-930-code-review-compliance.md)
 
 ### 工具和脚本

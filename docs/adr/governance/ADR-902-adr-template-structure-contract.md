@@ -209,7 +209,7 @@ superseded_by: ADR-xxx | null
 
 **Depends On**：
 
-- [ADR-901：ADR 语义宪法](ADR-901-warning-constraint-semantics.md) - 定义 ADR 语义与裁决资格
+- [ADR-901：ADR 语义元规则](ADR-901-warning-constraint-semantics.md) - 定义 ADR 语义与裁决资格
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档治理宪法
 
 **Depended By**：

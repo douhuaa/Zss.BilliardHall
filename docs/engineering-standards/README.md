@@ -71,7 +71,7 @@
 
 ## 相关文档
 
-- [ADR-950：指南与 FAQ 文档治理宪法](../adr/governance/ADR-950-guide-faq-documentation-governance.md)
+- [ADR-950：指南与 FAQ 文档治理规范](../adr/governance/ADR-950-guide-faq-documentation-governance.md)
 - [ADR-952：工程标准与 ADR 分离边界](../adr/governance/ADR-952-engineering-standard-adr-boundary.md)
 - [Guide 文档库](../guides/README.md)
 - [ADR 目录](../adr/README.md)

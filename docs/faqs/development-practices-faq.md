@@ -199,7 +199,7 @@ public async Task ShouldCreateOrder()       // 冗余的 Should
 ```
 
 **参考**：
-- [ADR-0000：架构测试与 CI 治理宪法](../adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-0000：架构测试与 CI 治理元规则](../adr/governance/ADR-0000-architecture-tests.md)
 - [Handler 单元测试案例](../cases/handler-unit-testing-case.md)
 
 ---
@@ -340,7 +340,7 @@ public class CreateOrderIntegrationTests
 - 事件流程端到端 → 集成测试
 - 边界情况和异常 → 单元测试
 
-**参考 ADR**：[ADR-0000：架构测试与 CI 治理宪法](../adr/governance/ADR-0000-architecture-tests.md)
+**参考 ADR**：[ADR-0000：架构测试与 CI 治理元规则](../adr/governance/ADR-0000-architecture-tests.md)
 
 ---
 
@@ -707,7 +707,7 @@ public async Task<List<OrderDto>> Handle(ListOrders query)
 
 - [ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 - [ADR-0005：应用内交互模型与执行边界](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-0000：架构测试与 CI 治理宪法](../adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-0000：架构测试与 CI 治理元规则](../adr/governance/ADR-0000-architecture-tests.md)
 - [ADR-0930：代码风格治理](../adr/governance/ADR-0930-code-style-governance.md)
 - [架构设计指南](../guides/architecture-design-guide.md)
 - [Handler 单元测试案例](../cases/handler-unit-testing-case.md)

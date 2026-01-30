@@ -456,7 +456,7 @@ docs/onboarding/dashboard.md
 
 **依赖（Depends On）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档标准
-- [ADR-960：Onboarding 文档治理宪法](../governance/ADR-960-onboarding-documentation-governance.md) - 基于其 Onboarding 结构
+- [ADR-960：Onboarding 文档治理规范](../governance/ADR-960-onboarding-documentation-governance.md) - 基于其 Onboarding 结构
 
 **被依赖（Depended By）**：
 - 无
@@ -478,7 +478,7 @@ docs/onboarding/dashboard.md
 
 ### 相关 ADR
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-960：Onboarding 文档治理宪法](../governance/ADR-960-onboarding-documentation-governance.md)
+- [ADR-960：Onboarding 文档治理规范](../governance/ADR-960-onboarding-documentation-governance.md)
 
 ### 实施工具
 - `.github/ISSUE_TEMPLATE/onboarding-checklist.md` - Issue Template

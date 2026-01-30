@@ -1,21 +1,21 @@
 ---
 adr: ADR-0000
-title: "架构测试与 CI 治理宪法"
+title: "架构测试与 CI 治理元规则"
 status: Final
 level: Governance
 deciders: "Architecture Board"
-date: 2026-01-29
-version: "3.0"
+date: 2026-01-30
+version: "3.1"
 maintainer: "Architecture Board"
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
 ---
 
-# ADR-0000：架构测试与 CI 治理宪法
+# ADR-0000：架构测试与 CI 治理元规则
 
 >⚖️ 唯一架构裁决源声明 
->本 ADR 是关于「架构合法性判定、CI 执法、破例治理」的最高宪法级规则。
+>本 ADR 是关于「架构合法性判定、CI 执法、破例治理」的最高治理级元规则。
 所有架构测试、CI Gate、Analyzer、Prompt、文档与流程 不得凌驾于本 ADR 之上。
 
 ---
@@ -242,12 +242,12 @@ superseded_by: null
 - [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
 - [ADR-900：ADR 流程与生命周期](./ADR-900-adr-process.md)
-- [ADR-901：ADR 语义宪法](./ADR-901-warning-constraint-semantics.md)
+- [ADR-901：ADR 语义元规则](./ADR-901-warning-constraint-semantics.md)
 - [ADR-903：架构测试命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD)
 - [ADR-905：架构约束分类与裁决实施映射](./ADR-905-enforcement-level-classification.md)
 - [ADR-906：Analyzer 与 CI Gate 映射协议](./ADR-906-analyzer-ci-gate-mapping-protocol.md)
-- [ADR-910：README 编写与维护宪法](./ADR-910-readme-governance-constitution.md)
-- [ADR-920：示例治理宪法](./ADR-920-examples-governance-constitution.md)
+- [ADR-910：README 编写与维护治理规范](./ADR-910-readme-governance-constitution.md)
+- [ADR-920：示例治理规范](./ADR-920-examples-governance-constitution.md)
 - [ADR-930：代码审查与 ADR 合规自检流程](./ADR-930-code-review-compliance.md)
 - [ADR-940：ADR 关系与溯源管理](./ADR-940-adr-relationship-traceability-management.md)
 - [ADR-970：自动化工具日志集成标准](./ADR-970-automation-log-integration-standard.md)
@@ -271,7 +271,8 @@ superseded_by: null
 
 | 版本  | 日期         | 变更说明              |
 |-----|------------|-------------------|
-|3.0| 2026-01-29 | 宪法级重写，剥离实现细节 |
-|2.1  | 2026-02-10 | 补充 ADR-0000.X/Y 规则 |
+|3.1| 2026-01-30 | 术语优化：宪法→元规则，消除与Constitutional层混淆 |
+|3.0| 2026-01-29 | 治理级重写，剥离实现细节 |
+|2.1  | 2026-01-24 | 补充 ADR-0000.X/Y 规则 |
 | 2.0 | 2026-01-23 | 聚焦自动化与治理闭环，细化执行分级 |
 | 1.0 | 2026-01-20 | 初版                |
