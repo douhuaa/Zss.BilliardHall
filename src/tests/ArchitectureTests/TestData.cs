@@ -15,16 +15,29 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests;
 /// </summary>
 public class ModuleAssemblyData : IEnumerable<object[]>
 {
-    // 唯一模块程序集和模块名清单
-    public static List<Assembly> ModuleAssemblies { get; } = new();
-    public static List<string> ModuleNames { get; } = new();
+    private static readonly Lazy<List<Assembly>> _moduleAssemblies = 
+        new(LoadModuleAssemblies, LazyThreadSafetyMode.ExecutionAndPublication);
+    
+    private static readonly Lazy<List<string>> _moduleNames = 
+        new(LoadModuleNames, LazyThreadSafetyMode.ExecutionAndPublication);
 
-    static ModuleAssemblyData()
+    /// <summary>
+    /// 获取已加载的模块程序集（延迟加载，线程安全）
+    /// </summary>
+    public static IReadOnlyList<Assembly> ModuleAssemblies => _moduleAssemblies.Value;
+
+    /// <summary>
+    /// 获取已加载的模块名称列表（延迟加载，线程安全）
+    /// </summary>
+    public static IReadOnlyList<string> ModuleNames => _moduleNames.Value;
+
+    private static List<Assembly> LoadModuleAssemblies()
     {
+        var assemblies = new List<Assembly>();
         var root = TestEnvironment.RepositoryRoot;
         var modulesDir = TestEnvironment.ModulesPath;
         if (!Directory.Exists(modulesDir))
-            return;
+            return assemblies;
 
         // 支持通过环境变量切换配置（CI 可设置为 Release）
         var configuration = TestConstants.BuildConfiguration;
@@ -35,8 +48,6 @@ public class ModuleAssemblyData : IEnumerable<object[]>
         foreach (var moduleDir in Directory.GetDirectories(modulesDir))
         {
             var moduleName = Path.GetFileName(moduleDir);
-            // 记录目录名（后续会去重排序）
-            ModuleNames.Add(moduleName);
 
             // 1) 明确主候选：bin/{Configuration}/{TFM}/{ModuleName}.dll（按 tfms 顺序）
             var prioritizedCandidates = new List<string>();
@@ -102,12 +113,12 @@ public class ModuleAssemblyData : IEnumerable<object[]>
                         .Name ==
                     $"Zss.BilliardHall.Modules.{moduleName}")
                 {
-                    ModuleAssemblies.Add(asm);
+                    assemblies.Add(asm);
                 }
                 else
                 {
                     Debug.WriteLine($"[ArchitectureTests] 警告: 加载的程序集名称为 {asm.GetName().Name}，与模块目录名 {moduleName} 不完全匹配。请保证一致的命名空间约定（推荐 Zss.BilliardHall.Modules.{moduleName}）。");
-                    ModuleAssemblies.Add(asm);
+                    assemblies.Add(asm);
                 }
             }
             catch (Exception ex)
@@ -116,18 +127,32 @@ public class ModuleAssemblyData : IEnumerable<object[]>
             }
         }
 
-        // 微调 1：ModuleNames 去重并排序（原地替换，保持 List API）
-        var orderedNames = ModuleNames
+        return assemblies;
+    }
+
+    private static List<string> LoadModuleNames()
+    {
+        var names = new List<string>();
+        var modulesDir = TestEnvironment.ModulesPath;
+        if (!Directory.Exists(modulesDir))
+            return names;
+
+        foreach (var moduleDir in Directory.GetDirectories(modulesDir))
+        {
+            var moduleName = Path.GetFileName(moduleDir);
+            names.Add(moduleName);
+        }
+
+        // 去重并排序
+        return names
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
             .ToList();
-        ModuleNames.Clear();
-        ModuleNames.AddRange(orderedNames);
     }
 
     public ModuleAssemblyData()
     {
-        /* nothing, static ctor does all */
+        /* 所有初始化在 Lazy<T> 中完成 */
     }
 
     public IEnumerator<object[]> GetEnumerator()
@@ -165,17 +190,27 @@ public class ModuleAssemblyData : IEnumerable<object[]>
 /// <summary>
 /// Host 程序集数据提供器
 /// 用于支持 ADR 测试的参数化测试
+/// 
+/// 优化说明：
+/// - 使用 Lazy<T> 延迟加载避免重复初始化
 /// </summary>
 public class HostAssemblyData : IEnumerable<object[]>
 {
-    public static List<Assembly> HostAssemblies { get; } = new();
+    private static readonly Lazy<List<Assembly>> _hostAssemblies = 
+        new(LoadHostAssemblies, LazyThreadSafetyMode.ExecutionAndPublication);
 
-    static HostAssemblyData()
+    /// <summary>
+    /// 获取已加载的 Host 程序集（延迟加载，线程安全）
+    /// </summary>
+    public static IReadOnlyList<Assembly> HostAssemblies => _hostAssemblies.Value;
+
+    private static List<Assembly> LoadHostAssemblies()
     {
+        var assemblies = new List<Assembly>();
         var root = TestEnvironment.RepositoryRoot;
         var hostDir = TestEnvironment.HostPath;
         if (!Directory.Exists(hostDir))
-            return;
+            return assemblies;
 
         var configuration = TestConstants.BuildConfiguration;
         var tfms = TestConstants.SupportedTargetFrameworks;
@@ -236,13 +271,15 @@ public class HostAssemblyData : IEnumerable<object[]>
             {
                 var asm = Assembly.LoadFrom(selected);
                 Debug.WriteLine($"[ArchitectureTests] Loaded Host assembly: {selected}, AssemblyName={asm.GetName().Name}");
-                HostAssemblies.Add(asm);
+                assemblies.Add(asm);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[ArchitectureTests] 无法加载 Host 程序集 {selected}: {ex}");
             }
         }
+
+        return assemblies;
     }
 
     public IEnumerator<object[]> GetEnumerator()

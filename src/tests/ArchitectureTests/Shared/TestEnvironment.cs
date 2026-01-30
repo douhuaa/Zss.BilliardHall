@@ -9,15 +9,15 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 public static class TestEnvironment
 {
     private static readonly Lazy<string> _repositoryRoot = 
-        new(FindRepositoryRootCore, LazyThreadSafetyMode.ExecutionAndPublication);
+        new(() => FindRepositoryRootCore() ?? throw new InvalidOperationException(
+            "未找到仓库根目录。请确保在解决方案根目录或其子目录中运行测试。"), 
+            LazyThreadSafetyMode.ExecutionAndPublication);
 
     /// <summary>
     /// 获取仓库根目录（缓存）
     /// </summary>
     /// <exception cref="InvalidOperationException">未找到仓库根目录</exception>
-    public static string RepositoryRoot => 
-        _repositoryRoot.Value ?? throw new InvalidOperationException(
-            "未找到仓库根目录。请确保在解决方案根目录或其子目录中运行测试。");
+    public static string RepositoryRoot => _repositoryRoot.Value;
 
     /// <summary>
     /// 获取 ADR 文档目录路径
