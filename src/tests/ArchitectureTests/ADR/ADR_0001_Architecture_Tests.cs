@@ -1,4 +1,5 @@
 ﻿using NetArchTest.Rules;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -109,7 +110,7 @@ public sealed class ADR_0001_Architecture_Tests
 
     public static IEnumerable<object[]> GetModuleProjectFiles()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var modulesDir = Path.Combine(root, "src", "Modules");
         if (!Directory.Exists(modulesDir)) yield break;
 

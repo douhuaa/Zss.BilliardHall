@@ -1,12 +1,17 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Xml;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests;
 
 /// <summary>
 /// 模块程序集数据提供器
 /// 用于支持 ADR 测试的参数化测试
+/// 
+/// 优化说明：
+/// - 使用 Lazy<T> 延迟加载避免重复初始化
+/// - 使用 TestConstants 和 TestEnvironment 消除重复代码
 /// </summary>
 public class ModuleAssemblyData : IEnumerable<object[]>
 {
@@ -16,16 +21,16 @@ public class ModuleAssemblyData : IEnumerable<object[]>
 
     static ModuleAssemblyData()
     {
-        var root = GetSolutionRoot();
-        var modulesDir = Path.Combine(root, "src", "Modules");
+        var root = TestEnvironment.RepositoryRoot;
+        var modulesDir = TestEnvironment.ModulesPath;
         if (!Directory.Exists(modulesDir))
             return;
 
         // 支持通过环境变量切换配置（CI 可设置为 Release）
-        var configuration = Environment.GetEnvironmentVariable("Configuration") ?? "Debug";
+        var configuration = TestConstants.BuildConfiguration;
 
         // 常见 TFM 列表（优先按此顺序尝试）
-        var tfms = new[] { "net10.0", "net8.0", "net7.0", "net6.0", "net5.0" };
+        var tfms = TestConstants.SupportedTargetFrameworks;
 
         foreach (var moduleDir in Directory.GetDirectories(modulesDir))
         {
@@ -140,22 +145,10 @@ public class ModuleAssemblyData : IEnumerable<object[]>
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
 
-    public static string GetSolutionRoot()
-    {
-        var dir = new DirectoryInfo(Environment.CurrentDirectory);
-        while (dir != null && !File.Exists(Path.Combine(dir.FullName, "Zss.BilliardHall.slnx")))
-        {
-            dir = dir.Parent;
-        }
-        if (dir == null)
-            throw new DirectoryNotFoundException("未找到解决方案根目录（Zss.BilliardHall.slnx）");
-        return dir.FullName;
-    }
-
     public static IEnumerable<object[]> GetModuleProjectFiles()
     {
-        var root = GetSolutionRoot();
-        var modulesDir = Path.Combine(root, "src", "Modules");
+        var root = TestEnvironment.RepositoryRoot;
+        var modulesDir = TestEnvironment.ModulesPath;
         if (!Directory.Exists(modulesDir))
         {
             yield break;
@@ -179,13 +172,13 @@ public class HostAssemblyData : IEnumerable<object[]>
 
     static HostAssemblyData()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
-        var hostDir = Path.Combine(root, "src", "Host");
+        var root = TestEnvironment.RepositoryRoot;
+        var hostDir = TestEnvironment.HostPath;
         if (!Directory.Exists(hostDir))
             return;
 
-        var configuration = Environment.GetEnvironmentVariable("Configuration") ?? "Debug";
-        var tfms = new[] { "net10.0", "net8.0", "net7.0", "net6.0" };
+        var configuration = TestConstants.BuildConfiguration;
+        var tfms = TestConstants.SupportedTargetFrameworks;
 
         foreach (var projectDir in Directory.GetDirectories(hostDir))
         {
