@@ -4,7 +4,7 @@ title: "ADR 关系与溯源管理治理规范"
 status: Accepted
 level: Governance
 deciders: "Architecture Board"
-date: 2026-01-26
+date: 2026-01-30
 version: "1.1"
 author: "GitHub Copilot"
 maintainer: "架构委员会"

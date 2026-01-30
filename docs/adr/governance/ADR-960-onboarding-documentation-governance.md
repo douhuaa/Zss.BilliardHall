@@ -4,7 +4,7 @@ title: "Onboarding 文档治理规范"
 status: Accepted
 level: Governance
 deciders: "Tech Lead & Onboarding Champion"
-date: 2026-01-26
+date: 2026-01-30
 version: "1.1"
 maintainer: "Tech Lead & Onboarding Champion"
 primary_enforcement: L1
