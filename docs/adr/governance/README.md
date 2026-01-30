@@ -21,7 +21,7 @@
 
 ### 元治理（Meta-Governance）
 
-- [ADR-0000：架构测试与 CI 治理宪法](ADR-0000-architecture-tests.md) ⭐
+- [ADR-0000：架构测试与 CI 治理元规则](ADR-0000-architecture-tests.md) ⭐
   - **地位**：元决策源，所有治理规则的裁决力基础
   - **核心**：测试映射、CI 阻断、破例管理、执行分级
   - **强制**：所有 ADR 须遵循本 ADR 的测试和 CI 机制
@@ -35,9 +35,9 @@
 
 ### 文档治理（Documentation Governance）
 
-- [ADR-910：README 编写与维护宪法](ADR-910-readme-governance-constitution.md)
+- [ADR-910：README 编写与维护治理规范](ADR-910-readme-governance-constitution.md)
   - README 边界：说明性文档，无裁决性语言
-- [ADR-920：示例代码治理宪法](ADR-920-examples-governance-constitution.md)
+- [ADR-920：示例代码治理规范](ADR-920-examples-governance-constitution.md)
   - 示例代码边界：演示用法，不得违反架构约束
 - [ADR-950：Guide/FAQ 文档治理](ADR-950-guide-faq-documentation-governance.md)
   - 指南和 FAQ 的分离边界和权威声明
@@ -54,7 +54,7 @@
 
 ### ADR 关系与演进治理（ADR Relationship Governance）
 
-- [ADR-940：ADR 关系与溯源管理宪法](ADR-940-adr-relationship-traceability-management.md)
+- [ADR-940：ADR 关系与溯源管理治理规范](ADR-940-adr-relationship-traceability-management.md)
   - ADR 关系类型、双向一致性、关系图生成
 - [ADR-945：ADR 时间线与演进视图](ADR-945-adr-timeline-evolution-view.md)
   - ADR 演进历史的可视化和溯源

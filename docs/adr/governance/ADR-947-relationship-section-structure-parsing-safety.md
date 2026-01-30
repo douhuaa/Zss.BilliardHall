@@ -196,7 +196,7 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-940：ADR 关系与溯源管理宪法](./ADR-940-adr-relationship-traceability-management.md) - 关系管理的基础规则
+- [ADR-940：ADR 关系与溯源管理治理规范](./ADR-940-adr-relationship-traceability-management.md) - 关系管理的基础规则
 - [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md) - 标题语义约束
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档结构规范
 

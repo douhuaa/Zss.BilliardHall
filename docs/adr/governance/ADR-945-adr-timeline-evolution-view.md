@@ -128,7 +128,7 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-940：ADR 关系与溯源管理宪法](ADR-940-adr-relationship-traceability-management.md) - 基于关系图数据
+- [ADR-940：ADR 关系与溯源管理治理规范](ADR-940-adr-relationship-traceability-management.md) - 基于关系图数据
 
 **被依赖（Depended By）**：无
 

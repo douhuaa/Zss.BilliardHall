@@ -1,11 +1,11 @@
 ---
 adr: ADR-980
-title: "ADR 生命周期一体化同步机制宪法"
+title: "ADR 生命周期一体化同步机制治理规范"
 status: Accepted
 level: Governance
 deciders: "Architecture Board"
-date: 2026-01-26
-version: "1.0"
+date: 2026-01-30
+version: "1.1"
 maintainer: "架构委员会"
 primary_enforcement: L1
 reviewer: "待定"
@@ -14,9 +14,9 @@ superseded_by: null
 ---
 
 
-# ADR-980：ADR 生命周期一体化同步机制宪法
+# ADR-980：ADR 生命周期一体化同步机制治理规范
 
-> ⚖️ **本 ADR 是 ADR 变更同步管理的唯一裁决源，定义 ADR/测试/Prompt 三位一体的强制同步机制。**
+> ⚖️ **本 ADR 是 ADR 变更同步管理的治理规范，定义 ADR/测试/Prompt 三位一体的强制同步机制。**
 
 **状态**：✅ Accepted  
 ## Focus（聚焦内容）
@@ -185,9 +185,9 @@ ADR-0001 版本不一致：
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 检测机制
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 检测机制
 - [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - 基于其"三位一体交付"要求
-- [ADR-940：ADR 关系与溯源管理宪法](./ADR-940-adr-relationship-traceability-management.md) - 版本同步需要关系图更新
+- [ADR-940：ADR 关系与溯源管理治理规范](./ADR-940-adr-relationship-traceability-management.md) - 版本同步需要关系图更新
 
 **被依赖（Depended By）**：
 - 无
@@ -200,7 +200,7 @@ ADR-0001 版本不一致：
 
 **相关（Related）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档版本管理
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系图更新
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系图更新
 
 ---
 
@@ -209,10 +209,10 @@ ADR-0001 版本不一致：
 ## References（非裁决性参考）
 
 ### 相关 ADR
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md)
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md)
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
 - [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md)
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md)
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md)
 
 ### 实施工具
 - `scripts/validate-adr-version-sync.sh` - 版本同步检测脚本

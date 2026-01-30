@@ -767,7 +767,7 @@ public class CreateOrderHandlerTests : IDisposable
 ## 参考资料
 
 - [ADR-0005：应用内交互模型与执行边界](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) - Handler 规则
-- [ADR-0000：架构测试与 CI 治理宪法](../adr/governance/ADR-0000-architecture-tests.md) - 测试架构
+- [ADR-0000：架构测试与 CI 治理元规则](../adr/governance/ADR-0000-architecture-tests.md) - 测试架构
 - [测试架构指南](../guides/test-architecture-guide.md)
 - [测试框架指南](../guides/testing-framework-guide.md)
 

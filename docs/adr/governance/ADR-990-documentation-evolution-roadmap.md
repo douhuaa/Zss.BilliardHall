@@ -117,7 +117,7 @@ docs/ROADMAP.md
 - 无
 
 **相关（Related）**：
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 路线图项目关联 ADR
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 路线图项目关联 ADR
 - [ADR-980：ADR 生命周期一体化同步机制](../governance/ADR-980-adr-lifecycle-synchronization.md) - 状态同步
 
 ---
@@ -129,7 +129,7 @@ docs/ROADMAP.md
 ### 相关 ADR
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
 - [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md)
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md)
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md)
 
 ### 实施工具
 - `docs/ROADMAP.md` - 主路线图文档

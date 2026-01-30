@@ -49,7 +49,7 @@
 - ADR 修订时可能遗漏需要同步更新的关联 ADR
 - 新人难以理解架构演进过程
 
-**建议方案**：ADR-940（ADR 关系与溯源管理宪法）
+**建议方案**：ADR-940（ADR 关系与溯源管理治理规范）
 
 ---
 
@@ -68,7 +68,7 @@
 - 实践经验未系统化沉淀
 
 **建议方案**：
-- ADR-950（指南与 FAQ 文档治理宪法）
+- ADR-950（指南与 FAQ 文档治理规范）
 - ADR-951（案例库管理规范）
 - ADR-952（工程标准与 ADR 分离边界）
 - ADR-990（文档演进路线图管理规范）
@@ -88,7 +88,7 @@
 - 新人遇到障碍但无人察觉
 - 无法持续改进新人入职体验
 
-**建议方案**：ADR-960（Onboarding 文档治理宪法）
+**建议方案**：ADR-960（Onboarding 文档治理规范）
 
 ---
 
@@ -132,9 +132,9 @@
 
 | 编号 | 名称 | 关键价值 | 工时 |
 |------|------|---------|------|
-| ADR-940 | ADR 关系与溯源管理宪法 | 标准化 ADR 关系，提供全局演进视图 | 2-3天 |
+| ADR-940 | ADR 关系与溯源管理治理规范 | 标准化 ADR 关系，提供全局演进视图 | 2-3天 |
 | ADR-980 | ADR 生命周期一体化同步机制 | 强制 ADR/测试/Prompt 同步，防止版本不一致 | 3-4天 |
-| ADR-950 | 指南与 FAQ 文档治理宪法 | 明确非裁决性文档边界，防止越界 | 2-3天 |
+| ADR-950 | 指南与 FAQ 文档治理规范 | 明确非裁决性文档边界，防止越界 | 2-3天 |
 
 **P0 总工时**：7-10 天
 
@@ -144,7 +144,7 @@
 
 | 编号 | 名称 | 关键价值 | 工时 |
 |------|------|---------|------|
-| ADR-960 | Onboarding 文档治理宪法 | 系统化新人入职体验，降低学习成本 | 3-4天 |
+| ADR-960 | Onboarding 文档治理规范 | 系统化新人入职体验，降低学习成本 | 3-4天 |
 | ADR-951 | 案例库管理规范 | 沉淀实践经验，加速知识传播 | 1-2天 |
 | ADR-952 | 工程标准与 ADR 分离边界 | 明确工程标准定位，防止与 ADR 混淆 | 1-2天 |
 | ADR-970 | 自动化工具日志集成标准 | 统一日志管理，提高问题排查效率 | 3-4天 |
@@ -366,8 +366,8 @@ ADR-0000（测试治理） → ADR-970（日志集成）
 - **现有治理**：
   - [ADR-0008：文档编写与维护宪法](../adr/constitutional/ADR-0008-documentation-governance-constitution.md)
   - [ADR-900：ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
-  - [ADR-910：README 编写与维护宪法](../adr/governance/ADR-910-readme-governance-constitution.md)
-  - [ADR-920：示例代码治理宪法](../adr/governance/ADR-920-examples-governance-constitution.md)
+  - [ADR-910：README 编写与维护治理规范](../adr/governance/ADR-910-readme-governance-constitution.md)
+  - [ADR-920：示例代码治理规范](../adr/governance/ADR-920-examples-governance-constitution.md)
 
 ---
 

@@ -1,11 +1,11 @@
 ---
 adr: ADR-950
-title: "指南与 FAQ 文档治理宪法"
+title: "指南与 FAQ 文档治理规范"
 status: Accepted
 level: Governance
 deciders: "Architecture Board"
-date: 2026-01-26
-version: "1.0"
+date: 2026-01-30
+version: "1.1"
 maintainer: "架构委员会"
 primary_enforcement: L1
 reviewer: "@douhuaa"
@@ -14,9 +14,9 @@ superseded_by: null
 ---
 
 
-# ADR-950：指南与 FAQ 文档治理宪法
+# ADR-950：指南与 FAQ 文档治理规范
 
-> ⚖️ **本 ADR 是所有非裁决性文档（Guide、FAQ、Case、Standard）的唯一治理标准，定义其与 ADR 的分离边界。**
+> ⚖️ **本 ADR 是所有非裁决性文档（Guide、FAQ、Case、Standard）的治理规范，定义其与 ADR 的分离边界。**
 
 **状态**：✅ Accepted（已采纳）  
 ## Focus（聚焦内容）
@@ -210,14 +210,14 @@ Standard（工程标准，不得引入新约束）
 **被依赖（Depended By）**：
 - [ADR-951：案例库管理规范](ADR-951-case-repository-management.md) - Case 类型细化
 - [ADR-952：工程标准与 ADR 分离边界](ADR-952-engineering-standard-adr-boundary.md) - Standard 类型细化
-- [ADR-960：Onboarding 文档治理宪法](ADR-960-onboarding-documentation-governance.md) - Onboarding 文档规范
+- [ADR-960：Onboarding 文档治理规范](ADR-960-onboarding-documentation-governance.md) - Onboarding 文档规范
 
 **替代（Supersedes）**：无
 
 **被替代（Superseded By）**：无
 
 **相关（Related）**：
-- [ADR-910：README 编写与维护宪法](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
+- [ADR-910：README 编写与维护治理规范](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
 
 ---
 

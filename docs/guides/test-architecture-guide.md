@@ -40,7 +40,7 @@
 
 ## 三层架构定义
 
-根据 [ADR-905：执行级别分类宪法](adr/governance/ADR-905-enforcement-level-classification.md) 和 [ADR-0000：架构测试与 CI 治理宪法](adr/governance/ADR-0000-architecture-tests.md)，测试架构划分为三层：
+根据 [ADR-905：执行级别分类宪法](adr/governance/ADR-905-enforcement-level-classification.md) 和 [ADR-0000：架构测试与 CI 治理元规则](adr/governance/ADR-0000-architecture-tests.md)，测试架构划分为三层：
 
 | 层级 | 本质 | 是否允许破例 | 失败策略 | 依据 |
 |------|------|------------|----------|------|
@@ -54,7 +54,7 @@
 
 ## Governance（治理宪法层）
 
-根据 [ADR-0000：架构测试与 CI 治理宪法](adr/governance/ADR-0000-architecture-tests.md)，Governance 层负责验证治理宪法本身的存在性和完整性。
+根据 [ADR-0000：架构测试与 CI 治理元规则](adr/governance/ADR-0000-architecture-tests.md)，Governance 层负责验证治理宪法本身的存在性和完整性。
 
 ### 定位（一句话）
 

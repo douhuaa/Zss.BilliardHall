@@ -173,7 +173,7 @@ private const string RuleId = "ADR-240.1";
 ## Relationships（关系声明）
 
 **上位裁决（Supersedes）**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md)
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md)
 
 **Depends On**：
 - [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 测试代码组织遵循模块化架构

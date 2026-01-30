@@ -179,7 +179,7 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 
 **历史依赖（Historical Context）**：
 
-- [ADR-0000：架构测试与 CI 治理宪法](../../governance/ADR-0000-architecture-tests.md)
+- [ADR-0000：架构测试与 CI 治理元规则](../../governance/ADR-0000-architecture-tests.md)
 - [ADR-903：ArchitectureTests 命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD)
 - [ADR-904：ArchitectureTests 最小断言语义规范](./ADR-904-architecturetests-minimum-assertion-semantics.md)
 - [ADR-905：执行级别分类](../../governance/ADR-905-enforcement-level-classification.md)
