@@ -54,7 +54,7 @@
 
 ### ADR 关系与演进治理（ADR Relationship Governance）
 
-- [ADR-940：ADR 关系与溯源管理宪法](ADR-940-adr-relationship-traceability-management.md)
+- [ADR-940：ADR 关系与溯源管理治理规范](ADR-940-adr-relationship-traceability-management.md)
   - ADR 关系类型、双向一致性、关系图生成
 - [ADR-945：ADR 时间线与演进视图](ADR-945-adr-timeline-evolution-view.md)
   - ADR 演进历史的可视化和溯源

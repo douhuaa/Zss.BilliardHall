@@ -100,7 +100,7 @@
 
 ## 相关文档
 
-- [ADR-950：指南与 FAQ 文档治理宪法](../adr/governance/ADR-950-guide-faq-documentation-governance.md)
+- [ADR-950：指南与 FAQ 文档治理规范](../adr/governance/ADR-950-guide-faq-documentation-governance.md)
 - [ADR-951：案例库管理规范](../adr/governance/ADR-951-case-repository-management.md)
 - [Guide 文档库](../guides/README.md)
 - [FAQ 文档库](../faqs/README.md)

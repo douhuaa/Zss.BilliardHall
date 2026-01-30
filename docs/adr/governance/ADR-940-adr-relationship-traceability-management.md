@@ -1,11 +1,11 @@
 ---
 adr: ADR-940
-title: "ADR 关系与溯源管理宪法"
+title: "ADR 关系与溯源管理治理规范"
 status: Accepted
 level: Governance
 deciders: "Architecture Board"
 date: 2026-01-26
-version: "1.0"
+version: "1.1"
 author: "GitHub Copilot"
 maintainer: "架构委员会"
 reviewer: "@douhuaa"
@@ -13,9 +13,9 @@ supersedes: null
 superseded_by: null
 ---
 
-# ADR-940：ADR 关系与溯源管理宪法
+# ADR-940：ADR 关系与溯源管理治理规范
 
-> ⚖️ **本 ADR 是所有 ADR 关系声明的唯一裁决源，定义 ADR 之间关系的标准化管理机制。**
+> ⚖️ **本 ADR 是所有 ADR 关系声明的治理规范，定义 ADR 之间关系的标准化管理机制。**
 
 ## Focus（聚焦内容）
 
@@ -291,7 +291,7 @@ jobs:
 - [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md) - 标题语义约束防止解析歧义
 - [ADR-947：关系声明区的结构与解析安全规则](./ADR-947-relationship-section-structure-parsing-safety.md) - 关系声明结构规范
 - [ADR-955：文档搜索与可发现性优化](./ADR-955-documentation-search-discoverability.md) - 搜索依赖关系图
-- [ADR-980：ADR 生命周期一体化同步机制宪法](./ADR-980-adr-lifecycle-synchronization.md) - 版本同步需要关系图更新
+- [ADR-980：ADR 生命周期一体化同步机制治理规范](./ADR-980-adr-lifecycle-synchronization.md) - 版本同步需要关系图更新
 
 ### 替代（Supersedes）
 无

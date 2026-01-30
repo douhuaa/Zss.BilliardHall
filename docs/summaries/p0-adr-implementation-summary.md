@@ -371,9 +371,9 @@ P0 实施被认为成功当：
 
 ## 参考文档
 
-- [ADR-940：ADR 关系与溯源管理宪法](../adr/governance/ADR-940-adr-relationship-traceability-management.md)
+- [ADR-940：ADR 关系与溯源管理治理规范](../adr/governance/ADR-940-adr-relationship-traceability-management.md)
 - [ADR-980：ADR 生命周期一体化同步机制](../adr/governance/ADR-980-adr-lifecycle-synchronization.md)
-- [ADR-950：指南与 FAQ 文档治理宪法](../adr/governance/ADR-950-guide-faq-documentation-governance.md)
+- [ADR-950：指南与 FAQ 文档治理规范](../adr/governance/ADR-950-guide-faq-documentation-governance.md)
 - [文档治理体系空白分析](../adr/proposals/ADR-Documentation-Governance-Gap-Analysis.md)
 - [ADR 关系图](../adr/ADR-RELATIONSHIP-MAP.md)
 

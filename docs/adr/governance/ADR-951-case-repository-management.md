@@ -263,7 +263,7 @@ docs/cases/
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-950：指南与 FAQ 文档治理宪法](ADR-950-guide-faq-documentation-governance.md) - 基于 Case 类型定义
+- [ADR-950：指南与 FAQ 文档治理规范](ADR-950-guide-faq-documentation-governance.md) - 基于 Case 类型定义
 - [ADR-920：示例代码治理规范](../governance/ADR-920-examples-governance-constitution.md)
 
 **被依赖（Depended By）**：无

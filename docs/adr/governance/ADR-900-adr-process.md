@@ -129,7 +129,7 @@ superseded_by: null
 - [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 - [ADR-930：代码审查与 ADR 合规自检流程](../governance/ADR-930-code-review-compliance.md)
 - [ADR-952：工程标准与 ADR 分离边界](../governance/ADR-952-engineering-standard-adr-boundary.md)
-- [ADR-980：ADR 生命周期一体化同步机制宪法](../governance/ADR-980-adr-lifecycle-synchronization.md)
+- [ADR-980：ADR 生命周期一体化同步机制治理规范](../governance/ADR-980-adr-lifecycle-synchronization.md)
 
 **替代（Supersedes）**：
 - 无

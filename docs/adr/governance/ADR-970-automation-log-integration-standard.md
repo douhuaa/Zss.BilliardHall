@@ -431,7 +431,7 @@ jobs:
 - 无
 
 **相关（Related）**：
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 日志与 ADR 关联
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 日志与 ADR 关联
 - [ADR-980：ADR 生命周期一体化同步机制](../governance/ADR-980-adr-lifecycle-synchronization.md) - 版本同步检测
 
 ---
@@ -443,7 +443,7 @@ jobs:
 ### 相关 ADR
 - [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md)
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md)
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md)
 
 ### 实施工具
 

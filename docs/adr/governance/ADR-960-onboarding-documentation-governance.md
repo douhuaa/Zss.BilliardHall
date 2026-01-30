@@ -1,11 +1,11 @@
 ---
 adr: ADR-960
-title: "Onboarding 文档治理宪法"
+title: "Onboarding 文档治理规范"
 status: Accepted
 level: Governance
 deciders: "Tech Lead & Onboarding Champion"
 date: 2026-01-26
-version: "1.0"
+version: "1.1"
 maintainer: "Tech Lead & Onboarding Champion"
 primary_enforcement: L1
 reviewer: "待定"
@@ -14,9 +14,9 @@ superseded_by: null
 ---
 
 
-# ADR-960：Onboarding 文档治理宪法
+# ADR-960：Onboarding 文档治理规范
 
-> ⚖️ **本 ADR 是所有 Onboarding 文档（新人入职文档）的唯一治理标准，定义其结构、审计和反馈机制。**
+> ⚖️ **本 ADR 是所有 Onboarding 文档（新人入职文档）的治理规范，定义其结构、审计和反馈机制。**
 
 **状态**：✅ Accepted  
 ## Focus（聚焦内容）
@@ -145,7 +145,7 @@ Onboarding 文档 **必须**每月进行准确性审计。
 
 **依赖（Depends On）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档分级和编写标准
-- [ADR-950：指南与 FAQ 文档治理宪法](../governance/ADR-950-guide-faq-documentation-governance.md) - 基于其文档类型定义
+- [ADR-950：指南与 FAQ 文档治理规范](../governance/ADR-950-guide-faq-documentation-governance.md) - 基于其文档类型定义
 
 **被依赖（Depended By）**：
 - [ADR-965：Onboarding 互动式学习路径](../governance/ADR-965-onboarding-interactive-learning-path.md)
@@ -167,7 +167,7 @@ Onboarding 文档 **必须**每月进行准确性审计。
 
 ### 相关 ADR
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-950：指南与 FAQ 文档治理宪法](../governance/ADR-950-guide-faq-documentation-governance.md)
+- [ADR-950：指南与 FAQ 文档治理规范](../governance/ADR-950-guide-faq-documentation-governance.md)
 
 ### 实施工具
 - `docs/onboarding/feedback-template.md` - 反馈表模板
