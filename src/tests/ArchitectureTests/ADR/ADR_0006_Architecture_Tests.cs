@@ -1,4 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>
 /// ADR-0006: 术语与编号宪法
@@ -17,7 +18,7 @@ public sealed class ADR_0006_Architecture_Tests
 
     public ADR_0006_Architecture_Tests()
     {
-        _adrRoot = Path.Combine(ModuleAssemblyData.GetSolutionRoot(), "docs", "adr");
+        _adrRoot = Path.Combine(TestEnvironment.RepositoryRoot, "docs", "adr");
     }
 
     [Fact(DisplayName = "ADR-0006.1: ADR 文件编号应符合分段规则")]

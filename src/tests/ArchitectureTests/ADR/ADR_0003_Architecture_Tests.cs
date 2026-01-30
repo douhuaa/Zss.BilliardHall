@@ -1,4 +1,5 @@
 ﻿using NetArchTest.Rules;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -188,7 +189,7 @@ public sealed class ADR_0003_Architecture_Tests
     [Fact(DisplayName = "ADR-0003.6: Directory.Build.props 应存在于仓库根目录")]
     public void Directory_Build_Props_Should_Exist_At_Repository_Root()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var directoryBuildPropsPath = Path.Combine(root, "Directory.Build.props");
 
         Assert.True(File.Exists(directoryBuildPropsPath),
@@ -205,7 +206,7 @@ public sealed class ADR_0003_Architecture_Tests
     [Fact(DisplayName = "ADR-0003.7: Directory.Build.props 应定义 BaseNamespace")]
     public void Directory_Build_Props_Should_Define_Base_Namespace()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var directoryBuildPropsPath = Path.Combine(root, "Directory.Build.props");
 
         if (!File.Exists(directoryBuildPropsPath))
@@ -236,7 +237,7 @@ public sealed class ADR_0003_Architecture_Tests
     [Fact(DisplayName = "ADR-0003.8: 所有项目应遵循命名空间约定")]
     public void All_Projects_Should_Follow_Namespace_Convention()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var projectFiles = Directory
             .GetFiles(root, "*.csproj", SearchOption.AllDirectories)
             .Where(p => !p.Contains("/obj/") && !p.Contains("/bin/"))

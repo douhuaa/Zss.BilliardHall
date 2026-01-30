@@ -1,4 +1,5 @@
 ﻿using NetArchTest.Rules;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -277,7 +278,7 @@ public sealed class ADR_0002_Architecture_Tests
     [MemberData(nameof(GetHostProjectFiles))]
     public void Host_Csproj_Should_Not_Reference_Modules(string csprojPath)
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var modulesDir = Path.Combine(root, "src", "Modules");
         var moduleProjFiles = Directory.Exists(modulesDir)
             ? Directory
@@ -315,7 +316,7 @@ public sealed class ADR_0002_Architecture_Tests
 
     public static IEnumerable<object[]> GetHostProjectFiles()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var hostDir = Path.Combine(root, "src", "Host");
         if (!Directory.Exists(hostDir)) yield break;
 
@@ -329,7 +330,7 @@ public sealed class ADR_0002_Architecture_Tests
     [Fact(DisplayName = "ADR-0002.12: Program.cs 应该保持简洁（建议 ≤ 50 行）")]
     public void Program_Cs_Should_Be_Concise()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var hostDir = Path.Combine(root, "src", "Host");
         if (!Directory.Exists(hostDir)) return;
 
@@ -370,7 +371,7 @@ public sealed class ADR_0002_Architecture_Tests
     [Fact(DisplayName = "ADR-0002.13: Program.cs 只应调用 Bootstrapper（语义检查）")]
     public void Program_Cs_Should_Only_Call_Bootstrapper()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var hostDir = Path.Combine(root, "src", "Host");
         if (!Directory.Exists(hostDir)) return;
 

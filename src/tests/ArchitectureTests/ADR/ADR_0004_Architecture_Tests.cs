@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -29,7 +30,7 @@ public sealed class ADR_0004_Architecture_Tests
     [Fact(DisplayName = "ADR-0004.1: Directory.Packages.props 应存在于仓库根目录")]
     public void Repository_Should_Have_Directory_Packages_Props()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var cpmFile = Path.Combine(root, "Directory.Packages.props");
 
         Assert.True(File.Exists(cpmFile),
@@ -45,7 +46,7 @@ public sealed class ADR_0004_Architecture_Tests
     [Fact(DisplayName = "ADR-0004.2: CPM 应被启用")]
     public void CPM_Should_Be_Enabled()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var cpmFile = Path.Combine(root, "Directory.Packages.props");
 
         Assert.True(File.Exists(cpmFile), "Directory.Packages.props 文件不存在");
@@ -74,7 +75,7 @@ public sealed class ADR_0004_Architecture_Tests
     [Fact(DisplayName = "ADR-0004.3: CPM 应启用传递依赖固定")]
     public void CPM_Should_Enable_Transitive_Pinning()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var cpmFile = Path.Combine(root, "Directory.Packages.props");
 
         if (!File.Exists(cpmFile)) return;
@@ -102,7 +103,7 @@ public sealed class ADR_0004_Architecture_Tests
     [Fact(DisplayName = "ADR-0004.4: 项目文件不应手动指定包版本")]
     public void Projects_Should_Not_Specify_Package_Versions()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var projectFiles = Directory
             .GetFiles(root, "*.csproj", SearchOption.AllDirectories)
             .Where(p => !p.Contains("/obj/") && !p.Contains("/bin/"))
@@ -155,7 +156,7 @@ public sealed class ADR_0004_Architecture_Tests
     [Fact(DisplayName = "ADR-0004.5: Directory.Packages.props 应包含包分组")]
     public void Directory_Packages_Props_Should_Contain_Package_Groups()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var cpmFile = Path.Combine(root, "Directory.Packages.props");
 
         if (!File.Exists(cpmFile)) return;
@@ -178,7 +179,7 @@ public sealed class ADR_0004_Architecture_Tests
     [Fact(DisplayName = "ADR-0004.6: Directory.Packages.props 应包含常见包分组")]
     public void Directory_Packages_Props_Should_Contain_Common_Package_Groups()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var cpmFile = Path.Combine(root, "Directory.Packages.props");
 
         if (!File.Exists(cpmFile)) return;
@@ -224,7 +225,7 @@ public sealed class ADR_0004_Architecture_Tests
     [Fact(DisplayName = "ADR-0004.7: Platform 项目不应引用业务包")]
     public void Platform_Projects_Should_Not_Reference_Business_Packages()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var platformDir = Path.Combine(root, "src", "Platform");
 
         if (!Directory.Exists(platformDir)) return;
@@ -278,7 +279,7 @@ public sealed class ADR_0004_Architecture_Tests
     [Fact(DisplayName = "ADR-0004.8: 所有测试项目应引用相同的测试框架版本")]
     public void All_Test_Projects_Should_Use_Same_Test_Framework_Versions()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var testProjects = Directory
             .GetFiles(root, "*.csproj", SearchOption.AllDirectories)
             .Where(p => p.Contains("/tests/") ||
@@ -355,7 +356,7 @@ public sealed class ADR_0004_Architecture_Tests
     [Fact(DisplayName = "ADR-0004.9: Directory.Packages.props 应定义所有项目使用的包")]
     public void Directory_Packages_Props_Should_Define_All_Used_Packages()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var cpmFile = Path.Combine(root, "Directory.Packages.props");
 
         if (!File.Exists(cpmFile)) return;

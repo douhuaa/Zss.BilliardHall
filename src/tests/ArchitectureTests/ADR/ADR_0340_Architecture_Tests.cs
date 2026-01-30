@@ -1,4 +1,5 @@
 using System.Reflection;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 using NetArchTest.Rules;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -29,7 +30,7 @@ public sealed class ADR_0340_Architecture_Tests
     [Fact(DisplayName = "ADR-340.1: Platform 层必须引用所有日志和监控基础设施包")]
     public void Platform_Must_Reference_Logging_Packages()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var platformCsproj = Path.Combine(root, "src", "Platform", "Platform.csproj");
 
         Assert.True(File.Exists(platformCsproj),
@@ -66,7 +67,7 @@ public sealed class ADR_0340_Architecture_Tests
     [Fact(DisplayName = "ADR-340.2: PlatformBootstrapper 必须包含日志配置代码")]
     public void PlatformBootstrapper_Must_Contain_Logging_Configuration()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var bootstrapperFile = Path.Combine(root, "src", "Platform", "PlatformBootstrapper.cs");
 
         Assert.True(File.Exists(bootstrapperFile),
@@ -190,7 +191,7 @@ public sealed class ADR_0340_Architecture_Tests
     [Fact(DisplayName = "ADR-340.5: Application 层不应直接配置 Serilog")]
     public void Application_Cannot_Configure_Serilog()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var configuration = GetBuildConfiguration();
         var applicationDll = Path.Combine(root, "src", "Application", "bin", configuration, "net10.0", "Application.dll");
         
@@ -222,7 +223,7 @@ public sealed class ADR_0340_Architecture_Tests
     [Fact(DisplayName = "ADR-340.5: Application 层不应直接配置 OpenTelemetry")]
     public void Application_Cannot_Configure_OpenTelemetry()
     {
-        var root = ModuleAssemblyData.GetSolutionRoot();
+        var root = TestEnvironment.RepositoryRoot;
         var configuration = GetBuildConfiguration();
         var applicationDll = Path.Combine(root, "src", "Application", "bin", configuration, "net10.0", "Application.dll");
         
