@@ -8,8 +8,11 @@
 
 ## ADR
 
-- [ADR-0100：模块静态边界细化](ADR-0100-module-boundary.md)
-- [ADR-0101：垂直切片组织细化](ADR-0101-vertical-slice-detail.md)
+- [ADR-120：领域事件命名规范](ADR-120-domain-event-naming-convention.md)
+- [ADR-121：契约（Contract）与 DTO 命名组织规范](ADR-121-contract-dto-naming-organization.md)
+- [ADR-122：测试组织与命名](ADR-122-test-organization-naming.md)
+- [ADR-123：Repository 接口分层](ADR-123-repository-interface-layering.md)
+- [ADR-124：Endpoint 命名约束](ADR-124-endpoint-naming-constraints.md)
 
 ## 链接
 
