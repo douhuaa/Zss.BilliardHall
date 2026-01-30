@@ -192,4 +192,69 @@ public class AdrParserTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => _parser.Parse(""));
     }
+
+    [Fact]
+    public void Parse_NoAdrNumber_ThrowsException()
+    {
+        // Arrange - 没有 ADR 编号的文档
+        var markdown = @"# 无效格式
+
+**状态**：Final
+
+## 决策
+
+这是一个没有 ADR 编号的文档。
+";
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() => _parser.Parse(markdown));
+        exception.Message.Should().Contain("Unable to extract ADR number");
+    }
+
+    [Fact]
+    public void Parse_NonNumericAdrId_ThrowsException()
+    {
+        // Arrange - ADR 编号不是数字
+        var markdown = @"# ADR-XXXX：测试
+
+**状态**：Final
+";
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() => _parser.Parse(markdown));
+        exception.Message.Should().Contain("Unable to extract ADR number");
+    }
+
+    [Fact]
+    public void Parse_MalformedAdrId_ThrowsException()
+    {
+        // Arrange - 畸形的 ADR 编号
+        var markdown = @"# ADR：测试（缺少编号）
+
+**状态**：Final
+";
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() => _parser.Parse(markdown));
+        exception.Message.Should().Contain("Unable to extract ADR number");
+    }
+
+    [Theory]
+    [InlineData("# ADR-001：测试", "ADR-001")]  // 短格式
+    [InlineData("# ADR-0001：测试", "ADR-0001")]  // 标准格式
+    [InlineData("# ADR-12345：测试", "ADR-12345")]  // 长编号
+    public void Parse_VariousAdrIdFormats_ExtractsCorrectly(string titleLine, string expectedId)
+    {
+        // Arrange
+        var markdown = $@"{titleLine}
+
+**状态**：Final
+";
+
+        // Act
+        var result = _parser.Parse(markdown);
+
+        // Assert
+        result.Id.Should().Be(expectedId);
+    }
 }
