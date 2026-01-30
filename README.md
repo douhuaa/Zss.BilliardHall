@@ -58,7 +58,48 @@ dotnet run --project src/Host/Worker/Worker.csproj
 - **[快速开始指南](docs/guides/quick-start-guide.md)** - 15 分钟极速上手 / 60 分钟完整入门
 - **[架构指南](docs/guides/architecture-design-guide.md)** - 架构概述和开发指南
 - **[CI/CD 指南](docs/guides/ci-cd-integration-guide.md)** - 持续集成和测试
-- **[ADR-0001](docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)** - 架构决策记录
+
+### 架构决策记录（ADR）
+
+> ⚠️ **所有架构决策以 ADR 正文为准**。完整列表请查看 [ADR 目录](docs/adr/README.md)
+
+本项目采用分层 ADR 体系，共 **44 个** 架构决策记录：
+
+| 层级 | 编号范围 | 数量 | 目录 | 说明 |
+|------|----------|------|------|------|
+| **宪法层** | ADR-0001~0009 | 8 | [constitutional](docs/adr/constitutional/) | 系统根基约束 |
+| **结构层** | ADR-100~199 | 5 | [structure](docs/adr/structure/) | 静态组织与命名 |
+| **运行层** | ADR-200~299 | 4 | [runtime](docs/adr/runtime/) | 运行时模型与异常 |
+| **技术层** | ADR-300~399 | 4 | [technical](docs/adr/technical/) | 技术选型与实现 |
+| **治理层** | ADR-0000, 900~999 | 23 | [governance](docs/adr/governance/) | 流程与测试治理 |
+
+#### 核心 ADR 快速链接
+
+**宪法层（系统基础）**：
+- [ADR-0001：模块化单体与垂直切片架构](docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 核心架构模式
+- [ADR-0002：Platform / Application / Host 三层启动体系](docs/adr/constitutional/ADR-0002-platform-application-host-bootstrap.md) - 启动与依赖注入
+- [ADR-0003：命名空间与项目边界规范](docs/adr/constitutional/ADR-0003-namespace-rules.md) - 命名空间规则
+- [ADR-0005：应用内交互模型与执行边界](docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) - CQRS 与 Handler 规范
+- [ADR-0006：术语与编号宪法](docs/adr/constitutional/ADR-0006-terminology-numbering-constitution.md) - ADR 编号与术语
+- [ADR-0007：Agent 行为与权限宪法](docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md) - AI Agent 治理
+- [ADR-0008：文档编写与维护宪法](docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md) - 文档规范
+
+**治理层（流程与规则）**：
+- [ADR-0000：架构测试与 CI 治理元规则](docs/adr/governance/ADR-0000-architecture-tests.md) - 元治理规则
+- [ADR-900：ADR 新增与修订流程](docs/adr/governance/ADR-900-adr-process.md) - ADR 生命周期
+- [ADR-910：README 编写与维护治理规范](docs/adr/governance/ADR-910-readme-governance-constitution.md) - README 治理
+- [ADR-930：代码审查与 ADR 合规自检流程](docs/adr/governance/ADR-930-code-review-compliance.md) - PR 审查流程
+
+**结构层（命名与组织）**：
+- [ADR-120：领域事件命名规范](docs/adr/structure/ADR-120-domain-event-naming-convention.md) - 事件命名
+- [ADR-121：契约（Contract）与 DTO 命名组织规范](docs/adr/structure/ADR-121-contract-dto-naming-organization.md) - 契约与 DTO
+
+**运行层（运行时行为）**：
+- [ADR-240：Handler 异常约束](docs/adr/runtime/ADR-240-handler-exception-constraints.md) - 异常处理规范
+
+**技术层（技术实现）**：
+- [ADR-340：结构化日志与监控约束](docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md) - 日志规范
+- [ADR-360：CI/CD Pipeline 流程标准化](docs/adr/technical/ADR-360-cicd-pipeline-standardization.md) - CI/CD 标准
 
 ## 🤖 AI 驱动的架构治理体系
 
