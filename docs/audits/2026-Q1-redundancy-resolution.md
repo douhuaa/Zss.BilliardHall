@@ -279,7 +279,7 @@
 
 - [2026-Q1 文档治理审计报告](2026-Q1-documentation-audit.md)
 - [ADR-950：指南与 FAQ 文档治理宪法](../adr/governance/ADR-950-guide-faq-documentation-governance.md)
-- [ADR-910：README 编写与维护宪法](../adr/governance/ADR-910-readme-governance-constitution.md)
+- [ADR-910：README 编写与维护治理规范](../adr/governance/ADR-910-readme-governance-constitution.md)
 - [ADR-0008：文档编写与维护宪法](../adr/constitutional/ADR-0008-documentation-governance-constitution.md)
 
 ---

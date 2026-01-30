@@ -119,7 +119,7 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - ADR 流程基于测试和 CI 机制
+- [ADR-0000：架构测试与 CI 治理元规则](./ADR-0000-architecture-tests.md) - ADR 流程基于测试和 CI 机制
 - [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - ADR 编号规则依赖编号宪法
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档标准依赖文档治理宪法
 
@@ -155,7 +155,7 @@ superseded_by: null
 - [RFC 2119: Key words for use in RFCs](https://www.ietf.org/rfc/rfc2119.txt) - 规范性语言标准
 
 **相关内部文档**：
-- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - ADR 测试和 CI 执行机制
+- [ADR-0000：架构测试与 CI 治理元规则](./ADR-0000-architecture-tests.md) - ADR 测试和 CI 执行机制
 - [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - ADR 编号规范和术语定义
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档编写标准
 - [ADR-901：Warning 约束语义](./ADR-901-warning-constraint-semantics.md) - ADR 语义规范

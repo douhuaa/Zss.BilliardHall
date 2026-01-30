@@ -244,7 +244,7 @@ README 引用 ADR 必须遵循：
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - README 治理基于测试和 CI 机制
+- [ADR-0000：架构测试与 CI 治理元规则](./ADR-0000-architecture-tests.md) - README 治理基于测试和 CI 机制
 - [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - README 术语使用遵循统一规范
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - README 约束是文档治理的细化
 
@@ -273,7 +273,7 @@ README 引用 ADR 必须遵循：
 
 **相关内部文档**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档分级与权限划分
-- [ADR-920：示例代码治理宪法](./ADR-920-examples-governance-constitution.md) - README 中代码示例的约束
+- [ADR-920：示例代码治理规范](./ADR-920-examples-governance-constitution.md) - README 中代码示例的约束
 - [ADR-950：Guide/FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md) - 与 Guide 文档的边界
 - [ADR-960：入职文档治理](./ADR-960-onboarding-documentation-governance.md) - 入职文档与 README 的关系
 

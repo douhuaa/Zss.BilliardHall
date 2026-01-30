@@ -267,7 +267,7 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
 
 **被依赖（Depended By）**：
 - [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - ADR 流程依赖编号规则
@@ -279,7 +279,7 @@ superseded_by: null
 - [ADR-340：结构化日志与监控约束](../technical/ADR-340-structured-logging-monitoring-constraints.md)
 - [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-910：README 编写与维护宪法](../governance/ADR-910-readme-governance-constitution.md)
+- [ADR-910：README 编写与维护治理规范](../governance/ADR-910-readme-governance-constitution.md)
 - 所有 ADR - 编号规范适用于所有 ADR
 
 **替代（Supersedes）**：

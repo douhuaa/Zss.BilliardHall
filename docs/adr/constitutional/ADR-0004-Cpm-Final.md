@@ -159,7 +159,7 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
 - [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 包管理规范基于层级装配边界
 - [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 包管理依赖命名空间结构
 
@@ -192,7 +192,7 @@ superseded_by: null
 - [Managing .NET Dependencies at Scale](https://devblogs.microsoft.com/dotnet/managing-package-dependency-updates-at-scale/) - 大规模依赖管理
 
 **相关内部文档**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 了解测试执行机制
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 了解测试执行机制
 - [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 了解层级职责划分
 - [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 了解项目组织结构
 

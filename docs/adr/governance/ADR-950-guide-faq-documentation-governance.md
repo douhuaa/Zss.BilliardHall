@@ -217,7 +217,7 @@ Standard（工程标准，不得引入新约束）
 **被替代（Superseded By）**：无
 
 **相关（Related）**：
-- [ADR-910：README 编写与维护宪法](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
+- [ADR-910：README 编写与维护治理规范](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
 
 ---
 

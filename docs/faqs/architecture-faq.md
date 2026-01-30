@@ -224,7 +224,7 @@ dotnet test --filter "FullyQualifiedName~ADR_0001"
 - `ADR_0005_*` - Handler 模式和 CQRS
 
 **参考**：
-- [ADR-0000：架构测试与 CI 治理宪法](../adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-0000：架构测试与 CI 治理元规则](../adr/governance/ADR-0000-architecture-tests.md)
 - [架构测试失败诊断](../copilot/architecture-test-failures.md)
 - [测试架构指南](../guides/test-architecture-guide.md)
 

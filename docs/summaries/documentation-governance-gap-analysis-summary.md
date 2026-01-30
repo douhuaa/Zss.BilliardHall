@@ -366,8 +366,8 @@ ADR-0000（测试治理） → ADR-970（日志集成）
 - **现有治理**：
   - [ADR-0008：文档编写与维护宪法](../adr/constitutional/ADR-0008-documentation-governance-constitution.md)
   - [ADR-900：ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
-  - [ADR-910：README 编写与维护宪法](../adr/governance/ADR-910-readme-governance-constitution.md)
-  - [ADR-920：示例代码治理宪法](../adr/governance/ADR-920-examples-governance-constitution.md)
+  - [ADR-910：README 编写与维护治理规范](../adr/governance/ADR-910-readme-governance-constitution.md)
+  - [ADR-920：示例代码治理规范](../adr/governance/ADR-920-examples-governance-constitution.md)
 
 ---
 

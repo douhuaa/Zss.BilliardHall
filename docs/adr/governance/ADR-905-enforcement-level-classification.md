@@ -250,7 +250,7 @@ superseded_by: null
 
 **Depends On**：
 - [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 本 ADR 为 ADR-0005 的执行级别补充
-- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - 执行级别基于测试和 CI 治理机制
+- [ADR-0000：架构测试与 CI 治理元规则](./ADR-0000-architecture-tests.md) - 执行级别基于测试和 CI 治理机制
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档治理宪法
 - [ADR-902：治理类 ADR 标准格式](./ADR-902-adr-template-structure-contract.md) - 本文档标准来源
 
@@ -276,7 +276,7 @@ superseded_by: null
 - [ADR-210：领域事件版本化与兼容性](../runtime/ADR-210-event-versioning-compatibility.md) - 参考本文档的执行级别
 - [ADR-240：Handler 异常约束](../runtime/ADR-240-handler-exception-constraints.md) - 参考本文档的执行级别
 - [ADR-201：Handler 生命周期管理](../runtime/ADR-201-handler-lifecycle-management.md) - 参考本文档的执行级别
-- [ADR-920：示例代码治理宪法](./ADR-920-examples-governance-constitution.md) - 参考本文档的执行级别
+- [ADR-920：示例代码治理规范](./ADR-920-examples-governance-constitution.md) - 参考本文档的执行级别
 - [ADR-930：代码审查与 ADR 合规自检流程](./ADR-930-code-review-compliance.md) - 人工 Gate 流程依赖代码审查
 
 ---

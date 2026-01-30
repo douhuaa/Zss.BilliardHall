@@ -172,7 +172,7 @@ ADR_240_1_HandlerMustNotCatchExceptionTests.Handle_ValidCommand_DoesNotCatchExce
 **历史依赖（Historical Context）**：
 
 - [ADR-903：ArchitectureTests 命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD)
-- [ADR-0000：架构测试与 CI 治理宪法](../../governance/ADR-0000-architecture-tests.md)
+- [ADR-0000：架构测试与 CI 治理元规则](../../governance/ADR-0000-architecture-tests.md)
 - [ADR-122：测试代码组织与命名规范](../../structure/ADR-122-test-organization-naming.md)
 
 ---

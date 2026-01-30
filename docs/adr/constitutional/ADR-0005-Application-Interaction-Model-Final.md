@@ -154,7 +154,7 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
 - [ADR-0001：模块化单体与垂直切片架构](./ADR-0001-modular-monolith-vertical-slice-architecture.md) - CQRS 模式基于模块隔离和垂直切片
 - [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - Handler 装配基于三层体系
 - [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - Handler 组织遵循命名空间规范
@@ -162,7 +162,7 @@ superseded_by: null
 
 **被依赖（Depended By）**：
 - [ADR-905：执行级别分类](../../governance/ADR-905-enforcement-level-classification.md) - 执行级别补充文档依赖本 ADR
-- [ADR-920：示例代码治理宪法](../../governance/ADR-920-examples-governance-constitution.md) - 示例治理依赖 CQRS 模式
+- [ADR-920：示例代码治理规范](../../governance/ADR-920-examples-governance-constitution.md) - 示例治理依赖 CQRS 模式
 - [ADR-201：Handler 生命周期管理](../../runtime/ADR-201-handler-lifecycle-management.md) - Handler 管理基于 CQRS
 - [ADR-210：领域事件版本化与兼容性](../../runtime/ADR-210-event-versioning-compatibility.md) - 事件版本化基于 CQRS
 - [ADR-220：事件总线集成规范](../../runtime/ADR-220-event-bus-integration.md) - 事件总线基于 CQRS

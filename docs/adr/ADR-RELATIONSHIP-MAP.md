@@ -129,7 +129,7 @@ graph TB
 **状态**：✅ Final（裁决型ADR）  
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 测试执行机制
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 测试执行机制
 - [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 术语定义标准
 - [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 基于模块隔离规则
 - [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 基于模块边界定义
@@ -222,7 +222,7 @@ graph TB
 
 ---
 
-#### ADR-0000：架构测试与 CI 治理宪法
+#### ADR-0000：架构测试与 CI 治理元规则
 
 **状态**：✅ Final（不可随意修改）  
 
@@ -266,7 +266,7 @@ graph TB
 
 ---
 
-#### ADR-910：README 编写与维护宪法
+#### ADR-910：README 编写与维护治理规范
 
 **状态**：✅ Final（裁决型ADR）  
 
@@ -274,7 +274,7 @@ graph TB
 
 ---
 
-#### ADR-920：示例代码治理宪法
+#### ADR-920：示例代码治理规范
 
 **状态**：✅ Final（裁决型ADR）  
 
@@ -350,16 +350,16 @@ graph TB
 - [ADR-951：案例库管理规范](ADR-951-case-repository-management.md) - Case 类型细化
 - [ADR-952：工程标准与 ADR 分离边界](ADR-952-engineering-standard-adr-boundary.md) - Standard 类型细化
 - [ADR-960：Onboarding 文档治理宪法](ADR-960-onboarding-documentation-governance.md) - Onboarding 文档规范
-- [ADR-910：README 编写与维护宪法](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
+- [ADR-910：README 编写与维护治理规范](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
 
 **替代（Supersedes）**：
-- [ADR-910：README 编写与维护宪法](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
+- [ADR-910：README 编写与维护治理规范](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
 
 **被替代（Superseded By）**：
-- [ADR-910：README 编写与维护宪法](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
+- [ADR-910：README 编写与维护治理规范](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
 
 **相关（Related）**：
-- [ADR-910：README 编写与维护宪法](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
+- [ADR-910：README 编写与维护治理规范](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
 
 ---
 
@@ -369,19 +369,19 @@ graph TB
 
 **依赖（Depends On）**：
 - [ADR-950：指南与 FAQ 文档治理宪法](ADR-950-guide-faq-documentation-governance.md) - 基于 Case 类型定义
-- [ADR-920：示例代码治理宪法](ADR-920-examples-governance-constitution.md) - 示例代码规范
+- [ADR-920：示例代码治理规范](ADR-920-examples-governance-constitution.md) - 示例代码规范
 
 **被依赖（Depended By）**：
-- [ADR-920：示例代码治理宪法](ADR-920-examples-governance-constitution.md) - 示例代码规范
+- [ADR-920：示例代码治理规范](ADR-920-examples-governance-constitution.md) - 示例代码规范
 
 **替代（Supersedes）**：
-- [ADR-920：示例代码治理宪法](ADR-920-examples-governance-constitution.md) - 示例代码规范
+- [ADR-920：示例代码治理规范](ADR-920-examples-governance-constitution.md) - 示例代码规范
 
 **被替代（Superseded By）**：
-- [ADR-920：示例代码治理宪法](ADR-920-examples-governance-constitution.md) - 示例代码规范
+- [ADR-920：示例代码治理规范](ADR-920-examples-governance-constitution.md) - 示例代码规范
 
 **相关（Related）**：
-- [ADR-920：示例代码治理宪法](ADR-920-examples-governance-constitution.md) - 示例代码规范
+- [ADR-920：示例代码治理规范](ADR-920-examples-governance-constitution.md) - 示例代码规范
 
 ---
 
@@ -478,7 +478,7 @@ graph TB
 **状态**：✅ Accepted  
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 测试机制
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 测试机制
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档组织
 
 **被依赖（Depended By）**：
@@ -524,7 +524,7 @@ graph TB
 **状态**：✅ Accepted  
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 检测机制
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 检测机制
 - [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - 基于其"三位一体交付"要求
 
 **被依赖（Depended By）**：

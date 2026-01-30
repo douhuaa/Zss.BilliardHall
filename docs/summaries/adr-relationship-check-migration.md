@@ -350,7 +350,7 @@ dotnet test src/tests/ArchitectureTests/
 ## 参考
 
 - ADR-940：ADR 关系与溯源管理
-- ADR-0000：架构测试与 CI 治理宪法
+- ADR-0000：架构测试与 CI 治理元规则
 - [Markdig GitHub](https://github.com/xoofx/markdig)
 
 ---

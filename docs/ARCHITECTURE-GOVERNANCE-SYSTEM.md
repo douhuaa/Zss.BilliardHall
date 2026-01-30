@@ -140,7 +140,7 @@ docs/adr/
 ### 参考文档
 
 - [ADR 目录](adr/README.md)
-- [ADR-0000: 架构测试与 CI 治理宪法](adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-0000: 架构测试与 CI 治理元规则](adr/governance/ADR-0000-architecture-tests.md)
 - [ADR-0007: Agent 行为与权限宪法](adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 - [ADR-0008: 文档编写与维护宪法](adr/constitutional/ADR-0008-documentation-governance-constitution.md)
 - [ADR-900: ADR 新增与修订流程](adr/governance/ADR-900-adr-process.md)

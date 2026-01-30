@@ -168,7 +168,7 @@ superseded_by: null
 
 **Depends On**：
 
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md)  
+- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md)  
 - [ADR-905：执行级别分类](../governance/ADR-905-enforcement-level-classification.md)  
 
 **Depended By**：
