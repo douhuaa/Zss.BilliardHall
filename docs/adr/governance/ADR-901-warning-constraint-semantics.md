@@ -1,11 +1,11 @@
 ---
 adr: ADR-901
-title: "语义宪法（Constraint / Warning / Notice）"
+title: "语义元规则（Constraint / Warning / Notice）"
 status: Final
 level: Governance
 deciders: "Architecture Board"
-date: 2026-01-27
-version: "1.0"
+date: 2026-01-30
+version: "1.1"
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -13,9 +13,9 @@ supersedes: null
 superseded_by: null
 ---
 
-# ADR-901：语义宪法（Constraint / Warning / Notice）
+# ADR-901：语义元规则（Constraint / Warning / Notice）
 
-> ⚖️ **这是 ADR 体系中“风险与约束语言”的宪法。**  
+> ⚖️ **这是 ADR 体系中“风险与约束语言”的治理级元规则。**  
 > 本 ADR 统一定义：**什么是警告、什么是禁止、什么只是提示，以及它们如何被书写、识别和执行。**  
 > 任何语义不合规的警告或提示，**不具备治理效力**。
 

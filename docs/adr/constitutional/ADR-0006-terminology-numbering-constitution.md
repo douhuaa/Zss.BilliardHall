@@ -3,9 +3,9 @@ adr: ADR-0006
 title: "术语与编号宪法"
 status: Final
 level: Constitutional
-version: "1.0"
+version: "1.1"
 deciders: "Architecture Board"
-date: 2026-01-23
+date: 2026-01-30
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "Architecture Board"
@@ -81,6 +81,39 @@ superseded_by: null
 | L1 测试      | 静态可执行自动化测试（如 NetArchTest）                       | Level 1 Test          |
 | L2 测试      | 语义半自动化测试（如 Roslyn Analyzer、启发式检查）             | Level 2 Test          |
 | L3 测试      | 人工 Gate，需要人工审查判断                               | Level 3 Test          |
+
+### "宪法"术语的语境区分
+
+> **重要说明**："宪法"一词在本架构体系中有明确的使用边界。
+
+**宪法层 ADR（Constitutional ADR）**：
+- 编号范围：ADR-0001 ~ ADR-0009
+- 位置：`docs/adr/constitutional/` 目录
+- 含义：定义系统的**根本架构约束**（代码结构、模块隔离、命名空间等）
+- 示例：
+  - ADR-0001：模块化单体与垂直切片架构
+  - ADR-0006：术语与编号宪法
+  - ADR-0007：Agent 行为与权限宪法
+  - ADR-0008：文档编写与维护宪法
+
+**治理层 ADR（Governance ADR）**：
+- 编号范围：ADR-0000, ADR-900 ~ ADR-999
+- 位置：`docs/adr/governance/` 目录
+- 含义：定义**治理流程和元规则**（ADR 流程、测试规范、文档规范等）
+- 术语使用规范：
+  - ✅ 使用"治理规范"（Governance Standard）
+  - ✅ 使用"元规则"（Meta-Rule）
+  - ❌ 避免使用"宪法"以免与 Constitutional 层混淆
+- 示例：
+  - ADR-0000：架构测试与 CI 治理元规则
+  - ADR-901：语义元规则
+  - ADR-910：README 编写与维护治理规范
+  - ADR-920：示例代码治理规范
+
+**核心原则**：
+- "宪法"一词**专属于 Constitutional 层**（约束代码架构）
+- Governance 层使用"治理规范"或"元规则"（约束治理行为）
+- 这种区分确保术语清晰，降低认知负担
 
 ---
 

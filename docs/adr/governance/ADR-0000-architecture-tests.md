@@ -1,21 +1,21 @@
 ---
 adr: ADR-0000
-title: "架构测试与 CI 治理宪法"
+title: "架构测试与 CI 治理元规则"
 status: Final
 level: Governance
 deciders: "Architecture Board"
-date: 2026-01-29
-version: "3.0"
+date: 2026-01-30
+version: "3.1"
 maintainer: "Architecture Board"
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
 ---
 
-# ADR-0000：架构测试与 CI 治理宪法
+# ADR-0000：架构测试与 CI 治理元规则
 
 >⚖️ 唯一架构裁决源声明 
->本 ADR 是关于「架构合法性判定、CI 执法、破例治理」的最高宪法级规则。
+>本 ADR 是关于「架构合法性判定、CI 执法、破例治理」的最高治理级元规则。
 所有架构测试、CI Gate、Analyzer、Prompt、文档与流程 不得凌驾于本 ADR 之上。
 
 ---
@@ -271,7 +271,8 @@ superseded_by: null
 
 | 版本  | 日期         | 变更说明              |
 |-----|------------|-------------------|
-|3.0| 2026-01-29 | 宪法级重写，剥离实现细节 |
+|3.1| 2026-01-30 | 术语优化：宪法→元规则，消除与Constitutional层混淆 |
+|3.0| 2026-01-29 | 治理级重写，剥离实现细节 |
 |2.1  | 2026-02-10 | 补充 ADR-0000.X/Y 规则 |
 | 2.0 | 2026-01-23 | 聚焦自动化与治理闭环，细化执行分级 |
 | 1.0 | 2026-01-20 | 初版                |
