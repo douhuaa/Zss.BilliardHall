@@ -302,7 +302,9 @@ public sealed class ADR_0907_Architecture_Tests
             return;
         }
 
-        var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Tests.cs");
+        var testFiles = Directory.GetFiles(testsDirectory, "*.cs")
+            .Where(f => Path.GetFileName(f).StartsWith("ADR_"))
+            .ToArray();
         var warnings = new List<string>();
 
         foreach (var testFile in testFiles)
