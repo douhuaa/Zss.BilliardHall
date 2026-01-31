@@ -554,7 +554,7 @@ public sealed class ADR_0907_Architecture_Tests
                 new[]
                 {
                     "",
-                    "⚠️  ADR-907.9 提醒：架构测试的 CI 集成可能不完整：",
+                    "⚠️  ADR-907.10 提醒：架构测试的 CI 集成可能不完整：",
                     ""
                 }
                 .Concat(warnings)
@@ -609,7 +609,7 @@ public sealed class ADR_0907_Architecture_Tests
         var adr0000Path = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-0000-architecture-tests.md");
         
         File.Exists(adr0000Path).Should().BeTrue(
-            $"❌ ADR-907.11 违规：缺少架构测试宪法文档\n\n" +
+            $"❌ ADR-907.12 违规：缺少架构测试宪法文档\n\n" +
             $"预期路径：{adr0000Path}\n\n" +
             $"修复建议：\n" +
             $"  1. 创建 ADR-0000 定义破例与偿还机制\n" +
@@ -682,7 +682,7 @@ public sealed class ADR_0907_Architecture_Tests
                 new[]
                 {
                     "",
-                    "⚠️  ADR-907.7 告警（L2）：以下测试类的断言可能不足或无效：",
+                    "⚠️  ADR-907.8 告警（L2）：以下测试类的断言可能不足或无效：",
                     ""
                 }
                 .Concat(violations)
@@ -761,7 +761,7 @@ public sealed class ADR_0907_Architecture_Tests
                 new[]
                 {
                     "",
-                    "⚠️  ADR-907.12 告警（L2）：以下测试对应的 ADR 已被废弃：",
+                    "⚠️  ADR-907.13 告警（L2）：以下测试对应的 ADR 已被废弃：",
                     ""
                 }
                 .Concat(violations)
