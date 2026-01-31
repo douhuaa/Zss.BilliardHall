@@ -7,21 +7,28 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_0907;
 /// ADR-907.4: 测试类与 ADR 映射校验
 /// 验证每个测试类只能覆盖一个 ADR（§2.4）
 /// 
+/// 测试细则：
+/// - 细则 1: 测试类命名必须符合规范格式
+/// - 细则 2: 测试类DisplayName 必须引用正确的 ADR
+/// 
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md
 /// - Prompts: docs/copilot/adr-0907.prompts.md
 /// </summary>
 public sealed class ADR_0907_4_Tests
 {
-    [Fact(DisplayName = "ADR-907.4: 测试类必须映射到单一 ADR")]
-    public void Test_Classes_Must_Map_To_Single_ADR()
+    /// <summary>
+    /// 细则 1: 验证测试类命名格式符合规范
+    /// </summary>
+    [Fact(DisplayName = "ADR-907.4.1: 测试类命名必须符合规范格式")]
+    public void Test_Class_Names_Must_Follow_Naming_Convention()
     {
         var repoRoot = ADR_0907_TestHelpers.FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, ADR_0907_TestHelpers.AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
-            true.Should().BeFalse($"❌ ADR-907.4 无法执行：测试目录不存在 {testsDirectory}");
+            true.Should().BeFalse($"❌ ADR-907.4.1 无法执行：测试目录不存在 {testsDirectory}");
             return;
         }
 
@@ -38,11 +45,42 @@ public sealed class ADR_0907_4_Tests
             if (!Regex.IsMatch(fileName, @"^ADR_\d{3,4}_(\d+_Tests|Architecture_Tests)\.cs$"))
             {
                 violations.Add($"  • {fileName} - 命名格式不符合规范");
-                continue;
             }
+        }
 
-            // 验证文件内容主要测试单一 ADR
-            var content = File.ReadAllText(testFile);
+        if (violations.Any())
+        {
+            true.Should().BeFalse(
+                $"❌ ADR-907.4.1 违规：以下测试类命名格式不符合规范\n\n" +
+                $"{string.Join("\n", violations)}\n\n" +
+                $"修复建议：\n" +
+                $"  1. 测试类命名：ADR_<编号>_<规则编号>_Tests 或 ADR_<编号>_Architecture_Tests\n" +
+                $"  2. 推荐使用规则独立格式：ADR_0907_1_Tests.cs\n\n" +
+                $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.4");
+        }
+    }
+
+    /// <summary>
+    /// 细则 2: 验证测试类 DisplayName 引用正确的 ADR
+    /// </summary>
+    [Fact(DisplayName = "ADR-907.4.2: DisplayName 必须引用正确的 ADR 编号")]
+    public void DisplayName_Must_Reference_Correct_ADR()
+    {
+        var repoRoot = ADR_0907_TestHelpers.FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var testsDirectory = Path.Combine(repoRoot, ADR_0907_TestHelpers.AdrTestsPath, "ADR");
+
+        if (!Directory.Exists(testsDirectory))
+        {
+            true.Should().BeFalse($"❌ ADR-907.4.2 无法执行：测试目录不存在 {testsDirectory}");
+            return;
+        }
+
+        var testFiles = Directory.GetFiles(testsDirectory, "*.cs");
+        var violations = new List<string>();
+
+        foreach (var testFile in testFiles)
+        {
+            var fileName = Path.GetFileName(testFile);
             
             // 提取文件名中的 ADR 编号
             var fileAdrMatch = Regex.Match(fileName, @"ADR_(\d{3,4})_");
@@ -50,6 +88,9 @@ public sealed class ADR_0907_4_Tests
                 continue;
 
             var fileAdr = fileAdrMatch.Groups[1].Value;
+            
+            // 验证文件内容主要测试单一 ADR
+            var content = File.ReadAllText(testFile);
             
             // 查找测试方法的 DisplayName
             var displayNames = Regex.Matches(content, @"DisplayName\s*=\s*""([^""]+)""");
@@ -75,12 +116,12 @@ public sealed class ADR_0907_4_Tests
         if (violations.Any())
         {
             true.Should().BeFalse(
-                $"❌ ADR-907.4 违规：以下测试类违反单一 ADR 映射规则\n\n" +
+                $"❌ ADR-907.4.2 违规：以下测试类 DisplayName 引用了不同的 ADR\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 每个测试类只能覆盖一个 ADR\n" +
-                $"  2. 如果需要测试多个 ADR，创建多个测试文件\n" +
-                $"  3. 测试类命名：ADR_<编号>_<规则编号>_Tests 或 ADR_<编号>_Architecture_Tests\n" +
+                $"  2. DisplayName 必须引用文件名中的 ADR 编号\n" +
+                $"  3. 如果需要测试多个 ADR，创建多个测试文件\n" +
                 $"  4. 引用依赖的 ADR（如 ADR-0000）是允许的\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.4");
         }
