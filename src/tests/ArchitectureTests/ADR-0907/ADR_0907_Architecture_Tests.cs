@@ -7,22 +7,23 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_0907;
 /// ADR-907: ArchitectureTests 执法治理体系
 /// 验证 ArchitectureTests 的命名、组织、最小断言及 CI / Analyzer 映射规则
 /// 
-/// 测试覆盖映射（严格遵循 ADR-907 §2.5 命名规范）：
+/// 测试覆盖映射（严格遵循 ADR-907 §2 命名规范）：
 /// L1 级别（失败即阻断）：
 /// - ADR-907.1: ArchitectureTests 项目存在性校验 → ADR_0907_1_ArchitectureTests_Project_Must_Exist
 /// - ADR-907.2: ADR 目录结构扫描 → ADR_0907_2_Test_Directory_Must_Be_Organized_By_ADR_Number
-/// - ADR-907.3: 测试类与 ADR 映射校验 → ADR_0907_3_Test_Classes_Must_Map_To_Single_ADR
-/// - ADR-907.4: 测试类命名正则校验 → ADR_0907_4_Test_Class_Names_Must_Follow_Convention
-/// - ADR-907.5: 测试方法与子规则解析 → ADR_0907_5_Test_Methods_Must_Map_To_Subrules
-/// - ADR-907.6: 失败信息 ADR 溯源校验 → ADR_0907_6_Failure_Messages_Must_Reference_ADR
-/// - ADR-907.8: Skip / 条件禁用检测 → ADR_0907_8_Tests_Must_Not_Be_Skipped
-/// - ADR-907.9: CI / Analyzer 自动注册校验 → ADR_0907_9_Tests_Must_Be_Discoverable_By_CI
-/// - ADR-907.10: L1 阻断 / L2 告警策略执行 → ADR_0907_10_Enforcement_Levels_Must_Be_Documented
-/// - ADR-907.11: 破例与偿还机制记录 → ADR_0907_11_Exception_Mechanism_Must_Be_Documented
+/// - ADR-907.3: 规则独立测试校验 → ADR_0907_3_Each_Rule_Must_Have_Independent_Test_Class
+/// - ADR-907.4: 测试类与 ADR 映射校验 → ADR_0907_4_Test_Classes_Must_Map_To_Single_ADR
+/// - ADR-907.5: 测试类命名正则校验 → ADR_0907_5_Test_Class_Names_Must_Follow_Convention
+/// - ADR-907.6: 测试方法映射行为场景校验 → ADR_0907_6_Test_Methods_Must_Map_To_Behavior_Scenarios
+/// - ADR-907.7: 失败信息 ADR 溯源校验 → ADR_0907_7_Failure_Messages_Must_Reference_ADR
+/// - ADR-907.9: Skip / 条件禁用检测 → ADR_0907_9_Tests_Must_Not_Be_Skipped
+/// - ADR-907.10: CI / Analyzer 自动注册校验 → ADR_0907_10_Tests_Must_Be_Discoverable_By_CI
+/// - ADR-907.11: L1 阻断 / L2 告警策略执行 → ADR_0907_11_Enforcement_Levels_Must_Be_Documented
+/// - ADR-907.12: 破例与偿还机制记录 → ADR_0907_12_Exception_Mechanism_Must_Be_Documented
 /// 
 /// L2 级别（失败记录告警）：
-/// - ADR-907.7: 最小断言数量与语义检测 → ADR_0907_7_Test_Classes_Must_Have_Valid_Assertions
-/// - ADR-907.12: ADR 生命周期同步校验 → ADR_0907_12_Superseded_ADRs_Must_Not_Have_Active_Tests
+/// - ADR-907.8: 最小断言数量与语义检测 → ADR_0907_8_Test_Classes_Must_Have_Valid_Assertions
+/// - ADR-907.13: ADR 生命周期同步校验 → ADR_0907_13_Superseded_ADRs_Must_Not_Have_Active_Tests
 /// 
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md
@@ -90,11 +91,12 @@ public sealed class ADR_0907_Architecture_Tests
     }
 
     /// <summary>
-    /// ADR-907.3: 测试类与 ADR 映射校验
-    /// 验证每个测试类只能覆盖一个 ADR（§2.3）
+    /// ADR-907.3: 规则独立测试校验（避免类膨胀）
+    /// 验证每一条具体架构规则必须使用独立的测试类进行验证（§2.3）
+    /// 禁止多个规则混合在同一个测试类
     /// </summary>
-    [Fact(DisplayName = "ADR-907.3: 测试类必须映射到单一 ADR")]
-    public void ADR_0907_3_Test_Classes_Must_Map_To_Single_ADR()
+    [Fact(DisplayName = "ADR-907.3: 规则独立测试 - 每条规则使用独立测试类")]
+    public void ADR_0907_3_Each_Rule_Must_Have_Independent_Test_Class()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
@@ -106,14 +108,86 @@ public sealed class ADR_0907_Architecture_Tests
         }
 
         var testFiles = Directory.GetFiles(testsDirectory, "*.cs");
+        var warnings = new List<string>();
+
+        foreach (var testFile in testFiles)
+        {
+            var fileName = Path.GetFileName(testFile);
+            var content = File.ReadAllText(testFile);
+
+            // 检查是否有多个规则编号的测试方法在同一个类中
+            // 提取所有 DisplayName 中的 ADR 规则引用（格式：ADR-XXXX.Y）
+            var ruleReferences = Regex.Matches(content, @"ADR-(\d{3,4})\.(\d+)");
+            
+            var uniqueRules = ruleReferences
+                .Cast<Match>()
+                .Select(m => $"{m.Groups[1].Value}.{m.Groups[2].Value}")
+                .Distinct()
+                .ToList();
+
+            // 如果一个测试类中包含多个不同规则的测试，给出警告
+            // 注意：ADR_XXXX_Architecture_Tests 是兼容格式，可以包含多个规则
+            // 但新的推荐格式 ADR_XXXX_Y_Tests 应该只包含一个规则
+            if (uniqueRules.Count > 1 && !fileName.EndsWith("Architecture_Tests.cs"))
+            {
+                warnings.Add($"  • {fileName} - 包含多个规则: {string.Join(", ", uniqueRules)}");
+            }
+        }
+
+        if (warnings.Any())
+        {
+            var message = string.Join("\n",
+                new[]
+                {
+                    "",
+                    "⚠️  ADR-907.3 提醒：以下测试类建议拆分为规则独立的测试类：",
+                    ""
+                }
+                .Concat(warnings)
+                .Concat(new[]
+                {
+                    "",
+                    "建议：",
+                    "  • 每一条具体架构规则使用独立的测试类",
+                    "  • 测试类命名：ADR_<编号>_<规则编号>_Tests",
+                    "  • 示例：ADR_0001_1_Tests、ADR_0001_2_Tests",
+                    "  • 兼容格式：ADR_<编号>_Architecture_Tests（单一规则或汇总测试）",
+                    "",
+                    "参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.3",
+                    ""
+                }));
+
+            Console.WriteLine(message);
+        }
+    }
+
+    /// <summary>
+    /// ADR-907.4: 测试类与 ADR 映射校验
+    /// 验证每个测试类只能覆盖一个 ADR（§2.4）
+    /// </summary>
+    [Fact(DisplayName = "ADR-907.4: 测试类必须映射到单一 ADR")]
+    public void ADR_0907_4_Test_Classes_Must_Map_To_Single_ADR()
+    {
+        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+
+        if (!Directory.Exists(testsDirectory))
+        {
+            true.Should().BeFalse($"❌ ADR-907.4 无法执行：测试目录不存在 {testsDirectory}");
+            return;
+        }
+
+        var testFiles = Directory.GetFiles(testsDirectory, "*.cs");
         var violations = new List<string>();
 
         foreach (var testFile in testFiles)
         {
             var fileName = Path.GetFileName(testFile);
             
-            // 测试类命名必须遵循 ADR_XXXX_Architecture_Tests.cs 格式
-            if (!Regex.IsMatch(fileName, @"^ADR_\d{3,4}_Architecture_Tests\.cs$"))
+            // 测试类命名必须遵循以下格式之一：
+            // 1. ADR_XXXX_Y_Tests.cs（规则独立测试，推荐）
+            // 2. ADR_XXXX_Architecture_Tests.cs（兼容格式）
+            if (!Regex.IsMatch(fileName, @"^ADR_\d{3,4}_(\d+_Tests|Architecture_Tests)\.cs$"))
             {
                 violations.Add($"  • {fileName} - 命名格式不符合规范");
                 continue;
@@ -153,39 +227,40 @@ public sealed class ADR_0907_Architecture_Tests
         if (violations.Any())
         {
             true.Should().BeFalse(
-                $"❌ ADR-907.3 违规：以下测试类违反单一 ADR 映射规则\n\n" +
+                $"❌ ADR-907.4 违规：以下测试类违反单一 ADR 映射规则\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 每个测试类只能覆盖一个 ADR\n" +
                 $"  2. 如果需要测试多个 ADR，创建多个测试文件\n" +
-                $"  3. 测试类命名：ADR_<编号>_Architecture_Tests\n" +
+                $"  3. 测试类命名：ADR_<编号>_<规则编号>_Tests 或 ADR_<编号>_Architecture_Tests\n" +
                 $"  4. 引用依赖的 ADR（如 ADR-0000）是允许的\n\n" +
-                $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.3");
+                $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.4");
         }
     }
 
     /// <summary>
-    /// ADR-907.4: 测试类命名正则校验
-    /// 验证测试类命名必须显式绑定 ADR（§2.4）
+    /// ADR-907.5: 测试类命名正则校验（支持规则编号）
+    /// 验证测试类命名必须显式绑定 ADR 和规则编号（§2.5）
     /// </summary>
-    [Fact(DisplayName = "ADR-907.4: 测试类命名必须遵循规范")]
-    public void ADR_0907_4_Test_Class_Names_Must_Follow_Convention()
+    [Fact(DisplayName = "ADR-907.5: 测试类命名必须遵循规范")]
+    public void ADR_0907_5_Test_Class_Names_Must_Follow_Convention()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
-            true.Should().BeFalse($"❌ ADR-907.4 无法执行：测试目录不存在 {testsDirectory}");
+            true.Should().BeFalse($"❌ ADR-907.5 无法执行：测试目录不存在 {testsDirectory}");
             return;
         }
 
         var testFiles = Directory.GetFiles(testsDirectory, "*.cs");
         var violations = new List<string>();
 
-        // 正则表达式：ADR_<3或4位数字>_Architecture_Tests.cs
-        // 推荐使用 4 位（如 ADR_0920），但也接受 3 位（如 ADR_920）
-        var namingPattern = @"^ADR_\d{3,4}_Architecture_Tests\.cs$";
+        // 正则表达式支持两种格式：
+        // 1. ADR_<编号>_<规则编号>_Tests.cs（推荐，避免类膨胀）
+        // 2. ADR_<编号>_Architecture_Tests.cs（兼容格式）
+        var namingPattern = @"^ADR_\d{3,4}_(\d+_Tests|Architecture_Tests)\.cs$";
 
         foreach (var testFile in testFiles)
         {
@@ -199,33 +274,35 @@ public sealed class ADR_0907_Architecture_Tests
         if (violations.Any())
         {
             true.Should().BeFalse(
-                $"❌ ADR-907.4 违规：以下测试类命名不符合规范\n\n" +
+                $"❌ ADR-907.5 违规：以下测试类命名不符合规范\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
-                $"  1. 测试类命名格式：ADR_<编号>_Architecture_Tests.cs\n" +
-                $"  2. 推荐使用 4 位编号：ADR_0920_Architecture_Tests.cs\n" +
-                $"  3. 也接受 3 位编号：ADR_920_Architecture_Tests.cs\n\n" +
-                $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.4");
+                $"  1. 推荐格式（规则独立）：ADR_<编号>_<规则编号>_Tests.cs\n" +
+                $"     示例：ADR_0907_1_Tests.cs、ADR_0907_2_Tests.cs\n" +
+                $"  2. 兼容格式：ADR_<编号>_Architecture_Tests.cs\n" +
+                $"     示例：ADR_0907_Architecture_Tests.cs\n" +
+                $"  3. 推荐使用 4 位 ADR 编号\n\n" +
+                $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.5");
         }
     }
 
     /// <summary>
-    /// ADR-907.5: 测试方法与子规则解析
-    /// 验证测试方法必须映射 ADR 子规则（§2.5）
+    /// ADR-907.6: 测试方法映射行为场景校验
+    /// 验证测试方法必须映射规则下的具体行为场景（§2.6）
     /// </summary>
-    [Fact(DisplayName = "ADR-907.5: 测试方法必须映射 ADR 子规则")]
-    public void ADR_0907_5_Test_Methods_Must_Map_To_Subrules()
+    [Fact(DisplayName = "ADR-907.6: 测试方法必须映射行为场景")]
+    public void ADR_0907_6_Test_Methods_Must_Map_To_Behavior_Scenarios()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
-            true.Should().BeFalse($"❌ ADR-907.5 无法执行：测试目录不存在 {testsDirectory}");
+            true.Should().BeFalse($"❌ ADR-907.6 无法执行：测试目录不存在 {testsDirectory}");
             return;
         }
 
-        var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
+        var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Tests.cs");
         var warnings = new List<string>();
 
         foreach (var testFile in testFiles)
@@ -242,20 +319,18 @@ public sealed class ADR_0907_Architecture_Tests
                 .Select(m => m.Groups[1].Value)
                 .ToList();
 
-            // 检查方法名是否包含 ADR 子规则引用
-            // 推荐格式：ADR_<编号>_<子规则>_<描述> 或包含 ADR-<编号>.<子规则> 的注释
+            // 检查方法名是否在 DisplayName 中引用了 ADR 和规则编号
             foreach (var methodName in allMethods)
             {
-                // 检查方法名是否以 ADR_ 开头或在 DisplayName 中引用了 ADR
-                var displayNamePattern = $@"\[(?:Fact|Theory).*?DisplayName\s*=\s*""[^""]*ADR-\d{{4}}";
+                var displayNamePattern = $@"\[(?:Fact|Theory).*?DisplayName\s*=\s*""[^""]*ADR-\d{{3,4}}\.\d+";
                 var hasDisplayNameReference = Regex.IsMatch(
                     content.Substring(Math.Max(0, content.IndexOf(methodName) - 300), 
                                       Math.Min(300, content.Length - Math.Max(0, content.IndexOf(methodName) - 300))),
                     displayNamePattern);
 
-                if (!methodName.StartsWith("ADR_") && !hasDisplayNameReference)
+                if (!hasDisplayNameReference)
                 {
-                    warnings.Add($"  • {fileName} -> {methodName} - 方法名或 DisplayName 未明确引用 ADR");
+                    warnings.Add($"  • {fileName} -> {methodName} - DisplayName 未引用 ADR 和规则编号");
                 }
             }
         }
@@ -267,7 +342,7 @@ public sealed class ADR_0907_Architecture_Tests
                 new[]
                 {
                     "",
-                    "⚠️  ADR-907.5 提醒：以下测试方法应更明确地映射到 ADR 子规则：",
+                    "⚠️  ADR-907.6 提醒：以下测试方法应在 DisplayName 中明确映射 ADR 和规则：",
                     ""
                 }
                 .Concat(warnings)
@@ -275,11 +350,12 @@ public sealed class ADR_0907_Architecture_Tests
                 {
                     "",
                     "建议：",
-                    "  • 方法命名格式：ADR_<编号>_<子规则>_<行为描述>",
-                    "  • 或在 DisplayName 中包含：ADR-<编号>.<子规则>",
-                    "  • 示例：ADR_0001_1_Modules_Should_Not_Reference_Other_Modules",
+                    "  • 测试方法对应规则下的具体行为场景",
+                    "  • 在 DisplayName 中包含：ADR-<编号>.<规则编号>: <场景描述>",
+                    "  • 示例：[Fact(DisplayName = \"ADR-0001.1: 模块不能直接引用其他模块\")]",
+                    "  • 方法名应描述具体场景，无需重复 ADR 编号",
                     "",
-                    "参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.5",
+                    "参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.6",
                     ""
                 }));
 
@@ -288,18 +364,18 @@ public sealed class ADR_0907_Architecture_Tests
     }
 
     /// <summary>
-    /// ADR-907.6: 失败信息 ADR 溯源校验
-    /// 验证测试失败信息必须包含 ADR 编号与子规则（§2.6）
+    /// ADR-907.7: 失败信息 ADR 溯源校验
+    /// 验证测试失败信息必须包含 ADR 编号与规则编号（§2.7）
     /// </summary>
-    [Fact(DisplayName = "ADR-907.6: 测试失败信息必须包含 ADR 溯源")]
-    public void ADR_0907_6_Failure_Messages_Must_Reference_ADR()
+    [Fact(DisplayName = "ADR-907.7: 测试失败信息必须包含 ADR 溯源")]
+    public void ADR_0907_7_Failure_Messages_Must_Reference_ADR()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
-            true.Should().BeFalse($"❌ ADR-907.6 无法执行：测试目录不存在 {testsDirectory}");
+            true.Should().BeFalse($"❌ ADR-907.7 无法执行：测试目录不存在 {testsDirectory}");
             return;
         }
 
@@ -360,7 +436,7 @@ public sealed class ADR_0907_Architecture_Tests
                 new[]
                 {
                     "",
-                    "⚠️  ADR-907.6 提醒：以下测试的失败消息应包含 ADR 溯源信息：",
+                    "⚠️  ADR-907.7 提醒：以下测试的失败消息应包含 ADR 溯源信息：",
                     ""
                 }
                 .Concat(violations.Take(10)) // 最多显示 10 个
@@ -373,7 +449,7 @@ public sealed class ADR_0907_Architecture_Tests
                     "  • 格式：❌ ADR-<编号>.<子规则> 违规：...",
                     "  • 包含参考链接：docs/adr/...",
                     "",
-                    "参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.6",
+                    "参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.7",
                     ""
                 }));
 
@@ -382,18 +458,18 @@ public sealed class ADR_0907_Architecture_Tests
     }
 
     /// <summary>
-    /// ADR-907.8: Skip / 条件禁用检测
-    /// 验证不得 Skip、条件禁用测试（除非走破例机制）（§2.8）
+    /// ADR-907.9: Skip / 条件禁用检测
+    /// 验证不得 Skip、条件禁用测试（除非走破例机制）（§2.9）
     /// </summary>
-    [Fact(DisplayName = "ADR-907.8: 测试不得使用 Skip 或条件禁用")]
-    public void ADR_0907_8_Tests_Must_Not_Be_Skipped()
+    [Fact(DisplayName = "ADR-907.9: 测试不得使用 Skip 或条件禁用")]
+    public void ADR_0907_9_Tests_Must_Not_Be_Skipped()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
-            true.Should().BeFalse($"❌ ADR-907.8 无法执行：测试目录不存在 {testsDirectory}");
+            true.Should().BeFalse($"❌ ADR-907.9 无法执行：测试目录不存在 {testsDirectory}");
             return;
         }
 
@@ -424,28 +500,28 @@ public sealed class ADR_0907_Architecture_Tests
         if (violations.Any())
         {
             true.Should().BeFalse(
-                $"❌ ADR-907.8 违规：以下测试使用了 Skip 或条件禁用\n\n" +
+                $"❌ ADR-907.9 违规：以下测试使用了 Skip 或条件禁用\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 移除 Skip 参数，修复测试\n" +
                 $"  2. 如果确实需要跳过，必须通过破例机制\n" +
                 $"  3. 记录破例原因、到期时间和偿还计划\n\n" +
-                $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.8");
+                $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.9");
         }
     }
 
     /// <summary>
-    /// ADR-907.9: CI / Analyzer 自动注册校验
+    /// ADR-907.10: CI / Analyzer 自动注册校验
     /// 验证所有 ArchitectureTests 必须被 Analyzer 自动发现并注册（§4.1）
     /// </summary>
-    [Fact(DisplayName = "ADR-907.9: 架构测试必须可被 CI 发现")]
-    public void ADR_0907_9_Tests_Must_Be_Discoverable_By_CI()
+    [Fact(DisplayName = "ADR-907.10: 架构测试必须可被 CI 发现")]
+    public void ADR_0907_10_Tests_Must_Be_Discoverable_By_CI()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var projectPath = Path.Combine(repoRoot, AdrTestsProjectPath);
 
         File.Exists(projectPath).Should().BeTrue(
-            $"❌ ADR-907.9 无法执行：项目文件不存在 {projectPath}");
+            $"❌ ADR-907.10 无法执行：项目文件不存在 {projectPath}");
 
         var projectContent = File.ReadAllText(projectPath);
 
@@ -499,11 +575,11 @@ public sealed class ADR_0907_Architecture_Tests
     }
 
     /// <summary>
-    /// ADR-907.10: L1 阻断 / L2 告警策略执行
+    /// ADR-907.11: L1 阻断 / L2 告警策略执行
     /// 验证执行级别分类是否有文档支持（§4.3）
     /// </summary>
-    [Fact(DisplayName = "ADR-907.10: 执行级别策略必须有文档支持")]
-    public void ADR_0907_10_Enforcement_Levels_Must_Be_Documented()
+    [Fact(DisplayName = "ADR-907.11: 执行级别策略必须有文档支持")]
+    public void ADR_0907_11_Enforcement_Levels_Must_Be_Documented()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         
@@ -511,7 +587,7 @@ public sealed class ADR_0907_Architecture_Tests
         var adr905Path = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-905-enforcement-level-classification.md");
         
         File.Exists(adr905Path).Should().BeTrue(
-            $"❌ ADR-907.10 违规：缺少执行级别分类文档\n\n" +
+            $"❌ ADR-907.11 违规：缺少执行级别分类文档\n\n" +
             $"预期路径：{adr905Path}\n\n" +
             $"修复建议：\n" +
             $"  1. 创建 ADR-905 文档定义 L1/L2 执行级别\n" +
@@ -521,11 +597,11 @@ public sealed class ADR_0907_Architecture_Tests
     }
 
     /// <summary>
-    /// ADR-907.11: 破例与偿还机制记录
+    /// ADR-907.12: 破例与偿还机制记录
     /// 验证破例机制必须有文档支持（§4.4）
     /// </summary>
-    [Fact(DisplayName = "ADR-907.11: 破例机制必须有文档支持")]
-    public void ADR_0907_11_Exception_Mechanism_Must_Be_Documented()
+    [Fact(DisplayName = "ADR-907.12: 破例机制必须有文档支持")]
+    public void ADR_0907_12_Exception_Mechanism_Must_Be_Documented()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         
@@ -547,18 +623,18 @@ public sealed class ADR_0907_Architecture_Tests
     #region L2 级别测试
 
     /// <summary>
-    /// ADR-907.7: 最小断言数量与语义检测
+    /// ADR-907.8: 最小断言数量与语义检测
     /// 验证每个测试类至少包含 1 个有效断言（§3）
     /// </summary>
-    [Fact(DisplayName = "ADR-907.7: 测试类必须包含有效断言")]
-    public void ADR_0907_7_Test_Classes_Must_Have_Valid_Assertions()
+    [Fact(DisplayName = "ADR-907.8: 测试类必须包含有效断言")]
+    public void ADR_0907_8_Test_Classes_Must_Have_Valid_Assertions()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
-            true.Should().BeFalse($"❌ ADR-907.7 无法执行：测试目录不存在 {testsDirectory}");
+            true.Should().BeFalse($"❌ ADR-907.8 无法执行：测试目录不存在 {testsDirectory}");
             return;
         }
 
@@ -628,11 +704,11 @@ public sealed class ADR_0907_Architecture_Tests
     }
 
     /// <summary>
-    /// ADR-907.12: ADR 生命周期同步校验
+    /// ADR-907.13: ADR 生命周期同步校验
     /// 验证 Superseded / Obsolete ADR 对应测试必须标记或移除（§4.6）
     /// </summary>
-    [Fact(DisplayName = "ADR-907.12: 废弃的 ADR 不应有活跃测试")]
-    public void ADR_0907_12_Superseded_ADRs_Must_Not_Have_Active_Tests()
+    [Fact(DisplayName = "ADR-907.13: 废弃的 ADR 不应有活跃测试")]
+    public void ADR_0907_13_Superseded_ADRs_Must_Not_Have_Active_Tests()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
@@ -640,7 +716,7 @@ public sealed class ADR_0907_Architecture_Tests
 
         if (!Directory.Exists(testsDirectory))
         {
-            true.Should().BeFalse($"❌ ADR-907.12 无法执行：测试目录不存在 {testsDirectory}");
+            true.Should().BeFalse($"❌ ADR-907.13 无法执行：测试目录不存在 {testsDirectory}");
             return;
         }
 
