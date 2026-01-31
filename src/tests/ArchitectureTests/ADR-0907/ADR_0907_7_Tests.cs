@@ -7,13 +7,39 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_0907;
 /// ADR-907.7: 失败信息 ADR 溯源校验
 /// 验证测试失败信息必须包含 ADR 编号与规则编号（§2.7）
 /// 
+/// 测试细则：
+/// - ADR-907.7.1: 测试目录必须存在
+/// - ADR-907.7.2: 测试失败信息必须包含 ADR 溯源引用
+/// 
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md
 /// - Prompts: docs/copilot/adr-0907.prompts.md
 /// </summary>
 public sealed class ADR_0907_7_Tests
 {
-    [Fact(DisplayName = "ADR-907.7: 测试失败信息必须包含 ADR 溯源")]
+    /// <summary>
+    /// ADR-907.7.1: 测试目录必须存在
+    /// 验证 ADR 测试目录结构完整性
+    /// </summary>
+    [Fact(DisplayName = "ADR-907.7.1: 测试目录必须存在")]
+    public void Test_Directory_Must_Exist()
+    {
+        var repoRoot = ADR_0907_TestHelpers.FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var testsDirectory = Path.Combine(repoRoot, ADR_0907_TestHelpers.AdrTestsPath, "ADR");
+
+        Directory.Exists(testsDirectory).Should().BeTrue(
+            $"❌ ADR-907.7.1 违规：测试目录不存在 {testsDirectory}\n\n" +
+            $"修复建议：\n" +
+            $"  1. 确保 ADR 测试目录结构完整\n" +
+            $"  2. 路径：{testsDirectory}\n\n" +
+            $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.7");
+    }
+
+    /// <summary>
+    /// ADR-907.7.2: 测试失败信息必须包含 ADR 溯源引用
+    /// 验证所有 Assert 语句的失败消息包含对应的 ADR 编号
+    /// </summary>
+    [Fact(DisplayName = "ADR-907.7.2: 测试失败信息必须包含 ADR 溯源引用")]
     public void Failure_Messages_Must_Reference_ADR()
     {
         var repoRoot = ADR_0907_TestHelpers.FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -21,7 +47,7 @@ public sealed class ADR_0907_7_Tests
 
         if (!Directory.Exists(testsDirectory))
         {
-            true.Should().BeFalse($"❌ ADR-907.7 无法执行：测试目录不存在 {testsDirectory}");
+            true.Should().BeFalse($"❌ ADR-907.7.2 无法执行：测试目录不存在 {testsDirectory}");
             return;
         }
 
@@ -82,7 +108,7 @@ public sealed class ADR_0907_7_Tests
                 new[]
                 {
                     "",
-                    "⚠️  ADR-907.7 提醒：以下测试的失败消息应包含 ADR 溯源信息：",
+                    "⚠️  ADR-907.7.2 提醒：以下测试的失败消息应包含 ADR 溯源信息：",
                     ""
                 }
                 .Concat(violations.Take(10)) // 最多显示 10 个
