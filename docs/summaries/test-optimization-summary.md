@@ -40,7 +40,7 @@
 
 ## 📚 文档输出
 
-- **详细报告**：[docs/test-optimization-report.md](./test-optimization-report.md)
+- **详细报告**：[docs/reports/test-optimization-report.md](../reports/test-optimization-report.md)
   - 问题分析（第二章）
   - 优化方案（第三章）
   - 代码对比（第三章）
@@ -130,7 +130,7 @@ var markdown = AdrMarkdownBuilder
   - 提供 CI 集成脚本
   - 支持性能报告生成和趋势分析
 
-详见 [test-optimization-report.md](./test-optimization-report.md) 第五章。
+详见 [test-optimization-report.md](../reports/test-optimization-report.md) 第五章。
 
 ## 📝 P2 后续工作完成情况（2026-01-30）
 
