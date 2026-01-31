@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
@@ -92,7 +92,7 @@ public sealed class DocumentationDecisionLanguageTests
 
         if (violations.Any())
         {
-            Assert.Fail(string.Join("\n", new[]
+            true.Should().BeFalse(string.Join("\n", new[]
             {
                 "❌ Enforcement 违规：以下 README/Guide 使用了裁决性语言",
                 "",

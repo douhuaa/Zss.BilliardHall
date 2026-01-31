@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -27,16 +27,16 @@ public sealed class ADR_910_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-910-readme-governance-constitution.md");
         
-        Assert.True(File.Exists(adrFile), $"ADR-910 文档不存在：{adrFile}");
+        File.Exists(adrFile).Should().BeTrue($"ADR-910 文档不存在：{adrFile}");
         
         var content = File.ReadAllText(adrFile);
         
         // 验证必需章节存在
-        Assert.Contains("README 的定位与权限边界", content);
-        Assert.Contains("README 禁用的裁决性语言", content);
-        Assert.Contains("README 必须包含的声明", content);
-        Assert.Contains("README 与 ADR 的关系", content);
-        Assert.Contains("README 的变更治理", content);
+        content.Should().Contain("README 的定位与权限边界");
+        content.Should().Contain("README 禁用的裁决性语言");
+        content.Should().Contain("README 必须包含的声明");
+        content.Should().Contain("README 与 ADR 的关系");
+        content.Should().Contain("README 的变更治理");
     }
 
     [Fact(DisplayName = "ADR-910.2: 对应的 Copilot Prompts 文件存在")]
@@ -49,15 +49,15 @@ public sealed class ADR_910_Architecture_Tests
         // 如果文件不存在，给出清晰的待办提示
         if (!File.Exists(promptsFile))
         {
-            Assert.Fail($"⚠️ 待办：ADR-910 Prompts 文件需要创建：{promptsFile}\n" +
+            true.Should().BeFalse($"⚠️ 待办：ADR-910 Prompts 文件需要创建：{promptsFile}\n" +
                        "请创建该文件以提供 README 编写的场景化指导。");
         }
         
         var content = File.ReadAllText(promptsFile);
         
         // 验证 Prompts 文件包含权威声明
-        Assert.Contains("权威声明", content);
-        Assert.Contains("ADR-910", content);
+        content.Should().Contain("权威声明");
+        content.Should().Contain("ADR-910");
     }
 
     [Fact(DisplayName = "ADR-910.3: 核心治理原则已定义")]
@@ -68,13 +68,13 @@ public sealed class ADR_910_Architecture_Tests
         var content = File.ReadAllText(adrFile);
         
         // 验证核心原则：README 无裁决力
-        Assert.Contains("README 是使用说明，不是架构裁决书", content);
+        content.Should().Contain("README 是使用说明，不是架构裁决书");
         
         // 验证裁决性语言约束
-        Assert.Contains("README 禁用的裁决性语言", content);
+        content.Should().Contain("README 禁用的裁决性语言");
         
         // 验证无裁决力声明要求
-        Assert.Contains("README 必须包含的声明", content);
+        content.Should().Contain("README 必须包含的声明");
     }
 
     private static string? FindRepositoryRoot()
@@ -225,7 +225,7 @@ public sealed class ADR_910_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail(string.Join("\n", new[]
+            true.Should().BeFalse(string.Join("\n", new[]
             {
                 "❌ ADR-910.4 违规：以下 README 使用了裁决性语言",
                 "",
@@ -311,7 +311,7 @@ public sealed class ADR_910_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail(string.Join("\n", new[]
+            true.Should().BeFalse(string.Join("\n", new[]
             {
                 "❌ ADR-910.5 违规：以下 README 缺少'无裁决力声明'",
                 "",
@@ -430,7 +430,7 @@ public sealed class ADR_910_Architecture_Tests
         }
         
         // 总是通过（这是指导级测试）
-        Assert.True(true);
+        true.Should().BeTrue();
     }
 
     // ========== 辅助方法 ==========

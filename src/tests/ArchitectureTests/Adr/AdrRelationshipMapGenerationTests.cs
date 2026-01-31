@@ -1,4 +1,4 @@
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
@@ -26,16 +26,16 @@ public sealed class AdrRelationshipMapGenerationTests
             AdrRelationshipMapGenerator.GenerateRelationshipMap(adrPath, outputPath);
 
             // 验证文件已生成
-            Assert.True(File.Exists(outputPath), "关系图文件应该被创建");
+            File.Exists(outputPath).Should().BeTrue("关系图文件应该被创建");
 
             // 验证文件不为空
             var content = File.ReadAllText(outputPath);
-            Assert.False(string.IsNullOrWhiteSpace(content), "关系图内容不应为空");
+            string.IsNullOrWhiteSpace(content).Should().BeFalse("关系图内容不应为空");
 
             // 验证包含基本结构
-            Assert.Contains("# ADR 关系图", content);
-            Assert.Contains("## 统计", content);
-            Assert.Contains("## ADR 列表", content);
+            content.Should().Contain("# ADR 关系图");
+            content.Should().Contain("## 统计");
+            content.Should().Contain("## ADR 列表");
         }
         finally
         {

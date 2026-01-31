@@ -1,4 +1,5 @@
 ﻿using NetArchTest.Rules;
+using FluentAssertions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -44,8 +45,7 @@ public sealed class ADR_0120_Architecture_Tests
 
         foreach (var eventType in eventTypes)
         {
-            Assert.True(eventType.Name.EndsWith("Event"),
-            $"❌ ADR-120.1 违规: 事件类型缺少 'Event' 后缀\n\n" +
+            eventType.Name.EndsWith("Event").Should().BeTrue($"❌ ADR-120.1 违规: 事件类型缺少 'Event' 后缀\n\n" +
             $"违规类型: {eventType.FullName}\n\n" +
             $"问题分析:\n" +
             $"所有领域事件类型必须以 'Event' 后缀结尾，以明确标识其为事件\n\n" +
@@ -89,7 +89,7 @@ public sealed class ADR_0120_Architecture_Tests
             {
                 if (pattern.IsMatch(eventName))
                 {
-                    Assert.Fail($"❌ ADR-120.2 违规: 事件名称未使用动词过去式（本体语义约束，L1）\n\n" +
+                    true.Should().BeFalse($"❌ ADR-120.2 违规: 事件名称未使用动词过去式（本体语义约束，L1）\n\n" +
                                 $"违规类型: {eventType.FullName}\n" +
                                 $"命名模式: {eventName}\n\n" +
                                 $"问题分析:\n" +
@@ -132,8 +132,7 @@ public sealed class ADR_0120_Architecture_Tests
             // 检查命名空间是否符合规范：Zss.BilliardHall.Modules.{ModuleName}.Events[.{SubNamespace}]
             var isValidNamespace = ns.Contains(".Events") && ns.StartsWith("Zss.BilliardHall.Modules.");
 
-            Assert.True(isValidNamespace,
-            $"❌ ADR-120.3 违规: 事件未在正确的命名空间下\n\n" +
+            isValidNamespace.Should().BeTrue($"❌ ADR-120.3 违规: 事件未在正确的命名空间下\n\n" +
             $"违规类型: {eventType.FullName}\n" +
             $"当前命名空间: {ns}\n" +
             $"期望命名空间: Zss.BilliardHall.Modules.{{ModuleName}}.Events[.{{SubNamespace}}]\n\n" +
@@ -196,8 +195,7 @@ public sealed class ADR_0120_Architecture_Tests
 
         foreach (var handlerType in eventHandlerTypes)
         {
-            Assert.True(handlerType.Name.EndsWith("Handler"),
-            $"❌ ADR-120.4 违规: 事件处理器缺少 'Handler' 后缀\n\n" +
+            handlerType.Name.EndsWith("Handler").Should().BeTrue($"❌ ADR-120.4 违规: 事件处理器缺少 'Handler' 后缀\n\n" +
             $"违规类型: {handlerType.FullName}\n\n" +
             $"问题分析:\n" +
             $"所有事件处理器必须以 'Handler' 后缀结尾\n\n" +
@@ -270,7 +268,7 @@ public sealed class ADR_0120_Architecture_Tests
 
                     if (isDomainEntity)
                     {
-                        Assert.Fail($"❌ ADR-120.5 违规: 事件包含领域实体类型\n\n" +
+                        true.Should().BeFalse($"❌ ADR-120.5 违规: 事件包含领域实体类型\n\n" +
                                     $"违规事件: {eventType.FullName}\n" +
                                     $"领域实体类型: {actualType.FullName}\n\n" +
                                     $"问题分析:\n" +
@@ -325,7 +323,7 @@ public sealed class ADR_0120_Architecture_Tests
 
             if (businessMethods.Any())
             {
-                Assert.Fail($"❌ ADR-120.6 违规: 事件包含业务方法\n\n" +
+                true.Should().BeFalse($"❌ ADR-120.6 违规: 事件包含业务方法\n\n" +
                             $"违规事件: {eventType.FullName}\n" +
                             $"业务方法: {string.Join(", ", businessMethods.Select(m => m.Name))}\n\n" +
                             $"问题分析:\n" +

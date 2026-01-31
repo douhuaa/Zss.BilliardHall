@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -33,8 +34,7 @@ public sealed class ADR_0004_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var cpmFile = Path.Combine(root, "Directory.Packages.props");
 
-        Assert.True(File.Exists(cpmFile),
-        $"❌ ADR-0004.1 违规: 仓库根目录必须存在 Directory.Packages.props 文件以启用 Central Package Management (CPM)。\n\n" +
+        File.Exists(cpmFile).Should().BeTrue($"❌ ADR-0004.1 违规: 仓库根目录必须存在 Directory.Packages.props 文件以启用 Central Package Management (CPM)。\n\n" +
         $"预期路径: {cpmFile}\n\n" +
         $"修复建议:\n" +
         $"1. 在仓库根目录创建 Directory.Packages.props 文件\n" +
@@ -49,12 +49,11 @@ public sealed class ADR_0004_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var cpmFile = Path.Combine(root, "Directory.Packages.props");
 
-        Assert.True(File.Exists(cpmFile), "Directory.Packages.props 文件不存在");
+        File.Exists(cpmFile).Should().BeTrue("Directory.Packages.props 文件不存在");
 
         var content = File.ReadAllText(cpmFile);
 
-        Assert.True(content.Contains("ManagePackageVersionsCentrally"),
-        $"❌ ADR-0004.2 违规: Directory.Packages.props 必须包含 ManagePackageVersionsCentrally 设置。\n\n" +
+        content.Contains("ManagePackageVersionsCentrally").Should().BeTrue($"❌ ADR-0004.2 违规: Directory.Packages.props 必须包含 ManagePackageVersionsCentrally 设置。\n\n" +
         $"当前状态: 未找到 ManagePackageVersionsCentrally 配置\n\n" +
         $"修复建议:\n" +
         $"1. 在 Directory.Packages.props 中添加 <PropertyGroup> 节点\n" +
@@ -62,8 +61,7 @@ public sealed class ADR_0004_Architecture_Tests
         $"3. 重新构建项目验证配置生效\n\n" +
         $"参考: docs/copilot/adr-0004.prompts.md (场景 1)");
 
-        Assert.True(content.Contains("true"),
-        $"❌ ADR-0004.2 违规: Directory.Packages.props 中的 ManagePackageVersionsCentrally 应该设置为 true。\n\n" +
+        content.Contains("true").Should().BeTrue($"❌ ADR-0004.2 违规: Directory.Packages.props 中的 ManagePackageVersionsCentrally 应该设置为 true。\n\n" +
         $"当前状态: ManagePackageVersionsCentrally 值不正确\n\n" +
         $"修复建议:\n" +
         $"1. 确保 <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>\n" +
@@ -85,8 +83,7 @@ public sealed class ADR_0004_Architecture_Tests
         // 建议启用但不强制
         if (content.Contains("CentralPackageTransitivePinningEnabled"))
         {
-            Assert.True(content.Contains("<CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>"),
-            $"⚠️ ADR-0004.3 建议: 建议启用 CentralPackageTransitivePinningEnabled 以固定传递依赖版本。\n\n" +
+            content.Contains("<CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>").Should().BeTrue($"⚠️ ADR-0004.3 建议: 建议启用 CentralPackageTransitivePinningEnabled 以固定传递依赖版本。\n\n" +
             $"当前状态: CentralPackageTransitivePinningEnabled 未设置为 true\n\n" +
             $"修复建议:\n" +
             $"1. 在 Directory.Packages.props 中添加 <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>\n" +
@@ -139,8 +136,7 @@ public sealed class ADR_0004_Architecture_Tests
             }
         }
 
-        Assert.True(violations.Count == 0,
-        $"❌ ADR-0004.4 违规: 发现 {violations.Count} 个项目手动指定了包版本，应使用 CPM 统一管理。\n\n" +
+        (violations.Count == 0).Should().BeTrue($"❌ ADR-0004.4 违规: 发现 {violations.Count} 个项目手动指定了包版本，应使用 CPM 统一管理。\n\n" +
         $"违规项目:\n{string.Join("\n", violations)}\n\n" +
         $"修复建议:\n" +
         $"1. 在 Directory.Packages.props 中定义包版本: <PackageVersion Include=\"包名\" Version=\"版本号\" />\n" +
@@ -166,8 +162,7 @@ public sealed class ADR_0004_Architecture_Tests
 
         var itemGroups = doc.SelectNodes("//ItemGroup[@Label]");
 
-        Assert.True(itemGroups != null && itemGroups.Count > 0,
-        $"⚠️ ADR-0004.5 建议: 建议在 Directory.Packages.props 中使用 Label 属性对包进行分组。\n\n" +
+        (itemGroups != null && itemGroups.Count > 0).Should().BeTrue($"⚠️ ADR-0004.5 建议: 建议在 Directory.Packages.props 中使用 Label 属性对包进行分组。\n\n" +
         $"当前状态: 未发现使用 Label 属性的包分组\n\n" +
         $"修复建议:\n" +
         $"1. 使用 <ItemGroup Label=\"分组名称\"> 对包进行逻辑分组\n" +
@@ -215,7 +210,7 @@ public sealed class ADR_0004_Architecture_Tests
             System.Diagnostics.Debug.WriteLine($"⚠️ ADR-0004 建议: 建议在 Directory.Packages.props 中添加以下分组：{string.Join(", ", missingGroups)}");
         }
 
-        Assert.True(true, "包分组检查完成");
+        true.Should().BeTrue("包分组检查完成");
     }
 
     #endregion
@@ -263,7 +258,7 @@ public sealed class ADR_0004_Architecture_Tests
 
                 if (forbiddenPackages.Any(fp => packageName.Contains(fp)))
                 {
-                    Assert.Fail($"❌ ADR-0004.7 违规: Platform 项目 {Path.GetFileName(projectFile)} 不应引用业务包: {packageName}。\n\n" +
+                    true.Should().BeFalse($"❌ ADR-0004.7 违规: Platform 项目 {Path.GetFileName(projectFile)} 不应引用业务包: {packageName}。\n\n" +
                                 $"违规项目: {Path.GetFileName(projectFile)}\n" +
                                 $"违规包: {packageName}\n\n" +
                                 $"修复建议:\n" +
@@ -338,7 +333,7 @@ public sealed class ADR_0004_Architecture_Tests
         {
             if (kvp.Value.Count > 1)
             {
-                Assert.Fail($"❌ ADR-0004.8 违规: 测试包 {kvp.Key} 存在多个版本: {string.Join(", ", kvp.Value)}。\n\n" +
+                true.Should().BeFalse($"❌ ADR-0004.8 违规: 测试包 {kvp.Key} 存在多个版本: {string.Join(", ", kvp.Value)}。\n\n" +
                             $"检测到的版本: {string.Join(", ", kvp.Value)}\n\n" +
                             $"修复建议:\n" +
                             $"1. 在 Directory.Packages.props 中统一该包的版本\n" +
@@ -418,8 +413,7 @@ public sealed class ADR_0004_Architecture_Tests
             }
         }
 
-        Assert.True(missingPackages.Count == 0,
-        $"❌ ADR-0004.9 违规: 发现 {missingPackages.Count} 个包在项目中使用但未在 Directory.Packages.props 中定义。\n\n" +
+        (missingPackages.Count == 0).Should().BeTrue($"❌ ADR-0004.9 违规: 发现 {missingPackages.Count} 个包在项目中使用但未在 Directory.Packages.props 中定义。\n\n" +
         $"缺失的包: {string.Join(", ", missingPackages)}\n\n" +
         $"修复建议:\n" +
         $"1. 在 Directory.Packages.props 中为每个缺失的包添加版本定义\n" +

@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -30,20 +30,20 @@ public sealed class ADR_902_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-902-adr-template-structure-contract.md");
         
-        Assert.True(File.Exists(adrFile), $"ADR-902 文档不存在：{adrFile}");
+        File.Exists(adrFile).Should().BeTrue($"ADR-902 文档不存在：{adrFile}");
         
         var content = File.ReadAllText(adrFile);
         
         // 验证必需章节存在
-        Assert.Contains("Focus", content);
-        Assert.Contains("Glossary", content);
-        Assert.Contains("Decision", content);
-        Assert.Contains("Enforcement", content);
-        Assert.Contains("Non-Goals", content);
-        Assert.Contains("Prohibited", content);
-        Assert.Contains("Relationships", content);
-        Assert.Contains("References", content);
-        Assert.Contains("History", content);
+        content.Should().Contain("Focus");
+        content.Should().Contain("Glossary");
+        content.Should().Contain("Decision");
+        content.Should().Contain("Enforcement");
+        content.Should().Contain("Non-Goals");
+        content.Should().Contain("Prohibited");
+        content.Should().Contain("Relationships");
+        content.Should().Contain("References");
+        content.Should().Contain("History");
     }
 
     [Fact(DisplayName = "ADR-902.1:L1 对应的 Copilot Prompts 文件存在")]
@@ -56,15 +56,15 @@ public sealed class ADR_902_Architecture_Tests
         // 如果文件不存在，给出清晰的待办提示
         if (!File.Exists(promptsFile))
         {
-            Assert.Fail($"⚠️ 待办：ADR-902 Prompts 文件需要创建：{promptsFile}\n" +
+            true.Should().BeFalse($"⚠️ 待办：ADR-902 Prompts 文件需要创建：{promptsFile}\n" +
                        "请创建该文件以提供 ADR 模板结构的场景化指导。");
         }
         
         var content = File.ReadAllText(promptsFile);
         
         // 验证 Prompts 文件包含权威声明
-        Assert.Contains("权威声明", content);
-        Assert.Contains("ADR-902", content);
+        content.Should().Contain("权威声明");
+        content.Should().Contain("ADR-902");
     }
 
     [Fact(DisplayName = "ADR-902.2:L1 核心治理原则已定义")]
@@ -75,14 +75,14 @@ public sealed class ADR_902_Architecture_Tests
         var content = File.ReadAllText(adrFile);
         
         // 验证核心原则：ADR 必须符合模板
-        Assert.Contains("可被机器和人同时理解的治理工件", content);
+        content.Should().Contain("可被机器和人同时理解的治理工件");
         
         // 验证模板结构要求
-        Assert.Contains("Front Matter", content);
-        Assert.Contains("章节集合", content);
+        content.Should().Contain("Front Matter");
+        content.Should().Contain("章节集合");
         
         // 验证 Decision 隔离
-        Assert.Contains("Decision 严格隔离", content);
+        content.Should().Contain("Decision 严格隔离");
     }
 
     /// <summary>
@@ -171,7 +171,7 @@ public sealed class ADR_902_Architecture_Tests
         
         if (!Directory.Exists(adrDirectory))
         {
-            Assert.Fail($"未找到 ADR 文档目录：{adrDirectory}");
+            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
         }
 
         // 扫描治理类 ADR 文档（ADR-902 发布后的新标准）
@@ -241,7 +241,7 @@ public sealed class ADR_902_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail(string.Join("\n", new[]
+            true.Should().BeFalse(string.Join("\n", new[]
             {
                 "❌ ADR-902.3 违规：以下 ADR 文档的 Front Matter 不符合标准",
                 "",
@@ -274,7 +274,7 @@ public sealed class ADR_902_Architecture_Tests
         
         if (!Directory.Exists(adrDirectory))
         {
-            Assert.Fail($"未找到 ADR 文档目录：{adrDirectory}");
+            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
         }
 
         // 扫描治理类 ADR 文档（ADR-902 发布后的新标准）
@@ -343,7 +343,7 @@ public sealed class ADR_902_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail(string.Join("\n", new[]
+            true.Should().BeFalse(string.Join("\n", new[]
             {
                 "❌ ADR-902.4 违规：以下 ADR 文档缺少必需章节或章节顺序不正确",
                 "",
@@ -376,7 +376,7 @@ public sealed class ADR_902_Architecture_Tests
         
         if (!Directory.Exists(adrDirectory))
         {
-            Assert.Fail($"未找到 ADR 文档目录：{adrDirectory}");
+            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
         }
 
         // 裁决性语言模式
@@ -454,7 +454,7 @@ public sealed class ADR_902_Architecture_Tests
         
         if (!Directory.Exists(adrDirectory))
         {
-            Assert.Fail($"未找到 ADR 文档目录：{adrDirectory}");
+            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
         }
 
         // 扫描所有 ADR 文档
@@ -542,7 +542,7 @@ public sealed class ADR_902_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail(string.Join("\n", new[]
+            true.Should().BeFalse(string.Join("\n", new[]
             {
                 "❌ ADR-902.1 违规：以下 ADR 的规则编号不符合要求",
                 "",

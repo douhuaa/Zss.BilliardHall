@@ -1,4 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>
@@ -31,8 +32,7 @@ public sealed class ADR_0006_Architecture_Tests
             var fileName = Path.GetFileName(file);
             var match = System.Text.RegularExpressions.Regex.Match(fileName, @"^ADR-(\d+)");
 
-            Assert.True(match.Success,
-                $"❌ ADR-0006.1 违规: ADR 文件名必须以 'ADR-数字' 开头\n\n" +
+            match.Success.Should().BeTrue($"❌ ADR-0006.1 违规: ADR 文件名必须以 'ADR-数字' 开头\n\n" +
                 $"文件: {file}\n" +
                 $"文件名: {fileName}\n\n" +
                 $"修复建议:\n" +
@@ -49,23 +49,23 @@ public sealed class ADR_0006_Architecture_Tests
                 // Validate numbering ranges
                 if (number is >= 1 and <= 9)
                 {
-                    Assert.Equal("constitutional", directory);
+                    directory.Should().Be("constitutional");
                 }
                 else if (number == 0 || number is >= 900 and <= 999)
                 {
-                    Assert.Equal("governance", directory);
+                    directory.Should().Be("governance");
                 }
                 else if (number is >= 100 and <= 199)
                 {
-                    Assert.Equal("structure", directory);
+                    directory.Should().Be("structure");
                 }
                 else if (number is >= 200 and <= 299)
                 {
-                    Assert.Equal("runtime", directory);
+                    directory.Should().Be("runtime");
                 }
                 else if (number is >= 300 and <= 399)
                 {
-                    Assert.Equal("technical", directory);
+                    directory.Should().Be("technical");
                 }
             }
         }
@@ -97,8 +97,7 @@ public sealed class ADR_0006_Architecture_Tests
             // Check format: ADR-XXXX-descriptive-title.md
             var isValid = System.Text.RegularExpressions.Regex.IsMatch(fileName, @"^ADR-\d+-[a-z0-9-]+\.md$");
 
-            Assert.True(isValid,
-                $"❌ ADR-0006.2 违规: ADR 文件名格式不正确\n\n" +
+            isValid.Should().BeTrue($"❌ ADR-0006.2 违规: ADR 文件名格式不正确\n\n" +
                 $"文件: {file}\n" +
                 $"文件名: {fileName}\n\n" +
                 $"正确格式: ADR-XXXX-descriptive-title.md\n" +
@@ -130,8 +129,7 @@ public sealed class ADR_0006_Architecture_Tests
 
                 if (number is >= 1 and <= 9)
                 {
-                    Assert.True(numberStr.Length == 4 && numberStr.StartsWith("000"),
-                        $"❌ ADR-0006.3 违规: 宪法层 ADR 必须使用前导零\n\n" +
+                    (numberStr.Length == 4 && numberStr.StartsWith("000")).Should().BeTrue($"❌ ADR-0006.3 违规: 宪法层 ADR 必须使用前导零\n\n" +
                         $"文件: {file}\n" +
                         $"当前编号: ADR-{numberStr}\n" +
                         $"正确编号: ADR-{number:D4}\n\n" +
@@ -177,8 +175,7 @@ public sealed class ADR_0006_Architecture_Tests
                     {
                         var hasLeadingZero = numberStr.StartsWith("0") && numberStr.Length > number.ToString().Length;
 
-                        Assert.False(hasLeadingZero,
-                            $"⚠️ ADR-0006.4 建议: 非宪法层 ADR 不应使用多余前导零\n\n" +
+                        hasLeadingZero.Should().BeFalse($"⚠️ ADR-0006.4 建议: 非宪法层 ADR 不应使用多余前导零\n\n" +
                             $"文件: {file}\n" +
                             $"当前编号: ADR-{numberStr}\n" +
                             $"建议编号: ADR-{number}\n\n" +
@@ -226,8 +223,7 @@ public sealed class ADR_0006_Architecture_Tests
                                           number is >= 200 and <= 299 && directory == "runtime" ||
                                           number is >= 300 and <= 399 && directory == "technical";
 
-                    Assert.True(isInCorrectRange,
-                        $"❌ ADR-0006.5 违规: ADR 文件位于错误的目录\n\n" +
+                    isInCorrectRange.Should().BeTrue($"❌ ADR-0006.5 违规: ADR 文件位于错误的目录\n\n" +
                         $"文件: {file}\n" +
                         $"编号: ADR-{number}\n" +
                         $"当前目录: {directory}\n\n" +

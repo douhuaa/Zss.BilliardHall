@@ -1,4 +1,5 @@
 using NetArchTest.Rules;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -17,7 +18,7 @@ public sealed class ADR_0301_Architecture_Tests
             .ToList();
 
         // 至少应该有架构测试项目
-        Assert.NotEmpty(testAssemblies);
+        testAssemblies.Should().NotBeEmpty();
         
         // 验证测试程序集命名符合规范
         var invalidNames = testAssemblies
@@ -25,7 +26,7 @@ public sealed class ADR_0301_Architecture_Tests
             .Select(a => a.GetName().Name)
             .ToList();
             
-        Assert.Empty(invalidNames);
+        invalidNames.Should().BeEmpty();
     }
 
     [Fact(DisplayName = "ADR-301.2: TestContainers 配置文件验证")]
@@ -35,12 +36,11 @@ public sealed class ADR_0301_Architecture_Tests
         var currentDir = Directory.GetCurrentDirectory();
         var repoRoot = FindRepositoryRoot(currentDir);
         
-        Assert.NotNull(repoRoot);
+        repoRoot.Should().NotBeNull();
         
         // 验证 tests 目录存在
         var testsDir = Path.Combine(repoRoot!, "src", "tests");
-        Assert.True(Directory.Exists(testsDir), 
-            $"【ADR-301.2】测试目录应存在：{testsDir}");
+        Directory.Exists(testsDir).Should().BeTrue($"【ADR-301.2】测试目录应存在：{testsDir}");
     }
     
     [Fact(DisplayName = "ADR-301.3: 测试项目应使用统一的测试框架")]
@@ -50,7 +50,7 @@ public sealed class ADR_0301_Architecture_Tests
         var xunitAssembly = AppDomain.CurrentDomain.GetAssemblies()
             .FirstOrDefault(a => a.GetName().Name?.StartsWith("xunit") == true);
             
-        Assert.NotNull(xunitAssembly);
+        xunitAssembly.Should().NotBeNull();
     }
 
     private static string? FindRepositoryRoot(string startPath)

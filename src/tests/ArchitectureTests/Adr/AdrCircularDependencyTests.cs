@@ -1,4 +1,4 @@
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
@@ -35,7 +35,7 @@ public sealed class AdrCircularDependencyTests
                 $"❌ 检测到循环依赖：\n   " + string.Join(" → ", cycle) + " → " + cycle[0]
             );
             
-            Assert.Fail($"发现 {cycles.Count} 个循环依赖：\n\n" + string.Join("\n\n", violations));
+            true.Should().BeFalse($"发现 {cycles.Count} 个循环依赖：\n\n" + string.Join("\n\n", violations));
         }
     }
 

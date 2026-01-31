@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -35,12 +35,12 @@ public sealed class ADR_0000_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根（docs/adr 或 .git）");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
-        Assert.True(Directory.Exists(adrDirectory), $"未找到 ADR 文档目录：{AdrDocsPath}");
+        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{AdrDocsPath}");
 
         var adrIds = LoadAdrIds(adrDirectory)
             .Where(adr => !AdrWithoutTests.Contains(adr)) // 跳过无需测试的 ADR
             .ToList();
-        Assert.NotEmpty(adrIds);
+        adrIds.Should().NotBeEmpty();
 
         var testTypes = LoadArchitectureTestTypes();
 

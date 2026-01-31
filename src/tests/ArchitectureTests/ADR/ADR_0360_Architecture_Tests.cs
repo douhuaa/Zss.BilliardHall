@@ -1,4 +1,5 @@
 using NetArchTest.Rules;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -14,18 +15,17 @@ public sealed class ADR_0360_Architecture_Tests
         var currentDir = Directory.GetCurrentDirectory();
         var repoRoot = FindRepositoryRoot(currentDir);
         
-        Assert.NotNull(repoRoot);
+        repoRoot.Should().NotBeNull();
         
         var workflowsDir = Path.Combine(repoRoot!, ".github", "workflows");
-        Assert.True(Directory.Exists(workflowsDir), 
-            $"【ADR-360.1】GitHub Workflows 目录应存在：{workflowsDir}");
+        Directory.Exists(workflowsDir).Should().BeTrue($"【ADR-360.1】GitHub Workflows 目录应存在：{workflowsDir}");
         
         // 验证至少有一个 workflow 文件
         var workflowFiles = Directory.GetFiles(workflowsDir, "*.yml")
             .Concat(Directory.GetFiles(workflowsDir, "*.yaml"))
             .ToList();
             
-        Assert.NotEmpty(workflowFiles);
+        workflowFiles.Should().NotBeEmpty();
     }
 
     [Fact(DisplayName = "ADR-360.2: PR 模板应存在")]
@@ -34,11 +34,10 @@ public sealed class ADR_0360_Architecture_Tests
         var currentDir = Directory.GetCurrentDirectory();
         var repoRoot = FindRepositoryRoot(currentDir);
         
-        Assert.NotNull(repoRoot);
+        repoRoot.Should().NotBeNull();
         
         var prTemplate = Path.Combine(repoRoot!, ".github", "PULL_REQUEST_TEMPLATE.md");
-        Assert.True(File.Exists(prTemplate), 
-            $"【ADR-360.2】PR 模板文件应存在：{prTemplate}");
+        File.Exists(prTemplate).Should().BeTrue($"【ADR-360.2】PR 模板文件应存在：{prTemplate}");
     }
 
     [Fact(DisplayName = "ADR-360.3: 架构测试项目应存在并可被 CI 执行")]
@@ -46,8 +45,8 @@ public sealed class ADR_0360_Architecture_Tests
     {
         // 验证架构测试项目可以被发现和执行
         var currentAssembly = typeof(ADR_0360_Architecture_Tests).Assembly;
-        Assert.NotNull(currentAssembly);
-        Assert.Equal("ArchitectureTests", currentAssembly.GetName().Name);
+        currentAssembly.Should().NotBeNull();
+        currentAssembly.GetName().Name.Should().Be("ArchitectureTests");
     }
 
     private static string? FindRepositoryRoot(string startPath)

@@ -1,4 +1,5 @@
 using NetArchTest.Rules;
+using FluentAssertions;
 using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -42,7 +43,7 @@ public sealed class ADR_0122_Architecture_Tests
         if (violations.Any())
         {
             var violationNames = string.Join("\n", violations.Select(t => $"  - {t.FullName}"));
-            Assert.Fail(
+            true.Should().BeFalse(
                 $"❌ ADR-122.2 违规: 测试类命名不符合规范\n\n" +
                 $"违规类型:\n{violationNames}\n\n" +
                 $"修复建议:\n" +
@@ -58,8 +59,8 @@ public sealed class ADR_0122_Architecture_Tests
             .GetAssemblies()
             .FirstOrDefault(a => a.GetName().Name == "ArchitectureTests");
 
-        Assert.NotNull(archTestAssembly);
-        Assert.True(true, "架构测试项目 ArchitectureTests 存在");
+        archTestAssembly.Should().NotBeNull();
+        true.Should().BeTrue("架构测试项目 ArchitectureTests 存在");
     }
 
     [Theory(DisplayName = "ADR-122.5: 测试项目必须遵循命名约定")]
@@ -74,8 +75,7 @@ public sealed class ADR_0122_Architecture_Tests
         var isValid = assemblyName.EndsWith(".Tests") || 
                      assemblyName == "ArchitectureTests";
 
-        Assert.True(isValid,
-            $"❌ ADR-122.5 违规: 测试项目命名不符合规范\n\n" +
+        isValid.Should().BeTrue($"❌ ADR-122.5 违规: 测试项目命名不符合规范\n\n" +
             $"违规项目: {assemblyName}\n\n" +
             $"修复建议:\n" +
             $"将项目重命名为 {{Module}}.Tests 或 ArchitectureTests\n\n" +

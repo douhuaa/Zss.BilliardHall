@@ -1,4 +1,4 @@
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
@@ -27,7 +27,7 @@ public sealed class AdrStructureTests
 
         if (!Directory.Exists(adrDir))
         {
-            Assert.Fail($"ADR 目录不存在：{adrDir}");
+            true.Should().BeFalse($"ADR 目录不存在：{adrDir}");
         }
 
         var violations = new List<string>();
@@ -78,7 +78,7 @@ public sealed class AdrStructureTests
 
         if (violations.Any())
         {
-            Assert.Fail(string.Join("\n", new[]
+            true.Should().BeFalse(string.Join("\n", new[]
             {
                 "❌ Enforcement 违规：以下 ADR 文档缺少必需章节",
                 "",

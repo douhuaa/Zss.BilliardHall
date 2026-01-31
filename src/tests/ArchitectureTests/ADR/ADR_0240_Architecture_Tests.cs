@@ -1,4 +1,5 @@
 using NetArchTest.Rules;
+using FluentAssertions;
 using System.Reflection;
 using Zss.BilliardHall.Platform.Exceptions;
 
@@ -67,7 +68,7 @@ public sealed class ADR_0240_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail($"❌ ADR-240.1 违规: 存在未继承结构化异常基类的自定义异常\n\n" +
+            true.Should().BeFalse($"❌ ADR-240.1 违规: 存在未继承结构化异常基类的自定义异常\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"自定义异常必须继承自以下三大基类之一：\n" +
@@ -113,7 +114,7 @@ public sealed class ADR_0240_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail($"❌ ADR-240.2 违规: 可重试异常必须是基础设施异常\n\n" +
+            true.Should().BeFalse($"❌ ADR-240.2 违规: 可重试异常必须是基础设施异常\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"实现 IRetryable 接口的异常必须继承自 InfrastructureException。\n" +
@@ -157,7 +158,7 @@ public sealed class ADR_0240_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail($"❌ ADR-240.3 违规: 领域异常不可标记为可重试\n\n" +
+            true.Should().BeFalse($"❌ ADR-240.3 违规: 领域异常不可标记为可重试\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"领域异常表示业务规则违反，不会因重试而改变结果。\n" +
@@ -199,7 +200,7 @@ public sealed class ADR_0240_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail($"❌ ADR-240.4 违规: 验证异常不可标记为可重试\n\n" +
+            true.Should().BeFalse($"❌ ADR-240.4 违规: 验证异常不可标记为可重试\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"验证异常表示输入数据错误，不会因重试而修正。\n" +
@@ -257,7 +258,7 @@ public sealed class ADR_0240_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail($"❌ ADR-240.5 违规: 异常类型命名空间不符合约定\n\n" +
+            true.Should().BeFalse($"❌ ADR-240.5 违规: 异常类型命名空间不符合约定\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"异常类型必须组织在 Exceptions 命名空间下，以保持一致性和可发现性。\n\n" +

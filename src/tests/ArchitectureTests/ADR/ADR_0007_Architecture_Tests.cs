@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -66,7 +67,7 @@ public sealed class ADR_0007_Architecture_Tests
         }
 
         if (violations.Any())
-            Assert.Fail(FormatViolations("ADR-0007.1 违规：以下 Agent 配置文件未正确实现三态输出规范：", violations));
+            true.Should().BeFalse(FormatViolations("ADR-0007.1 违规：以下 Agent 配置文件未正确实现三态输出规范：", violations));
     }
 
     [Fact(DisplayName = "ADR-0007.7: Prompts 文件不应引入 ADR 未明确的规则")]
@@ -90,7 +91,7 @@ public sealed class ADR_0007_Architecture_Tests
         if (!warnings.Any()) return;
 
         var message = "\n⚠️ ADR-0007.7 提醒：Prompts 文件可能需要人工审查：\n" + string.Join("\n", warnings);
-        Assert.Fail(message);
+        true.Should().BeFalse(message);
     }
 
     #region Helper Methods

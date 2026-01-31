@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using Xunit;
+using FluentAssertions;
 using Xunit.Abstractions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Heuristics;
@@ -82,7 +82,7 @@ public sealed class DocumentationStyleHeuristicsTests
         }
 
         // ✅ 永远通过 - Heuristics 不应该失败构建
-        Assert.True(true);
+        true.Should().BeTrue();
     }
 
     [Fact(DisplayName = "Heuristics: ADR 建议包含示例")]
@@ -136,7 +136,7 @@ public sealed class DocumentationStyleHeuristicsTests
         }
 
         // ✅ 永远通过 - Heuristics 不应该失败构建
-        Assert.True(true);
+        true.Should().BeTrue();
     }
 
     [Fact(DisplayName = "Heuristics: 文档建议保持简洁")]
@@ -190,7 +190,7 @@ public sealed class DocumentationStyleHeuristicsTests
         }
 
         // ✅ 永远通过 - Heuristics 不应该失败构建
-        Assert.True(true);
+        true.Should().BeTrue();
     }
 
     private static string? FindRepositoryRoot()
