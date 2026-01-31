@@ -1,4 +1,5 @@
 using NetArchTest.Rules;
+using FluentAssertions;
 using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -22,8 +23,7 @@ public sealed class ADR_0220_Architecture_Tests
                 .HaveDependencyOn(dep)
                 .GetResult();
 
-            Assert.True(result.IsSuccessful,
-                $"❌ ADR-220.1 违规: 模块直接依赖具体事件总线实现 {dep}\n\n" +
+            result.IsSuccessful.Should().BeTrue($"❌ ADR-220.1 违规: 模块直接依赖具体事件总线实现 {dep}\n\n" +
                 $"违规类型: {string.Join(", ", result.FailingTypeNames ?? new List<string>())}\n\n" +
                 $"修复建议:\n" +
                 $"通过 IEventBus 抽象接口使用事件总线\n\n" +
@@ -35,7 +35,6 @@ public sealed class ADR_0220_Architecture_Tests
     public void EventHandlers_Must_Be_Scoped_Or_Transient()
     {
         // 此规则需要在集成测试中验证 DI 容器配置
-        Assert.True(true,
-            "EventHandler 生命周期验证需在集成测试中检查 ServiceDescriptor.Lifetime");
+        true.Should().BeTrue("EventHandler 生命周期验证需在集成测试中检查 ServiceDescriptor.Lifetime");
     }
 }

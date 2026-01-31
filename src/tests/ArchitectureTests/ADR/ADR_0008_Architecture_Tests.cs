@@ -1,4 +1,4 @@
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -71,8 +71,7 @@ public sealed class ADR_0008_Architecture_Tests
         // - Enforcement/*.cs
         // - Heuristics/DocumentationStyleHeuristicsTests.cs
         
-        Assert.True(true, 
-            "ADR-0008 测试已迁移至三层架构。" +
+        true.Should().BeTrue("ADR-0008 测试已迁移至三层架构。" +
             "请参考 Governance/、Enforcement/、Heuristics/ 目录。");
     }
 }

@@ -1,4 +1,4 @@
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
@@ -42,7 +42,7 @@ public sealed class AdrRelationshipDeclarationTests
             }
         }
 
-        Assert.Empty(violations);
+        violations.Should().BeEmpty();
     }
 
     /// <summary>

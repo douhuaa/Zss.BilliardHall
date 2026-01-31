@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
@@ -59,7 +59,7 @@ public sealed class AdrConsistencyTests
             }
         }
 
-        Assert.Empty(violations);
+        violations.Should().BeEmpty();
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ public sealed class AdrConsistencyTests
             }
         }
 
-        Assert.Empty(violations);
+        violations.Should().BeEmpty();
     }
 
     /// <summary>
@@ -156,7 +156,7 @@ public sealed class AdrConsistencyTests
             }
         }
 
-        Assert.Empty(violations);
+        violations.Should().BeEmpty();
     }
 
     /// <summary>

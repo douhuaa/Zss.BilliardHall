@@ -1,4 +1,5 @@
 using NetArchTest.Rules;
+using FluentAssertions;
 using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -26,8 +27,7 @@ public sealed class ADR_0210_Architecture_Tests
         {
             var hasSchemaVersion = eventType.GetProperty("SchemaVersion") != null;
             
-            Assert.True(hasSchemaVersion,
-                $"❌ ADR-210.2 违规: 事件缺少 SchemaVersion 属性\n\n" +
+            hasSchemaVersion.Should().BeTrue($"❌ ADR-210.2 违规: 事件缺少 SchemaVersion 属性\n\n" +
                 $"违规类型: {eventType.FullName}\n\n" +
                 $"修复建议:\n" +
                 $"添加 public string SchemaVersion {{ get; init; }} = \"1.0\";\n\n" +

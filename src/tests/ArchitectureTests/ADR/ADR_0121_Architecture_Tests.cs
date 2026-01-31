@@ -1,4 +1,5 @@
 using NetArchTest.Rules;
+using FluentAssertions;
 using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -50,8 +51,7 @@ public sealed class ADR_0121_Architecture_Tests
             var hasValidSuffix = contractType.Name.EndsWith("Dto") || 
                                  contractType.Name.EndsWith("Contract");
 
-            Assert.True(hasValidSuffix,
-                $"❌ ADR-121.1 违规: 契约类型缺少 'Dto' 或 'Contract' 后缀\n\n" +
+            hasValidSuffix.Should().BeTrue($"❌ ADR-121.1 违规: 契约类型缺少 'Dto' 或 'Contract' 后缀\n\n" +
                 $"违规类型: {contractType.FullName}\n\n" +
                 $"问题分析:\n" +
                 $"所有位于 Contracts 命名空间的类型必须以 'Dto' 或 'Contract' 后缀结尾，\n" +
@@ -111,8 +111,7 @@ public sealed class ADR_0121_Architecture_Tests
                 // 属性必须是只读的（没有 setter）或者是 init-only
                 var isImmutable = !hasSetter || isInitOnly;
 
-                Assert.True(isImmutable,
-                    $"❌ ADR-121.2 违规: 契约属性必须是只读的\n\n" +
+                isImmutable.Should().BeTrue($"❌ ADR-121.2 违规: 契约属性必须是只读的\n\n" +
                     $"违规类型: {contractType.FullName}\n" +
                     $"可变属性: {property.Name}\n\n" +
                     $"问题分析:\n" +
@@ -191,7 +190,7 @@ public sealed class ADR_0121_Architecture_Tests
 
             if (businessMethods.Any())
             {
-                Assert.Fail(
+                true.Should().BeFalse(
                     $"❌ ADR-121.3 违规: 契约包含业务方法\n\n" +
                     $"违规类型: {contractType.FullName}\n" +
                     $"业务方法: {string.Join(", ", businessMethods.Select(m => m.Name))}\n\n" +
@@ -307,7 +306,7 @@ public sealed class ADR_0121_Architecture_Tests
 
                 if (isDomainType && !isContractType)
                 {
-                    Assert.Fail(
+                    true.Should().BeFalse(
                         $"❌ ADR-121.4 违规: 契约包含领域模型类型\n\n" +
                         $"违规契约: {contractType.FullName}\n" +
                         $"领域模型类型: {type.FullName}\n\n" +
@@ -379,7 +378,7 @@ public sealed class ADR_0121_Architecture_Tests
 
             if (looksLikePublicContract && !isInContractsNamespace)
             {
-                Assert.Fail(
+                true.Should().BeFalse(
                     $"❌ ADR-121.5 违规: 公共契约未在 Contracts 命名空间下\n\n" +
                     $"违规类型: {dtoType.FullName}\n" +
                     $"当前命名空间: {ns}\n" +

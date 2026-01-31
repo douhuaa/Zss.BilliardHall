@@ -1,4 +1,5 @@
-﻿using NetArchTest.Rules;
+﻿using FluentAssertions;
+using NetArchTest.Rules;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 using System.Reflection;
 
@@ -38,7 +39,7 @@ public sealed class ADR_0001_Architecture_Tests
                 .HaveDependencyOn($"Zss.BilliardHall.Modules.{other}")
                 .GetResult();
 
-            Assert.True(result.IsSuccessful,
+            result.IsSuccessful.Should().BeTrue(
             $"❌ ADR-0001.1 违规: 模块 {moduleName} 不应依赖模块 {other}。\n" +
             $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
             $"修复建议：\n" +
@@ -81,7 +82,11 @@ public sealed class ADR_0001_Architecture_Tests
             if (allowedProjectNames.Contains(refName))
                 continue;
 
-            Assert.Fail($"❌ ADR-0001.2 违规: 模块 {projectName} 不应引用其他模块或非白名单项目: {refName}。\n" + $"项目路径: {csprojPath}\n" + $"引用路径: {include}\n" + $"修复建议：将共享代码移至 Platform/BuildingBlocks，或改用消息通信。");
+            true.Should().BeFalse(
+                $"❌ ADR-0001.2 违规: 模块 {projectName} 不应引用其他模块或非白名单项目: {refName}。\n" + 
+                $"项目路径: {csprojPath}\n" + 
+                $"引用路径: {include}\n" + 
+                $"修复建议：将共享代码移至 Platform/BuildingBlocks，或改用消息通信。");
         }
     }
 
@@ -105,7 +110,10 @@ public sealed class ADR_0001_Architecture_Tests
             .ResideInNamespaceStartingWith(expectedNamespace)
             .GetResult();
 
-        Assert.True(result.IsSuccessful, $"❌ ADR-0001.7 违规: 模块 {moduleName} 的类型必须在命名空间 {expectedNamespace} 下。\n" + $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" + $"修复建议：确保所有类型都在正确的模块命名空间下，遵循目录结构与命名空间一致性原则。");
+        result.IsSuccessful.Should().BeTrue(
+            $"❌ ADR-0001.7 违规: 模块 {moduleName} 的类型必须在命名空间 {expectedNamespace} 下。\n" + 
+            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" + 
+            $"修复建议：确保所有类型都在正确的模块命名空间下，遵循目录结构与命名空间一致性原则。");
     }
 
     public static IEnumerable<object[]> GetModuleProjectFiles()
@@ -143,7 +151,7 @@ public sealed class ADR_0001_Architecture_Tests
             // 接受 UseCases 或 Features（历史原因，语义相同）
             var hasUseCases = ns.Contains(".UseCases.") || ns.Contains(".Features.");
 
-            Assert.True(hasUseCases,
+            hasUseCases.Should().BeTrue(
             $"❌ ADR-0001.3 违规: Handler {handler.FullName} 必须在 UseCases 或 Features 命名空间下。\n" +
             $"当前命名空间: {ns}\n" +
             $"修复建议：\n" +
@@ -169,7 +177,7 @@ public sealed class ADR_0001_Architecture_Tests
                 .HaveNameMatching($".*{word}.*")
                 .GetResult();
 
-            Assert.True(result.IsSuccessful,
+            result.IsSuccessful.Should().BeTrue(
             $"❌ ADR-0001.4 违规: 模块 {moduleAssembly.GetName().Name} 禁止包含名称含 '{word}' 的类型。\n" +
             $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
             $"修复建议：\n" +
@@ -208,7 +216,7 @@ public sealed class ADR_0001_Architecture_Tests
                     .HaveDependencyOn($"Zss.BilliardHall.Modules.{other}.Domain")
                     .GetResult();
 
-                Assert.True(result.IsSuccessful,
+                result.IsSuccessful.Should().BeTrue(
                 $"❌ ADR-0001.5 违规: 模块 {moduleName} 不应依赖其他模块 {other} 的领域对象。\n" +
                 $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
                 $"修复建议：\n" +
@@ -249,7 +257,7 @@ public sealed class ADR_0001_Architecture_Tests
             {
                 var hasBusinessDecisionPattern = businessDecisionPatterns.Any(pattern => prop.Name.Contains(pattern, StringComparison.OrdinalIgnoreCase));
 
-                Assert.False(hasBusinessDecisionPattern,
+                hasBusinessDecisionPattern.Should().BeFalse(
                 $"❌ ADR-0001.6 违规: Contract {contractType.Name} 包含疑似业务判断字段: {prop.Name}。\n" +
                 $"修复建议：\n" +
                 $"  1. Contract 应仅用于数据传递，不包含业务决策字段\n" +

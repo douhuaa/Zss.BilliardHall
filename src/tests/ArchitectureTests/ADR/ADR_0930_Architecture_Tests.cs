@@ -1,4 +1,5 @@
 using NetArchTest.Rules;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -14,16 +15,15 @@ public sealed class ADR_0930_Architecture_Tests
         var currentDir = Directory.GetCurrentDirectory();
         var repoRoot = FindRepositoryRoot(currentDir);
         
-        Assert.NotNull(repoRoot);
+        repoRoot.Should().NotBeNull();
         
         var prTemplate = Path.Combine(repoRoot!, ".github", "PULL_REQUEST_TEMPLATE.md");
-        Assert.True(File.Exists(prTemplate), 
-            $"【ADR-930.1】PR 模板文件应存在：{prTemplate}");
+        File.Exists(prTemplate).Should().BeTrue($"【ADR-930.1】PR 模板文件应存在：{prTemplate}");
         
         // 验证模板包含基本内容
         var content = File.ReadAllText(prTemplate);
-        Assert.NotEmpty(content);
-        Assert.True(content.Length > 100, "PR 模板应包含实质性内容");
+        content.Should().NotBeEmpty();
+        (content.Length > 100).Should().BeTrue("PR 模板应包含实质性内容");
     }
 
     [Fact(DisplayName = "ADR-930.2: Copilot 指令文件应存在")]
@@ -32,16 +32,15 @@ public sealed class ADR_0930_Architecture_Tests
         var currentDir = Directory.GetCurrentDirectory();
         var repoRoot = FindRepositoryRoot(currentDir);
         
-        Assert.NotNull(repoRoot);
+        repoRoot.Should().NotBeNull();
         
         // 验证 Copilot 指令目录存在
         var copilotDir = Path.Combine(repoRoot!, "docs", "copilot");
-        Assert.True(Directory.Exists(copilotDir), 
-            $"【ADR-930.2】Copilot 指令目录应存在：{copilotDir}");
+        Directory.Exists(copilotDir).Should().BeTrue($"【ADR-930.2】Copilot 指令目录应存在：{copilotDir}");
         
         // 验证至少有一些提示词文件
         var promptFiles = Directory.GetFiles(copilotDir, "*.prompts.md");
-        Assert.True(promptFiles.Length > 0, "应存在 Copilot 提示词文件");
+        promptFiles.Should().NotBeEmpty("应存在 Copilot 提示词文件");
     }
 
     [Fact(DisplayName = "ADR-930.3: 架构测试必须在 CI 中执行")]
@@ -49,16 +48,15 @@ public sealed class ADR_0930_Architecture_Tests
     {
         // 验证架构测试项目可以被 CI 发现和执行
         var currentAssembly = typeof(ADR_0930_Architecture_Tests).Assembly;
-        Assert.NotNull(currentAssembly);
-        Assert.Equal("ArchitectureTests", currentAssembly.GetName().Name);
+        currentAssembly.Should().NotBeNull();
+        currentAssembly.GetName().Name.Should().Be("ArchitectureTests");
         
         // 验证测试类存在并可执行
         var testTypes = currentAssembly.GetTypes()
             .Where(t => t.Name.EndsWith("Architecture_Tests"))
             .ToList();
             
-        Assert.True(testTypes.Count >= 10, 
-            $"【ADR-930.3】应至少有 10 个架构测试类，当前：{testTypes.Count}");
+        (testTypes.Count >= 10).Should().BeTrue($"【ADR-930.3】应至少有 10 个架构测试类，当前：{testTypes.Count}");
     }
 
     private static string? FindRepositoryRoot(string startPath)

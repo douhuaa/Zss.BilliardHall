@@ -1,4 +1,5 @@
 using NetArchTest.Rules;
+using FluentAssertions;
 using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -38,7 +39,7 @@ public sealed class ADR_0201_Architecture_Tests
             if (staticFields.Any())
             {
                 var fieldNames = string.Join(", ", staticFields.Select(f => f.Name));
-                Assert.Fail(
+                true.Should().BeFalse(
                     $"❌ ADR-201.3 违规: Handler 使用静态字段存储状态\n\n" +
                     $"违规类型: {handler.FullName}\n" +
                     $"静态字段: {fieldNames}\n\n" +
@@ -58,7 +59,6 @@ public sealed class ADR_0201_Architecture_Tests
     {
         // 注意: 此测试需要在集成测试中验证 DI 容器配置
         // 这里仅作为占位符，提醒团队此规则存在
-        Assert.True(true, 
-            "Handler 生命周期验证需在集成测试中检查 ServiceDescriptor.Lifetime == ServiceLifetime.Scoped");
+        true.Should().BeTrue("Handler 生命周期验证需在集成测试中检查 ServiceDescriptor.Lifetime == ServiceLifetime.Scoped");
     }
 }

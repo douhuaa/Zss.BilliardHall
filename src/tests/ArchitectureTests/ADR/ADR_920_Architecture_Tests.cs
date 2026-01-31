@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -46,17 +46,17 @@ public sealed class ADR_920_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-920-examples-governance-constitution.md");
 
-        Assert.True(File.Exists(adrFile), $"ADR-920 文档不存在：{adrFile}");
+        File.Exists(adrFile).Should().BeTrue($"ADR-920 文档不存在：{adrFile}");
 
         var content = File.ReadAllText(adrFile);
 
         // 验证必需章节存在
-        Assert.Contains("示例代码的法律地位", content);
-        Assert.Contains("示例代码必须包含的免责声明", content);
-        Assert.Contains("示例代码禁止的架构违规行为", content);
-        Assert.Contains("示例 vs 测试 vs PoC", content);
-        // Assert.Contains("示例代码的自动化执法（分级处理）", content);
-        Assert.Contains("示例作者责任制", content);
+        content.Should().Contain("示例代码的法律地位");
+        content.Should().Contain("示例代码必须包含的免责声明");
+        content.Should().Contain("示例代码禁止的架构违规行为");
+        content.Should().Contain("示例 vs 测试 vs PoC");
+        // content.Should().Contain("示例代码的自动化执法（分级处理）");
+        content.Should().Contain("示例作者责任制");
     }
 
     [Fact(DisplayName = "ADR-920.2: 对应的 Copilot Prompts 文件存在")]
@@ -69,15 +69,15 @@ public sealed class ADR_920_Architecture_Tests
         // 如果文件不存在，给出清晰的待办提示
         if (!File.Exists(promptsFile))
         {
-            Assert.Fail($"⚠️ 待办：ADR-920 Prompts 文件需要创建：{promptsFile}\n" +
+            true.Should().BeFalse($"⚠️ 待办：ADR-920 Prompts 文件需要创建：{promptsFile}\n" +
                        "请创建该文件以提供示例编写的场景化指导。");
         }
 
         var content = File.ReadAllText(promptsFile);
 
         // 验证 Prompts 文件包含权威声明
-        Assert.Contains("权威声明", content);
-        Assert.Contains("ADR-920", content);
+        content.Should().Contain("权威声明");
+        content.Should().Contain("ADR-920");
     }
 
     [Fact(DisplayName = "ADR-920.3: 核心治理原则已定义")]
@@ -88,22 +88,22 @@ public sealed class ADR_920_Architecture_Tests
         var content = File.ReadAllText(adrFile);
 
         // 验证核心原则：示例无裁决力
-        Assert.Contains("示例不是规范，只是演示", content);
+        content.Should().Contain("示例不是规范，只是演示");
 
         // 验证禁止行为约束
-        Assert.Contains("示例代码禁止的架构违规行为", content);
+        content.Should().Contain("示例代码禁止的架构违规行为");
 
         // 验证免责声明要求
-        Assert.Contains("示例代码必须包含的免责声明", content);
+        content.Should().Contain("示例代码必须包含的免责声明");
 
         // 验证核心灵魂句
-        Assert.Contains("示例允许简化流程，但不允许简化规则", content);
+        content.Should().Contain("示例允许简化流程，但不允许简化规则");
 
         // 验证分级执法
-        // Assert.Contains("同规则、不同严重级别", content);
+        // content.Should().Contain("同规则、不同严重级别");
 
         // 验证责任制
-        Assert.Contains("示例作者责任制", content);
+        content.Should().Contain("示例作者责任制");
     }
 
     /// <summary>
@@ -228,7 +228,7 @@ public sealed class ADR_920_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail(string.Join("\n", new[]
+            true.Should().BeFalse(string.Join("\n", new[]
             {
                 "❌ ADR-920.4 违规：以下示例代码包含架构违规",
                 "",
@@ -313,7 +313,7 @@ public sealed class ADR_920_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail(string.Join("\n", new[]
+            true.Should().BeFalse(string.Join("\n", new[]
             {
                 "❌ ADR-920.5 违规：以下示例文档缺少'示例免责声明'",
                 "",
@@ -434,7 +434,7 @@ public sealed class ADR_920_Architecture_Tests
         }
 
         // L2 警告：总是通过（但已输出警告信息）
-        Assert.True(true);
+        true.Should().BeTrue();
     }
 
     [Fact(DisplayName = "ADR-920.7: 示例目录必须有责任人和目的说明（L1 阻断）")]
@@ -448,7 +448,7 @@ public sealed class ADR_920_Architecture_Tests
         if (!Directory.Exists(examplesDir))
         {
             // 如果 examples 目录不存在，测试通过
-            Assert.True(true);
+            true.Should().BeTrue();
             return;
         }
 
@@ -506,7 +506,7 @@ public sealed class ADR_920_Architecture_Tests
 
         if (violations.Any())
         {
-            Assert.Fail(string.Join("\n", new[]
+            true.Should().BeFalse(string.Join("\n", new[]
             {
                 "❌ ADR-920.7 违规（L1）：以下示例目录缺少必需的维护信息",
                 "",

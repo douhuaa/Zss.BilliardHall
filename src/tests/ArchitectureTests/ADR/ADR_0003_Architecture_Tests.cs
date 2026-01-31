@@ -1,4 +1,5 @@
 ﻿using NetArchTest.Rules;
+using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 using System.Reflection;
 
@@ -39,8 +40,7 @@ public sealed class ADR_0003_Architecture_Tests
 
             foreach (var type in types)
             {
-                Assert.True(type.Namespace?.StartsWith(BaseNamespace) == true,
-                $"❌ ADR-0003.1 违规: 所有类型的命名空间都应以 BaseNamespace 开头\n\n" +
+                (type.Namespace?.StartsWith(BaseNamespace) == true).Should().BeTrue($"❌ ADR-0003.1 违规: 所有类型的命名空间都应以 BaseNamespace 开头\n\n" +
                 $"程序集: {assembly.GetName().Name}\n" +
                 $"违规类型: {type.FullName}\n" +
                 $"当前命名空间: {type.Namespace}\n" +
@@ -70,8 +70,7 @@ public sealed class ADR_0003_Architecture_Tests
 
         foreach (var type in types)
         {
-            Assert.True(type.Namespace?.StartsWith($"{BaseNamespace}.Platform") == true,
-            $"❌ ADR-0003.2 违规: Platform 程序集中的类型应在 {BaseNamespace}.Platform 命名空间下\n\n" +
+            (type.Namespace?.StartsWith($"{BaseNamespace}.Platform") == true).Should().BeTrue($"❌ ADR-0003.2 违规: Platform 程序集中的类型应在 {BaseNamespace}.Platform 命名空间下\n\n" +
             $"违规类型: {type.FullName}\n" +
             $"当前命名空间: {type.Namespace}\n" +
             $"期望命名空间前缀: {BaseNamespace}.Platform\n\n" +
@@ -99,8 +98,7 @@ public sealed class ADR_0003_Architecture_Tests
 
         foreach (var type in types)
         {
-            Assert.True(type.Namespace?.StartsWith($"{BaseNamespace}.Application") == true,
-            $"❌ ADR-0003.3 违规: Application 程序集中的类型应在 {BaseNamespace}.Application 命名空间下\n\n" +
+            (type.Namespace?.StartsWith($"{BaseNamespace}.Application") == true).Should().BeTrue($"❌ ADR-0003.3 违规: Application 程序集中的类型应在 {BaseNamespace}.Application 命名空间下\n\n" +
             $"违规类型: {type.FullName}\n" +
             $"当前命名空间: {type.Namespace}\n" +
             $"期望命名空间前缀: {BaseNamespace}.Application\n\n" +
@@ -132,8 +130,7 @@ public sealed class ADR_0003_Architecture_Tests
 
         foreach (var type in types)
         {
-            Assert.True(type.Namespace?.StartsWith($"{BaseNamespace}.Modules.{moduleName}") == true,
-            $"❌ ADR-0003.4 违规: Module 程序集中的类型应在 {BaseNamespace}.Modules.{{ModuleName}} 命名空间下\n\n" +
+            (type.Namespace?.StartsWith($"{BaseNamespace}.Modules.{moduleName}") == true).Should().BeTrue($"❌ ADR-0003.4 违规: Module 程序集中的类型应在 {BaseNamespace}.Modules.{{ModuleName}} 命名空间下\n\n" +
             $"模块名: {moduleName}\n" +
             $"违规类型: {type.FullName}\n" +
             $"当前命名空间: {type.Namespace}\n" +
@@ -168,8 +165,7 @@ public sealed class ADR_0003_Architecture_Tests
         foreach (var type in types)
         {
             var expectedNamespace = $"{BaseNamespace}.Host.{hostName}";
-            Assert.True(type.Namespace?.StartsWith(expectedNamespace) == true,
-            $"❌ ADR-0003.5 违规: Host 程序集中的类型应在 {BaseNamespace}.Host.{{HostName}} 命名空间下\n\n" +
+            (type.Namespace?.StartsWith(expectedNamespace) == true).Should().BeTrue($"❌ ADR-0003.5 违规: Host 程序集中的类型应在 {BaseNamespace}.Host.{{HostName}} 命名空间下\n\n" +
             $"Host 名: {hostName}\n" +
             $"违规类型: {type.FullName}\n" +
             $"当前命名空间: {type.Namespace}\n" +
@@ -192,8 +188,7 @@ public sealed class ADR_0003_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var directoryBuildPropsPath = Path.Combine(root, "Directory.Build.props");
 
-        Assert.True(File.Exists(directoryBuildPropsPath),
-        $"❌ ADR-0003.6 违规: Directory.Build.props 文件应存在于仓库根目录\n\n" +
+        File.Exists(directoryBuildPropsPath).Should().BeTrue($"❌ ADR-0003.6 违规: Directory.Build.props 文件应存在于仓库根目录\n\n" +
         $"期望路径: {directoryBuildPropsPath}\n" +
         $"当前状态: 文件不存在\n\n" +
         $"修复建议:\n" +
@@ -211,13 +206,12 @@ public sealed class ADR_0003_Architecture_Tests
 
         if (!File.Exists(directoryBuildPropsPath))
         {
-            Assert.Fail($"❌ ADR-0003.6 违规: Directory.Build.props 文件不存在");
+            true.Should().BeFalse($"❌ ADR-0003.6 违规: Directory.Build.props 文件不存在");
         }
 
         var content = File.ReadAllText(directoryBuildPropsPath);
 
-        Assert.True(content.Contains("CompanyNamespace") || content.Contains("ProductNamespace") || content.Contains("BaseNamespace"),
-        $"❌ ADR-0003.7 违规: Directory.Build.props 应定义 BaseNamespace 相关属性\n\n" +
+        (content.Contains("CompanyNamespace") || content.Contains("ProductNamespace") || content.Contains("BaseNamespace")).Should().BeTrue($"❌ ADR-0003.7 违规: Directory.Build.props 应定义 BaseNamespace 相关属性\n\n" +
         $"文件路径: {directoryBuildPropsPath}\n" +
         $"当前状态: 未找到 CompanyNamespace/ProductNamespace/BaseNamespace 定义\n\n" +
         $"修复建议:\n" +
@@ -243,7 +237,7 @@ public sealed class ADR_0003_Architecture_Tests
             .Where(p => !p.Contains("/obj/") && !p.Contains("/bin/"))
             .ToList();
 
-        Assert.NotEmpty(projectFiles);
+        projectFiles.Should().NotBeEmpty();
 
         foreach (var projectFile in projectFiles)
         {
@@ -264,8 +258,7 @@ public sealed class ADR_0003_Architecture_Tests
                                   projectName == "ArchitectureAnalyzers" ||  // Level 2 enforcement tool
                                   projectName == "AdrParserCli";  // CLI tool in tools directory
 
-                Assert.True(isValidName,
-                $"❌ ADR-0003.8 违规: 项目命名不符合命名空间约定\n\n" +
+                isValidName.Should().BeTrue($"❌ ADR-0003.8 违规: 项目命名不符合命名空间约定\n\n" +
                 $"项目文件: {projectFile}\n" +
                 $"项目名称: {projectName}\n" +
                 $"相对路径: {relativePath}\n\n" +
@@ -299,8 +292,7 @@ public sealed class ADR_0003_Architecture_Tests
                 .ResideInNamespaceContaining(pattern)
                 .GetResult();
 
-            Assert.True(result.IsSuccessful,
-            $"❌ ADR-0003.9 违规: 模块不应包含不规范的命名空间模式\n\n" +
+            result.IsSuccessful.Should().BeTrue($"❌ ADR-0003.9 违规: 模块不应包含不规范的命名空间模式\n\n" +
             $"模块: {moduleAssembly.GetName().Name}\n" +
             $"禁止的模式: {pattern}\n" +
             $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +

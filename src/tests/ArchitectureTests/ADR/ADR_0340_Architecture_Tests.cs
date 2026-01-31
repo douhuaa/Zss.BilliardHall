@@ -1,4 +1,5 @@
 using System.Reflection;
+using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 using NetArchTest.Rules;
 
@@ -33,8 +34,7 @@ public sealed class ADR_0340_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var platformCsproj = Path.Combine(root, "src", "Platform", "Platform.csproj");
 
-        Assert.True(File.Exists(platformCsproj),
-            $"❌ ADR-340.1 违规: 找不到 Platform.csproj 文件。\n\n" +
+        File.Exists(platformCsproj).Should().BeTrue($"❌ ADR-340.1 违规: 找不到 Platform.csproj 文件。\n\n" +
             $"预期路径: {platformCsproj}");
 
         var content = File.ReadAllText(platformCsproj);
@@ -51,8 +51,7 @@ public sealed class ADR_0340_Architecture_Tests
 
         var missingPackages = requiredPackages.Where(pkg => !content.Contains(pkg)).ToList();
 
-        Assert.True(!missingPackages.Any(),
-            $"❌ ADR-340.1 违规: Platform 层必须引用以下日志和监控基础设施包。\n\n" +
+        missingPackages.Any().Should().BeFalse($"❌ ADR-340.1 违规: Platform 层必须引用以下日志和监控基础设施包。\n\n" +
             $"缺失的包:\n" +
             string.Join("\n", missingPackages.Select(pkg => $"  - {pkg}")) + "\n\n" +
             $"修复建议:\n" +
@@ -70,8 +69,7 @@ public sealed class ADR_0340_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var bootstrapperFile = Path.Combine(root, "src", "Platform", "PlatformBootstrapper.cs");
 
-        Assert.True(File.Exists(bootstrapperFile),
-            $"❌ ADR-340.2 违规: 找不到 PlatformBootstrapper.cs 文件。");
+        File.Exists(bootstrapperFile).Should().BeTrue($"❌ ADR-340.2 违规: 找不到 PlatformBootstrapper.cs 文件。");
 
         var content = File.ReadAllText(bootstrapperFile);
 
@@ -79,8 +77,7 @@ public sealed class ADR_0340_Architecture_Tests
         var hasSerilogUsing = content.Contains("using Serilog") || content.Contains("Serilog.");
         var hasSerilogConfig = content.Contains("Log.Logger") || content.Contains("LoggerConfiguration");
 
-        Assert.True(hasSerilogUsing,
-            $"❌ ADR-340.2 违规: PlatformBootstrapper 必须引用 Serilog 命名空间。\n\n" +
+        hasSerilogUsing.Should().BeTrue($"❌ ADR-340.2 违规: PlatformBootstrapper 必须引用 Serilog 命名空间。\n\n" +
             $"当前状态: PlatformBootstrapper.cs 未 using Serilog\n\n" +
             $"修复建议:\n" +
             $"1. 在文件顶部添加 'using Serilog;'\n" +
@@ -88,8 +85,7 @@ public sealed class ADR_0340_Architecture_Tests
             $"执行级别: L1（文本匹配）- 此规则仅验证代码存在，不验证配置正确性\n\n" +
             $"参考: docs/guides/structured-logging-monitoring-standard.md (附录 A)");
 
-        Assert.True(hasSerilogConfig,
-            $"❌ ADR-340.2 违规: PlatformBootstrapper 必须包含 Serilog 配置代码。\n\n" +
+        hasSerilogConfig.Should().BeTrue($"❌ ADR-340.2 违规: PlatformBootstrapper 必须包含 Serilog 配置代码。\n\n" +
             $"当前状态: 未发现 Log.Logger 或 LoggerConfiguration\n\n" +
             $"修复建议:\n" +
             $"1. 在 PlatformBootstrapper.Configure() 中创建 LoggerConfiguration\n" +
@@ -102,8 +98,7 @@ public sealed class ADR_0340_Architecture_Tests
         var hasOpenTelemetryConfig = content.Contains("AddOpenTelemetry");
         var hasTracingAndMetrics = content.Contains("WithTracing") && content.Contains("WithMetrics");
 
-        Assert.True(hasOpenTelemetryConfig,
-            $"❌ ADR-340.2 违规: PlatformBootstrapper 必须包含 OpenTelemetry 配置代码。\n\n" +
+        hasOpenTelemetryConfig.Should().BeTrue($"❌ ADR-340.2 违规: PlatformBootstrapper 必须包含 OpenTelemetry 配置代码。\n\n" +
             $"当前状态: 未发现 AddOpenTelemetry 调用\n\n" +
             $"修复建议:\n" +
             $"1. 在 PlatformBootstrapper.Configure() 中调用 services.AddOpenTelemetry()\n" +
@@ -111,8 +106,7 @@ public sealed class ADR_0340_Architecture_Tests
             $"执行级别: L1（文本匹配）- 此规则仅验证代码存在，不验证配置正确性\n\n" +
             $"参考: docs/guides/structured-logging-monitoring-standard.md (二、OpenTelemetry 追踪和指标配置)");
 
-        Assert.True(hasTracingAndMetrics,
-            $"❌ ADR-340.2 违规: OpenTelemetry 必须同时配置 Tracing 和 Metrics。\n\n" +
+        hasTracingAndMetrics.Should().BeTrue($"❌ ADR-340.2 违规: OpenTelemetry 必须同时配置 Tracing 和 Metrics。\n\n" +
             $"当前状态: 缺少 WithTracing 或 WithMetrics 配置\n\n" +
             $"修复建议:\n" +
             $"1. 确保同时配置 .WithTracing() 和 .WithMetrics()\n" +
@@ -133,7 +127,7 @@ public sealed class ADR_0340_Architecture_Tests
 
         if (!modulesAssemblies.Any())
         {
-            Assert.Fail("❌ 未加载任何模块程序集。请先运行 `dotnet build` 构建所有模块。");
+            true.Should().BeFalse("❌ 未加载任何模块程序集。请先运行 `dotnet build` 构建所有模块。");
         }
 
         var result = Types.InAssemblies(modulesAssemblies)
@@ -141,8 +135,7 @@ public sealed class ADR_0340_Architecture_Tests
             .HaveDependencyOn("Serilog")
             .GetResult();
 
-        Assert.True(result.IsSuccessful,
-            $"❌ ADR-340.5 违规: Modules 层禁止直接引用 Serilog。\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-340.5 违规: Modules 层禁止直接引用 Serilog。\n\n" +
             $"违规类型:\n" +
             string.Join("\n", result.FailingTypeNames?.Select(t => $"  - {t}") ?? Array.Empty<string>()) + "\n\n" +
             $"修复建议:\n" +
@@ -165,7 +158,7 @@ public sealed class ADR_0340_Architecture_Tests
 
         if (!modulesAssemblies.Any())
         {
-            Assert.Fail("❌ 未加载任何模块程序集。请先运行 `dotnet build` 构建所有模块。");
+            true.Should().BeFalse("❌ 未加载任何模块程序集。请先运行 `dotnet build` 构建所有模块。");
         }
 
         var result = Types.InAssemblies(modulesAssemblies)
@@ -173,8 +166,7 @@ public sealed class ADR_0340_Architecture_Tests
             .HaveDependencyOn("OpenTelemetry")
             .GetResult();
 
-        Assert.True(result.IsSuccessful,
-            $"❌ ADR-340.5 违规: Modules 层禁止直接引用 OpenTelemetry（配置类）。\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-340.5 违规: Modules 层禁止直接引用 OpenTelemetry（配置类）。\n\n" +
             $"违规类型:\n" +
             string.Join("\n", result.FailingTypeNames?.Select(t => $"  - {t}") ?? Array.Empty<string>()) + "\n\n" +
             $"修复建议:\n" +
@@ -197,7 +189,7 @@ public sealed class ADR_0340_Architecture_Tests
         
         if (!File.Exists(applicationDll))
         {
-            Assert.Fail($"❌ 未找到 Application.dll。请先运行 `dotnet build` 构建 Application 项目。路径: {applicationDll}");
+            true.Should().BeFalse($"❌ 未找到 Application.dll。请先运行 `dotnet build` 构建 Application 项目。路径: {applicationDll}");
         }
 
         var applicationAssembly = Assembly.LoadFrom(applicationDll);
@@ -207,8 +199,7 @@ public sealed class ADR_0340_Architecture_Tests
             .HaveDependencyOn("Serilog")
             .GetResult();
 
-        Assert.True(result.IsSuccessful,
-            $"❌ ADR-340.5 违规: Application 层禁止直接引用 Serilog。\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-340.5 违规: Application 层禁止直接引用 Serilog。\n\n" +
             $"违规类型:\n" +
             string.Join("\n", result.FailingTypeNames?.Select(t => $"  - {t}") ?? Array.Empty<string>()) + "\n\n" +
             $"修复建议:\n" +
@@ -229,7 +220,7 @@ public sealed class ADR_0340_Architecture_Tests
         
         if (!File.Exists(applicationDll))
         {
-            Assert.Fail($"❌ 未找到 Application.dll。请先运行 `dotnet build` 构建 Application 项目。路径: {applicationDll}");
+            true.Should().BeFalse($"❌ 未找到 Application.dll。请先运行 `dotnet build` 构建 Application 项目。路径: {applicationDll}");
         }
 
         var applicationAssembly = Assembly.LoadFrom(applicationDll);
@@ -239,8 +230,7 @@ public sealed class ADR_0340_Architecture_Tests
             .HaveDependencyOn("OpenTelemetry")
             .GetResult();
 
-        Assert.True(result.IsSuccessful,
-            $"❌ ADR-340.5 违规: Application 层禁止直接引用 OpenTelemetry 配置包。\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-340.5 违规: Application 层禁止直接引用 OpenTelemetry 配置包。\n\n" +
             $"违规类型:\n" +
             string.Join("\n", result.FailingTypeNames?.Select(t => $"  - {t}") ?? Array.Empty<string>()) + "\n\n" +
             $"修复建议:\n" +

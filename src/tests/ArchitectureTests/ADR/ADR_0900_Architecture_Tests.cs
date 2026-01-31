@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -41,7 +41,7 @@ public sealed class ADR_0900_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
 
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
-        Assert.True(Directory.Exists(adrDirectory), $"未找到 ADR 文档目录：{adrDirectory}");
+        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
         var promptsDirectory = Path.Combine(repoRoot, AdrPromptsPath);
@@ -111,7 +111,7 @@ public sealed class ADR_0900_Architecture_Tests
             errors.Add("");
             errors.Add("参考：docs/adr/governance/ADR-0900-adr-process.md");
 
-            Assert.Fail(string.Join("\n", errors));
+            true.Should().BeFalse(string.Join("\n", errors));
         }
     }
 

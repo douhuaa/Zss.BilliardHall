@@ -1,4 +1,5 @@
 ﻿using NetArchTest.Rules;
+using FluentAssertions;
 using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -46,8 +47,7 @@ public sealed class ADR_0005_Architecture_Tests
             var isQueryHandler = handler.Name.Contains("Query");
             var isEventHandler = handler.Name.Contains("Event");
 
-            Assert.True(isCommandHandler || isQueryHandler || isEventHandler,
-            $"❌ ADR-0005.1 违规: Handler 命名不清晰\n\n" +
+            (isCommandHandler || isQueryHandler || isEventHandler).Should().BeTrue($"❌ ADR-0005.1 违规: Handler 命名不清晰\n\n" +
             $"违规类型: {handler.FullName}\n\n" +
             $"问题分析:\n" +
             $"Handler 命名未明确表达业务意图（Command/Query/Event）\n\n" +
@@ -94,7 +94,7 @@ public sealed class ADR_0005_Architecture_Tests
 
                 if (constructorParams.Count > 5)
                 {
-                    Assert.Fail($"❌ ADR-0005.2 违规: Endpoint/Controller 包含过多依赖\n\n" +
+                    true.Should().BeFalse($"❌ ADR-0005.2 违规: Endpoint/Controller 包含过多依赖\n\n" +
                                 $"违规类型: {endpoint.FullName}\n" +
                                 $"构造函数依赖数量: {constructorParams.Count} 个（超过建议的 5 个）\n\n" +
                                 $"问题分析:\n" +
@@ -126,8 +126,7 @@ public sealed class ADR_0005_Architecture_Tests
             .HaveDependencyOnAny(forbiddenDeps)
             .GetResult();
 
-        Assert.True(result.IsSuccessful,
-        $"❌ ADR-0005.3 违规: Handler 依赖 ASP.NET Core 类型\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-0005.3 违规: Handler 依赖 ASP.NET Core 类型\n\n" +
         $"模块: {moduleAssembly.GetName().Name}\n" +
         $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}\n\n" +
         $"问题分析:\n" +
@@ -156,8 +155,7 @@ public sealed class ADR_0005_Architecture_Tests
                 .Where(t => t?.Namespace != null && forbiddenNamespaces.Any(ns => t.Namespace.StartsWith(ns)))
                 .ToList();
 
-            Assert.True(ctorDeps.Count == 0,
-            $"❌ ADR-0005.3 违规: Handler 构造函数依赖 ASP.NET 类型\n\n" +
+            (ctorDeps.Count == 0).Should().BeTrue($"❌ ADR-0005.3 违规: Handler 构造函数依赖 ASP.NET 类型\n\n" +
             $"违规 Handler: {handler.FullName}\n" +
             $"依赖类型: {string.Join(", ", ctorDeps.Select(t => t.FullName))}\n\n" +
             $"问题分析:\n" +
@@ -188,8 +186,7 @@ public sealed class ADR_0005_Architecture_Tests
                 .Where(f => !f.IsInitOnly) // 排除 readonly 字段
                 .ToList();
 
-            Assert.True(fields.Count == 0,
-            $"❌ ADR-0005.4 违规: Handler 包含可变字段\n\n" +
+            (fields.Count == 0).Should().BeTrue($"❌ ADR-0005.4 违规: Handler 包含可变字段\n\n" +
             $"违规 Handler: {handler.FullName}\n" +
             $"可变字段: {string.Join(", ", fields.Select(f => f.Name))}\n\n" +
             $"问题分析:\n" +
@@ -241,7 +238,7 @@ public sealed class ADR_0005_Architecture_Tests
 
                     if (paramModule != null && paramModule != currentModule)
                     {
-                        Assert.Fail($"❌ ADR-0005.5 违规: Handler 注入了其他模块的类型\n\n" +
+                        true.Should().BeFalse($"❌ ADR-0005.5 违规: Handler 注入了其他模块的类型\n\n" +
                                     $"违规 Handler: {handler.FullName}\n" +
                                     $"当前模块: {currentModule}\n" +
                                     $"依赖模块: {paramModule}\n" +
@@ -282,7 +279,7 @@ public sealed class ADR_0005_Architecture_Tests
             {
                 if (!method.Name.EndsWith("Async"))
                 {
-                    Assert.Fail($"❌ ADR-0005.6 违规: 异步方法命名不符合约定\n\n" +
+                    true.Should().BeFalse($"❌ ADR-0005.6 违规: 异步方法命名不符合约定\n\n" +
                                 $"违规方法: {type.FullName}.{method.Name}\n" +
                                 $"返回类型: {method.ReturnType.Name}\n\n" +
                                 $"问题分析:\n" +
@@ -333,7 +330,7 @@ public sealed class ADR_0005_Architecture_Tests
             }
         }
 
-        Assert.True(true, "领域实体共享检查完成");
+        true.Should().BeTrue("领域实体共享检查完成");
     }
 
     [Theory(DisplayName = "ADR-0005.8: Query Handler 可以返回 Contracts")]
@@ -350,7 +347,7 @@ public sealed class ADR_0005_Architecture_Tests
 
         // 这是一个"正面"测试，确保我们没有过度限制
         // Query Handler 允许使用和返回 Contracts
-        Assert.True(true, "Query Handlers 允许使用 Contracts - 这是预期行为");
+        true.Should().BeTrue("Query Handlers 允许使用 Contracts - 这是预期行为");
     }
 
     #endregion
@@ -375,7 +372,7 @@ public sealed class ADR_0005_Architecture_Tests
             // Handler 不应同时是 Command 和 Query
             if (isCommandHandler && isQueryHandler)
             {
-                Assert.Fail($"❌ ADR-0005.9 违规: Handler 同时包含 Command 和 Query 语义\n\n" +
+                true.Should().BeFalse($"❌ ADR-0005.9 违规: Handler 同时包含 Command 和 Query 语义\n\n" +
                             $"违规 Handler: {handler.FullName}\n\n" +
                             $"问题分析:\n" +
                             $"Handler 命名同时包含 Command 和 Query，违反 CQRS 原则\n\n" +
@@ -452,7 +449,7 @@ public sealed class ADR_0005_Architecture_Tests
             }
         }
 
-        Assert.True(true, "Command Handler 返回类型检查完成");
+        true.Should().BeTrue("Command Handler 返回类型检查完成");
     }
 
     #endregion
@@ -490,7 +487,7 @@ public sealed class ADR_0005_Architecture_Tests
             }
         }
 
-        Assert.True(true, "Handler 异常使用检查完成");
+        true.Should().BeTrue("Handler 异常使用检查完成");
     }
 
     #endregion
@@ -511,7 +508,7 @@ public sealed class ADR_0005_Architecture_Tests
             .GetTypes()
             .ToList();
 
-        Assert.Empty(platformHandlers);
+        platformHandlers.Should().BeEmpty();
 
         // Application 不应包含业务 Handler（可能有基础 Handler）
         var applicationHandlers = Types
@@ -531,7 +528,7 @@ public sealed class ADR_0005_Architecture_Tests
             .Where(h => h.Namespace?.Contains("Command") == true || h.Namespace?.Contains("Query") == true)
             .ToList();
 
-        Assert.Empty(businessHandlers);
+        businessHandlers.Should().BeEmpty();
     }
 
     #endregion

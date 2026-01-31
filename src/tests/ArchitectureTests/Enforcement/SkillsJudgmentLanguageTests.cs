@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
@@ -70,7 +70,7 @@ public sealed class SkillsJudgmentLanguageTests
 
         if (violations.Any())
         {
-            Assert.Fail(string.Join("\n", new[]
+            true.Should().BeFalse(string.Join("\n", new[]
             {
                 "❌ Enforcement 违规：以下 Skills 输出了判断性结论",
                 "",

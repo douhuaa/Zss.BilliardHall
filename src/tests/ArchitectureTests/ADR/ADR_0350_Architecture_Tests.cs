@@ -1,4 +1,5 @@
 using NetArchTest.Rules;
+using FluentAssertions;
 using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -27,9 +28,8 @@ public sealed class ADR_0350_Architecture_Tests
             foreach (var type in loggingTypes)
             {
                 var ns = type.Namespace ?? "";
-                Assert.True(
-                    ns.StartsWith("Zss.BilliardHall"),
-                    $"【ADR-350.1】日志类型 {type.FullName} 必须在 Zss.BilliardHall 命名空间下");
+                
+                    ns.StartsWith("Zss.BilliardHall").Should().BeTrue($"【ADR-350.1】日志类型 {type.FullName} 必须在 Zss.BilliardHall 命名空间下");
             }
         }
     }
@@ -48,11 +48,11 @@ public sealed class ADR_0350_Architecture_Tests
             var hasLoggingRelated = AppDomain.CurrentDomain.GetAssemblies()
                 .Any(a => a.GetName().Name?.Contains("Logging") == true);
             
-            Assert.True(true, "日志框架引用通过项目文件和 Directory.Packages.props 验证");
+            true.Should().BeTrue("日志框架引用通过项目文件和 Directory.Packages.props 验证");
         }
         else
         {
-            Assert.NotNull(loggingAssembly);
+            loggingAssembly.Should().NotBeNull();
         }
     }
 
@@ -75,8 +75,7 @@ public sealed class ADR_0350_Architecture_Tests
 
             // 这些类型应该被标记为不可序列化或有特殊处理
             // 这里做基本验证：不应该有太多公共的敏感类型
-            Assert.True(sensitiveTypes.Count() < 50, 
-                $"【ADR-350.3】发现过多公共敏感类型（{sensitiveTypes.Count()}），需人工审查");
+            (sensitiveTypes.Count() < 50).Should().BeTrue($"【ADR-350.3】发现过多公共敏感类型（{sensitiveTypes.Count()}），需人工审查");
         }
     }
 

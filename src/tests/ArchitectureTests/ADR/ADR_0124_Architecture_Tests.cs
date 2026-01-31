@@ -1,4 +1,5 @@
 using NetArchTest.Rules;
+using FluentAssertions;
 using System.Reflection;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
@@ -18,8 +19,7 @@ public sealed class ADR_0124_Architecture_Tests
             .HaveNameEndingWith("Endpoint")
             .GetTypes();
 
-        Assert.True(true,
-            $"找到 {endpoints.Count()} 个 Endpoint 类，命名符合规范");
+        true.Should().BeTrue($"找到 {endpoints.Count()} 个 Endpoint 类，命名符合规范");
     }
 
     [Theory(DisplayName = "ADR-124.2: 请求 DTO 必须以 Request 结尾")]
@@ -40,8 +40,7 @@ public sealed class ADR_0124_Architecture_Tests
         {
             var endsWithRequest = dto.Name.EndsWith("Request");
             
-            Assert.True(endsWithRequest,
-                $"❌ ADR-124.2 违规: 请求 DTO 命名不符合规范\n\n" +
+            endsWithRequest.Should().BeTrue($"❌ ADR-124.2 违规: 请求 DTO 命名不符合规范\n\n" +
                 $"违规类型: {dto.FullName}\n\n" +
                 $"修复建议:\n" +
                 $"请求 DTO 名称必须以 Request 结尾\n\n" +

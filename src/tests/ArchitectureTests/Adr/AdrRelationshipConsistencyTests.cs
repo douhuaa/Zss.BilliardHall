@@ -1,4 +1,4 @@
-using Xunit;
+using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
@@ -45,6 +45,7 @@ public sealed class AdrRelationshipConsistencyTests : IClassFixture<AdrTestFixtu
             adr => AdrRelationshipValidator.GetRelationshipTargets(adr, backwardRelation)
         );
 
-        Assert.Empty(violations);
+        violations.Should().BeEmpty(
+            because: $"{forwardRelation} 和 {backwardRelation} 关系必须双向一致");
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Xml;
+using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests;
@@ -160,7 +161,7 @@ public class ModuleAssemblyData : IEnumerable<object[]>
         Debug.WriteLine($"[ArchitectureTests] Loaded module assemblies count={ModuleAssemblies.Count}, names={string.Join(",", ModuleNames)}");
         if (ModuleAssemblies.Count == 0)
         {
-            Assert.Fail("❌ 未加载任何模块程序集，架构测试失效。请先运行 `dotnet build` 或检查模块输出路径/命名约定。");
+            true.Should().BeFalse("❌ 未加载任何模块程序集，架构测试失效。请先运行 `dotnet build` 或检查模块输出路径/命名约定。");
         }
         foreach (var asm in ModuleAssemblies)
         {
@@ -287,7 +288,7 @@ public class HostAssemblyData : IEnumerable<object[]>
         Debug.WriteLine($"[ArchitectureTests] Loaded host assemblies count={HostAssemblies.Count}");
         if (HostAssemblies.Count == 0)
         {
-            Assert.Fail("❌ 未加载任何 Host 程序集，架构测试失效。请先运行 `dotnet build` 或检查 Host 输出路径/命名约定。");
+            true.Should().BeFalse("❌ 未加载任何 Host 程序集，架构测试失效。请先运行 `dotnet build` 或检查 Host 输出路径/命名约定。");
         }
         foreach (var asm in HostAssemblies)
         {

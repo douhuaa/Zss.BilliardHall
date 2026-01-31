@@ -1,4 +1,4 @@
-using Xunit;
+using FluentAssertions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Governance;
 
@@ -25,13 +25,13 @@ public sealed class ADR_0008_Governance_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md");
         
-        Assert.True(File.Exists(adrFile), $"ADR-0008 文档不存在：{adrFile}");
+        File.Exists(adrFile).Should().BeTrue($"ADR-0008 文档不存在：{adrFile}");
         
         var content = File.ReadAllText(adrFile);
         
         // 验证宪法级章节存在（不验证具体内容）
-        Assert.Contains("文档分级", content);
-        Assert.Contains("裁决", content);
+        content.Should().Contain("文档分级");
+        content.Should().Contain("裁决");
     }
 
     [Fact(DisplayName = "ADR-0008.G2: 裁决权唯一归属原则已定义")]
@@ -42,7 +42,7 @@ public sealed class ADR_0008_Governance_Tests
         var content = File.ReadAllText(adrFile);
         
         // 验证核心原则：只有 ADR 具备裁决力
-        Assert.Contains("只有 ADR 具备裁决力", content);
+        content.Should().Contain("只有 ADR 具备裁决力");
     }
 
     [Fact(DisplayName = "ADR-0008.G3: 文档分级体系已定义")]
@@ -67,7 +67,7 @@ public sealed class ADR_0008_Governance_Tests
         var content = File.ReadAllText(adrFile);
         
         // 验证冲突裁决优先级规则
-        Assert.Contains("ADR 正文", content);
+        content.Should().Contain("ADR 正文");
         Assert.Matches(@"ADR.*>.*Instructions", content);
     }
 
@@ -79,7 +79,7 @@ public sealed class ADR_0008_Governance_Tests
         var content = File.ReadAllText(adrFile);
         
         // 验证防引用扩权规则存在
-        Assert.Contains("任何非 ADR 文档，即使全文逐字引用 ADR，也不具备裁决力", content);
+        content.Should().Contain("任何非 ADR 文档，即使全文逐字引用 ADR，也不具备裁决力");
     }
 
     [Fact(DisplayName = "ADR-0008.G6: Copilot Prompts 文件存在且声明无裁决力")]
@@ -88,14 +88,14 @@ public sealed class ADR_0008_Governance_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var promptsFile = Path.Combine(repoRoot, "docs/copilot/adr-0008.prompts.md");
         
-        Assert.True(File.Exists(promptsFile), $"ADR-0008 Prompts 文件不存在：{promptsFile}");
+        File.Exists(promptsFile).Should().BeTrue($"ADR-0008 Prompts 文件不存在：{promptsFile}");
         
         var content = File.ReadAllText(promptsFile);
         
         // 验证 Prompts 文件包含权威声明
-        Assert.Contains("权威声明", content);
-        Assert.Contains("不具备裁决权", content);
-        Assert.Contains("ADR-0008", content);
+        content.Should().Contain("权威声明");
+        content.Should().Contain("不具备裁决权");
+        content.Should().Contain("ADR-0008");
     }
 
     private static string? FindRepositoryRoot()
