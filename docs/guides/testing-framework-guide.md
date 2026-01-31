@@ -3,8 +3,8 @@
 > ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
 > 所有架构决策以相关 ADR 正文为准。详见 [ADR 目录](adr/README.md)。
 
-**版本**：1.1  
-**最后更新**：2026-01-27  
+**版本**：1.2  
+**最后更新**：2026-01-30  
 **状态**：Active
 
 ---
@@ -621,6 +621,324 @@ graph TB
 
 ---
 
+## 🛠️ 测试最佳实践与共享工具
+
+### 共享测试工具
+
+为了提高测试代码的可维护性和一致性，项目提供了以下共享工具类（位于 `src/tests/ArchitectureTests/Shared/`）：
+
+#### 1. TestEnvironment - 环境管理
+
+统一管理测试环境和路径：
+
+```csharp
+// 获取仓库根目录（自动查找 .git）
+var repoRoot = TestEnvironment.RepositoryRoot;
+
+// 获取 ADR 文档目录
+var adrPath = Path.Combine(repoRoot, "docs", "adr");
+```
+
+**优势**：
+- ✅ 消除重复的路径查找逻辑
+- ✅ 自动适配不同运行环境
+- ✅ 线程安全的单例模式
+
+#### 2. TestConstants - 常量管理
+
+集中管理测试中的魔法字符串：
+
+```csharp
+// 使用集中管理的常量
+var moduleNamespace = TestConstants.ModulesNamespacePrefix; // "Zss.BilliardHall.Modules"
+var adrPattern = TestConstants.AdrTestClassNamePattern;     // @"ADR_(\d{4})_Architecture_Tests"
+```
+
+**优势**：
+- ✅ 消除魔法字符串
+- ✅ 统一维护，修改一处生效全局
+- ✅ 类型安全
+
+#### 3. AdrTestFixture - ADR 文档加载
+
+统一加载和缓存 ADR 文档：
+
+```csharp
+public class MyAdrTests : IClassFixture<AdrTestFixture>
+{
+    private readonly AdrTestFixture _fixture;
+    
+    public MyAdrTests(AdrTestFixture fixture)
+    {
+        _fixture = fixture;
+    }
+    
+    [Fact]
+    public void Test_ADR_Content()
+    {
+        // 使用缓存的 ADR 文档
+        var adr = _fixture.GetAdr("ADR-0001");
+        // ...
+    }
+}
+```
+
+**优势**：
+- ✅ 避免重复加载文件
+- ✅ 提高测试性能（缓存机制）
+- ✅ 统一的 ADR 访问接口
+
+#### 4. AdrRelationshipValidator - 关系验证
+
+通用的 ADR 关系验证逻辑：
+
+```csharp
+// 验证双向关系一致性
+var violations = AdrRelationshipValidator.ValidateBidirectionalRelationship(
+    adrs,
+    "DependsOn",
+    "DependedBy"
+);
+
+violations.Should().BeEmpty();
+```
+
+**优势**：
+- ✅ 消除重复的验证逻辑
+- ✅ 参数化测试支持
+- ✅ 统一的错误消息格式
+
+#### 5. AdrMarkdownBuilder - 测试数据构建
+
+流畅的 API 构建测试数据：
+
+```csharp
+// 使用构建器模式创建测试 ADR
+var markdown = AdrMarkdownBuilder
+    .Create("ADR-0001", "测试标题")
+    .WithStatus("Final")
+    .DependsOn("ADR-0002", "ADR-0003")
+    .WithVersion("2.0")
+    .Build();
+```
+
+**优势**：
+- ✅ 可读性高，代码即文档
+- ✅ 避免硬编码 Markdown 字符串
+- ✅ 灵活组合不同场景
+
+### 断言库选择
+
+项目使用 **FluentAssertions** 提供更具表达力的断言：
+
+#### 基本断言对比
+
+```csharp
+// ❌ 传统 xUnit Assert
+Assert.True(result.IsSuccessful, "操作应该成功");
+Assert.Equal(expected, actual);
+Assert.NotNull(value);
+
+// ✅ FluentAssertions（推荐）
+result.IsSuccessful.Should().BeTrue(because: "操作应该成功");
+actual.Should().Be(expected);
+value.Should().NotBeNull();
+```
+
+#### 集合断言
+
+```csharp
+// ❌ 传统方式
+Assert.Empty(violations);
+Assert.Contains(expectedItem, collection);
+Assert.Equal(3, collection.Count);
+
+// ✅ FluentAssertions（推荐）
+violations.Should().BeEmpty(because: "不应该有任何违规");
+collection.Should().Contain(expectedItem);
+collection.Should().HaveCount(3);
+```
+
+#### 架构测试断言
+
+```csharp
+// NetArchTest 结果验证
+var result = Types
+    .InAssembly(assembly)
+    .ShouldNot()
+    .HaveDependencyOn("OtherModule")
+    .GetResult();
+
+// ✅ 使用 FluentAssertions
+result.IsSuccessful.Should().BeTrue(
+    because: $"❌ ADR-0001.1 违规: 模块不应相互依赖\n" +
+             $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? [])}\n" +
+             $"参考: docs/adr/constitutional/ADR-0001.md"
+);
+```
+
+#### FluentAssertions 优势
+
+1. **更好的可读性**
+   - 自然语言风格：`value.Should().Be(expected)`
+   - 链式调用：`value.Should().NotBeNull().And.BeGreaterThan(0)`
+
+2. **更详细的失败消息**
+   - 自动显示期望值和实际值
+   - 支持自定义原因：`because: "业务规则要求..."`
+
+3. **丰富的断言方法**
+   - 集合：`BeEmpty()`, `Contain()`, `HaveCount()`
+   - 字符串：`StartWith()`, `Contain()`, `MatchRegex()`
+   - 异常：`Should().Throw<Exception>().WithMessage()`
+
+### 参数化测试最佳实践
+
+#### 使用 Theory + InlineData
+
+```csharp
+// ✅ 避免重复的测试方法
+[Theory]
+[InlineData("DependsOn", "DependedBy")]
+[InlineData("Supersedes", "SupersededBy")]
+[InlineData("Implements", "ImplementedBy")]
+public void Bidirectional_Relationships_Must_Be_Consistent(
+    string forwardRelation, 
+    string backwardRelation)
+{
+    var violations = AdrRelationshipValidator.ValidateBidirectionalRelationship(
+        _fixture.AllAdrs,
+        forwardRelation,
+        backwardRelation
+    );
+    
+    violations.Should().BeEmpty(
+        because: $"{forwardRelation}/{backwardRelation} 关系必须双向一致"
+    );
+}
+```
+
+**对比：重复方法（不推荐）**
+
+```csharp
+// ❌ 重复代码，难以维护
+[Fact]
+public void DependsOn_Must_Be_Bidirectional() { /* 40 行 */ }
+
+[Fact]
+public void Supersedes_Must_Be_Bidirectional() { /* 40 行 */ }
+
+[Fact]
+public void Implements_Must_Be_Bidirectional() { /* 40 行 */ }
+```
+
+#### 使用 MemberData / ClassData
+
+```csharp
+// 复杂测试数据
+public static IEnumerable<object[]> GetModuleProjectFiles()
+{
+    var root = TestEnvironment.RepositoryRoot;
+    var modulesDir = Path.Combine(root, "src", "Modules");
+    
+    return Directory.GetFiles(modulesDir, "*.csproj", SearchOption.AllDirectories)
+        .Select(path => new object[] { path });
+}
+
+[Theory]
+[MemberData(nameof(GetModuleProjectFiles))]
+public void Module_Should_Not_Reference_Other_Modules(string csprojPath)
+{
+    // 测试逻辑...
+}
+```
+
+### 测试组织原则
+
+#### 1. 测试结构镜像源代码
+
+```
+src/Modules/Orders/
+  ├── UseCases/
+  │   └── CreateOrder/
+  │       ├── CreateOrderCommand.cs
+  │       └── CreateOrderHandler.cs
+  
+tests/OrdersTests/
+  ├── UseCases/
+  │   └── CreateOrder/
+  │       ├── CreateOrderCommandTests.cs
+  │       └── CreateOrderHandlerTests.cs
+```
+
+#### 2. 使用 Arrange-Act-Assert 模式
+
+```csharp
+[Fact]
+public void Handler_Should_Create_Order_With_Valid_Data()
+{
+    // Arrange
+    var command = new CreateOrderCommand { CustomerId = Guid.NewGuid() };
+    var handler = new CreateOrderHandler(mockRepository.Object);
+    
+    // Act
+    var result = await handler.Handle(command, CancellationToken.None);
+    
+    // Assert
+    result.Should().NotBeNull();
+    result.OrderId.Should().NotBeEmpty();
+}
+```
+
+#### 3. 一个测试一个断言焦点
+
+```csharp
+// ✅ 单一职责
+[Fact]
+public void Should_Create_Order() { /* 测试创建 */ }
+
+[Fact]
+public void Should_Validate_Customer_Exists() { /* 测试验证 */ }
+
+[Fact]
+public void Should_Publish_OrderCreated_Event() { /* 测试事件 */ }
+
+// ❌ 测试过多行为
+[Fact]
+public void Should_Create_Order_And_Validate_And_Publish() { /* 太复杂 */ }
+```
+
+### 迁移指南：从 xUnit Assert 到 FluentAssertions
+
+如需将现有测试迁移到 FluentAssertions，参考以下映射表：
+
+| xUnit Assert | FluentAssertions | 说明 |
+|-------------|-----------------|------|
+| `Assert.True(condition)` | `condition.Should().BeTrue()` | 布尔断言 |
+| `Assert.False(condition)` | `condition.Should().BeFalse()` | 布尔断言 |
+| `Assert.Equal(expected, actual)` | `actual.Should().Be(expected)` | 相等断言 |
+| `Assert.NotEqual(expected, actual)` | `actual.Should().NotBe(expected)` | 不等断言 |
+| `Assert.Null(value)` | `value.Should().BeNull()` | 空值断言 |
+| `Assert.NotNull(value)` | `value.Should().NotBeNull()` | 非空断言 |
+| `Assert.Empty(collection)` | `collection.Should().BeEmpty()` | 空集合 |
+| `Assert.Contains(item, collection)` | `collection.Should().Contain(item)` | 包含元素 |
+| `Assert.Throws<T>(() => ...)` | `action.Should().Throw<T>()` | 异常断言 |
+
+**迁移步骤**：
+
+1. 添加 using 语句：`using FluentAssertions;`
+2. 逐步替换断言，优先替换新编写的测试
+3. 运行测试确保行为一致
+4. 对于复杂的多行断言，可保留 xUnit Assert
+
+**注意事项**：
+
+- 不需要一次性迁移所有测试
+- 两种风格可以共存
+- 重点迁移新编写的测试和关键测试
+
+---
+
 ## 📚 相关资源
 
 ### 内部文档
@@ -918,9 +1236,11 @@ Path.Combine(AppContext.BaseDirectory, "data", "test.json")  # ✅
 
 ## 📜 版本历史
 
-| 版本  | 日期         | 变更说明          |
-|-----|------------|---------------|
-| 1.0 | 2026-01-22 | 初始版本，整合所有测试文档 |
+| 版本  | 日期         | 变更说明                                      |
+|-----|------------|-------------------------------------------|
+| 1.2 | 2026-01-30 | 新增测试最佳实践章节，包含共享工具使用指南和 FluentAssertions 迁移指南 |
+| 1.1 | 2026-01-27 | 添加 ADR-测试映射和测试架构说明                        |
+| 1.0 | 2026-01-22 | 初始版本，整合所有测试文档                             |
 
 ---
 

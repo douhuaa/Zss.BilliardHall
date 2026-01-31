@@ -113,10 +113,20 @@ var markdown = AdrMarkdownBuilder
 - ✅ 修复 TestEnvironment 可空性警告
 - ⚠️ 添加测试数据清理逻辑（可选，暂未实施）
 
-### P3 优先级
-- 统一使用 FluentAssertions
-- 添加性能监控和基线
-- 更新测试最佳实践文档
+### P3 优先级（🚧 进行中）
+- ✅ **更新测试最佳实践文档**（2026-01-30 完成）
+  - 添加共享工具使用指南
+  - 添加 FluentAssertions 使用示例和迁移指南
+  - 添加参数化测试最佳实践
+  - 更新 testing-framework-guide.md v1.2
+- ⏳ 统一使用 FluentAssertions
+  - 已提供迁移指南和示例
+  - 建议逐步迁移，优先新测试
+  - 两种断言风格可共存
+- ⏳ 添加性能监控和基线
+  - 使用 BenchmarkDotNet 或自定义性能收集器
+  - 设置性能基线
+  - CI 中检测性能回归
 
 详见 [test-optimization-report.md](./test-optimization-report.md) 第五章。
 
@@ -174,8 +184,43 @@ var markdown = AdrMarkdownBuilder
 
 ---
 
+## 📝 P3 后续工作进展（2026-01-30）
+
+### 1. 测试最佳实践文档更新
+- **testing-framework-guide.md v1.2**：新增"测试最佳实践与共享工具"章节
+  - 共享工具使用指南（5 个工具类详细说明）
+  - FluentAssertions 断言库使用指南
+  - xUnit Assert 到 FluentAssertions 迁移映射表
+  - 参数化测试最佳实践
+  - 测试组织原则和 AAA 模式
+  
+### 2. FluentAssertions 推广策略
+- 提供完整的迁移指南和对比示例
+- 建议渐进式迁移，优先新测试
+- xUnit Assert 和 FluentAssertions 可以共存
+- 重点体现 FluentAssertions 的三大优势：
+  - 更好的可读性（自然语言风格）
+  - 更详细的失败消息（自动显示期望值和实际值）
+  - 丰富的断言方法（集合、字符串、异常等）
+
+### 3. 共享工具推广
+- 在文档中详细说明每个共享工具的用途和优势
+- 提供实际代码示例，降低使用门槛
+- 强调共享工具如何消除代码重复和提高可维护性
+
+### 成果
+```
+✅ 文档更新：testing-framework-guide.md v1.1 → v1.2
+✅ 新增内容：~300 行测试最佳实践指导
+✅ 迁移指南：完整的 Assert → FluentAssertions 映射表
+✅ 实践示例：共享工具 5 个 + FluentAssertions 10+ 个
+```
+
+---
+
 **创建日期**：2026-01-30  
 **作者**：GitHub Copilot  
 **审核者**：@douhuaa  
 **P2 后续工作完成**：2026-01-30  
-**状态**：✅ 主要优化和 P2 任务已完成
+**P3 后续工作进展**：2026-01-30（文档更新完成）  
+**状态**：✅ 主要优化、P2 任务、P3 文档更新已完成
