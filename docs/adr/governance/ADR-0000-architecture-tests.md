@@ -126,6 +126,62 @@ superseded_by: null
 
 ## 测试组织与自治原则
 
+### ADR-0000.Z：测试类与规则一一对应，细化到独立方法
+
+**核心原则**：
+- **一对一映射**：每个 ADR 必须有且仅有一个对应的测试类
+- **规则独立**：每条架构规则必须细化为独立的测试方法
+- **风格一致**：所有测试遵循统一的命名和组织模式
+
+**优势**：
+- **隔离性强**：每条规则单独测试，保证测试覆盖面和准确性，规避变动互相影响
+- **易于追踪和维护**：变更某一规则时，仅需维护相关类和方法，减少全局性修改风险
+- **融合 ADR 文档链路**：测试与架构决策文档一一映射，方便自动化筛查和合规审查
+- **便于团队协作**：不同开发者可并行负责不同规则的测试类，降低冲突几率
+- **提升 CI/CD 效率**：测试失败精确定位到具体规则，缩短排查和修复时间
+
+**命名规范**：
+- **测试类**：`ADR_{编号}_Architecture_Tests`
+  - 示例：`ADR_0001_Architecture_Tests`、`ADR_0005_Architecture_Tests`
+- **测试方法**：使用 `DisplayName` 属性标注 `ADR-{编号}.{子编号}: {规则描述}`
+  - 示例：`[Fact(DisplayName = "ADR-0001.1: 模块不应相互引用")]`
+  - 示例：`[Theory(DisplayName = "ADR-0005.3: Handler 不应依赖 ASP.NET 类型")]`
+
+**组织结构**：
+- 使用 `#region` 分组相关规则，提高可读性
+- 每个测试方法必须包含：
+  - 清晰的错误消息，包含 ADR 编号（如 `❌ ADR-0001.1 违规：...`）
+  - 具体的违规类型或位置
+  - 详细的修复建议
+  - 相关文档引用（如 ADR 文档、Copilot Prompts）
+
+**强制执行**：
+- ADR-0000 测试自动验证一对一映射关系
+- 禁止跳过测试（Skip 属性）
+- 测试失败消息必须包含 ADR 编号
+
+**测试方法示例**：
+
+```csharp
+[Theory(DisplayName = "ADR-0001.1: 模块不应相互引用")]
+[ClassData(typeof(ModuleAssemblyData))]
+public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
+{
+    // 测试逻辑...
+    
+    Assert.True(result.IsSuccessful,
+        $"❌ ADR-0001.1 违规: 模块 {moduleName} 不应依赖模块 {other}。\n" +
+        $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
+        $"修复建议：\n" +
+        $"  1. 使用领域事件进行异步通信\n" +
+        $"  2. 使用数据契约进行只读查询\n" +
+        $"  3. 传递原始类型（Guid、string）而非领域对象\n" +
+        $"参考：docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md");
+}
+```
+
+### 其他组织原则
+
 - 所有架构测试目录、类、用例均以 `ADR-XXXX` 前缀命名
 - 测试失败消息格式：`ADR-XXXX 违规：{原因} 修复建议：{建议}`
 - 禁止架构测试跳过（需显式记录在ARCH-VIOLATIONS，季度审计）

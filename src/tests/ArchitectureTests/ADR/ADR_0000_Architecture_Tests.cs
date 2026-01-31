@@ -305,9 +305,89 @@ public sealed class ADR_0000_Architecture_Tests
         }
     }
 
+    /// <summary>
+    /// ADR-0000.Z: 测试方法应使用 DisplayName 包含 ADR 编号
+    /// 确保每个测试方法都能清晰地追溯到对应的 ADR 规则
+    /// </summary>
+    [Fact(DisplayName = "ADR-0000.Z: 测试方法 DisplayName 应包含 ADR 编号")]
+    public void Test_Methods_Should_Include_ADR_Number_In_DisplayName()
+    {
+        var testTypes = LoadArchitectureTestTypes();
+        var warnings = new List<string>();
+        var errors = new List<string>();
+
+        foreach (var testType in testTypes)
+        {
+            // 跳过 ADR-0000 自身和重定向类
+            if (testType.Name == "ADR_0000_Architecture_Tests" || testType.Name == "ADR_0008_Architecture_Tests")
+                continue;
+
+            // 提取 ADR 编号（支持 3 位或 4 位编号）
+            var adrNumberMatch = System.Text.RegularExpressions.Regex.Match(testType.Name, @"ADR_(\d{3,4})");
+            if (!adrNumberMatch.Success)
+            {
+                errors.Add($"❌ {testType.Name}: 无法从类名提取 ADR 编号");
+                continue;
+            }
+
+            var adrNumber = adrNumberMatch.Groups[1].Value;
+
+            // 检查测试方法的 DisplayName
+            var testMethods = testType
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => m.GetCustomAttributes(typeof(FactAttribute), false).Any() || 
+                           m.GetCustomAttributes(typeof(TheoryAttribute), false).Any())
+                .ToList();
+
+            foreach (var method in testMethods)
+            {
+                var factAttr = method.GetCustomAttributes(typeof(FactAttribute), false).FirstOrDefault() as FactAttribute;
+                var theoryAttr = method.GetCustomAttributes(typeof(TheoryAttribute), false).FirstOrDefault() as TheoryAttribute;
+                var displayName = factAttr?.DisplayName ?? theoryAttr?.DisplayName;
+
+                if (string.IsNullOrWhiteSpace(displayName))
+                {
+                    warnings.Add($"⚠️ {testType.Name}.{method.Name}: 缺少 DisplayName 属性");
+                }
+                else if (!displayName.Contains($"ADR-{adrNumber}") && !displayName.Contains($"ADR-0{adrNumber}"))
+                {
+                    // 只对宪法层和治理层（0000-0999）强制要求 ADR 编号
+                    var adrNum = int.Parse(adrNumber);
+                    if (adrNum < 1000)
+                    {
+                        warnings.Add($"⚠️ {testType.Name}.{method.Name}: DisplayName 建议包含 'ADR-{adrNumber}'");
+                    }
+                }
+            }
+        }
+
+        // 只对错误失败，警告仅输出
+        if (errors.Any())
+        {
+            var message = "❌ ADR-0000.Z 违规：以下测试类存在问题\n" +
+                         string.Join("\n", errors) +
+                         "\n\n修复建议：\n" +
+                         "1. 测试类名应遵循 ADR_{编号}_Architecture_Tests 格式\n" +
+                         "2. 编号可以是 3 位（如 910）或 4 位（如 0001）\n\n" +
+                         "参考：docs/adr/governance/ADR-0000-architecture-tests.md";
+            throw new Xunit.Sdk.XunitException(message);
+        }
+
+        // 输出警告信息供参考
+        if (warnings.Any())
+        {
+            System.Diagnostics.Debug.WriteLine("⚠️ ADR-0000.Z 建议：\n" + string.Join("\n", warnings) +
+                "\n\n建议：\n" +
+                "1. 所有测试方法应使用 [Fact(DisplayName = \"...\")] 或 [Theory(DisplayName = \"...\")]\n" +
+                "2. DisplayName 格式：'ADR-{编号}.{子编号}: {规则描述}'\n" +
+                "3. 示例：[Fact(DisplayName = \"ADR-0001.1: 模块不应相互引用\")]\n\n" +
+                "注意：这是建议性规则，不会阻断测试，但有助于提升可追溯性");
+        }
+    }
+
     private static string? ExtractAdrNumber(string typeName)
     {
-        var match = System.Text.RegularExpressions.Regex.Match(typeName, @"ADR_(\d{4})");
+        var match = System.Text.RegularExpressions.Regex.Match(typeName, @"ADR_(\d{3,4})");
         return match.Success ? match.Groups[1].Value : null;
     }
 }
