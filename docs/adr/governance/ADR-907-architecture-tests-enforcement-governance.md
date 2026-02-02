@@ -50,7 +50,9 @@ superseded_by: null
 |------|------|----------|
 | ArchitectureTests | 验证 ADR 架构约束的测试集合 | ArchitectureTests |
 | ADR 镜像 | 测试结构与 ADR 条目一一对应 | ADR Mirror |
-| RuleId | 与 ADR 条目对应的唯一规则编号（如 ADR-240.1） | RuleId |
+| RuleId | 与 ADR 条目对应的唯一规则编号，格式为 `ADR-XXX.<Rule>_<Clause>`（如 ADR-907.2_1） | RuleId |
+| Rule | 主要规则分类，对应测试类（如 ADR-907.1, ADR-907.2） | Rule |
+| Clause | 具体条款，对应测试方法（如 ADR-907.2_1, ADR-907.2_2） | Clause |
 | 最小断言 | 每个测试类必须包含的有效断言数量 | Minimum Assertions |
 | 有效断言 | 验证结构约束或 ADR 条目，不为空或形式化 | Effective Assertion |
 | CI Gate | 持续集成管道中自动执行架构测试 | CI Gate |
