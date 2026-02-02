@@ -3,9 +3,9 @@ adr: ADR-907
 title: "ArchitectureTests 执法治理体系"
 status: Final
 level: Governance
-version: "1.0"
+version: "2.0"
 deciders: "Architecture Board"
-date: 2026-01-27
+date: 2026-02-02
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -63,83 +63,175 @@ superseded_by: null
 
 ## Decision（裁决）
 
-### 1. ArchitectureTests 的法律地位
-
-1. ArchitectureTests 是 ADR 的**唯一自动化执法形式**
-2. 任何具备裁决力的 ADR：
-   - 要么已有 ArchitectureTests
-   - 要么明确声明为 _Non-Enforceable_
-3. 不存在“仅文档约束、不接受执行”的架构规则
-
-
----
-
-### 2. 命名与组织规范（原 ADR-903）
-
-1. ArchitectureTests **必须集中于独立测试项目**
-   - `<SolutionName>.Tests.Architecture`
-2. 测试目录必须按 ADR 编号分组
-   - `/ADR-XXXX/`
-3. 禁止跨 ADR 混合测试
-   - 单个测试类或文件仅允许覆盖一个 ADR
-4. 测试类命名必须显式绑定 ADR
-   - `ADR_<编号>_Architecture_Tests`
-5. 测试方法必须映射 ADR 子规则
-   - `ADR_<编号>_<子规则>_<行为描述>`
-6. 测试失败信息必须包含 ADR 编号与子规则
-7. ArchitectureTests 不得为空、占位或弱断言
-8. 不得 Skip、条件禁用测试（除非走破例机制）
+> 🔒 **统一铁律**：
+> 
+> ADR-907 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-907.<Rule>_<Clause>
+> ```
+> 
+> - **Rule**：主要规则编号（1-4）
+> - **Clause**：具体条款编号（1-n）
+> - 每个 Clause 对应一个可测试的架构约束
+> - 测试方法必须一一映射到 Clause
 
 ---
 
-### 3. 最小断言语义规范（原 ADR-904）
+### ADR-907.1：ArchitectureTests 的法律地位（Rule）
 
-1. 每个测试类 **至少包含 1 个有效断言**
-2. 每个测试方法 **只能映射一个 ADR 子规则**
-3. 所有断言失败信息必须可反向溯源到 ADR
-4. 明确禁止以下行为：
+#### ADR-907.1_1 唯一自动化执法形式
+- ArchitectureTests 是 ADR 的**唯一自动化执法形式**
+
+#### ADR-907.1_2 可执法性要求
+- 任何具备裁决力的 ADR 必须满足以下条件之一：
+  - 已有对应的 ArchitectureTests
+  - 明确声明为 _Non-Enforceable_
+
+#### ADR-907.1_3 禁止仅文档约束
+- 不存在"仅文档约束、不接受执行"的架构规则
+
+---
+
+### ADR-907.2：命名与组织规范（Rule，原 ADR-903）
+
+#### ADR-907.2_1 独立测试项目要求
+- ArchitectureTests **必须集中于独立测试项目**
+- 项目命名格式：`<SolutionName>.Tests.Architecture`
+
+#### ADR-907.2_2 ADR 编号目录分组
+- 测试目录必须按 ADR 编号分组
+- 目录格式：`/ADR-XXXX/`
+
+#### ADR-907.2_3 禁止跨 ADR 混合测试
+- 单个测试类或文件仅允许覆盖一个 ADR
+- 每个测试类专注于单一 ADR 的约束验证
+
+#### ADR-907.2_4 测试类命名规范
+- 测试类命名必须显式绑定 ADR
+- 命名格式：`ADR_<编号>_Architecture_Tests`
+
+#### ADR-907.2_5 测试方法命名规范
+- 测试方法必须映射 ADR 子规则
+- 命名格式：`ADR_<编号>_<子规则>_<行为描述>`
+
+#### ADR-907.2_6 失败信息溯源要求
+- 测试失败信息必须包含 ADR 编号与子规则
+- 支持从失败信息反向追溯到 ADR 条款
+
+#### ADR-907.2_7 禁止空弱断言
+- ArchitectureTests 不得为空、占位或弱断言
+- 每个测试必须包含有效的架构约束验证
+
+#### ADR-907.2_8 禁止跳过测试
+- 不得 Skip、条件禁用测试（除非走破例机制）
+- 所有测试必须正常执行或通过破例流程处理
+
+---
+
+### ADR-907.3：最小断言语义规范（Rule，原 ADR-904）
+
+#### ADR-907.3_1 最小断言数量要求
+- 每个测试类 **至少包含 1 个有效断言**
+- 验证至少一个架构约束
+
+#### ADR-907.3_2 单一子规则映射
+- 每个测试方法 **只能映射一个 ADR 子规则**
+- 保持测试的单一职责和清晰性
+
+#### ADR-907.3_3 失败信息可溯源性
+- 所有断言失败信息必须可反向溯源到 ADR
+- 包含 ADR 编号和具体条款引用
+
+#### ADR-907.3_4 禁止形式化断言
+- 明确禁止以下行为：
   - `Assert.True(true)` 等形式化断言
   - 仅验证测试可运行、不验证结构约束
 
 ---
 
-### 4. Analyzer / CI Gate 映射协议（原 ADR-906）
+### ADR-907.4：Analyzer / CI Gate 映射协议（Rule，原 ADR-906）
 
-1. 所有 ArchitectureTests 必须被 Analyzer 自动发现并注册
-2. 测试失败必须精确映射至 ADR 子规则（RuleId）
-3. 支持执行级别分类（依赖 ADR-905）：
-   - **L1**：失败即阻断 CI / 合并 / 部署
-   - **L2**：失败记录告警，进入人工 Code Review
-4. 破例机制必须自动记录：
-   - ADR 编号
-   - 测试类 / 方法
-   - 破例原因
-   - 到期时间与偿还计划
-5. Analyzer 必须具备以下检测能力：
-   - 空测试 / 弱断言
-   - 单测试覆盖多 ADR
-   - 非 Final ADR 生成测试
-6. ADR 生命周期变更必须同步：
-   - Superseded / Obsolete ADR 对应测试必须标记或移除
+#### ADR-907.4_1 自动发现注册要求
+- 所有 ArchitectureTests 必须被 Analyzer 自动发现并注册
+- 支持 CI/CD 管道的自动执行
+
+#### ADR-907.4_2 RuleId 精确映射
+- 测试失败必须精确映射至 ADR 子规则（RuleId）
+- 使用 `ADR-907.<Rule>_<Clause>` 格式标识
+
+#### ADR-907.4_3 执行级别分类支持
+- 支持执行级别分类（依赖 ADR-905）：
+  - **L1**：失败即阻断 CI / 合并 / 部署
+  - **L2**：失败记录告警，进入人工 Code Review
+
+#### ADR-907.4_4 破例机制自动记录
+- 破例机制必须自动记录：
+  - ADR 编号
+  - 测试类 / 方法
+  - 破例原因
+  - 到期时间与偿还计划
+
+#### ADR-907.4_5 Analyzer 检测能力要求
+- Analyzer 必须具备以下检测能力：
+  - 空测试 / 弱断言
+  - 单测试覆盖多 ADR
+  - 非 Final ADR 生成测试
+
+#### ADR-907.4_6 ADR 生命周期同步
+- ADR 生命周期变更必须同步：
+  - Superseded / Obsolete ADR 对应测试必须标记或移除
 
 ---
 
 ## Enforcement（执法模型）
 
-|规则编号|执行级|执法方式|
-|---|---|---|
-|ADR-907.1|L1|ArchitectureTests 项目存在性校验|
-|ADR-907.2|L1|ADR 目录结构扫描|
-|ADR-907.3|L1|测试类与 ADR 映射校验|
-|ADR-907.4|L1|测试类命名正则校验|
-|ADR-907.5|L1|测试方法与子规则解析|
-|ADR-907.6|L1|失败信息 ADR 溯源校验|
-|ADR-907.7|L2|最小断言数量与语义检测|
-|ADR-907.8|L1|Skip / 条件禁用检测|
-|ADR-907.9|L1|CI / Analyzer 自动注册校验|
-|ADR-907.10|L1|L1 阻断 / L2 告警策略执行|
-|ADR-907.11|L1|破例与偿还机制记录|
-|ADR-907.12|L2|ADR 生命周期同步校验|
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-907 各条款（Clause）的执法方式及执行级别。
+> 每条 Clause 对应一个或多个具体的测试方法，形成可机器执行的验证规则。
+
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|-------|---------|--------------|
+| **ADR-907.1_1** | L1 | ArchitectureTests 必须是唯一执法形式的元验证 | §ADR-907.1_1 |
+| **ADR-907.1_2** | L1 | 检测 ADR 是否具备对应测试或 Non-Enforceable 声明 | §ADR-907.1_2 |
+| **ADR-907.1_3** | L1 | 禁止无执法路径的架构规则存在 | §ADR-907.1_3 |
+| **ADR-907.2_1** | L1 | ArchitectureTests 项目存在性校验 | §ADR-907.2_1 |
+| **ADR-907.2_2** | L1 | ADR 目录结构扫描（/ADR-XXXX/） | §ADR-907.2_2 |
+| **ADR-907.2_3** | L1 | 测试类与 ADR 映射校验（单一 ADR） | §ADR-907.2_3 |
+| **ADR-907.2_4** | L1 | 测试类命名正则校验 | §ADR-907.2_4 |
+| **ADR-907.2_5** | L1 | 测试方法与子规则解析 | §ADR-907.2_5 |
+| **ADR-907.2_6** | L1 | 失败信息 ADR 溯源校验 | §ADR-907.2_6 |
+| **ADR-907.2_7** | L2 | 禁止空弱断言检测 | §ADR-907.2_7 |
+| **ADR-907.2_8** | L1 | Skip / 条件禁用检测 | §ADR-907.2_8 |
+| **ADR-907.3_1** | L2 | 最小断言数量语义检测 | §ADR-907.3_1 |
+| **ADR-907.3_2** | L1 | 单一子规则映射校验 | §ADR-907.3_2 |
+| **ADR-907.3_3** | L1 | 失败信息可溯源性校验 | §ADR-907.3_3 |
+| **ADR-907.3_4** | L2 | 形式化断言检测 | §ADR-907.3_4 |
+| **ADR-907.4_1** | L1 | CI / Analyzer 自动注册校验 | §ADR-907.4_1 |
+| **ADR-907.4_2** | L1 | RuleId 精确映射验证 | §ADR-907.4_2 |
+| **ADR-907.4_3** | L1 | L1 阻断 / L2 告警策略执行 | §ADR-907.4_3 |
+| **ADR-907.4_4** | L1 | 破例与偿还机制记录 | §ADR-907.4_4 |
+| **ADR-907.4_5** | L2 | Analyzer 检测能力完整性验证 | §ADR-907.4_5 |
+| **ADR-907.4_6** | L2 | ADR 生命周期同步校验 | §ADR-907.4_6 |
+
+### 执法级别说明
+
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+
+### 测试组织映射
+
+基于上述 Enforcement 表，ADR-907 的测试应组织为：
+
+- **测试类数量**：4 个（对应 4 个 Rule）
+  - `ADR_907_1_Architecture_Tests.cs` → ADR-907.1（3 个测试方法）
+  - `ADR_907_2_Architecture_Tests.cs` → ADR-907.2（8 个测试方法）
+  - `ADR_907_3_Architecture_Tests.cs` → ADR-907.3（4 个测试方法）
+  - `ADR_907_4_Architecture_Tests.cs` → ADR-907.4（6 个测试方法）
+
+- **测试方法数量**：21 个（对应 21 个 Clause）
+  - 每个测试方法命名格式：`ADR_907_<Rule>_<Clause>_<行为描述>`
+  - 示例：`ADR_907_2_1_ArchitectureTests_Project_Must_Exist`
 
 ---
 
@@ -209,3 +301,4 @@ superseded_by: null
 | 版本  | 日期         | 说明       | 修订人 |
 |-----|------------|----------|-----|
 | 1.0 | 2026-01-28 | 首次整合正式发布 | Architecture Board |
+| 2.0 | 2026-02-02 | 引入 Rule/Clause 双层编号体系，实现 Decision 与 Enforcement 一一映射 | Architecture Board |
