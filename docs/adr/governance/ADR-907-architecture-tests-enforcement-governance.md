@@ -3,7 +3,7 @@ adr: ADR-907
 title: "ArchitectureTests 执法治理体系"
 status: Final
 level: Governance
-version: "2.0"
+version: "2.1"
 deciders: "Architecture Board"
 date: 2026-02-02
 maintainer: "Architecture Board"
@@ -272,11 +272,13 @@ superseded_by: null
 **Depended By**：
 
 - 所有 ArchitectureTests 执法流程  
-- CI / Analyzer 自动裁决规则  
+- CI / Analyzer 自动裁决规则
+- [ADR-907-A：ADR-907 对齐执行标准](./adr-907-a-adr-alignment-execution-standard.md)
 
 **Related**：
 
 - [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
+- [ADR-907-A：ADR-907 对齐执行标准](./adr-907-a-adr-alignment-execution-standard.md)（执行附录）
 
 **Supersedes**：
 
@@ -308,3 +310,4 @@ superseded_by: null
 |-----|------------|----------|-----|
 | 1.0 | 2026-01-28 | 首次整合正式发布 | Architecture Board |
 | 2.0 | 2026-02-02 | 引入 Rule/Clause 双层编号体系，实现 Decision 与 Enforcement 一一映射 | Architecture Board |
+| 2.1 | 2026-02-02 | 新增执行附录 ADR-907-A，定义对齐执行标准、失败策略与测试绑定规则 | Architecture Board |
