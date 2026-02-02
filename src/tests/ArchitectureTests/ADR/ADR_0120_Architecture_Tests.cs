@@ -89,7 +89,7 @@ public sealed class ADR_0120_Architecture_Tests
             {
                 if (pattern.IsMatch(eventName))
                 {
-                    true.Should().BeFalse($"❌ ADR-0120_2_1 违规: 事件名称未使用动词过去式（本体语义约束，L1）\n\n" +
+                    true.Should().BeFalse($"❌ ADR-0120_1_2 违规: 事件名称未使用动词过去式（本体语义约束，L1）\n\n" +
                                 $"违规类型: {eventType.FullName}\n" +
                                 $"命名模式: {eventName}\n\n" +
                                 $"问题分析:\n" +
@@ -132,7 +132,7 @@ public sealed class ADR_0120_Architecture_Tests
             // 检查命名空间是否符合规范：Zss.BilliardHall.Modules.{ModuleName}.Events[.{SubNamespace}]
             var isValidNamespace = ns.Contains(".Events") && ns.StartsWith("Zss.BilliardHall.Modules.");
 
-            isValidNamespace.Should().BeTrue($"❌ ADR-0120_3_1 违规: 事件未在正确的命名空间下\n\n" +
+            isValidNamespace.Should().BeTrue($"❌ ADR-0120_2_1 违规: 事件未在正确的命名空间下\n\n" +
             $"违规类型: {eventType.FullName}\n" +
             $"当前命名空间: {ns}\n" +
             $"期望命名空间: Zss.BilliardHall.Modules.{{ModuleName}}.Events[.{{SubNamespace}}]\n\n" +
@@ -195,7 +195,7 @@ public sealed class ADR_0120_Architecture_Tests
 
         foreach (var handlerType in eventHandlerTypes)
         {
-            handlerType.Name.EndsWith("Handler").Should().BeTrue($"❌ ADR-0120_4_1 违规: 事件处理器缺少 'Handler' 后缀\n\n" +
+            handlerType.Name.EndsWith("Handler").Should().BeTrue($"❌ ADR-0120_3_1 违规: 事件处理器缺少 'Handler' 后缀\n\n" +
             $"违规类型: {handlerType.FullName}\n\n" +
             $"问题分析:\n" +
             $"所有事件处理器必须以 'Handler' 后缀结尾\n\n" +
@@ -268,7 +268,7 @@ public sealed class ADR_0120_Architecture_Tests
 
                     if (isDomainEntity)
                     {
-                        true.Should().BeFalse($"❌ ADR-0120_1_5 违规: 事件包含领域实体类型\n\n" +
+                        true.Should().BeFalse($"❌ ADR-0120_4_1 违规: 事件包含领域实体类型\n\n" +
                                     $"违规事件: {eventType.FullName}\n" +
                                     $"领域实体类型: {actualType.FullName}\n\n" +
                                     $"问题分析:\n" +
@@ -323,7 +323,7 @@ public sealed class ADR_0120_Architecture_Tests
 
             if (businessMethods.Any())
             {
-                true.Should().BeFalse($"❌ ADR-0120_1_6 违规: 事件包含业务方法\n\n" +
+                true.Should().BeFalse($"❌ ADR-0120_4_2 违规: 事件包含业务方法\n\n" +
                             $"违规事件: {eventType.FullName}\n" +
                             $"业务方法: {string.Join(", ", businessMethods.Select(m => m.Name))}\n\n" +
                             $"问题分析:\n" +

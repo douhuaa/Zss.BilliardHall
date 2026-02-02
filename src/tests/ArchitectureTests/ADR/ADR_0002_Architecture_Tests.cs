@@ -59,7 +59,7 @@ public sealed class ADR_0002_Architecture_Tests
             .HaveDependencyOnAny("Zss.BilliardHall.Host", "Zss.BilliardHall.Host.Web", "Zss.BilliardHall.Host.Worker")
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-0002_2_1 违规: Platform 层不应依赖 Host 层\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-0002_1_2 违规: Platform 层不应依赖 Host 层\n\n" +
         $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
         $"修复建议:\n" +
         $"1. 移除 Platform 对 Host 的引用\n" +
@@ -81,7 +81,7 @@ public sealed class ADR_0002_Architecture_Tests
                 .ToArray())
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-0002_3_1 违规: Platform 层不应依赖任何 Modules\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-0002_1_3 违规: Platform 层不应依赖任何 Modules\n\n" +
         $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
         $"修复建议:\n" +
         $"1. 移除 Platform 对 Modules 的引用\n" +
@@ -103,7 +103,7 @@ public sealed class ADR_0002_Architecture_Tests
             .GetTypes()
             .ToList();
 
-        bootstrappers.Should().NotBeEmpty($"❌ ADR-0002_4_1 违规: Platform 层必须包含 Bootstrapper 入口点\n\n" + $"修复建议:\n" + $"1. 创建 PlatformBootstrapper 类作为 Platform 层的唯一入口\n" + $"2. 在 PlatformBootstrapper 中封装所有技术配置\n" + $"3. 提供 public static void Configure() 方法\n\n" + $"参考: docs/copilot/adr-0002.prompts.md (场景 2)");
+        bootstrappers.Should().NotBeEmpty($"❌ ADR-0002_1_4 违规: Platform 层必须包含 Bootstrapper 入口点\n\n" + $"修复建议:\n" + $"1. 创建 PlatformBootstrapper 类作为 Platform 层的唯一入口\n" + $"2. 在 PlatformBootstrapper 中封装所有技术配置\n" + $"3. 提供 public static void Configure() 方法\n\n" + $"参考: docs/copilot/adr-0002.prompts.md (场景 2)");
 
         // 验证有 Configure 方法
         var platformBootstrapper = bootstrappers.FirstOrDefault(t => t.Name == "PlatformBootstrapper");
@@ -136,7 +136,7 @@ public sealed class ADR_0002_Architecture_Tests
             .HaveDependencyOnAny("Zss.BilliardHall.Host", "Zss.BilliardHall.Host.Web", "Zss.BilliardHall.Host.Worker")
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-0002_1_5 违规: Application 层不应依赖 Host 层\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-0002_2_1 违规: Application 层不应依赖 Host 层\n\n" +
         $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
         $"修复建议:\n" +
         $"1. 移除 Application 对 Host 的引用\n" +
@@ -158,7 +158,7 @@ public sealed class ADR_0002_Architecture_Tests
                 .ToArray())
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-0002_1_6 违规: Application 层不应依赖任何 Modules\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-0002_2_2 违规: Application 层不应依赖任何 Modules\n\n" +
         $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
         $"修复建议:\n" +
         $"1. 移除 Application 对 Modules 的引用\n" +
@@ -208,7 +208,7 @@ public sealed class ADR_0002_Architecture_Tests
             .HaveDependencyOn("Microsoft.AspNetCore.Http.HttpContext")
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-0002_1_8 违规: Application 层不应使用 HttpContext 等 Host 专属类型\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-0002_2_4 违规: Application 层不应使用 HttpContext 等 Host 专属类型\n\n" +
         $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
         $"修复建议:\n" +
         $"1. 移除对 HttpContext 的依赖\n" +
@@ -241,7 +241,7 @@ public sealed class ADR_0002_Architecture_Tests
             .HaveDependencyOnAny(forbidden)
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-0002_1_9 违规: Host {hostAssembly.GetName().Name} 不应依赖任何 Modules\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-0002_3_1 违规: Host {hostAssembly.GetName().Name} 不应依赖任何 Modules\n\n" +
         $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
         $"修复建议:\n" +
         $"1. 移除 Host 对 Modules 的项目引用\n" +
@@ -291,7 +291,7 @@ public sealed class ADR_0002_Architecture_Tests
             var refPath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(csprojPath)!, include));
             if (moduleProjFiles.Contains(refPath))
             {
-                true.Should().BeFalse($"❌ ADR-0002_1_11 违规: Host 项目不应直接引用 Modules\n\n" +
+                true.Should().BeFalse($"❌ ADR-0002_3_3 违规: Host 项目不应直接引用 Modules\n\n" +
                             $"Host 项目: {Path.GetFileName(csprojPath)}\n" +
                             $"违规引用: {Path.GetFileName(refPath)}\n" +
                             $"引用路径: {include}\n\n" +
@@ -336,7 +336,7 @@ public sealed class ADR_0002_Architecture_Tests
                     .StartsWith("//")) // 排除注释行
                 .ToList();
 
-            (lines.Count <= 50).Should().BeTrue($"❌ ADR-0002_1_12 违规: Program.cs 应保持简洁（≤ 50 行）\n\n" +
+            (lines.Count <= 50).Should().BeTrue($"❌ ADR-0002_3_4 违规: Program.cs 应保持简洁（≤ 50 行）\n\n" +
             $"当前行数: {lines.Count}\n" +
             $"文件路径: {programFile}\n\n" +
             $"修复建议:\n" +
@@ -457,7 +457,7 @@ public sealed class ADR_0002_Architecture_Tests
             .HaveDependencyOnAny("Zss.BilliardHall.Application", "Zss.BilliardHall.Host")
             .GetResult();
 
-        platformResult.IsSuccessful.Should().BeTrue($"❌ ADR-0002_1_14 违规: Platform 不应依赖 Application 或 Host\n\n" +
+        platformResult.IsSuccessful.Should().BeTrue($"❌ ADR-0002_4_1 违规: Platform 不应依赖 Application 或 Host\n\n" +
         $"违规类型:\n{string.Join("\n", platformResult.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
         $"修复建议:\n" +
         $"1. 确保三层依赖方向: Host → Application → Platform\n" +
@@ -472,7 +472,7 @@ public sealed class ADR_0002_Architecture_Tests
             .HaveDependencyOn("Zss.BilliardHall.Host")
             .GetResult();
 
-        applicationResult.IsSuccessful.Should().BeTrue($"❌ ADR-0002_1_14 违规: Application 不应依赖 Host\n\n" +
+        applicationResult.IsSuccessful.Should().BeTrue($"❌ ADR-0002_4_1 违规: Application 不应依赖 Host\n\n" +
         $"违规类型:\n{string.Join("\n", applicationResult.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
         $"修复建议:\n" +
         $"1. 确保三层依赖方向: Host → Application → Platform\n" +

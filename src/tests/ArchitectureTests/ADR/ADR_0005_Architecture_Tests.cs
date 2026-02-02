@@ -94,7 +94,7 @@ public sealed class ADR_0005_Architecture_Tests
 
                 if (constructorParams.Count > 5)
                 {
-                    true.Should().BeFalse($"❌ ADR-0005_2_1 违规: Endpoint/Controller 包含过多依赖\n\n" +
+                    true.Should().BeFalse($"❌ ADR-0005_1_2 违规: Endpoint/Controller 包含过多依赖\n\n" +
                                 $"违规类型: {endpoint.FullName}\n" +
                                 $"构造函数依赖数量: {constructorParams.Count} 个（超过建议的 5 个）\n\n" +
                                 $"问题分析:\n" +
@@ -186,7 +186,7 @@ public sealed class ADR_0005_Architecture_Tests
                 .Where(f => !f.IsInitOnly) // 排除 readonly 字段
                 .ToList();
 
-            (fields.Count == 0).Should().BeTrue($"❌ ADR-0005_4_1 违规: Handler 包含可变字段\n\n" +
+            (fields.Count == 0).Should().BeTrue($"❌ ADR-0005_2_2 违规: Handler 包含可变字段\n\n" +
             $"违规 Handler: {handler.FullName}\n" +
             $"可变字段: {string.Join(", ", fields.Select(f => f.Name))}\n\n" +
             $"问题分析:\n" +
@@ -238,7 +238,7 @@ public sealed class ADR_0005_Architecture_Tests
 
                     if (paramModule != null && paramModule != currentModule)
                     {
-                        true.Should().BeFalse($"❌ ADR-0005_5_1 违规: Handler 注入了其他模块的类型\n\n" +
+                        true.Should().BeFalse($"❌ ADR-0005_3_1 违规: Handler 注入了其他模块的类型\n\n" +
                                     $"违规 Handler: {handler.FullName}\n" +
                                     $"当前模块: {currentModule}\n" +
                                     $"依赖模块: {paramModule}\n" +
@@ -279,7 +279,7 @@ public sealed class ADR_0005_Architecture_Tests
             {
                 if (!method.Name.EndsWith("Async"))
                 {
-                    true.Should().BeFalse($"❌ ADR-0005_6_1 违规: 异步方法命名不符合约定\n\n" +
+                    true.Should().BeFalse($"❌ ADR-0005_3_2 违规: 异步方法命名不符合约定\n\n" +
                                 $"违规方法: {type.FullName}.{method.Name}\n" +
                                 $"返回类型: {method.ReturnType.Name}\n\n" +
                                 $"问题分析:\n" +

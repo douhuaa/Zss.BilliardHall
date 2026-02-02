@@ -544,7 +544,7 @@ public sealed class ADR_902_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-0902_1_1 违规：以下 ADR 的规则编号不符合要求",
+                "❌ ADR-0902_1_7 违规：以下 ADR 的规则编号不符合要求",
                 "",
                 "根据 ADR-902 决策 1：每条规则必须作为独立三级标题存在，格式为：### ADR-XXX.Y:L? <规则标题>",
                 ""

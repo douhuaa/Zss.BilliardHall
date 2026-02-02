@@ -83,7 +83,7 @@ public sealed class ADR_0001_Architecture_Tests
                 continue;
 
             true.Should().BeFalse(
-                $"❌ ADR-0001_2_1 违规: 模块 {projectName} 不应引用其他模块或非白名单项目: {refName}。\n" + 
+                $"❌ ADR-0001_1_2 违规: 模块 {projectName} 不应引用其他模块或非白名单项目: {refName}。\n" + 
                 $"项目路径: {csprojPath}\n" + 
                 $"引用路径: {include}\n" + 
                 $"修复建议：将共享代码移至 Platform/BuildingBlocks，或改用消息通信。");
@@ -111,7 +111,7 @@ public sealed class ADR_0001_Architecture_Tests
             .GetResult();
 
         result.IsSuccessful.Should().BeTrue(
-            $"❌ ADR-0001_1_7 违规: 模块 {moduleName} 的类型必须在命名空间 {expectedNamespace} 下。\n" + 
+            $"❌ ADR-0001_1_3 违规: 模块 {moduleName} 的类型必须在命名空间 {expectedNamespace} 下。\n" + 
             $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" + 
             $"修复建议：确保所有类型都在正确的模块命名空间下，遵循目录结构与命名空间一致性原则。");
     }
@@ -152,7 +152,7 @@ public sealed class ADR_0001_Architecture_Tests
             var hasUseCases = ns.Contains(".UseCases.") || ns.Contains(".Features.");
 
             hasUseCases.Should().BeTrue(
-            $"❌ ADR-0001_3_1 违规: Handler {handler.FullName} 必须在 UseCases 或 Features 命名空间下。\n" +
+            $"❌ ADR-0001_2_1 违规: Handler {handler.FullName} 必须在 UseCases 或 Features 命名空间下。\n" +
             $"当前命名空间: {ns}\n" +
             $"修复建议：\n" +
             $"  1. 将 Handler 移动到对应的 UseCases/<用例名>/ 或 Features/<用例名>/ 目录下\n" +
@@ -178,7 +178,7 @@ public sealed class ADR_0001_Architecture_Tests
                 .GetResult();
 
             result.IsSuccessful.Should().BeTrue(
-            $"❌ ADR-0001_1_4 违规: 模块 {moduleAssembly.GetName().Name} 禁止包含名称含 '{word}' 的类型。\n" +
+            $"❌ ADR-0001_2_2 违规: 模块 {moduleAssembly.GetName().Name} 禁止包含名称含 '{word}' 的类型。\n" +
             $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
             $"修复建议：\n" +
             $"  1. 将业务逻辑放入领域模型或 Handler 中\n" +
@@ -217,7 +217,7 @@ public sealed class ADR_0001_Architecture_Tests
                     .GetResult();
 
                 result.IsSuccessful.Should().BeTrue(
-                $"❌ ADR-0001_1_5 违规: 模块 {moduleName} 不应依赖其他模块 {other} 的领域对象。\n" +
+                $"❌ ADR-0001_3_1 违规: 模块 {moduleName} 不应依赖其他模块 {other} 的领域对象。\n" +
                 $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
                 $"修复建议：\n" +
                 $"  1. 使用领域事件进行异步通信\n" +
@@ -258,7 +258,7 @@ public sealed class ADR_0001_Architecture_Tests
                 var hasBusinessDecisionPattern = businessDecisionPatterns.Any(pattern => prop.Name.Contains(pattern, StringComparison.OrdinalIgnoreCase));
 
                 hasBusinessDecisionPattern.Should().BeFalse(
-                $"❌ ADR-0001_1_6 违规: Contract {contractType.Name} 包含疑似业务判断字段: {prop.Name}。\n" +
+                $"❌ ADR-0001_3_2 违规: Contract {contractType.Name} 包含疑似业务判断字段: {prop.Name}。\n" +
                 $"修复建议：\n" +
                 $"  1. Contract 应仅用于数据传递，不包含业务决策字段\n" +
                 $"  2. 将业务判断逻辑移至 Handler 或领域模型中\n" +
