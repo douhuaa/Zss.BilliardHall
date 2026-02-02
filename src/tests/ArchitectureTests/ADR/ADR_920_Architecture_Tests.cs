@@ -434,7 +434,7 @@ public sealed class ADR_920_Architecture_Tests
         }
 
         // L2 警告：总是通过（但已输出警告信息）
-        true.Should().BeTrue();
+        // 不需要断言 - 警告已通过 Console 输出
     }
 
     [Fact(DisplayName = "ADR-920.7: 示例目录必须有责任人和目的说明（L1 阻断）")]
@@ -448,7 +448,6 @@ public sealed class ADR_920_Architecture_Tests
         if (!Directory.Exists(examplesDir))
         {
             // 如果 examples 目录不存在，测试通过
-            true.Should().BeTrue();
             return;
         }
 
