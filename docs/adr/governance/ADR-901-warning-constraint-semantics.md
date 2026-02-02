@@ -4,8 +4,8 @@ title: "语义元规则（Constraint / Warning / Notice）"
 status: Final
 level: Governance
 deciders: "Architecture Board"
-date: 2026-01-30
-version: "1.1"
+date: 2026-02-03
+version: "2.0"
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
