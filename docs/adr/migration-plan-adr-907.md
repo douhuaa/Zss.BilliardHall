@@ -170,9 +170,9 @@ ADR-907 v2.0 引入了 Rule/Clause 双层编号体系，要求所有 Architectur
 
 ## 参考资源
 
-- [ADR-907 ArchitectureTests 执法治理体系](./adr/governance/ADR-907-architecture-tests-enforcement-governance.md)
-- [ADR-907 Copilot 提示词](./copilot/adr-0907.prompts.md)
-- [ADR-0000 架构测试宪法](./adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-907 ArchitectureTests 执法治理体系](./governance/ADR-907-architecture-tests-enforcement-governance.md)
+- [ADR-907 Copilot 提示词](../copilot/adr-0907.prompts.md)
+- [ADR-0000 架构测试宪法](./governance/ADR-0000-architecture-tests.md)
 
 ---
 
