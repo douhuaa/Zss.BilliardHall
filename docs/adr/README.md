@@ -22,10 +22,10 @@
 | 层级      | 编号范围                | 目录                | 当前 ADR 数 |
 |---------|---------------------|-------------------|----------|
 | **宪法层** | `ADR-0001~0009`     | `constitutional/` | 8         |
-| **结构层** | `ADR-100~199`       | `structure/`      | 2         |
-| **运行层** | `ADR-200~299`       | `runtime/`        | 1         |
-| **技术层** | `ADR-300~399`       | `technical/`      | 1         |
-| **治理层** | `ADR-0000, 900~999` | `governance/`     | 2         |
+| **结构层** | `ADR-100~199`       | `structure/`      | 5         |
+| **运行层** | `ADR-200~299`       | `runtime/`        | 4         |
+| **技术层** | `ADR-300~399`       | `technical/`      | 4         |
+| **治理层** | `ADR-0000, 900~999` | `governance/`     | 23        |
 
 编号含义、约束及变更政策以 [ADR-0006](constitutional/ADR-0006-terminology-numbering-constitution.md) 为准。
 
@@ -54,6 +54,10 @@
 - [ADR-0007：Agent 行为与权限宪法](constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 - [ADR-0008：文档编写与维护宪法](constitutional/ADR-0008-documentation-governance-constitution.md)
 - [ADR-900：ADR 新增与修订流程](governance/ADR-900-adr-process.md)
+- [ADR-901：警告/约束语义规范](governance/ADR-901-warning-constraint-semantics.md)
+- [ADR-902：ADR 模板结构契约](governance/ADR-902-adr-template-structure-contract.md)
+- [ADR-905：执行级别分类](governance/ADR-905-enforcement-level-classification.md)
+- [ADR-907：ArchitectureTests 执法治理体系](governance/ADR-907-architecture-tests-enforcement-governance.md) ⭐
 - [ADR-120：领域事件命名规范](structure/ADR-120-domain-event-naming-convention.md)
 - [ADR-121：契约（Contract）与 DTO 命名组织规范](structure/ADR-121-contract-dto-naming-organization.md)
 - [ADR-240：Handler 异常约束](runtime/ADR-240-handler-exception-constraints.md)

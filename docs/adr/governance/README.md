@@ -30,6 +30,10 @@
 
 - [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md)
   - 定义 ADR 生命周期：新增、修订、废弃、权限、三位一体交付
+- [ADR-901：警告/约束语义规范](ADR-901-warning-constraint-semantics.md)
+  - 定义 Warning/Constraint/Notice 的语义分级和使用规则
+- [ADR-902：ADR 模板结构契约](ADR-902-adr-template-structure-contract.md)
+  - 定义 ADR 文档的标准模板和必备章节
 - [ADR-930：代码审查与 ADR 合规自检流程](ADR-930-code-review-compliance.md)
   - 定义 PR 必填信息、Copilot 自检、架构测试失败处理、破例标注
 
@@ -71,6 +75,10 @@
 
 - [ADR-905：执行级别分类](ADR-905-enforcement-level-classification.md)
   - L1 静态/L2 语义/L3 人工的执行分级标准
+- [ADR-907：ArchitectureTests 执法治理体系](ADR-907-architecture-tests-enforcement-governance.md) ⭐
+  - **整合**：命名组织、最小断言、CI/Analyzer 映射（整合 ADR-903/904/906）
+  - **核心**：RuleId 规范、测试一一映射、自动化裁决闭环
+  - **强制**：所有架构测试必须遵循本 ADR 的规范
 - [ADR-970：自动化工具日志集成标准](ADR-970-automation-log-integration-standard.md)
   - CI/测试/Copilot 日志的统一格式和集成
 - [ADR-975：文档质量监控](ADR-975-documentation-quality-monitoring.md)

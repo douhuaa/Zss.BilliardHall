@@ -215,10 +215,10 @@ Notice **只能**用于：
 **Depended By**：
 
 - [ADR-902：ADR 结构与章节规范](./ADR-902-adr-template-structure-contract.md) - ADR 语义定义被 ADR 结构规范依赖
-- [ADR-903：ArchitectureTests 命名与组织规范](ADR-903-architecture-tests-naming-organization.md) - 测试组织需要明确语义分类
-- [ADR-904：ArchitectureTests 断言规范](ADR-904-architecturetests-minimum-assertion-semantics.md) - 断言规范需要明确语义分类
-- [ADR-906：Analyzer 与 CI 阻断映射协议](ADR-906-analyzer-ci-gate-mapping-protocol.md) - 自动化阻断需要明确语义分类
+- [ADR-907：ArchitectureTests 执法治理体系](./ADR-907-architecture-tests-enforcement-governance.md) - 整合了原 ADR-903/904/906，需要明确语义分类
 - 所有文档类 ADR
+
+**Note**: ADR-903, ADR-904, ADR-906 已被 ADR-907 整合并归档至 `../archive/governance/`
 
 ---
 
