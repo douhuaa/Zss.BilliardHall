@@ -35,7 +35,7 @@ public sealed class ADR_0900_Architecture_Tests
     /// ADR-0900.4: 文档/测试/Prompt 三位一体交付
     /// 验证每个 ADR 文档都有对应的架构测试和 Copilot Prompts
     /// </summary>
-    [Fact(DisplayName = "ADR-0900.4: 每个 ADR 必须有对应的架构测试和 Copilot Prompts")]
+    [Fact(DisplayName = "ADR-0900_1_1: 每个 ADR 必须有对应的架构测试和 Copilot Prompts")]
     public void ADR_Documents_Must_Have_Architecture_Tests_And_Prompts()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -90,14 +90,14 @@ public sealed class ADR_0900_Architecture_Tests
 
         if (missingTests.Any())
         {
-            errors.Add("❌ ADR-0900.4 违规：以下 ADR 缺少架构测试文件：");
+            errors.Add("❌ ADR-0900_1_1 违规：以下 ADR 缺少架构测试文件：");
             errors.AddRange(missingTests.Select(m => $"  • {m}"));
             errors.Add("");
         }
 
         if (missingPrompts.Any())
         {
-            errors.Add("❌ ADR-0900.4 违规：以下 ADR 缺少 Copilot Prompts 文件：");
+            errors.Add("❌ ADR-0900_1_1 违规：以下 ADR 缺少 Copilot Prompts 文件：");
             errors.AddRange(missingPrompts.Select(m => $"  • {m}"));
             errors.Add("");
         }
@@ -119,7 +119,7 @@ public sealed class ADR_0900_Architecture_Tests
     /// ADR-0900.4: 关键约束均带【必须架构测试覆盖】标记
     /// 验证 ADR 文档中需要测试的约束都有明确标记
     /// </summary>
-    [Fact(DisplayName = "ADR-0900.4: ADR 文档中的关键约束必须标记为需要测试")]
+    [Fact(DisplayName = "ADR-0900_1_2: ADR 文档中的关键约束必须标记为需要测试")]
     public void ADR_Documents_Must_Mark_Testable_Constraints()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");

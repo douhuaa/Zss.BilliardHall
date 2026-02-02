@@ -24,7 +24,7 @@ public sealed class ADR_0240_Architecture_Tests
 {
     #region 1. 异常分类体系
 
-    [Fact(DisplayName = "ADR-240.1: 所有自定义异常应继承自结构化异常基类")]
+    [Fact(DisplayName = "ADR-0240_1_1: 所有自定义异常应继承自结构化异常基类")]
     public void All_Custom_Exceptions_Should_Inherit_From_Structured_Exception_Base_Classes()
     {
         // 获取所有项目程序集
@@ -68,7 +68,7 @@ public sealed class ADR_0240_Architecture_Tests
 
         if (violations.Any())
         {
-            true.Should().BeFalse($"❌ ADR-240.1 违规: 存在未继承结构化异常基类的自定义异常\n\n" +
+            true.Should().BeFalse($"❌ ADR-0240_1_1 违规: 存在未继承结构化异常基类的自定义异常\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"自定义异常必须继承自以下三大基类之一：\n" +
@@ -83,7 +83,7 @@ public sealed class ADR_0240_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-240.2: 可重试异常必须是基础设施异常")]
+    [Fact(DisplayName = "ADR-0240_1_2: 可重试异常必须是基础设施异常")]
     public void Retryable_Exceptions_Must_Be_Infrastructure_Exceptions()
     {
         var assemblies = GetAllProjectAssemblies();
@@ -114,7 +114,7 @@ public sealed class ADR_0240_Architecture_Tests
 
         if (violations.Any())
         {
-            true.Should().BeFalse($"❌ ADR-240.2 违规: 可重试异常必须是基础设施异常\n\n" +
+            true.Should().BeFalse($"❌ ADR-0240_1_2 违规: 可重试异常必须是基础设施异常\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"实现 IRetryable 接口的异常必须继承自 InfrastructureException。\n" +
@@ -129,7 +129,7 @@ public sealed class ADR_0240_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-240.3: 领域异常不可标记为可重试")]
+    [Fact(DisplayName = "ADR-0240_1_3: 领域异常不可标记为可重试")]
     public void Domain_Exceptions_Should_Not_Be_Retryable()
     {
         var assemblies = GetAllProjectAssemblies();
@@ -158,7 +158,7 @@ public sealed class ADR_0240_Architecture_Tests
 
         if (violations.Any())
         {
-            true.Should().BeFalse($"❌ ADR-240.3 违规: 领域异常不可标记为可重试\n\n" +
+            true.Should().BeFalse($"❌ ADR-0240_1_3 违规: 领域异常不可标记为可重试\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"领域异常表示业务规则违反，不会因重试而改变结果。\n" +
@@ -171,7 +171,7 @@ public sealed class ADR_0240_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-240.4: 验证异常不可标记为可重试")]
+    [Fact(DisplayName = "ADR-0240_1_4: 验证异常不可标记为可重试")]
     public void Validation_Exceptions_Should_Not_Be_Retryable()
     {
         var assemblies = GetAllProjectAssemblies();
@@ -200,7 +200,7 @@ public sealed class ADR_0240_Architecture_Tests
 
         if (violations.Any())
         {
-            true.Should().BeFalse($"❌ ADR-240.4 违规: 验证异常不可标记为可重试\n\n" +
+            true.Should().BeFalse($"❌ ADR-0240_1_4 违规: 验证异常不可标记为可重试\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"验证异常表示输入数据错误，不会因重试而修正。\n" +
@@ -213,7 +213,7 @@ public sealed class ADR_0240_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-240.5: 异常类型必须在正确的命名空间")]
+    [Fact(DisplayName = "ADR-0240_1_5: 异常类型必须在正确的命名空间")]
     public void Exceptions_Should_Be_In_Correct_Namespaces()
     {
         var assemblies = GetAllProjectAssemblies();
@@ -258,7 +258,7 @@ public sealed class ADR_0240_Architecture_Tests
 
         if (violations.Any())
         {
-            true.Should().BeFalse($"❌ ADR-240.5 违规: 异常类型命名空间不符合约定\n\n" +
+            true.Should().BeFalse($"❌ ADR-0240_1_5 违规: 异常类型命名空间不符合约定\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"异常类型必须组织在 Exceptions 命名空间下，以保持一致性和可发现性。\n\n" +

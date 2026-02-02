@@ -9,7 +9,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// </summary>
 public sealed class ADR_0360_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-360.1: GitHub Workflows 配置文件应存在")]
+    [Fact(DisplayName = "ADR-0360_1_1: GitHub Workflows 配置文件应存在")]
     public void GitHub_Workflows_Configuration_Should_Exist()
     {
         var currentDir = Directory.GetCurrentDirectory();
@@ -28,7 +28,7 @@ public sealed class ADR_0360_Architecture_Tests
         workflowFiles.Should().NotBeEmpty();
     }
 
-    [Fact(DisplayName = "ADR-360.2: PR 模板应存在")]
+    [Fact(DisplayName = "ADR-0360_1_2: PR 模板应存在")]
     public void Pull_Request_Template_Should_Exist()
     {
         var currentDir = Directory.GetCurrentDirectory();
@@ -40,7 +40,7 @@ public sealed class ADR_0360_Architecture_Tests
         File.Exists(prTemplate).Should().BeTrue($"【ADR-360.2】PR 模板文件应存在：{prTemplate}");
     }
 
-    [Fact(DisplayName = "ADR-360.3: 架构测试项目应存在并可被 CI 执行")]
+    [Fact(DisplayName = "ADR-0360_1_3: 架构测试项目应存在并可被 CI 执行")]
     public void Architecture_Tests_Should_Be_Executable()
     {
         // 验证架构测试项目可以被发现和执行

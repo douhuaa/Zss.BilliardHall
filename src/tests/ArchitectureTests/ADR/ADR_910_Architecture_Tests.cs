@@ -20,7 +20,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// </summary>
 public sealed class ADR_910_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-910.1: README 治理宪法已定义")]
+    [Fact(DisplayName = "ADR-0910_1_1: README 治理宪法已定义")]
     public void ADR_910_README_Governance_Constitution_Exists()
     {
         // 验证 ADR-910 文档存在
@@ -39,7 +39,7 @@ public sealed class ADR_910_Architecture_Tests
         content.Should().Contain("README 的变更治理");
     }
 
-    [Fact(DisplayName = "ADR-910.2: 对应的 Copilot Prompts 文件存在")]
+    [Fact(DisplayName = "ADR-0910_1_2: 对应的 Copilot Prompts 文件存在")]
     public void ADR_910_Prompts_File_Exists()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -60,7 +60,7 @@ public sealed class ADR_910_Architecture_Tests
         content.Should().Contain("ADR-910");
     }
 
-    [Fact(DisplayName = "ADR-910.3: 核心治理原则已定义")]
+    [Fact(DisplayName = "ADR-0910_1_3: 核心治理原则已定义")]
     public void Core_README_Governance_Principles_Are_Defined()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -111,7 +111,7 @@ public sealed class ADR_910_Architecture_Tests
     // it likely indicates organizational issues that should be addressed separately
     private const int MaxReadmeFilesToCheck = 30;
 
-    [Fact(DisplayName = "ADR-910.4: README 不得使用裁决性语言（执法级）")]
+    [Fact(DisplayName = "ADR-0910_1_4: README 不得使用裁决性语言（执法级）")]
     public void README_Must_Not_Use_Decision_Language()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -227,7 +227,7 @@ public sealed class ADR_910_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-910.4 违规：以下 README 使用了裁决性语言",
+                "❌ ADR-0910_1_4 违规：以下 README 使用了裁决性语言",
                 "",
                 "根据 ADR-910 决策 2：README 不得使用裁决性语言，除非在引用 ADR 的上下文中。",
                 ""
@@ -257,7 +257,7 @@ public sealed class ADR_910_Architecture_Tests
     // Limit number of files to check for performance - same rationale as MaxReadmeFilesToCheck
     private const int MaxReadmeFilesForDeclarationCheck = 20;
 
-    [Fact(DisplayName = "ADR-910.5: README 必须声明无裁决力（执法级）")]
+    [Fact(DisplayName = "ADR-0910_1_5: README 必须声明无裁决力（执法级）")]
     public void README_Must_Declare_No_Authority()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -313,7 +313,7 @@ public sealed class ADR_910_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-910.5 违规：以下 README 缺少'无裁决力声明'",
+                "❌ ADR-0910_1_5 违规：以下 README 缺少'无裁决力声明'",
                 "",
                 "根据 ADR-910 决策 3：所有 README 必须在开头声明无架构裁决权。",
                 ""
@@ -339,7 +339,7 @@ public sealed class ADR_910_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-910.6: README 应引用而非定义规则（指导级）")]
+    [Fact(DisplayName = "ADR-0910_1_6: README 应引用而非定义规则（指导级）")]
     public void README_Should_Reference_Not_Define_Rules()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -430,7 +430,7 @@ public sealed class ADR_910_Architecture_Tests
         }
         
         // 总是通过（这是指导级测试）
-        true.Should().BeTrue();
+        // 不需要断言 - 这是指导级测试，警告已输出
     }
 
     // ========== 辅助方法 ==========
