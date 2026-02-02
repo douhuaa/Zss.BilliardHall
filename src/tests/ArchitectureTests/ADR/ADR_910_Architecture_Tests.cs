@@ -430,7 +430,7 @@ public sealed class ADR_910_Architecture_Tests
         }
         
         // 总是通过（这是指导级测试）
-        true.Should().BeTrue();
+        // 不需要断言 - 这是指导级测试，警告已输出
     }
 
     // ========== 辅助方法 ==========
