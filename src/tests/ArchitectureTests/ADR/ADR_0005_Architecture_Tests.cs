@@ -31,7 +31,7 @@ public sealed class ADR_0005_Architecture_Tests
 
     #region 1. Use Case + Handler 最小执行单元
 
-    [Theory(DisplayName = "ADR-0005.1: Handler 应有明确的命名约定")]
+    [Theory(DisplayName = "ADR-0005_1_1: Handler 应有明确的命名约定")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Handlers_Should_Have_Clear_Naming_Convention(Assembly moduleAssembly)
     {
@@ -47,7 +47,7 @@ public sealed class ADR_0005_Architecture_Tests
             var isQueryHandler = handler.Name.Contains("Query");
             var isEventHandler = handler.Name.Contains("Event");
 
-            (isCommandHandler || isQueryHandler || isEventHandler).Should().BeTrue($"❌ ADR-0005.1 违规: Handler 命名不清晰\n\n" +
+            (isCommandHandler || isQueryHandler || isEventHandler).Should().BeTrue($"❌ ADR-0005_1_1 违规: Handler 命名不清晰\n\n" +
             $"违规类型: {handler.FullName}\n\n" +
             $"问题分析:\n" +
             $"Handler 命名未明确表达业务意图（Command/Query/Event）\n\n" +
@@ -59,7 +59,7 @@ public sealed class ADR_0005_Architecture_Tests
         }
     }
 
-    [Theory(DisplayName = "ADR-0005.2: Endpoint 不应包含业务逻辑")]
+    [Theory(DisplayName = "ADR-0005_1_2: Endpoint 不应包含业务逻辑")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Endpoints_Should_Not_Contain_Business_Logic(Assembly moduleAssembly)
     {
@@ -94,7 +94,7 @@ public sealed class ADR_0005_Architecture_Tests
 
                 if (constructorParams.Count > 5)
                 {
-                    true.Should().BeFalse($"❌ ADR-0005.2 违规: Endpoint/Controller 包含过多依赖\n\n" +
+                    true.Should().BeFalse($"❌ ADR-0005_2_1 违规: Endpoint/Controller 包含过多依赖\n\n" +
                                 $"违规类型: {endpoint.FullName}\n" +
                                 $"构造函数依赖数量: {constructorParams.Count} 个（超过建议的 5 个）\n\n" +
                                 $"问题分析:\n" +
@@ -113,7 +113,7 @@ public sealed class ADR_0005_Architecture_Tests
 
     #region 2. Handler 职责边界
 
-    [Theory(DisplayName = "ADR-0005.3: Handler 不应依赖 ASP.NET 类型")]
+    [Theory(DisplayName = "ADR-0005_2_1: Handler 不应依赖 ASP.NET 类型")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Handlers_Should_Not_Depend_On_AspNet(Assembly moduleAssembly)
     {
@@ -126,7 +126,7 @@ public sealed class ADR_0005_Architecture_Tests
             .HaveDependencyOnAny(forbiddenDeps)
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-0005.3 违规: Handler 依赖 ASP.NET Core 类型\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-0005_3_1 违规: Handler 依赖 ASP.NET Core 类型\n\n" +
         $"模块: {moduleAssembly.GetName().Name}\n" +
         $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}\n\n" +
         $"问题分析:\n" +
@@ -155,7 +155,7 @@ public sealed class ADR_0005_Architecture_Tests
                 .Where(t => t?.Namespace != null && forbiddenNamespaces.Any(ns => t.Namespace.StartsWith(ns)))
                 .ToList();
 
-            (ctorDeps.Count == 0).Should().BeTrue($"❌ ADR-0005.3 违规: Handler 构造函数依赖 ASP.NET 类型\n\n" +
+            (ctorDeps.Count == 0).Should().BeTrue($"❌ ADR-0005_3_1 违规: Handler 构造函数依赖 ASP.NET 类型\n\n" +
             $"违规 Handler: {handler.FullName}\n" +
             $"依赖类型: {string.Join(", ", ctorDeps.Select(t => t.FullName))}\n\n" +
             $"问题分析:\n" +
@@ -168,7 +168,7 @@ public sealed class ADR_0005_Architecture_Tests
         }
     }
 
-    [Theory(DisplayName = "ADR-0005.4: Handler 应该是无状态的")]
+    [Theory(DisplayName = "ADR-0005_2_2: Handler 应该是无状态的")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Handlers_Should_Be_Stateless(Assembly moduleAssembly)
     {
@@ -186,7 +186,7 @@ public sealed class ADR_0005_Architecture_Tests
                 .Where(f => !f.IsInitOnly) // 排除 readonly 字段
                 .ToList();
 
-            (fields.Count == 0).Should().BeTrue($"❌ ADR-0005.4 违规: Handler 包含可变字段\n\n" +
+            (fields.Count == 0).Should().BeTrue($"❌ ADR-0005_4_1 违规: Handler 包含可变字段\n\n" +
             $"违规 Handler: {handler.FullName}\n" +
             $"可变字段: {string.Join(", ", fields.Select(f => f.Name))}\n\n" +
             $"问题分析:\n" +
@@ -203,7 +203,7 @@ public sealed class ADR_0005_Architecture_Tests
 
     #region 3. 同步/异步原则
 
-    [Theory(DisplayName = "ADR-0005.5: 模块间不应有未审批的同步调用")]
+    [Theory(DisplayName = "ADR-0005_3_1: 模块间不应有未审批的同步调用")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Modules_Should_Not_Have_Synchronous_Cross_Module_Calls(Assembly moduleAssembly)
     {
@@ -238,7 +238,7 @@ public sealed class ADR_0005_Architecture_Tests
 
                     if (paramModule != null && paramModule != currentModule)
                     {
-                        true.Should().BeFalse($"❌ ADR-0005.5 违规: Handler 注入了其他模块的类型\n\n" +
+                        true.Should().BeFalse($"❌ ADR-0005_5_1 违规: Handler 注入了其他模块的类型\n\n" +
                                     $"违规 Handler: {handler.FullName}\n" +
                                     $"当前模块: {currentModule}\n" +
                                     $"依赖模块: {paramModule}\n" +
@@ -256,7 +256,7 @@ public sealed class ADR_0005_Architecture_Tests
         }
     }
 
-    [Theory(DisplayName = "ADR-0005.6: 异步方法应遵循命名约定")]
+    [Theory(DisplayName = "ADR-0005_3_2: 异步方法应遵循命名约定")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Async_Methods_Should_Follow_Naming_Convention(Assembly moduleAssembly)
     {
@@ -279,7 +279,7 @@ public sealed class ADR_0005_Architecture_Tests
             {
                 if (!method.Name.EndsWith("Async"))
                 {
-                    true.Should().BeFalse($"❌ ADR-0005.6 违规: 异步方法命名不符合约定\n\n" +
+                    true.Should().BeFalse($"❌ ADR-0005_6_1 违规: 异步方法命名不符合约定\n\n" +
                                 $"违规方法: {type.FullName}.{method.Name}\n" +
                                 $"返回类型: {method.ReturnType.Name}\n\n" +
                                 $"问题分析:\n" +
@@ -298,7 +298,7 @@ public sealed class ADR_0005_Architecture_Tests
 
     #region 4. 模块通信契约
 
-    [Theory(DisplayName = "ADR-0005.7: 模块不应共享领域实体")]
+    [Theory(DisplayName = "ADR-0005_4_1: 模块不应共享领域实体")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Modules_Should_Not_Share_Domain_Entities(Assembly moduleAssembly)
     {
@@ -333,7 +333,7 @@ public sealed class ADR_0005_Architecture_Tests
         true.Should().BeTrue("领域实体共享检查完成");
     }
 
-    [Theory(DisplayName = "ADR-0005.8: Query Handler 可以返回 Contracts")]
+    [Theory(DisplayName = "ADR-0005_4_2: Query Handler 可以返回 Contracts")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void QueryHandlers_Can_Return_Contracts(Assembly moduleAssembly)
     {
@@ -354,7 +354,7 @@ public sealed class ADR_0005_Architecture_Tests
 
     #region 5. 查询与命令分离
 
-    [Theory(DisplayName = "ADR-0005.9: Command Handler 和 Query Handler 应明确分离")]
+    [Theory(DisplayName = "ADR-0005_5_1: Command Handler 和 Query Handler 应明确分离")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Command_And_Query_Handlers_Should_Be_Separated(Assembly moduleAssembly)
     {
@@ -372,7 +372,7 @@ public sealed class ADR_0005_Architecture_Tests
             // Handler 不应同时是 Command 和 Query
             if (isCommandHandler && isQueryHandler)
             {
-                true.Should().BeFalse($"❌ ADR-0005.9 违规: Handler 同时包含 Command 和 Query 语义\n\n" +
+                true.Should().BeFalse($"❌ ADR-0005_5_1 违规: Handler 同时包含 Command 和 Query 语义\n\n" +
                             $"违规 Handler: {handler.FullName}\n\n" +
                             $"问题分析:\n" +
                             $"Handler 命名同时包含 Command 和 Query，违反 CQRS 原则\n\n" +
@@ -385,7 +385,7 @@ public sealed class ADR_0005_Architecture_Tests
         }
     }
 
-    [Theory(DisplayName = "ADR-0005.10: Command Handler 不应返回业务数据")]
+    [Theory(DisplayName = "ADR-0005_5_2: Command Handler 不应返回业务数据")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void CommandHandlers_Should_Not_Return_Business_Data(Assembly moduleAssembly)
     {
@@ -456,7 +456,7 @@ public sealed class ADR_0005_Architecture_Tests
 
     #region 6. 错误与失败语义
 
-    [Theory(DisplayName = "ADR-0005.11: Handler 应使用结构化异常")]
+    [Theory(DisplayName = "ADR-0005_6_1: Handler 应使用结构化异常")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Handlers_Should_Use_Structured_Exceptions(Assembly moduleAssembly)
     {
@@ -494,7 +494,7 @@ public sealed class ADR_0005_Architecture_Tests
 
     #region 7. 自动化校验辅助
 
-    [Fact(DisplayName = "ADR-0005.12: 所有 Handler 应在模块程序集中")]
+    [Fact(DisplayName = "ADR-0005_7_1: 所有 Handler 应在模块程序集中")]
     public void All_Handlers_Should_Be_In_Module_Assemblies()
     {
         var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
