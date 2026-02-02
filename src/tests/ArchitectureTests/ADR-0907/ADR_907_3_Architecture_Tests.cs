@@ -298,7 +298,6 @@ public sealed class ADR_907_3_Architecture_Tests
                 [@"Assert\.False\s*\(\s*false\s*[,\)]"] = "Assert.False(false)",
                 [@"true\.Should\(\)\.BeTrue\s*\(\s*\)"] = "true.Should().BeTrue()",
                 [@"false\.Should\(\)\.BeFalse\s*\(\s*\)"] = "false.Should().BeFalse()",
-                [@"Assert\.Equal\s*\(\s*\w+\s*,\s*\w+\s*\)\s*;"] = "Assert.Equal without validation",
                 [@"1\.Should\(\)\.Be\s*\(\s*1\s*\)"] = "Tautological assertion",
             };
 

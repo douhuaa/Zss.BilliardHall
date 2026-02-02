@@ -299,13 +299,13 @@ public sealed class ADR_907_4_Architecture_Tests
     public void ADR_907_4_5_Analyzer_Must_Detect_Violations()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR-0907");
+        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         Directory.Exists(testsDirectory).Should().BeTrue(
-            $"❌ ADR-907_4_5 违规：ADR-907 测试目录不存在\n\n" +
+            $"❌ ADR-907_4_5 违规：ADR 测试目录不存在\n\n" +
             $"预期路径：{testsDirectory}\n\n" +
             $"修复建议：\n" +
-            $"  1. 创建 ADR-0907 或 ADR-907 测试目录\n" +
+            $"  1. 确保测试目录存在\n" +
             $"  2. ADR-907 是元规则，必须有自己的测试\n" +
             $"  3. 测试必须验证 Analyzer 的检测能力\n\n" +
             $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §4.5");
