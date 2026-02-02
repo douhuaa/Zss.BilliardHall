@@ -9,7 +9,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// </summary>
 public sealed class ADR_0930_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-930.1: PR 模板应包含必要的自检清单")]
+    [Fact(DisplayName = "ADR-0930_1_1: PR 模板应包含必要的自检清单")]
     public void PR_Template_Should_Include_Checklist()
     {
         var currentDir = Directory.GetCurrentDirectory();
@@ -26,7 +26,7 @@ public sealed class ADR_0930_Architecture_Tests
         (content.Length > 100).Should().BeTrue("PR 模板应包含实质性内容");
     }
 
-    [Fact(DisplayName = "ADR-930.2: Copilot 指令文件应存在")]
+    [Fact(DisplayName = "ADR-0930_1_2: Copilot 指令文件应存在")]
     public void Copilot_Instructions_Should_Exist()
     {
         var currentDir = Directory.GetCurrentDirectory();
@@ -43,7 +43,7 @@ public sealed class ADR_0930_Architecture_Tests
         promptFiles.Should().NotBeEmpty("应存在 Copilot 提示词文件");
     }
 
-    [Fact(DisplayName = "ADR-930.3: 架构测试必须在 CI 中执行")]
+    [Fact(DisplayName = "ADR-0930_1_3: 架构测试必须在 CI 中执行")]
     public void Architecture_Tests_Must_Be_In_CI()
     {
         // 验证架构测试项目可以被 CI 发现和执行

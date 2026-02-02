@@ -18,7 +18,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// </summary>
 public sealed class ADR_0201_Architecture_Tests
 {
-    [Theory(DisplayName = "ADR-201.3: Handler 禁止使用静态字段存储状态")]
+    [Theory(DisplayName = "ADR-0201_1_3: Handler 禁止使用静态字段存储状态")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Handlers_Must_Not_Have_Static_Fields(Assembly moduleAssembly)
     {
@@ -40,7 +40,7 @@ public sealed class ADR_0201_Architecture_Tests
             {
                 var fieldNames = string.Join(", ", staticFields.Select(f => f.Name));
                 true.Should().BeFalse(
-                    $"❌ ADR-201.3 违规: Handler 使用静态字段存储状态\n\n" +
+                    $"❌ ADR-0201_1_3 违规: Handler 使用静态字段存储状态\n\n" +
                     $"违规类型: {handler.FullName}\n" +
                     $"静态字段: {fieldNames}\n\n" +
                     $"问题分析:\n" +
@@ -54,7 +54,7 @@ public sealed class ADR_0201_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-201.1: Handler 必须注册为 Scoped 生命周期（需人工验证 DI 配置）")]
+    [Fact(DisplayName = "ADR-0201_1_1: Handler 必须注册为 Scoped 生命周期（需人工验证 DI 配置）")]
     public void Handlers_Must_Be_Registered_As_Scoped()
     {
         // 注意: 此测试需要在集成测试中验证 DI 容器配置

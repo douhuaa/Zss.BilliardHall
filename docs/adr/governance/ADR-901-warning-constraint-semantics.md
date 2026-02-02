@@ -11,6 +11,7 @@ primary_enforcement: L1
 reviewer: "GitHub Copilot"
 supersedes: null
 superseded_by: null
+enforceable: false
 ---
 
 # ADR-901：语义元规则（Constraint / Warning / Notice）

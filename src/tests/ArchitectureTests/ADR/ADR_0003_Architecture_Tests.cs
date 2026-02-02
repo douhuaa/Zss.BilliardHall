@@ -26,7 +26,7 @@ public sealed class ADR_0003_Architecture_Tests
 
     #region 1. 基础命名空间约束
 
-    [Fact(DisplayName = "ADR-0003.1: 所有类型应以 BaseNamespace 开头")]
+    [Fact(DisplayName = "ADR-0003_1_1: 所有类型应以 BaseNamespace 开头")]
     public void All_Types_Should_Start_With_Base_Namespace()
     {
         foreach (var assembly in GetAllProjectAssemblies())
@@ -40,7 +40,7 @@ public sealed class ADR_0003_Architecture_Tests
 
             foreach (var type in types)
             {
-                (type.Namespace?.StartsWith(BaseNamespace) == true).Should().BeTrue($"❌ ADR-0003.1 违规: 所有类型的命名空间都应以 BaseNamespace 开头\n\n" +
+                (type.Namespace?.StartsWith(BaseNamespace) == true).Should().BeTrue($"❌ ADR-0003_1_1 违规: 所有类型的命名空间都应以 BaseNamespace 开头\n\n" +
                 $"程序集: {assembly.GetName().Name}\n" +
                 $"违规类型: {type.FullName}\n" +
                 $"当前命名空间: {type.Namespace}\n" +
@@ -58,7 +58,7 @@ public sealed class ADR_0003_Architecture_Tests
 
     #region 2. Platform 命名空间约束
 
-    [Fact(DisplayName = "ADR-0003.2: Platform 类型应在 Zss.BilliardHall.Platform 命名空间")]
+    [Fact(DisplayName = "ADR-0003_2_1: Platform 类型应在 Zss.BilliardHall.Platform 命名空间")]
     public void Platform_Types_Should_Have_Platform_Namespace()
     {
         var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
@@ -70,7 +70,7 @@ public sealed class ADR_0003_Architecture_Tests
 
         foreach (var type in types)
         {
-            (type.Namespace?.StartsWith($"{BaseNamespace}.Platform") == true).Should().BeTrue($"❌ ADR-0003.2 违规: Platform 程序集中的类型应在 {BaseNamespace}.Platform 命名空间下\n\n" +
+            (type.Namespace?.StartsWith($"{BaseNamespace}.Platform") == true).Should().BeTrue($"❌ ADR-0003_2_1 违规: Platform 程序集中的类型应在 {BaseNamespace}.Platform 命名空间下\n\n" +
             $"违规类型: {type.FullName}\n" +
             $"当前命名空间: {type.Namespace}\n" +
             $"期望命名空间前缀: {BaseNamespace}.Platform\n\n" +
@@ -86,7 +86,7 @@ public sealed class ADR_0003_Architecture_Tests
 
     #region 3. Application 命名空间约束
 
-    [Fact(DisplayName = "ADR-0003.3: Application 类型应在 Zss.BilliardHall.Application 命名空间")]
+    [Fact(DisplayName = "ADR-0003_3_1: Application 类型应在 Zss.BilliardHall.Application 命名空间")]
     public void Application_Types_Should_Have_Application_Namespace()
     {
         var applicationAssembly = typeof(Application.ApplicationBootstrapper).Assembly;
@@ -98,7 +98,7 @@ public sealed class ADR_0003_Architecture_Tests
 
         foreach (var type in types)
         {
-            (type.Namespace?.StartsWith($"{BaseNamespace}.Application") == true).Should().BeTrue($"❌ ADR-0003.3 违规: Application 程序集中的类型应在 {BaseNamespace}.Application 命名空间下\n\n" +
+            (type.Namespace?.StartsWith($"{BaseNamespace}.Application") == true).Should().BeTrue($"❌ ADR-0003_3_1 违规: Application 程序集中的类型应在 {BaseNamespace}.Application 命名空间下\n\n" +
             $"违规类型: {type.FullName}\n" +
             $"当前命名空间: {type.Namespace}\n" +
             $"期望命名空间前缀: {BaseNamespace}.Application\n\n" +
@@ -114,7 +114,7 @@ public sealed class ADR_0003_Architecture_Tests
 
     #region 4. Modules 命名空间约束
 
-    [Theory(DisplayName = "ADR-0003.4: Module 类型应在 Zss.BilliardHall.Modules.{ModuleName} 命名空间")]
+    [Theory(DisplayName = "ADR-0003_4_1: Module 类型应在 Zss.BilliardHall.Modules.{ModuleName} 命名空间")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Module_Types_Should_Have_Module_Namespace(Assembly moduleAssembly)
     {
@@ -130,7 +130,7 @@ public sealed class ADR_0003_Architecture_Tests
 
         foreach (var type in types)
         {
-            (type.Namespace?.StartsWith($"{BaseNamespace}.Modules.{moduleName}") == true).Should().BeTrue($"❌ ADR-0003.4 违规: Module 程序集中的类型应在 {BaseNamespace}.Modules.{{ModuleName}} 命名空间下\n\n" +
+            (type.Namespace?.StartsWith($"{BaseNamespace}.Modules.{moduleName}") == true).Should().BeTrue($"❌ ADR-0003_4_1 违规: Module 程序集中的类型应在 {BaseNamespace}.Modules.{{ModuleName}} 命名空间下\n\n" +
             $"模块名: {moduleName}\n" +
             $"违规类型: {type.FullName}\n" +
             $"当前命名空间: {type.Namespace}\n" +
@@ -147,7 +147,7 @@ public sealed class ADR_0003_Architecture_Tests
 
     #region 5. Host 命名空间约束
 
-    [Theory(DisplayName = "ADR-0003.5: Host 类型应在 Zss.BilliardHall.Host.{HostName} 命名空间")]
+    [Theory(DisplayName = "ADR-0003_5_1: Host 类型应在 Zss.BilliardHall.Host.{HostName} 命名空间")]
     [ClassData(typeof(HostAssemblyData))]
     public void Host_Types_Should_Have_Host_Namespace(Assembly hostAssembly)
     {
@@ -165,7 +165,7 @@ public sealed class ADR_0003_Architecture_Tests
         foreach (var type in types)
         {
             var expectedNamespace = $"{BaseNamespace}.Host.{hostName}";
-            (type.Namespace?.StartsWith(expectedNamespace) == true).Should().BeTrue($"❌ ADR-0003.5 违规: Host 程序集中的类型应在 {BaseNamespace}.Host.{{HostName}} 命名空间下\n\n" +
+            (type.Namespace?.StartsWith(expectedNamespace) == true).Should().BeTrue($"❌ ADR-0003_5_1 违规: Host 程序集中的类型应在 {BaseNamespace}.Host.{{HostName}} 命名空间下\n\n" +
             $"Host 名: {hostName}\n" +
             $"违规类型: {type.FullName}\n" +
             $"当前命名空间: {type.Namespace}\n" +
@@ -182,13 +182,13 @@ public sealed class ADR_0003_Architecture_Tests
 
     #region 6. Directory.Build.props 约束
 
-    [Fact(DisplayName = "ADR-0003.6: Directory.Build.props 应存在于仓库根目录")]
+    [Fact(DisplayName = "ADR-0003_6_1: Directory.Build.props 应存在于仓库根目录")]
     public void Directory_Build_Props_Should_Exist_At_Repository_Root()
     {
         var root = TestEnvironment.RepositoryRoot;
         var directoryBuildPropsPath = Path.Combine(root, "Directory.Build.props");
 
-        File.Exists(directoryBuildPropsPath).Should().BeTrue($"❌ ADR-0003.6 违规: Directory.Build.props 文件应存在于仓库根目录\n\n" +
+        File.Exists(directoryBuildPropsPath).Should().BeTrue($"❌ ADR-0003_6_1 违规: Directory.Build.props 文件应存在于仓库根目录\n\n" +
         $"期望路径: {directoryBuildPropsPath}\n" +
         $"当前状态: 文件不存在\n\n" +
         $"修复建议:\n" +
@@ -198,7 +198,7 @@ public sealed class ADR_0003_Architecture_Tests
         $"参考: docs/copilot/adr-0003.prompts.md (场景 1)");
     }
 
-    [Fact(DisplayName = "ADR-0003.7: Directory.Build.props 应定义 BaseNamespace")]
+    [Fact(DisplayName = "ADR-0003_6_2: Directory.Build.props 应定义 BaseNamespace")]
     public void Directory_Build_Props_Should_Define_Base_Namespace()
     {
         var root = TestEnvironment.RepositoryRoot;
@@ -206,12 +206,12 @@ public sealed class ADR_0003_Architecture_Tests
 
         if (!File.Exists(directoryBuildPropsPath))
         {
-            true.Should().BeFalse($"❌ ADR-0003.6 违规: Directory.Build.props 文件不存在");
+            true.Should().BeFalse($"❌ ADR-0003_6_1 违规: Directory.Build.props 文件不存在");
         }
 
         var content = File.ReadAllText(directoryBuildPropsPath);
 
-        (content.Contains("CompanyNamespace") || content.Contains("ProductNamespace") || content.Contains("BaseNamespace")).Should().BeTrue($"❌ ADR-0003.7 违规: Directory.Build.props 应定义 BaseNamespace 相关属性\n\n" +
+        (content.Contains("CompanyNamespace") || content.Contains("ProductNamespace") || content.Contains("BaseNamespace")).Should().BeTrue($"❌ ADR-0003_7_1 违规: Directory.Build.props 应定义 BaseNamespace 相关属性\n\n" +
         $"文件路径: {directoryBuildPropsPath}\n" +
         $"当前状态: 未找到 CompanyNamespace/ProductNamespace/BaseNamespace 定义\n\n" +
         $"修复建议:\n" +
@@ -228,7 +228,7 @@ public sealed class ADR_0003_Architecture_Tests
 
     #region 7. 项目命名约束
 
-    [Fact(DisplayName = "ADR-0003.8: 所有项目应遵循命名空间约定")]
+    [Fact(DisplayName = "ADR-0003_7_1: 所有项目应遵循命名空间约定")]
     public void All_Projects_Should_Follow_Namespace_Convention()
     {
         var root = TestEnvironment.RepositoryRoot;
@@ -258,7 +258,7 @@ public sealed class ADR_0003_Architecture_Tests
                                   projectName == "ArchitectureAnalyzers" ||  // Level 2 enforcement tool
                                   projectName == "AdrParserCli";  // CLI tool in tools directory
 
-                isValidName.Should().BeTrue($"❌ ADR-0003.8 违规: 项目命名不符合命名空间约定\n\n" +
+                isValidName.Should().BeTrue($"❌ ADR-0003_7_1 违规: 项目命名不符合命名空间约定\n\n" +
                 $"项目文件: {projectFile}\n" +
                 $"项目名称: {projectName}\n" +
                 $"相对路径: {relativePath}\n\n" +
@@ -275,7 +275,7 @@ public sealed class ADR_0003_Architecture_Tests
 
     #region 8. 禁止的命名空间模式
 
-    [Theory(DisplayName = "ADR-0003.9: 模块不应包含不规范的命名空间模式")]
+    [Theory(DisplayName = "ADR-0003_8_1: 模块不应包含不规范的命名空间模式")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Modules_Should_Not_Contain_Irregular_Namespace_Patterns(Assembly moduleAssembly)
     {
@@ -292,7 +292,7 @@ public sealed class ADR_0003_Architecture_Tests
                 .ResideInNamespaceContaining(pattern)
                 .GetResult();
 
-            result.IsSuccessful.Should().BeTrue($"❌ ADR-0003.9 违规: 模块不应包含不规范的命名空间模式\n\n" +
+            result.IsSuccessful.Should().BeTrue($"❌ ADR-0003_8_1 违规: 模块不应包含不规范的命名空间模式\n\n" +
             $"模块: {moduleAssembly.GetName().Name}\n" +
             $"禁止的模式: {pattern}\n" +
             $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +

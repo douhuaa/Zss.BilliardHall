@@ -10,7 +10,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// </summary>
 public sealed class ADR_0350_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-350.1: 日志相关类型必须在正确的命名空间")]
+    [Fact(DisplayName = "ADR-0350_1_1: 日志相关类型必须在正确的命名空间")]
     public void Logging_Types_Should_Be_In_Correct_Namespace()
     {
         var assemblies = GetAllProjectAssemblies();
@@ -34,7 +34,7 @@ public sealed class ADR_0350_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-350.2: 项目应引用日志框架")]
+    [Fact(DisplayName = "ADR-0350_1_2: 项目应引用日志框架")]
     public void Projects_Should_Reference_Logging_Framework()
     {
         // 验证是否引用了 Microsoft.Extensions.Logging
@@ -56,7 +56,7 @@ public sealed class ADR_0350_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-350.3: 敏感信息类型不应出现在公共日志中")]
+    [Fact(DisplayName = "ADR-0350_1_3: 敏感信息类型不应出现在公共日志中")]
     public void Sensitive_Types_Should_Not_Be_Logged()
     {
         var assemblies = GetAllProjectAssemblies();

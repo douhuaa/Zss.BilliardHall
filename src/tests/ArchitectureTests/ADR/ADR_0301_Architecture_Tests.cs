@@ -9,7 +9,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// </summary>
 public sealed class ADR_0301_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-301.1: 集成测试项目必须存在")]
+    [Fact(DisplayName = "ADR-0301_1_1: 集成测试项目必须存在")]
     public void Integration_Test_Project_Should_Exist()
     {
         // 验证集成测试项目命名规范
@@ -29,7 +29,7 @@ public sealed class ADR_0301_Architecture_Tests
         invalidNames.Should().BeEmpty();
     }
 
-    [Fact(DisplayName = "ADR-301.2: TestContainers 配置文件验证")]
+    [Fact(DisplayName = "ADR-0301_1_2: TestContainers 配置文件验证")]
     public void TestContainers_Configuration_Should_Be_Valid()
     {
         // 验证项目根目录和测试目录的基本结构
@@ -43,7 +43,7 @@ public sealed class ADR_0301_Architecture_Tests
         Directory.Exists(testsDir).Should().BeTrue($"【ADR-301.2】测试目录应存在：{testsDir}");
     }
     
-    [Fact(DisplayName = "ADR-301.3: 测试项目应使用统一的测试框架")]
+    [Fact(DisplayName = "ADR-0301_1_3: 测试项目应使用统一的测试框架")]
     public void Test_Projects_Should_Use_Consistent_Test_Framework()
     {
         // 验证当前测试项目使用了 xUnit

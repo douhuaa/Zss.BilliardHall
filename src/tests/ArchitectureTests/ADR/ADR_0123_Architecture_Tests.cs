@@ -9,7 +9,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// </summary>
 public sealed class ADR_0123_Architecture_Tests
 {
-    [Theory(DisplayName = "ADR-123.1: Repository 接口必须位于 Domain 层")]
+    [Theory(DisplayName = "ADR-0123_1_1: Repository 接口必须位于 Domain 层")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Repository_Interfaces_Must_Be_In_Domain(Assembly moduleAssembly)
     {
@@ -26,7 +26,7 @@ public sealed class ADR_0123_Architecture_Tests
             var isInDomain = repoInterface.Namespace?.Contains(".Domain.") == true ||
                            repoInterface.Namespace?.EndsWith(".Domain") == true;
 
-            isInDomain.Should().BeTrue($"❌ ADR-123.1 违规: Repository 接口不在 Domain 层\n\n" +
+            isInDomain.Should().BeTrue($"❌ ADR-0123_1_1 违规: Repository 接口不在 Domain 层\n\n" +
                 $"违规接口: {repoInterface.FullName}\n\n" +
                 $"修复建议:\n" +
                 $"将接口移动到 {{Module}}.Domain.Repositories 命名空间\n\n" +
@@ -34,7 +34,7 @@ public sealed class ADR_0123_Architecture_Tests
         }
     }
 
-    [Theory(DisplayName = "ADR-123.3: Repository 接口命名必须遵循 I{Aggregate}Repository 模式")]
+    [Theory(DisplayName = "ADR-0123_1_2: Repository 接口命名必须遵循 I{Aggregate}Repository 模式")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Repository_Interfaces_Must_Follow_Naming(Assembly moduleAssembly)
     {
@@ -50,7 +50,7 @@ public sealed class ADR_0123_Architecture_Tests
         {
             var startsWithI = repoInterface.Name.StartsWith("I");
             
-            startsWithI.Should().BeTrue($"❌ ADR-123.3 违规: Repository 接口命名不符合规范\n\n" +
+            startsWithI.Should().BeTrue($"❌ ADR-0123_1_2 违规: Repository 接口命名不符合规范\n\n" +
                 $"违规接口: {repoInterface.FullName}\n\n" +
                 $"修复建议:\n" +
                 $"接口名称必须以 I 开头，格式为 I{{Aggregate}}Repository\n\n" +
