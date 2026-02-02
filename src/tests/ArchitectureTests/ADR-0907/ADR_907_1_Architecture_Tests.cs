@@ -195,10 +195,10 @@ public sealed class ADR_907_1_Architecture_Tests
         if (violations.Any())
         {
             true.Should().BeFalse(
-                $"❌ ADR-907_1_3 违规：以下 ADR 包含"仅文档约束"的禁止声明\n\n" +
+                $"❌ ADR-907_1_3 违规：以下 ADR 包含\"仅文档约束\"的禁止声明\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
-                $"  1. 移除"仅文档约束"、"不接受执行"等声明\n" +
+                $"  1. 移除\"仅文档约束\"、\"不接受执行\"等声明\n" +
                 $"  2. 选择以下之一：\n" +
                 $"     a. 创建对应的 ArchitectureTests（推荐）\n" +
                 $"     b. 明确声明为 Non-Enforceable\n" +
