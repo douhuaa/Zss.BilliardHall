@@ -1,10 +1,10 @@
 # ADR-907 v2.0 对齐指南
 
-> ⚠️ **已废弃 - 请参阅 [ADR-907-A：ADR-907 对齐执行标准](./adr/governance/ADR-907-A-adr-alignment-execution-standard.md)**
+> ⚠️ **已废弃 - 请参阅 [ADR-907-A：ADR-907 对齐执行标准](./adr/governance/adr-907-a-adr-alignment-execution-standard.md)**
 > 
 > 本文档已升级为正式 ADR（ADR-907-A），具备执行力和法律地位。
 > 
-> - **权威文档**：[ADR-907-A](./adr/governance/ADR-907-A-adr-alignment-execution-standard.md)
+> - **权威文档**：[ADR-907-A](./adr/governance/adr-907-a-adr-alignment-execution-standard.md)
 > - **本文档状态**：仅作为历史参考，不具备裁决力
 > - **升级日期**：2026-02-02
 

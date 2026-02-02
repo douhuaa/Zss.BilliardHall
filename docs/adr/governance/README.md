@@ -74,7 +74,7 @@
 - [ADR-907：ArchitectureTests 执法治理体系](ADR-907-architecture-tests-enforcement-governance.md) ⭐
   - 整合 ArchitectureTests 命名、组织、最小断言及 CI/Analyzer 映射规则
   - 实现完整的自动裁决闭环
-- [ADR-907-A：ADR-907 对齐执行标准](ADR-907-A-adr-alignment-execution-standard.md) ⭐
+- [ADR-907-A：ADR-907 对齐执行标准](adr-907-a-adr-alignment-execution-standard.md) ⭐
   - **ADR-907 的官方执行附录**
   - 定义 ADR 向 Rule/Clause 双层编号体系对齐的强制规范
   - 包含权威性声明、对齐失败策略、测试绑定规则
@@ -179,7 +179,7 @@
 | ADR-0000             | 元决策源，测试和 CI 机制  | [查看](ADR-0000-architecture-tests.md)         |
 | ADR-900              | ADR 生命周期流程     | [查看](ADR-900-adr-process.md)                 |
 | ADR-907              | ArchitectureTests 执法治理体系 | [查看](ADR-907-architecture-tests-enforcement-governance.md) |
-| ADR-907-A            | ADR-907 对齐执行标准（官方执行附录） | [查看](ADR-907-A-adr-alignment-execution-standard.md) |
+| ADR-907-A            | ADR-907 对齐执行标准（官方执行附录） | [查看](adr-907-a-adr-alignment-execution-standard.md) |
 | ADR-930              | PR 和代码审查流程     | [查看](ADR-930-code-review-compliance.md)      |
 | arch-violations.md   | 破例记录表           | [查看](/docs/summaries/arch-violations.md)     |
 

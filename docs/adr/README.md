@@ -55,7 +55,7 @@
 - [ADR-0008：文档编写与维护宪法](constitutional/ADR-0008-documentation-governance-constitution.md)
 - [ADR-900：ADR 新增与修订流程](governance/ADR-900-adr-process.md)
 - [ADR-907：ArchitectureTests 执法治理体系](governance/ADR-907-architecture-tests-enforcement-governance.md) ⭐
-- [ADR-907-A：ADR-907 对齐执行标准](governance/ADR-907-A-adr-alignment-execution-standard.md) ⭐
+- [ADR-907-A：ADR-907 对齐执行标准](governance/adr-907-a-adr-alignment-execution-standard.md) ⭐
 - [ADR-120：领域事件命名规范](structure/ADR-120-domain-event-naming-convention.md)
 - [ADR-121：契约（Contract）与 DTO 命名组织规范](structure/ADR-121-contract-dto-naming-organization.md)
 - [ADR-240：Handler 异常约束](runtime/ADR-240-handler-exception-constraints.md)
