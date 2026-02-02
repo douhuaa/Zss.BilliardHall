@@ -136,7 +136,7 @@ public sealed class ADR_0004_Architecture_Tests
             }
         }
 
-        (violations.Count == 0).Should().BeTrue($"❌ ADR-0004_4_1 违规: 发现 {violations.Count} 个项目手动指定了包版本，应使用 CPM 统一管理。\n\n" +
+        (violations.Count == 0).Should().BeTrue($"❌ ADR-0004_2_1 违规: 发现 {violations.Count} 个项目手动指定了包版本，应使用 CPM 统一管理。\n\n" +
         $"违规项目:\n{string.Join("\n", violations)}\n\n" +
         $"修复建议:\n" +
         $"1. 在 Directory.Packages.props 中定义包版本: <PackageVersion Include=\"包名\" Version=\"版本号\" />\n" +
@@ -258,7 +258,7 @@ public sealed class ADR_0004_Architecture_Tests
 
                 if (forbiddenPackages.Any(fp => packageName.Contains(fp)))
                 {
-                    true.Should().BeFalse($"❌ ADR-0004_1_7 违规: Platform 项目 {Path.GetFileName(projectFile)} 不应引用业务包: {packageName}。\n\n" +
+                    true.Should().BeFalse($"❌ ADR-0004_4_1 违规: Platform 项目 {Path.GetFileName(projectFile)} 不应引用业务包: {packageName}。\n\n" +
                                 $"违规项目: {Path.GetFileName(projectFile)}\n" +
                                 $"违规包: {packageName}\n\n" +
                                 $"修复建议:\n" +
@@ -333,7 +333,7 @@ public sealed class ADR_0004_Architecture_Tests
         {
             if (kvp.Value.Count > 1)
             {
-                true.Should().BeFalse($"❌ ADR-0004_1_8 违规: 测试包 {kvp.Key} 存在多个版本: {string.Join(", ", kvp.Value)}。\n\n" +
+                true.Should().BeFalse($"❌ ADR-0004_4_2 违规: 测试包 {kvp.Key} 存在多个版本: {string.Join(", ", kvp.Value)}。\n\n" +
                             $"检测到的版本: {string.Join(", ", kvp.Value)}\n\n" +
                             $"修复建议:\n" +
                             $"1. 在 Directory.Packages.props 中统一该包的版本\n" +
@@ -413,7 +413,7 @@ public sealed class ADR_0004_Architecture_Tests
             }
         }
 
-        (missingPackages.Count == 0).Should().BeTrue($"❌ ADR-0004_1_9 违规: 发现 {missingPackages.Count} 个包在项目中使用但未在 Directory.Packages.props 中定义。\n\n" +
+        (missingPackages.Count == 0).Should().BeTrue($"❌ ADR-0004_5_1 违规: 发现 {missingPackages.Count} 个包在项目中使用但未在 Directory.Packages.props 中定义。\n\n" +
         $"缺失的包: {string.Join(", ", missingPackages)}\n\n" +
         $"修复建议:\n" +
         $"1. 在 Directory.Packages.props 中为每个缺失的包添加版本定义\n" +

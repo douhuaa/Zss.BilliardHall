@@ -258,7 +258,7 @@ public sealed class ADR_0003_Architecture_Tests
                                   projectName == "ArchitectureAnalyzers" ||  // Level 2 enforcement tool
                                   projectName == "AdrParserCli";  // CLI tool in tools directory
 
-                isValidName.Should().BeTrue($"❌ ADR-0003_8_1 违规: 项目命名不符合命名空间约定\n\n" +
+                isValidName.Should().BeTrue($"❌ ADR-0003_7_1 违规: 项目命名不符合命名空间约定\n\n" +
                 $"项目文件: {projectFile}\n" +
                 $"项目名称: {projectName}\n" +
                 $"相对路径: {relativePath}\n\n" +
@@ -292,7 +292,7 @@ public sealed class ADR_0003_Architecture_Tests
                 .ResideInNamespaceContaining(pattern)
                 .GetResult();
 
-            result.IsSuccessful.Should().BeTrue($"❌ ADR-0003_1_9 违规: 模块不应包含不规范的命名空间模式\n\n" +
+            result.IsSuccessful.Should().BeTrue($"❌ ADR-0003_8_1 违规: 模块不应包含不规范的命名空间模式\n\n" +
             $"模块: {moduleAssembly.GetName().Name}\n" +
             $"禁止的模式: {pattern}\n" +
             $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +

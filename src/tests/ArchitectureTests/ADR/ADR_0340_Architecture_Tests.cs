@@ -151,7 +151,7 @@ public sealed class ADR_0340_Architecture_Tests
             $"参考: docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.5)");
     }
 
-    [Fact(DisplayName = "ADR-0340_1_5: Modules 层不应直接引用 OpenTelemetry")]
+    [Fact(DisplayName = "ADR-0340_1_6: Modules 层不应直接引用 OpenTelemetry")]
     public void Modules_Cannot_Reference_OpenTelemetry_Directly()
     {
         var modulesAssemblies = ModuleAssemblyData.ModuleAssemblies;

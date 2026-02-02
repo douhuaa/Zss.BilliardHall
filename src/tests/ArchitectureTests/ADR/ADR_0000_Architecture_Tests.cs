@@ -131,7 +131,7 @@ public sealed class ADR_0000_Architecture_Tests
     /// <summary>
     /// 反作弊规则：测试类必须包含实质性测试，不能是空壳
     /// </summary>
-    [Fact(DisplayName = "ADR-0000_1_1: 架构测试类必须包含最少断言数（反作弊）")]
+    [Fact(DisplayName = "ADR-0000_1_2: 架构测试类必须包含最少断言数（反作弊）")]
     public void Architecture_Test_Classes_Must_Have_Minimum_Assertions()
     {
         var testTypes = LoadArchitectureTestTypes();
@@ -203,7 +203,7 @@ public sealed class ADR_0000_Architecture_Tests
     /// <summary>
     /// 反作弊规则：测试失败消息必须包含 ADR 编号
     /// </summary>
-    [Fact(DisplayName = "ADR-0000_1_1: 测试失败消息必须包含 ADR 编号（反作弊）")]
+    [Fact(DisplayName = "ADR-0000_1_3: 测试失败消息必须包含 ADR 编号（反作弊）")]
     public void Test_Failure_Messages_Must_Include_ADR_Number()
     {
         var testTypes = LoadArchitectureTestTypes();
@@ -263,7 +263,7 @@ public sealed class ADR_0000_Architecture_Tests
     /// <summary>
     /// 禁止使用 Skip 属性跳过架构测试
     /// </summary>
-    [Fact(DisplayName = "ADR-0000_1_1: 禁止跳过架构测试（反作弊）")]
+    [Fact(DisplayName = "ADR-0000_1_4: 禁止跳过架构测试（反作弊）")]
     public void Architecture_Tests_Must_Not_Be_Skipped()
     {
         var testTypes = LoadArchitectureTestTypes();
