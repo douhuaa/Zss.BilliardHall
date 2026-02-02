@@ -23,7 +23,7 @@ public sealed class ADR_902_Architecture_Tests
 {
     private const string AdrDocsPath = "docs/adr";
 
-    [Fact(DisplayName = "ADR-902.0: ADR-902 标准模板与结构契约文档存在")]
+    [Fact(DisplayName = "ADR-0902_1_1: ADR-902 标准模板与结构契约文档存在")]
     public void ADR_902_Template_Structure_Contract_Exists()
     {
         // 验证 ADR-902 文档存在
@@ -46,7 +46,7 @@ public sealed class ADR_902_Architecture_Tests
         content.Should().Contain("History");
     }
 
-    [Fact(DisplayName = "ADR-902.1:L1 对应的 Copilot Prompts 文件存在")]
+    [Fact(DisplayName = "ADR-0902_1_2:L1 对应的 Copilot Prompts 文件存在")]
     public void ADR_902_Prompts_File_Exists()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -67,7 +67,7 @@ public sealed class ADR_902_Architecture_Tests
         content.Should().Contain("ADR-902");
     }
 
-    [Fact(DisplayName = "ADR-902.2:L1 核心治理原则已定义")]
+    [Fact(DisplayName = "ADR-0902_1_3:L1 核心治理原则已定义")]
     public void Core_ADR_Template_Principles_Are_Defined()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -161,7 +161,7 @@ public sealed class ADR_902_Architecture_Tests
     private const int MaxAdrFilesToCheckL1 = 50;  // L1 阻断级测试
     private const int MaxAdrFilesToCheckL2 = 20;  // L2 警告级测试
 
-    [Fact(DisplayName = "ADR-902.3:L1 ADR 文档必须包含标准 Front Matter（执法级）")]
+    [Fact(DisplayName = "ADR-0902_1_4:L1 ADR 文档必须包含标准 Front Matter（执法级）")]
     public void ADR_Documents_Must_Have_Standard_FrontMatter()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -243,7 +243,7 @@ public sealed class ADR_902_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-902.3 违规：以下 ADR 文档的 Front Matter 不符合标准",
+                "❌ ADR-0902_1_4 违规：以下 ADR 文档的 Front Matter 不符合标准",
                 "",
                 "根据 ADR-902 决策 3：所有 ADR 必须包含标准 Front Matter 并使用合法的枚举值。",
                 ""
@@ -264,7 +264,7 @@ public sealed class ADR_902_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-902.4:L1 ADR 文档必须包含完整章节集合（执法级）")]
+    [Fact(DisplayName = "ADR-0902_1_5:L1 ADR 文档必须包含完整章节集合（执法级）")]
     public void ADR_Documents_Must_Have_Complete_Sections()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -345,7 +345,7 @@ public sealed class ADR_902_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-902.4 违规：以下 ADR 文档缺少必需章节或章节顺序不正确",
+                "❌ ADR-0902_1_5 违规：以下 ADR 文档缺少必需章节或章节顺序不正确",
                 "",
                 "根据 ADR-902 决策 4：所有 ADR 必须包含完整章节集合且顺序固定。",
                 ""
@@ -366,7 +366,7 @@ public sealed class ADR_902_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-902.5:L2 Decision 章节必须严格隔离约束性规则（指导级）")]
+    [Fact(DisplayName = "ADR-0902_1_6:L2 Decision 章节必须严格隔离约束性规则（指导级）")]
     public void ADR_Decision_Must_Be_Isolated()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -444,7 +444,7 @@ public sealed class ADR_902_Architecture_Tests
         // L2 警告：测试总是通过，但已输出警告信息
     }
 
-    [Fact(DisplayName = "ADR-902.1:L1 规则条目必须独立编号（执法级）")]
+    [Fact(DisplayName = "ADR-0902_1_7:L1 规则条目必须独立编号（执法级）")]
     public void ADR_Rules_Must_Have_Independent_Numbering()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -544,7 +544,7 @@ public sealed class ADR_902_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-902.1 违规：以下 ADR 的规则编号不符合要求",
+                "❌ ADR-0902_1_1 违规：以下 ADR 的规则编号不符合要求",
                 "",
                 "根据 ADR-902 决策 1：每条规则必须作为独立三级标题存在，格式为：### ADR-XXX.Y:L? <规则标题>",
                 ""

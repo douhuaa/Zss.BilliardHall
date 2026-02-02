@@ -24,7 +24,7 @@ public sealed class ADR_0121_Architecture_Tests
 {
     #region 1. 契约命名规则 (ADR-121.1)
 
-    [Fact(DisplayName = "ADR-121.1: 位于 Contracts 命名空间的类型必须以 Dto 或 Contract 结尾")]
+    [Fact(DisplayName = "ADR-0121_1_1: 位于 Contracts 命名空间的类型必须以 Dto 或 Contract 结尾")]
     public void Contract_Types_Should_End_With_Dto_Or_Contract_Suffix()
     {
         // 获取所有程序集（包括模块和 Host）
@@ -51,7 +51,7 @@ public sealed class ADR_0121_Architecture_Tests
             var hasValidSuffix = contractType.Name.EndsWith("Dto") || 
                                  contractType.Name.EndsWith("Contract");
 
-            hasValidSuffix.Should().BeTrue($"❌ ADR-121.1 违规: 契约类型缺少 'Dto' 或 'Contract' 后缀\n\n" +
+            hasValidSuffix.Should().BeTrue($"❌ ADR-0121_1_1 违规: 契约类型缺少 'Dto' 或 'Contract' 后缀\n\n" +
                 $"违规类型: {contractType.FullName}\n\n" +
                 $"问题分析:\n" +
                 $"所有位于 Contracts 命名空间的类型必须以 'Dto' 或 'Contract' 后缀结尾，\n" +
@@ -73,7 +73,7 @@ public sealed class ADR_0121_Architecture_Tests
 
     #region 2. 契约不可变性 (ADR-121.2)
 
-    [Fact(DisplayName = "ADR-121.2: 契约属性必须是只读的")]
+    [Fact(DisplayName = "ADR-0121_2_1: 契约属性必须是只读的")]
     public void Contracts_Should_Be_Immutable()
     {
         var allAssemblies = ModuleAssemblyData.ModuleAssemblies
@@ -111,7 +111,7 @@ public sealed class ADR_0121_Architecture_Tests
                 // 属性必须是只读的（没有 setter）或者是 init-only
                 var isImmutable = !hasSetter || isInitOnly;
 
-                isImmutable.Should().BeTrue($"❌ ADR-121.2 违规: 契约属性必须是只读的\n\n" +
+                isImmutable.Should().BeTrue($"❌ ADR-0121_2_1 违规: 契约属性必须是只读的\n\n" +
                     $"违规类型: {contractType.FullName}\n" +
                     $"可变属性: {property.Name}\n\n" +
                     $"问题分析:\n" +
@@ -136,7 +136,7 @@ public sealed class ADR_0121_Architecture_Tests
 
     #region 3. 契约无业务方法 (ADR-121.3)
 
-    [Fact(DisplayName = "ADR-121.3: 契约不得包含业务方法")]
+    [Fact(DisplayName = "ADR-0121_3_1: 契约不得包含业务方法")]
     public void Contracts_Should_Not_Contain_Business_Methods()
     {
         var allAssemblies = ModuleAssemblyData.ModuleAssemblies
@@ -191,7 +191,7 @@ public sealed class ADR_0121_Architecture_Tests
             if (businessMethods.Any())
             {
                 true.Should().BeFalse(
-                    $"❌ ADR-121.3 违规: 契约包含业务方法\n\n" +
+                    $"❌ ADR-0121_3_1 违规: 契约包含业务方法\n\n" +
                     $"违规类型: {contractType.FullName}\n" +
                     $"业务方法: {string.Join(", ", businessMethods.Select(m => m.Name))}\n\n" +
                     $"问题分析:\n" +
@@ -214,7 +214,7 @@ public sealed class ADR_0121_Architecture_Tests
 
     #region 4. 契约不包含领域模型类型 (ADR-121.4)
 
-    [Fact(DisplayName = "ADR-121.4: 契约不得包含领域模型类型")]
+    [Fact(DisplayName = "ADR-0121_4_1: 契约不得包含领域模型类型")]
     public void Contracts_Should_Not_Contain_Domain_Types()
     {
         var allAssemblies = ModuleAssemblyData.ModuleAssemblies
@@ -307,7 +307,7 @@ public sealed class ADR_0121_Architecture_Tests
                 if (isDomainType && !isContractType)
                 {
                     true.Should().BeFalse(
-                        $"❌ ADR-121.4 违规: 契约包含领域模型类型\n\n" +
+                        $"❌ ADR-0121_4_1 违规: 契约包含领域模型类型\n\n" +
                         $"违规契约: {contractType.FullName}\n" +
                         $"领域模型类型: {type.FullName}\n\n" +
                         $"问题分析:\n" +
@@ -331,7 +331,7 @@ public sealed class ADR_0121_Architecture_Tests
 
     #region 5. 契约命名空间规范 (ADR-121.5)
 
-    [Fact(DisplayName = "ADR-121.5: 契约必须位于 Contracts 命名空间下")]
+    [Fact(DisplayName = "ADR-0121_5_1: 契约必须位于 Contracts 命名空间下")]
     public void Contracts_Should_Be_In_Contracts_Namespace()
     {
         var allAssemblies = ModuleAssemblyData.ModuleAssemblies
@@ -379,7 +379,7 @@ public sealed class ADR_0121_Architecture_Tests
             if (looksLikePublicContract && !isInContractsNamespace)
             {
                 true.Should().BeFalse(
-                    $"❌ ADR-121.5 违规: 公共契约未在 Contracts 命名空间下\n\n" +
+                    $"❌ ADR-0121_5_1 违规: 公共契约未在 Contracts 命名空间下\n\n" +
                     $"违规类型: {dtoType.FullName}\n" +
                     $"当前命名空间: {ns}\n" +
                     $"期望命名空间: Zss.BilliardHall.Platform.Contracts.* 或 Zss.BilliardHall.Modules.{{ModuleName}}.Contracts.*\n\n" +
@@ -406,7 +406,7 @@ public sealed class ADR_0121_Architecture_Tests
     // 原因：物理目录结构验证需要文件系统访问，可能在某些 CI 环境中不可用
 
     /*
-    [Fact(DisplayName = "ADR-121.6: 契约命名空间应与物理目录一致 (L2)")]
+    [Fact(DisplayName = "ADR-0121_6_1: 契约命名空间应与物理目录一致 (L2)")]
     public void Contract_Namespace_Should_Match_Directory()
     {
         // 此测试需要文件系统访问权限

@@ -46,7 +46,7 @@ public sealed class ADR_0007_Architecture_Tests
     private static bool ContainsAny(string content, params string[] patterns) =>
         patterns.Any(p => content.Contains(p, StringComparison.OrdinalIgnoreCase));
 
-    [Fact(DisplayName = "ADR-0007.1: Agent 配置必须包含三态输出规范")]
+    [Fact(DisplayName = "ADR-0007_1_1: Agent 配置必须包含三态输出规范")]
     public void Agent_Responses_Must_Include_Three_State_Indicators()
     {
         var violations = new List<string>();
@@ -70,7 +70,7 @@ public sealed class ADR_0007_Architecture_Tests
             true.Should().BeFalse(FormatViolations("ADR-0007.1 违规：以下 Agent 配置文件未正确实现三态输出规范：", violations));
     }
 
-    [Fact(DisplayName = "ADR-0007.7: Prompts 文件不应引入 ADR 未明确的规则")]
+    [Fact(DisplayName = "ADR-0007_1_2: Prompts 文件不应引入 ADR 未明确的规则")]
     public void Prompts_Must_Not_Contradict_ADR()
     {
         return;

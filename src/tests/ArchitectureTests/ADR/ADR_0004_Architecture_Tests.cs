@@ -28,13 +28,13 @@ public sealed class ADR_0004_Architecture_Tests
 
     #region 1. CPM 基础设施约束
 
-    [Fact(DisplayName = "ADR-0004.1: Directory.Packages.props 应存在于仓库根目录")]
+    [Fact(DisplayName = "ADR-0004_1_1: Directory.Packages.props 应存在于仓库根目录")]
     public void Repository_Should_Have_Directory_Packages_Props()
     {
         var root = TestEnvironment.RepositoryRoot;
         var cpmFile = Path.Combine(root, "Directory.Packages.props");
 
-        File.Exists(cpmFile).Should().BeTrue($"❌ ADR-0004.1 违规: 仓库根目录必须存在 Directory.Packages.props 文件以启用 Central Package Management (CPM)。\n\n" +
+        File.Exists(cpmFile).Should().BeTrue($"❌ ADR-0004_1_1 违规: 仓库根目录必须存在 Directory.Packages.props 文件以启用 Central Package Management (CPM)。\n\n" +
         $"预期路径: {cpmFile}\n\n" +
         $"修复建议:\n" +
         $"1. 在仓库根目录创建 Directory.Packages.props 文件\n" +
@@ -43,7 +43,7 @@ public sealed class ADR_0004_Architecture_Tests
         $"参考: docs/copilot/adr-0004.prompts.md (场景 1)");
     }
 
-    [Fact(DisplayName = "ADR-0004.2: CPM 应被启用")]
+    [Fact(DisplayName = "ADR-0004_1_2: CPM 应被启用")]
     public void CPM_Should_Be_Enabled()
     {
         var root = TestEnvironment.RepositoryRoot;
@@ -53,7 +53,7 @@ public sealed class ADR_0004_Architecture_Tests
 
         var content = File.ReadAllText(cpmFile);
 
-        content.Contains("ManagePackageVersionsCentrally").Should().BeTrue($"❌ ADR-0004.2 违规: Directory.Packages.props 必须包含 ManagePackageVersionsCentrally 设置。\n\n" +
+        content.Contains("ManagePackageVersionsCentrally").Should().BeTrue($"❌ ADR-0004_2_1 违规: Directory.Packages.props 必须包含 ManagePackageVersionsCentrally 设置。\n\n" +
         $"当前状态: 未找到 ManagePackageVersionsCentrally 配置\n\n" +
         $"修复建议:\n" +
         $"1. 在 Directory.Packages.props 中添加 <PropertyGroup> 节点\n" +
@@ -61,7 +61,7 @@ public sealed class ADR_0004_Architecture_Tests
         $"3. 重新构建项目验证配置生效\n\n" +
         $"参考: docs/copilot/adr-0004.prompts.md (场景 1)");
 
-        content.Contains("true").Should().BeTrue($"❌ ADR-0004.2 违规: Directory.Packages.props 中的 ManagePackageVersionsCentrally 应该设置为 true。\n\n" +
+        content.Contains("true").Should().BeTrue($"❌ ADR-0004_2_1 违规: Directory.Packages.props 中的 ManagePackageVersionsCentrally 应该设置为 true。\n\n" +
         $"当前状态: ManagePackageVersionsCentrally 值不正确\n\n" +
         $"修复建议:\n" +
         $"1. 确保 <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>\n" +
@@ -70,7 +70,7 @@ public sealed class ADR_0004_Architecture_Tests
         $"参考: docs/copilot/adr-0004.prompts.md (场景 1)");
     }
 
-    [Fact(DisplayName = "ADR-0004.3: CPM 应启用传递依赖固定")]
+    [Fact(DisplayName = "ADR-0004_1_3: CPM 应启用传递依赖固定")]
     public void CPM_Should_Enable_Transitive_Pinning()
     {
         var root = TestEnvironment.RepositoryRoot;
@@ -97,7 +97,7 @@ public sealed class ADR_0004_Architecture_Tests
 
     #region 2. 项目不应手动指定包版本
 
-    [Fact(DisplayName = "ADR-0004.4: 项目文件不应手动指定包版本")]
+    [Fact(DisplayName = "ADR-0004_2_1: 项目文件不应手动指定包版本")]
     public void Projects_Should_Not_Specify_Package_Versions()
     {
         var root = TestEnvironment.RepositoryRoot;
@@ -136,7 +136,7 @@ public sealed class ADR_0004_Architecture_Tests
             }
         }
 
-        (violations.Count == 0).Should().BeTrue($"❌ ADR-0004.4 违规: 发现 {violations.Count} 个项目手动指定了包版本，应使用 CPM 统一管理。\n\n" +
+        (violations.Count == 0).Should().BeTrue($"❌ ADR-0004_4_1 违规: 发现 {violations.Count} 个项目手动指定了包版本，应使用 CPM 统一管理。\n\n" +
         $"违规项目:\n{string.Join("\n", violations)}\n\n" +
         $"修复建议:\n" +
         $"1. 在 Directory.Packages.props 中定义包版本: <PackageVersion Include=\"包名\" Version=\"版本号\" />\n" +
@@ -149,7 +149,7 @@ public sealed class ADR_0004_Architecture_Tests
 
     #region 3. 包分组约束
 
-    [Fact(DisplayName = "ADR-0004.5: Directory.Packages.props 应包含包分组")]
+    [Fact(DisplayName = "ADR-0004_3_1: Directory.Packages.props 应包含包分组")]
     public void Directory_Packages_Props_Should_Contain_Package_Groups()
     {
         var root = TestEnvironment.RepositoryRoot;
@@ -171,7 +171,7 @@ public sealed class ADR_0004_Architecture_Tests
         $"参考: docs/copilot/adr-0004.prompts.md (FAQ Q3)");
     }
 
-    [Fact(DisplayName = "ADR-0004.6: Directory.Packages.props 应包含常见包分组")]
+    [Fact(DisplayName = "ADR-0004_3_2: Directory.Packages.props 应包含常见包分组")]
     public void Directory_Packages_Props_Should_Contain_Common_Package_Groups()
     {
         var root = TestEnvironment.RepositoryRoot;
@@ -217,7 +217,7 @@ public sealed class ADR_0004_Architecture_Tests
 
     #region 4. 分层依赖包规则约束
 
-    [Fact(DisplayName = "ADR-0004.7: Platform 项目不应引用业务包")]
+    [Fact(DisplayName = "ADR-0004_4_1: Platform 项目不应引用业务包")]
     public void Platform_Projects_Should_Not_Reference_Business_Packages()
     {
         var root = TestEnvironment.RepositoryRoot;
@@ -258,7 +258,7 @@ public sealed class ADR_0004_Architecture_Tests
 
                 if (forbiddenPackages.Any(fp => packageName.Contains(fp)))
                 {
-                    true.Should().BeFalse($"❌ ADR-0004.7 违规: Platform 项目 {Path.GetFileName(projectFile)} 不应引用业务包: {packageName}。\n\n" +
+                    true.Should().BeFalse($"❌ ADR-0004_1_7 违规: Platform 项目 {Path.GetFileName(projectFile)} 不应引用业务包: {packageName}。\n\n" +
                                 $"违规项目: {Path.GetFileName(projectFile)}\n" +
                                 $"违规包: {packageName}\n\n" +
                                 $"修复建议:\n" +
@@ -271,7 +271,7 @@ public sealed class ADR_0004_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-0004.8: 所有测试项目应引用相同的测试框架版本")]
+    [Fact(DisplayName = "ADR-0004_4_2: 所有测试项目应引用相同的测试框架版本")]
     public void All_Test_Projects_Should_Use_Same_Test_Framework_Versions()
     {
         var root = TestEnvironment.RepositoryRoot;
@@ -333,7 +333,7 @@ public sealed class ADR_0004_Architecture_Tests
         {
             if (kvp.Value.Count > 1)
             {
-                true.Should().BeFalse($"❌ ADR-0004.8 违规: 测试包 {kvp.Key} 存在多个版本: {string.Join(", ", kvp.Value)}。\n\n" +
+                true.Should().BeFalse($"❌ ADR-0004_1_8 违规: 测试包 {kvp.Key} 存在多个版本: {string.Join(", ", kvp.Value)}。\n\n" +
                             $"检测到的版本: {string.Join(", ", kvp.Value)}\n\n" +
                             $"修复建议:\n" +
                             $"1. 在 Directory.Packages.props 中统一该包的版本\n" +
@@ -348,7 +348,7 @@ public sealed class ADR_0004_Architecture_Tests
 
     #region 5. 包版本一致性约束
 
-    [Fact(DisplayName = "ADR-0004.9: Directory.Packages.props 应定义所有项目使用的包")]
+    [Fact(DisplayName = "ADR-0004_5_1: Directory.Packages.props 应定义所有项目使用的包")]
     public void Directory_Packages_Props_Should_Define_All_Used_Packages()
     {
         var root = TestEnvironment.RepositoryRoot;
@@ -413,7 +413,7 @@ public sealed class ADR_0004_Architecture_Tests
             }
         }
 
-        (missingPackages.Count == 0).Should().BeTrue($"❌ ADR-0004.9 违规: 发现 {missingPackages.Count} 个包在项目中使用但未在 Directory.Packages.props 中定义。\n\n" +
+        (missingPackages.Count == 0).Should().BeTrue($"❌ ADR-0004_1_9 违规: 发现 {missingPackages.Count} 个包在项目中使用但未在 Directory.Packages.props 中定义。\n\n" +
         $"缺失的包: {string.Join(", ", missingPackages)}\n\n" +
         $"修复建议:\n" +
         $"1. 在 Directory.Packages.props 中为每个缺失的包添加版本定义\n" +

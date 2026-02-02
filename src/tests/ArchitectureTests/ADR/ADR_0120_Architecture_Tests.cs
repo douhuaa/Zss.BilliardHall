@@ -28,7 +28,7 @@ public sealed class ADR_0120_Architecture_Tests
 
     #region 1. 事件命名规则 (ADR-120.1, ADR-120.2)
 
-    [Theory(DisplayName = "ADR-120.1: 事件类型必须以 Event 后缀结尾")]
+    [Theory(DisplayName = "ADR-0120_1_1: 事件类型必须以 Event 后缀结尾")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Event_Types_Should_End_With_Event_Suffix(Assembly moduleAssembly)
     {
@@ -45,7 +45,7 @@ public sealed class ADR_0120_Architecture_Tests
 
         foreach (var eventType in eventTypes)
         {
-            eventType.Name.EndsWith("Event").Should().BeTrue($"❌ ADR-120.1 违规: 事件类型缺少 'Event' 后缀\n\n" +
+            eventType.Name.EndsWith("Event").Should().BeTrue($"❌ ADR-0120_1_1 违规: 事件类型缺少 'Event' 后缀\n\n" +
             $"违规类型: {eventType.FullName}\n\n" +
             $"问题分析:\n" +
             $"所有领域事件类型必须以 'Event' 后缀结尾，以明确标识其为事件\n\n" +
@@ -57,7 +57,7 @@ public sealed class ADR_0120_Architecture_Tests
         }
     }
 
-    [Theory(DisplayName = "ADR-120.2: 事件名称必须使用动词过去式")]
+    [Theory(DisplayName = "ADR-0120_1_2: 事件名称必须使用动词过去式")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Event_Names_Should_Use_Past_Tense_Verbs(Assembly moduleAssembly)
     {
@@ -89,7 +89,7 @@ public sealed class ADR_0120_Architecture_Tests
             {
                 if (pattern.IsMatch(eventName))
                 {
-                    true.Should().BeFalse($"❌ ADR-120.2 违规: 事件名称未使用动词过去式（本体语义约束，L1）\n\n" +
+                    true.Should().BeFalse($"❌ ADR-0120_2_1 违规: 事件名称未使用动词过去式（本体语义约束，L1）\n\n" +
                                 $"违规类型: {eventType.FullName}\n" +
                                 $"命名模式: {eventName}\n\n" +
                                 $"问题分析:\n" +
@@ -112,7 +112,7 @@ public sealed class ADR_0120_Architecture_Tests
 
     #region 2. 命名空间组织 (ADR-120.3)
 
-    [Theory(DisplayName = "ADR-120.3: 事件必须在模块的 Events 命名空间下")]
+    [Theory(DisplayName = "ADR-0120_2_1: 事件必须在模块的 Events 命名空间下")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Events_Should_Be_In_Events_Namespace(Assembly moduleAssembly)
     {
@@ -132,7 +132,7 @@ public sealed class ADR_0120_Architecture_Tests
             // 检查命名空间是否符合规范：Zss.BilliardHall.Modules.{ModuleName}.Events[.{SubNamespace}]
             var isValidNamespace = ns.Contains(".Events") && ns.StartsWith("Zss.BilliardHall.Modules.");
 
-            isValidNamespace.Should().BeTrue($"❌ ADR-120.3 违规: 事件未在正确的命名空间下\n\n" +
+            isValidNamespace.Should().BeTrue($"❌ ADR-0120_3_1 违规: 事件未在正确的命名空间下\n\n" +
             $"违规类型: {eventType.FullName}\n" +
             $"当前命名空间: {ns}\n" +
             $"期望命名空间: Zss.BilliardHall.Modules.{{ModuleName}}.Events[.{{SubNamespace}}]\n\n" +
@@ -154,7 +154,7 @@ public sealed class ADR_0120_Architecture_Tests
 
     #region 3. 事件处理器命名 (ADR-120.4)
 
-    [Theory(DisplayName = "ADR-120.4: 事件处理器必须以 Handler 后缀结尾")]
+    [Theory(DisplayName = "ADR-0120_3_1: 事件处理器必须以 Handler 后缀结尾")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Event_Handlers_Should_End_With_Handler_Suffix(Assembly moduleAssembly)
     {
@@ -195,7 +195,7 @@ public sealed class ADR_0120_Architecture_Tests
 
         foreach (var handlerType in eventHandlerTypes)
         {
-            handlerType.Name.EndsWith("Handler").Should().BeTrue($"❌ ADR-120.4 违规: 事件处理器缺少 'Handler' 后缀\n\n" +
+            handlerType.Name.EndsWith("Handler").Should().BeTrue($"❌ ADR-0120_4_1 违规: 事件处理器缺少 'Handler' 后缀\n\n" +
             $"违规类型: {handlerType.FullName}\n\n" +
             $"问题分析:\n" +
             $"所有事件处理器必须以 'Handler' 后缀结尾\n\n" +
@@ -214,7 +214,7 @@ public sealed class ADR_0120_Architecture_Tests
 
     #region 4. 模块隔离约束 (ADR-120.5, ADR-120.6)
 
-    [Theory(DisplayName = "ADR-120.5: 事件不得包含领域实体类型")]
+    [Theory(DisplayName = "ADR-0120_4_1: 事件不得包含领域实体类型")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Events_Should_Not_Contain_Domain_Entities(Assembly moduleAssembly)
     {
@@ -268,7 +268,7 @@ public sealed class ADR_0120_Architecture_Tests
 
                     if (isDomainEntity)
                     {
-                        true.Should().BeFalse($"❌ ADR-120.5 违规: 事件包含领域实体类型\n\n" +
+                        true.Should().BeFalse($"❌ ADR-0120_1_5 违规: 事件包含领域实体类型\n\n" +
                                     $"违规事件: {eventType.FullName}\n" +
                                     $"领域实体类型: {actualType.FullName}\n\n" +
                                     $"问题分析:\n" +
@@ -287,7 +287,7 @@ public sealed class ADR_0120_Architecture_Tests
         }
     }
 
-    [Theory(DisplayName = "ADR-120.6: 事件不得包含业务方法")]
+    [Theory(DisplayName = "ADR-0120_4_2: 事件不得包含业务方法")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Events_Should_Not_Contain_Business_Methods(Assembly moduleAssembly)
     {
@@ -323,7 +323,7 @@ public sealed class ADR_0120_Architecture_Tests
 
             if (businessMethods.Any())
             {
-                true.Should().BeFalse($"❌ ADR-120.6 违规: 事件包含业务方法\n\n" +
+                true.Should().BeFalse($"❌ ADR-0120_1_6 违规: 事件包含业务方法\n\n" +
                             $"违规事件: {eventType.FullName}\n" +
                             $"业务方法: {string.Join(", ", businessMethods.Select(m => m.Name))}\n\n" +
                             $"问题分析:\n" +

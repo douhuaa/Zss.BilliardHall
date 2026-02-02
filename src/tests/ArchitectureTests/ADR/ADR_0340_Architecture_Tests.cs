@@ -28,13 +28,13 @@ public sealed class ADR_0340_Architecture_Tests
 {
     #region 1. Platform 层日志和监控依赖约束（L1 - 依赖验证）
 
-    [Fact(DisplayName = "ADR-340.1: Platform 层必须引用所有日志和监控基础设施包")]
+    [Fact(DisplayName = "ADR-0340_1_1: Platform 层必须引用所有日志和监控基础设施包")]
     public void Platform_Must_Reference_Logging_Packages()
     {
         var root = TestEnvironment.RepositoryRoot;
         var platformCsproj = Path.Combine(root, "src", "Platform", "Platform.csproj");
 
-        File.Exists(platformCsproj).Should().BeTrue($"❌ ADR-340.1 违规: 找不到 Platform.csproj 文件。\n\n" +
+        File.Exists(platformCsproj).Should().BeTrue($"❌ ADR-0340_1_1 违规: 找不到 Platform.csproj 文件。\n\n" +
             $"预期路径: {platformCsproj}");
 
         var content = File.ReadAllText(platformCsproj);
@@ -51,7 +51,7 @@ public sealed class ADR_0340_Architecture_Tests
 
         var missingPackages = requiredPackages.Where(pkg => !content.Contains(pkg)).ToList();
 
-        missingPackages.Any().Should().BeFalse($"❌ ADR-340.1 违规: Platform 层必须引用以下日志和监控基础设施包。\n\n" +
+        missingPackages.Any().Should().BeFalse($"❌ ADR-0340_1_1 违规: Platform 层必须引用以下日志和监控基础设施包。\n\n" +
             $"缺失的包:\n" +
             string.Join("\n", missingPackages.Select(pkg => $"  - {pkg}")) + "\n\n" +
             $"修复建议:\n" +
@@ -63,13 +63,13 @@ public sealed class ADR_0340_Architecture_Tests
             $"工程标准: docs/guides/structured-logging-monitoring-standard.md");
     }
 
-    [Fact(DisplayName = "ADR-340.2: PlatformBootstrapper 必须包含日志配置代码")]
+    [Fact(DisplayName = "ADR-0340_1_2: PlatformBootstrapper 必须包含日志配置代码")]
     public void PlatformBootstrapper_Must_Contain_Logging_Configuration()
     {
         var root = TestEnvironment.RepositoryRoot;
         var bootstrapperFile = Path.Combine(root, "src", "Platform", "PlatformBootstrapper.cs");
 
-        File.Exists(bootstrapperFile).Should().BeTrue($"❌ ADR-340.2 违规: 找不到 PlatformBootstrapper.cs 文件。");
+        File.Exists(bootstrapperFile).Should().BeTrue($"❌ ADR-0340_1_2 违规: 找不到 PlatformBootstrapper.cs 文件。");
 
         var content = File.ReadAllText(bootstrapperFile);
 
@@ -77,7 +77,7 @@ public sealed class ADR_0340_Architecture_Tests
         var hasSerilogUsing = content.Contains("using Serilog") || content.Contains("Serilog.");
         var hasSerilogConfig = content.Contains("Log.Logger") || content.Contains("LoggerConfiguration");
 
-        hasSerilogUsing.Should().BeTrue($"❌ ADR-340.2 违规: PlatformBootstrapper 必须引用 Serilog 命名空间。\n\n" +
+        hasSerilogUsing.Should().BeTrue($"❌ ADR-0340_1_2 违规: PlatformBootstrapper 必须引用 Serilog 命名空间。\n\n" +
             $"当前状态: PlatformBootstrapper.cs 未 using Serilog\n\n" +
             $"修复建议:\n" +
             $"1. 在文件顶部添加 'using Serilog;'\n" +
@@ -85,7 +85,7 @@ public sealed class ADR_0340_Architecture_Tests
             $"执行级别: L1（文本匹配）- 此规则仅验证代码存在，不验证配置正确性\n\n" +
             $"参考: docs/guides/structured-logging-monitoring-standard.md (附录 A)");
 
-        hasSerilogConfig.Should().BeTrue($"❌ ADR-340.2 违规: PlatformBootstrapper 必须包含 Serilog 配置代码。\n\n" +
+        hasSerilogConfig.Should().BeTrue($"❌ ADR-0340_1_2 违规: PlatformBootstrapper 必须包含 Serilog 配置代码。\n\n" +
             $"当前状态: 未发现 Log.Logger 或 LoggerConfiguration\n\n" +
             $"修复建议:\n" +
             $"1. 在 PlatformBootstrapper.Configure() 中创建 LoggerConfiguration\n" +
@@ -98,7 +98,7 @@ public sealed class ADR_0340_Architecture_Tests
         var hasOpenTelemetryConfig = content.Contains("AddOpenTelemetry");
         var hasTracingAndMetrics = content.Contains("WithTracing") && content.Contains("WithMetrics");
 
-        hasOpenTelemetryConfig.Should().BeTrue($"❌ ADR-340.2 违规: PlatformBootstrapper 必须包含 OpenTelemetry 配置代码。\n\n" +
+        hasOpenTelemetryConfig.Should().BeTrue($"❌ ADR-0340_1_2 违规: PlatformBootstrapper 必须包含 OpenTelemetry 配置代码。\n\n" +
             $"当前状态: 未发现 AddOpenTelemetry 调用\n\n" +
             $"修复建议:\n" +
             $"1. 在 PlatformBootstrapper.Configure() 中调用 services.AddOpenTelemetry()\n" +
@@ -106,7 +106,7 @@ public sealed class ADR_0340_Architecture_Tests
             $"执行级别: L1（文本匹配）- 此规则仅验证代码存在，不验证配置正确性\n\n" +
             $"参考: docs/guides/structured-logging-monitoring-standard.md (二、OpenTelemetry 追踪和指标配置)");
 
-        hasTracingAndMetrics.Should().BeTrue($"❌ ADR-340.2 违规: OpenTelemetry 必须同时配置 Tracing 和 Metrics。\n\n" +
+        hasTracingAndMetrics.Should().BeTrue($"❌ ADR-0340_1_2 违规: OpenTelemetry 必须同时配置 Tracing 和 Metrics。\n\n" +
             $"当前状态: 缺少 WithTracing 或 WithMetrics 配置\n\n" +
             $"修复建议:\n" +
             $"1. 确保同时配置 .WithTracing() 和 .WithMetrics()\n" +
@@ -120,7 +120,7 @@ public sealed class ADR_0340_Architecture_Tests
 
     #region 2. Application/Modules 层日志配置隔离（L1 - 依赖隔离）
 
-    [Fact(DisplayName = "ADR-340.5: Modules 层不应直接引用 Serilog")]
+    [Fact(DisplayName = "ADR-0340_1_5: Modules 层不应直接引用 Serilog")]
     public void Modules_Cannot_Reference_Serilog_Directly()
     {
         var modulesAssemblies = ModuleAssemblyData.ModuleAssemblies;
@@ -135,7 +135,7 @@ public sealed class ADR_0340_Architecture_Tests
             .HaveDependencyOn("Serilog")
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-340.5 违规: Modules 层禁止直接引用 Serilog。\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-0340_1_5 违规: Modules 层禁止直接引用 Serilog。\n\n" +
             $"违规类型:\n" +
             string.Join("\n", result.FailingTypeNames?.Select(t => $"  - {t}") ?? Array.Empty<string>()) + "\n\n" +
             $"修复建议:\n" +
@@ -151,7 +151,7 @@ public sealed class ADR_0340_Architecture_Tests
             $"参考: docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.5)");
     }
 
-    [Fact(DisplayName = "ADR-340.5: Modules 层不应直接引用 OpenTelemetry")]
+    [Fact(DisplayName = "ADR-0340_1_5: Modules 层不应直接引用 OpenTelemetry")]
     public void Modules_Cannot_Reference_OpenTelemetry_Directly()
     {
         var modulesAssemblies = ModuleAssemblyData.ModuleAssemblies;
@@ -166,7 +166,7 @@ public sealed class ADR_0340_Architecture_Tests
             .HaveDependencyOn("OpenTelemetry")
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-340.5 违规: Modules 层禁止直接引用 OpenTelemetry（配置类）。\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-0340_1_5 违规: Modules 层禁止直接引用 OpenTelemetry（配置类）。\n\n" +
             $"违规类型:\n" +
             string.Join("\n", result.FailingTypeNames?.Select(t => $"  - {t}") ?? Array.Empty<string>()) + "\n\n" +
             $"修复建议:\n" +
@@ -180,7 +180,7 @@ public sealed class ADR_0340_Architecture_Tests
             $"参考: docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.5)");
     }
 
-    [Fact(DisplayName = "ADR-340.5: Application 层不应直接配置 Serilog")]
+    [Fact(DisplayName = "ADR-0340_1_5: Application 层不应直接配置 Serilog")]
     public void Application_Cannot_Configure_Serilog()
     {
         var root = TestEnvironment.RepositoryRoot;
@@ -199,7 +199,7 @@ public sealed class ADR_0340_Architecture_Tests
             .HaveDependencyOn("Serilog")
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-340.5 违规: Application 层禁止直接引用 Serilog。\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-0340_1_5 违规: Application 层禁止直接引用 Serilog。\n\n" +
             $"违规类型:\n" +
             string.Join("\n", result.FailingTypeNames?.Select(t => $"  - {t}") ?? Array.Empty<string>()) + "\n\n" +
             $"修复建议:\n" +
@@ -211,7 +211,7 @@ public sealed class ADR_0340_Architecture_Tests
             $"参考: docs/adr/constitutional/ADR-0002-platform-application-host-bootstrap.md");
     }
 
-    [Fact(DisplayName = "ADR-340.5: Application 层不应直接配置 OpenTelemetry")]
+    [Fact(DisplayName = "ADR-0340_1_5: Application 层不应直接配置 OpenTelemetry")]
     public void Application_Cannot_Configure_OpenTelemetry()
     {
         var root = TestEnvironment.RepositoryRoot;
@@ -230,7 +230,7 @@ public sealed class ADR_0340_Architecture_Tests
             .HaveDependencyOn("OpenTelemetry")
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-340.5 违规: Application 层禁止直接引用 OpenTelemetry 配置包。\n\n" +
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-0340_1_5 违规: Application 层禁止直接引用 OpenTelemetry 配置包。\n\n" +
             $"违规类型:\n" +
             string.Join("\n", result.FailingTypeNames?.Select(t => $"  - {t}") ?? Array.Empty<string>()) + "\n\n" +
             $"修复建议:\n" +

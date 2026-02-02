@@ -9,7 +9,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// </summary>
 public sealed class ADR_0220_Architecture_Tests
 {
-    [Theory(DisplayName = "ADR-220.1: 模块禁止直接依赖具体事件总线实现")]
+    [Theory(DisplayName = "ADR-0220_1_1: 模块禁止直接依赖具体事件总线实现")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Modules_Must_Not_Depend_On_Concrete_EventBus(Assembly moduleAssembly)
     {
@@ -23,7 +23,7 @@ public sealed class ADR_0220_Architecture_Tests
                 .HaveDependencyOn(dep)
                 .GetResult();
 
-            result.IsSuccessful.Should().BeTrue($"❌ ADR-220.1 违规: 模块直接依赖具体事件总线实现 {dep}\n\n" +
+            result.IsSuccessful.Should().BeTrue($"❌ ADR-0220_1_1 违规: 模块直接依赖具体事件总线实现 {dep}\n\n" +
                 $"违规类型: {string.Join(", ", result.FailingTypeNames ?? new List<string>())}\n\n" +
                 $"修复建议:\n" +
                 $"通过 IEventBus 抽象接口使用事件总线\n\n" +
@@ -31,7 +31,7 @@ public sealed class ADR_0220_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-220.4: 事件订阅者必须注册为 Scoped 或 Transient")]
+    [Fact(DisplayName = "ADR-0220_1_2: 事件订阅者必须注册为 Scoped 或 Transient")]
     public void EventHandlers_Must_Be_Scoped_Or_Transient()
     {
         // 此规则需要在集成测试中验证 DI 容器配置

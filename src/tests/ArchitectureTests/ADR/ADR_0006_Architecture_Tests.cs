@@ -22,7 +22,7 @@ public sealed class ADR_0006_Architecture_Tests
         _adrRoot = Path.Combine(TestEnvironment.RepositoryRoot, "docs", "adr");
     }
 
-    [Fact(DisplayName = "ADR-0006.1: ADR 文件编号应符合分段规则")]
+    [Fact(DisplayName = "ADR-0006_1_1: ADR 文件编号应符合分段规则")]
     public void All_ADR_Files_Should_Match_Numbering_Rules()
     {
         var adrFiles = GetAllAdrFiles();
@@ -32,7 +32,7 @@ public sealed class ADR_0006_Architecture_Tests
             var fileName = Path.GetFileName(file);
             var match = System.Text.RegularExpressions.Regex.Match(fileName, @"^ADR-(\d+)");
 
-            match.Success.Should().BeTrue($"❌ ADR-0006.1 违规: ADR 文件名必须以 'ADR-数字' 开头\n\n" +
+            match.Success.Should().BeTrue($"❌ ADR-0006_1_1 违规: ADR 文件名必须以 'ADR-数字' 开头\n\n" +
                 $"文件: {file}\n" +
                 $"文件名: {fileName}\n\n" +
                 $"修复建议:\n" +
@@ -71,7 +71,7 @@ public sealed class ADR_0006_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-0006.2: ADR 文件名应与编号一致")]
+    [Fact(DisplayName = "ADR-0006_1_2: ADR 文件名应与编号一致")]
     public void All_ADR_Files_Should_Have_Correct_Filename_Format()
     {
         var adrFiles = GetAllAdrFiles();
@@ -97,7 +97,7 @@ public sealed class ADR_0006_Architecture_Tests
             // Check format: ADR-XXXX-descriptive-title.md
             var isValid = System.Text.RegularExpressions.Regex.IsMatch(fileName, @"^ADR-\d+-[a-z0-9-]+\.md$");
 
-            isValid.Should().BeTrue($"❌ ADR-0006.2 违规: ADR 文件名格式不正确\n\n" +
+            isValid.Should().BeTrue($"❌ ADR-0006_1_2 违规: ADR 文件名格式不正确\n\n" +
                 $"文件: {file}\n" +
                 $"文件名: {fileName}\n\n" +
                 $"正确格式: ADR-XXXX-descriptive-title.md\n" +
@@ -111,7 +111,7 @@ public sealed class ADR_0006_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-0006.3: 宪法层 ADR 应使用前导零")]
+    [Fact(DisplayName = "ADR-0006_1_3: 宪法层 ADR 应使用前导零")]
     public void Constitutional_ADRs_Should_Use_Leading_Zeros()
     {
         var constitutionalDir = Path.Combine(_adrRoot, "constitutional");
@@ -129,7 +129,7 @@ public sealed class ADR_0006_Architecture_Tests
 
                 if (number is >= 1 and <= 9)
                 {
-                    (numberStr.Length == 4 && numberStr.StartsWith("000")).Should().BeTrue($"❌ ADR-0006.3 违规: 宪法层 ADR 必须使用前导零\n\n" +
+                    (numberStr.Length == 4 && numberStr.StartsWith("000")).Should().BeTrue($"❌ ADR-0006_1_3 违规: 宪法层 ADR 必须使用前导零\n\n" +
                         $"文件: {file}\n" +
                         $"当前编号: ADR-{numberStr}\n" +
                         $"正确编号: ADR-{number:D4}\n\n" +
@@ -142,7 +142,7 @@ public sealed class ADR_0006_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-0006.4: 非宪法层 ADR 不应使用多余前导零")]
+    [Fact(DisplayName = "ADR-0006_1_4: 非宪法层 ADR 不应使用多余前导零")]
     public void Non_Constitutional_ADRs_Should_Not_Use_Leading_Zeros()
     {
         var directories = new[] { "structure", "runtime", "technical", "governance" };
@@ -190,7 +190,7 @@ public sealed class ADR_0006_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-0006.5: ADR 文件应位于正确的目录")]
+    [Fact(DisplayName = "ADR-0006_1_5: ADR 文件应位于正确的目录")]
     public void All_ADR_Files_Should_Be_In_Correct_Directory()
     {
         var mapping = new Dictionary<string, (int Min, int Max)>
@@ -223,7 +223,7 @@ public sealed class ADR_0006_Architecture_Tests
                                           number is >= 200 and <= 299 && directory == "runtime" ||
                                           number is >= 300 and <= 399 && directory == "technical";
 
-                    isInCorrectRange.Should().BeTrue($"❌ ADR-0006.5 违规: ADR 文件位于错误的目录\n\n" +
+                    isInCorrectRange.Should().BeTrue($"❌ ADR-0006_1_5 违规: ADR 文件位于错误的目录\n\n" +
                         $"文件: {file}\n" +
                         $"编号: ADR-{number}\n" +
                         $"当前目录: {directory}\n\n" +
