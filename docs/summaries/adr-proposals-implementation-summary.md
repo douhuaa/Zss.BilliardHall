@@ -223,7 +223,7 @@ graph LR
 | ADR-0005（交互模型） | ADR-201（Handler 生命周期） | 细化 |
 | ADR-120（事件命名） | ADR-210（事件版本化） | 扩展 |
 | ADR-121（契约命名） | ADR-124（Endpoint 命名） | 扩展 |
-| ADR-0000（架构测试） | ADR-930（代码审查流程） | 补充 |
+| ADR-900（架构测试） | ADR-930（代码审查流程） | 补充 |
 
 ### 对现有代码的影响
 
@@ -387,7 +387,7 @@ graph LR
 ### 核心文档
 - [待落地 ADR 提案跟踪清单](../adr/PENDING-ADR-PROPOSALS.md)
 - [ADR 实施指南](../adr/ADR-IMPLEMENTATION-GUIDE.md)
-- [ADR-900：ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](../adr/governance/ADR-900-architecture-tests.md)
 
 ### 参考资料
 - [PR 常见问题总结](../copilot/pr-common-issues.prompts.md)

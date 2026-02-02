@@ -4,8 +4,8 @@
 > 所有架构决策以相关 ADR 正文为准。详见 [ADR 目录](../adr/README.md)。
 >
 > 📘 **权威依据**：本指南说明如何实施以下 ADR：
-> - [ADR-0000：架构测试与 CI 治理元规则](../adr/governance/ADR-0000-architecture-tests.md)
-> - [ADR-900：ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
+> - [ADR-900：架构测试与 CI 治理元规则](../adr/governance/ADR-900-architecture-tests.md)
+> - [ADR-900：ADR 新增与修订流程](../adr/governance/ADR-900-architecture-tests.md)
 >
 > 本文档中的"必须"/"禁止"等语言均指代上述 ADR 的要求，本文档不独立产生新规则。
 
@@ -61,7 +61,7 @@
    - 这是需要遵守的约束。【必须架构测试覆盖】
 
 2. 段落标记（置于约束段落后）
-   **需要测试**：根据 ADR-0000，此约束应通过架构测试验证。
+   **需要测试**：根据 ADR-900，此约束应通过架构测试验证。
 
 3. 英文标记（便于脚本解析）
    [MUST_TEST] 此约束需要自动化测试。
@@ -136,12 +136,12 @@ public void ADR_0001_3_2_No_Horizontal_Service_Layer()
 
 **要求**：
 
-- 根据 ADR-0000，方法名或 DisplayName 应包含 `ADR-{编号}`
+- 根据 ADR-900，方法名或 DisplayName 应包含 `ADR-{编号}`
 - 清晰表达验证的约束内容
 
 #### C. 测试类头部注释
 
-根据 ADR-0000，每个测试类**应**包含 ADR 映射清单：
+根据 ADR-900，每个测试类**应**包含 ADR 映射清单：
 
 ```csharp
 /// <summary>
@@ -189,7 +189,7 @@ Assert.True(result.IsSuccessful,
 
 #### A. 测试-ADR 一致性自检指令
 
-根据 ADR-0000，每个 `adr-XXXX.prompts.md` 文件应包含 **"测试覆盖自检"** 章节：
+根据 ADR-900，每个 `adr-XXXX.prompts.md` 文件应包含 **"测试覆盖自检"** 章节：
 
 ```markdown
 ## 六、测试覆盖自检清单
@@ -208,7 +208,7 @@ Assert.True(result.IsSuccessful,
 
 当审查代码变更时，询问自己：
 
-1. ✅ 根据 ADR-0000，所有需要测试覆盖的约束是否都有对应的测试方法？
+1. ✅ 根据 ADR-900，所有需要测试覆盖的约束是否都有对应的测试方法？
 2. ✅ 测试方法名是否清晰反映了 ADR 约束内容？
 3. ✅ 测试失败消息是否包含 ADR 编号和修复建议？
 4. ✅ 如果 ADR 新增了约束，是否同步新增了测试？
@@ -264,7 +264,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ### 3.2 脚本功能
 
 1. **扫描 ADR 文档**：
-  - 提取所有标记为测试覆盖的约束（根据 ADR-0000 定义的标记格式）
+  - 提取所有标记为测试覆盖的约束（根据 ADR-900 定义的标记格式）
   - 统计需要测试的约束数量
 
 2. **扫描测试代码**：
@@ -308,7 +308,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ```markdown
 ## ADR-测试一致性检查
 
-- [ ] 根据 ADR-0000，所有需要测试的条款都有对应测试方法
+- [ ] 根据 ADR-900，所有需要测试的条款都有对应测试方法
 - [ ] 所有测试断言都引用了具体 ADR 及条款
 - [ ] 本地运行 `./scripts/validate-adr-test-mapping.sh` 通过
 - [ ] Copilot 审查已确认测试与 ADR 内容无偏差
@@ -321,7 +321,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ```
 请审查本 PR 的 ADR-测试一致性：
 
-1. 根据 ADR-0000，检查是否所有需要测试覆盖的约束都有对应测试
+1. 根据 ADR-900，检查是否所有需要测试覆盖的约束都有对应测试
 2. 检查测试方法命名是否包含 ADR 引用
 3. 检查测试失败消息是否符合规范（包含 ADR 编号、违规详情、修复建议）
 4. 如果修改了 ADR 文档，检查测试是否同步更新
@@ -343,7 +343,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ### 5.1 新增 ADR 时
 
 1. **编写 ADR 文档**：
-  - 根据 ADR-0000，为需要测试的约束添加测试覆盖标记
+  - 根据 ADR-900，为需要测试的约束添加测试覆盖标记
   - 在快速参考表中预留"测试覆盖"列
 
 2. **编写架构测试**：
@@ -365,7 +365,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 ### 5.2 修订 ADR 时
 
 1. **更新 ADR 约束**：
-  - 根据 ADR-0000，新增约束时添加测试覆盖标记
+  - 根据 ADR-900，新增约束时添加测试覆盖标记
   - 废弃约束时更新快速参考表
 
 2. **同步更新测试**：
@@ -394,7 +394,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 
 ### Q1: 是否所有 ADR 约束都需要测试？
 
-**A**: 不是。根据 ADR-0000，只有标记为需要测试覆盖的约束才需要自动化测试。以下情况不需要：
+**A**: 不是。根据 ADR-900，只有标记为需要测试覆盖的约束才需要自动化测试。以下情况不需要：
 
 - 纯概念性的指导原则
 - 需要人工判断的最佳实践
@@ -428,7 +428,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 
 **A**:
 
-1. 根据 ADR-0000，检查是否正确使用了测试覆盖标记
+1. 根据 ADR-900，检查是否正确使用了测试覆盖标记
 2. 检查测试方法是否包含 ADR 引用（方法名或 DisplayName）
 3. 如确实是脚本问题，请提交 Issue 改进脚本
 
@@ -436,8 +436,8 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 
 ## 七、参考资料
 
-- [ADR-0000: 架构测试与 CI 治理](../adr/governance/ADR-0000-architecture-tests.md)
-- [ADR-900: ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
+- [ADR-900: 架构测试与 CI 治理](../adr/governance/ADR-900-architecture-tests.md)
+- [ADR-900: ADR 新增与修订流程](../adr/governance/ADR-900-architecture-tests.md)
 - [Copilot 治理体系](../copilot/README.md)
 - [PR 模板](../.github/PULL_REQUEST_TEMPLATE.md)
 

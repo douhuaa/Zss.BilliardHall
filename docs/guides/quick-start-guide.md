@@ -441,7 +441,7 @@ dotnet run --project src/Host/Web/
 
 6. [ADR-0003](adr/constitutional/ADR-0003-namespace-rules.md)
 7. [ADR-0004](adr/constitutional/ADR-0004-Cpm-Final.md)
-8. [ADR-0000](adr/governance/ADR-0000-architecture-tests.md)
+8. [ADR-900](adr/governance/ADR-900-architecture-tests.md)
 9. [测试完整指南](TESTING-GUIDE.md)
 10. [CI/CD 指南](ci-cd-guide.md)
 

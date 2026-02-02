@@ -484,7 +484,7 @@ violations.Should().BeEmpty(because: "ADR 关系必须一致");
 
 ## 八、参考资料
 
-- ADR-0000：架构测试与 CI 治理元规则
+- ADR-900：架构测试与 CI 治理元规则
 - ADR-0940：ADR 关系与溯源管理
 - xUnit 参数化测试文档
 - C# Fluent Interface 模式

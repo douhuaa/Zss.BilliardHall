@@ -148,7 +148,7 @@ tests/ArchitectureTests/Adr/
 
 ```csharp
 ✅ Core_ADRs_Must_Have_Architecture_Test_Classes()
-   ADR-0000: 确保核心 ADR（0000-0099）有测试类
+   ADR-900: 确保核心 ADR（0000-0099）有测试类
    使用反射检查 ADR_XXXX_Architecture_Tests 类
 
 ✅ Architecture_Test_Classes_Must_Have_Substantial_Test_Methods()
@@ -350,7 +350,7 @@ dotnet test src/tests/ArchitectureTests/
 ## 参考
 
 - ADR-940：ADR 关系与溯源管理
-- ADR-0000：架构测试与 CI 治理元规则
+- ADR-900：架构测试与 CI 治理元规则
 - [Markdig GitHub](https://github.com/xoofx/markdig)
 
 ---

@@ -8,7 +8,7 @@ GitHub Copilot 场景化提示词。
 
 ## Constitutional（宪法层）
 
-- [adr-0000.prompts.md](adr-0000.prompts.md) - 架构测试与 CI 治理
+- [adr-900.prompts.md](adr-900.prompts.md) - 架构测试与 CI 治理
 - [adr-0001.prompts.md](adr-0001.prompts.md) - 模块化单体与垂直切片架构
 - [adr-0002.prompts.md](adr-0002.prompts.md) - Platform/Application/Host 三层启动体系
 - [adr-0003.prompts.md](adr-0003.prompts.md) - 命名空间与项目边界规范

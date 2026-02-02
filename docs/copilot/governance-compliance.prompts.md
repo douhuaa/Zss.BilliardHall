@@ -1,11 +1,11 @@
-# ADR-0000 / 治理合规 Copilot 提示词
+# ADR-900 / 治理合规 Copilot 提示词
 
 > 📋 **用途**：协助开发者理解和遵守治理层 ADR 要求，特别是破例管理、合规检查和健康度监控。
 
 **状态**：✅ Active  
 **关联 ADR**：
-- [ADR-0000：架构测试与 CI 治理元规则](/docs/adr/governance/ADR-0000-architecture-tests.md)
-- [ADR-900：ADR 新增与修订流程](/docs/adr/governance/ADR-900-adr-process.md)
+- [ADR-900：架构测试与 CI 治理元规则](/docs/adr/governance/ADR-900-architecture-tests.md)
+- [ADR-900：ADR 新增与修订流程](/docs/adr/governance/ADR-900-architecture-tests.md)
 - [ADR-930：代码审查与 ADR 合规自检流程](/docs/adr/governance/ADR-930-code-review-compliance.md)
 
 ---
@@ -18,7 +18,7 @@
 
 ### Copilot 回答模板
 
-根据 **ADR-0000.Y 破例成本管理**，申请架构破例需要遵循以下流程：
+根据 **ADR-900.Y 破例成本管理**，申请架构破例需要遵循以下流程：
 
 #### 步骤 1：评估是否真的需要破例
 
@@ -98,7 +98,7 @@ private readonly IMemberRepository _memberRepository;
 
 **参考**：
 - [arch-violations.md](/docs/summaries/arch-violations.md) - 查看当前破例
-- [ADR-0000.Y](/docs/adr/governance/ADR-0000-architecture-tests.md#adr-0000y破例必须绑定偿还计划与到期监控)
+- [ADR-900.Y](/docs/adr/governance/ADR-900-architecture-tests.md#adr-900y破例必须绑定偿还计划与到期监控)
 
 ---
 
@@ -181,7 +181,7 @@ CI 检测到破例已过期，说明到期版本已达到或超过当前版本�
 - **连续延期会触发架构审查**：可能需要重新评估设计
 
 **参考**：
-- [ADR-0000.Y](/docs/adr/governance/ADR-0000-architecture-tests.md#adr-0000y破例必须绑定偿还计划与到期监控)
+- [ADR-900.Y](/docs/adr/governance/ADR-900-architecture-tests.md#adr-900y破例必须绑定偿还计划与到期监控)
 
 ---
 
@@ -219,7 +219,7 @@ cd /path/to/Zss.BilliardHall
    - adr-relationship-check.yml
 
 3. **治理 ADR 依赖声明**
-   - 验证治理 ADR 是否声明依赖 ADR-0000
+   - 验证治理 ADR 是否声明依赖 ADR-900
 
 4. **README 无裁决力声明**（ADR-910）
    - 检查文档 README 是否包含权威边界声明
@@ -227,7 +227,7 @@ cd /path/to/Zss.BilliardHall
 5. **治理 ADR 变更政策**
    - 检查核心治理 ADR 是否包含变更政策说明
 
-6. **ADR-0000 测试映射**
+6. **ADR-900 测试映射**
    - 验证是否存在对应的架构测试
 
 7. **架构测试执行**
@@ -525,8 +525,8 @@ var member = _memberRepository.GetById(memberId);
 
 ### ADR 文档
 
-- [ADR-0000：架构测试与 CI 治理元规则](/docs/adr/governance/ADR-0000-architecture-tests.md)
-- [ADR-900：ADR 新增与修订流程](/docs/adr/governance/ADR-900-adr-process.md)
+- [ADR-900：架构测试与 CI 治理元规则](/docs/adr/governance/ADR-900-architecture-tests.md)
+- [ADR-900：ADR 新增与修订流程](/docs/adr/governance/ADR-900-architecture-tests.md)
 - [ADR-910：README 编写与维护治理规范](/docs/adr/governance/ADR-910-readme-governance-constitution.md)
 - [ADR-930：代码审查与 ADR 合规自检流程](/docs/adr/governance/ADR-930-code-review-compliance.md)
 

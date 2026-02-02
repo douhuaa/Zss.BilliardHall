@@ -113,7 +113,7 @@
 **检查项**：
 - ✅ ADR 与测试文件的映射
 - ✅ ADR 与 Prompt 文件的映射
-- ✅ 根据 ADR-0000，检查需要测试覆盖的 ADR 是否有测试
+- ✅ 根据 ADR-900，检查需要测试覆盖的 ADR 是否有测试
 - ✅ 孤立的测试和 Prompt 文件
 - ✅ 映射覆盖率统计
 
@@ -218,7 +218,7 @@
 **提取内容**：
 - 🔴 红线约束（MUST/MUST NOT）
 - 🟡 建议约束（SHOULD）
-- ✅ 根据 ADR-0000，提取需要测试覆盖的条款
+- ✅ 根据 ADR-900，提取需要测试覆盖的条款
 - 🚧 人工审核门控点
 
 **使用方法**：
@@ -439,7 +439,7 @@ main "$@"
 ### 文档
 - [ADR 目录](../docs/adr/README.md)
 - [ADR 流程规范](../docs/adr/governance/ADR-0900-adr-process.md)
-- [架构测试宪法](../docs/adr/governance/ADR-0000-architecture-tests.md)
+- [架构测试宪法](../docs/adr/governance/ADR-900-architecture-tests.md)
 - [Copilot 治理体系](../docs/copilot/README.md)
 
 ### 模板

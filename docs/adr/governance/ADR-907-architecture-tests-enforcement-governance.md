@@ -58,7 +58,7 @@ superseded_by: null
 | CI Gate | 持续集成管道中自动执行架构测试 | CI Gate |
 | Analyzer | 静态/运行时分析工具，验证规则与 ADR 映射 | Analyzer |
 | Enforcement Level | L1 / L2 执行等级，L1 可自动阻断 | Enforcement Level |
-| Exception Mechanism | ADR-0000 定义的破例 / 补救机制 | Exception Mechanism |
+| Exception Mechanism | ADR-900 定义的破例 / 补救机制 | Exception Mechanism |
 
 
 ---
@@ -266,7 +266,7 @@ superseded_by: null
 
 **Depends On**：
 
-- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md)  
+- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md)  
 - [ADR-905：执行级别分类](../governance/ADR-905-enforcement-level-classification.md)  
 
 **Depended By**：

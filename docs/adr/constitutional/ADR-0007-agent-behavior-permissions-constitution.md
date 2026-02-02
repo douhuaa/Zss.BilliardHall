@@ -240,9 +240,9 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-900
 - [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - Agent 术语使用统一规范
-- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - Agent 变更流程参考 ADR 分级权限
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-architecture-tests.md) - Agent 变更流程参考 ADR 分级权限
 
 **被依赖（Depended By）**：
 - 所有 Copilot Instructions 和 Agents - Agent 行为必须遵循本 ADR

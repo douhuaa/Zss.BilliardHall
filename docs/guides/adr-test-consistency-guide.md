@@ -57,7 +57,7 @@ dotnet test src/tests/ArchitectureTests/
 
 #### 步骤 1：在 ADR 文档中标记约束
 
-在需要测试的约束后添加 **【必须架构测试覆盖】** 标记（根据 ADR-0000）：
+在需要测试的约束后添加 **【必须架构测试覆盖】** 标记（根据 ADR-900）：
 
 ```markdown
 ### 3. 模块通信约束
@@ -133,7 +133,7 @@ dotnet test src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
 
 #### 步骤 1：更新 ADR 文档
 
-修改或删除约束，检查并更新 **【必须架构测试覆盖】** 标记的准确性（根据 ADR-0000）。
+修改或删除约束，检查并更新 **【必须架构测试覆盖】** 标记的准确性（根据 ADR-900）。
 
 #### 步骤 2：同步更新测试
 
@@ -364,7 +364,7 @@ Assert.True(result.IsSuccessful, "Test failed");
 
 1. 测试方法是否使用了 `[Fact]` 或 `[Theory]` 属性？
 2. 测试方法或 DisplayName 是否包含对应的 ADR 编号（如 `ADR-0001`）？
-3. ADR 文档中标记了 **【必须架构测试覆盖】** 的约束是否都有测试？（参考 ADR-0000）
+3. ADR 文档中标记了 **【必须架构测试覆盖】** 的约束是否都有测试？（参考 ADR-900）
 
 ### Q2: 测试失败消息太长，影响可读性？
 
@@ -413,7 +413,7 @@ Assert.True(result.IsSuccessful,
 ## 六、参考资源
 
 - [ADR-测试映射规范](../ADR-TEST-MAPPING-SPECIFICATION.md) - 完整的映射规范
-- [ADR-0000: 架构测试与 CI 治理](../adr/governance/ADR-0000-architecture-tests.md) - 架构测试的总体指导
+- [ADR-900: 架构测试与 CI 治理](../adr/governance/ADR-900-architecture-tests.md) - 架构测试的总体指导
 - [Copilot 治理体系](../copilot/README.md) - Copilot 的角色和使用指南
 - [PR 模板](../.github/PULL_REQUEST_TEMPLATE.md) - PR 提交清单
 

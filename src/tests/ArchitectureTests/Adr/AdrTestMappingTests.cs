@@ -14,9 +14,9 @@ public sealed class AdrTestMappingTests
     private const string AdrTestPattern = @"ADR_(\d{4})_Architecture_Tests";
 
     /// <summary>
-    /// ADR-0000: 每条核心 ADR（0000-0099）必须有对应的架构测试类
+    /// ADR-900: 每条核心 ADR（0000-0099）必须有对应的架构测试类
     /// </summary>
-    [Fact(DisplayName = "ADR-0000: 每条核心 ADR 必须有对应的架构测试类")]
+    [Fact(DisplayName = "ADR-900: 每条核心 ADR 必须有对应的架构测试类")]
     public void Core_ADRs_Must_Have_Architecture_Test_Classes()
     {
         var repoRoot = FindRepositoryRoot() 

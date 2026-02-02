@@ -105,7 +105,7 @@ docs/ROADMAP.md
 
 **依赖（Depends On）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档管理标准
-- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - 基于其 RFC 流程
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-architecture-tests.md) - 基于其 RFC 流程
 
 **被依赖（Depended By）**：
 - 无
@@ -128,7 +128,7 @@ docs/ROADMAP.md
 
 ### 相关 ADR
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-architecture-tests.md)
 - [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md)
 
 ### 实施工具

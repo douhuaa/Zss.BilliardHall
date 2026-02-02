@@ -4,10 +4,10 @@ using FluentAssertions;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
-/// ADR-0000: 架构测试与 CI 治理宪法（v2.0）
+/// ADR-900: 架构测试与 CI 治理宪法（v2.0）
 /// 架构宪法测试：每一条 ADR 文档，必须有唯一、严格对应的架构测试类
 /// </summary>
-public sealed class ADR_0000_Architecture_Tests
+public sealed class ADR_900_Architecture_Tests
 {
     private const string AdrDocsPath = "docs/adr";
     private const string AdrFilePattern = "ADR-*.md";
@@ -29,7 +29,7 @@ public sealed class ADR_0000_Architecture_Tests
     /// - 标题/slug 可演进
     /// - 编号不可变
     /// </summary>
-    [Fact(DisplayName = "ADR-0000_1_1: 每条 ADR 必须有且仅有唯一对应的架构测试类")]
+    [Fact(DisplayName = "ADR-900_1_1: 每条 ADR 必须有且仅有唯一对应的架构测试类")]
     public void Each_ADR_Must_Have_Exact_And_Unique_Architecture_Test()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根（docs/adr 或 .git）");
@@ -65,7 +65,7 @@ public sealed class ADR_0000_Architecture_Tests
 
             if (duplicates.Any())
             {
-                messages.Add("❌ ADR-0000 架构违规（重复定义）");
+                messages.Add("❌ ADR-900 架构违规（重复定义）");
                 foreach (var d in duplicates)
                 {
                     messages.Add($" - {d.Adr} 对应多个测试类型:");
@@ -75,7 +75,7 @@ public sealed class ADR_0000_Architecture_Tests
 
             if (missing.Any())
             {
-                messages.Add("❌ ADR-0000 架构违规（缺失测试）");
+                messages.Add("❌ ADR-900 架构违规（缺失测试）");
                 messages.AddRange(missing.Select(m => $" - {m}"));
             }
 
@@ -131,7 +131,7 @@ public sealed class ADR_0000_Architecture_Tests
     /// <summary>
     /// 反作弊规则：测试类必须包含实质性测试，不能是空壳
     /// </summary>
-    [Fact(DisplayName = "ADR-0000_1_2: 架构测试类必须包含最少断言数（反作弊）")]
+    [Fact(DisplayName = "ADR-900_1_2: 架构测试类必须包含最少断言数（反作弊）")]
     public void Architecture_Test_Classes_Must_Have_Minimum_Assertions()
     {
         var testTypes = LoadArchitectureTestTypes();
@@ -139,8 +139,8 @@ public sealed class ADR_0000_Architecture_Tests
 
         foreach (var testType in testTypes)
         {
-            // 跳过 ADR-0000 自身
-            if (testType.Name == "ADR_0000_Architecture_Tests")
+            // 跳过 ADR-900 自身
+            if (testType.Name == "ADR_900_Architecture_Tests")
                 continue;
 
             // 跳过重定向测试（ADR_0008 已重构为三层架构）
@@ -195,7 +195,7 @@ public sealed class ADR_0000_Architecture_Tests
 
         if (violations.Any())
         {
-            var message = "❌ ADR-0000 反作弊检查失败：\n" + string.Join("\n", violations) + "\n\n修复建议：架构测试类必须包含实质性的测试逻辑，不允许空测试或全部跳过的测试。";
+            var message = "❌ ADR-900 反作弊检查失败：\n" + string.Join("\n", violations) + "\n\n修复建议：架构测试类必须包含实质性的测试逻辑，不允许空测试或全部跳过的测试。";
             throw new Xunit.Sdk.XunitException(message);
         }
     }
@@ -203,7 +203,7 @@ public sealed class ADR_0000_Architecture_Tests
     /// <summary>
     /// 反作弊规则：测试失败消息必须包含 ADR 编号
     /// </summary>
-    [Fact(DisplayName = "ADR-0000_1_3: 测试失败消息必须包含 ADR 编号（反作弊）")]
+    [Fact(DisplayName = "ADR-900_1_3: 测试失败消息必须包含 ADR 编号（反作弊）")]
     public void Test_Failure_Messages_Must_Include_ADR_Number()
     {
         var testTypes = LoadArchitectureTestTypes();
@@ -211,8 +211,8 @@ public sealed class ADR_0000_Architecture_Tests
 
         foreach (var testType in testTypes)
         {
-            // 跳过 ADR-0000 自身
-            if (testType.Name == "ADR_0000_Architecture_Tests")
+            // 跳过 ADR-900 自身
+            if (testType.Name == "ADR_900_Architecture_Tests")
                 continue;
 
             // 提取 ADR 编号
@@ -253,7 +253,7 @@ public sealed class ADR_0000_Architecture_Tests
 
         if (violations.Any())
         {
-            var message = "⚠️ ADR-0000 建议：\n" + string.Join("\n", violations) + "\n\n建议：所有测试的 DisplayName 应包含 ADR 编号（如 'ADR-0001: ...'），便于追溯和审计。";
+            var message = "⚠️ ADR-900 建议：\n" + string.Join("\n", violations) + "\n\n建议：所有测试的 DisplayName 应包含 ADR 编号（如 'ADR-0001: ...'），便于追溯和审计。";
 
             // 这是建议性规则，暂时只输出调试信息，不阻断
             System.Diagnostics.Debug.WriteLine(message);
@@ -263,7 +263,7 @@ public sealed class ADR_0000_Architecture_Tests
     /// <summary>
     /// 禁止使用 Skip 属性跳过架构测试
     /// </summary>
-    [Fact(DisplayName = "ADR-0000_1_4: 禁止跳过架构测试（反作弊）")]
+    [Fact(DisplayName = "ADR-900_1_4: 禁止跳过架构测试（反作弊）")]
     public void Architecture_Tests_Must_Not_Be_Skipped()
     {
         var testTypes = LoadArchitectureTestTypes();
@@ -300,7 +300,7 @@ public sealed class ADR_0000_Architecture_Tests
 
         if (skippedTests.Any())
         {
-            var message = "❌ ADR-0000_1_1 违规：禁止跳过架构测试\n" + string.Join("\n", skippedTests) + "\n\n修复建议：如果某个架构约束不再适用，应删除测试或修改 ADR，而不是跳过测试。" + "跳过测试会导致架构约束形同虚设。";
+            var message = "❌ ADR-900_1_1 违规：禁止跳过架构测试\n" + string.Join("\n", skippedTests) + "\n\n修复建议：如果某个架构约束不再适用，应删除测试或修改 ADR，而不是跳过测试。" + "跳过测试会导致架构约束形同虚设。";
             throw new Xunit.Sdk.XunitException(message);
         }
     }

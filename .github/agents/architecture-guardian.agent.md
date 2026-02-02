@@ -3,7 +3,7 @@ name: "Architecture Guardian"
 description: "架构守护者 - 实时监督代码符合所有架构约束"
 version: "2.0"
 risk_level: "极高"
-supervised_adrs: ["ADR-0000", "ADR-0001", "ADR-0002", "ADR-0003", "ADR-0004", "ADR-0005", "ADR-0006", "ADR-0007", "ADR-0008"]
+supervised_adrs: ["ADR-900", "ADR-0001", "ADR-0002", "ADR-0003", "ADR-0004", "ADR-0005", "ADR-0006", "ADR-0007", "ADR-0008"]
 based_on: "ADR-0007"
 tools: ["code-analysis", "architecture-tests", "dependency-scanner"]
 ---

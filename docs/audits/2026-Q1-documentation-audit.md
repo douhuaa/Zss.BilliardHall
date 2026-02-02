@@ -47,7 +47,7 @@
 2. **`THREE-LAYER-TEST-ARCHITECTURE.md` 缺少无裁决力声明**
    - 严重程度：🔴 高（ADR-910.3 违规）
    - 状态：✅ 已修复
-   - 修复方式：添加标准声明并引用 ADR-905/ADR-0000
+   - 修复方式：添加标准声明并引用 ADR-905/ADR-900
 
 3. **`THREE-LAYER-TEST-ARCHITECTURE.md` 使用裁决性语言未引用 ADR**
    - 严重程度：🔴 高（ADR-910.2 违规）

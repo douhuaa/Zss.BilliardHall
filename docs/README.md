@@ -164,15 +164,15 @@ graph LR
 
 1. **模块隔离** - 业务模块之间不能直接相互引用（参见 [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)）
 2. **垂直切片** - 按用例组织功能，而非技术层（参见 [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)）
-3. **自动化测试** - 所有架构约束通过测试强制执行（参见 [ADR-0000](adr/governance/ADR-0000-architecture-tests.md)）
+3. **自动化测试** - 所有架构约束通过测试强制执行（参见 [ADR-900](adr/governance/ADR-900-architecture-tests.md)）
 
 ### 关键约束
 
 根据 ADR 文档，以下为关键架构约束：
 
 1. 模块不应直接引用其他模块实现（[ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)）
-2. 所有隔离规则通过自动化测试校验（[ADR-0000](adr/governance/ADR-0000-architecture-tests.md)）
-3. 架构测试失败会阻止构建（[ADR-0000](adr/governance/ADR-0000-architecture-tests.md)）
+2. 所有隔离规则通过自动化测试校验（[ADR-900](adr/governance/ADR-900-architecture-tests.md)）
+3. 架构测试失败会阻止构建（[ADR-900](adr/governance/ADR-900-architecture-tests.md)）
 4. 契约用于数据传递，不应驱动业务决策（[ADR-0005](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)）
 5. ADR 为架构裁决的最终依据（[ADR-0008](adr/constitutional/ADR-0008-documentation-governance-constitution.md)）
 

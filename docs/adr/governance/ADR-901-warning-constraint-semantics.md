@@ -209,7 +209,7 @@ Notice **只能**用于：
 
 **Depends On**：
 
-- [ADR-0000：架构测试与 CI 治理元规则](ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-900：架构测试与 CI 治理元规则](ADR-900-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-900
 - [ADR-905：架构执法等级定义](ADR-905-enforcement-level-classification.md) - 本 ADR 的执行级别定义依赖 ADR-905
 
 **Depended By**：

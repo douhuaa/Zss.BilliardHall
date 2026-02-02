@@ -17,7 +17,7 @@
 
 根据问题陈述，治理层现状分析表明：
 
-1. **宪法与治理层分类明晰**：ADR-0000 作为唯一元决策源已确立
+1. **宪法与治理层分类明晰**：ADR-900 作为唯一元决策源已确立
 2. **合规与闭环机制**：PR/代码审查、破例治理已有基础框架
 3. **变更与演进机制**：治理 ADR 变更流程已定义
 4. **前瞻性建议**：需要强化自动化、责任追溯和周期性报告
@@ -28,7 +28,7 @@
 
 ## 实施内容
 
-### 1. 破例治理自动化（ADR-0000.Y）
+### 1. 破例治理自动化（ADR-900.Y）
 
 #### 1.1 CI 自动扫描过期破例
 
@@ -58,7 +58,7 @@ if due_version and due_version <= CURRENT_VERSION:
 - ✅ 自动化监控，减少人工审计成本
 - ✅ 提前预警（可配置），给团队充足时间
 
-#### 1.2 强化 ADR-0000 破例管理章节
+#### 1.2 强化 ADR-900 破例管理章节
 
 **变更**：
 - 增加"破例申请与记录"章节，明确代码标注要求
@@ -81,10 +81,10 @@ if due_version and due_version <= CURRENT_VERSION:
 1. arch-violations.md 结构完整性（7 个必需章节）
 2. arch-violations.md 强制字段（到期版本、负责人、偿还计划）
 3. 治理 CI workflows 存在性（3 个必需 workflows）
-4. 治理 ADR 依赖声明（是否声明依赖 ADR-0000）
+4. 治理 ADR 依赖声明（是否声明依赖 ADR-900）
 5. README 无裁决力声明（ADR-910）
 6. 治理 ADR 变更政策（核心治理 ADR）
-7. ADR-0000 测试映射（架构测试）
+7. ADR-900 测试映射（架构测试）
 
 **输出示例**：
 ```
@@ -160,7 +160,7 @@ if due_version and due_version <= CURRENT_VERSION:
 - 增加"快速参考"章节，提供核心文档和工具链接
 
 **核心原则重申**：
-1. ADR-0000 是唯一元决策源
+1. ADR-900 是唯一元决策源
 2. 测试一一映射与自动阻断
 3. 破例治理闭环
 4. 三位一体交付
@@ -197,7 +197,7 @@ if due_version and due_version <= CURRENT_VERSION:
 
 2. **强化责任人和归还计划**
    - ✅ arch-violations.md 强制字段验证
-   - ✅ ADR-0000 明确责任追溯机制
+   - ✅ ADR-900 明确责任追溯机制
    - ⏳ 建议：季度审计并纳入绩效
 
 3. **定期治理和合规数据报告**
@@ -310,9 +310,9 @@ echo -e "${RED}❌ FAIL${NC}: $check_name"
 
 ### 已知问题
 
-1. **部分治理 ADR 未声明依赖 ADR-0000**
+1. **部分治理 ADR 未声明依赖 ADR-900**
    - 影响：12 个 ADR（ADR-940, 945, 946, 947, 950, 951, 952, 955, 960, 965, 975, 990）
-   - 原因：这些是补充性/支持性 ADR，可能不直接依赖 ADR-0000
+   - 原因：这些是补充性/支持性 ADR，可能不直接依赖 ADR-900
    - 建议：逐个评估，确定是否需要添加依赖声明
 
 2. **ADR-905 缺少变更政策章节**
@@ -339,7 +339,7 @@ scripts/validate-governance-compliance.sh             # 合规验证脚本
 ### 修改文件
 
 ```
-docs/adr/governance/ADR-0000-architecture-tests.md    # 强化破例管理
+docs/adr/governance/ADR-900-architecture-tests.md    # 强化破例管理
 docs/adr/governance/README.md                         # 增强治理体系说明
 docs/cases/README.md                                  # 修复裁决性语言
 docs/faqs/README.md                                   # 修复裁决性语言
@@ -349,7 +349,7 @@ scripts/docs/README.md                                # 添加无裁决力声明
 
 ### 影响的 ADR
 
-- ✅ **直接增强**：ADR-0000（破例管理）
+- ✅ **直接增强**：ADR-900（破例管理）
 - ✅ **合规验证**：ADR-910（README 治理）
 - ✅ **间接支持**：ADR-900（ADR 流程）、ADR-930（代码审查）
 
@@ -436,7 +436,7 @@ git commit -m "docs: 添加 2026 Q1 治理健康度报告"
    - [ ] 修复 ADR-0003.8 项目命名问题（单独 Issue）
 
 2. **更新 Copilot Prompts**
-   - [ ] 创建 `docs/copilot/adr-0000.prompts.md`（破例管理场景）
+   - [ ] 创建 `docs/copilot/adr-900.prompts.md`（破例管理场景）
    - [ ] 更新 `docs/copilot/adr-0930.prompts.md`（代码审查场景）
    - [ ] 创建 `docs/copilot/governance-compliance.prompts.md`（治理合规场景）
 
@@ -485,8 +485,8 @@ git commit -m "docs: 添加 2026 Q1 治理健康度报告"
 
 ### ADR 文档
 
-- [ADR-0000：架构测试与 CI 治理元规则](/docs/adr/governance/ADR-0000-architecture-tests.md)
-- [ADR-900：ADR 新增与修订流程](/docs/adr/governance/ADR-900-adr-process.md)
+- [ADR-900：架构测试与 CI 治理元规则](/docs/adr/governance/ADR-900-architecture-tests.md)
+- [ADR-900：ADR 新增与修订流程](/docs/adr/governance/ADR-900-architecture-tests.md)
 - [ADR-910：README 编写与维护治理规范](/docs/adr/governance/ADR-910-readme-governance-constitution.md)
 - [ADR-930：代码审查与 ADR 合规自检流程](/docs/adr/governance/ADR-930-code-review-compliance.md)
 

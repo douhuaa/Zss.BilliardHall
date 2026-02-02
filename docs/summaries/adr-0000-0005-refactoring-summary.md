@@ -1,4 +1,4 @@
-# ADR-0000 至 ADR-0005 重构实施总结
+# ADR-900 至 ADR-0005 重构实施总结
 
 **实施日期**：2026-01-23  
 **状态**：✅ 已完成  
@@ -8,7 +8,7 @@
 
 ## 📋 执行摘要
 
-本次实施成功完成了 ADR-0000 至 ADR-0005 文档的重构工作，确保所有 ADR 文档的"快速参考表（Quick Reference Table）"
+本次实施成功完成了 ADR-900 至 ADR-0005 文档的重构工作，确保所有 ADR 文档的"快速参考表（Quick Reference Table）"
 与实际架构测试完全对应，实现了 **ADR 约束 ↔ 架构测试** 的强一致性映射。
 
 ---
@@ -42,7 +42,7 @@
 
 | ADR 文档   | 约束条款数  | 测试方法数  | 映射状态     |
 |----------|--------|--------|----------|
-| ADR-0000 | 5      | 4      | ✅ 通过     |
+| ADR-900 | 5      | 4      | ✅ 通过     |
 | ADR-0001 | 18     | 11     | ✅ 通过     |
 | ADR-0002 | 22     | 14     | ✅ 通过     |
 | ADR-0003 | 14     | 9      | ✅ 通过     |
@@ -70,7 +70,7 @@ Total tests: 81
 
 **测试覆盖情况**：
 
-- ADR-0000：4 个测试，全部通过 ✅
+- ADR-900：4 个测试，全部通过 ✅
 - ADR-0001：11 个测试，全部通过 ✅
 - ADR-0002：14 个测试，全部通过 ✅
 - ADR-0003：9 个测试，全部通过 ✅
@@ -114,7 +114,7 @@ Total tests: 81
 
 | 指标          | 数量   | 说明                  |
 |-------------|------|---------------------|
-| 重构的 ADR 文档数 | 6    | ADR-0000 至 ADR-0005 |
+| 重构的 ADR 文档数 | 6    | ADR-900 至 ADR-0005 |
 | 总约束条款数      | 89   | 所有标记【必须架构测试覆盖】的约束   |
 | 需要测试的约束数    | 89   | 所有约束都需要测试覆盖         |
 | 已测试覆盖数      | 89   | 全部覆盖                |
@@ -131,7 +131,7 @@ Total tests: 81
 
 | 测试文件                           | 测试方法数  | 通过数    | 失败数   |
 |--------------------------------|--------|--------|-------|
-| ADR_0000_Architecture_Tests.cs | 4      | 4      | 0     |
+| ADR_900_Architecture_Tests.cs | 4      | 4      | 0     |
 | ADR_0001_Architecture_Tests.cs | 11     | 11     | 0     |
 | ADR_0002_Architecture_Tests.cs | 14     | 14     | 0     |
 | ADR_0003_Architecture_Tests.cs | 9      | 9      | 0     |
@@ -227,7 +227,7 @@ Total tests: 81
 
 ### 相关 ADR
 
-- [ADR-0000：架构测试与 CI 治理](../adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-900：架构测试与 CI 治理](../adr/governance/ADR-900-architecture-tests.md)
 - [ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 - [ADR-0002：Platform/Application/Host 三层启动体系](../adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)
 - [ADR-0003：命名空间与项目边界规范](../adr/constitutional/ADR-0003-namespace-rules.md)
@@ -248,7 +248,7 @@ Total tests: 81
 
 ## 🏁 结论
 
-本次 ADR-0000 至 ADR-0005 重构验证工作成功完成，主要成果包括：
+本次 ADR-900 至 ADR-0005 重构验证工作成功完成，主要成果包括：
 
 1. ✅ **验证了所有 ADR 文档与架构测试的映射关系**
 2. ✅ **确认了快速参考表的准确性和完整性**

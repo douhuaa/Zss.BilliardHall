@@ -9,7 +9,7 @@
 
 ## 三层防御体系
 
-根据 [ADR-0000](../adr/governance/ADR-0000-architecture-tests.md)
+根据 [ADR-900](../adr/governance/ADR-900-architecture-tests.md)
 和 [ADR-905 执行级别分类](../adr/ADR-905-enforcement-level-classification.md)，我们实施了三层自动化防御体系：
 
 ### 🛡️ Level 1: 静态可执行（Static Enforceable）
@@ -32,7 +32,7 @@
 
 **测试覆盖**:
 
-- ADR-0000: 架构测试元规则（4 个测试）
+- ADR-900: 架构测试元规则（4 个测试）
 - ADR-0001: 模块化单体与垂直切片（22 个测试）
 - ADR-0002: Platform/Application/Host 三层启动体系（26 个测试）
 - ADR-0003: 命名空间与项目边界规范（18 个测试）
@@ -130,7 +130,7 @@ cat src/tools/ArchitectureAnalyzers/README.md
 
 1. **PR 提交阶段**
   - 开发者填写 `.github/PULL_REQUEST_TEMPLATE.md`
-  - 根据 ADR-0000，应声明架构测试状态
+  - 根据 ADR-900，应声明架构测试状态
   - 如有架构破例，应详细说明
 
 2. **自动检查阶段**
@@ -396,7 +396,7 @@ open TestResults/architecture-test-results.html
 **新人入职**:
 
 1. 阅读本文档
-2. 阅读 [ADR-0000](../adr/governance/ADR-0000-architecture-tests.md)
+2. 阅读 [ADR-900](../adr/governance/ADR-900-architecture-tests.md)
 3. 运行一次架构测试
 4. 安装 pre-push hook
 5. 尝试故意违反一条规则，观察反馈
@@ -430,7 +430,7 @@ open TestResults/architecture-test-results.html
 
 ## 相关文档
 
-- [ADR-0000: 架构测试与 CI 治理](../adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-900: 架构测试与 CI 治理](../adr/governance/ADR-900-architecture-tests.md)
 - [ADR-0005: 应用内交互模型](../adr/ADR-0005-Application-Interaction-Model-Final.md)
 - [ADR-905 执行级别分类](../adr/ADR-905-enforcement-level-classification.md)
 - [Architecture Tests README](../../src/tests/ArchitectureTests/README.md)

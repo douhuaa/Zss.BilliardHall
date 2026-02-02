@@ -189,7 +189,7 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 测试执行机制
+- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - 测试执行机制
 
 **被依赖（Depended By）**：
 - [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 基于模块隔离规则

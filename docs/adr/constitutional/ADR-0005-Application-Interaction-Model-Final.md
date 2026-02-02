@@ -154,7 +154,7 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-900
 - [ADR-0001：模块化单体与垂直切片架构](./ADR-0001-modular-monolith-vertical-slice-architecture.md) - CQRS 模式基于模块隔离和垂直切片
 - [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - Handler 装配基于三层体系
 - [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - Handler 组织遵循命名空间规范

@@ -146,7 +146,7 @@ Create test projects in `src/tests/ArchitectureAnalyzers.Tests/` with positive a
 
 - [ADR-0005: Application Interaction Model](../../docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
 - [ADR-0005 Enforcement Levels](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
-- [ADR-0000: Architecture Tests](../../docs/adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-900: Architecture Tests](../../docs/adr/governance/ADR-900-architecture-tests.md)
 
 ## Support
 

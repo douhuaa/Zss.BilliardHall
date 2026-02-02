@@ -492,7 +492,7 @@ echo "✅ All tests passed! Ready to push."
 
 | 类型          | 目标覆盖率 | 说明           |
 |-------------|-------|--------------|
-| **架构测试**    | 100%  | 所有 ADR 应有测试（根据 ADR-0000） |
+| **架构测试**    | 100%  | 所有 ADR 应有测试（根据 ADR-900） |
 | **领域模型**    | 90%+  | 所有业务逻辑应测试   |
 | **Handler** | 85%+  | 所有用例应测试     |
 | **基础设施**    | 60%+  | 关键路径应测试     |
@@ -506,7 +506,7 @@ echo "✅ All tests passed! Ready to push."
 - ⏭️ 基础设施样板代码
 - ⏭️ 自动生成的代码
 
-**应测试**（参考 ADR-0000 测试指导）：
+**应测试**（参考 ADR-900 测试指导）：
 
 - ✅ 领域模型中的所有业务逻辑
 - ✅ 所有 Handler 编排流程
@@ -950,7 +950,7 @@ public void Should_Create_Order_And_Validate_And_Publish() { /* 太复杂 */ }
 
 ### ADR
 
-- [ADR-0000：架构测试与 CI 治理](adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-900：架构测试与 CI 治理](adr/governance/ADR-900-architecture-tests.md)
 - [ADR-0001~0005：宪法层 ADR](adr/constitutional/)
 
 ### 外部参考

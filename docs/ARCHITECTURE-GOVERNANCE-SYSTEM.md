@@ -121,7 +121,7 @@
 ```
 docs/adr/
   ├── constitutional/     ← 宪法层（ADR-0001~0005）
-  ├── governance/         ← 治理层（ADR-0000, 0900~0999）
+  ├── governance/         ← 治理层（ADR-900, 0900~0999）
   ├── structure/          ← 结构层（ADR-0100~0199）
   ├── runtime/            ← 运行层（ADR-0200~0299）
   └── technical/          ← 技术层（ADR-0300~0399）
@@ -133,17 +133,17 @@ docs/adr/
 
 - ✅ ADR 是唯一的"事实来源"（Source of Truth）
 - ✅ 所有层级服从 ADR
-- ✅ ADR 冲突时按优先级裁决（ADR-0000.X）
+- ✅ ADR 冲突时按优先级裁决（ADR-900.X）
 - ❌ 不应绕过 ADR
 - ❌ Prompts/Instructions 不应与 ADR 冲突
 
 ### 参考文档
 
 - [ADR 目录](adr/README.md)
-- [ADR-0000: 架构测试与 CI 治理元规则](adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-900: 架构测试与 CI 治理元规则](adr/governance/ADR-900-architecture-tests.md)
 - [ADR-0007: Agent 行为与权限宪法](adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 - [ADR-0008: 文档编写与维护宪法](adr/constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-900: ADR 新增与修订流程](adr/governance/ADR-900-adr-process.md)
+- [ADR-900: ADR 新增与修订流程](adr/governance/ADR-900-architecture-tests.md)
 
 ---
 
@@ -216,7 +216,7 @@ Agent = Instructions + 特定职责域 + ADR 约束视角
 |---------------------------|------------|----------------------|------|
 | architecture-guardian     | 架构约束守护     | 所有 ADR               | 极高   |
 | adr-reviewer              | ADR 文档审查   | ADR-900             | 高    |
-| test-generator            | 测试生成       | ADR-0000, 0122       | 中    |
+| test-generator            | 测试生成       | ADR-900, 0122       | 中    |
 | module-boundary-checker   | 模块边界检查     | ADR-0001             | 极高   |
 | handler-pattern-enforcer  | Handler 规范执行 | ADR-0005             | 高    |
 | documentation-maintainer  | 文档维护       | ADR-900, 文档规范       | 低    |
@@ -276,7 +276,7 @@ Prompt = ADR → 开发现场的"翻译层"
 ```
 docs/copilot/
   ├── README.md                           ← Copilot 角色定位
-  ├── adr-0000.prompts.md                 ← ADR-0000 提示词
+  ├── adr-900.prompts.md                 ← ADR-900 提示词
   ├── adr-0001.prompts.md                 ← ADR-0001 提示词
   ├── adr-0002.prompts.md                 ← ADR-0002 提示词
   ├── ...（每个 ADR 一个文件）
@@ -418,7 +418,7 @@ graph TB
 | 设计阶段    | architecture-guardian     | ADR 全集          | 约束提醒          |
 | 编码阶段    | architecture-guardian     | ADR + Prompts   | 实时阻止          |
 | 提交前审查   | adr-reviewer              | ADR + Prompts   | 自检清单          |
-| CI 测试   | Architecture Tests        | ADR-0000        | 通过/失败         |
+| CI 测试   | Architecture Tests        | ADR-900        | 通过/失败         |
 | 失败诊断    | test-enforcer             | test-failures   | 人话解释 + 修复建议   |
 | 成功提醒    | adr-reviewer              | pr-review       | 完成检查清单提醒      |
 
@@ -533,17 +533,17 @@ ADR → Instructions → Agents → Prompts → Skills
 |------|-----------------------------------------------------------------------|
 | 新成员  | 本文档 → [快速开始](QUICK-START.md) → [Copilot 使用](copilot/README.md)     |
 | 开发者  | [Instructions](../.github/instructions/) → [Prompts](copilot/)       |
-| 架构师  | [ADR 目录](adr/README.md) → [ADR-0000](adr/governance/ADR-0000-architecture-tests.md) |
-| 维护者  | [ADR-900](adr/governance/ADR-900-adr-process.md) → [Agents](.github/agents/) |
+| 架构师  | [ADR 目录](adr/README.md) → [ADR-900](adr/governance/ADR-900-architecture-tests.md) |
+| 维护者  | [ADR-900](adr/governance/ADR-900-architecture-tests.md) → [Agents](.github/agents/) |
 
 ### 按任务导航
 
 | 任务          | 参考文档                                          |
 |-------------|-----------------------------------------------|
 | 添加新功能       | [后端指令](../.github/instructions/backend.instructions.md) → [ADR-0001 Prompts](copilot/adr-0001.prompts.md) |
-| 编写测试        | [测试指令](../.github/instructions/testing.instructions.md) → [ADR-0000 Prompts](copilot/adr-0000.prompts.md) |
+| 编写测试        | [测试指令](../.github/instructions/testing.instructions.md) → [ADR-900 Prompts](copilot/adr-900.prompts.md) |
 | 审查 PR       | [评审指令](../.github/instructions/architecture-review.instructions.md) → [PR 流程](copilot/pr-review-pipeline.md) |
-| 新增 ADR      | [ADR-900](adr/governance/ADR-900-adr-process.md) |
+| 新增 ADR      | [ADR-900](adr/governance/ADR-900-architecture-tests.md) |
 | 配置 Agent    | [Agents 说明](.github/agents/README.md)        |
 | 开发 Skill    | [Skills 说明](.github/skills/README.md)        |
 

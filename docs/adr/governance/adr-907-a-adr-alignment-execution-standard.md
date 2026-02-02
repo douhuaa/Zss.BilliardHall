@@ -494,15 +494,15 @@ version: "X.0"    # 主版本号 +1
 - 每个 Rule 应该有清晰的主题
 - 每个 Clause 应该是一个独立的可测试规则
 
-**示例（ADR-0000）**：
+**示例（ADR-900）**：
 
 **旧规则**：
-- ADR-0000.1: 审判权唯一性
-- ADR-0000.2: 架构违规的判定原则
-- ADR-0000.3: 执行级别分离原则
-- ADR-0000.4: ADR ↔ 测试 ↔ CI 的一一映射
-- ADR-0000.5: 破例治理宪法规则
-- ADR-0000.6: 冲突裁决优先级
+- ADR-900.1: 审判权唯一性
+- ADR-900.2: 架构违规的判定原则
+- ADR-900.3: 执行级别分离原则
+- ADR-900.4: ADR ↔ 测试 ↔ CI 的一一映射
+- ADR-900.5: 破例治理宪法规则
+- ADR-900.6: 冲突裁决优先级
 
 **新分组**：
 - **Rule 1：架构裁决权威性**
@@ -527,7 +527,7 @@ version: "X.0"    # 主版本号 +1
 
 | ADR | 状态 | 规则数量 | 预估难度 | 备注 |
 |-----|------|---------|---------|------|
-| ADR-0000 | ✅ 已完成 | 4 Rule, 7 Clause | ⭐⭐⭐ | - |
+| ADR-900 | ✅ 已完成 | 4 Rule, 7 Clause | ⭐⭐⭐ | - |
 | ADR-900 | ⚠️ 待评估 | ? | ⭐⭐⭐ | Decision 章节为空，需补充 |
 | ADR-901 | 🚧 进行中 | 2 Rule, 8 Clause | ⭐⭐ | Front Matter 已更新 |
 | ADR-902 | ⏸️ 待对齐 | 2 Rule, 7 Clause | ⭐⭐ | - |
@@ -604,7 +604,7 @@ version: "X.0"    # 主版本号 +1
 **Depends On**：
 
 - [ADR-907：ArchitectureTests 执法治理体系](./ADR-907-architecture-tests-enforcement-governance.md)  
-- [ADR-0000：架构测试与 CI 治理元规则](./ADR-0000-architecture-tests.md)
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md)
 
 **Depended By**：
 
@@ -614,7 +614,7 @@ version: "X.0"    # 主版本号 +1
 **Related**：
 
 - [ADR-902：ADR 模板结构契约](./ADR-902-adr-template-structure-contract.md)
-- [ADR-900：ADR 新增与修订流程](./ADR-900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](./ADR-900-architecture-tests.md)
 
 ---
 

@@ -239,14 +239,14 @@ public sealed class ADR_907_4_Architecture_Tests
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         
-        // 验证 ADR-0000 定义了破例机制
-        var adr0000File = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-0000-architecture-tests.md");
+        // 验证 ADR-900 定义了破例机制
+        var adr0000File = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-900-architecture-tests.md");
         
         File.Exists(adr0000File).Should().BeTrue(
-            $"❌ ADR-907_4_4 违规：ADR-0000 文档不存在\n\n" +
+            $"❌ ADR-907_4_4 违规：ADR-900 文档不存在\n\n" +
             $"预期路径：{adr0000File}\n\n" +
             $"修复建议：\n" +
-            $"  1. 创建 ADR-0000 架构测试宪法文档\n" +
+            $"  1. 创建 ADR-900 架构测试宪法文档\n" +
             $"  2. 定义破例与偿还机制\n" +
             $"  3. 明确破例流程和审批要求\n\n" +
             $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §4.4");
@@ -259,9 +259,9 @@ public sealed class ADR_907_4_Architecture_Tests
                                    adr0000Content.Contains("exemption");
 
         hasExceptionMechanism.Should().BeTrue(
-            $"❌ ADR-907_4_4 违规：ADR-0000 未定义破例机制\n\n" +
+            $"❌ ADR-907_4_4 违规：ADR-900 未定义破例机制\n\n" +
             $"修复建议：\n" +
-            $"  1. 在 ADR-0000 中定义破例机制\n" +
+            $"  1. 在 ADR-900 中定义破例机制\n" +
             $"  2. 破例记录必须包含：\n" +
             $"     - ADR 编号\n" +
             $"     - 测试类 / 方法\n" +

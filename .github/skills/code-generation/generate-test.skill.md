@@ -279,7 +279,7 @@ public class {ClassName}Tests
 
 ## 参考资料
 
-- [ADR-0000：架构测试](../../../docs/adr/constitutional/ADR-0000-architecture-testing-ci-governance-constitution.md)
+- [ADR-900：架构测试](../../../docs/adr/constitutional/ADR-900-architecture-testing-ci-governance-constitution.md)
 - [ADR-0122：测试组织](../../../docs/adr/structure/ADR-0122-testing-organization.md)
 - [测试编写指令](../../instructions/testing.instructions.md)
 

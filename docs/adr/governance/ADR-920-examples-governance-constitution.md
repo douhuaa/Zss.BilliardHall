@@ -262,7 +262,7 @@ public class CreateOrderHandler { }
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理元规则](./ADR-0000-architecture-tests.md) - 示例治理基于测试和 CI 机制
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 示例治理基于测试和 CI 机制
 - [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 示例必须遵守模块隔离规则
 - [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 示例必须遵守层级依赖规则
 - [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 示例必须遵守 Handler 模式
@@ -293,7 +293,7 @@ public class CreateOrderHandler { }
 
 **相关内部文档**：
 - [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 示例必须遵守的核心架构
-- [ADR-0000：架构测试与 CI 治理元规则](./ADR-0000-architecture-tests.md) - 示例的测试和验证机制
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 示例的测试和验证机制
 - [ADR-910：README 编写与维护治理规范](./ADR-910-readme-governance-constitution.md) - README 中的示例规范
 - [ADR-950：Guide/FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md) - Guide 文档中的示例规范
 
