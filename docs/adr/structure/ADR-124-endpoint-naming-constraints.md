@@ -3,9 +3,9 @@ adr: ADR-124
 title: "Endpoint 命名及参数约束规范"
 status: Final
 level: Structure
-version: "2.0"
+version: "3.0"
 deciders: "Architecture Board"
-date: 2026-01-26
+date: 2026-02-03
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -48,7 +48,20 @@ superseded_by: null
 
 ## Decision（裁决）
 
-### ADR-124.1：Endpoint 类命名必须遵循 {UseCase}Endpoint 模式
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-124 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-124_<Rule>_<Clause>
+> ```
+
+---
+
+### ADR-124_1：Endpoint 命名规范（Rule）
+
+#### ADR-124_1_1 Endpoint 类命名必须遵循 {UseCase}Endpoint 模式
 
 **规则**：
 - Endpoint 类名**必须**为用例名 + `Endpoint` 后缀
@@ -62,7 +75,7 @@ superseded_by: null
 - ❌ `CreateOrderController`（非 Endpoint 后缀）
 - ❌ `CreateOrderApi`（非标准后缀）
 
-### ADR-124.2：请求 DTO 命名必须遵循 {UseCase}Request 模式
+#### ADR-124_1_2 请求 DTO 命名必须遵循 {UseCase}Request 模式
 
 **规则**：
 - 请求 DTO 名称**必须**为用例名 + `Request` 后缀
@@ -76,7 +89,7 @@ superseded_by: null
 - ❌ `OrderRequest`（缺少用例动词）
 - ❌ `CreateOrderInput`（非标准后缀）
 
-### ADR-124.3：响应 DTO 命名必须遵循 {UseCase}Response 模式
+#### ADR-124_1_3 响应 DTO 命名必须遵循 {UseCase}Response 模式
 
 **规则**：
 - 响应 DTO 名称**必须**为用例名 + `Response` 后缀
@@ -90,7 +103,11 @@ superseded_by: null
 - ❌ `OrderDto`（不明确用途）
 - ❌ `CreateOrderResult`（非标准后缀）
 
-### ADR-124.4：Endpoint 禁止包含业务逻辑
+---
+
+### ADR-124_2：Endpoint 职责边界（Rule）
+
+#### ADR-124_2_1 Endpoint 禁止包含业务逻辑
 
 **规则**：
 - Endpoint **禁止**包含任何业务逻辑
@@ -135,7 +152,7 @@ var total = request.Items.Sum(i => i.Price * i.Quantity);
 var order = await _dbContext.Orders.FindAsync(id);
 ```
 
-### ADR-124.5：一个 Endpoint 只能调用一个 Command 或 Query
+#### ADR-124_2_2 一个 Endpoint 只能调用一个 Command 或 Query
 
 **规则**：
 - 每个 Endpoint 方法**必须**只调用一个 Command 或一个 Query
@@ -185,18 +202,26 @@ builder.MapPost("/orders/fulfill", async (request, bus) =>
 
 ## Enforcement（执法模型）
 
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_124_Architecture_Tests.cs` 强制验证：
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-124 各条款（Clause）的执法方式及执行级别。
+>
+> 所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_124_Architecture_Tests.cs` 强制验证。
 
-- Endpoint 类命名是否符合 `{UseCase}Endpoint` 模式
-- Request DTO 命名是否以 `Request` 结尾
-- Response DTO 命名是否以 `Response` 结尾
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-124_1_1** | L1 | ArchitectureTests 验证 Endpoint 类命名模式 | §ADR-124_1_1 |
+| **ADR-124_1_2** | L1 | ArchitectureTests 验证 Request DTO 命名 | §ADR-124_1_2 |
+| **ADR-124_1_3** | L1 | ArchitectureTests 验证 Response DTO 命名 | §ADR-124_1_3 |
+| **ADR-124_2_1** | L2 | Code Review + Roslyn Analyzer 检测业务逻辑 | §ADR-124_2_1 |
+| **ADR-124_2_2** | L2 | Code Review 检查单一调用约束 | §ADR-124_2_2 |
 
-**L2 测试**：
-- 通过 Code Review 检查 Endpoint 是否包含业务逻辑
-- 通过 Code Review 检查 Endpoint 是否只调用一个 Command/Query
-- 建议使用 Roslyn Analyzer 检测业务逻辑特征
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
 
-**有一项违规视为架构违规，CI 自动阻断。**
+**有一项 L1 违规视为架构违规，CI 自动阻断。**
 
 ---
 ---
@@ -256,7 +281,8 @@ builder.MapPost("/orders/fulfill", async (request, bus) =>
 
 ## History（版本历史）
 
-
-| 版本  | 日期         | 变更说明   |
-|-----|------------|--------|
-| 1.0 | 2026-01-29 | 初始版本 |
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------|-------|
+| 3.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
+| 2.0 | 2026-01-26 | 更新版本 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |
