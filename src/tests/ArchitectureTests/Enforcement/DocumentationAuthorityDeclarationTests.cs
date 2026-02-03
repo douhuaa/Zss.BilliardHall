@@ -6,8 +6,8 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 /// <summary>
 /// 文档权威声明检查 - Enforcement 层测试
 /// 
-/// 【定位】：执行 ADR-0008 的具体约束
-/// 【来源】：ADR-0008 决策 3.1
+/// 【定位】：执行 ADR-008 的具体约束
+/// 【来源】：ADR-008 决策 3.1
 /// 【执法】：失败 = CI 阻断
 /// 
 /// 本测试类检查：
@@ -15,8 +15,8 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 /// 2. 必须包含冲突裁决规则
 /// 
 /// 【关联文档】
-/// - ADR: docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md
-/// - 来源决策: ADR-0008 决策 3.1
+/// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
+/// - 来源决策: ADR-008 决策 3.1
 /// </summary>
 public sealed class DocumentationAuthorityDeclarationTests
 {
@@ -99,7 +99,7 @@ public sealed class DocumentationAuthorityDeclarationTests
             {
                 "❌ Enforcement 违规：以下治理级文档未正确声明权威依据",
                 "",
-                "根据 ADR-0008 决策 3.1：Instructions/Agents 必须显式声明所服从的 ADR。",
+                "根据 ADR-008 决策 3.1：Instructions/Agents 必须显式声明所服从的 ADR。",
                 ""
             }
             .Concat(violations)
@@ -108,19 +108,19 @@ public sealed class DocumentationAuthorityDeclarationTests
                 "",
                 "修复建议：",
                 "  1. 在文档开头添加'权威声明'或'权威依据'章节",
-                "  2. 明确列出所服从的 ADR 编号（如：本文档基于 ADR-0001, ADR-0005）",
+                "  2. 明确列出所服从的 ADR 编号（如：本文档基于 ADR-001, ADR-005）",
                 "  3. 添加冲突裁决规则：'若与 ADR 冲突，以 ADR 正文为准'",
                 "",
                 "示例：",
                 "  ## 权威声明",
                 "  ",
                 "  本文档服从以下 ADR：",
-                "  - ADR-0001: 模块化单体架构",
-                "  - ADR-0005: Handler 模式",
+                "  - ADR-001: 模块化单体架构",
+                "  - ADR-005: Handler 模式",
                 "  ",
                 "  > ⚖️ 若本文档与 ADR 正文冲突，以 ADR 正文为准。",
                 "",
-                "参考：docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md 决策 3.1"
+                "参考：docs/adr/constitutional/ADR-008-documentation-governance-constitution.md 决策 3.1"
             })));
         }
     }

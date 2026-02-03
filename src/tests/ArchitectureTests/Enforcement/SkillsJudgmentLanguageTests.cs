@@ -6,8 +6,8 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 /// <summary>
 /// Skills 判断性语言检查 - Enforcement 层测试
 /// 
-/// 【定位】：执行 ADR-0008 的具体约束
-/// 【来源】：ADR-0008 决策 3.2
+/// 【定位】：执行 ADR-008 的具体约束
+/// 【来源】：ADR-008 决策 3.2
 /// 【执法】：失败 = CI 阻断
 /// 
 /// 本测试类检查：
@@ -15,8 +15,8 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 /// 2. Skills 只能输出事实
 /// 
 /// 【关联文档】
-/// - ADR: docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md
-/// - 来源决策: ADR-0008 决策 3.2
+/// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
+/// - 来源决策: ADR-008 决策 3.2
 /// </summary>
 public sealed class SkillsJudgmentLanguageTests
 {
@@ -32,7 +32,7 @@ public sealed class SkillsJudgmentLanguageTests
             return;
         }
         
-        // 判断性词汇（ADR-0008 明确禁止 Skills 使用）
+        // 判断性词汇（ADR-008 明确禁止 Skills 使用）
         var forbiddenJudgments = new[]
         {
             "违规", "不符合", "应当", "建议", "推荐",
@@ -74,7 +74,7 @@ public sealed class SkillsJudgmentLanguageTests
             {
                 "❌ Enforcement 违规：以下 Skills 输出了判断性结论",
                 "",
-                "根据 ADR-0008 决策 3.2：Skills 只能输出事实，不得输出判断。",
+                "根据 ADR-008 决策 3.2：Skills 只能输出事实，不得输出判断。",
                 ""
             }
             .Concat(violations)
@@ -90,7 +90,7 @@ public sealed class SkillsJudgmentLanguageTests
                 "  ✅ { \"type\": \"DirectReference\", \"source\": \"Orders\", \"target\": \"Members\" }",
                 "  ❌ { \"violation\": \"非法引用\", \"severity\": \"High\" }",
                 "",
-                "参考：docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md 决策 3.2"
+                "参考：docs/adr/constitutional/ADR-008-documentation-governance-constitution.md 决策 3.2"
             })));
         }
     }

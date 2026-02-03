@@ -179,7 +179,7 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - Handler 生命周期基于 CQRS 和 Handler 模式
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - Handler 生命周期基于 CQRS 和 Handler 模式
 
 **被依赖（Depended By）**：
 - 无
@@ -202,7 +202,7 @@ superseded_by: null
 > **仅供理解，不具裁决力。**
 
 ### 相关 ADR
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md)
 - [ADR-240：Handler 异常约束](ADR-240-handler-exception-constraints.md)
 
 ### 技术背景
@@ -211,7 +211,7 @@ superseded_by: null
 
 ### 实践指导
 - 详细的 Handler 生命周期实现示例参见工程标准文档
-- 常见问题排查参见 `docs/copilot/adr-0201.prompts.md`
+- 常见问题排查参见 `docs/copilot/adr-201.prompts.md`
 
 ---
 

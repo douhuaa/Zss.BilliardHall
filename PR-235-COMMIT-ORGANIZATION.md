@@ -26,7 +26,7 @@ PR #235 (copilot/update-test-cases-for-907) 实现了 ADR-907 v2.0 的重构和�
 
 #### 1. 测试结构重构（2 个提交）
 - `dcaeced` 重构 ADR-907 测试：按 v2.0 Rule/Clause 体系拆分为 4 个测试类
-  - 删除：ADR_0907_Architecture_Tests.cs (732 行)
+  - 删除：ADR_907_Architecture_Tests.cs (732 行)
   - 新增：4 个测试类 (1,571 行)
   
 - `15da417` 修复 ADR_907_1 测试中的字符串引号语法错误

@@ -16,7 +16,7 @@ public class AdrParserTests
     public void Parse_ValidAdr_ReturnsCorrectId()
     {
         // Arrange
-        var markdown = @"# ADR-0001：模块化单体架构
+        var markdown = @"# ADR-001：模块化单体架构
 
 **状态**：✅ Final  
 **级别**：架构约束
@@ -35,23 +35,23 @@ public class AdrParserTests
 ";
 
         // Act
-        var result = _parser.Parse(markdown, "ADR-0001-test.md");
+        var result = _parser.Parse(markdown, "ADR-001-test.md");
 
         // Assert
-        result.Id.Should().Be("ADR-0001");
+        result.Id.Should().Be("ADR-001");
     }
 
     [Fact]
     public void Parse_ValidAdr_ReturnsCorrectTitle()
     {
         // Arrange
-        var markdown = @"# ADR-0001：模块化单体架构
+        var markdown = @"# ADR-001：模块化单体架构
 
 **状态**：✅ Final  
 ";
 
         // Act
-        var result = _parser.Parse(markdown, "ADR-0001-test.md");
+        var result = _parser.Parse(markdown, "ADR-001-test.md");
 
         // Assert
         result.Title.Should().Be("模块化单体架构");
@@ -94,8 +94,8 @@ public class AdrParserTests
 ## 关系声明（Relationships）
 
 **依赖（Depends On）**：
-- [ADR-0001：模块化单体架构](./ADR-0001.md) - 基于模块隔离规则
-- [ADR-0002：平台架构](./ADR-0002.md) - 依赖平台定义
+- [ADR-001：模块化单体架构](./ADR-001.md) - 基于模块隔离规则
+- [ADR-002：平台架构](./ADR-002.md) - 依赖平台定义
 
 **被依赖（Depended By）**：无
 ";
@@ -105,7 +105,7 @@ public class AdrParserTests
 
         // Assert
         result.Relationships.DependsOn.Should().HaveCount(2);
-        result.Relationships.DependsOn[0].Id.Should().Be("ADR-0001");
+        result.Relationships.DependsOn[0].Id.Should().Be("ADR-001");
         result.Relationships.DependsOn[0].Title.Should().Be("模块化单体架构");
         result.Relationships.DependsOn[0].Reason.Should().Be("基于模块隔离规则");
     }
@@ -241,7 +241,7 @@ public class AdrParserTests
 
     [Theory]
     [InlineData("# ADR-001：测试", "ADR-001")]  // 短格式
-    [InlineData("# ADR-0001：测试", "ADR-0001")]  // 标准格式
+    [InlineData("# ADR-001：测试", "ADR-001")]  // 标准格式
     [InlineData("# ADR-12345：测试", "ADR-12345")]  // 长编号
     public void Parse_VariousAdrIdFormats_ExtractsCorrectly(string titleLine, string expectedId)
     {

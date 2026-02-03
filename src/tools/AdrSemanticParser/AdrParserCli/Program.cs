@@ -45,8 +45,8 @@ static void ShowHelp()
     Console.WriteLine("  adr-parser help                             显示帮助信息");
     Console.WriteLine();
     Console.WriteLine("示例:");
-    Console.WriteLine("  adr-parser parse docs/adr/ADR-0001.md");
-    Console.WriteLine("  adr-parser parse docs/adr/ADR-0001.md output.json");
+    Console.WriteLine("  adr-parser parse docs/adr/ADR-001.md");
+    Console.WriteLine("  adr-parser parse docs/adr/ADR-001.md output.json");
     Console.WriteLine("  adr-parser batch docs/adr adr-models.json");
 }
 

@@ -40,7 +40,7 @@ using Zss.BilliardHall.AdrSemanticParser;
 var parser = new AdrParser();
 
 // 解析单个文件
-var model = await parser.ParseFileAsync("docs/adr/ADR-0001.md");
+var model = await parser.ParseFileAsync("docs/adr/ADR-001.md");
 
 // 输出 JSON
 var serializer = new AdrSerializer();
@@ -56,7 +56,7 @@ dotnet build src/tools/AdrSemanticParser/AdrParserCli/AdrParserCli.csproj
 
 # 解析单个 ADR
 dotnet run --project src/tools/AdrSemanticParser/AdrParserCli/AdrParserCli.csproj \
-  -- parse docs/adr/ADR-0001.md output.json
+  -- parse docs/adr/ADR-001.md output.json
 
 # 批量解析
 dotnet run --project src/tools/AdrSemanticParser/AdrParserCli/AdrParserCli.csproj \
@@ -81,10 +81,10 @@ dotnet run --project src/tools/AdrSemanticParser/AdrParserCli/AdrParserCli.cspro
   "relationships": {
     "dependsOn": [
       {
-        "id": "ADR-0008",
+        "id": "ADR-008",
         "title": "文档编写与维护宪法",
         "reason": "基于文档规范",
-        "relativePath": "../constitutional/ADR-0008.md"
+        "relativePath": "../constitutional/ADR-008.md"
       }
     ],
     "dependedBy": [],
@@ -126,17 +126,17 @@ dotnet run --project src/tools/AdrSemanticParser/AdrParserCli/AdrParserCli.cspro
 ## 关系声明（Relationships）
 
 **依赖（Depends On）**：
-- [ADR-0001：模块化单体架构](./ADR-0001.md) - 基于模块隔离规则
+- [ADR-001：模块化单体架构](./ADR-001.md) - 基于模块隔离规则
 
 **被依赖（Depended By）**：
-- [ADR-0002：平台架构](./ADR-0002.md)
+- [ADR-002：平台架构](./ADR-002.md)
 
 **替代（Supersedes）**：无
 
 **被替代（Superseded By）**：无
 
 **相关（Related）**：
-- [ADR-0003：命名规范](./ADR-0003.md) - 相关约束
+- [ADR-003：命名规范](./ADR-003.md) - 相关约束
 ```
 
 ### 术语表
@@ -225,7 +225,7 @@ dotnet test src/tools/AdrSemanticParser/Tests/Zss.BilliardHall.AdrSemanticParser
   "relationships": {
     "dependsOn": [
       {
-        "id": "ADR-0008",
+        "id": "ADR-008",
         "title": "文档编写与维护宪法",
         "reason": "基于文档规范"
       }

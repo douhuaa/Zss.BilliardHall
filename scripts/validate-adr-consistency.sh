@@ -102,7 +102,7 @@ VALID_ADRS=0
 INVALID_ADRS=0
 IS_VALID=true
 
-# ADR 层级编号范围定义（基于 ADR-0006）
+# ADR 层级编号范围定义（基于 ADR-006）
 declare -A TIER_RANGES
 TIER_RANGES["constitutional"]="0001-0099"
 TIER_RANGES["structure"]="0100-0199"
@@ -280,7 +280,7 @@ function validate_consistency() {
             if [ "$OUTPUT_FORMAT" = "json" ]; then
                 json_add_detail "ADR_Numbering_Format" "$adr_id" "error" \
                     "编号格式错误：应为4位数字（如 0001），当前为 $adr_number" \
-                    "$adr_file" "" "docs/adr/constitutional/ADR-0006-terminology-numbering-constitution.md"
+                    "$adr_file" "" "docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md"
             fi
             has_error=true
         else
@@ -304,7 +304,7 @@ function validate_consistency() {
                 if [ "$OUTPUT_FORMAT" = "json" ]; then
                     json_add_detail "ADR_Tier_Consistency" "$adr_id" "error" \
                         "目录位置错误：ADR-$adr_number 不在 $tier 的编号范围 (${TIER_RANGES[$tier]}) 内" \
-                        "$adr_file" "" "docs/adr/constitutional/ADR-0006-terminology-numbering-constitution.md"
+                        "$adr_file" "" "docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md"
                 fi
                 has_error=true
             fi
@@ -400,7 +400,7 @@ function validate_consistency() {
             echo "  4. 确保文件命名符合规范"
             echo ""
             echo -e "${CYAN}参考文档：${NC}"
-            echo "  - docs/adr/constitutional/ADR-0006-terminology-numbering-constitution.md"
+            echo "  - docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md"
             echo "  - docs/adr/governance/ADR-0900-adr-process.md"
             echo ""
         fi

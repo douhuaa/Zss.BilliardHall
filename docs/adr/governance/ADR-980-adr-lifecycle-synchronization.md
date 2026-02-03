@@ -61,30 +61,30 @@ ADR 正文、架构测试、Copilot Prompt **必须**使用一致的版本号。
 
 **示例**：
 
-ADR 正文 (`ADR-0001-modular-monolith-vertical-slice-architecture.md`)：
+ADR 正文 (`ADR-001-modular-monolith-vertical-slice-architecture.md`)：
 ```markdown
-# ADR-0001：模块化单体与垂直切片架构
+# ADR-001：模块化单体与垂直切片架构
 
 **状态**：✅ Accepted
 **版本**：3.2
 ```
 
-架构测试 (`ADR_0001_Architecture_Tests.cs`)：
+架构测试 (`ADR_001_Architecture_Tests.cs`)：
 ```csharp
 // Version: 3.2
-// ADR: ADR-0001
-public class ADR_0001_Architecture_Tests
+// ADR: ADR-001
+public class ADR_001_Architecture_Tests
 {
     // ...
 }
 ```
 
-Copilot Prompt (`adr-0001.prompts.md`)：
+Copilot Prompt (`adr-001.prompts.md`)：
 ```markdown
-# ADR-0001 Copilot Prompts
+# ADR-001 Copilot Prompts
 
 **版本**：3.2
-**对应 ADR**：ADR-0001-modular-monolith-vertical-slice-architecture
+**对应 ADR**：ADR-001-modular-monolith-vertical-slice-architecture
 ```
 
 **核心原则**：
@@ -121,7 +121,7 @@ CI **必须**包含版本同步检测步骤，不一致时 **必须**阻断构�
 ```
 ❌ 版本同步检测失败
 
-ADR-0001 版本不一致：
+ADR-001 版本不一致：
 - ADR 正文：3.2
 - 架构测试：3.1
 - Copilot Prompt：3.2
@@ -199,7 +199,7 @@ ADR-0001 版本不一致：
 - 无
 
 **相关（Related）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档版本管理
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档版本管理
 - [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系图更新
 
 ---
@@ -210,7 +210,7 @@ ADR-0001 版本不一致：
 
 ### 相关 ADR
 - [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md)
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md)
 - [ADR-900：ADR 新增与修订流程](../governance/ADR-900-architecture-tests.md)
 - [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md)
 

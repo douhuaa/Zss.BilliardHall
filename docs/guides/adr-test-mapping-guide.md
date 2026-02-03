@@ -76,8 +76,8 @@
 
 | 约束 | 描述 | 测试覆盖 | ADR 章节 |
 |------|------|---------|----------|
-| 模块隔离 | 模块不得相互引用 | ✅ ADR_0001_Architecture_Tests.cs::Modules_Should_Not_Reference_Other_Modules | 3.1 |
-| 垂直切片 | 禁止横向 Service 层 | ✅ ADR_0001_Architecture_Tests.cs::Modules_Should_Not_Contain_Traditional_Layering | 3.2 |
+| 模块隔离 | 模块不得相互引用 | ✅ ADR_001_Architecture_Tests.cs::Modules_Should_Not_Reference_Other_Modules | 3.1 |
+| 垂直切片 | 禁止横向 Service 层 | ✅ ADR_001_Architecture_Tests.cs::Modules_Should_Not_Contain_Traditional_Layering | 3.2 |
 ```
 
 **列说明**：
@@ -92,14 +92,14 @@
 为便于追溯，ADR 中的关键约束应采用 **层级编号**：
 
 ```markdown
-### 3. 模块通信约束（ADR-0001.3）
+### 3. 模块通信约束（ADR-001.3）
 
-#### 3.1 允许的通信方式（ADR-0001.3.1）
+#### 3.1 允许的通信方式（ADR-001.3.1）
 - 领域事件（Domain Events）【必须架构测试覆盖】
 - 数据契约（Contracts）【必须架构测试覆盖】
 - 原始类型【必须架构测试覆盖】
 
-#### 3.2 禁止的通信方式（ADR-0001.3.2）
+#### 3.2 禁止的通信方式（ADR-001.3.2）
 - 直接引用其他模块的实体 【必须架构测试覆盖】
 ```
 
@@ -113,7 +113,7 @@
 
 ```csharp
 // ✅ 正确
-public class ADR_0001_Architecture_Tests { }
+public class ADR_001_Architecture_Tests { }
 
 // ❌ 错误
 public class ModularMonolithTests { }
@@ -126,12 +126,12 @@ public class ArchitectureTests { }
 
 ```csharp
 // ✅ 推荐方式 1：语义化命名
-[Theory(DisplayName = "ADR-0001.3.1: 模块不应相互引用")]
+[Theory(DisplayName = "ADR-001.3.1: 模块不应相互引用")]
 public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 
 // ✅ 推荐方式 2：编号前缀命名
-[Fact(DisplayName = "ADR-0001.3.2: 禁止横向 Service 层")]
-public void ADR_0001_3_2_No_Horizontal_Service_Layer()
+[Fact(DisplayName = "ADR-001.3.2: 禁止横向 Service 层")]
+public void ADR_001_3_2_No_Horizontal_Service_Layer()
 ```
 
 **要求**：
@@ -145,19 +145,19 @@ public void ADR_0001_3_2_No_Horizontal_Service_Layer()
 
 ```csharp
 /// <summary>
-/// ADR-0001: 模块化单体与垂直切片架构
+/// ADR-001: 模块化单体与垂直切片架构
 /// 
 /// 【测试覆盖映射】
-/// ├─ ADR-0001.3.1: 模块隔离 → Modules_Should_Not_Reference_Other_Modules
-/// ├─ ADR-0001.3.2: 垂直切片 → Modules_Should_Not_Contain_Traditional_Layering
-/// ├─ ADR-0001.4.1: 契约通信 → Modules_Should_Only_Use_Contracts_For_Communication
-/// └─ ADR-0001.4.2: 事件通信 → Modules_Should_Use_Events_For_Async_Communication
+/// ├─ ADR-001.3.1: 模块隔离 → Modules_Should_Not_Reference_Other_Modules
+/// ├─ ADR-001.3.2: 垂直切片 → Modules_Should_Not_Contain_Traditional_Layering
+/// ├─ ADR-001.4.1: 契约通信 → Modules_Should_Only_Use_Contracts_For_Communication
+/// └─ ADR-001.4.2: 事件通信 → Modules_Should_Use_Events_For_Async_Communication
 /// 
 /// 【关联文档】
-/// - ADR: docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md
-/// - Prompts: docs/copilot/adr-0001.prompts.md
+/// - ADR: docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md
+/// - Prompts: docs/copilot/adr-001.prompts.md
 /// </summary>
-public sealed class ADR_0001_Architecture_Tests
+public sealed class ADR_001_Architecture_Tests
 {
     // ...
 }
@@ -169,10 +169,10 @@ public sealed class ADR_0001_Architecture_Tests
 
 ```csharp
 Assert.True(result.IsSuccessful,
-    $"❌ ADR-0001 违规: 模块 {moduleName} 不应依赖模块 {otherModule}。\n" +
+    $"❌ ADR-001 违规: 模块 {moduleName} 不应依赖模块 {otherModule}。\n" +
     $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
     $"修复建议：将共享逻辑移至 Platform/BuildingBlocks，或改为消息通信（Publish/Invoke），或由 Bootstrapper/Coordinator 做模块级协调。\n" +
-    $"参考：docs/copilot/adr-0001.prompts.md");
+    $"参考：docs/copilot/adr-001.prompts.md");
 ```
 
 **要求**：
@@ -194,15 +194,15 @@ Assert.True(result.IsSuccessful,
 ```markdown
 ## 六、测试覆盖自检清单
 
-在审查与 ADR-0001 相关的 PR 时，请检查以下映射关系：
+在审查与 ADR-001 相关的 PR 时，请检查以下映射关系：
 
 ### 映射清单
 
 | ADR 约束 | 测试方法 | 状态 |
 |---------|---------|------|
-| ADR-0001.3.1: 模块不得相互引用 | `Modules_Should_Not_Reference_Other_Modules` | ✅ 已覆盖 |
-| ADR-0001.3.2: 禁止横向 Service 层 | `Modules_Should_Not_Contain_Traditional_Layering` | ✅ 已覆盖 |
-| ADR-0001.4.1: 使用契约通信 | `Modules_Should_Only_Use_Contracts` | ❌ 待补充 |
+| ADR-001.3.1: 模块不得相互引用 | `Modules_Should_Not_Reference_Other_Modules` | ✅ 已覆盖 |
+| ADR-001.3.2: 禁止横向 Service 层 | `Modules_Should_Not_Contain_Traditional_Layering` | ✅ 已覆盖 |
+| ADR-001.4.1: 使用契约通信 | `Modules_Should_Only_Use_Contracts` | ❌ 待补充 |
 
 ### 自检问题
 
@@ -222,7 +222,7 @@ Assert.True(result.IsSuccessful,
 ### 示例 1：模块隔离测试
 
 \`\`\`csharp
-[Theory(DisplayName = "ADR-0001.3.1: 模块不应相互引用")]
+[Theory(DisplayName = "ADR-001.3.1: 模块不应相互引用")]
 [ClassData(typeof(ModuleAssemblyData))]
 public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 {
@@ -236,16 +236,16 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
             .GetResult();
 
         Assert.True(result.IsSuccessful,
-            $"❌ ADR-0001.3.1 违规: 模块 {moduleName} 不应依赖模块 {other}。\n" +
+            $"❌ ADR-001.3.1 违规: 模块 {moduleName} 不应依赖模块 {other}。\n" +
             $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName))}。\n" +
             $"修复建议：使用领域事件或数据契约进行模块间通信。\n" +
-            $"参考：docs/copilot/adr-0001.prompts.md 场景 3");
+            $"参考：docs/copilot/adr-001.prompts.md 场景 3");
     }
 }
 \`\`\`
 
 **要点说明**：
-- ✅ DisplayName 明确标注 ADR-0001.3.1
+- ✅ DisplayName 明确标注 ADR-001.3.1
 - ✅ 失败消息包含 ADR 编号
 - ✅ 提供具体修复建议和参考文档
 ```

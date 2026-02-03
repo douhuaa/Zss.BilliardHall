@@ -3,7 +3,7 @@ name: "Handler Pattern Enforcer"
 description: "Handler 规范执行器 - 确保 Handler 模式正确使用"
 version: "1.0"
 risk_level: "高"
-supervised_adrs: ["ADR-0005", "ADR-0201"]
+supervised_adrs: ["ADR-005", "ADR-201"]
 tools: ["handler-analyzer", "cqrs-validator"]
 ---
 
@@ -19,11 +19,11 @@ tools: ["handler-analyzer", "cqrs-validator"]
 
 ### 权威声明
 
-> **当本 Agent 的行为描述与 ADR-0005、ADR-0201 或 ADR-0007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
+> **当本 Agent 的行为描述与 ADR-005、ADR-201 或 ADR-007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
 
 本 Agent 不承担宪法责任，仅作为 ADR 的执行代理。所有裁决权归属于 ADR 正文。
 
-**本 Agent 是 ADR-0007（Agent 行为与权限宪法）的实例化实现。**
+**本 Agent 是 ADR-007（Agent 行为与权限宪法）的实例化实现。**
 
 ### 我是谁
 
@@ -54,7 +54,7 @@ tools: ["handler-analyzer", "cqrs-validator"]
 
 **❌ 我禁止做的事**：
 - 批准违反 CQRS 的设计
-- 修改 ADR-0005
+- 修改 ADR-005
 - 绕过架构测试
 - 自动修改代码（必须人工确认）
 - 输出模糊判断（如"这样也可以"、"差不多"）
@@ -68,7 +68,7 @@ tools: ["handler-analyzer", "cqrs-validator"]
 
 ## 二、监督的核心约束
 
-### ADR-0005 Handler 规则
+### ADR-005 Handler 规则
 
 #### Command Handler 规则
 
@@ -220,7 +220,7 @@ graph TB
 
 ### ⚠️ 检测到违规
 - [列出违规项]
-- 违反的规则：ADR-0005.X.X
+- 违反的规则：ADR-005.X.X
 - 影响：[解释影响]
 - 修复方案：[具体步骤]
 
@@ -431,8 +431,8 @@ module-boundary-checker（检查模块边界）
 
 | 禁止行为 | 原因 |
 |---------|------|
-| ❌ 批准违反 CQRS | 违反 ADR-0005 |
-| ❌ 修改 ADR-0005 | 只能执行，不能修改 |
+| ❌ 批准违反 CQRS | 违反 ADR-005 |
+| ❌ 修改 ADR-005 | 只能执行，不能修改 |
 | ❌ 绕过架构测试 | 测试是最终仲裁 |
 | ❌ 输出模糊判断 | 违反三态输出规则 |
 | ❌ 自动修改代码 | 需人工确认 |
@@ -441,7 +441,7 @@ module-boundary-checker（检查模块边界）
 
 - ⚠️ Handler 模式违规可能导致架构退化
 - ⚠️ CQRS 分离不当影响可维护性
-- ⚠️ 必须与 ADR-0005 保持同步
+- ⚠️ 必须与 ADR-005 保持同步
 
 ---
 
@@ -451,7 +451,7 @@ module-boundary-checker（检查模块边界）
 
 | 问题 | 处理方式 |
 |------|---------|
-| Command 返回 DTO | ⚠️ Blocked - 违反 ADR-0005 |
+| Command 返回 DTO | ⚠️ Blocked - 违反 ADR-005 |
 | Query 修改状态 | ⚠️ Blocked - 违反 CQRS |
 | 基于 DTO 决策 | ⚠️ Blocked - 应加载领域模型 |
 | Handler 包含业务逻辑 | ⚠️ 需改进 - 移至领域模型 |
@@ -463,14 +463,14 @@ module-boundary-checker（检查模块边界）
 
 ### 主要 ADR
 
-- [ADR-0005：应用内交互模型与执行边界](../../docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-0201：Handler 生命周期](../../docs/adr/runtime/ADR-0201-handler-lifecycle.md)
-- [ADR-0007：Agent 行为与权限宪法](../../docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
-- [ADR-0001：垂直切片架构](../../docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-005：应用内交互模型与执行边界](../../docs/adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
+- [ADR-201：Handler 生命周期](../../docs/adr/runtime/ADR-201-handler-lifecycle.md)
+- [ADR-007：Agent 行为与权限宪法](../../docs/adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
+- [ADR-001：垂直切片架构](../../docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
 
 ### 相关 Prompts
 
-- [ADR-0005 Prompts](../../docs/copilot/adr-0005.prompts.md)
+- [ADR-005 Prompts](../../docs/copilot/adr-005.prompts.md)
 - [后端开发指令](../instructions/backend.instructions.md)
 
 ---
@@ -480,9 +480,9 @@ module-boundary-checker（检查模块边界）
 
 | 版本 | 日期 | 变更说明 |
 |-----|------|---------|
-| 1.0 | 2026-01-26 | 初始版本，基于 ADR-0007 创建 |
+| 1.0 | 2026-01-26 | 初始版本，基于 ADR-007 创建 |
 
 ---
 
 **状态**：✅ Active  
-**基于 ADR**：ADR-0007（Agent 行为与权限宪法）
+**基于 ADR**：ADR-007（Agent 行为与权限宪法）

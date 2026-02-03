@@ -57,7 +57,7 @@ Copilot 在解释架构测试失败时，应遵循以下模板：
 
 ## 常见架构测试失败场景
 
-### 1. ADR-0001 相关失败
+### 1. ADR-001 相关失败
 
 #### 场景 1.1：模块间非法依赖
 
@@ -74,7 +74,7 @@ Copilot 在解释架构测试失败时，应遵循以下模板：
 ```markdown
 ### 违规分析
 
-**违反的 ADR**：ADR-0001 - 模块化单体与垂直切片架构
+**违反的 ADR**：ADR-001 - 模块化单体与垂直切片架构
 **违规类型**：模块间直接依赖
 
 ### 问题描述
@@ -83,7 +83,7 @@ Orders 模块直接引用了 Members 模块的内部实现（Domain 层），违
 
 ### 违规原因
 
-根据 ADR-0001：
+根据 ADR-001：
 - 模块必须保持独立边界
 - 模块之间只能通过三种方式通信：
   1. 领域事件（Domain Events）
@@ -158,13 +158,13 @@ await _eventBus.Publish(new OrderCreated(orderId, memberId));
 
 ```bash
 # 运行架构测试
-dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_0001"
+dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_001"
 ```
 
 ### 相关资源
 
-- [ADR-0001 完整文档](../adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-0001 提示词库](adr-0001.prompts.md)
+- [ADR-001 完整文档](../adr/ADR-001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-001 提示词库](adr-001.prompts.md)
 
 ```
 
@@ -188,7 +188,7 @@ Actual: Found 'OrderService' in Orders module
 
 ---
 
-### 2. ADR-0002 相关失败
+### 2. ADR-002 相关失败
 
 #### 场景 2.1：Program.cs 超过 30 行
 
@@ -226,7 +226,7 @@ Actual: Found reference to 'Zss.BilliardHall.Application'
 
 ---
 
-### 3. ADR-0003 相关失败
+### 3. ADR-003 相关失败
 
 #### 场景 3.1：命名空间与目录不一致
 
@@ -246,7 +246,7 @@ Actual: Zss.BilliardHall.Orders
 
 ---
 
-### 4. ADR-0004 相关失败
+### 4. ADR-004 相关失败
 
 #### 场景 4.1：项目中指定了包版本
 
@@ -266,7 +266,7 @@ Actual: Found Version="7.0.0" in Orders.csproj
 
 ---
 
-### 5. ADR-0005 相关失败
+### 5. ADR-005 相关失败
 
 #### 场景 5.1：Endpoint 包含业务逻辑
 
@@ -302,15 +302,15 @@ Actual: Found business logic in CreateOrderEndpoint
 
 发现 5 个架构测试失败，归属于 3 个 ADR：
 
-#### ADR-0001 相关（2 个）
+#### ADR-001 相关（2 个）
 - Modules_Should_Not_Reference_Other_Modules
 - Modules_Should_Not_Have_Service_Layer
 
-#### ADR-0002 相关（2 个）
+#### ADR-002 相关（2 个）
 - Platform_Should_Not_Depend_On_Application
 - Program_Should_Be_Minimal
 
-#### ADR-0004 相关（1 个）
+#### ADR-004 相关（1 个）
 - Projects_Should_Not_Specify_Package_Version
 
 ### 根本原因分析
@@ -320,13 +320,13 @@ Actual: Found business logic in CreateOrderEndpoint
 
 ### 推荐修复顺序
 
-1. **优先修复 ADR-0001 违规**（影响最大）
+1. **优先修复 ADR-001 违规**（影响最大）
    [详细步骤]
 
-2. **然后修复 ADR-0002 违规**
+2. **然后修复 ADR-002 违规**
    [详细步骤]
 
-3. **最后修复 ADR-0004 违规**（最简单）
+3. **最后修复 ADR-004 违规**（最简单）
    [详细步骤]
 ```
 
@@ -465,11 +465,11 @@ dotnet test
 
 | ADR      | 测试类                         | 主要检查项           |
 |----------|-----------------------------|-----------------|
-| ADR-0001 | ADR_0001_Architecture_Tests | 模块隔离、垂直切片       |
-| ADR-0002 | ADR_0002_Architecture_Tests | 三层依赖、Program.cs |
-| ADR-0003 | ADR_0003_Architecture_Tests | 命名空间一致性         |
-| ADR-0004 | ADR_0004_Architecture_Tests | CPM、依赖层级        |
-| ADR-0005 | ADR_0005_Architecture_Tests | CQRS、Handler 职责 |
+| ADR-001 | ADR_001_Architecture_Tests | 模块隔离、垂直切片       |
+| ADR-002 | ADR_002_Architecture_Tests | 三层依赖、Program.cs |
+| ADR-003 | ADR_003_Architecture_Tests | 命名空间一致性         |
+| ADR-004 | ADR_004_Architecture_Tests | CPM、依赖层级        |
+| ADR-005 | ADR_005_Architecture_Tests | CQRS、Handler 职责 |
 
 ---
 
@@ -480,7 +480,7 @@ dotnet test
 dotnet test src/tests/ArchitectureTests/
 
 # 运行特定 ADR 的测试
-dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_0001"
+dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_001"
 
 # 运行单个测试
 dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~Modules_Should_Not_Reference_Other_Modules"

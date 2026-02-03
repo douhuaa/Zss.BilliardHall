@@ -102,7 +102,7 @@ docs/INDEX.md
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档组织
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档组织
 - [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 基于其关系声明
 
 **被依赖（Depended By）**：
@@ -124,7 +124,7 @@ docs/INDEX.md
 ## References（非裁决性参考）
 
 ### 相关 ADR
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md)
 - [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md)
 
 ### 实施工具

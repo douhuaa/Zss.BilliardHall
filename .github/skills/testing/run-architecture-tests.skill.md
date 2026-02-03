@@ -41,9 +41,9 @@ required_agent: "test-generator"
   },
   "failures": [
     {
-      "test": "ADR_0001_Modules_Should_Not_Reference_Other_Modules",
-      "adr": "ADR-0001",
-      "message": "模块 Orders 直接引用了模块 Members（ADR-0001）",
+      "test": "ADR_001_Modules_Should_Not_Reference_Other_Modules",
+      "adr": "ADR-001",
+      "message": "模块 Orders 直接引用了模块 Members（ADR-001）",
       "violations": [
         {
           "file": "UseCases/CreateOrder/CreateOrderHandler.cs",
@@ -118,7 +118,7 @@ dotnet test src/tests/ArchitectureTests/ \
 
 ```bash
 dotnet test src/tests/ArchitectureTests/ \
-  --filter "FullyQualifiedName~ADR_0001" \
+  --filter "FullyQualifiedName~ADR_001" \
   --logger "console;verbosity=detailed"
 ```
 
@@ -140,12 +140,12 @@ dotnet test src/tests/ArchitectureTests/ \
 当测试失败时，提取 ADR 编号并关联到具体条款：
 
 ```
-测试：ADR_0001_Modules_Should_Not_Reference_Other_Modules
+测试：ADR_001_Modules_Should_Not_Reference_Other_Modules
 失败：模块 Orders 引用了 Members
 
-关联 ADR：ADR-0001.2.1
+关联 ADR：ADR-001.2.1
 约束：模块间禁止直接引用
-参考：docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md
+参考：docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md
 ```
 
 ### 提供修复建议
@@ -159,7 +159,7 @@ dotnet test src/tests/ArchitectureTests/ \
 2. 使用契约查询（只读）
 3. 使用原始类型（ID）
 
-参考：docs/copilot/adr-0001.prompts.md
+参考：docs/copilot/adr-001.prompts.md
 ```
 
 ---
@@ -180,8 +180,8 @@ dotnet test src/tests/ArchitectureTests/ \
 
 === 失败详情 ===
 
-❌ ADR_0001_Modules_Should_Not_Reference_Other_Modules
-   违反: ADR-0001.2.1 - 模块间禁止直接引用
+❌ ADR_001_Modules_Should_Not_Reference_Other_Modules
+   违反: ADR-001.2.1 - 模块间禁止直接引用
    位置: Orders/UseCases/CreateOrder/CreateOrderHandler.cs:15
    内容: using Zss.BilliardHall.Modules.Members.Domain
    
@@ -191,7 +191,7 @@ dotnet test src/tests/ArchitectureTests/ \
    - 契约查询（同步，只读）
    - 原始类型（传递 ID）
    
-   参考: docs/copilot/adr-0001.prompts.md
+   参考: docs/copilot/adr-001.prompts.md
 
 ---
 
@@ -247,7 +247,7 @@ dotnet test src/tests/ArchitectureTests/ \
 ```
 
 **输出**：
-- 只运行 ADR-0001 相关测试
+- 只运行 ADR-001 相关测试
 - 简洁输出
 - 仅显示失败
 

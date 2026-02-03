@@ -215,7 +215,7 @@ superseded_by: null
 - [OpenTelemetry Specification](https://opentelemetry.io/docs/reference/specification/)
 
 ### 实践指导
-- 日志配置示例参见 `docs/copilot/adr-0350.prompts.md`（待创建）
+- 日志配置示例参见 `docs/copilot/adr-350.prompts.md`（待创建）
 
 ---
 

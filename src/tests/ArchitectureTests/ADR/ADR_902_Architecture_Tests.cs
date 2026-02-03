@@ -469,7 +469,7 @@ public sealed class ADR_902_Architecture_Tests
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
             
-            // 提取 ADR 编号（如 ADR-0001）
+            // 提取 ADR 编号（如 ADR-001）
             var adrNumber = ExtractAdrNumber(Path.GetFileNameWithoutExtension(file));
             if (string.IsNullOrEmpty(adrNumber))
                 continue;

@@ -54,7 +54,7 @@ public sealed class AdrConsistencyTests
                 violations.Add(
                     $"❌ {fileName} 不符合 4 位编号格式\n" +
                     $"   文件：{file}\n" +
-                    $"   期望格式：ADR-XXXX-title.md（如 ADR-0001-xxx.md）"
+                    $"   期望格式：ADR-XXXX-title.md（如 ADR-001-xxx.md）"
                 );
             }
         }

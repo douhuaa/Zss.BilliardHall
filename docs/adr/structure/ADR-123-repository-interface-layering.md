@@ -178,8 +178,8 @@ Task ExecuteSqlAsync(string sql);               // 直接暴露 SQL
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - Repository 分层基于模块结构
-- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - Repository 遵循三层体系
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - Repository 分层基于模块结构
+- [ADR-002：平台、应用与主机启动器架构](../constitutional/ADR-002-platform-application-host-bootstrap.md) - Repository 遵循三层体系
 
 **被依赖（Depended By）**：
 - 无

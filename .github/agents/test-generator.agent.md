@@ -3,7 +3,7 @@ name: "Test Generator"
 description: "测试生成器 - 生成符合架构规范的测试代码"
 version: "1.0"
 risk_level: "中"
-supervised_adrs: ["ADR-900", "ADR-0122"]
+supervised_adrs: ["ADR-900", "ADR-122"]
 tools: ["test-template-generator", "architecture-test-generator"]
 ---
 
@@ -19,11 +19,11 @@ tools: ["test-template-generator", "architecture-test-generator"]
 
 ### 权威声明
 
-> **当本 Agent 的行为描述与 ADR-900、ADR-0122 或 ADR-0007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
+> **当本 Agent 的行为描述与 ADR-900、ADR-122 或 ADR-007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
 
 本 Agent 不承担宪法责任，仅作为 ADR 的执行代理。所有裁决权归属于 ADR 正文。
 
-**本 Agent 是 ADR-0007（Agent 行为与权限宪法）的实例化实现。**
+**本 Agent 是 ADR-007（Agent 行为与权限宪法）的实例化实现。**
 
 ### 我是谁
 
@@ -80,13 +80,13 @@ tools: ["test-template-generator", "architecture-test-generator"]
 
 ```
 src/tests/ArchitectureTests/ADR/
-  ├── ADR_0001_Architecture_Tests.cs  ← 模块隔离
-  ├── ADR_0002_Architecture_Tests.cs  ← 层级边界
-  ├── ADR_0003_Architecture_Tests.cs  ← 命名空间
-  └── ADR_0005_Architecture_Tests.cs  ← Handler 模式
+  ├── ADR_001_Architecture_Tests.cs  ← 模块隔离
+  ├── ADR_002_Architecture_Tests.cs  ← 层级边界
+  ├── ADR_003_Architecture_Tests.cs  ← 命名空间
+  └── ADR_005_Architecture_Tests.cs  ← Handler 模式
 ```
 
-### ADR-0122 测试组织规范
+### ADR-122 测试组织规范
 
 #### 测试必须镜像源代码结构
 
@@ -268,11 +268,11 @@ public class OrderTests
 
 ### 模式 3：架构测试
 
-**输入**：ADR-0001 约束 - 模块不得直接引用
+**输入**：ADR-001 约束 - 模块不得直接引用
 
 **生成**：
 ```csharp
-public class ADR_0001_Architecture_Tests
+public class ADR_001_Architecture_Tests
 {
     [Fact]
     public void Modules_Should_Not_Reference_Other_Modules()
@@ -285,7 +285,7 @@ public class ADR_0001_Architecture_Tests
             .GetResult();
             
         result.IsSuccessful.Should().BeTrue(
-            "模块不得直接引用其他模块（ADR-0001）");
+            "模块不得直接引用其他模块（ADR-001）");
     }
 }
 ```
@@ -437,8 +437,8 @@ test-generator（为 ADR 生成测试）
 ### 主要 ADR
 
 - [ADR-900：架构测试与 CI 治理宪法](../../docs/adr/constitutional/ADR-900-architecture-testing-ci-governance-constitution.md)
-- [ADR-0122：测试组织规范](../../docs/adr/structure/ADR-0122-testing-organization.md)
-- [ADR-0007：Agent 行为与权限宪法](../../docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+- [ADR-122：测试组织规范](../../docs/adr/structure/ADR-122-testing-organization.md)
+- [ADR-007：Agent 行为与权限宪法](../../docs/adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
 
 ### 相关指令
 
@@ -452,9 +452,9 @@ test-generator（为 ADR 生成测试）
 
 | 版本 | 日期 | 变更说明 |
 |-----|------|---------|
-| 1.0 | 2026-01-26 | 初始版本，基于 ADR-0007 创建 |
+| 1.0 | 2026-01-26 | 初始版本，基于 ADR-007 创建 |
 
 ---
 
 **状态**：✅ Active  
-**基于 ADR**：ADR-0007（Agent 行为与权限宪法）
+**基于 ADR**：ADR-007（Agent 行为与权限宪法）

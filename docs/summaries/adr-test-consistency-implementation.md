@@ -149,15 +149,15 @@ ADR 文档统计：
 
 ### 2.6 示例实现
 
-✅ **为 ADR-0001 提供了完整示例**：
+✅ **为 ADR-001 提供了完整示例**：
 
-**ADR 文档**（`docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md`）：
+**ADR 文档**（`docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md`）：
 
 - 添加 **【必须架构测试覆盖】** 标记
 - 新增"快速参考表"，包含测试覆盖映射
 - 标注每条约束是否需要测试
 
-**Prompts 文件**（`docs/copilot/adr-0001.prompts.md`）：
+**Prompts 文件**（`docs/copilot/adr-001.prompts.md`）：
 
 - 新增"六、测试覆盖自检清单"章节
 - 包含 ADR-测试映射表
@@ -184,7 +184,7 @@ ADR 文档统计：
 ```markdown
 | 约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节 |
 |---------|---------|---------|---------|----------|
-| ADR-0001.1 | 模块不得相互引用 | ✅ | ADR_0001_Architecture_Tests::Modules_Should_Not_Reference_Other_Modules | 1 |
+| ADR-001.1 | 模块不得相互引用 | ✅ | ADR_001_Architecture_Tests::Modules_Should_Not_Reference_Other_Modules | 1 |
 ```
 
 ### 3.2 测试代码规范
@@ -198,16 +198,16 @@ public sealed class ADR_{编号}_Architecture_Tests
 **测试方法规范**：
 
 ```csharp
-[Theory(DisplayName = "ADR-0001.1: 模块不应相互引用")]
+[Theory(DisplayName = "ADR-001.1: 模块不应相互引用")]
 public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 {
     // 测试逻辑...
     
     Assert.True(result.IsSuccessful,
-        $"❌ ADR-0001.1 违规: 模块 {moduleName} 不应依赖模块 {other}。\n" +
+        $"❌ ADR-001.1 违规: 模块 {moduleName} 不应依赖模块 {other}。\n" +
         $"违规类型: {failingTypes}。\n" +
         $"修复建议：使用领域事件或数据契约进行模块间通信。\n" +
-        $"参考：docs/copilot/adr-0001.prompts.md 场景 3");
+        $"参考：docs/copilot/adr-001.prompts.md 场景 3");
 }
 ```
 
@@ -281,7 +281,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 开发者询问：
 
 ```
-"我要在 ADR-0001 中新增一条约束：禁止模块间共享 Repository。
+"我要在 ADR-001 中新增一条约束：禁止模块间共享 Repository。
 请帮我：
 1. 添加正确的标记
 2. 更新快速参考表
@@ -292,7 +292,7 @@ public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 Copilot 会参考：
 
 - `docs/ADR-TEST-MAPPING-SPECIFICATION.md`
-- `docs/copilot/adr-0001.prompts.md`
+- `docs/copilot/adr-001.prompts.md`
 - 现有的测试示例
 
 **场景 2：验证失败诊断**
@@ -300,9 +300,9 @@ Copilot 会参考：
 开发者询问：
 
 ```
-"映射验证失败了，报告说 ADR-0002 有 3 条约束缺少测试。
+"映射验证失败了，报告说 ADR-002 有 3 条约束缺少测试。
 请帮我：
-1. 检查 ADR-0002 文档中哪些约束缺少测试
+1. 检查 ADR-002 文档中哪些约束缺少测试
 2. 为这些约束生成测试代码"
 ```
 
@@ -351,7 +351,7 @@ Copilot 会参考：
 - ✅ ADR 文档数：8
 - ✅ 架构测试文件数：6
 - ✅ 总测试方法数：71
-- ✅ ADR-0001 标记约束数：14
+- ✅ ADR-001 标记约束数：14
 - ✅ 验证脚本覆盖率：100%
 
 ---
@@ -414,9 +414,9 @@ Copilot 会参考：
 
 ### 7.3 示例
 
-- ADR-0001 文档：标记和快速参考表示例
-- adr-0001.prompts.md：测试覆盖自检清单示例
-- ADR_0001_Architecture_Tests.cs：测试代码示例
+- ADR-001 文档：标记和快速参考表示例
+- adr-001.prompts.md：测试覆盖自检清单示例
+- ADR_001_Architecture_Tests.cs：测试代码示例
 
 ---
 

@@ -36,7 +36,7 @@
    - 添加 59 处反向关系声明
 
 2. **编号格式修正**（Bash脚本）
-   - 符合 ADR-0006 规范
+   - 符合 ADR-006 规范
    - 移除 100-999 范围 ADR 的前导零
    - 修正 11 个文件中的 ADR 引用
 
@@ -48,7 +48,7 @@
 **修改的文件**：
 ```
 constitutional/
-  - ADR-0001, ADR-0002, ADR-0003, ADR-0005, ADR-0006, ADR-0008
+  - ADR-001, ADR-002, ADR-003, ADR-005, ADR-006, ADR-008
 
 governance/
   - ADR-900, ADR-900, ADR-940, ADR-951, ADR-960, ADR-980
@@ -107,8 +107,8 @@ python3 /tmp/auto_fix_relationships.py
 **文件**：`/tmp/fix_adr_numbering.sh`
 
 **功能**：
-- 移除非宪法层 ADR 的前导零（ADR-0120 → ADR-120）
-- 符合 ADR-0006 的编号规范
+- 移除非宪法层 ADR 的前导零（ADR-120 → ADR-120）
+- 符合 ADR-006 的编号规范
 - 批量处理多个文件
 
 ---
@@ -117,18 +117,18 @@ python3 /tmp/auto_fix_relationships.py
 
 所有剩余问题都是**假阳性**（误报），由编号冲突和脚本解析限制导致：
 
-### 1. ADR-0005 编号冲突（3个误报）
+### 1. ADR-005 编号冲突（3个误报）
 
-**问题**：两个文件共享 ADR-0005 编号
-- `ADR-0005-Application-Interaction-Model-Final.md`（主文档）
+**问题**：两个文件共享 ADR-005 编号
+- `ADR-005-Application-Interaction-Model-Final.md`（主文档）
 - `ADR-905-enforcement-level-classification.md`（补充说明）
 
 **现象**：
 - Enforcement-Levels 引用 Application-Interaction-Model-Final
-- bash 脚本误认为是自引用（ADR-0005 → ADR-0005）
+- bash 脚本误认为是自引用（ADR-005 → ADR-005）
 
 **建议解决方案**：
-1. 重新编号补充文档（例如 ADR-0005-B）
+1. 重新编号补充文档（例如 ADR-005-B）
 2. 或将补充说明作为附录合并到主文档
 
 **超出范围**：此问题涉及 ADR 编号体系调整，超出当前 PR 范围
@@ -166,8 +166,8 @@ python3 /tmp/auto_fix_relationships.py
 ```
 
 **分析**：
-- ADR-0005 编号冲突（真实问题，需要重新编号）
-- ADR-975/ADR-0008（可能是解析器问题，实际关系已正确）
+- ADR-005 编号冲突（真实问题，需要重新编号）
+- ADR-975/ADR-008（可能是解析器问题，实际关系已正确）
 
 ### 完整验证
 
@@ -235,7 +235,7 @@ C# 分析 → JSON 报告 → Python 修复 → Bash 验证
 
 ### 高优先级
 
-1. **解决 ADR-0005 编号冲突**
+1. **解决 ADR-005 编号冲突**
    - 重新编号补充文档
    - 更新所有引用
    - 预计工作量：1-2小时
@@ -277,7 +277,7 @@ C# 分析 → JSON 报告 → Python 修复 → Bash 验证
 
 ### 挑战与解决
 
-1. **编号冲突**：发现系统性问题（ADR-0005），标记为后续工作
+1. **编号冲突**：发现系统性问题（ADR-005），标记为后续工作
 2. **脚本局限**：bash 正则无法处理复杂场景，建议用 C# 替代
 3. **假阳性处理**：区分真实问题和工具误报，避免过度修复
 

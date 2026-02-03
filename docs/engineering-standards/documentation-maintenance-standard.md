@@ -50,7 +50,7 @@ docs/
 │
 ├── adr/                              # 架构决策记录
 │   ├── README.md                     # ADR 索引
-│   ├── constitutional/               # 宪法层 (ADR-0001~0009)
+│   ├── constitutional/               # 宪法层 (ADR-001~0009)
 │   ├── governance/                   # 治理层 (ADR-900, 900~999)
 │   ├── structure/                    # 结构层 (ADR-100~199)
 │   ├── runtime/                      # 运行层 (ADR-200~299)
@@ -224,8 +224,8 @@ dotnet test
 ✅ 正确：[架构指南](architecture-guide.md)
 ❌ 错误：[点击这里](architecture-guide.md)
 
-✅ 正确：[ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-❌ 错误：[这个 ADR](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+✅ 正确：[ADR-001](adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
+❌ 错误：[这个 ADR](adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
 ```
 
 ### 图表规范

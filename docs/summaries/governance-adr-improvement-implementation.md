@@ -319,7 +319,7 @@ echo -e "${RED}❌ FAIL${NC}: $check_name"
    - 影响：轻微，ADR-905 是执行级别分类文档
    - 建议：添加简短的变更政策说明
 
-3. **ADR-0003.8 项目命名约定测试失败**
+3. **ADR-003.8 项目命名约定测试失败**
    - 影响：轻微，与本 PR 无关（历史遗留问题）
    - 原因：`src/tools/AdrSemanticParser/AdrParserCli` 项目不符合命名约定
    - 建议：单独 Issue 处理
@@ -433,11 +433,11 @@ git commit -m "docs: 添加 2026 Q1 治理健康度报告"
 1. **修复已知问题**
    - [ ] 评估并修复 12 个 ADR 的依赖声明
    - [ ] 为 ADR-905 添加变更政策章节
-   - [ ] 修复 ADR-0003.8 项目命名问题（单独 Issue）
+   - [ ] 修复 ADR-003.8 项目命名问题（单独 Issue）
 
 2. **更新 Copilot Prompts**
    - [ ] 创建 `docs/copilot/adr-900.prompts.md`（破例管理场景）
-   - [ ] 更新 `docs/copilot/adr-0930.prompts.md`（代码审查场景）
+   - [ ] 更新 `docs/copilot/adr-930.prompts.md`（代码审查场景）
    - [ ] 创建 `docs/copilot/governance-compliance.prompts.md`（治理合规场景）
 
 3. **测试和验证**

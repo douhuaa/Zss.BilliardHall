@@ -2,7 +2,7 @@
 
 **PR**: #150  
 **测试时间**：2026-01-25 02:46 UTC  
-**测试范围**：全部 ADR 架构测试（ADR-900 至 ADR-0930）
+**测试范围**：全部 ADR 架构测试（ADR-900 至 ADR-930）
 
 ---
 
@@ -25,10 +25,10 @@
 
 **检测到的问题**：
 ```
-⚠️ ADR_0301_Architecture_Tests: 测试方法体可能过于简单（建议人工审查）
-⚠️ ADR_0350_Architecture_Tests: 测试方法体可能过于简单（建议人工审查）
-⚠️ ADR_0360_Architecture_Tests: 测试方法体可能过于简单（建议人工审查）
-⚠️ ADR_0930_Architecture_Tests: 测试方法体可能过于简单（建议人工审查）
+⚠️ ADR_301_Architecture_Tests: 测试方法体可能过于简单（建议人工审查）
+⚠️ ADR_350_Architecture_Tests: 测试方法体可能过于简单（建议人工审查）
+⚠️ ADR_360_Architecture_Tests: 测试方法体可能过于简单（建议人工审查）
+⚠️ ADR_930_Architecture_Tests: 测试方法体可能过于简单（建议人工审查）
 ```
 
 **说明**：
@@ -49,66 +49,66 @@
 
 ## 通过的关键架构测试（127 个）
 
-### ADR-0001: 模块化单体与垂直切片（14 个测试）
-- ✅ ADR-0001.1: 模块不应相互引用 (Members, Orders)
-- ✅ ADR-0001.2: 模块项目文件不应引用其他模块
-- ✅ ADR-0001.3: Handler 应在 UseCases 命名空间下
-- ✅ ADR-0001.4: 模块不应包含横向 Service 类
-- ✅ ADR-0001.5: 模块间只允许事件/契约/原始类型通信
-- ✅ ADR-0001.6: Contract 不应包含业务判断字段
-- ✅ ADR-0001.7: 命名空间应匹配模块边界
+### ADR-001: 模块化单体与垂直切片（14 个测试）
+- ✅ ADR-001.1: 模块不应相互引用 (Members, Orders)
+- ✅ ADR-001.2: 模块项目文件不应引用其他模块
+- ✅ ADR-001.3: Handler 应在 UseCases 命名空间下
+- ✅ ADR-001.4: 模块不应包含横向 Service 类
+- ✅ ADR-001.5: 模块间只允许事件/契约/原始类型通信
+- ✅ ADR-001.6: Contract 不应包含业务判断字段
+- ✅ ADR-001.7: 命名空间应匹配模块边界
 
-### ADR-0002: Platform/Application/Host 边界（14 个测试）
-- ✅ ADR-0002.1: Platform 不应依赖 Application
-- ✅ ADR-0002.2: Platform 不应依赖 Host
-- ✅ ADR-0002.3: Platform 不应依赖任何 Modules
-- ✅ ADR-0002.4: Platform 应有唯一 Bootstrapper
-- ✅ ADR-0002.5: Application 不应依赖 Host
-- ✅ ADR-0002.6: Application 不应依赖 Modules
-- ✅ ADR-0002.7: Application 应有唯一 Bootstrapper
-- ✅ ADR-0002.8: Application 不应包含 HttpContext
-- ✅ ADR-0002.9: Host 不应依赖 Modules
-- ✅ ADR-0002.10: Host 不应包含业务类型
-- ✅ ADR-0002.11: Host 项目不应引用 Modules
-- ✅ ADR-0002.12: Program.cs 应简洁（≤ 50 行）
-- ✅ ADR-0002.13: Program.cs 只应调用 Bootstrapper
-- ✅ ADR-0002.14: 验证完整三层依赖方向
+### ADR-002: Platform/Application/Host 边界（14 个测试）
+- ✅ ADR-002.1: Platform 不应依赖 Application
+- ✅ ADR-002.2: Platform 不应依赖 Host
+- ✅ ADR-002.3: Platform 不应依赖任何 Modules
+- ✅ ADR-002.4: Platform 应有唯一 Bootstrapper
+- ✅ ADR-002.5: Application 不应依赖 Host
+- ✅ ADR-002.6: Application 不应依赖 Modules
+- ✅ ADR-002.7: Application 应有唯一 Bootstrapper
+- ✅ ADR-002.8: Application 不应包含 HttpContext
+- ✅ ADR-002.9: Host 不应依赖 Modules
+- ✅ ADR-002.10: Host 不应包含业务类型
+- ✅ ADR-002.11: Host 项目不应引用 Modules
+- ✅ ADR-002.12: Program.cs 应简洁（≤ 50 行）
+- ✅ ADR-002.13: Program.cs 只应调用 Bootstrapper
+- ✅ ADR-002.14: 验证完整三层依赖方向
 
-### ADR-0003: 命名空间规则（9 个测试）
-- ✅ ADR-0003.1: 所有类型应以 BaseNamespace 开头
-- ✅ ADR-0003.2: Platform 类型应在正确命名空间
-- ✅ ADR-0003.3: Application 类型应在正确命名空间
-- ✅ ADR-0003.4: Module 类型应在正确命名空间
-- ✅ ADR-0003.5: Host 类型应在正确命名空间
-- ✅ ADR-0003.6: Directory.Build.props 应存在
-- ✅ ADR-0003.7: Directory.Build.props 应定义 BaseNamespace
-- ✅ ADR-0003.8: 所有项目应遵循命名空间约定
-- ✅ ADR-0003.9: 模块不应包含不规范的命名空间模式
+### ADR-003: 命名空间规则（9 个测试）
+- ✅ ADR-003.1: 所有类型应以 BaseNamespace 开头
+- ✅ ADR-003.2: Platform 类型应在正确命名空间
+- ✅ ADR-003.3: Application 类型应在正确命名空间
+- ✅ ADR-003.4: Module 类型应在正确命名空间
+- ✅ ADR-003.5: Host 类型应在正确命名空间
+- ✅ ADR-003.6: Directory.Build.props 应存在
+- ✅ ADR-003.7: Directory.Build.props 应定义 BaseNamespace
+- ✅ ADR-003.8: 所有项目应遵循命名空间约定
+- ✅ ADR-003.9: 模块不应包含不规范的命名空间模式
 
-### ADR-0004: 中央包管理（9 个测试）
-- ✅ ADR-0004.1: Directory.Packages.props 应存在
-- ✅ ADR-0004.2: CPM 应被启用
-- ✅ ADR-0004.3: CPM 应启用传递依赖固定
-- ✅ ADR-0004.4: 项目文件不应手动指定包版本
-- ✅ ADR-0004.5: Directory.Packages.props 应包含包分组
-- ✅ ADR-0004.6: 应包含常见包分组
-- ✅ ADR-0004.7: Platform 不应引用业务包
-- ✅ ADR-0004.8: 测试项目应引用相同测试框架版本
-- ✅ ADR-0004.9: 应定义所有项目使用的包
+### ADR-004: 中央包管理（9 个测试）
+- ✅ ADR-004.1: Directory.Packages.props 应存在
+- ✅ ADR-004.2: CPM 应被启用
+- ✅ ADR-004.3: CPM 应启用传递依赖固定
+- ✅ ADR-004.4: 项目文件不应手动指定包版本
+- ✅ ADR-004.5: Directory.Packages.props 应包含包分组
+- ✅ ADR-004.6: 应包含常见包分组
+- ✅ ADR-004.7: Platform 不应引用业务包
+- ✅ ADR-004.8: 测试项目应引用相同测试框架版本
+- ✅ ADR-004.9: 应定义所有项目使用的包
 
-### ADR-0005: Handler 与 CQRS（16 个测试）
-- ✅ ADR-0005.1: Handler 应有明确命名约定
-- ✅ ADR-0005.2: Endpoint 不应包含业务逻辑
-- ✅ ADR-0005.3: Handler 不应依赖 ASP.NET 类型
-- ✅ ADR-0005.4: Handler 应该是无状态的
-- ✅ ADR-0005.5: 模块间不应有未审批的同步调用
-- ✅ ADR-0005.6: 异步方法应遵循命名约定
-- ✅ ADR-0005.7: 模块不应共享领域实体
-- ✅ ADR-0005.8: Query Handler 可以返回 Contracts
-- ✅ ADR-0005.9: Command/Query Handler 应明确分离
-- ✅ ADR-0005.10: Command Handler 不应返回业务数据
-- ✅ ADR-0005.11: Handler 应使用结构化异常
-- ✅ ADR-0005.12: 所有 Handler 应在模块程序集中
+### ADR-005: Handler 与 CQRS（16 个测试）
+- ✅ ADR-005.1: Handler 应有明确命名约定
+- ✅ ADR-005.2: Endpoint 不应包含业务逻辑
+- ✅ ADR-005.3: Handler 不应依赖 ASP.NET 类型
+- ✅ ADR-005.4: Handler 应该是无状态的
+- ✅ ADR-005.5: 模块间不应有未审批的同步调用
+- ✅ ADR-005.6: 异步方法应遵循命名约定
+- ✅ ADR-005.7: 模块不应共享领域实体
+- ✅ ADR-005.8: Query Handler 可以返回 Contracts
+- ✅ ADR-005.9: Command/Query Handler 应明确分离
+- ✅ ADR-005.10: Command Handler 不应返回业务数据
+- ✅ ADR-005.11: Handler 应使用结构化异常
+- ✅ ADR-005.12: 所有 Handler 应在模块程序集中
 
 ### ADR-120: 领域事件设计（12 个测试）
 - ✅ ADR-120.1: 事件类型必须以 Event 后缀
@@ -179,16 +179,16 @@
 
 | ADR | 测试类 | 测试数 | 状态 | 说明 |
 |-----|--------|-------|------|------|
-| ADR-122 | ADR_0122_Architecture_Tests | 3 | ✅ | 测试组织命名 |
-| ADR-123 | ADR_0123_Architecture_Tests | 2 | ✅ | Repository 分层 |
-| ADR-124 | ADR_0124_Architecture_Tests | 2 | ✅ | Endpoint 命名 |
-| ADR-201 | ADR_0201_Architecture_Tests | 2 | ✅ | Handler 生命周期 |
-| ADR-210 | ADR_0210_Architecture_Tests | 1 | ✅ | 事件版本化 |
-| ADR-220 | ADR_0220_Architecture_Tests | 2 | ✅ | 事件总线集成 |
-| ADR-301 | ADR_0301_Architecture_Tests | 1 | ⚠️ | 占位符（L2 规则）|
-| ADR-350 | ADR_0350_Architecture_Tests | 1 | ⚠️ | 占位符（L2/L3）|
-| ADR-360 | ADR_0360_Architecture_Tests | 1 | ⚠️ | 占位符（L1/L2，CI 验证）|
-| ADR-930 | ADR_0930_Architecture_Tests | 1 | ⚠️ | 占位符（L2/L3）|
+| ADR-122 | ADR_122_Architecture_Tests | 3 | ✅ | 测试组织命名 |
+| ADR-123 | ADR_123_Architecture_Tests | 2 | ✅ | Repository 分层 |
+| ADR-124 | ADR_124_Architecture_Tests | 2 | ✅ | Endpoint 命名 |
+| ADR-201 | ADR_201_Architecture_Tests | 2 | ✅ | Handler 生命周期 |
+| ADR-210 | ADR_210_Architecture_Tests | 1 | ✅ | 事件版本化 |
+| ADR-220 | ADR_220_Architecture_Tests | 2 | ✅ | 事件总线集成 |
+| ADR-301 | ADR_301_Architecture_Tests | 1 | ⚠️ | 占位符（L2 规则）|
+| ADR-350 | ADR_350_Architecture_Tests | 1 | ⚠️ | 占位符（L2/L3）|
+| ADR-360 | ADR_360_Architecture_Tests | 1 | ⚠️ | 占位符（L1/L2，CI 验证）|
+| ADR-930 | ADR_930_Architecture_Tests | 1 | ⚠️ | 占位符（L2/L3）|
 
 **总计**：16 个测试（12 个实质性 L1 测试 + 4 个 L2/L3 占位符）
 

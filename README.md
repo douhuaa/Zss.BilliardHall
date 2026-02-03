@@ -67,7 +67,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 
 | 层级 | 编号范围 | 数量 | 目录 | 说明 |
 |------|----------|------|------|------|
-| **宪法层** | ADR-0001~0009 | 8 | [constitutional](docs/adr/constitutional/) | 系统根基约束 |
+| **宪法层** | ADR-001~0009 | 8 | [constitutional](docs/adr/constitutional/) | 系统根基约束 |
 | **结构层** | ADR-100~199 | 5 | [structure](docs/adr/structure/) | 静态组织与命名 |
 | **运行层** | ADR-200~299 | 4 | [runtime](docs/adr/runtime/) | 运行时模型与异常 |
 | **技术层** | ADR-300~399 | 4 | [technical](docs/adr/technical/) | 技术选型与实现 |
@@ -76,13 +76,13 @@ dotnet run --project src/Host/Worker/Worker.csproj
 #### 核心 ADR 快速链接
 
 **宪法层（系统基础）**：
-- [ADR-0001：模块化单体与垂直切片架构](docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 核心架构模式
-- [ADR-0002：Platform / Application / Host 三层启动体系](docs/adr/constitutional/ADR-0002-platform-application-host-bootstrap.md) - 启动与依赖注入
-- [ADR-0003：命名空间与项目边界规范](docs/adr/constitutional/ADR-0003-namespace-rules.md) - 命名空间规则
-- [ADR-0005：应用内交互模型与执行边界](docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) - CQRS 与 Handler 规范
-- [ADR-0006：术语与编号宪法](docs/adr/constitutional/ADR-0006-terminology-numbering-constitution.md) - ADR 编号与术语
-- [ADR-0007：Agent 行为与权限宪法](docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md) - AI Agent 治理
-- [ADR-0008：文档编写与维护宪法](docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md) - 文档规范
+- [ADR-001：模块化单体与垂直切片架构](docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 核心架构模式
+- [ADR-002：Platform / Application / Host 三层启动体系](docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md) - 启动与依赖注入
+- [ADR-003：命名空间与项目边界规范](docs/adr/constitutional/ADR-003-namespace-rules.md) - 命名空间规则
+- [ADR-005：应用内交互模型与执行边界](docs/adr/constitutional/ADR-005-Application-Interaction-Model-Final.md) - CQRS 与 Handler 规范
+- [ADR-006：术语与编号宪法](docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md) - ADR 编号与术语
+- [ADR-007：Agent 行为与权限宪法](docs/adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md) - AI Agent 治理
+- [ADR-008：文档编写与维护宪法](docs/adr/constitutional/ADR-008-documentation-governance-constitution.md) - 文档规范
 
 **治理层（流程与规则）**：
 - [ADR-900：架构测试与 CI 治理元规则](docs/adr/governance/ADR-900-architecture-tests.md) - 元治理规则
@@ -185,14 +185,14 @@ dotnet run --project src/Host/Worker/Worker.csproj
 
 ```
 @adr-reviewer
-请基于 ADR-0001 至 ADR-0005 审查本 PR 的变更，检查是否存在架构违规。
+请基于 ADR-001 至 ADR-005 审查本 PR 的变更，检查是否存在架构违规。
 ```
 
 **场景 4：检查模块边界（使用 module-boundary-checker）**
 
 ```
 @module-boundary-checker
-这种跨模块调用方式是否符合 ADR-0001 的要求？
+这种跨模块调用方式是否符合 ADR-001 的要求？
 ```
 
 ### 三大核心价值

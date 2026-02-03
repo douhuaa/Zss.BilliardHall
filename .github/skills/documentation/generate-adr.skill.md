@@ -36,7 +36,7 @@ required_agent: "adr-reviewer"
   "generated": true,
   "files": [
     {
-      "path": "docs/adr/constitutional/ADR-0001-modular-monolith.md",
+      "path": "docs/adr/constitutional/ADR-001-modular-monolith.md",
       "content": "...",
       "type": "ADR"
     }
@@ -278,7 +278,7 @@ required_agent: "adr-reviewer"
   "title": "Event Sourcing Pattern",
   "level": "宪法",
   "category": "constitutional",
-  "relatedAdrs": ["ADR-0005", "ADR-0001"]
+  "relatedAdrs": ["ADR-005", "ADR-001"]
 }
 ```
 
@@ -292,7 +292,7 @@ required_agent: "adr-reviewer"
 ## 参考资料
 
 - [ADR-0900：ADR 流程](../../../docs/adr/governance/ADR-0900-adr-workflow-final.md)
-- [ADR-0008：文档编写规范](../../../docs/adr/constitutional/ADR-0008-documentation-writing-maintenance-constitution.md)
+- [ADR-008：文档编写规范](../../../docs/adr/constitutional/ADR-008-documentation-writing-maintenance-constitution.md)
 - [ADR 模板](../../../docs/templates/adr-template.md)
 
 ---

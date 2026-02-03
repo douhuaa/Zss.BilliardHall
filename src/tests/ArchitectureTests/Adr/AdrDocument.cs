@@ -7,7 +7,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 public sealed class AdrDocument
 {
     /// <summary>
-    /// ADR 编号（如 "ADR-0001"）
+    /// ADR 编号（如 "ADR-001"）
     /// </summary>
     public string Id { get; init; } = default!;
 

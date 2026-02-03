@@ -232,7 +232,7 @@ TestContainer 启动**必须**配置超时和健康检查。
 - [xUnit Fixtures 文档](https://xunit.net/docs/shared-context)
 
 ### 实践指导
-- 详细配置示例参见 `docs/copilot/adr-0301.prompts.md`（待创建）
+- 详细配置示例参见 `docs/copilot/adr-301.prompts.md`（待创建）
 
 ---
 

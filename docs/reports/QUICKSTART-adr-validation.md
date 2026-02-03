@@ -10,7 +10,7 @@
 
 近期对 ADR 进行了大量更新，包括：
 - ADR-902：定义了标准 Front Matter 和文档结构
-- ADR-0006：定义了标准术语表格式（三列：术语、定义、英文对照）
+- ADR-006：定义了标准术语表格式（三列：术语、定义、英文对照）
 - ADR-940：定义了关系声明的双向一致性要求
 - ADR-980：定义了版本号格式规范
 
@@ -51,7 +51,7 @@ python3 --version  # 应显示 Python 3.6+
 检查 1: Front Matter 完整性
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-❌ ADR-0001-modular-monolith-vertical-slice-architecture.md 缺少 Front Matter
+❌ ADR-001-modular-monolith-vertical-slice-architecture.md 缺少 Front Matter
 ...
 ```
 
@@ -87,9 +87,9 @@ python3 ./scripts/validate-adr-relationships.py
 | 检查项 | 依据 ADR | 严重程度 |
 |-------|---------|---------|
 | Front Matter 完整性 | ADR-902 | 🔴 高 |
-| 术语表格式（英文对照） | ADR-0006 | 🟡 中 |
+| 术语表格式（英文对照） | ADR-006 | 🟡 中 |
 | 版本号格式（无 v 前缀） | ADR-980 | 🟡 中 |
-| 快速参考表（宪法层） | ADR-0006 | 🟢 低 |
+| 快速参考表（宪法层） | ADR-006 | 🟢 低 |
 
 #### 使用示例
 
@@ -110,7 +110,7 @@ done
 
 ❌ **错误示例**：
 ```markdown
-# ADR-0001: 模块化单体与垂直切片架构
+# ADR-001: 模块化单体与垂直切片架构
 
 **版本**：4.0
 **状态**：Final
@@ -119,14 +119,14 @@ done
 ✅ **正确示例**：
 ```markdown
 ---
-adr: ADR-0001
+adr: ADR-001
 title: "模块化单体与垂直切片架构"
 status: Final
 level: Constitutional
 version: "4.0"
 ---
 
-# ADR-0001: 模块化单体与垂直切片架构
+# ADR-001: 模块化单体与垂直切片架构
 ```
 
 **问题 2：术语表缺少英文对照**
@@ -181,34 +181,34 @@ python3 ./scripts/validate-adr-relationships.py | grep "统计信息" -A 10
 
 ❌ **错误示例**：
 
-在 ADR-0001 中：
+在 ADR-001 中：
 ```markdown
 ## ADR 关系
 
-**依赖**：ADR-0002
+**依赖**：ADR-002
 ```
 
-但在 ADR-0002 中：
+但在 ADR-002 中：
 ```markdown
 ## ADR 关系
 
-（没有声明被 ADR-0001 依赖）
+（没有声明被 ADR-001 依赖）
 ```
 
 ✅ **正确示例**：
 
-在 ADR-0001 中：
+在 ADR-001 中：
 ```markdown
 ## ADR 关系
 
-**依赖**：ADR-0002（模块隔离基于三层架构）
+**依赖**：ADR-002（模块隔离基于三层架构）
 ```
 
-在 ADR-0002 中：
+在 ADR-002 中：
 ```markdown
 ## ADR 关系
 
-**被依赖**：ADR-0001（模块隔离基于三层架构）
+**被依赖**：ADR-001（模块隔离基于三层架构）
 ```
 
 ---
@@ -223,9 +223,9 @@ python3 ./scripts/validate-adr-relationships.py | grep "统计信息" -A 10
 
 | 检查项 | 依据 ADR | 严重程度 |
 |-------|---------|---------|
-| 重复定义检测 | ADR-0006 | 🟡 中 |
-| 英文对照完整性 | ADR-0006 | 🟡 中 |
-| 格式统一性 | ADR-0006 | 🟢 低 |
+| 重复定义检测 | ADR-006 | 🟡 中 |
+| 英文对照完整性 | ADR-006 | 🟡 中 |
+| 格式统一性 | ADR-006 | 🟢 低 |
 
 #### 使用示例
 
@@ -243,12 +243,12 @@ cat /tmp/all-terms-*.txt
 
 ❌ **不推荐**：
 
-在 ADR-0001 中定义"模块化单体"  
-在 ADR-0006 中再次定义"模块化单体"
+在 ADR-001 中定义"模块化单体"  
+在 ADR-006 中再次定义"模块化单体"
 
 ✅ **推荐**：
 
-在 ADR-0006（术语宪法）中建立权威定义：
+在 ADR-006（术语宪法）中建立权威定义：
 ```markdown
 ## 术语表
 
@@ -257,11 +257,11 @@ cat /tmp/all-terms-*.txt
 | 模块化单体 | 单进程部署，按业务能力划分独立模块 | Modular Monolith |
 ```
 
-在 ADR-0001 中引用：
+在 ADR-001 中引用：
 ```markdown
 ## 术语说明
 
-本 ADR 中使用的术语定义参见 [ADR-0006 术语表](../constitutional/ADR-0006-terminology-numbering-constitution.md#术语表)。
+本 ADR 中使用的术语定义参见 [ADR-006 术语表](../constitutional/ADR-006-terminology-numbering-constitution.md#术语表)。
 ```
 
 ---
@@ -275,15 +275,15 @@ cat /tmp/all-terms-*.txt
 ./scripts/check-adr-consistency.sh
 
 # 2. 编辑 ADR
-vim docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md
+vim docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md
 
 # 3. 修改后验证
 ./scripts/check-adr-consistency.sh
 python3 ./scripts/validate-adr-relationships.py
 
 # 4. 如果通过，提交
-git add docs/adr/constitutional/ADR-0001-*.md
-git commit -m "fix: Add Front Matter to ADR-0001"
+git add docs/adr/constitutional/ADR-001-*.md
+git commit -m "fix: Add Front Matter to ADR-001"
 ```
 
 ### 场景 2：创建新 ADR
@@ -415,7 +415,7 @@ ls docs/adr  # 应显示 ADR 文件
 - 📘 [ADR-902: ADR 标准模板](../adr/governance/ADR-902-adr-template-structure-contract.md)
 - 📘 [ADR-940: ADR 关系管理](../adr/governance/ADR-940-adr-relationship-traceability-management.md)
 - 📘 [ADR-980: ADR 生命周期同步](../adr/governance/ADR-980-adr-lifecycle-synchronization.md)
-- 📘 [ADR-0006: 术语与编号宪法](../adr/constitutional/ADR-0006-terminology-numbering-constitution.md)
+- 📘 [ADR-006: 术语与编号宪法](../adr/constitutional/ADR-006-terminology-numbering-constitution.md)
 
 ### 工具文档
 - 📘 [验证工具完整文档](../scripts/README-adr-validation-tools.md)

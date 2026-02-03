@@ -2,7 +2,7 @@
 
 ## 目的
 
-这组测试的目的是把 **ADR-0001 至 ADR-0005 的核心静态约束** 写成可执行规则，确保架构规范能够被自动化检查并在 CI 中执行。
+这组测试的目的是把 **ADR-001 至 ADR-005 的核心静态约束** 写成可执行规则，确保架构规范能够被自动化检查并在 CI 中执行。
 
 所有架构决策文档 (ADR) 都已映射为独立的测试类，实现了 **可执行的架构宪法**。
 
@@ -39,11 +39,11 @@
 - **Enforcement**: 把宪法结论变成可执行规则，机械执行
 - **Heuristics**: 品味和建议，避免"要么放水、要么内耗"
 
-#### 重构案例：ADR-0008
+#### 重构案例：ADR-008
 
-ADR-0008（文档治理宪法）是第一个完成三层拆分的测试：
+ADR-008（文档治理宪法）是第一个完成三层拆分的测试：
 
-- **Governance 层**: `ADR_0008_Governance_Tests.cs` - 验证治理边界定义
+- **Governance 层**: `ADR_008_Governance_Tests.cs` - 验证治理边界定义
 - **Enforcement 层**:
   - `DocumentationDecisionLanguageTests.cs` - README 裁决语言检查
   - `DocumentationAuthorityDeclarationTests.cs` - Instructions/Agents 权威声明
@@ -63,9 +63,9 @@ ADR-0008（文档治理宪法）是第一个完成三层拆分的测试：
 - **目的**: 确保每条 ADR 都有唯一对应的架构测试类
 - **核心约束**: ADR 与测试类的一一映射关系
 
-#### ADR-0001: 模块化单体与垂直切片架构
+#### ADR-001: 模块化单体与垂直切片架构
 
-- **测试类**: `ADR_0001_Architecture_Tests`
+- **测试类**: `ADR_001_Architecture_Tests`
 - **测试数量**: 11 个测试
 - **核心约束**:
   - 模块隔离（模块间不能互相引用）
@@ -75,9 +75,9 @@ ADR-0008（文档治理宪法）是第一个完成三层拆分的测试：
   - Platform 层限制（不包含业务逻辑）
   - 契约是简单数据结构（不含业务方法）
 
-#### ADR-0002: Platform / Application / Host 三层启动体系
+#### ADR-002: Platform / Application / Host 三层启动体系
 
-- **测试类**: `ADR_0002_Architecture_Tests`
+- **测试类**: `ADR_002_Architecture_Tests`
 - **测试数量**: 13 个测试
 - **核心约束**:
   - Platform 不依赖 Application/Host
@@ -87,9 +87,9 @@ ADR-0008（文档治理宪法）是第一个完成三层拆分的测试：
   - Program.cs 简洁性（≤50 行）
   - 三层依赖方向验证
 
-#### ADR-0003: 命名空间与项目边界规范
+#### ADR-003: 命名空间与项目边界规范
 
-- **测试类**: `ADR_0003_Architecture_Tests`
+- **测试类**: `ADR_003_Architecture_Tests`
 - **测试数量**: 9 个测试
 - **核心约束**:
   - 所有类型命名空间以 Zss.BilliardHall 开头
@@ -97,9 +97,9 @@ ADR-0008（文档治理宪法）是第一个完成三层拆分的测试：
   - Directory.Build.props 存在性和配置
   - 禁止不规范命名空间模式
 
-#### ADR-0004: 中央包管理 (CPM) 规范
+#### ADR-004: 中央包管理 (CPM) 规范
 
-- **测试类**: `ADR_0004_Architecture_Tests`
+- **测试类**: `ADR_004_Architecture_Tests`
 - **测试数量**: 9 个测试
 - **核心约束**:
   - Directory.Packages.props 存在性和配置
@@ -108,9 +108,9 @@ ADR-0008（文档治理宪法）是第一个完成三层拆分的测试：
   - 包分组约束
   - 测试框架版本一致性
 
-#### ADR-0005: 应用内交互模型与执行边界
+#### ADR-005: 应用内交互模型与执行边界
 
-- **测试类**: `ADR_0005_Architecture_Tests`
+- **测试类**: `ADR_005_Architecture_Tests`
 - **测试数量**: 12 个测试
 - **核心约束**:
   - Handler 命名约定（Command/Query/Event）
@@ -124,7 +124,7 @@ ADR-0008（文档治理宪法）是第一个完成三层拆分的测试：
 
 ## 测试统计
 
-- **ADR 测试类**: 6 个（ADR-900 至 ADR-0005）
+- **ADR 测试类**: 6 个（ADR-900 至 ADR-005）
 - **覆盖率**: 100% ADR 约束覆盖
 
 ### 架构演进说明
@@ -206,16 +206,16 @@ dotnet test src/tests/ArchitectureTests -c Release
 ### 已实现的 ADR 测试覆盖
 
 ✅ **ADR-900**: 架构测试元规则  
-✅ **ADR-0001**: 模块化单体与垂直切片架构  
-✅ **ADR-0002**: Platform / Application / Host 三层启动体系  
-✅ **ADR-0003**: 命名空间与项目边界规范  
-✅ **ADR-0004**: 中央包管理 (CPM) 规范  
-✅ **ADR-0005**: 应用内交互模型与执行边界
+✅ **ADR-001**: 模块化单体与垂直切片架构  
+✅ **ADR-002**: Platform / Application / Host 三层启动体系  
+✅ **ADR-003**: 命名空间与项目边界规范  
+✅ **ADR-004**: 中央包管理 (CPM) 规范  
+✅ **ADR-005**: 应用内交互模型与执行边界
 
 ### 未来增强方向
 
 1. **引入 Roslyn Analyzer**：做语义级别的静态检查
-  - 详见 [ADR-0005 执行级别分类](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
+  - 详见 [ADR-005 执行级别分类](../../docs/adr/constitutional/ADR-005-Enforcement-Levels.md)
   - Level 2 规则建议使用 Roslyn Analyzer 实现
 2. **添加更多规则**：
   - 异常处理规范（使用 DomainException）
@@ -235,7 +235,7 @@ dotnet test src/tests/ArchitectureTests -c Release
 
 ### 📜 架构宪法层
 
-**ADR-900 至 ADR-0005 构成系统的"架构宪法层"**，不可被后续 ADR 推翻：
+**ADR-900 至 ADR-005 构成系统的"架构宪法层"**，不可被后续 ADR 推翻：
 
 - 详见 [架构宪法层文档](../../docs/adr/ARCHITECTURE-CONSTITUTIONAL-LAYER.md)
 - 这些 ADR 只能细化，不能削弱
@@ -253,7 +253,7 @@ dotnet test src/tests/ArchitectureTests -c Release
 2. **Level 2 - 语义半自动**（部分覆盖，建议增强）
   - 当前：启发式检查（建议性）
   - 建议：Roslyn Analyzer（自定义分析器）
-  - 详见 [ADR-0005 执行级别分类](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
+  - 详见 [ADR-005 执行级别分类](../../docs/adr/constitutional/ADR-005-Enforcement-Levels.md)
 
 3. **Level 3 - 人工 Gate**（流程控制）
   - PR 模板强制架构违规声明

@@ -2,7 +2,7 @@
 
 ⚠️ 本文档不具备裁决力。所有架构决策以对应 ADR 正文为准。
 
-This package contains Roslyn analyzers that enforce architectural constraints defined in ADR-0005 (Application
+This package contains Roslyn analyzers that enforce architectural constraints defined in ADR-005 (Application
 Interaction Model & Execution Boundaries).
 
 ## Purpose
@@ -14,7 +14,7 @@ checked through static dependency analysis alone but require understanding of co
 
 ### ADR0005_02: Endpoint Business Logic Analyzer
 
-**Rule**: Endpoints should not contain business logic (ADR-0005.2)
+**Rule**: Endpoints should not contain business logic (ADR-005.2)
 
 **Detection**:
 
@@ -31,7 +31,7 @@ checked through static dependency analysis alone but require understanding of co
 
 ### ADR0005_05: Cross-Module Call Analyzer
 
-**Rule**: Modules should not have synchronous cross-module calls (ADR-0005.5)
+**Rule**: Modules should not have synchronous cross-module calls (ADR-005.5)
 
 **Detection**:
 
@@ -47,7 +47,7 @@ checked through static dependency analysis alone but require understanding of co
 
 ### ADR0005_11: Structured Exception Analyzer
 
-**Rule**: Handlers should use structured exceptions (ADR-0005.11)
+**Rule**: Handlers should use structured exceptions (ADR-005.11)
 
 **Detection**:
 
@@ -106,7 +106,7 @@ The analyzers run during:
 
 ## Enforcement Levels
 
-According to [ADR-0005 Enforcement Levels](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md):
+According to [ADR-005 Enforcement Levels](../../docs/adr/constitutional/ADR-005-Enforcement-Levels.md):
 
 - **Level 1 (Static)**: NetArchTest (architecture tests)
 - **Level 2 (Semantic)**: These Roslyn Analyzers ← You are here
@@ -144,8 +144,8 @@ Create test projects in `src/tests/ArchitectureAnalyzers.Tests/` with positive a
 
 ## Related Documentation
 
-- [ADR-0005: Application Interaction Model](../../docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-0005 Enforcement Levels](../../docs/adr/constitutional/ADR-0005-Enforcement-Levels.md)
+- [ADR-005: Application Interaction Model](../../docs/adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
+- [ADR-005 Enforcement Levels](../../docs/adr/constitutional/ADR-005-Enforcement-Levels.md)
 - [ADR-900: Architecture Tests](../../docs/adr/governance/ADR-900-architecture-tests.md)
 
 ## Support

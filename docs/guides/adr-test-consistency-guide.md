@@ -80,8 +80,8 @@ dotnet test src/tests/ArchitectureTests/
 
 | 约束编号 | 约束描述 | 需要测试 | 测试覆盖 | ADR 章节 |
 |---------|---------|---------|---------|----------|
-| ADR-0001.1 | 模块不得相互引用 | ✅ | ADR_0001_Architecture_Tests::Modules_Should_Not_Reference_Other_Modules | 1 |
-| ADR-0001.3 | 跨模块禁止引用实体 | ✅ | ❌ 待补充 | 3 |
+| ADR-001.1 | 模块不得相互引用 | ✅ | ADR_001_Architecture_Tests::Modules_Should_Not_Reference_Other_Modules | 1 |
+| ADR-001.3 | 跨模块禁止引用实体 | ✅ | ❌ 待补充 | 3 |
 ```
 
 #### 步骤 3：编写对应的架构测试
@@ -89,7 +89,7 @@ dotnet test src/tests/ArchitectureTests/
 在 `src/tests/ArchitectureTests/ADR/ADR_XXXX_Architecture_Tests.cs` 中添加测试方法：
 
 ```csharp
-[Theory(DisplayName = "ADR-0001.3: 模块不得跨模块引用实体")]
+[Theory(DisplayName = "ADR-001.3: 模块不得跨模块引用实体")]
 [ClassData(typeof(ModuleAssemblyData))]
 public void Modules_Should_Not_Reference_Entities_Across_Modules(Assembly moduleAssembly)
 {
@@ -100,10 +100,10 @@ public void Modules_Should_Not_Reference_Entities_Across_Modules(Assembly module
         .GetResult();
 
     Assert.True(result.IsSuccessful,
-        $"❌ ADR-0001.3 违规: 模块实体被其他模块引用。\n" +
+        $"❌ ADR-001.3 违规: 模块实体被其他模块引用。\n" +
         $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName))}。\n" +
         $"修复建议：使用数据契约（DTO）替代直接引用实体。\n" +
-        $"参考：docs/copilot/adr-0001.prompts.md");
+        $"参考：docs/copilot/adr-001.prompts.md");
 }
 ```
 
@@ -114,7 +114,7 @@ public void Modules_Should_Not_Reference_Entities_Across_Modules(Assembly module
 ```markdown
 | ADR 约束 | 测试方法 | 测试文件 | 状态 |
 |---------|---------|---------|------|
-| ADR-0001.3: 跨模块禁止引用实体 | `Modules_Should_Not_Reference_Entities_Across_Modules` | ADR_0001_Architecture_Tests.cs | ✅ 已覆盖 |
+| ADR-001.3: 跨模块禁止引用实体 | `Modules_Should_Not_Reference_Entities_Across_Modules` | ADR_001_Architecture_Tests.cs | ✅ 已覆盖 |
 ```
 
 #### 步骤 5：验证
@@ -124,7 +124,7 @@ public void Modules_Should_Not_Reference_Entities_Across_Modules(Assembly module
 ./scripts/validate-adr-test-mapping.sh
 
 # 运行测试
-dotnet test src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
+dotnet test src/tests/ArchitectureTests/ADR/ADR_001_Architecture_Tests.cs
 ```
 
 ---
@@ -159,34 +159,34 @@ dotnet test src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
 
 ```csharp
 // 方式 1：在 DisplayName 中
-[Theory(DisplayName = "ADR-0002.1: Platform 不应依赖 Application")]
+[Theory(DisplayName = "ADR-002.1: Platform 不应依赖 Application")]
 public void Platform_Should_Not_Depend_On_Application()
 
 // 方式 2：在方法名中
 [Fact]
-public void ADR_0002_1_Platform_Should_Not_Depend_On_Application()
+public void ADR_002_1_Platform_Should_Not_Depend_On_Application()
 ```
 
 #### 步骤 2：测试失败消息应包含 ADR 引用
 
 ```csharp
 Assert.True(result.IsSuccessful,
-    $"❌ ADR-0002.1 违规: Platform 不应依赖 Application。\n" +
+    $"❌ ADR-002.1 违规: Platform 不应依赖 Application。\n" +
     $"违规类型: {violatingTypes}。\n" +
     $"修复建议：{fixSuggestion}。\n" +
-    $"参考：docs/copilot/adr-0002.prompts.md");
+    $"参考：docs/copilot/adr-002.prompts.md");
 ```
 
 #### 步骤 3：在测试类头部更新映射清单
 
 ```csharp
 /// <summary>
-/// ADR-0002: Platform / Application / Host 三层启动体系
+/// ADR-002: Platform / Application / Host 三层启动体系
 /// 
 /// 【测试覆盖映射】
-/// ├─ ADR-0002.1: Platform 不依赖 Application → Platform_Should_Not_Depend_On_Application
-/// ├─ ADR-0002.2: Application 不依赖 Host → Application_Should_Not_Depend_On_Host
-/// └─ ADR-0002.3: Host 无业务逻辑 → Host_Should_Not_Contain_Business_Logic
+/// ├─ ADR-002.1: Platform 不依赖 Application → Platform_Should_Not_Depend_On_Application
+/// ├─ ADR-002.2: Application 不依赖 Host → Application_Should_Not_Depend_On_Host
+/// └─ ADR-002.3: Host 无业务逻辑 → Host_Should_Not_Contain_Business_Logic
 /// </summary>
 ```
 
@@ -275,7 +275,7 @@ ADR 文档统计：
 dotnet test src/tests/ArchitectureTests/
 
 # 运行特定 ADR 的测试
-dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_0001"
+dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~ADR_001"
 
 # 运行特定测试方法
 dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~Modules_Should_Not_Reference_Other_Modules"
@@ -290,10 +290,10 @@ dotnet test src/tests/ArchitectureTests/ --filter "FullyQualifiedName~Modules_Sh
 ✅ **推荐**：
 
 ```csharp
-[Theory(DisplayName = "ADR-0001.1: 模块不应相互引用")]
+[Theory(DisplayName = "ADR-001.1: 模块不应相互引用")]
 public void Modules_Should_Not_Reference_Other_Modules(Assembly moduleAssembly)
 
-[Fact(DisplayName = "ADR-0002.3: Host 不应包含业务逻辑")]
+[Fact(DisplayName = "ADR-002.3: Host 不应包含业务逻辑")]
 public void Host_Should_Not_Contain_Business_Logic()
 ```
 
@@ -315,13 +315,13 @@ public void Test1()
 
 ```csharp
 Assert.True(result.IsSuccessful,
-    $"❌ ADR-0001.1 违规: 模块 {moduleName} 不应依赖模块 {otherModule}。\n" +
+    $"❌ ADR-001.1 违规: 模块 {moduleName} 不应依赖模块 {otherModule}。\n" +
     $"违规类型: {string.Join(", ", failingTypes)}。\n" +
     $"修复建议：\n" +
     $"  1. 使用领域事件进行异步通信\n" +
     $"  2. 使用数据契约进行只读查询\n" +
     $"  3. 传递原始类型（Guid、string）\n" +
-    $"参考：docs/copilot/adr-0001.prompts.md 场景 3");
+    $"参考：docs/copilot/adr-001.prompts.md 场景 3");
 ```
 
 ❌ **避免**：
@@ -363,7 +363,7 @@ Assert.True(result.IsSuccessful, "Test failed");
 **A**: 检查以下几点：
 
 1. 测试方法是否使用了 `[Fact]` 或 `[Theory]` 属性？
-2. 测试方法或 DisplayName 是否包含对应的 ADR 编号（如 `ADR-0001`）？
+2. 测试方法或 DisplayName 是否包含对应的 ADR 编号（如 `ADR-001`）？
 3. ADR 文档中标记了 **【必须架构测试覆盖】** 的约束是否都有测试？（参考 ADR-900）
 
 ### Q2: 测试失败消息太长，影响可读性？
@@ -372,8 +372,8 @@ Assert.True(result.IsSuccessful, "Test failed");
 
 ```csharp
 Assert.True(result.IsSuccessful,
-    $"❌ ADR-0001.1 违规: 模块 {moduleName} 依赖了 {otherModule}。\n" +
-    $"详细修复指南：docs/copilot/adr-0001.prompts.md 场景 3");
+    $"❌ ADR-001.1 违规: 模块 {moduleName} 依赖了 {otherModule}。\n" +
+    $"详细修复指南：docs/copilot/adr-001.prompts.md 场景 3");
 ```
 
 ### Q3: 某条约束无法通过静态分析验证，怎么办？

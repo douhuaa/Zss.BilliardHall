@@ -276,7 +276,7 @@ dotnet test tests/ \
 
 ## 参考资料
 
-- [ADR-0122：测试组织规范](../../../docs/adr/structure/ADR-0122-testing-organization.md)
+- [ADR-122：测试组织规范](../../../docs/adr/structure/ADR-122-testing-organization.md)
 - [测试编写指令](../../instructions/testing.instructions.md)
 
 ---

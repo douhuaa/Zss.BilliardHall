@@ -21,13 +21,13 @@
 
 | 层级      | 编号范围                | 目录                | 当前 ADR 数 |
 |---------|---------------------|-------------------|----------|
-| **宪法层** | `ADR-0001~0009`     | `constitutional/` | 8         |
+| **宪法层** | `ADR-001~0009`     | `constitutional/` | 8         |
 | **结构层** | `ADR-100~199`       | `structure/`      | 5         |
 | **运行层** | `ADR-200~299`       | `runtime/`        | 4         |
 | **技术层** | `ADR-300~399`       | `technical/`      | 4         |
 | **治理层** | `ADR-900, 900~999` | `governance/`     | 23        |
 
-编号含义、约束及变更政策以 [ADR-0006](constitutional/ADR-0006-terminology-numbering-constitution.md) 为准。
+编号含义、约束及变更政策以 [ADR-006](constitutional/ADR-006-terminology-numbering-constitution.md) 为准。
 
 ---
 
@@ -45,14 +45,14 @@
 
 ### 主要 ADR 链接
 
-- [ADR-0001：模块化单体与垂直切片架构](constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-0002：Platform / Application / Host 三层启动体系](constitutional/ADR-0002-platform-application-host-bootstrap.md)
-- [ADR-0003：命名空间与项目边界规范](constitutional/ADR-0003-namespace-rules.md)
-- [ADR-0004：中央包管理（CPM）规范](constitutional/ADR-0004-Cpm-Final.md)
-- [ADR-0005：应用内交互模型与执行边界](constitutional/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-0006：术语与编号宪法](constitutional/ADR-0006-terminology-numbering-constitution.md)
-- [ADR-0007：Agent 行为与权限宪法](constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
-- [ADR-0008：文档编写与维护宪法](constitutional/ADR-0008-documentation-governance-constitution.md)
+- [ADR-001：模块化单体与垂直切片架构](constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-002：Platform / Application / Host 三层启动体系](constitutional/ADR-002-platform-application-host-bootstrap.md)
+- [ADR-003：命名空间与项目边界规范](constitutional/ADR-003-namespace-rules.md)
+- [ADR-004：中央包管理（CPM）规范](constitutional/ADR-004-Cpm-Final.md)
+- [ADR-005：应用内交互模型与执行边界](constitutional/ADR-005-Application-Interaction-Model-Final.md)
+- [ADR-006：术语与编号宪法](constitutional/ADR-006-terminology-numbering-constitution.md)
+- [ADR-007：Agent 行为与权限宪法](constitutional/ADR-007-agent-behavior-permissions-constitution.md)
+- [ADR-008：文档编写与维护宪法](constitutional/ADR-008-documentation-governance-constitution.md)
 - [ADR-900：ADR 新增与修订流程](governance/ADR-900-architecture-tests.md)
 - [ADR-907：ArchitectureTests 执法治理体系](governance/ADR-907-architecture-tests-enforcement-governance.md) ⭐
 - [ADR-907-A：ADR-907 对齐执行标准](governance/adr-907-a-adr-alignment-execution-standard.md) ⭐
@@ -76,7 +76,7 @@
 
 ## 索引与维护
 
-- ADR 版本、层级、编号等重大事项以[ADR-0006](constitutional/ADR-0006-terminology-numbering-constitution.md)为主
+- ADR 版本、层级、编号等重大事项以[ADR-006](constitutional/ADR-006-terminology-numbering-constitution.md)为主
 - 变更流程详见 [ADR-900](governance/ADR-900-architecture-tests.md)
 - 各层次变更均需相应审批���归档
 

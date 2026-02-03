@@ -33,11 +33,11 @@
 **测试覆盖**:
 
 - ADR-900: 架构测试元规则（4 个测试）
-- ADR-0001: 模块化单体与垂直切片（22 个测试）
-- ADR-0002: Platform/Application/Host 三层启动体系（26 个测试）
-- ADR-0003: 命名空间与项目边界规范（18 个测试）
-- ADR-0004: 中央包管理规范（18 个测试）
-- ADR-0005: 应用内交互模型与执行边界（24 个测试）
+- ADR-001: 模块化单体与垂直切片（22 个测试）
+- ADR-002: Platform/Application/Host 三层启动体系（26 个测试）
+- ADR-003: 命名空间与项目边界规范（18 个测试）
+- ADR-004: 中央包管理规范（18 个测试）
+- ADR-005: 应用内交互模型与执行边界（24 个测试）
 
 **查看测试详情**:
 
@@ -363,7 +363,7 @@ open TestResults/architecture-test-results.html
 - **架构测试通过率**: 目标 100%
 - **当前豁免数量**: 见 `docs/summaries/arch-violations.md`
 - **Analyzer 警告数量**: 使用 `dotnet build` 查看
-- **跨模块依赖数量**: 应为 0（由 ADR-0001 测试保证）
+- **跨模块依赖数量**: 应为 0（由 ADR-001 测试保证）
 
 ---
 
@@ -431,7 +431,7 @@ open TestResults/architecture-test-results.html
 ## 相关文档
 
 - [ADR-900: 架构测试与 CI 治理](../adr/governance/ADR-900-architecture-tests.md)
-- [ADR-0005: 应用内交互模型](../adr/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-005: 应用内交互模型](../adr/ADR-005-Application-Interaction-Model-Final.md)
 - [ADR-905 执行级别分类](../adr/ADR-905-enforcement-level-classification.md)
 - [Architecture Tests README](../../src/tests/ArchitectureTests/README.md)
 - [Roslyn Analyzers README](../../src/tools/ArchitectureAnalyzers/README.md)

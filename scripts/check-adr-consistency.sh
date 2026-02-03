@@ -46,7 +46,7 @@ check_front_matter() {
 
 # 检查 2：术语表格式
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BLUE}检查 2: 术语表格式（ADR-0006 标准）${NC}"
+echo -e "${BLUE}检查 2: 术语表格式（ADR-006 标准）${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
 
 check_glossary_format() {
@@ -62,7 +62,7 @@ check_glossary_format() {
             
             # 检查是否有标准三列格式：术语 | 定义 | 英文对照
             if ! grep -A 2 "## 术语表" "$adr" | grep -q "| 术语.*| 定义.*| 英文对照 |"; then
-                echo -e "${YELLOW}⚠️  $adr_name 术语表格式不符合 ADR-0006（缺少英文对照列）${NC}"
+                echo -e "${YELLOW}⚠️  $adr_name 术语表格式不符合 ADR-006（缺少英文对照列）${NC}"
                 ISSUES_FOUND=$((ISSUES_FOUND + 1))
                 invalid_count=$((invalid_count + 1))
             fi
@@ -72,7 +72,7 @@ check_glossary_format() {
     if [ $invalid_count -eq 0 ] && [ $has_glossary_count -gt 0 ]; then
         echo -e "${GREEN}✅ 所有术语表格式符合标准${NC}"
     elif [ $invalid_count -gt 0 ]; then
-        echo -e "${YELLOW}⚠️  发现 $invalid_count 个术语表格式不符合 ADR-0006（共 $has_glossary_count 个有术语表的 ADR）${NC}"
+        echo -e "${YELLOW}⚠️  发现 $invalid_count 个术语表格式不符合 ADR-006（共 $has_glossary_count 个有术语表的 ADR）${NC}"
     else
         echo -e "${BLUE}ℹ️  未发现包含术语表的 ADR${NC}"
     fi
@@ -125,9 +125,9 @@ check_version_format() {
     echo ""
 }
 
-# 检查 4：快速参考表（ADR-0006 要求）
+# 检查 4：快速参考表（ADR-006 要求）
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BLUE}检查 4: 快速参考表（ADR-0006 推荐）${NC}"
+echo -e "${BLUE}检查 4: 快速参考表（ADR-006 推荐）${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
 
 check_quick_reference() {

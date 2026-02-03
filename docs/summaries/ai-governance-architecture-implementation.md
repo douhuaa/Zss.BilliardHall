@@ -160,7 +160,7 @@ name: "Agent 名称"
 description: "简短描述"
 version: "1.0"
 risk_level: "高/中/低"
-supervised_adrs: ["ADR-0001", "ADR-0002"]
+supervised_adrs: ["ADR-001", "ADR-002"]
 tools: ["tool1", "tool2"]
 ---
 ```
@@ -216,7 +216,7 @@ required_agent: "必须由哪个 Agent 授权"
 | Agent | 风险等级 | 职责 | 配置文件 |
 |-------|---------|------|----------|
 | architecture-guardian | 极高 | 架构守护者，监督所有 ADR | ✅ 已创建 |
-| module-boundary-checker | 极高 | 模块边界检查器，专注 ADR-0001 | ✅ 已创建 |
+| module-boundary-checker | 极高 | 模块边界检查器，专注 ADR-001 | ✅ 已创建 |
 
 ### 待实现的 Agents
 

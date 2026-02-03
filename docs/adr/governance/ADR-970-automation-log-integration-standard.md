@@ -125,7 +125,7 @@ docs/reports/
   "details": [
     {
       "test": "test-name",
-      "adr": "ADR-0001",
+      "adr": "ADR-001",
       "severity": "error | warning | info",
       "message": "error message",
       "file": "path/to/file.cs",
@@ -184,12 +184,12 @@ docs/reports/
   "details": [
     {
       "test": "Modules_Should_Not_Reference_Other_Modules",
-      "adr": "ADR-0001",
+      "adr": "ADR-001",
       "severity": "error",
       "message": "Modules.Orders references Modules.Members",
       "file": "src/Modules/Orders/UseCases/CreateOrder/CreateOrderHandler.cs",
       "line": 15,
-      "fix_guide": "docs/copilot/adr-0001.prompts.md#scenario-3"
+      "fix_guide": "docs/copilot/adr-001.prompts.md#scenario-3"
     }
   ],
   "metadata": {
@@ -220,7 +220,7 @@ docs/reports/
 **关联规则**：
 1. **测试名称映射**：测试名称必须包含 ADR 编号
    - 格式：`ADR_XXXX_Test_Name`
-   - 示例：`ADR_0001_Modules_Should_Not_Reference_Other_Modules`
+   - 示例：`ADR_001_Modules_Should_Not_Reference_Other_Modules`
 
 2. **日志中的 ADR 字段**：
    - 从测试名称自动提取 ADR 编号
@@ -239,11 +239,11 @@ docs/reports/
 
 | 规则编号 | 执行级别 | 测试/手段 | 说明 |
 |---------|---------|----------|------|
-| ADR-0001.1 | L1 | `Modules_Should_Not_Reference_Other_Modules` | 模块隔离测试 |
+| ADR-001.1 | L1 | `Modules_Should_Not_Reference_Other_Modules` | 模块隔离测试 |
 
 **相关日志**：
 - 测试报告：`docs/reports/architecture-tests/latest.json`
-- 修复指南：`docs/copilot/adr-0001.prompts.md`
+- 修复指南：`docs/copilot/adr-001.prompts.md`
 ```
 
 **CI 失败通知增强**：
@@ -253,12 +253,12 @@ docs/reports/
 ❌ 架构测试失败
 
 测试：Modules_Should_Not_Reference_Other_Modules
-ADR：ADR-0001 - 模块化单体与垂直切片架构
+ADR：ADR-001 - 模块化单体与垂直切片架构
 错误：Modules.Orders references Modules.Members
 
 📖 了解详情：
-- ADR 正文：docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md
-- 修复指南：docs/copilot/adr-0001.prompts.md#scenario-3
+- ADR 正文：docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md
+- 修复指南：docs/copilot/adr-001.prompts.md#scenario-3
 - 测试报告：docs/reports/architecture-tests/latest.json
 ```
 
@@ -419,7 +419,7 @@ jobs:
 
 **依赖（Depends On）**：
 - [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - 基于其 CI 测试机制
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档组织
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档组织
 
 **被依赖（Depended By）**：
 - 无
@@ -442,7 +442,7 @@ jobs:
 
 ### 相关 ADR
 - [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md)
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md)
 - [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md)
 
 ### 实施工具

@@ -184,7 +184,7 @@ superseded_by: null
 
 **依赖（Depends On）**：
 - [ADR-940：ADR 关系与溯源管理治理规范](./ADR-940-adr-relationship-traceability-management.md) - 关系解析依赖标题语义
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档结构规范
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - ADR 文档结构规范
 
 **被依赖（Depended By）**：
 - [ADR-947：关系声明区的结构与解析安全规则](./ADR-947-relationship-section-structure-parsing-safety.md)
@@ -196,7 +196,7 @@ superseded_by: null
 - 无
 
 **相关（Related）**：
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 同为 ADR 结构约束
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - 同为 ADR 结构约束
 
 ---
 

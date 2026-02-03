@@ -123,7 +123,7 @@ graph TB
 dotnet test src/tests/ArchitectureTests/
 
 # 运行特定 ADR 测试
-dotnet test --filter "FullyQualifiedName~ADR_0001"
+dotnet test --filter "FullyQualifiedName~ADR_001"
 ```
 
 **如果失败**：
@@ -171,7 +171,7 @@ dotnet test --filter "FullyQualifiedName~ADR_0001"
 
 ```
 询问 Copilot：
-"请基于 ADR-0001 至 ADR-0005 审查我的以下变更：
+"请基于 ADR-001 至 ADR-005 审查我的以下变更：
 
 [粘贴代码或描述变更]
 "
@@ -192,14 +192,14 @@ dotnet test --filter "FullyQualifiedName~ADR_0001"
 - Handler 职责清晰
 
 ### ⚠️ Potential Concerns
-- Command Handler 返回了 DTO，可能违反 ADR-0005
+- Command Handler 返回了 DTO，可能违反 ADR-005
 - 建议：只返回 ID，用单独的 Query 获取数据
 
 ### ❌ Violations Detected
 - 无
 
 ### 📚 Recommended Reading
-- docs/copilot/adr-0005.prompts.md (场景 2)
+- docs/copilot/adr-005.prompts.md (场景 2)
 ```
 
 ---
@@ -221,11 +221,11 @@ dotnet test --filter "FullyQualifiedName~ADR_0001"
 
 ### Copilot Review 记录
 
-询问："请基于 ADR-0001 至 ADR-0005 审查本 PR"
+询问："请基于 ADR-001 至 ADR-005 审查本 PR"
 
 Copilot 回复摘要：
-- ✅ 模块隔离符合 ADR-0001
-- ✅ Handler 模式符合 ADR-0005
+- ✅ 模块隔离符合 ADR-001
+- ✅ Handler 模式符合 ADR-005
 - ⚠️ 建议为复杂业务逻辑添加单元测试
 
 已采纳建议：添加了 OrderTests.cs
@@ -260,8 +260,8 @@ Copilot 回复摘要：
 ## 架构相关
 
 ### 涉及的 ADR
-- ADR-0001：新增 Orders 模块，遵循垂直切片
-- ADR-0005：实现 CreateOrderHandler 和 CreateOrderQuery
+- ADR-001：新增 Orders 模块，遵循垂直切片
+- ADR-005：实现 CreateOrderHandler 和 CreateOrderQuery
 
 ### Copilot Review 要点
 - ✅ 模块隔离：Orders 模块独立，不依赖其他业务模块
@@ -298,11 +298,11 @@ PR 创建/更新后，CI 自动运行：
 🎉 所有架构测试通过！
 
 ✅ 本 PR 符合以下架构决策记录（ADR）：
-   - ADR-0001: 模块化单体与垂直切片架构
-   - ADR-0002: Platform / Application / Host 三层启动体系
-   - ADR-0003: 命名空间与项目边界规范
-   - ADR-0004: 中央包管理（CPM）规范
-   - ADR-0005: 应用内交互模型与执行边界
+   - ADR-001: 模块化单体与垂直切片架构
+   - ADR-002: Platform / Application / Host 三层启动体系
+   - ADR-003: 命名空间与项目边界规范
+   - ADR-004: 中央包管理（CPM）规范
+   - ADR-005: 应用内交互模型与执行边界
 
 💡 提示：在 PR 中勾选 'Copilot 参与检查清单'
 ```
@@ -380,11 +380,11 @@ dotnet test src/tests/ArchitectureTests/
 
 ### 📚 相关 ADR
 
-- [ADR-0001: 模块化单体与垂直切片架构](...)
-- [ADR-0002: Platform / Application / Host 三层启动体系](...)
-- [ADR-0003: 命名空间与项目边界规范](...)
-- [ADR-0004: 中央包管理（CPM）规范](...)
-- [ADR-0005: 应用内交互模型与执行边界](...)
+- [ADR-001: 模块化单体与垂直切片架构](...)
+- [ADR-002: Platform / Application / Host 三层启动体系](...)
+- [ADR-003: 命名空间与项目边界规范](...)
+- [ADR-004: 中央包管理（CPM）规范](...)
+- [ADR-005: 应用内交互模型与执行边界](...)
 
 ---
 
@@ -412,7 +412,7 @@ dotnet test src/tests/ArchitectureTests/
    ```markdown
    ### 违规分析
 
-   **违反的 ADR**：ADR-0001
+   **违反的 ADR**：ADR-001
    **失败测试**：Modules_Should_Not_Reference_Other_Modules
 
    ### 问题描述
@@ -565,7 +565,7 @@ dotnet test src/tests/ArchitectureTests/
 2. **填写完整的破例说明**：
    ```markdown
    #### 违反的 ADR 规则
-   - ADR-0001: 模块隔离
+   - ADR-001: 模块隔离
 
    #### 破例理由
    临时需要 Orders 模块同步查询 Members 数据以满足紧急业务需求。

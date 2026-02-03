@@ -3,7 +3,7 @@
 > ⚠️ **无裁决力声明**：本文档为实践案例说明，不具备架构裁决权。所有架构决策以 [ADR 文档](../adr/) 为准。
 
 **难度**：🟡 中等  
-**相关 ADR**：[ADR-0001](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md), [ADR-0005](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)  
+**相关 ADR**：[ADR-001](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md), [ADR-005](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)  
 **作者**：@douhuaa  
 **日期**：2026-01-27  
 **标签**：模块化, 领域事件, 异步通信, 模块隔离
@@ -23,7 +23,7 @@
 
 ## 背景
 
-在模块化单体架构中，模块之间必须保持隔离（根据 ADR-0001）。直接调用其他模块的 Handler 或共享领域对象会破坏模块边界，导致紧耦合。
+在模块化单体架构中，模块之间必须保持隔离（根据 ADR-001）。直接调用其他模块的 Handler 或共享领域对象会破坏模块边界，导致紧耦合。
 
 领域事件提供了一种**异步、解耦**的通信方式：
 - **发布者**：只负责发布事件，不知道谁会订阅
@@ -68,7 +68,7 @@ namespace Zss.BilliardHall.BuildingBlocks.Events;
 
 /// <summary>
 /// 订单创建事件
-/// 根据 ADR-0001，事件是模块间通信的合规方式
+/// 根据 ADR-001，事件是模块间通信的合规方式
 /// </summary>
 public sealed record OrderCreatedEvent : IDomainEvent
 {
@@ -123,14 +123,14 @@ public sealed class CreateOrderHandler : ICommandHandler<CreateOrder, Guid>
             CreatedAt = DateTime.UtcNow
         });
 
-        // 4. 返回 ID（根据 ADR-0005）
+        // 4. 返回 ID（根据 ADR-005）
         return order.Id;
     }
 }
 ```
 
 **要点**：
-- Command Handler 只返回 ID，不返回业务数据（ADR-0005）
+- Command Handler 只返回 ID，不返回业务数据（ADR-005）
 - 事件发布在业务逻辑完成**之后**
 - 事件是**"已发生的事实"**，用过去式命名（`OrderCreated`）
 
@@ -421,7 +421,7 @@ public async Task HandleAsync(OrderCreatedEvent @event)
 
 ## 架构合规检查清单
 
-根据 ADR-0001 和 ADR-0005，确认：
+根据 ADR-001 和 ADR-005，确认：
 
 - [ ] 事件定义在 BuildingBlocks，不在模块内
 - [ ] 事件不包含领域对象引用
@@ -435,8 +435,8 @@ public async Task HandleAsync(OrderCreatedEvent @event)
 
 ## 参考资料
 
-- [ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 第 2.2 节：模块通信规则
-- [ADR-0005：应用内交互模型与执行边界](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 第 2.1 节：Command Handler 规则
+- [ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 第 2.2 节：模块通信规则
+- [ADR-005：应用内交互模型与执行边界](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md) - 第 2.1 节：Command Handler 规则
 - [模块化架构 FAQ](../faqs/architecture-faq.md) - Q: 模块间如何通信？
 - [跨模块通信指南](../guides/cross-module-communication.md)
 

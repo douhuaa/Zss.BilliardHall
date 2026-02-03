@@ -67,14 +67,14 @@
 
 2. **术语表格式不统一**
    - 17 个 ADR 的术语表缺少英文对照列
-   - 不符合 ADR-0006 标准格式要求
+   - 不符合 ADR-006 标准格式要求
 
 3. **宪法层 ADR 未完全同步新规则**
-   - ADR-0001 至 ADR-0005 缺少：
+   - ADR-001 至 ADR-005 缺少：
      - 标准 Front Matter（ADR-902）
-     - 英文对照术语表（ADR-0006）
-     - 快速参考表（ADR-0006）
-     - 裁决权威声明（ADR-0007/0008）
+     - 英文对照术语表（ADR-006）
+     - 快速参考表（ADR-006）
+     - 裁决权威声明（ADR-007/0008）
 
 ---
 
@@ -133,11 +133,11 @@ python3 ./scripts/validate-adr-relationships.py
 **目标**：确保宪法层 ADR 完全符合新规范
 
 **任务清单**：
-- [ ] ADR-0001: 增加 Front Matter、标准术语表、快速参考表、裁决声明
-- [ ] ADR-0002: 增加 Front Matter、执行级别标注、标准关系声明
-- [ ] ADR-0003: 增加 Front Matter、英文对照、执行级别
-- [ ] ADR-0004: 增加 Front Matter、完整关系声明
-- [ ] ADR-0005: 增加 Front Matter、标准化格式、快速参考表
+- [ ] ADR-001: 增加 Front Matter、标准术语表、快速参考表、裁决声明
+- [ ] ADR-002: 增加 Front Matter、执行级别标注、标准关系声明
+- [ ] ADR-003: 增加 Front Matter、英文对照、执行级别
+- [ ] ADR-004: 增加 Front Matter、完整关系声明
+- [ ] ADR-005: 增加 Front Matter、标准化格式、快速参考表
 
 **验证方式**：
 ```bash
@@ -248,7 +248,7 @@ fi
    - 包含工具使用文档
 
 2. **启动 Phase 3（P0 修复）**
-   - 优先修复宪法层 ADR（ADR-0001 至 ADR-0005）
+   - 优先修复宪法层 ADR（ADR-001 至 ADR-005）
    - 使用工具持续验证修复效果
 
 3. **集成 CI/CD**
@@ -280,7 +280,7 @@ fi
 - 📘 [ADR-902: ADR 标准模板](../adr/governance/ADR-902-adr-template-structure-contract.md)
 - 📘 [ADR-940: ADR 关系管理](../adr/governance/ADR-940-adr-relationship-traceability-management.md)
 - 📘 [ADR-980: ADR 生命周期同步](../adr/governance/ADR-980-adr-lifecycle-synchronization.md)
-- 📘 [ADR-0006: 术语与编号宪法](../adr/constitutional/ADR-0006-terminology-numbering-constitution.md)
+- 📘 [ADR-006: 术语与编号宪法](../adr/constitutional/ADR-006-terminology-numbering-constitution.md)
 
 ---
 

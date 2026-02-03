@@ -107,11 +107,11 @@ graph TB
 
 | ADR                                                                                     | 测试类                              | 关键测试            |
 |-----------------------------------------------------------------------------------------|----------------------------------|-----------------|
-| [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) | `ADR_0001_Architecture_Tests.cs` | 模块隔离、垂直切片       |
-| [ADR-0002](adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)          | `ADR_0002_Architecture_Tests.cs` | 层级依赖、启动体系       |
-| [ADR-0003](adr/constitutional/ADR-0003-namespace-rules.md)                              | `ADR_0003_Architecture_Tests.cs` | 命名空间规则          |
-| [ADR-0004](adr/constitutional/ADR-0004-Cpm-Final.md)                                    | `ADR_0004_Architecture_Tests.cs` | 包管理             |
-| [ADR-0005](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)          | `ADR_0005_Architecture_Tests.cs` | Handler 模式、CQRS |
+| [ADR-001](adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) | `ADR_001_Architecture_Tests.cs` | 模块隔离、垂直切片       |
+| [ADR-002](adr/constitutional/ADR-002-platform-application-host-bootstrap.md)          | `ADR_002_Architecture_Tests.cs` | 层级依赖、启动体系       |
+| [ADR-003](adr/constitutional/ADR-003-namespace-rules.md)                              | `ADR_003_Architecture_Tests.cs` | 命名空间规则          |
+| [ADR-004](adr/constitutional/ADR-004-Cpm-Final.md)                                    | `ADR_004_Architecture_Tests.cs` | 包管理             |
+| [ADR-005](adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)          | `ADR_005_Architecture_Tests.cs` | Handler 模式、CQRS |
 
 > 💡 **ADR-测试映射实操**：新增 ADR 约束时如何编写测试？请参阅 [ADR-测试一致性指南](adr-test-consistency-guide.md)。
 
@@ -124,7 +124,7 @@ graph TB
 dotnet test src/tests/ArchitectureTests/
 
 # 运行特定 ADR 测试
-dotnet test --filter "FullyQualifiedName~ADR_0001"
+dotnet test --filter "FullyQualifiedName~ADR_001"
 
 # 查看详细输出
 dotnet test src/tests/ArchitectureTests/ --logger "console;verbosity=detailed"
@@ -172,7 +172,7 @@ dotnet test src/tests/ArchitectureTests/ --logger "console;verbosity=detailed"
 Test Failed: Platform_Should_Not_Depend_On_Application
 违规类型: Zss.BilliardHall.Platform.SomeClass
 依赖了: Zss.BilliardHall.Application.SomeType
-违反: ADR-0002
+违反: ADR-002
 ```
 
 #### 步骤 3：修复违规
@@ -677,7 +677,7 @@ public class MyAdrTests : IClassFixture<AdrTestFixture>
     public void Test_ADR_Content()
     {
         // 使用缓存的 ADR 文档
-        var adr = _fixture.GetAdr("ADR-0001");
+        var adr = _fixture.GetAdr("ADR-001");
         // ...
     }
 }
@@ -715,9 +715,9 @@ violations.Should().BeEmpty();
 ```csharp
 // 使用构建器模式创建测试 ADR
 var markdown = AdrMarkdownBuilder
-    .Create("ADR-0001", "测试标题")
+    .Create("ADR-001", "测试标题")
     .WithStatus("Final")
-    .DependsOn("ADR-0002", "ADR-0003")
+    .DependsOn("ADR-002", "ADR-003")
     .WithVersion("2.0")
     .Build();
 ```
@@ -771,9 +771,9 @@ var result = Types
 
 // ✅ 使用 FluentAssertions
 result.IsSuccessful.Should().BeTrue(
-    because: $"❌ ADR-0001.1 违规: 模块不应相互依赖\n" +
+    because: $"❌ ADR-001.1 违规: 模块不应相互依赖\n" +
              $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? [])}\n" +
-             $"参考: docs/adr/constitutional/ADR-0001.md"
+             $"参考: docs/adr/constitutional/ADR-001.md"
 );
 ```
 
@@ -951,7 +951,7 @@ public void Should_Create_Order_And_Validate_And_Publish() { /* 太复杂 */ }
 ### ADR
 
 - [ADR-900：架构测试与 CI 治理](adr/governance/ADR-900-architecture-tests.md)
-- [ADR-0001~0005：宪法层 ADR](adr/constitutional/)
+- [ADR-001~0005：宪法层 ADR](adr/constitutional/)
 
 ### 外部参考
 

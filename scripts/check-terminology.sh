@@ -122,11 +122,11 @@ else
     echo -e "${YELLOW}⚠️  发现 $total_issues 个术语相关问题${NC}"
     echo -e "${YELLOW}📋 建议：${NC}"
     if [ $duplicate_count -gt 0 ]; then
-        echo -e "${YELLOW}  • 在 ADR-0006 中建立权威术语表${NC}"
+        echo -e "${YELLOW}  • 在 ADR-006 中建立权威术语表${NC}"
         echo -e "${YELLOW}  • 其他 ADR 应引用而非重复定义${NC}"
     fi
     if [ $missing_english -gt 0 ]; then
-        echo -e "${YELLOW}  • 按 ADR-0006 标准为术语表增加英文对照列${NC}"
+        echo -e "${YELLOW}  • 按 ADR-006 标准为术语表增加英文对照列${NC}"
     fi
     exit 0
 fi

@@ -297,10 +297,10 @@ public record MemberInfoDto(Guid MemberId, string UserName) : IContract
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 契约 DTO 基于 CQRS 模式
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 命名约定遵循术语规范
-- [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 命名空间规范
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - 契约 DTO 基于 CQRS 模式
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - 命名约定遵循术语规范
+- [ADR-003：命名空间与项目结构规范](../constitutional/ADR-003-namespace-rules.md) - 命名空间规范
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
 
 **被依赖（Depended By）**：
 - [ADR-124：Endpoint 命名及参数约束规范](./ADR-124-endpoint-naming-constraints.md) - Endpoint 使用契约遵循命名规范

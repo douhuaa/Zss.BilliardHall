@@ -149,7 +149,7 @@ chmod +x .git/hooks/pre-push
 
 2. **理解违规原因**
   - 为什么这条规则存在？
-  - 参考 [ADR-0001](/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+  - 参考 [ADR-001](/docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
 
 3. **应用修复方案**
   - 按照测试建议进行修改
@@ -176,7 +176,7 @@ chmod +x .git/hooks/pre-push
    
    本 PR 包含架构违规豁免：
    - 违规项：Orders 模块临时依赖 Members 模块
-   - ADR: ADR-0002-temporary-coupling-exemption.md
+   - ADR: ADR-002-temporary-coupling-exemption.md
    - 偿还计划：将在 Q2 重构时修复
    - 责任人：@developer
    ```
@@ -272,5 +272,5 @@ A: 优化建议：
 ## 参考
 
 - [Architecture Tests README](/src/tests/ArchitectureTests/README.md)
-- [ADR-0001](/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-001](/docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
 - [Architecture Guide](/docs/architecture-guide.md)

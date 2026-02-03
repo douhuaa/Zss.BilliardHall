@@ -170,7 +170,7 @@ graph LR
   - 核心原则
   - 目录结构
 
-2. **[ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)** （5 分钟）
+2. **[ADR-001](adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)** （5 分钟）
   - 模块化单体决策
   - 垂直切片决策
 
@@ -322,7 +322,7 @@ GitHub Copilot 是本项目的架构守护者。
 ```
 
 **预期回复**：
-Copilot 会解释 ADR-0001 和 ADR-0005 的约束，并给出具体步骤。
+Copilot 会解释 ADR-001 和 ADR-005 的约束，并给出具体步骤。
 
 ### 3. 浏览 Copilot 文档
 
@@ -380,7 +380,7 @@ dotnet run --project src/Host/Web/
 
 ### 第 1 周：理解架构
 
-- [ ] 阅读所有宪法层 ADR（ADR-0001~0005）
+- [ ] 阅读所有宪法层 ADR（ADR-001~0005）
 - [ ] 浏览所有模块的 README
 - [ ] 理解模块间通信方式
 - [ ] 运行和调试应用
@@ -433,14 +433,14 @@ dotnet run --project src/Host/Web/
 
 1. 本文档（你正在读）
 2. [架构指南](architecture-guide.md)
-3. [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-4. [ADR-0002](adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)
-5. [ADR-0005](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+3. [ADR-001](adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
+4. [ADR-002](adr/constitutional/ADR-002-platform-application-host-bootstrap.md)
+5. [ADR-005](adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
 
 ### 扩展阅读（第 2 周）
 
-6. [ADR-0003](adr/constitutional/ADR-0003-namespace-rules.md)
-7. [ADR-0004](adr/constitutional/ADR-0004-Cpm-Final.md)
+6. [ADR-003](adr/constitutional/ADR-003-namespace-rules.md)
+7. [ADR-004](adr/constitutional/ADR-004-Cpm-Final.md)
 8. [ADR-900](adr/governance/ADR-900-architecture-tests.md)
 9. [测试完整指南](TESTING-GUIDE.md)
 10. [CI/CD 指南](ci-cd-guide.md)

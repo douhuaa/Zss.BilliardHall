@@ -15,10 +15,10 @@
 
 ## 一、已解决的三个硬伤
 
-### ❌ 硬伤 1：ADR-0005 被"过度静态化"了
+### ❌ 硬伤 1：ADR-005 被"过度静态化"了
 
 **问题本质**：  
-ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态分析，存在物理极限。
+ADR-005 定义的是"运行时秩序"，但当前测试只能做编译期静态分析，存在物理极限。
 
 **解决方案**：
 
@@ -50,7 +50,7 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
 
 **解决方案**：
 
-1. **新增了语义检查测试** (`ADR-0002.13: Program.cs 只应调用 Bootstrapper`)
+1. **新增了语义检查测试** (`ADR-002.13: Program.cs 只应调用 Bootstrapper`)
   - 检测非 Bootstrapper 的扩展方法调用（如 `AddXxxModule`）
   - 检测直接的服务注册（`services.AddScoped` 等）
   - 检测条件分支逻辑（`if`/`switch`）
@@ -101,7 +101,7 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
 
 ## 二、已实现的三个前瞻性改进
 
-### 🔧 建议 1：给 ADR-0005 明确"静态 / 语义分界线"
+### 🔧 建议 1：给 ADR-005 明确"静态 / 语义分界线"
 
 **实现内容**：
 
@@ -173,17 +173,17 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
 创建了 `docs/adr/ARCHITECTURE-CONSTITUTIONAL-LAYER.md` 文档，明确定义：
 
 1. **宪法层的不可变性**
-  - ADR-900 至 ADR-0005 不可被后续 ADR 推翻
+  - ADR-900 至 ADR-005 不可被后续 ADR 推翻
   - 只能细化，不能削弱
   - 破例必须经过架构委员会审批
 
 2. **每个宪法层 ADR 的核心约束**
   - ADR-900：架构测试元规则
-  - ADR-0001：模块化单体与垂直切片
-  - ADR-0002：Platform/Application/Host 三层
-  - ADR-0003：命名空间规范
-  - ADR-0004：中央包管理
-  - ADR-0005：应用内交互模型
+  - ADR-001：模块化单体与垂直切片
+  - ADR-002：Platform/Application/Host 三层
+  - ADR-003：命名空间规范
+  - ADR-004：中央包管理
+  - ADR-005：应用内交互模型
 
 3. **宪法层的演进规则**
   - 修订条件：根本性缺陷 / 技术栈重大变更 / 法规要求
@@ -223,7 +223,7 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
 - `ADR-900: 架构测试类必须包含最少断言数（反作弊）`
 - `ADR-900: 测试失败消息必须包含 ADR 编号（反作弊）`
 - `ADR-900: 禁止跳过架构测试（反作弊）`
-- `ADR-0002.13: Program.cs 只应调用 Bootstrapper（语义检查）`
+- `ADR-002.13: Program.cs 只应调用 Bootstrapper（语义检查）`
 
 ### 测试覆盖
 
@@ -246,7 +246,7 @@ ADR-0005 定义的是"运行时秩序"，但当前测试只能做编译期静态
 ### 修改文件
 
 1. `src/tests/ArchitectureTests/ADR/ADR_900_Architecture_Tests.cs` - 新增反作弊规则（+156 行）
-2. `src/tests/ArchitectureTests/ADR/ADR_0002_Architecture_Tests.cs` - 新增语义检查（+108 行）
+2. `src/tests/ArchitectureTests/ADR/ADR_002_Architecture_Tests.cs` - 新增语义检查（+108 行）
 3. `src/tests/ArchitectureTests/README.md` - 更新文档说明（+45 行）
 
 ### 总代码量

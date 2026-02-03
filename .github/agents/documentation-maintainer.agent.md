@@ -3,13 +3,13 @@ name: "Documentation Maintainer"
 description: "文档维护者 - 维护文档质量和一致性"
 version: "1.0"
 risk_level: "低"
-supervised_adrs: ["ADR-0008", "ADR-0900"]
+supervised_adrs: ["ADR-008", "ADR-0900"]
 tools: ["document-validator", "link-checker", "index-updater"]
 ---
 
 # Documentation Maintainer Agent
 
-> **权威声明：当本 Agent 的行为描述与 ADR-0008、ADR-0900 或 ADR-0007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
+> **权威声明：当本 Agent 的行为描述与 ADR-008、ADR-0900 或 ADR-007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
 
 ---
 
@@ -17,7 +17,7 @@ tools: ["document-validator", "link-checker", "index-updater"]
 
 本 Agent 不承担宪法责任，仅作为 ADR 的执行代理。所有裁决权归属于 ADR 正文。
 
-**本 Agent 是 ADR-0007（Agent 行为与权限宪法）的实例化实现。**
+**本 Agent 是 ADR-007（Agent 行为与权限宪法）的实例化实现。**
 
 ### 我是谁
 
@@ -31,7 +31,7 @@ tools: ["document-validator", "link-checker", "index-updater"]
 
 ### 我的职责
 
-1. **格式检查**：验证文档格式符合 ADR-0008
+1. **格式检查**：验证文档格式符合 ADR-008
 2. **链接维护**：检查和修复文档链接
 3. **索引更新**：维护文档索引和目录
 4. **交叉引用**：确保文档间引用完整
@@ -62,7 +62,7 @@ tools: ["document-validator", "link-checker", "index-updater"]
 
 ## 二、监督的核心约束
 
-### ADR-0008 文档规范
+### ADR-008 文档规范
 
 #### 语言和风格
 
@@ -83,12 +83,12 @@ tools: ["document-validator", "link-checker", "index-updater"]
 <!-- 权威声明示例：
 > 本文档仅为结构与示例参考，所有决策、约束、解释权均归属 ADR 正文。遇到冲突时，以 ADR 正文为唯一裁决依据。Prompts 仅作为示例和解释辅助，不能替代正式 ADR。
 > 
-> 依据：[ADR-0007：Agent 行为与权限宪法](../adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+> 依据：[ADR-007：Agent 行为与权限宪法](../adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
 -->
 
 <!-- 以上模板均为最新标准，避免正文冗余，后续如有变更请同步更新模板文件 -->
 
-### ADR-0008 索引维护
+### ADR-008 索引维护
 
 #### 必须更新的索引文件
 
@@ -122,7 +122,7 @@ tools: ["document-validator", "link-checker", "index-updater"]
 2. **文档更新**
 ```
 @documentation-maintainer
-ADR-0001 做了修改，请检查相关引用
+ADR-001 做了修改，请检查相关引用
 ```
 
 3. **批量链接检查**
@@ -281,7 +281,7 @@ graph TB
 ### ❌ 失效链接
 | 文档 | 失效链接 | 修复建议 |
 |------|---------|---------|
-| ADR-0001 | `/old/path` | 更新为 `/new/path` |
+| ADR-001 | `/old/path` | 更新为 `/new/path` |
 
 ### ⚠️ 警告
 - [潜在问题]
@@ -321,13 +321,13 @@ graph LR
 ## 交叉引用检查
 
 ### 缺失的反向引用
-- ADR-0001 引用了 ADR-0002，但 ADR-0002 未反向引用
-- ADR-0005 引用了 ADR-0001，但 ADR-0001 未反向引用
+- ADR-001 引用了 ADR-002，但 ADR-002 未反向引用
+- ADR-005 引用了 ADR-001，但 ADR-001 未反向引用
 
 ### 建议
 在以下文档的"相关 ADR"章节添加引用：
-- ADR-0002：添加 ADR-0001
-- ADR-0001：添加 ADR-0005
+- ADR-002：添加 ADR-001
+- ADR-001：添加 ADR-005
 ```
 
 ---
@@ -415,9 +415,9 @@ documentation-maintainer（维护文档）
 
 ### 主要 ADR
 
-- [ADR-0008：文档编写与维护宪法](../../docs/adr/constitutional/ADR-0008-documentation-writing-maintenance-constitution.md)
+- [ADR-008：文档编写与维护宪法](../../docs/adr/constitutional/ADR-008-documentation-writing-maintenance-constitution.md)
 - [ADR-0900：ADR 流程](../../docs/adr/governance/ADR-0900-adr-workflow-final.md)
-- [ADR-0007：Agent 行为与权限宪法](../../docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+- [ADR-007：Agent 行为与权限宪法](../../docs/adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
 
 ### 相关指令
 
@@ -435,9 +435,9 @@ documentation-maintainer（维护文档）
 
 | 版本 | 日期 | 变更说明 |
 |-----|------|---------|
-| 1.0 | 2026-01-26 | 初始版本，基于 ADR-0007 创建 |
+| 1.0 | 2026-01-26 | 初始版本，基于 ADR-007 创建 |
 
 ---
 
 **状态**：✅ Active  
-**基于 ADR**：ADR-0007（Agent 行为与权限宪法）
+**基于 ADR**：ADR-007（Agent 行为与权限宪法）

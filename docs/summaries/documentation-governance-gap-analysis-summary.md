@@ -3,7 +3,7 @@
 **文档类型**：改进总结  
 **创建日期**：2026-01-26  
 **状态**：✅ 已完成  
-**相关 ADR**：ADR-0008, ADR-900, ADR-910, ADR-920
+**相关 ADR**：ADR-008, ADR-900, ADR-910, ADR-920
 
 ---
 
@@ -21,7 +21,7 @@
 
 | 治理机制 | ADR 编号 | 覆盖范围 |
 |---------|---------|---------|
-| ADR 正文治理 | ADR-0008, 0900 | 文档分级、权限边界、变更流程 |
+| ADR 正文治理 | ADR-008, 0900 | 文档分级、权限边界、变更流程 |
 | README 治理 | ADR-910 | 禁用裁决性语言、强制声明 |
 | 示例代码治理 | ADR-920 | 分级执法、免责声明、责任人制度 |
 | 代码审查合规 | ADR-930 | PR 审查流程 |
@@ -273,7 +273,7 @@ gantt
 ### 关键依赖关系
 
 ```
-ADR-0008（文档治理） → ADR-940（关系管理）
+ADR-008（文档治理） → ADR-940（关系管理）
                       → ADR-950（指南治理）
                       → ADR-975（质量监控）
 
@@ -364,7 +364,7 @@ ADR-900（测试治理） → ADR-970（日志集成）
 
 - **详细报告**：[ADR 文档治理体系空白分析](../adr/proposals/ADR-Documentation-Governance-Gap-Analysis.md)
 - **现有治理**：
-  - [ADR-0008：文档编写与维护宪法](../adr/constitutional/ADR-0008-documentation-governance-constitution.md)
+  - [ADR-008：文档编写与维护宪法](../adr/constitutional/ADR-008-documentation-governance-constitution.md)
   - [ADR-900：ADR 新增与修订流程](../adr/governance/ADR-900-architecture-tests.md)
   - [ADR-910：README 编写与维护治理规范](../adr/governance/ADR-910-readme-governance-constitution.md)
   - [ADR-920：示例代码治理规范](../adr/governance/ADR-920-examples-governance-constitution.md)

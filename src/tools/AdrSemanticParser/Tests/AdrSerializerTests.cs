@@ -18,7 +18,7 @@ public class AdrSerializerTests
         // Arrange
         var model = new AdrSemanticModel
         {
-            Id = "ADR-0001",
+            Id = "ADR-001",
             Title = "测试 ADR",
             Status = "Final",
             Relationships = new AdrRelationships()
@@ -28,7 +28,7 @@ public class AdrSerializerTests
         var json = _serializer.Serialize(model);
 
         // Assert
-        json.Should().Contain("\"id\": \"ADR-0001\"");
+        json.Should().Contain("\"id\": \"ADR-001\"");
         json.Should().Contain("\"title\": \"测试 ADR\"");
         json.Should().Contain("\"status\": \"Final\"");
     }
@@ -47,7 +47,7 @@ public class AdrSerializerTests
                 [
                     new AdrReference 
                     { 
-                        Id = "ADR-0001", 
+                        Id = "ADR-001", 
                         Title = "基础 ADR",
                         Reason = "测试原因" 
                     }
@@ -59,7 +59,7 @@ public class AdrSerializerTests
         var json = _serializer.Serialize(model);
 
         // Assert
-        json.Should().Contain("ADR-0001");
+        json.Should().Contain("ADR-001");
         json.Should().Contain("基础 ADR");
         json.Should().Contain("测试原因");
     }
@@ -69,7 +69,7 @@ public class AdrSerializerTests
     {
         // Arrange
         var json = @"{
-            ""id"": ""ADR-0001"",
+            ""id"": ""ADR-001"",
             ""title"": ""测试 ADR"",
             ""status"": ""Final"",
             ""relationships"": {
@@ -86,7 +86,7 @@ public class AdrSerializerTests
 
         // Assert
         model.Should().NotBeNull();
-        model!.Id.Should().Be("ADR-0001");
+        model!.Id.Should().Be("ADR-001");
         model.Title.Should().Be("测试 ADR");
         model.Status.Should().Be("Final");
     }

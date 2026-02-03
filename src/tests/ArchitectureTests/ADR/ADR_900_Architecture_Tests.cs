@@ -14,9 +14,9 @@ public sealed class ADR_900_Architecture_Tests
     private const string TestNamespacePrefix = "Zss.BilliardHall.Tests.ArchitectureTests.ADR";
     private const string TypeSuffix = "_Architecture_Tests";
 
-    // ADR-0005-Enforcement-Levels 是 ADR-0005 的补充文档，不是独立的 ADR
+    // ADR-005-Enforcement-Levels 是 ADR-005 的补充文档，不是独立的 ADR
     private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.OrdinalIgnoreCase) {
-        "ADR-0005-Enforcement-Levels"
+        "ADR-005-Enforcement-Levels"
     };
 
     // 最小 IL 字节数阈值：用于启发式判断测试方法是否包含实质内容
@@ -143,8 +143,8 @@ public sealed class ADR_900_Architecture_Tests
             if (testType.Name == "ADR_900_Architecture_Tests")
                 continue;
 
-            // 跳过重定向测试（ADR_0008 已重构为三层架构）
-            if (testType.Name == "ADR_0008_Architecture_Tests")
+            // 跳过重定向测试（ADR_008 已重构为三层架构）
+            if (testType.Name == "ADR_008_Architecture_Tests")
                 continue;
 
             var testMethods = testType

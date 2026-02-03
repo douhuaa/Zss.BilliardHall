@@ -8,7 +8,7 @@ using System.Linq;
 namespace Zss.BilliardHall.ArchitectureAnalyzers;
 
 /// <summary>
-/// ADR-0005.5: 模块间不应有未审批的同步调用
+/// ADR-005.5: 模块间不应有未审批的同步调用
 /// Analyzer that detects synchronous cross-module calls
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -23,7 +23,7 @@ public class CrossModuleCallAnalyzer : DiagnosticAnalyzer
     private const string ContractsNamespacePart = ".Contracts";
 
     private static readonly LocalizableString Title = "Synchronous cross-module call detected";
-    private static readonly LocalizableString MessageFormat = "Detected potential synchronous call to module '{0}' from module '{1}'. Use asynchronous messaging instead (ADR-0005.5).";
+    private static readonly LocalizableString MessageFormat = "Detected potential synchronous call to module '{0}' from module '{1}'. Use asynchronous messaging instead (ADR-005.5).";
     private static readonly LocalizableString Description = "Modules should communicate asynchronously through domain events or application layer orchestration. " + "Direct synchronous calls between modules violate isolation principles.";
 
     private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId,

@@ -199,7 +199,7 @@ declare -A adr_numbers
 
 while IFS= read -r adr_file; do
     adr_name=$(basename "$adr_file" .md)
-    # 提取 ADR 编号（如 ADR-0001）
+    # 提取 ADR 编号（如 ADR-001）
     adr_num=$(echo "$adr_name" | grep -oE 'ADR-[0-9]+' 2>/dev/null || true)
     
     if [ -n "$adr_num" ]; then

@@ -42,11 +42,11 @@
 
 架构约束由以下机制强制执行：
 
-- **ADR-0001**：模块化单体与垂直切片架构
-- **ADR-0002**：Platform/Application/Host 三层启动体系
-- **ADR-0003**：命名空间规则（通过 `Directory.Build.props` 强制）
-- **ADR-0004**：中央包管理（通过 `Directory.Packages.props` 强制）
-- **ADR-0005**：CQRS 和 Handler 模式
+- **ADR-001**：模块化单体与垂直切片架构
+- **ADR-002**：Platform/Application/Host 三层启动体系
+- **ADR-003**：命名空间规则（通过 `Directory.Build.props` 强制）
+- **ADR-004**：中央包管理（通过 `Directory.Packages.props` 强制）
+- **ADR-005**：CQRS 和 Handler 模式
 - **架构测试**：自动化验证架构约束合规性
 
 ---
@@ -69,9 +69,9 @@ EditorConfig 配置纯粹是技术性的：
 | 关注点  | 管理机制                 | 配置文件                           |
 |------|----------------------|--------------------------------|
 | 代码格式 | EditorConfig         | `.editorconfig`                |
-| 命名空间 | MSBuild + ADR-0003   | `Directory.Build.props`        |
-| 依赖管理 | CPM + ADR-0004       | `Directory.Packages.props`     |
-| 架构约束 | 架构测试 + ADR-0001~0005 | `src/tests/ArchitectureTests/` |
+| 命名空间 | MSBuild + ADR-003   | `Directory.Build.props`        |
+| 依赖管理 | CPM + ADR-004       | `Directory.Packages.props`     |
+| 架构约束 | 架构测试 + ADR-001~0005 | `src/tests/ArchitectureTests/` |
 
 ### 3. 跨平台兼容
 
@@ -288,13 +288,13 @@ git reset --hard origin/main
 
 1. **识别失败的测试**：
    ```bash
-   dotnet test src/tests/ArchitectureTests/ --filter "ADR_0003"
+   dotnet test src/tests/ArchitectureTests/ --filter "ADR_003"
    ```
 
 2. **查阅对应 ADR**：
-  - 命名空间问题 → [ADR-0003](../adr/constitutional/ADR-0003-namespace-rules.md)
-  - 依赖问题 → [ADR-0001](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-  - 包管理问题 → [ADR-0004](../adr/constitutional/ADR-0004-Cpm-Final.md)
+  - 命名空间问题 → [ADR-003](../adr/constitutional/ADR-003-namespace-rules.md)
+  - 依赖问题 → [ADR-001](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
+  - 包管理问题 → [ADR-004](../adr/constitutional/ADR-004-Cpm-Final.md)
 
 3. **参考 Copilot 指南**：
   - [架构测试失败诊断](../copilot/architecture-test-failures.md)
@@ -523,7 +523,7 @@ dotnet format --verify-no-changes || exit 1
 - [ ] 安装 dotnet SDK 10.0+
 - [ ] 运行构建验证：dotnet build
 - [ ] 运行测试验证：dotnet test
-- [ ] 阅读核心 ADR（ADR-0001 ~ ADR-0005）
+- [ ] 阅读核心 ADR（ADR-001 ~ ADR-005）
 ```
 
 ### 2. 代码审查注意事项
@@ -537,10 +537,10 @@ dotnet format --verify-no-changes || exit 1
 
 **应该关注的问题**（EditorConfig 无法检测）：
 
-- ✅ 命名空间是否符合 ADR-0003
-- ✅ 模块依赖是否违反 ADR-0001
-- ✅ 包引用是否符合 ADR-0004
-- ✅ Handler 模式是否符合 ADR-0005
+- ✅ 命名空间是否符合 ADR-003
+- ✅ 模块依赖是否违反 ADR-001
+- ✅ 包引用是否符合 ADR-004
+- ✅ Handler 模式是否符合 ADR-005
 - ✅ 业务逻辑正确性
 - ✅ 测试覆盖率
 
@@ -633,11 +633,11 @@ git commit -m "style: 应用 EditorConfig 到 Modules"
 
 ### ADR 体系
 
-- [ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-0002：Platform/Application/Host 三层启动体系](../adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)
-- [ADR-0003：命名空间规则](../adr/constitutional/ADR-0003-namespace-rules.md)
-- [ADR-0004：中央包管理](../adr/constitutional/ADR-0004-Cpm-Final.md)
-- [ADR-0005：CQRS 和 Handler 模式](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-002：Platform/Application/Host 三层启动体系](../adr/constitutional/ADR-002-platform-application-host-bootstrap.md)
+- [ADR-003：命名空间规则](../adr/constitutional/ADR-003-namespace-rules.md)
+- [ADR-004：中央包管理](../adr/constitutional/ADR-004-Cpm-Final.md)
+- [ADR-005：CQRS 和 Handler 模式](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
 - [ADR-900：架构测试与 CI 治理元规则](../adr/governance/ADR-900-architecture-tests.md)
 
 ### 配置文件
@@ -650,7 +650,7 @@ git commit -m "style: 应用 EditorConfig 到 Modules"
 ### Copilot 指南
 
 - [架构测试失败诊断](../copilot/architecture-test-failures.md)
-- [ADR-0003 Prompts](../copilot/adr-0003.prompts.md)
+- [ADR-003 Prompts](../copilot/adr-003.prompts.md)
 - [Copilot 指令索引](../copilot/README.md)
 
 ---

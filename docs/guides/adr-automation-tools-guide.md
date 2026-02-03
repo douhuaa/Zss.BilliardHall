@@ -68,7 +68,7 @@
 | 编号格式 | 必须为4位数字 | `0001` ✅ vs `1` ❌ |
 | 目录层级 | 编号须在层级范围内 | `0150` 在 `structure/` ✅ |
 | 元数据 | 状态、级别字段完整 | **状态**：Final ✅ |
-| 文件命名 | 符合命名规范 | `ADR-0001-title.md` ✅ |
+| 文件命名 | 符合命名规范 | `ADR-001-title.md` ✅ |
 | 编号连续 | 检测跳号 | 0001→0003 ⚠️ 跳过 0002 |
 
 #### 使用示例
@@ -98,7 +98,7 @@
 ```
 解决：重命名文件使用4位编号：
 ```bash
-mv docs/adr/constitutional/ADR-1-*.md docs/adr/constitutional/ADR-0001-*.md
+mv docs/adr/constitutional/ADR-1-*.md docs/adr/constitutional/ADR-001-*.md
 ```
 
 **错误：目录层级错误**
@@ -161,12 +161,12 @@ Copilot Prompts
 📋 修正清单
 
 需要添加测试文件：
-  [ ] 为 ADR-0001 创建测试文件：
-      src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
+  [ ] 为 ADR-001 创建测试文件：
+      src/tests/ArchitectureTests/ADR/ADR_001_Architecture_Tests.cs
       参考：docs/adr/governance/ADR-900-architecture-tests.md
 
 需要添加 Prompt 文件：
-  [ ] 为 ADR-0001 创建 Prompt 文件：
+  [ ] 为 ADR-001 创建 Prompt 文件：
       docs/copilot/adr-1.prompts.md
       参考：docs/templates/copilot-prompts-template.md
 ```
@@ -195,10 +195,10 @@ adr-cli.sh validate                   # 运行所有验证
 ./scripts/adr-cli.sh create structure "领域事件命名规范"
 
 # 工具自动执行：
-# ✅ 分配编号：ADR-0120
-# ✅ 创建 ADR 文档：docs/adr/structure/ADR-0120-domain-event-naming.md
+# ✅ 分配编号：ADR-120
+# ✅ 创建 ADR 文档：docs/adr/structure/ADR-120-domain-event-naming.md
 # ✅ 创建 Prompt 文件：docs/copilot/adr-120.prompts.md
-# ℹ️  提示创建测试文件：src/tests/ArchitectureTests/ADR/ADR_0120_Architecture_Tests.cs
+# ℹ️  提示创建测试文件：src/tests/ArchitectureTests/ADR/ADR_120_Architecture_Tests.cs
 ```
 
 #### 层级选择指南
@@ -319,7 +319,7 @@ adr-cli.sh validate                   # 运行所有验证
 
 ## 宪法层 (constitutional)
 
-### ADR-0001：模块化单体架构
+### ADR-001：模块化单体架构
 
 #### 🔴 红线约束
 - 模块**禁止**直接引用其他模块
@@ -389,12 +389,12 @@ adr-cli.sh validate                   # 运行所有验证
 
 1. 修改 ADR 文档
    ```bash
-   vim docs/adr/constitutional/ADR-0001-*.md
+   vim docs/adr/constitutional/ADR-001-*.md
    ```
 
 2. 同步更新测试
    ```bash
-   vim src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
+   vim src/tests/ArchitectureTests/ADR/ADR_001_Architecture_Tests.cs
    ```
 
 3. 同步更新 Prompt
@@ -584,7 +584,7 @@ find docs/adr -name "ADR-*.md"
 
 **症状**：
 ```
-❌ 编号冲突：ADR-0120 已存在
+❌ 编号冲突：ADR-120 已存在
 ```
 
 **解决**：
@@ -602,7 +602,7 @@ find docs/adr -name "ADR-*.md"
 
 **症状**：
 ```
-⚠️ ADR-0001：需要测试但缺少测试文件
+⚠️ ADR-001：需要测试但缺少测试文件
 ```
 
 **解决**：
@@ -612,7 +612,7 @@ find docs/adr -name "ADR-*.md"
 
 2. 如需要，创建测试文件
    ```bash
-   touch src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
+   touch src/tests/ArchitectureTests/ADR/ADR_001_Architecture_Tests.cs
    ```
 
 3. 或者，移除测试标记（如该 ADR 不需要测试）

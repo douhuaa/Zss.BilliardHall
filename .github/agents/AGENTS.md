@@ -1,13 +1,13 @@
 # AGENTS.md - Agent 体系主从配置与版本管理
 
-> ⚠️ **本配置文件不具备裁决力，所有权威以 [ADR-0007：Agent 行为与权限宪法](/docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md) 为准。**
+> ⚠️ **本配置文件不具备裁决力，所有权威以 [ADR-007：Agent 行为与权限宪法](/docs/adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md) 为准。**
 >
 > 📋 **冲突协同提醒**：如本文件与 ADR/Instructions 有不一致，必须同步提 Issue（标签 `governance-inconsistency`）并协同修订所有材料。
 
 **版本**：1.0  
 **最后更新**：2026-01-26  
 **状态**：Active  
-**基于 ADR**：ADR-0007（Agent 行为与权限宪法）
+**基于 ADR**：ADR-007（Agent 行为与权限宪法）
 
 ---
 
@@ -17,7 +17,7 @@
 
 **唯一主控角色**：`architecture-guardian`
 
-**职责**（基于 ADR-0007 决策 5）：
+**职责**（基于 ADR-007 决策 5）：
 - ✅ 最终裁决引用链协调
 - ✅ 统一所有 Agent 响应格式
 - ✅ 解决 Agent 间冲突
@@ -61,7 +61,7 @@
 #### 1.2.2 module-boundary-checker（模块边界检查器）
 
 **职责**：专门监督模块隔离和边界约束  
-**监督 ADR**：ADR-0001（模块化单体）  
+**监督 ADR**：ADR-001（模块化单体）  
 **风险等级**：⚠️ 极高  
 **配置文件**：[module-boundary-checker.agent.md](module-boundary-checker.agent.md)
 
@@ -76,7 +76,7 @@
 #### 1.2.3 handler-pattern-enforcer（Handler 规范执行器）
 
 **职责**：确保 Handler 模式正确使用  
-**监督 ADR**：ADR-0005（应用内交互模型）、ADR-0201（Handler 生命周期）  
+**监督 ADR**：ADR-005（应用内交互模型）、ADR-201（Handler 生命周期）  
 **风险等级**：⚠️ 高  
 **配置文件**：[handler-pattern-enforcer.agent.md](handler-pattern-enforcer.agent.md)
 
@@ -91,7 +91,7 @@
 #### 1.2.4 test-generator（测试生成器）
 
 **职责**：生成符合架构规范的测试代码  
-**监督 ADR**：ADR-900（架构测试）、ADR-0122（测试组织）  
+**监督 ADR**：ADR-900（架构测试）、ADR-122（测试组织）  
 **风险等级**：⚠️ 中  
 **配置文件**：[test-generator.agent.md](test-generator.agent.md)
 
@@ -106,7 +106,7 @@
 #### 1.2.5 documentation-maintainer（文档维护者）
 
 **职责**：维护文档质量和一致性  
-**监督 ADR**：ADR-0008（文档编写与维护宪法）、ADR-0900（ADR 流程）  
+**监督 ADR**：ADR-008（文档编写与维护宪法）、ADR-0900（ADR 流程）  
 **风险等级**：⚠️ 低  
 **配置文件**：[documentation-maintainer.agent.md](documentation-maintainer.agent.md)
 
@@ -161,7 +161,7 @@ graph TB
     style DotNetExpert fill:#ffe0cc
 ```
 
-**协作原则**（基于 ADR-0007.8）：
+**协作原则**（基于 ADR-007.8）：
 - Guardian 是唯一协调者
 - Specialist Agents 向 Guardian 报告
 - 所有 Agent 使用相同三态输出格式
@@ -169,13 +169,13 @@ graph TB
 
 ---
 
-## 三、Agent 变更治理（基于 ADR-0007.9）
+## 三、Agent 变更治理（基于 ADR-007.9）
 
 ### 3.1 变更分级
 
 | 变更类型   | 示例                   | 审批权限      | 公示期 | 涉及文件               |
 |--------|----------------------|-----------|-----|-------------------|
-| 宪法级变更  | 修改 Guardian 权限边界    | 架构委员会全体一致 | 2 周  | ADR-0007 正文        |
+| 宪法级变更  | 修改 Guardian 权限边界    | 架构委员会全体一致 | 2 周  | ADR-007 正文        |
 | 治理级变更  | 新增/删除 Specialist Agent | Tech Lead | 1 周  | AGENTS.md、README.md |
 | 实施级变更  | 更新 Prompts、优化响应模板   | 单人批准      | 无   | *.agent.md、Prompts |
 
@@ -227,25 +227,25 @@ graph TB
 
 ---
 
-## 五、Agent 权限边界总结（基于 ADR-0007）
+## 五、Agent 权限边界总结（基于 ADR-007）
 
 ### 5.1 所有 Agent 的共同约束
 
-**必须遵守**（ADR-0007 决策 1-6）：
+**必须遵守**（ADR-007 决策 1-6）：
 - ✅ 使用三态输出（✅ Allowed / ⚠️ Blocked / ❓ Uncertain）
 - ✅ 引用 ADR 正文作为唯一裁决依据
 - ✅ Uncertain 时默认禁止，引导查阅 ADR
 - ✅ 将 Prompts 作为辅助参考，不作裁决依据
 - ✅ 在职责范围内工作，向 Guardian 报告
 
-**禁止行为**（ADR-0007 决策 2-6）：
+**禁止行为**（ADR-007 决策 2-6）：
 - ❌ 解释性扩权（ADR 未明确时扩展解释）
 - ❌ 替代性裁决（替代 ADR/测试/人工审批）
 - ❌ 模糊输出（使用"应该"、"可能"、"试试看"）
 - ❌ 将 Prompts 作为裁决依据
 - ❌ 发明架构规则（引用不存在于 ADR 的规则）
 
-### 5.2 Guardian 的特殊权限（ADR-0007.8）
+### 5.2 Guardian 的特殊权限（ADR-007.8）
 
 - ✅ 协调所有 Agent
 - ✅ 解决 Agent 间冲突
@@ -314,7 +314,7 @@ graph TB
 
 ## 八、相关资源
 
-- [ADR-0007：Agent 行为与权限宪法](/docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)（**必读**，唯一权威）
+- [ADR-007：Agent 行为与权限宪法](/docs/adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)（**必读**，唯一权威）
 - [Agents 体系 README](README.md)
 - [Instructions 体系](../instructions/README.md)
 - [Copilot Prompts 库](/docs/copilot/README.md)
@@ -338,5 +338,5 @@ graph TB
 ---
 
 **状态**：✅ Active  
-**基于 ADR**：ADR-0007（Agent 行为与权限宪法）  
+**基于 ADR**：ADR-007（Agent 行为与权限宪法）  
 **维护团队**：架构委员会

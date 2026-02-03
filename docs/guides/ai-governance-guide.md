@@ -4,8 +4,8 @@
 > 所有架构决策以相关 ADR 正文为准。详见 [ADR 目录](../adr/README.md)。
 >
 > 📘 **权威依据**：本指南说明如何实施以下 ADR：
-> - [ADR-0007：Agent 行为与权限宪法](../adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
-> - [ADR-0008：文档编写与维护宪法](../adr/constitutional/ADR-0008-documentation-governance-constitution.md)
+> - [ADR-007：Agent 行为与权限宪法](../adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
+> - [ADR-008：文档编写与维护宪法](../adr/constitutional/ADR-008-documentation-governance-constitution.md)
 > - [ADR-900：架构测试与 CI 治理元规则](../adr/governance/ADR-900-architecture-tests.md)
 >
 > 本文档中的"必须"/"禁止"等语言均指代上述 ADR 的要求，本文档不独立产生新规则。
@@ -79,8 +79,8 @@ CI 测试通过 ✅
 **作用**：定义"能做什么，不能做什么"
 
 **示例**：
-- ADR-0001：模块不能直接引用其他模块
-- ADR-0005：Command Handler 不能返回业务数据
+- ADR-001：模块不能直接引用其他模块
+- ADR-005：Command Handler 不能返回业务数据
 
 **你需要做什么**：
 - ✅ 遇到架构问题时，查阅 ADR
@@ -143,8 +143,8 @@ CI 测试通过 ✅
 **作用**：告诉 AI"遇到 X 场景，应该做什么"
 
 **文件结构**：
-- `adr-0001.prompts.md`：ADR-0001 的执行手册
-- `adr-0002.prompts.md`：ADR-0002 的执行手册
+- `adr-001.prompts.md`：ADR-001 的执行手册
+- `adr-002.prompts.md`：ADR-002 的执行手册
 - `architecture-test-failures.md`：测试失败诊断指南
 
 **你需要做什么**：
@@ -190,14 +190,14 @@ CI 测试通过 ✅
 
 2. **获得建议**
 ```
-✅ 基于 ADR-0001 和 ADR-0005：
+✅ 基于 ADR-001 和 ADR-005：
 - 在 Orders/UseCases/CancelOrder/ 创建垂直切片
 - 定义 CancelOrder Command
 - 实现 CancelOrderHandler
 - Handler 只返回 void 或订单 ID
 - 不要创建 OrderService
 
-📚 参考：docs/copilot/adr-0001.prompts.md
+📚 参考：docs/copilot/adr-001.prompts.md
 ```
 
 3. **按建议实施**
@@ -229,7 +229,7 @@ Found: 1 type
 
 3. **获得诊断**
 ```
-⚠️ 违反 ADR-0001：模块隔离
+⚠️ 违反 ADR-001：模块隔离
 
 问题：
 Orders 模块直接引用了 Members 模块的类型
@@ -239,7 +239,7 @@ Orders 模块直接引用了 Members 模块的类型
 - 方案 2：通过契约（DTO）查询数据
 - 方案 3：通过原始类型传递 MemberId
 
-📚 参考：docs/copilot/adr-0001.prompts.md（场景 3）
+📚 参考：docs/copilot/adr-001.prompts.md（场景 3）
 ```
 
 4. **按建议修复**
@@ -283,7 +283,7 @@ using Zss.BilliardHall.Modules.Members.Domain;
 var member = await _memberRepository.GetByIdAsync(memberId);
 ```
 
-📚 参考：docs/copilot/adr-0001.prompts.md
+📚 参考：docs/copilot/adr-001.prompts.md
 ```
 
 3. **按建议实施**
@@ -314,7 +314,7 @@ var member = await _memberRepository.GetByIdAsync(memberId);
 - 建议重构为 CreateOrder/CreateOrderHandler.cs
 
 ### 📚 建议阅读
-- docs/copilot/adr-0001.prompts.md
+- docs/copilot/adr-001.prompts.md
 ```
 
 3. **修正问题**
@@ -440,14 +440,14 @@ Architecture Tests > Agent 建议 > 口头约定
 ### 常用 ADR
 
 - [ADR-900：架构测试](adr/governance/ADR-900-architecture-tests.md)
-- [ADR-0001：模块化单体](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-0002：三层启动](adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)
-- [ADR-0005：Handler 模式](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-001：模块化单体](adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-002：三层启动](adr/constitutional/ADR-002-platform-application-host-bootstrap.md)
+- [ADR-005：Handler 模式](adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
 
 ### 常用 Prompts
 
-- [ADR-0001 提示词](copilot/adr-0001.prompts.md)
-- [ADR-0005 提示词](copilot/adr-0005.prompts.md)
+- [ADR-001 提示词](copilot/adr-001.prompts.md)
+- [ADR-005 提示词](copilot/adr-005.prompts.md)
 - [测试失败诊断](copilot/architecture-test-failures.md)
 - [常见问题总结](copilot/pr-common-issues.prompts.md)
 

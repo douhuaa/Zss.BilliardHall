@@ -168,7 +168,7 @@ superseded_by: null
 
 **依赖（Depends On）**：
 - [ADR-120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件总线集成依赖事件命名规范
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 事件总线是模块间通信的实现
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - 事件总线是模块间通信的实现
 
 **被依赖（Depended By）**：
 - 无
@@ -191,7 +191,7 @@ superseded_by: null
 > **仅供理解，不具裁决力。**
 
 ### 相关 ADR
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
 - [ADR-210：领域事件版本化与兼容性](ADR-210-event-versioning-compatibility.md)
 
 ### 技术资源
@@ -199,7 +199,7 @@ superseded_by: null
 - [At-Least-Once Delivery](https://docs.microsoft.com/en-us/azure/service-bus-messaging/message-sessions)
 
 ### 实践指导
-- 事件总线配置示例参见 `docs/copilot/adr-0220.prompts.md`
+- 事件总线配置示例参见 `docs/copilot/adr-220.prompts.md`
 
 ---
 

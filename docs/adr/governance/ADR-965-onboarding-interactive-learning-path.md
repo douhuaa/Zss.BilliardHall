@@ -87,8 +87,8 @@ assignees: ''
 **完成时间**：_____
 
 ### 架构理解
-- [ ] 阅读 [ADR-0001：模块化单体架构](...)
-- [ ] 阅读 [ADR-0005：应用内交互模型](...)
+- [ ] 阅读 [ADR-001：模块化单体架构](...)
+- [ ] 阅读 [ADR-005：应用内交互模型](...)
 - [ ] 观看架构概览视频（如有）
 - [ ] 与 Mentor 讨论架构概念
 
@@ -455,7 +455,7 @@ docs/onboarding/dashboard.md
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档标准
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档标准
 - [ADR-960：Onboarding 文档治理规范](../governance/ADR-960-onboarding-documentation-governance.md) - 基于其 Onboarding 结构
 
 **被依赖（Depended By）**：
@@ -477,7 +477,7 @@ docs/onboarding/dashboard.md
 ## References（非裁决性参考）
 
 ### 相关 ADR
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md)
 - [ADR-960：Onboarding 文档治理规范](../governance/ADR-960-onboarding-documentation-governance.md)
 
 ### 实施工具

@@ -93,11 +93,11 @@ superseded_by: null
 
 | 关系类型 | 定义 | 使用场景 | 强制双向 |
 |---------|------|----------|----------|
-| **依赖（Depends On）** | 本 ADR 基于另一 ADR 的规则、概念或决策 | ADR-0005 依赖 ADR-0001 的模块隔离规则 | ✅ 是 |
-| **被依赖（Depended By）** | 其他 ADR 基于本 ADR | ADR-0001 被 ADR-0005 依赖 | ✅ 是 |
-| **替代（Supersedes）** | 本 ADR 取代另一 ADR，原 ADR 已废弃 | ADR-0005-v2 替代 ADR-0005-v1 | ✅ 是 |
-| **被替代（Superseded By）** | 本 ADR 已被新 ADR 取代，本 ADR 已废弃 | ADR-0005-v1 被 ADR-0005-v2 替代 | ✅ 是 |
-| **相关（Related）** | 与本 ADR 相关但不存在依赖 | ADR-0001 与 ADR-0002 都涉及模块 | ❌ 否 |
+| **依赖（Depends On）** | 本 ADR 基于另一 ADR 的规则、概念或决策 | ADR-005 依赖 ADR-001 的模块隔离规则 | ✅ 是 |
+| **被依赖（Depended By）** | 其他 ADR 基于本 ADR | ADR-001 被 ADR-005 依赖 | ✅ 是 |
+| **替代（Supersedes）** | 本 ADR 取代另一 ADR，原 ADR 已废弃 | ADR-005-v2 替代 ADR-005-v1 | ✅ 是 |
+| **被替代（Superseded By）** | 本 ADR 已被新 ADR 取代，本 ADR 已废弃 | ADR-005-v1 被 ADR-005-v2 替代 | ✅ 是 |
+| **相关（Related）** | 与本 ADR 相关但不存在依赖 | ADR-001 与 ADR-002 都涉及模块 | ❌ 否 |
 
 **核心原则**：
 > 依赖和替代关系必须双向一致，相关关系可以单向声明。
@@ -110,13 +110,13 @@ superseded_by: null
 **示例**：
 ```markdown
 ❌ 禁止：
-- ADR-0005-v1 已被 ADR-0005-v2 替代
-- 新 ADR-XXX 声明依赖 ADR-0005-v1
-→ 违规，必须改为依赖 ADR-0005-v2
+- ADR-005-v1 已被 ADR-005-v2 替代
+- 新 ADR-XXX 声明依赖 ADR-005-v1
+→ 违规，必须改为依赖 ADR-005-v2
 
 ✅ 允许：
-- ADR-0005-v1 已被 ADR-0005-v2 替代
-- 历史 ADR（替代前创建）依赖 ADR-0005-v1
+- ADR-005-v1 已被 ADR-005-v2 替代
+- 历史 ADR（替代前创建）依赖 ADR-005-v1
 → 合规，历史依赖保留
 ```
 
@@ -196,8 +196,8 @@ ADR **禁止**形成循环依赖：
 **Mermaid 图表格式**：
 ```mermaid
 graph TB
-    ADR0001[ADR-0001: 模块化架构] --> ADR0005[ADR-0005: 交互模型]
-    ADR0005 --> ADR0201[ADR-0201: Handler 生命周期]
+    ADR0001[ADR-001: 模块化架构] --> ADR0005[ADR-005: 交互模型]
+    ADR0005 --> ADR0201[ADR-201: Handler 生命周期]
 
     style ADR0001 fill:#90EE90
     style ADR0005 fill:#87CEEB
@@ -207,7 +207,7 @@ graph TB
 **表格列表格式**：
 | ADR | 标题 | 依赖 | 被依赖 | 替代 | 被替代 |
 |-----|------|------|--------|------|--------|
-| ADR-0001 | 模块化架构 | 无 | ADR-0005, ADR-0123 | 无 | 无 |
+| ADR-001 | 模块化架构 | 无 | ADR-005, ADR-123 | 无 | 无 |
 
 **判定**：
 - ❌ 关系图缺失或过时
@@ -270,7 +270,7 @@ jobs:
 本 ADR **不负责**：
 - ADR 内容质量评审
 - ADR 版本号管理（由 ADR-980 管理）
-- ADR 文档格式（由 ADR-0008 管理）
+- ADR 文档格式（由 ADR-008 管理）
 - ADR 审批流程（由 ADR-900 管理）
 
 ---
@@ -283,7 +283,7 @@ jobs:
 
 ### 依赖（Depends On）
 - [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 关系管理基于 CI 治理机制
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于文档规范
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于文档规范
 - [ADR-900：ADR 新增与修订流程](ADR-900-architecture-tests.md) - 集成到 ADR 流程
 
 ### 被依赖（Depended By）
@@ -300,8 +300,8 @@ jobs:
 无
 
 ### 相关（Related）
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档规范相关
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档规范相关
 - [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md) - 标题语义约束防止解析歧义
 
 ---

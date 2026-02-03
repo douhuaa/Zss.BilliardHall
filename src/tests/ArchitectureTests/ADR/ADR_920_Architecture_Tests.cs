@@ -143,11 +143,11 @@ public sealed class ADR_920_Architecture_Tests
     // ⚠️ 规则权威源：ADR 正文是唯一规则源，此处仅为最低可执行子集
     private static readonly string[] ForbiddenPatterns = new[]
     {
-        // 跨模块直接引用（ADR-0001.1）
+        // 跨模块直接引用（ADR-001.1）
         @"using\s+Zss\.BilliardHall\.Modules\.\w+\.Domain",
         @"using\s+Zss\.BilliardHall\.Modules\.\w+\.Infrastructure",
 
-        // Service 类（ADR-0001.4）
+        // Service 类（ADR-001.4）
         @"class\s+\w+Service\s*[:{]",
         @"interface\s+I\w+Service\s*[:{]",
     };
@@ -241,9 +241,9 @@ public sealed class ADR_920_Architecture_Tests
             {
                 "",
                 "修复建议：",
-                "  1. 移除跨模块直接引用，使用事件或契约（ADR-0001）",
-                "  2. 移除 Service 类，使用垂直切片 Handler（ADR-0001）",
-                "  3. 确保 Platform 层不依赖业务层（ADR-0002）",
+                "  1. 移除跨模块直接引用，使用事件或契约（ADR-001）",
+                "  2. 移除 Service 类，使用垂直切片 Handler（ADR-001）",
+                "  3. 确保 Platform 层不依赖业务层（ADR-002）",
                 "  4. 如果这是错误示例，请明确标记：// ❌ 错误：...",
                 "",
                 "允许的标记方式：",
@@ -423,7 +423,7 @@ public sealed class ADR_920_Architecture_Tests
                 "  1. 如果是正确示例，请移除违规代码",
                 "  2. 如果是错误示例，请明确标记：// ❌ 错误：...",
                 "  3. 如果是 ADR 正文的教学片段，请标记：// 反例（禁止）或 // 结构示意",
-                "  4. 确保示例代码符合 ADR-0001、ADR-0002、ADR-0005 等架构约束",
+                "  4. 确保示例代码符合 ADR-001、ADR-002、ADR-005 等架构约束",
                 "",
                 "注意：这是 L2 警告级别，不会阻断构建。"
             }));
@@ -528,7 +528,7 @@ public sealed class ADR_920_Architecture_Tests
                 "- **作者**：@username",
                 "- **目的**：教学 / 演示 / Onboarding",
                 "- **创建日期**：YYYY-MM-DD",
-                "- **适用 ADR**：ADR-0001, ADR-0005",
+                "- **适用 ADR**：ADR-001, ADR-005",
                 "```",
                 "",
                 "核心原则：没有责任人 = 没人维护 = 示例腐化",
