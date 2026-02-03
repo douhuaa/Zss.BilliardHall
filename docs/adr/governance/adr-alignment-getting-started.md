@@ -22,11 +22,11 @@
 
 在开始之前，请务必阅读以下文档：
 
-1. **[ADR-907：ArchitectureTests 执法治理体系](./ADR-907-architecture-tests-enforcement-governance.md)**  
+1. **[ADR-907：ArchitectureTests 执法治理体系](./adr-907-architecture-tests-enforcement-governance.md)**  
    - 定义新的 Rule/Clause 编号格式
    - 规定测试组织和命名规范
 
-2. **[ADR-907-A：ADR-907 对齐执行标准](./ADR-907-A-adr-alignment-execution-standard.md)**  
+2. **[ADR-907-A：ADR-907 对齐执行标准](./adr-907-a-adr-alignment-execution-standard.md)**  
    - 定义对齐的强制规范
    - 规定失败处理策略
 

@@ -89,10 +89,10 @@
 ### 关键文档
 
 - 📋 **[ADR 对齐执行计划](../ADR-ALIGNMENT-EXECUTION-PLAN.md)** - 完整执行路线图（10-12 周）
-- 📖 **[ADR-907：ArchitectureTests 执法治理体系](governance/ADR-907-architecture-tests-enforcement-governance.md)** - 新格式定义
-- 📘 **[ADR-907-A：对齐执行标准](governance/ADR-907-A-adr-alignment-execution-standard.md)** - 强制规范
+- 📖 **[ADR-907：ArchitectureTests 执法治理体系](governance/adr-907-architecture-tests-enforcement-governance.md)** - 新格式定义
+- 📘 **[ADR-907-A：对齐执行标准](governance/adr-907-a-adr-alignment-execution-standard.md)** - 强制规范
 - ✅ **[对齐进度清单](governance/adr-907-a-alignment-checklist.md)** - 实时追踪
-- 🚀 **[快速开始指南](governance/ADR-ALIGNMENT-GETTING-STARTED.md)** - 如何参与
+- 🚀 **[快速开始指南](governance/adr-alignment-getting-started.md)** - 如何参与
 
 ### 当前进度
 
