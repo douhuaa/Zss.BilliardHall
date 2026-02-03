@@ -293,16 +293,16 @@
 |---|------|--------|---------|
 | 1 | 创建 Feature Branch `feature/adr-alignment` | Human | 5 分钟 |
 | 2 | 调用 test-generator 生成测试拆分清单 | Guardian | 1 小时 |
-| 4 | 配置 CI 验证脚本 | Human + Guardian | 2 小时 |
-| 5 | 创建 GitHub Project Board 跟踪进度 | Human | 30 分钟 |
+| 3 | 配置 CI 验证脚本 | Human + Guardian | 2 小时 |
+| 4 | 创建 GitHub Project Board 跟踪进度 | Human | 30 分钟 |
 
 ### 等待审批（阻塞中）
 
 | # | 任务 | 等待审批项 | 预计审批时间 |
 |---|------|-----------|-------------|
-| 3 | 审批测试拆分计划 | Architecture Board | 1-2 天 |
+| 5 | 审批测试拆分计划 | Architecture Board | 1-2 天 |
 | 6 | 确认 5 个人工决策点 | Architecture Board | 1-2 天 |
-| 7 | 开始阶段 1 执行 | 任务 3, 6 | - |
+| 7 | 开始阶段 1 执行 | 任务 5, 6 | - |
 
 ---
 
