@@ -329,7 +329,7 @@ function validate_consistency() {
             if [ "$OUTPUT_FORMAT" = "json" ]; then
                 json_add_detail "ADR_Metadata_Completeness" "$adr_id" "error" \
                     "元数据问题：$metadata_result" "$adr_file" "" \
-                    "docs/adr/governance/ADR-0900-adr-process.md"
+                    "docs/adr/governance/ADR-900-adr-process.md"
             fi
             has_error=true
         fi
@@ -401,7 +401,7 @@ function validate_consistency() {
             echo ""
             echo -e "${CYAN}参考文档：${NC}"
             echo "  - docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md"
-            echo "  - docs/adr/governance/ADR-0900-adr-process.md"
+            echo "  - docs/adr/governance/ADR-900-adr-process.md"
             echo ""
         fi
         final_status="failure"

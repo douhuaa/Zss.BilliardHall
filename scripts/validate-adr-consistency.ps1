@@ -245,7 +245,7 @@ function Test-AdrConsistency {
         Write-Host ""
         Write-Host "参考文档：" -ForegroundColor Cyan
         Write-Host "  - docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md"
-        Write-Host "  - docs/adr/governance/ADR-0900-adr-process.md"
+        Write-Host "  - docs/adr/governance/ADR-900-adr-process.md"
         Write-Host ""
         return 1
     }

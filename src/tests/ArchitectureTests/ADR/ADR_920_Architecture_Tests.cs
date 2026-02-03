@@ -230,7 +230,7 @@ public sealed class ADR_920_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-0920_1_4 违规：以下示例代码包含架构违规",
+                "❌ ADR-920_1_4 违规：以下示例代码包含架构违规",
                 "",
                 "根据 ADR-920 决策 3：示例代码不得引入 ADR 未允许的结构或违反架构约束。",
                 ""
@@ -315,7 +315,7 @@ public sealed class ADR_920_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-0920_1_5 违规：以下示例文档缺少'示例免责声明'",
+                "❌ ADR-920_1_5 违规：以下示例文档缺少'示例免责声明'",
                 "",
                 "根据 ADR-920 决策 2：所有示例文档必须在开头包含免责声明。",
                 ""
@@ -507,7 +507,7 @@ public sealed class ADR_920_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-0920_1_7 违规（L1）：以下示例目录缺少必需的维护信息",
+                "❌ ADR-920_1_7 违规（L1）：以下示例目录缺少必需的维护信息",
                 "",
                 "根据 ADR-920 决策 6：每个示例目录必须有明确的责任人和目的说明。",
                 ""

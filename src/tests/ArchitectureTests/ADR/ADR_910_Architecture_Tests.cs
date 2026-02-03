@@ -227,7 +227,7 @@ public sealed class ADR_910_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-0910_1_4 违规：以下 README 使用了裁决性语言",
+                "❌ ADR-910_1_4 违规：以下 README 使用了裁决性语言",
                 "",
                 "根据 ADR-910 决策 2：README 不得使用裁决性语言，除非在引用 ADR 的上下文中。",
                 ""
@@ -313,7 +313,7 @@ public sealed class ADR_910_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-0910_1_5 违规：以下 README 缺少'无裁决力声明'",
+                "❌ ADR-910_1_5 违规：以下 README 缺少'无裁决力声明'",
                 "",
                 "根据 ADR-910 决策 3：所有 README 必须在开头声明无架构裁决权。",
                 ""

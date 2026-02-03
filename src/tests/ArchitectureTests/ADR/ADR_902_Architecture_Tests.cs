@@ -243,7 +243,7 @@ public sealed class ADR_902_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-0902_1_4 违规：以下 ADR 文档的 Front Matter 不符合标准",
+                "❌ ADR-902_1_4 违规：以下 ADR 文档的 Front Matter 不符合标准",
                 "",
                 "根据 ADR-902 决策 3：所有 ADR 必须包含标准 Front Matter 并使用合法的枚举值。",
                 ""
@@ -345,7 +345,7 @@ public sealed class ADR_902_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-0902_1_5 违规：以下 ADR 文档缺少必需章节或章节顺序不正确",
+                "❌ ADR-902_1_5 违规：以下 ADR 文档缺少必需章节或章节顺序不正确",
                 "",
                 "根据 ADR-902 决策 4：所有 ADR 必须包含完整章节集合且顺序固定。",
                 ""
@@ -544,7 +544,7 @@ public sealed class ADR_902_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-0902_1_7 违规：以下 ADR 的规则编号不符合要求",
+                "❌ ADR-902_1_7 违规：以下 ADR 的规则编号不符合要求",
                 "",
                 "根据 ADR-902 决策 1：每条规则必须作为独立三级标题存在，格式为：### ADR-XXX.Y:L? <规则标题>",
                 ""

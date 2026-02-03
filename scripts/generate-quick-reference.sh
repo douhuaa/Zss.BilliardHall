@@ -221,7 +221,7 @@ public OrderDto Handle(CreateOrder command) { ... }
 4. 提供技术理由和归还计划
 5. 获得架构委员会批准
 
-**参考**：[ADR-0900 流程规范](./governance/ADR-0900-adr-process.md)
+**参考**：[ADR-900 流程规范](./governance/ADR-900-adr-process.md)
 
 ---
 
