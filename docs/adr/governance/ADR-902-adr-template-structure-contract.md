@@ -4,8 +4,8 @@ title: "ADR 标准模板与结构契约"
 status: Final
 level: Governance
 deciders: "Architecture Board"
-date: 2026-01-28
-version: "1.0"
+date: 2026-02-03
+version: "2.0"
 maintainer: "Architecture Board"
 primary_enforcement: L2
 reviewer: "Architecture Board"
@@ -51,24 +51,26 @@ superseded_by: null
 
 ## Decision（裁决）
 
-> ⚠️ **本节是唯一裁决来源，其他章节不得产生新规则。**
->>
-> 每条规则必须独立为三级标题，格式统一：
->
-> `### ADR-902.X:L? <规则标题>（中文别名可选）`
->
-> 例如：
->
-> `### ADR-902.1:L1 规则条目必须独立编号（独立三级标题）`
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-902 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-902_<Rule>_<Clause>
+> ```
+
 ---
 
-### ADR-902.1:L1 规则条目必须独立编号
+### ADR-902_1：ADR 结构完整性（Rule）
+
+#### ADR-902_1_1 规则条目必须独立编号
 
 - 每条规则必须作为独立三级标题存在。
 - 避免合并多条规则，确保 CI 能精确扫描。
-- 标题格式严格遵守：`### ADR-902.X:L? <规则标题>（中文别名可选）`
+- 标题格式严格遵守：`### ADR-902_X_Y <规则标题>（中文别名可选）`
 
-### ADR-902.2:L1 统一模板结构
+#### ADR-902_1_2 统一模板结构
 
 - 所有 ADR 文档 **必须**符合本 ADR 定义的：
   - Front Matter 字段规范
@@ -82,7 +84,7 @@ superseded_by: null
 
 ---
 
-### ADR-902.3:L1 标准 Front Matter
+#### ADR-902_1_3 标准 Front Matter
 
 每个 ADR 文件 **必须**以 YAML Front Matter 开头，并至少包含以下字段：
 
@@ -108,7 +110,7 @@ superseded_by: ADR-xxx | null
 
 ---
 
-### ADR-902.4:L1 包含完整章节集合
+#### ADR-902_1_4 包含完整章节集合
 
 - 每个 ADR **必须**包含以下章节，**英文名称为裁决关键字（Canonical Name）**，中文名称仅作显示别名（Alias）：
 
@@ -132,7 +134,9 @@ superseded_by: ADR-xxx | null
 
 ---
 
-### ADR-902.5:L1 Decision 严格隔离
+### ADR-902_2：语义职责边界（Rule）
+
+#### ADR-902_2_1 Decision 严格隔离
 
 - 所有 约束性规则只能出现在 ## Decision。
 - 非 Decision 章节不得出现 MUST / 禁止 / 不允许 等裁决语义。
@@ -140,7 +144,7 @@ superseded_by: ADR-xxx | null
 
 ---
 
-### ADR-902.6:L1 ADR 模板不承担语义裁决职责
+#### ADR-902_2_2 ADR 模板不承担语义裁决职责
 
 - 不定义 Warning / Constraint / Notice。
 - 不定义规则执行级别（L1/L2/L3）。
@@ -148,7 +152,7 @@ superseded_by: ADR-xxx | null
 
 ---
 
-### ADR-902.7:L1 Relationships 章节仅承担结构接口职责
+#### ADR-902_2_3 Relationships 章节仅承担结构接口职责
 
 - ADR-902 仅裁决 `Relationships` 章节是否存在、名称是否合法、顺序是否正确。
 - `Relationships` 章节中出现的任何关系类型、依赖合法性、双向一致性、循环依赖、替代规则等 **语义性约束**：
@@ -160,17 +164,26 @@ superseded_by: ADR-xxx | null
 
 ## Enforcement（执法模型）
 
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-902 各条款（Clause）的执法方式及执行级别。
+>
 > **模板本身不做语义裁决，只验证结构与格式。**
 
-### 测试映射
-| 规则编号      | 执行级 | 执法方式                      |
-| --------- | --- | ------------------------- |
-| ADR-902.1 | L1  | CI 扫描三级标题独立性              |
-| ADR-902.2 | L1  | CI 模板完整性校验                |
-| ADR-902.3 | L1  | Front Matter 字段 + 格式校验    |
-| ADR-902.4 | L1  | 章节存在性与顺序检查                |
-| ADR-902.5 | L2  | Decision 语义扫描 + 人工 Review |
-| ADR-902.6 | L1  | 模板不承担语义裁决验证               |
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-902_1_1** | L1 | CI 扫描三级标题独立性 | §ADR-902_1_1 |
+| **ADR-902_1_2** | L1 | CI 模板完整性校验 | §ADR-902_1_2 |
+| **ADR-902_1_3** | L1 | Front Matter 字段 + 格式校验 | §ADR-902_1_3 |
+| **ADR-902_1_4** | L1 | 章节存在性与顺序检查 | §ADR-902_1_4 |
+| **ADR-902_2_1** | L2 | Decision 语义扫描 + 人工 Review | §ADR-902_2_1 |
+| **ADR-902_2_2** | L1 | 模板不承担语义裁决验证 | §ADR-902_2_2 |
+| **ADR-902_2_3** | L1 | Relationships 章节结构验证 | §ADR-902_2_3 |
+
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
 
 ### 执行时机
 
@@ -234,6 +247,7 @@ superseded_by: ADR-xxx | null
 
 ## History（版本历史）
 
-| 版本  | 日期         | 变更说明                  | 作者                 |
+| 版本  | 日期         | 变更说明                  | 修订人                 |
 | --- | ---------- | --------------------- | ------------------ |
+| 2.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
 | 1.0 | 2026-01-27 | 初始正式版本，定义 ADR 模板与结构契约 | Architecture Board |
