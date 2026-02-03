@@ -6,6 +6,10 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// <summary>
 /// ADR-930: 代码审查与 ADR 合规自检流程
 /// 参考：docs/adr/governance/ADR-930-code-review-compliance.md
+///
+/// 【测试覆盖映射】
+/// ├─ ADR-930_1_1: PR 必须填写变更类型和影响范围 (L2) → PR_Template_Should_Include_Checklist
+/// └─ Copilot 指令和 CI 集成 (L2) → Copilot_Instructions_Should_Exist, Architecture_Tests_Must_Be_In_CI
 /// </summary>
 public sealed class ADR_930_Architecture_Tests
 {
@@ -18,7 +22,7 @@ public sealed class ADR_930_Architecture_Tests
         repoRoot.Should().NotBeNull();
         
         var prTemplate = Path.Combine(repoRoot!, ".github", "PULL_REQUEST_TEMPLATE.md");
-        File.Exists(prTemplate).Should().BeTrue($"【ADR-930.1】PR 模板文件应存在：{prTemplate}");
+        File.Exists(prTemplate).Should().BeTrue($"【ADR-930_1_1】PR 模板文件应存在：{prTemplate}");
         
         // 验证模板包含基本内容
         var content = File.ReadAllText(prTemplate);
@@ -36,7 +40,7 @@ public sealed class ADR_930_Architecture_Tests
         
         // 验证 Copilot 指令目录存在
         var copilotDir = Path.Combine(repoRoot!, "docs", "copilot");
-        Directory.Exists(copilotDir).Should().BeTrue($"【ADR-930.2】Copilot 指令目录应存在：{copilotDir}");
+        Directory.Exists(copilotDir).Should().BeTrue($"【ADR-930_1_2】Copilot 指令目录应存在：{copilotDir}");
         
         // 验证至少有一些提示词文件
         var promptFiles = Directory.GetFiles(copilotDir, "*.prompts.md");
@@ -56,7 +60,7 @@ public sealed class ADR_930_Architecture_Tests
             .Where(t => t.Name.EndsWith("Architecture_Tests"))
             .ToList();
             
-        (testTypes.Count >= 10).Should().BeTrue($"【ADR-930.3】应至少有 10 个架构测试类，当前：{testTypes.Count}");
+        (testTypes.Count >= 10).Should().BeTrue($"【ADR-930_1_3】应至少有 10 个架构测试类，当前：{testTypes.Count}");
     }
 
     private static string? FindRepositoryRoot(string startPath)

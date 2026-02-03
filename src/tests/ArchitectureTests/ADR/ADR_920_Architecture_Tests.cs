@@ -8,12 +8,11 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// 验证所有示例代码符合 ADR-920 的约束
 ///
 /// 【测试覆盖映射】
-/// ├─ ADR-920.1: 示例代码不得跨模块直接引用 (L1) → Examples_Should_Not_Reference_Other_Modules
-/// ├─ ADR-920.2: 示例文档必须包含免责声明 (L1) → Example_Documents_Must_Have_Disclaimer
-/// ├─ ADR-920.3: README C# 代码块不得引入架构违规 (L2) → README_CSharp_Code_Examples_Should_Not_Violate_Architecture
-/// ├─ ADR-920.4: 示例目录必须有责任人和目的说明 (L1) → Example_Directories_Must_Have_Owner_And_Purpose
-/// ├─ ADR-920.5: 示例治理宪法已定义 → ADR_920_Examples_Governance_Constitution_Exists
-/// └─ ADR-920.6: 对应的 Copilot Prompts 文件存在 → ADR_920_Prompts_File_Exists
+/// ├─ ADR-920_1_1: 示例代码的法律地位 (L2) → ADR_920_Examples_Governance_Constitution_Exists
+/// ├─ ADR-920_1_2: 示例代码必须包含的免责声明 (L1) → Example_Documents_Must_Have_Disclaimer
+/// ├─ ADR-920_2_1: 示例代码禁止的架构违规行为 (L1) → Examples_Should_Not_Reference_Other_Modules
+/// ├─ ADR-920_2_1 (扩展): README C# 代码块也不得违规 (L2) → README_CSharp_Code_Examples_Should_Not_Violate_Architecture
+/// └─ ADR-920_3_1: 示例 vs 测试 vs PoC (L1) → Example_Directories_Must_Have_Owner_And_Purpose
 ///
 /// 【执法分级】
 /// - L1（阻断）：结构违规（跨模块引用、Service、缺少责任人）
@@ -166,7 +165,7 @@ public sealed class ADR_920_Architecture_Tests
     // 限制检查的文件数量以提高性能
     private const int MaxExampleFilesToCheck = 50;
 
-    [Fact(DisplayName = "ADR-920_1_4: 示例代码不得跨模块直接引用（L1 阻断）")]
+    [Fact(DisplayName = "ADR-920_2_1: 示例代码不得跨模块直接引用（L1 阻断）")]
     public void Examples_Should_Not_Reference_Other_Modules()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -230,9 +229,9 @@ public sealed class ADR_920_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-920_1_4 违规：以下示例代码包含架构违规",
+                "❌ ADR-920_2_1 违规：以下示例代码包含架构违规",
                 "",
-                "根据 ADR-920 决策 3：示例代码不得引入 ADR 未允许的结构或违反架构约束。",
+                "根据 ADR-920_2_1：示例代码禁止的架构违规行为。",
                 ""
             }
             .Concat(violations.Take(20)) // 限制输出前20个违规
@@ -251,12 +250,12 @@ public sealed class ADR_920_Architecture_Tests
                 "  ✅ '// BAD EXAMPLE: cross-module reference'",
                 "  ✅ '/* 以下是违规示例，仅用于教学 */'",
                 "",
-                "参考：docs/adr/governance/ADR-920-examples-governance-constitution.md 决策 3"
+                "参考：docs/adr/governance/ADR-920-examples-governance-constitution.md §ADR-920_2_1"
             })));
         }
     }
 
-    [Fact(DisplayName = "ADR-920_1_5: 示例文档必须包含免责声明（L1 阻断）")]
+    [Fact(DisplayName = "ADR-920_1_2: 示例文档必须包含免责声明（L1 阻断）")]
     public void Example_Documents_Must_Have_Disclaimer()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -315,9 +314,9 @@ public sealed class ADR_920_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-920_1_5 违规：以下示例文档缺少'示例免责声明'",
+                "❌ ADR-920_1_2 违规：以下示例文档缺少'示例免责声明'",
                 "",
-                "根据 ADR-920 决策 2：所有示例文档必须在开头包含免责声明。",
+                "根据 ADR-920_1_2：示例代码必须包含的免责声明。",
                 ""
             }
             .Concat(violations)
@@ -341,13 +340,13 @@ public sealed class ADR_920_Architecture_Tests
                 "  /// </summary>",
                 "  ```",
                 "",
-                "参考：docs/adr/governance/ADR-920-examples-governance-constitution.md 决策 2"
+                "参考：docs/adr/governance/ADR-920-examples-governance-constitution.md §ADR-920_1_2"
             })));
         }
     }
 
     // README 中的 C# 代码示例违规检测（L2 警告级别）
-    [Fact(DisplayName = "ADR-920_1_6: README C# 代码块不得引入明显架构违规（L2 警告）")]
+    [Fact(DisplayName = "ADR-920_2_1: README C# 代码块不得引入明显架构违规（L2 警告）")]
     public void README_CSharp_Code_Examples_Should_Not_Violate_Architecture()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -409,9 +408,9 @@ public sealed class ADR_920_Architecture_Tests
         {
             var warningMessage = string.Join("\n", new[]
             {
-                "⚠️ ADR-920.6 警告（L2）：以下 README C# 代码块可能包含架构违规",
+                "⚠️ ADR-920_2_1 警告（L2）：以下 README C# 代码块可能包含架构违规",
                 "",
-                "根据 ADR-920 决策 3 和决策 5：README 中的 C# 代码块也不应违反架构约束。",
+                "根据 ADR-920_2_1：示例代码禁止的架构违规行为。",
                 "非 C# 代码块（bash、pseudo-code）不受此检测。",
                 ""
             }
@@ -437,7 +436,7 @@ public sealed class ADR_920_Architecture_Tests
         // 不需要断言 - 警告已通过 Console 输出
     }
 
-    [Fact(DisplayName = "ADR-920_1_7: 示例目录必须有责任人和目的说明（L1 阻断）")]
+    [Fact(DisplayName = "ADR-920_3_1: 示例目录必须有责任人和目的说明（L1 阻断）")]
     public void Example_Directories_Must_Have_Owner_And_Purpose()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -507,9 +506,9 @@ public sealed class ADR_920_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-920_1_7 违规（L1）：以下示例目录缺少必需的维护信息",
+                "❌ ADR-920_3_1 违规（L1）：以下示例目录缺少必需的维护信息",
                 "",
-                "根据 ADR-920 决策 6：每个示例目录必须有明确的责任人和目的说明。",
+                "根据 ADR-920_3_1：示例 vs 测试 vs PoC。",
                 ""
             }
             .Concat(violations)
@@ -533,7 +532,7 @@ public sealed class ADR_920_Architecture_Tests
                 "",
                 "核心原则：没有责任人 = 没人维护 = 示例腐化",
                 "",
-                "参考：docs/adr/governance/ADR-920-examples-governance-constitution.md 决策 6"
+                "参考：docs/adr/governance/ADR-920-examples-governance-constitution.md §ADR-920_3_1"
             })));
         }
     }

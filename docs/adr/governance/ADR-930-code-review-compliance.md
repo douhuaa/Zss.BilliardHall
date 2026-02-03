@@ -3,9 +3,9 @@ adr: ADR-930
 title: "代码审查与 ADR 合规自检流程"
 status: Final
 level: Governance
-version: "1.0"
+version: "2.0"
 deciders: "Architecture Board"
-date: 2026-01-27
+date: 2026-02-03
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -49,7 +49,20 @@ superseded_by: null
 
 ## Decision（裁决）
 
-### PR 必须填写变更类型和影响范围（ADR-930.1）
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-930 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-930_<Rule>_<Clause>
+> ```
+
+---
+
+### ADR-930_1：PR 必填信息规范（Rule）
+
+#### ADR-930_1_1 PR 必须填写变更类型和影响范围
 
 **规则**：
 
@@ -62,10 +75,48 @@ superseded_by: null
 
 **PR 模板强制字段**：
 ```markdown
+## 变更类型
+- [ ] feat
+- [ ] fix
+- [ ] docs
+- [ ] refactor
+- [ ] test
+- [ ] chore
+
+## 影响范围
+模块/层：___________
+
+## ADR 相关性
+- [ ] 无关 ADR
+- [ ] 相关 ADR：ADR-___
+```
+
+**判定**：
+- ❌ PR 描述为空
+- ❌ 缺少变更类型标注
+- ✅ 完整填写所有强制字段
 
 ---
 
 ## Enforcement（执法模型）
+
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-930 各条款（Clause）的执法方式及执行级别。
+
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-930_1_1** | L2 | PR 模板验证 + 人工审查 | §ADR-930_1_1 |
+
+### 执行级别说明
+
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构委员会人工裁决
+
+---
+
+## 测试实现参考
 
 所有规则通过以下方式强制验证：
 
@@ -162,7 +213,7 @@ superseded_by: null
 
 ## History（版本历史）
 
-
-| 版本  | 日期         | 变更说明   |
-|-----|------------|--------|
-| 1.0 | 2026-01-29 | 初始版本 |
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------|-------|
+| 2.0 | 2026-02-03 | 对齐 ADR-907 v2.0（部分），Rule 1 已完成。**Alignment Incomplete**：其他规则待后续补充 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |
