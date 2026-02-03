@@ -4,14 +4,13 @@ using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>
 /// ADR-006: 术语与编号宪法
-/// 验证 ADR 编号体系和文件命名规范
+/// 验证 ADR 编号体系和文件命名规范（统一3位格式：000-999）
 /// 
 /// 测试映射：
 /// - All_ADR_Files_Should_Match_Numbering_Rules → ADR-006.1 (ADR 文件编号应符合分段规则)
 /// - All_ADR_Files_Should_Have_Correct_Filename_Format → ADR-006.2 (ADR 文件名应与编号一致)
-/// - Constitutional_ADRs_Should_Use_Leading_Zeros → ADR-006.3 (宪法层 ADR 应使用前导零)
-/// - Non_Constitutional_ADRs_Should_Not_Use_Leading_Zeros → ADR-006.4 (非宪法层 ADR 不应使用前导零)
-/// - All_ADR_Files_Should_Be_In_Correct_Directory → ADR-006.5 (ADR 文件应位于正确的目录)
+/// - All_ADRs_Should_Use_Three_Digit_Format → ADR-006.3 (所有 ADR 必须使用3位格式)
+/// - All_ADR_Files_Should_Be_In_Correct_Directory → ADR-006.4 (ADR 文件应位于正确的目录)
 /// </summary>
 public sealed class ADR_006_Architecture_Tests
 {
@@ -36,9 +35,9 @@ public sealed class ADR_006_Architecture_Tests
                 $"文件: {file}\n" +
                 $"文件名: {fileName}\n\n" +
                 $"修复建议:\n" +
-                $"1. 文件名必须以 ADR-XXXX 格式开头\n" +
-                $"2. 宪法层（0001~0009）使用前导零\n" +
-                $"3. 其他层（100+）不使用前导零\n\n" +
+                $"1. 文件名必须以 ADR-XXX 格式开头（3位数字）\n" +
+                $"2. 所有编号统一使用3位格式（001-999）\n" +
+                $"3. 小于100的编号必须使用前导零（如 ADR-001, ADR-010）\n\n" +
                 $"参考: docs/copilot/adr-006.prompts.md (场景 5)");
 
             if (match.Success)
@@ -111,11 +110,10 @@ public sealed class ADR_006_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-006_1_3: 宪法层 ADR 应使用前导零")]
-    public void Constitutional_ADRs_Should_Use_Leading_Zeros()
+    [Fact(DisplayName = "ADR-006_1_3: 所有 ADR 必须使用3位数字格式")]
+    public void All_ADRs_Should_Use_Three_Digit_Format()
     {
-        var constitutionalDir = Path.Combine(_adrRoot, "constitutional");
-        var adrFiles = Directory.GetFiles(constitutionalDir, "ADR-*.md", SearchOption.TopDirectoryOnly);
+        var adrFiles = GetAllAdrFiles();
 
         foreach (var file in adrFiles)
         {
@@ -127,70 +125,27 @@ public sealed class ADR_006_Architecture_Tests
                 var numberStr = match.Groups[1].Value;
                 var number = int.Parse(numberStr);
 
-                if (number is >= 1 and <= 9)
-                {
-                    (numberStr.Length == 4 && numberStr.StartsWith("000")).Should().BeTrue($"❌ ADR-006_1_3 违规: 宪法层 ADR 必须使用前导零\n\n" +
-                        $"文件: {file}\n" +
-                        $"当前编号: ADR-{numberStr}\n" +
-                        $"正确编号: ADR-{number:D4}\n\n" +
-                        $"修复建议:\n" +
-                        $"1. 宪法层（0001~0009）必须使用前导零\n" +
-                        $"2. 文件名格式: ADR-001, ADR-002, ..., ADR-0009\n\n" +
-                        $"参考: docs/copilot/adr-006.prompts.md (常见错误 2)");
-                }
+                // All ADR numbers must be exactly 3 digits (000-999)
+                (numberStr.Length == 3).Should().BeTrue($"❌ ADR-006_1_3 违规: ADR 编号必须为3位格式\n\n" +
+                    $"文件: {file}\n" +
+                    $"当前编号: ADR-{numberStr}\n" +
+                    $"正确编号: ADR-{number:D3}\n\n" +
+                    $"修复建议:\n" +
+                    $"1. 所有 ADR 编号统一使用3位格式（000-999）\n" +
+                    $"2. 小于100的编号必须使用前导零\n" +
+                    $"   - 宪法层: ADR-001 到 ADR-009\n" +
+                    $"   - 其他: ADR-010 到 ADR-099\n" +
+                    $"3. 大于等于100的编号自然为3位\n" +
+                    $"   - 结构层: ADR-100 到 ADR-199\n" +
+                    $"   - 运行层: ADR-200 到 ADR-299\n" +
+                    $"   - 技术层: ADR-300 到 ADR-399\n" +
+                    $"   - 治理层: ADR-900 到 ADR-999\n\n" +
+                    $"参考: docs/copilot/adr-006.prompts.md");
             }
         }
     }
 
-    [Fact(DisplayName = "ADR-006_1_4: 非宪法层 ADR 不应使用多余前导零")]
-    public void Non_Constitutional_ADRs_Should_Not_Use_Leading_Zeros()
-    {
-        var directories = new[] { "structure", "runtime", "technical", "governance" };
-
-        foreach (var dir in directories)
-        {
-            var dirPath = Path.Combine(_adrRoot, dir);
-            if (!Directory.Exists(dirPath)) continue;
-
-            var adrFiles = Directory.GetFiles(dirPath, "ADR-*.md", SearchOption.TopDirectoryOnly);
-
-            foreach (var file in adrFiles)
-            {
-                var fileName = Path.GetFileName(file);
-                var match = System.Text.RegularExpressions.Regex.Match(fileName, @"^ADR-(\d+)");
-
-                if (match.Success)
-                {
-                    var numberStr = match.Groups[1].Value;
-                    var number = int.Parse(numberStr);
-
-                    // Special cases: ADR-900 and ADR-0900 are allowed to have leading zeros
-                    if (number == 0 || number == 900)
-                    {
-                        continue;
-                    }
-
-                    // For numbers >= 100, should not have leading zeros (except 0900)
-                    if (number >= 100)
-                    {
-                        var hasLeadingZero = numberStr.StartsWith("0") && numberStr.Length > number.ToString().Length;
-
-                        hasLeadingZero.Should().BeFalse($"⚠️ ADR-006.4 建议: 非宪法层 ADR 不应使用多余前导零\n\n" +
-                            $"文件: {file}\n" +
-                            $"当前编号: ADR-{numberStr}\n" +
-                            $"建议编号: ADR-{number}\n\n" +
-                            $"说明:\n" +
-                            $"1. 只有宪法层（0001~0009）和特殊编号（0000, 0900）使用前导零\n" +
-                            $"2. 其他层（100~999）不使用前导零\n" +
-                            $"3. 历史原因（如 ADR-0900）可保留\n\n" +
-                            $"参考: docs/copilot/adr-006.prompts.md (常见错误 2)");
-                    }
-                }
-            }
-        }
-    }
-
-    [Fact(DisplayName = "ADR-006_1_5: ADR 文件应位于正确的目录")]
+    [Fact(DisplayName = "ADR-006_1_4: ADR 文件应位于正确的目录")]
     public void All_ADR_Files_Should_Be_In_Correct_Directory()
     {
         var mapping = new Dictionary<string, (int Min, int Max)>
