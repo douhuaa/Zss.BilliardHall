@@ -3,9 +3,9 @@ adr: ADR-920
 title: "示例代码治理规范"
 status: Final
 level: Governance
-version: "1.1"
+version: "2.0"
 deciders: "Architecture Board"
-date: 2026-01-30
+date: 2026-02-03
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -49,7 +49,20 @@ superseded_by: null
 
 ## Decision（裁决）
 
-### 示例代码的法律地位（ADR-920.1）
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-920 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-920_<Rule>_<Clause>
+> ```
+
+---
+
+### ADR-920_1：示例代码权限边界（Rule）
+
+#### ADR-920_1_1 示例代码的法律地位
 
 **规则**：
 
@@ -79,7 +92,7 @@ superseded_by: null
 
 ---
 
-### 示例代码必须包含的免责声明（ADR-920.2）
+#### ADR-920_1_2 示例代码必须包含的免责声明
 
 **规则**：
 
@@ -123,13 +136,15 @@ superseded_by: null
 
 ---
 
-### 示例代码禁止的架构违规行为（ADR-920.3）
+### ADR-920_2：示例代码架构约束（Rule）
+
+#### ADR-920_2_1 示例代码禁止的架构违规行为
 
 **规则**：
 
 示例代码**禁止**包含以下"示例代码禁止的架构违规行为"：
 
-#### 3.1 跨模块直接引用（ADR-001）
+##### ADR-920_2_1_a 跨模块直接引用（ADR-001）
 ```csharp
 // ❌ 禁止
 using Zss.BilliardHall.Modules.Members.Domain;
@@ -139,7 +154,7 @@ await _eventBus.Publish(new OrderCreated(orderId));
 var memberDto = await _queryBus.Send(new GetMemberById(memberId));
 ```
 
-#### 3.2 违反 Handler 模式（ADR-005）
+##### ADR-920_2_1_b 违反 Handler 模式（ADR-005）
 ```csharp
 // ❌ 禁止：Command Handler 返回业务数据
 public async Task<OrderDto> Handle(CreateOrder command)
@@ -148,7 +163,7 @@ public async Task<OrderDto> Handle(CreateOrder command)
 public async Task<Guid> Handle(CreateOrder command)
 ```
 
-#### 3.3 创建横向 Service 层（ADR-001）
+##### ADR-920_2_1_c 创建横向 Service 层（ADR-001）
 ```csharp
 // ❌ 禁止
 public class OrderService { }
@@ -178,7 +193,9 @@ public class CreateOrderHandler { }
 
 ---
 
-### 示例 vs 测试 vs PoC（ADR-920.4）
+### ADR-920_3：示例类型边界管理（Rule）
+
+#### ADR-920_3_1 示例 vs 测试 vs PoC
 
 **规则**：
 
@@ -203,13 +220,34 @@ public class CreateOrderHandler { }
 
 ## Enforcement（执法模型）
 
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-920 各条款（Clause）的执法方式及执行级别。
+
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-920_1_1** | L2 | 人工审查：示例是否引入未经 ADR 允许的模式 | §ADR-920_1_1 |
+| **ADR-920_1_2** | L1 | ArchitectureTests 验证示例文档/代码包含免责声明 | §ADR-920_1_2 |
+| **ADR-920_2_1** | L1 | ArchitectureTests 验证示例不包含架构违规 | §ADR-920_2_1 |
+| **ADR-920_3_1** | L1 | ArchitectureTests 验证示例、测试、PoC 边界与存放位置 | §ADR-920_3_1 |
+
+### 执行级别说明
+
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
+
+---
+
+## 测试实现参考
+
 所有规则通过以下方式强制验证：
 
-- **架构测试**：`src/tests/ArchitectureTests/ADR/ADR_0920_Architecture_Tests.cs`
-  - `Examples_Should_Not_Reference_Other_Modules` - L1 阻断
-  - `Example_Documents_Must_Have_Disclaimer` - L1 阻断
-  - `README_CSharp_Code_Examples_Should_Not_Violate_Architecture` - L2 警告
-  - `Example_Directories_Must_Have_Owner_And_Purpose` - L1 阻断
+- **架构测试**：`src/tests/ArchitectureTests/ADR/ADR_920_Architecture_Tests.cs`
+  - `ADR_920_1_2_Example_Documents_Must_Have_Disclaimer` - L1 阻断
+  - `ADR_920_2_1_Examples_Should_Not_Reference_Other_Modules` - L1 阻断
+  - `ADR_920_2_1_README_CSharp_Code_Examples_Should_Not_Violate_Architecture` - L2 警告
+  - `ADR_920_3_1_Example_Directories_Must_Have_Owner_And_Purpose` - L1 阻断
 
 - **CI 脚本**：扫描示例目录和文档
 - **Code Review**：检查示例是否引入未经 ADR 允许的模式
@@ -304,7 +342,7 @@ public class CreateOrderHandler { }
 
 ## History（版本历史）
 
-
-| 版本  | 日期         | 变更说明   |
-|-----|------------|--------|
-| 1.0 | 2026-01-29 | 初始版本 |
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------|-------|
+| 2.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |
