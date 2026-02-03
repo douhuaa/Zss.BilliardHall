@@ -104,9 +104,9 @@
 
 ### 如何参与
 
-1. 阅读 [快速开始指南](governance/ADR-ALIGNMENT-GETTING-STARTED.md)
+1. 阅读 [快速开始指南](governance/adr-alignment-getting-started.md)
 2. 查看 [对齐清单](governance/adr-907-a-alignment-checklist.md) 选择工作项
-3. 按照 [执行标准](governance/ADR-907-A-adr-alignment-execution-standard.md) 进行对齐
+3. 按照 [执行标准](governance/adr-907-a-adr-alignment-execution-standard.md) 进行对齐
 4. 提交 PR 并更新清单状态
 
 ---
