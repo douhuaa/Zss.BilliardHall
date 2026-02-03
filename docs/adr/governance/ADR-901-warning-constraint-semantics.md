@@ -4,8 +4,8 @@ title: "语义元规则（Constraint / Warning / Notice）"
 status: Final
 level: Governance
 deciders: "Architecture Board"
-date: 2026-01-30
-version: "1.1"
+date: 2026-02-03
+version: "2.0"
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -53,9 +53,20 @@ enforceable: false
 
 ## Decision（裁决）
 
-> ⚠️ **本节是唯一裁决来源，其他章节不得产生新规则。**
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-901 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-901_<Rule>_<Clause>
+> ```
 
-### ADR-901.1:L1 风险表达必须使用三态语义模型
+---
+
+### ADR-901_1：风险表达语义模型（Rule）
+
+#### ADR-901_1_1 风险表达必须使用三态语义模型
 
 所有风险与提示 **必须** 明确归类为以下三种之一：
 
@@ -70,7 +81,7 @@ enforceable: false
 - Soft Rule
 - Best Practice（若具约束性）
 
-### ADR-901.2:L1 Constraint 的合法性条件
+#### ADR-901_1_2 Constraint 的合法性条件
 
 只有同时满足以下条件，才允许声明为 Constraint：
 
@@ -82,7 +93,7 @@ enforceable: false
 
 否则 **必须降级**。
 
-### ADR-901.3:L1 Warning 的边界
+#### ADR-901_1_3 Warning 的边界
 
 Warning **必须**：
 - 明确风险后果
@@ -96,7 +107,7 @@ Warning **必须**：
 - “最好”
 - 暗含强制但不声明的表述
 
-### ADR-901.4:L1 Notice 的纯信息性约束
+#### ADR-901_1_4 Notice 的纯信息性约束
 
 Notice **只能**用于：
 - 背景说明
@@ -108,12 +119,16 @@ Notice **只能**用于：
 - 隐性规则
 - 流程性约束
 
-### ADR-901.5:L1 统一语义声明块
+---
+
+### ADR-901_2：语义执行与判定（Rule）
+
+#### ADR-901_2_1 统一语义声明块
 
 所有 Constraint / Warning / Notice  
 **必须** 使用统一结构块，不允许自由文本表达。
 
-#### 标准格式
+**标准格式**：
 
 ```md
 > 🚨 **Constraint | L1**
@@ -133,7 +148,7 @@ Notice **只能**用于：
 > ……
 ```
 
-### ADR-901.6:L1 不可识别语义等同不存在
+#### ADR-901_2_2 不可识别语义等同不存在
 
 任何风险表达如果：
 - 无统一结构
@@ -142,14 +157,14 @@ Notice **只能**用于：
 
 → **治理系统视为不存在**。
 
-### ADR-901.7:L1 执行级别强制声明
+#### ADR-901_2_3 执行级别强制声明
 
 所有 Constraint / Warning  
 **必须显式声明执行级别**（L1 / L2 / L3）。
 
 执行级别定义 **完全依赖 ADR-905**。
 
-### ADR-901.8:L1 判定输出三态模型
+#### ADR-901_2_4 判定输出三态模型
 
 所有风险表达在治理系统中 **必须被判定为**：
 
@@ -161,25 +176,25 @@ Notice **只能**用于：
 
 ## Enforcement（执法模型）
 
-### 执法责任
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-901 各条款（Clause）的执法方式及执行级别。
 
-|阶段|执法内容|
-|---|---|
-|PR|语义结构扫描|
-|CI|执行级别与格式校验|
-|Review|Warning 放行合法性|
-|Audit|语义一致性审计|
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-901_1_1** | L1 | ArchitectureTests 自动化验证语义类型 | §ADR-901_1_1 |
+| **ADR-901_1_2** | L1 | ArchitectureTests 验证 Constraint 合法性 | §ADR-901_1_2 |
+| **ADR-901_1_3** | L1 | ArchitectureTests 验证 Warning 边界 | §ADR-901_1_3 |
+| **ADR-901_1_4** | L1 | ArchitectureTests 验证 Notice 纯信息性 | §ADR-901_1_4 |
+| **ADR-901_2_1** | L1 | ArchitectureTests 验证统一结构块格式 | §ADR-901_2_1 |
+| **ADR-901_2_2** | L1 | ArchitectureTests 检测不可识别语义 | §ADR-901_2_2 |
+| **ADR-901_2_3** | L1 | ArchitectureTests 验证执行级别声明 | §ADR-901_2_3 |
+| **ADR-901_2_4** | L1 | CI 系统三态判定输出 | §ADR-901_2_4 |
 
----
-
-### 自动化执法
-
-|规则|方式|
-|---|---|
-|三态识别|文档扫描|
-|结构合法|Markdown AST|
-|执行级别|正则 + Schema|
-|降级/升级|差异检测|
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
 
 
 ## Non-Goals（明确不管什么）
@@ -232,6 +247,7 @@ Notice **只能**用于：
 
 ## History（版本历史）
 
-| 版本 | 日期         | 变更说明 | 作者 |
-|----|------------|----|----|
+| 版本 | 日期 | 变更说明 | 修订人 |
+|------|------|----------|-------|
+| 2.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
 | 1.0 | 2025-01-30 | 初始正式版本 | Architecture Board |
