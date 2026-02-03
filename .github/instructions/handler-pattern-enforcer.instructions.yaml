@@ -1,0 +1,12 @@
+﻿instructions:
+  - id: HP-001
+    description: "确保所有 Handler 遵循定义的异常约束和处理模式"
+    action: "扫描所有 Command/Query/Event Handler"
+    conditions:
+      - "Push to src/Handlers/"
+    output: "Pass / Fail"
+    tools:
+      - "Roslyn Analyzer"
+      - "ArchitectureTests"
+    feedback:
+      - "报告 Handler 模式违规"

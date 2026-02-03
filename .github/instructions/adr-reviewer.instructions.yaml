@@ -1,0 +1,24 @@
+﻿instructions:
+  - id: AR-001
+    description: "检查 PR 是否引用 ADR 并映射 Clause"
+    action: "扫描 PR 修改内容"
+    conditions:
+      - "PullRequest"
+    output: "Flag unreferenced changes"
+    tools:
+      - "ADR database"
+      - "pull request diff"
+    feedback:
+      - "Open guardian-false-decision issue if missing references"
+
+  - id: AR-002
+    description: "验证 Clause 与 Enforcement 映射是否一致"
+    action: "检查 Clause 对应测试"
+    conditions:
+      - "PullRequest"
+    output: "Pass / Fail"
+    tools:
+      - "ADR database"
+      - "ArchitectureTests"
+    feedback:
+      - "Report failures to Guardian"

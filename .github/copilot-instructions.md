@@ -1,49 +1,74 @@
-# GitHub Copilot 指令集成
+# Copilot Instructions
 
-**版本**：1.0  
-**最后更新**：2026-01-25  
-**状态**：Active
+> 本文档统一调度所有 Specialist 与 Guardian instructions，并定义触发规则、委托原则与反馈闭环。
 
-> ⚖️ **绝对权威仅归属 ADR 正文**
+---
 
+## 委托原则
 
-## 一、回答规范
-- 所有回答必须使用中文。
-- 遇到架构相关问题，必须遵循 ADR 正文。
-- 所有输出必须使用三态标记：
-  - ✅ Allowed
-  - ⚠️ Blocked
-  - ❓ Uncertain
-- 禁止模糊判断、绕过测试或破例。
-- 输出必须附带 ADR 编号或 Agent 名称。
+* **所有任务**必须通过 `run_subagent` 调用对应 Agent 执行。
+* Guardian **仅协调与汇总**，禁止直接做最终裁决。
+* 未明确职责的操作必须标记为 `Uncertain` 并引导人工确认。
 
-## 二、GitHub Copilot 指令集成
-- ADR 是唯一权威，所有操作必须遵循 ADR 正文。
-- 所有 Agent 输出必须三态标记。
-- Specialist Agent 只负责其领域，不能越权修改 ADR。
-- 所有输出必须返回到 Guardian，由 Guardian 统一输出。
-- 维护、审核、更新等职责有专门 Agent。
+---
 
-## 三、子代理调用规则
-- 必须优先调用与任务匹配的专用 Agent（如 documentation-maintainer、adr-reviewer、architecture-guardian 等）。
-- 只有在没有合适 Agent 时才自行处理。
+## 可用 Agent（Specialist & Guardian）
 
-## 四、文档编写指令
-- 文件路径示例：`./github/instructions/documentation.instructions.md`
-- 文档必须用简体中文，结构、引用、风格、交叉链接等均有详细规范。
-- 所有文档引用 ADR 时，需用仓库内相对路径，并优先引用宪法/治理类 ADR。
-- 文件内应内嵌常用文档治理相关 ADR 快速链接和完整索引，便于直接引用。
-- README、示例、FAQ、Guide 等文档的边界、声明、引用、格式均有详细约束。
-- 发现冲突时，以 ADR 正文为准并修正辅导材料。
+| Agent 名称                               | 说明                             | instructions 文件                                                                                                         |
+|----------------------------------------|--------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| 架构守护（Guardian）                         | 监督协调所有架构约束，三态判定 Agent 输出       | [`architecture-guardian.instructions.yaml`](./instructions/architecture-guardian.instructions.yaml)                     |
+| ADR 审查（ADR Reviewer）                   | 审查 ADR 文档质量、关系与变更              | [`adr-reviewer.instructions.yaml`](./instructions/adr-reviewer.instructions.yaml)                                       |
+| 文档维护（Documentation Maintainer）         | 文档维护、链接检查、索引更新                 | [`documentation-maintainer.instructions.yaml`](./instructions/documentation-maintainer.instructions.yaml)               |
+| .NET 专家工程（Expert Dotnet Engineer）      | 提供 .NET 技术建议、代码规范检查            | [`expert-dotnet-software-engineer.instructions.yaml`](./instructions/expert-dotnet-software-engineer.instructions.yaml) |
+| Handler 模式强制（Handler Pattern Enforcer） | 强制 Handler 模式执行、约束验证           | [`handler-pattern-enforcer.instructions.yaml`](./instructions/handler-pattern-enforcer.instructions.yaml)               |
+| 模块边界检查（Module Boundary Checker）        | 检查模块边界规则、依赖约束                  | [`module-boundary-checker.instructions.yaml`](./instructions/module-boundary-checker.instructions.yaml)                 |
+| 测试生成（Test Generator）                   | 根据 ADR 与约束生成 ArchitectureTests | [`test-generator.instructions.yaml`](./instructions/test-generator.instructions.yaml)                                   |
 
-## 五、系统级 Agent 行为约束
-- 必须持续推进任务直至彻底解决，不能提前终止。
-- 每次操作前需详细规划，操作后需验证结果，发现问题要继续修正。
-- 不能重复输出，不能遗漏边界情况，需多轮自查。
-- 文件编辑时用 `...existing code...` 标记未变部分，避免重复。
+---
 
-## pr描述和标题必须用中文
+## 任务触发规则（Trigger Rules）
 
-**维护**：架构委员会  
-**审核**：@douhuaa  
-**状态**：✅ Active
+```yaml
+pull_request:
+  run_subagents:
+    - adr-reviewer
+    - architecture-guardian
+    - test-generator
+
+push:
+  paths:
+    - "src/**":
+        run_subagents:
+          - module-boundary-checker
+          - handler-pattern-enforcer
+          - expert-dotnet-software-engineer
+    - "docs/adr/**":
+        run_subagents:
+          - documentation-maintainer
+          - adr-reviewer
+
+ci_pipeline:
+  run_subagents:
+    - architecture-guardian
+    - all_L1_architecture_tests
+```
+
+> 每次任务执行都会生成 `FailureObject`，保证可追踪、可审计。
+
+---
+
+## 反馈与报告（Feedback & Reporting）
+
+```yaml
+feedback_loop:
+  source: guardian
+  failure_object:
+    required: true
+  actions:
+    - update_adr
+    - enhance_architecture_tests
+    - adjust_agent_config
+```
+
+* Guardian 汇总所有 Agent 输出，并执行三态判定（✅ Allowed / ⚠️ Blocked / ❓ Uncertain）。
+* 任何失败或异常必须产生治理产物，不可仅修改 Prompt。

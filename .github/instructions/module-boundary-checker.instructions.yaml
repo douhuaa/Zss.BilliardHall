@@ -1,0 +1,12 @@
+﻿instructions:
+  - id: MB-001
+    description: "检测模块边界引用，防止跨模块调用违规"
+    action: "静态扫描模块间引用"
+    conditions:
+      - "Push to src/"
+    output: "Flag violations"
+    tools:
+      - "Roslyn Analyzer"
+      - "ArchitectureTests"
+    feedback:
+      - "Open guardian-false-decision issue for boundary violations"

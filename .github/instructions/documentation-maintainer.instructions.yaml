@@ -1,0 +1,23 @@
+﻿instructions:
+  - id: DM-001
+    description: "验证 ADR 文档格式与规范"
+    action: "扫描 ADR Markdown 文件"
+    conditions:
+      - "Push to docs/adr/"
+    output: "Pass / Fail"
+    tools:
+      - "markdown-linter"
+      - "ADR database"
+    feedback:
+      - "自动生成格式修正建议"
+
+  - id: DM-002
+    description: "检查 ADR 关系与依赖声明"
+    action: "校验 DependsOn / DependedBy / Related 链接"
+    conditions:
+      - "Push to docs/adr/"
+    output: "Flag invalid relationships"
+    tools:
+      - "ADR database"
+    feedback:
+      - "Open guardian-false-decision issue for broken links"

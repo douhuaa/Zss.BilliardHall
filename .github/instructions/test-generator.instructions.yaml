@@ -1,0 +1,13 @@
+﻿instructions:
+  - id: TG-001
+    description: "根据 ADR Clause 自动生成 Architecture Tests"
+    action: "生成对应测试方法"
+    conditions:
+      - "PullRequest"
+      - "New ADR Added"
+    output: "Generated Tests"
+    tools:
+      - "ArchitectureTests"
+      - "Codegen Templates"
+    feedback:
+      - "提交生成测试至测试项目"

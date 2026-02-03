@@ -1,0 +1,28 @@
+﻿instructions:
+  - id: AG-001
+    description: "协调所有 Specialist Agent 输出，确保 ADR 遵守三态输出规则"
+    action: "审核所有 Agent 输出"
+    conditions:
+      - "PullRequest"
+      - "CI pipeline"
+      - "ManualReview"
+    output: "Allowed / Blocked / Uncertain"
+    tools:
+      - "architecture-tests"
+      - "ADR database"
+    feedback:
+      - "生成 FailureObject"
+      - "Escalate Fatal failures to ArchitectureCouncil"
+
+  - id: AG-002
+    description: "检测 Guardian 决策失误并触发纠偏"
+    action: "识别 False Allow / False Block"
+    conditions:
+      - "CI 架构测试失败"
+      - "人工标注 Issue"
+    output: "标记 Invalid 决策"
+    tools:
+      - "ADR database"
+      - "ArchitectureTests"
+    feedback:
+      - "反馈至 ADR / Agent / 测试更新"
