@@ -11,8 +11,8 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// ├─ ADR-920_1_1: 示例代码的法律地位 (L2) → ADR_920_Examples_Governance_Constitution_Exists
 /// ├─ ADR-920_1_2: 示例代码必须包含的免责声明 (L1) → Example_Documents_Must_Have_Disclaimer
 /// ├─ ADR-920_2_1: 示例代码禁止的架构违规行为 (L1) → Examples_Should_Not_Reference_Other_Modules
-/// ├─ ADR-920_3_1: 示例 vs 测试 vs PoC (L1) → Example_Directories_Must_Have_Owner_And_Purpose
-/// └─ README C# 代码块检查 (L2) → README_CSharp_Code_Examples_Should_Not_Violate_Architecture
+/// ├─ ADR-920_2_1 (扩展): README C# 代码块也不得违规 (L2) → README_CSharp_Code_Examples_Should_Not_Violate_Architecture
+/// └─ ADR-920_3_1: 示例 vs 测试 vs PoC (L1) → Example_Directories_Must_Have_Owner_And_Purpose
 ///
 /// 【执法分级】
 /// - L1（阻断）：结构违规（跨模块引用、Service、缺少责任人）

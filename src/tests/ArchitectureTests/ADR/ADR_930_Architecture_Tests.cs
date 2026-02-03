@@ -40,7 +40,7 @@ public sealed class ADR_930_Architecture_Tests
         
         // 验证 Copilot 指令目录存在
         var copilotDir = Path.Combine(repoRoot!, "docs", "copilot");
-        Directory.Exists(copilotDir).Should().BeTrue($"【ADR-930_1_1】Copilot 指令目录应存在：{copilotDir}");
+        Directory.Exists(copilotDir).Should().BeTrue($"【ADR-930_1_2】Copilot 指令目录应存在：{copilotDir}");
         
         // 验证至少有一些提示词文件
         var promptFiles = Directory.GetFiles(copilotDir, "*.prompts.md");
@@ -60,7 +60,7 @@ public sealed class ADR_930_Architecture_Tests
             .Where(t => t.Name.EndsWith("Architecture_Tests"))
             .ToList();
             
-        (testTypes.Count >= 10).Should().BeTrue($"【ADR-930_1_1】应至少有 10 个架构测试类，当前：{testTypes.Count}");
+        (testTypes.Count >= 10).Should().BeTrue($"【ADR-930_1_3】应至少有 10 个架构测试类，当前：{testTypes.Count}");
     }
 
     private static string? FindRepositoryRoot(string startPath)
