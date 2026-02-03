@@ -3,7 +3,7 @@ adr: ADR-920
 title: "示例代码治理规范"
 status: Final
 level: Governance
-version: "2.0"
+version: "2.1"
 deciders: "Architecture Board"
 date: 2026-02-03
 maintainer: "Architecture Board"
@@ -13,37 +13,27 @@ supersedes: null
 superseded_by: null
 ---
 
-
 # ADR-920：示例代码治理规范
 
 > ⚖️ **本 ADR 是所有示例代码（Examples）的治理规范，定义示例的边界、约束与执法机制。**
 
-**状态**：✅ Final（裁决型ADR）  
 ## Focus（聚焦内容）
 
-- 示例代码的定位与权限边界
-- 示例代码禁止的架构违规行为
-- 示例/测试/PoC 的明确区分
-- 分级执法标准（L1/L2/L3）
-- 示例作者责任制
-
----
+- 示例代码必须与实际模块、API 保持一致
+- 不允许示例代码引入未批准的架构模式或依赖
+- 需要包含执行和测试约束
+- 违规处理与 Agent 执行映射
 
 ---
 
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
-|------------|------------------------------------------------|---------------------------|
-| 示例代码       | 用于演示用法的代码片段，无架构裁决力                         | Example Code              |
-| 免责声明       | 示例必须在开头声明无架构权威，仅用于说明用法                   | Disclaimer                |
-| 架构违规       | 示例中违反 ADR 规则的代码                              | Architecture Violation    |
-| 教学性简化      | 为便于理解而简化流程，但不违反架构规则                        | Educational Simplification|
-| 规则简化       | 为便于演示而违反架构约束，**绝对禁止**                      | Rule Simplification (Forbidden) |
-| 测试代码       | 用于验证功能的代码，可在受控条件下违规                        | Test Code                 |
-| PoC/Spike  | 概念验证代码，允许违规，但**不可进入主干**                   | Proof of Concept / Spike  |
-
----
+|------|------|-----------|
+| 示例代码 | README 或文档中用于说明功能的代码片段 | Example Code |
+| 可执行性 | 示例代码可以被正确编译或运行 | Executable |
+| 偏离 | 示例代码与真实 API/模块行为不符 | Deviation |
+| 标记 | ✅/❌ 或注释说明正确性 | Marking |
 
 ---
 
@@ -212,10 +202,6 @@ public class CreateOrderHandler { }
 - README 必须标注 `⚠️ NOT FOR REUSE - PoC Only`
 - Copilot 必须在配置中忽略此目录
 
-**Copilot 防污染规则**：
-```markdown
-# .github/copilot-instructions.md
-
 ---
 
 ## Enforcement（执法模型）
@@ -292,9 +278,6 @@ public class CreateOrderHandler { }
 - ❌ **禁止示例缺少所有者信息**：每个示例必须标明创建者和维护联系方式
 - ❌ **禁止 Copilot 从示例学习不良模式**：必须配置 Copilot 忽略示例目录以防污染
 
-
----
-
 ---
 
 ## Relationships（关系声明）
@@ -320,8 +303,6 @@ public class CreateOrderHandler { }
 
 ---
 
----
-
 ## References（非裁决性参考）
 
 **相关外部资源**：
@@ -334,9 +315,6 @@ public class CreateOrderHandler { }
 - [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 示例的测试和验证机制
 - [ADR-910：README 编写与维护治理规范](./ADR-910-readme-governance-constitution.md) - README 中的示例规范
 - [ADR-950：Guide/FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md) - Guide 文档中的示例规范
-
-
----
 
 ---
 

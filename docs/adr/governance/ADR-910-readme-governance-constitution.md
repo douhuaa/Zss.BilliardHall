@@ -13,7 +13,6 @@ supersedes: null
 superseded_by: null
 ---
 
-
 # ADR-910：README 编写与维护治理规范
 
 > ⚖️ **本 ADR 是所有 README 文档的治理规范，定义 README 的边界、约束与执法机制。**
@@ -29,8 +28,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -40,8 +37,6 @@ superseded_by: null
 | 描述性语言      | 解释用法、提供步骤的词汇，如"可以"、"推荐"、"示例"                 | Descriptive Language      |
 | 无裁决力声明     | README 必须在开头声明无架构裁决权                           | No-Authority Declaration  |
 | README 越界  | README 试图定义架构规则或做出架构判断                         | README Boundary Violation |
-
----
 
 ---
 
@@ -198,8 +193,6 @@ README 引用 ADR 必须遵循：
 
 ---
 
----
-
 ## Enforcement（执法模型）
 
 > 📋 **Enforcement 映射说明**：
@@ -235,7 +228,6 @@ README 引用 ADR 必须遵循：
 
 **有一项 L1 违规视为架构违规，CI 自动阻断。**
 
----
 ---
 
 ## Non-Goals（明确不管什么）
@@ -273,9 +265,6 @@ README 引用 ADR 必须遵循：
 - ❌ **禁止 README 包含过期信息而不标注**：过期内容必须移除或明确标记为已废弃
 - ❌ **禁止 README 复制粘贴 ADR 内容**：应该引用 ADR 而不是复制其内容
 
-
----
-
 ---
 
 ## Relationships（关系声明）
@@ -299,8 +288,6 @@ README 引用 ADR 必须遵循：
 
 ---
 
----
-
 ## References（非裁决性参考）
 
 **相关外部资源**：
@@ -313,9 +300,6 @@ README 引用 ADR 必须遵循：
 - [ADR-920：示例代码治理规范](./ADR-920-examples-governance-constitution.md) - README 中代码示例的约束
 - [ADR-950：Guide/FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md) - 与 Guide 文档的边界
 - [ADR-960：入职文档治理](./ADR-960-onboarding-documentation-governance.md) - 入职文档与 README 的关系
-
-
----
 
 ---
 

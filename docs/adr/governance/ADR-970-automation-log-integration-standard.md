@@ -4,8 +4,8 @@ title: "自动化工具日志集成标准"
 status: Accepted
 level: Governance
 deciders: "Architecture Board & DevOps Team"
-date: 2026-01-26
-version: "1.0"
+date: 2026-02-03
+version: "2.0"
 maintainer: "Architecture Board & DevOps Team"
 primary_enforcement: L1
 reviewer: "待定"
@@ -48,12 +48,23 @@ superseded_by: null
 
 ## Decision（裁决）
 
-### 日志分类与存储位置（ADR-970.1）
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-970 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-970_<Rule>_<Clause>
+> ```
 
-**规则**：
+---
 
+### ADR-970_1：日志分类与存储位置（Rule）
+
+#### ADR-970_1_1 必须按类型存储在标准位置
 所有自动化工具日志 **必须**按类型存储在标准位置。
 
+#### ADR-970_1_2 存储结构
 **存储结构**：
 ```
 docs/reports/
@@ -82,6 +93,7 @@ docs/reports/
     └── e2e/
 ```
 
+#### ADR-970_1_3 保留期策略
 **保留期策略**：
 
 | 日志类型 | 保留期 | 清理策略 | 原因 |
@@ -92,6 +104,7 @@ docs/reports/
 | 构建日志 | 7 天 | 自动删除旧日志 | 仅用于近期故障排查 |
 | 测试报告 | 30 天 | 自动删除旧报告 | 频繁执行，历史价值有限 |
 
+#### ADR-970_1_4 核心原则
 **核心原则**：
 > 分类存储，明确保留，易于查找。
 
@@ -102,12 +115,12 @@ docs/reports/
 
 ---
 
-### 结构化日志格式（ADR-970.2）
+### ADR-970_2：结构化日志格式（Rule）
 
-**规则**：
-
+#### ADR-970_2_1 必须使用 JSON 格式
 所有日志 **必须**使用 JSON 格式，包含标准字段。
 
+#### ADR-970_2_2 标准 JSON 架构
 **标准 JSON 架构**：
 ```json
 {
@@ -142,6 +155,7 @@ docs/reports/
 }
 ```
 
+#### ADR-970_2_3 字段说明
 **字段说明**：
 
 | 字段 | 必须 | 类型 | 说明 |
@@ -167,6 +181,7 @@ docs/reports/
 | `line` | ❌ | number | 行号 |
 | `fix_guide` | ❌ | string | 修复指南链接 |
 
+#### ADR-970_2_4 示例
 **示例：架构测试报告**：
 ```json
 {
@@ -211,12 +226,12 @@ docs/reports/
 
 ---
 
-### 日志与 ADR 关联机制（ADR-970.3）
+### ADR-970_3：日志与 ADR 关联机制（Rule）
 
-**规则**：
-
+#### ADR-970_3_1 测试失败日志必须自动链接到 ADR
 测试失败日志 **必须**自动链接到对应的 ADR 和修复指南。
 
+#### ADR-970_3_2 关联规则
 **关联规则**：
 1. **测试名称映射**：测试名称必须包含 ADR 编号
    - 格式：`ADR_XXXX_Test_Name`
@@ -230,9 +245,10 @@ docs/reports/
    - 映射到 `docs/copilot/adr-XXXX.prompts.md`
    - 具体到场景或章节（如适用）
 
+#### ADR-970_3_3 ADR 中的反向链接
 **ADR 中的反向链接**：
 
-每个 ADR **应该**包含相关测试和日志位置：
+每个 ADR **必须**包含相关测试和日志位置：
 
 ```markdown
 ### Enforcement Section Example
@@ -246,6 +262,7 @@ docs/reports/
 - 修复指南：`docs/copilot/adr-001.prompts.md`
 ```
 
+#### ADR-970_3_4 CI 失败通知增强
 **CI 失败通知增强**：
 
 当测试失败时，CI 通知 **应该**包含：
@@ -272,12 +289,12 @@ ADR：ADR-001 - 模块化单体与垂直切片架构
 
 ---
 
-### 自动化报告生成（ADR-970.4）
+### ADR-970_4：自动化报告生成（Rule）
 
-**规则**：
-
+#### ADR-970_4_1 CI 必须自动生成结构化日志
 CI **必须**自动生成结构化日志并存储。
 
+#### ADR-970_4_2 CI Workflow 示例
 **CI Workflow 示例**：
 ```yaml
 name: Architecture Tests
@@ -305,7 +322,7 @@ jobs:
           ln -sf $(date +%Y-%m-%d-%H-%M).json docs/reports/architecture-tests/latest.json
       
       - name: Upload Report
-        uses: actions/upload-artifact@v3
+        uses: actions/github-script@v3
         with:
           name: architecture-test-report
           path: docs/reports/architecture-tests/latest.json
@@ -331,6 +348,7 @@ jobs:
             });
 ```
 
+#### ADR-970_4_3 脚本职责
 **脚本职责**：
 - `scripts/convert-test-report.js`：转换工具原始输出到标准格式
 - 提取 ADR 编号
@@ -347,18 +365,19 @@ jobs:
 
 ---
 
-### 日志分发与访问（ADR-970.5）
+### ADR-970_5：日志分发与访问（Rule）
 
-**规则**：
-
+#### ADR-970_5_1 日志必须易于访问
 日志 **必须**易于访问，并在适当时自动分发。
 
+#### ADR-970_5_2 访问方式
 **访问方式**：
 1. **本地访问**：`docs/reports/` 目录
 2. **CI Artifacts**：GitHub Actions Artifacts
 3. **PR 评论**：失败时自动评论
 4. **通知**：严重失败时通知团队
 
+#### ADR-970_5_3 分发规则
 **分发规则**：
 
 | 事件 | 分发方式 | 接收方 | 内容 |
@@ -368,6 +387,7 @@ jobs:
 | 依赖重大更新 | PR 评论 | PR 作者 | 变更说明 + 影响评估 |
 | 构建失败 | PR 评论 | PR 作者 | 失败日志摘要 |
 
+#### ADR-970_5_4 访问权限
 **访问权限**：
 - `docs/reports/` 目录在仓库中，所有成员可访问
 - 敏感安全报告可配置访问限制
@@ -376,99 +396,44 @@ jobs:
 > 主动分发关键信息，降低查找成本。
 
 **判定**：
-- ❌ 开发者需主动去 CI 查看日志
+- ❌ 发展者需主动去 CI 查看日志
 - ❌ 关键失败无人知晓
 - ✅ 自动分发到相关方
 
 ---
 
----
-
 ## Enforcement（执法模型）
 
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-970 各条款（Clause）的执法方式及执行级别。
 
-### 执行方式
-
-待补充...
-
-
----
----
-
-## Non-Goals（明确不管什么）
-
-本 ADR 明确不涉及以下内容：
-
-- 待补充
-
----
-
-## Prohibited（禁止行为）
-
-
-以下行为明确禁止：
-
-- 待补充
-
-
----
-
----
-
-## Relationships（关系声明）
-
-**依赖（Depends On）**：
-- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - 基于其 CI 测试机制
-- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档组织
-
-**被依赖（Depended By）**：
-- 无
-
-**替代（Supersedes）**：
-- 无
-
-**被替代（Superseded By）**：
-- 无
-
-**相关（Related）**：
-- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 日志与 ADR 关联
-- [ADR-980：ADR 生命周期一体化同步机制](../governance/ADR-980-adr-lifecycle-synchronization.md) - 版本同步检测
-
----
-
----
-
-## References（非裁决性参考）
-
-### 相关 ADR
-- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md)
-- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md)
-- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md)
-
-### 实施工具
-
-**已实施**（2026-01-27）：
-- `scripts/lib/json-output.sh` - 通用 JSON 输出库（依据 ADR-970.2）
-- `scripts/validate-adr-consistency.sh` - ADR 一致性验证（支持 JSON 输出）
-- `scripts/validate-three-way-mapping.sh` - 三位一体映射验证（支持 JSON 输出）
-- `docs/reports/` - 标准化日志存储目录（依据 ADR-970.1）
-
-**待实施**：
-- `scripts/convert-test-report.js` - 报告格式转换（计划中）
-- `.github/workflows/` - CI Workflows 集成（计划中）
-- JSON Schema 定义文件（计划中）
-- 其他验证脚本的 JSON 输出支持（进行中）
-
-### 背景材料
-- [ADR-Documentation-Governance-Gap-Analysis.md](../proposals/ADR-Documentation-Governance-Gap-Analysis.md) - 原始提案
-
----
-
----
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-970_1_1** | L1 | 文档扫描日志存储位置 | §ADR-970_1_1 |
+| **ADR-970_1_2** | L1 | 文档扫描存储结构 | §ADR-970_1_2 |
+| **ADR-970_1_3** | L1 | 文档扫描保留期策略 | §ADR-970_1_3 |
+| **ADR-970_1_4** | L1 | 文档扫描核心原则 | §ADR-970_1_4 |
+| **ADR-970_2_1** | L1 | 文档扫描 JSON 格式要求 | §ADR-970_2_1 |
+| **ADR-970_2_2** | L1 | 文档扫描标准架构 | §ADR-970_2_2 |
+| **ADR-970_2_3** | L1 | 文档扫描字段说明 | §ADR-970_2_3 |
+| **ADR-970_2_4** | L1 | 文档扫描示例 | §ADR-970_2_4 |
+| **ADR-970_3_1** | L1 | 文档扫描 ADR 关联机制 | §ADR-970_3_1 |
+| **ADR-970_3_2** | L1 | 文档扫描关联规则 | §ADR-970_3_2 |
+| **ADR-970_3_3** | L1 | 文档扫描反向链接 | §ADR-970_3_3 |
+| **ADR-970_3_4** | L1 | 文档扫描 CI 通知增强 | §ADR-970_3_4 |
+| **ADR-970_4_1** | L1 | 文档扫描自动化生成 | §ADR-970_4_1 |
+| **ADR-970_4_2** | L1 | 文档扫描 CI Workflow | §ADR-970_4_2 |
+| **ADR-970_4_3** | L1 | 文档扫描脚本职责 | §ADR-970_4_3 |
+| **ADR-970_5_1** | L1 | 文档扫描日志访问 | §ADR-970_5_1 |
+| **ADR-970_5_2** | L1 | 文档扫描访问方式 | §ADR-970_5_2 |
+| **ADR-970_5_3** | L1 | 文档扫描分发规则 | §ADR-970_5_3 |
+| **ADR-970_5_4** | L1 | 文档扫描访问权限 | §ADR-970_5_4 |
 
 ## History（版本历史）
 
 
 | 版本  | 日期         | 变更说明   |
 |-----|------------|--------|
+| 2.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | 架构委员会 |
 | 1.0 | 2026-01-29 | 初始版本 |

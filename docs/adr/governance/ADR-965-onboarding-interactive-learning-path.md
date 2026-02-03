@@ -4,8 +4,8 @@ title: "Onboarding 互动式学习路径"
 status: Accepted
 level: Governance
 deciders: "Tech Lead & Onboarding Champion"
-date: 2026-01-26
-version: "1.0"
+date: 2026-02-03
+version: "2.0"
 maintainer: "Tech Lead & Onboarding Champion"
 primary_enforcement: L1
 reviewer: "待定"
@@ -13,12 +13,10 @@ supersedes: null
 superseded_by: null
 ---
 
-
 # ADR-965：Onboarding 互动式学习路径
 
 > ⚖️ **本 ADR 是 Onboarding 互动式学习体验的标准，定义互动清单、可视化路径和进度跟踪机制。**
 
-**状态**：✅ Accepted  
 ## Focus（聚焦内容）
 
 - 互动式清单设计
@@ -26,8 +24,6 @@ superseded_by: null
 - 进度跟踪机制
 - Issue Template 集成
 - 成就系统（可选）
-
----
 
 ---
 
@@ -44,18 +40,25 @@ superseded_by: null
 
 ---
 
----
-
 ## Decision（裁决）
 
-### 互动式清单设计（ADR-965.1）
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-965 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-965_<Rule>_<Clause>
+> ```
 
-**规则**：
+---
 
+### ADR-965_1：互动式清单设计（Rule）
+
+#### ADR-965_1_1 必须包含可互动的任务清单
 Onboarding 文档 **必须**包含可互动的任务清单。
 
-**清单格式**：
-
+#### ADR-965_1_2 清单格式
 使用 GitHub Issue Template 创建个人 Onboarding Issue：
 
 ```markdown
@@ -214,13 +217,8 @@ assignees: ''
 - [ ] 🎯 Feature Complete - 完成第一个功能
 - [ ] 📚 Documentation Reader - 阅读所有核心 ADR
 - [ ] 🎓 Onboarding Complete - 完成 Onboarding
-```
 
-**Issue Template 位置**：
-```
-.github/ISSUE_TEMPLATE/onboarding-checklist.md
-```
-
+#### ADR-965_1_3 使用流程
 **使用流程**：
 1. 新成员加入时，创建 Onboarding Issue
 2. 分配给新成员和 Mentor
@@ -228,6 +226,7 @@ assignees: ''
 4. Mentor 定期检查进度
 5. 完成后关闭 Issue
 
+#### ADR-965_1_4 核心原则
 **核心原则**：
 > 可见进度，互动参与，持续激励。
 
@@ -238,23 +237,19 @@ assignees: ''
 
 ---
 
-### 学习路径可视化（ADR-965.2）
+### ADR-965_2：学习路径可视化（Rule）
 
-**规则**：
-
+#### ADR-965_2_1 必须包含可视化学习路径图
 Onboarding 文档 **必须**包含可视化学习路径图。
 
+#### ADR-965_2_2 路径图位置
 **路径图位置**：
-```
-docs/onboarding/README.md
-```
+`docs/onboarding/README.md`
 
+#### ADR-965_2_3 可视化格式
 **可视化格式**：
 
 使用 Mermaid 图表：
-
-```markdown
-# Onboarding 学习路径
 
 ```mermaid
 graph TD
@@ -307,8 +302,8 @@ graph TD
     style Complete fill:#FFD700
     style Certified fill:#FF69B4
 ```
-```
 
+#### ADR-965_2_4 里程碑可视化
 **里程碑可视化**：
 
 ```mermaid
@@ -340,32 +335,35 @@ gantt
 
 ---
 
-### 进度跟踪机制（ADR-965.3）
+### ADR-965_3：进度跟踪机制（Rule）
 
-**规则**：
-
+#### ADR-965_3_1 必须实时追踪 Onboarding 进度
 **必须**实时追踪 Onboarding 进度。
 
+#### ADR-965_3_2 GitHub Issue 进度条
 **追踪方式**：
 
-1. **GitHub Issue 进度条**：
-   - Issue 中的复选框自动生成进度条
-   - GitHub 原生支持
+**GitHub Issue 进度条**：
+- Issue 中的复选框自动生成进度条
+- GitHub 原生支持
 
-2. **Project Board 集成**：
-   ```
-   Onboarding Pipeline
-   ├─ To Do（待完成）
-   ├─ In Progress（进行中）
-   ├─ Review（审查中）
-   └─ Done（已完成）
-   ```
+#### ADR-965_3_3 Project Board 集成
+**Project Board 集成**：
+```
+Onboarding Pipeline
+├─ To Do（待完成）
+├─ In Progress（进行中）
+├─ Review（审查中）
+└─ Done（已完成）
+```
 
-3. **自动化通知**：
-   - 完成每周时自动评论祝贺
-   - 卡住超过 3 天自动通知 Mentor
-   - 完成 Onboarding 时自动庆祝
+#### ADR-965_3_4 自动化通知
+**自动化通知**：
+- 完成每周时自动评论祝贺
+- 卡住超过 3 天自动通知 Mentor
+- 完成 Onboarding 时自动庆祝
 
+#### ADR-965_3_5 进度仪表板
 **GitHub Actions 示例**：
 ```yaml
 name: Onboarding Progress Tracker
@@ -411,25 +409,37 @@ jobs:
 ```
 
 **进度仪表板**（可选）：
-```
-docs/onboarding/dashboard.md
-```
+`docs/onboarding/dashboard.md`
 
 内容：
-```markdown
-# Onboarding 仪表板
+待补充...
 
 ---
 
 ## Enforcement（执法模型）
 
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-965 各条款（Clause）的执法方式及执行级别。
+
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-965_1_1** | L1 | 文档扫描互动清单存在性 | §ADR-965_1_1 |
+| **ADR-965_1_2** | L1 | 文档扫描 Issue Template 格式 | §ADR-965_1_2 |
+| **ADR-965_1_3** | L1 | 文档扫描使用流程 | §ADR-965_1_3 |
+| **ADR-965_1_4** | L1 | 文档扫描核心原则 | §ADR-965_1_4 |
+| **ADR-965_2_1** | L1 | 文档扫描可视化路径图存在性 | §ADR-965_2_1 |
+| **ADR-965_2_2** | L1 | 文档扫描路径图位置 | §ADR-965_2_2 |
+| **ADR-965_2_3** | L1 | 文档扫描 Mermaid 格式 | §ADR-965_2_3 |
+| **ADR-965_2_4** | L1 | 文档扫描里程碑可视化 | §ADR-965_2_4 |
+| **ADR-965_3_1** | L1 | 文档扫描进度跟踪机制 | §ADR-965_3_1 |
+| **ADR-965_3_2** | L1 | 文档扫描 GitHub Issue 进度条 | §ADR-965_3_2 |
+| **ADR-965_3_3** | L1 | 文档扫描 Project Board 集成 | §ADR-965_3_3 |
+| **ADR-965_3_4** | L1 | 文档扫描自动化通知 | §ADR-965_3_4 |
+| **ADR-965_3_5** | L2 | 文档扫描进度仪表板（可选） | §ADR-965_3_5 |
 
 ### 执行方式
 
-待补充...
-
-
----
 ---
 
 ## Non-Goals（明确不管什么）
@@ -472,7 +482,6 @@ docs/onboarding/dashboard.md
 
 ---
 
----
 
 ## References（非裁决性参考）
 
@@ -490,11 +499,10 @@ docs/onboarding/dashboard.md
 
 ---
 
----
-
 ## History（版本历史）
 
 
 | 版本  | 日期         | 变更说明   |
 |-----|------------|--------|
+| 2.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | 架构委员会 |
 | 1.0 | 2026-01-29 | 初始版本 |
