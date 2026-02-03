@@ -4,8 +4,8 @@ title: "执行级别分类"
 status: Final
 level: Governance
 deciders: "Architecture Board"
-date: 2026-01-26
-version: "2.0"
+date: 2026-02-03
+version: "3.0"
 maintainer: "架构委员会"
 primary_enforcement: L1
 reviewer: "@douhuaa"
@@ -56,9 +56,20 @@ enforceable: false
 
 ## Decision（裁决）
 
-> ⚠️ **本节是唯一裁决来源，其他章节不得产生新规则。**
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-905 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-905_<Rule>_<Clause>
+> ```
 
-### ADR-905.1:L1 架构规则必须分级执行
+---
+
+### ADR-905_1：执行级别分类体系（Rule）
+
+#### ADR-905_1_1 架构规则必须分级执行
 
 **规则**：
 
@@ -74,7 +85,7 @@ enforceable: false
 
 ---
 
-### ADR-905.2:L1 规则的执行标准
+#### ADR-905_1_2 Level 1（L1）规则的执行标准
 
 **定义**：可以通过 NetArchTest 等静态分析工具完全自动化检查的规则。
 
@@ -105,7 +116,7 @@ enforceable: false
 
 ---
 
-### ADR-905.3:L2 规则的执行标准
+#### ADR-905_1_3 Level 2（L2）规则的执行标准
 
 **定义**：需要语义分析的规则，建议通过 Roslyn Analyzer 检查，当前测试只能做启发式检查。
 
@@ -134,7 +145,7 @@ enforceable: false
 
 ---
 
-### ADR-905.4:L3 规则的执行标准
+#### ADR-905_1_4 Level 3（L3）规则的执行标准
 
 **定义**：无法（或不应该）完全自动化的规则，需要人工审查和决策。
 
@@ -172,7 +183,7 @@ enforceable: false
 
 ---
 
-### ADR-905.5:L2 执行级别的分级意义
+#### ADR-905_1_5 执行级别的分级意义
 
 **规则**：
 
@@ -204,15 +215,24 @@ enforceable: false
 
 ## Enforcement（执法模型）
 
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-905 各条款（Clause）的执法方式及执行级别。
+>
 > 本节为唯一架构执法映射表，所有必测/必拦规则均需在此列明。
 
-| 规则编号   | 执行级 | 执法方式 | 关键测试用例/流程 | 必须遵守 |
-|---------|------|----------------|--------------------------|------|
-| ADR-905.1 | L2   | ADR 编写时的执行级别声明检查（Code Review） | ADR_905_EnforcementLevel_Declaration_Test | ✅    |
-| ADR-905.2 | L1   | NetArchTest 架构测试（CI 阻断） | ArchitectureTests（见 ADR-005 相关用例） | ✅    |
-| ADR-905.3 | L2   | Roslyn Analyzer（警告）+ 人工审查 | Roslyn Analyzer/启发式检查 | ✅    |
-| ADR-905.4 | L3   | PR Template + 架构师审查 + ARCH-VIOLATIONS 记录 | PR Review 流程/破例登记 | ✅    |
-| ADR-905.5 | L2   | Code Review + 教育培训 | 规则分级宣贯/人工审核 | ✅    |
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-905_1_1** | L2 | ADR 编写时的执行级别声明检查（Code Review） | §ADR-905_1_1 |
+| **ADR-905_1_2** | L1 | NetArchTest 架构测试（CI 阻断） | §ADR-905_1_2 |
+| **ADR-905_1_3** | L2 | Roslyn Analyzer（警告）+ 人工审查 | §ADR-905_1_3 |
+| **ADR-905_1_4** | L3 | PR Template + 架构师审查 + ARCH-VIOLATIONS 记录 | §ADR-905_1_4 |
+| **ADR-905_1_5** | L2 | Code Review + 教育培训 | §ADR-905_1_5 |
+
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
 
 ---
 ---
@@ -346,7 +366,8 @@ public class EndpointBusinessLogicAnalyzer : DiagnosticAnalyzer
 
 ## History（版本历史）
 
-| 版本 | 日期 | 变更说明 | 作者 |
+| 版本 | 日期 | 变更说明 | 修订人 |
 |------|------|----------|------|
+| 3.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
 | 2.0 | 2026-01-26 | 按照 ADR-901 标准格式重写，规范章节结构和裁决表达 | GitHub Copilot |
 | 1.0 | 2025-01-20 | 初始版本，定义三级执行分类体系 | Architecture Board |

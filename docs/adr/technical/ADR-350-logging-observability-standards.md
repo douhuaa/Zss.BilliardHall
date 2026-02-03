@@ -3,9 +3,9 @@ adr: ADR-350
 title: "日志与可观测性字段标准"
 status: Final
 level: Technical
-version: "2.0"
+version: "3.0"
 deciders: "Architecture Board"
-date: 2026-01-26
+date: 2026-02-03
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -61,7 +61,11 @@ superseded_by: null
 
 ---
 
-### ADR-350.2：禁止记录敏感信息【必须架构测试覆盖】
+---
+
+### ADR-350_2：敏感信息保护与错误处理（Rule）
+
+#### ADR-350_2_1 禁止记录敏感信息【必须架构测试覆盖】
 
 日志**禁止**包含敏感信息。
 
@@ -103,7 +107,7 @@ superseded_by: null
 
 ---
 
-### ADR-350.4：错误日志必须包含异常详情【必须架构测试覆盖】
+#### ADR-350_2_2 错误日志必须包含异常详情【必须架构测试覆盖】
 
 错误级别的日志**必须**包含完整的异常信息。
 
@@ -122,7 +126,7 @@ superseded_by: null
 
 ---
 
-### ADR-350.5：日志级别使用必须符合标准【必须架构测试覆盖】
+#### ADR-350_2_3 日志级别使用必须符合标准【必须架构测试覆盖】
 
 日志级别**必须**按标准定义使用。
 
@@ -146,20 +150,22 @@ superseded_by: null
 
 ## Enforcement（执法模型）
 
-### 测试实现
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-350 各条款（Clause）的执法方式及执行级别。
 
-**ADR-350.1 实现**：
-- 架构测试：扫描日志调用验证 CorrelationId 参数
-- Serilog Enricher：全局注入 CorrelationId（推荐）
-- 降低遗漏风险
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-350_1_1** | L1 | ArchitectureTests 验证 CorrelationId 参数 | §ADR-350_1_1 |
+| **ADR-350_1_2** | L1 | ArchitectureTests 验证字段命名规范 | §ADR-350_1_2 |
+| **ADR-350_2_1** | L2 | Code Review + 敏感信息扫描工具 | §ADR-350_2_1 |
+| **ADR-350_2_2** | L1 | Roslyn Analyzer 强制异常参数 | §ADR-350_2_2 |
+| **ADR-350_2_3** | L2 | Code Review 检查日志级别使用 | §ADR-350_2_3 |
 
-**ADR-350.4 实现**：
-- Roslyn Analyzer：检测 `LogError(string)` 模式并报编译错误
-- 强制使用 `LogError(Exception, string)` 确保异常完整
-
-**其他规则**：
-- L2 测试通过 Code Review 执行
-- 敏感信息扫描工具辅助检查
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
 
 ---
 ---
@@ -223,7 +229,8 @@ superseded_by: null
 
 ## History（版本历史）
 
-
-| 版本  | 日期         | 变更说明   |
-|-----|------------|--------|
-| 1.0 | 2026-01-29 | 初始版本 |
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------|-------|
+| 3.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
+| 2.0 | 2026-01-26 | 更新版本 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |

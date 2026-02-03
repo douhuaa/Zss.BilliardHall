@@ -3,9 +3,9 @@ adr: ADR-340
 title: "结构化日志与监控约束"
 status: Final
 level: Technical
-version: "2.0"
+version: "3.0"
 deciders: "Architecture Board"
-date: 2026-01-26
+date: 2026-02-03
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -42,7 +42,20 @@ superseded_by: null
 
 ## Decision（裁决）
 
-### ADR-340.1：Platform 层必须引用日志基础设施包【必须架构测试覆盖】
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-340 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-340_<Rule>_<Clause>
+> ```
+
+---
+
+### ADR-340_1：Platform 层日志基础设施（Rule）
+
+#### ADR-340_1_1 Platform 层必须引用日志基础设施包【必须架构测试覆盖】
 
 Platform 层**必须**引用结构化日志和监控的核心包。
 
@@ -62,7 +75,7 @@ Platform 层**必须**引用结构化日志和监控的核心包。
 
 ---
 
-### ADR-340.2：PlatformBootstrapper 必须包含日志配置【必须架构测试覆盖】
+#### ADR-340_1_2 PlatformBootstrapper 必须包含日志配置【必须架构测试覆盖】
 
 `PlatformBootstrapper.cs` 文件**必须**包含 Serilog 和 OpenTelemetry 配置代码。
 
@@ -80,7 +93,11 @@ Platform 层**必须**引用结构化日志和监控的核心包。
 
 ---
 
-### ADR-340.3：Handler 禁止使用控制台输出【必须架构测试覆盖】
+---
+
+### ADR-340_2：业务层日志约束（Rule）
+
+#### ADR-340_2_1 Handler 禁止使用控制台输出【必须架构测试覆盖】
 
 所有 Handler（Command/Query/Event）**禁止**使用控制台输出。
 
@@ -98,7 +115,7 @@ Platform 层**必须**引用结构化日志和监控的核心包。
 
 ---
 
-### ADR-340.4：日志调用禁止字符串插值【必须架构测试覆盖】
+#### ADR-340_2_2 日志调用禁止字符串插值【必须架构测试覆盖】
 
 日志记录方法**禁止**使用字符串插值。
 
@@ -116,7 +133,7 @@ Platform 层**必须**引用结构化日志和监控的核心包。
 
 ---
 
-### ADR-340.5：禁止业务层配置日志实现【必须架构测试覆盖】
+#### ADR-340_2_3 禁止业务层配置日志实现【必须架构测试覆盖】
 
 Application 层和 Modules 层**禁止**配置日志框架或 OpenTelemetry。
 
@@ -138,24 +155,22 @@ Application 层和 Modules 层**禁止**配置日志框架或 OpenTelemetry。
 
 ## Enforcement（执法模型）
 
-### 测试实现
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-340 各条款（Clause）的执法方式及执行级别。
 
-**L1 当前可执行**：
-- `Platform_Must_Reference_Logging_Packages()` - 验证 Platform 包引用
-- `PlatformBootstrapper_Must_Contain_Logging_Configuration()` - 验证配置代码存在
-- `Modules_Cannot_Reference_Logging_Implementation()` - 验证层级隔离
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-340_1_1** | L1 | ArchitectureTests 验证 Platform 包引用 | §ADR-340_1_1 |
+| **ADR-340_1_2** | L1 | ArchitectureTests 验证配置代码存在 | §ADR-340_1_2 |
+| **ADR-340_2_1** | L2 | Code Review 检查控制台输出 | §ADR-340_2_1 |
+| **ADR-340_2_2** | L2 | Code Review 检查字符串插值 | §ADR-340_2_2 |
+| **ADR-340_2_3** | L1 | ArchitectureTests 验证层级隔离 | §ADR-340_2_3 |
 
-**L2 待实现（当前 Code Review）**：
-- Handler 禁止控制台输出检查
-- 日志字符串插值检查
-
-**L3 人工审查**：
-- 日志配置语义完整性验证
-- 运行时日志输出行为验证
-- 监控指标采集完整性验证
-
-**CI 阻断条件**：
-- Platform 层缺少必需包引用 → CI 失败
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
 - PlatformBootstrapper 缺少配置代码 → CI 失败
 - Application/Modules 引用日志实现包 → CI 失败
 
@@ -223,7 +238,8 @@ Application 层和 Modules 层**禁止**配置日志框架或 OpenTelemetry。
 
 ## History（版本历史）
 
-
-| 版本  | 日期         | 变更说明   |
-|-----|------------|--------|
-| 1.0 | 2026-01-29 | 初始版本 |
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------|-------|
+| 3.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
+| 2.0 | 2026-01-26 | 更新版本 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |

@@ -4,8 +4,8 @@ title: "模块化单体与垂直切片架构"
 status: Final
 level: Constitutional
 deciders: "Architecture Board"
-date: 2026-01-29
-version: "5.0"
+date: 2026-02-03
+version: "6.0"
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "Architecture Board"
@@ -51,9 +51,20 @@ superseded_by: null
 
 ## Decision（裁决）
 
-> ⚠️ **本节是唯一裁决来源，其他章节不得产生新规则。**
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-001 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-001_<Rule>_<Clause>
+> ```
 
-### ADR-001.1:L1 模块按业务能力独立划分
+---
+
+### ADR-001_1：模块物理隔离（Rule）
+
+#### ADR-001_1_1 模块按业务能力独立划分
 
 - 模块按业务能力独立划分（如 Members/Orders）
 - 每模块 = 独立程序集 = 清晰目录边界
@@ -63,7 +74,7 @@ superseded_by: null
 - ❌ 模块引用其他模块类型
 - ✅ 仅通过契约、事件、原始类型通信
 
-### ADR-001.2:L1 项目文件禁止引用其他模块
+#### ADR-001_1_2 项目文件禁止引用其他模块
 
 - 项目文件（.csproj）不得包含对其他模块的 ProjectReference
 - 确保模块在编译时物理隔离
@@ -72,45 +83,7 @@ superseded_by: null
 - ❌ 项目文件引用其他模块
 - ✅ 模块编译时独立
 
-### ADR-001.3:L2 垂直切片以用例为最小单元
-
-- 用例（Use Case）为最小组织单元
-- 每用例包含 Endpoint → Command/Query → Handler → 领域逻辑
-- Handler 必须在 UseCases 命名空间
-
-**判定**：
-- ❌ Handler 不在 UseCases 命名空间
-- ✅ 每用例自包含完整切片
-
-### ADR-001.4:L1 禁止横向 Service 抽象
-
-- 禁止使用 Service/Manager/Helper 类承载业务逻辑
-- 业务逻辑应在 Handler 或领域模型中
-
-**判定**：
-- ❌ 存在 *Service 类
-- ✅ 业务逻辑在正确位置
-
-### ADR-001.5:L2 模块间通信仅允许事件/契约/原始类型
-
-- 模块间仅允许：领域事件、契约 DTO、原始类型（Guid/string/int）
-- 禁止直接依赖其他模块的 Entity/Aggregate/VO
-
-**判定**：
-- ❌ 直接依赖 Entity/Aggregate/VO
-- ✅ 仅传递只读数据
-
-### ADR-001.6:L2 契约不含业务决策字段
-
-- 契约 DTO 不含业务判断字段（如 CanRefund）
-- 契约不含行为方法
-- 契约仅用于数据传递
-
-**判定**：
-- ❌ 契约包含业务判断字段
-- ✅ 契约仅传递数据
-
-### ADR-001.7:L1 命名空间匹配模块边界
+#### ADR-001_1_3 命名空间匹配模块边界
 
 - 命名空间必须与模块边界一致
 - 目录结构必须反映模块隔离
@@ -122,21 +95,76 @@ superseded_by: null
 
 ---
 
+### ADR-001_2：垂直切片架构（Rule）
+
+#### ADR-001_2_1 垂直切片以用例为最小单元
+
+- 用例（Use Case）为最小组织单元
+- 每用例包含 Endpoint → Command/Query → Handler → 领域逻辑
+- Handler 必须在 UseCases 命名空间
+
+**判定**：
+- ❌ Handler 不在 UseCases 命名空间
+- ✅ 每用例自包含完整切片
+
+#### ADR-001_2_2 禁止横向 Service 抽象
+
+- 禁止使用 Service/Manager/Helper 类承载业务逻辑
+- 业务逻辑应在 Handler 或领域模型中
+
+**判定**：
+- ❌ 存在 *Service 类
+- ✅ 业务逻辑在正确位置
+
+---
+
+### ADR-001_3：模块间通信约束（Rule）
+
+#### ADR-001_3_1 模块间通信仅允许事件/契约/原始类型
+
+- 模块间仅允许：领域事件、契约 DTO、原始类型（Guid/string/int）
+- 禁止直接依赖其他模块的 Entity/Aggregate/VO
+
+**判定**：
+- ❌ 直接依赖 Entity/Aggregate/VO
+- ✅ 仅传递只读数据
+
+#### ADR-001_3_2 契约不含业务决策字段
+
+- 契约 DTO 不含业务判断字段（如 CanRefund）
+- 契约不含行为方法
+- 契约仅用于数据传递
+
+**判定**：
+- ❌ 契约包含业务判断字段
+- ✅ 契约仅传递数据
+
 ---
 
 ## Enforcement（执法模型）
 
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_001_Architecture_Tests.cs` 强制验证：
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-001 各条款（Clause）的执法方式及执行级别。
+>
+> 所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_001_Architecture_Tests.cs` 强制验证。
 
-- 模块不应相互引用（程序集级别）
-- 模块项目文件不应引用其他模块
-- 命名空间应匹配模块边界
-- Handler 必须在 UseCases 命名空间
-- 模块不应包含 Service 类
-- 契约语义规则检查
-- 契约业务字段分析
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-001_1_1** | L1 | ArchitectureTests 自动化验证模块程序集隔离 | §ADR-001_1_1 |
+| **ADR-001_1_2** | L1 | ArchitectureTests 验证项目文件依赖 | §ADR-001_1_2 |
+| **ADR-001_1_3** | L1 | ArchitectureTests 验证命名空间匹配 | §ADR-001_1_3 |
+| **ADR-001_2_1** | L2 | ArchitectureTests 验证 Handler 命名空间 | §ADR-001_2_1 |
+| **ADR-001_2_2** | L1 | ArchitectureTests 检测 Service 类存在 | §ADR-001_2_2 |
+| **ADR-001_3_1** | L2 | ArchitectureTests 验证模块通信方式 | §ADR-001_3_1 |
+| **ADR-001_3_2** | L2 | ArchitectureTests 分析契约业务字段 | §ADR-001_3_2 |
 
-**有一项违规视为架构违规，CI 自动阻断。**
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
+
+**有一项 L1 违规视为架构违规，CI 自动阻断。**
 
 ---
 ---
@@ -239,10 +267,11 @@ superseded_by: null
 
 ## History（版本历史）
 
-| 版本  | 日期         | 变更说明                                              |
-|-----|------------|---------------------------------------------------|
-| 5.0 | 2026-01-29 | 对齐 ADR-902 标准：添加 primary_enforcement、标准章节、规则独立编号 |
-| 4.0 | 2026-01-26 | 裁决型重构，移除冗余                                        |
-| 3.2 | 2026-01-23 | 术语&执行等级补充                                         |
-| 3.0 | 2026-01-20 | 分层体系与目录规则固化                                       |
-| 1.0 | 初始         | 初版发布                                              |
+| 版本  | 日期         | 变更说明                                              | 修订人 |
+|-----|------------|---------------------------------------------------|----|
+| 6.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
+| 5.0 | 2026-01-29 | 对齐 ADR-902 标准：添加 primary_enforcement、标准章节、规则独立编号 | Architecture Board |
+| 4.0 | 2026-01-26 | 裁决型重构，移除冗余                                        | Architecture Board |
+| 3.2 | 2026-01-23 | 术语&执行等级补充                                         | Architecture Board |
+| 3.0 | 2026-01-20 | 分层体系与目录规则固化                                       | Architecture Board |
+| 1.0 | 初始         | 初版发布                                              | Architecture Board |
