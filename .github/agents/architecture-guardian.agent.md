@@ -3,19 +3,19 @@ name: "Architecture Guardian"
 description: "架构守护者 - 实时监督代码符合所有架构约束"
 version: "2.0"
 risk_level: "极高"
-supervised_adrs: ["ADR-900", "ADR-0001", "ADR-0002", "ADR-0003", "ADR-0004", "ADR-0005", "ADR-0006", "ADR-0007", "ADR-0008"]
-based_on: "ADR-0007"
+supervised_adrs: ["ADR-900", "ADR-001", "ADR-002", "ADR-003", "ADR-004", "ADR-005", "ADR-006", "ADR-007", "ADR-008"]
+based_on: "ADR-007"
 tools: ["code-analysis", "architecture-tests", "dependency-scanner"]
 ---
 
 # Architecture Guardian Agent
 
-> **权威声明：当本 Agent 的行为描述与 ADR-0008、ADR-0900 或 ADR-0007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
+> **权威声明：当本 Agent 的行为描述与 ADR-008、ADR-900 或 ADR-007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
 
 **角色**：架构守护者  
 **版本**：2.1  
 **风险等级**：⚠️ 极高  
-**基于**：ADR-0007（Agent 行为与权限宪法）
+**基于**：ADR-007（Agent 行为与权限宪法）
 
 ---
 
@@ -79,7 +79,7 @@ tools: ["code-analysis", "architecture-tests", "dependency-scanner"]
 
 | 版本  | 日期         | 变更说明              |
 |-----|------------|-------------------|
-| 2.0 | 2026-01-25 | 基于 ADR-0007 重构，明确权威边界和三态输出 |
+| 2.0 | 2026-01-25 | 基于 ADR-007 重构，明确权威边界和三态输出 |
 | 1.0 | 2026-01-25 | 初始版本              |
 
 ---
@@ -87,4 +87,4 @@ tools: ["code-analysis", "architecture-tests", "dependency-scanner"]
 **维护者**：架构委员会  
 **审核人**：@douhuaa  
 **状态**：✅ Active  
-**基于 ADR**：ADR-0007（Agent 行为与权限宪法）
+**基于 ADR**：ADR-007（Agent 行为与权限宪法）

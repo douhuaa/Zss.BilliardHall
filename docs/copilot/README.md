@@ -9,36 +9,36 @@ GitHub Copilot 场景化提示词。
 ## Constitutional（宪法层）
 
 - [adr-900.prompts.md](adr-900.prompts.md) - 架构测试与 CI 治理
-- [adr-0001.prompts.md](adr-0001.prompts.md) - 模块化单体与垂直切片架构
-- [adr-0002.prompts.md](adr-0002.prompts.md) - Platform/Application/Host 三层启动体系
-- [adr-0003.prompts.md](adr-0003.prompts.md) - 命名空间与项目边界规范
-- [adr-0004.prompts.md](adr-0004.prompts.md) - 中央包管理（CPM）规范
-- [adr-0005.prompts.md](adr-0005.prompts.md) - 应用内交互模型与执行边界
-- [adr-0006.prompts.md](adr-0006.prompts.md) - 术语与编号宪法
-- [adr-0007.prompts.md](adr-0007.prompts.md) - Agent 行为与权限宪法
-- [adr-0008.prompts.md](adr-0008.prompts.md) - 文档编写与维护宪法
+- [adr-001.prompts.md](adr-001.prompts.md) - 模块化单体与垂直切片架构
+- [adr-002.prompts.md](adr-002.prompts.md) - Platform/Application/Host 三层启动体系
+- [adr-003.prompts.md](adr-003.prompts.md) - 命名空间与项目边界规范
+- [adr-004.prompts.md](adr-004.prompts.md) - 中央包管理（CPM）规范
+- [adr-005.prompts.md](adr-005.prompts.md) - 应用内交互模型与执行边界
+- [adr-006.prompts.md](adr-006.prompts.md) - 术语与编号宪法
+- [adr-007.prompts.md](adr-007.prompts.md) - Agent 行为与权限宪法
+- [adr-008.prompts.md](adr-008.prompts.md) - 文档编写与维护宪法
 
 ## Structure（结构层）
 
-- [adr-0120.prompts.md](adr-0120.prompts.md) - 领域事件命名规范
-- [adr-0121.prompts.md](adr-0121.prompts.md) - 契约（Contract）与 DTO 命名组织规范
-- [adr-0122.prompts.md](adr-0122.prompts.md) - Repository 命名及组织规范
-- [adr-0123.prompts.md](adr-0123.prompts.md) - 服务接口命名规范
-- [adr-0124.prompts.md](adr-0124.prompts.md) - Endpoint 命名及参数约束规范
+- [adr-120.prompts.md](adr-120.prompts.md) - 领域事件命名规范
+- [adr-121.prompts.md](adr-121.prompts.md) - 契约（Contract）与 DTO 命名组织规范
+- [adr-122.prompts.md](adr-122.prompts.md) - Repository 命名及组织规范
+- [adr-123.prompts.md](adr-123.prompts.md) - 服务接口命名规范
+- [adr-124.prompts.md](adr-124.prompts.md) - Endpoint 命名及参数约束规范
 
 ## Runtime（运行层）
 
-- [adr-0201.prompts.md](adr-0201.prompts.md) - Handler 生命周期管理
-- [adr-0210.prompts.md](adr-0210.prompts.md) - 领域事件版本化与兼容性
-- [adr-0220.prompts.md](adr-0220.prompts.md) - 事件总线集成规范
-- [adr-0240.prompts.md](adr-0240.prompts.md) - Handler 异常约束
+- [adr-201.prompts.md](adr-201.prompts.md) - Handler 生命周期管理
+- [adr-210.prompts.md](adr-210.prompts.md) - 领域事件版本化与兼容性
+- [adr-220.prompts.md](adr-220.prompts.md) - 事件总线集成规范
+- [adr-240.prompts.md](adr-240.prompts.md) - Handler 异常约束
 
 ## Technical（技术层）
 
-- [adr-0301.prompts.md](adr-0301.prompts.md) - Marten 作为事件存储与文档数据库
-- [adr-0340.prompts.md](adr-0340.prompts.md) - MassTransit 作为事件总线
-- [adr-0350.prompts.md](adr-0350.prompts.md) - ASP.NET Core Minimal API
-- [adr-0360.prompts.md](adr-0360.prompts.md) - Serilog 结构化日志
+- [adr-301.prompts.md](adr-301.prompts.md) - Marten 作为事件存储与文档数据库
+- [adr-340.prompts.md](adr-340.prompts.md) - MassTransit 作为事件总线
+- [adr-350.prompts.md](adr-350.prompts.md) - ASP.NET Core Minimal API
+- [adr-360.prompts.md](adr-360.prompts.md) - Serilog 结构化日志
 
 ## Governance（治理层）
 
@@ -46,7 +46,7 @@ GitHub Copilot 场景化提示词。
 - [adr-905.prompts.md](adr-905.prompts.md) - 执行级别分类
 - [adr-910.prompts.md](adr-910.prompts.md) - README 编写与维护治理规范
 - [adr-920.prompts.md](adr-920.prompts.md) - 示例代码治理规范
-- [adr-0930.prompts.md](adr-0930.prompts.md) - 代码评审合规性
+- [adr-930.prompts.md](adr-930.prompts.md) - 代码评审合规性
 - [adr-940.prompts.md](adr-940.prompts.md) - ADR 关系与溯源管理治理规范
 - [adr-945.prompts.md](adr-945.prompts.md) - ADR 时间线演进视图
 - [adr-946.prompts.md](adr-946.prompts.md) - ADR 标题级别即语义级别约束

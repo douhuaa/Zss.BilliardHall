@@ -8,7 +8,7 @@
 
 ## 执行摘要
 
-成功实施测试三层架构（Governance/Enforcement/Heuristics），将 ADR-0008 相关测试从单一文件重构为清晰的三层结构。此重构解决了"治理层级打架"的问题，建立了权力分级的测试体系。
+成功实施测试三层架构（Governance/Enforcement/Heuristics），将 ADR-008 相关测试从单一文件重构为清晰的三层结构。此重构解决了"治理层级打架"的问题，建立了权力分级的测试体系。
 
 ---
 
@@ -24,11 +24,11 @@
   └─ ADR/                 # 传统层 - 162 个测试
 ```
 
-### 2. 拆分 ADR-0008 测试
+### 2. 拆分 ADR-008 测试
 
 #### 原有结构（问题）
 ```
-ADR/ADR_0008_Architecture_Tests.cs  (385 行)
+ADR/ADR_008_Architecture_Tests.cs  (385 行)
   - 混合了宪法原则、执行细节和风格建议
   - 所有检查都会失败构建
   - 无法区分不同严重性的违规
@@ -38,8 +38,8 @@ ADR/ADR_0008_Architecture_Tests.cs  (385 行)
 
 **Governance 层** - 宪法级原则验证
 ```
-Governance/ADR_0008_Governance_Tests.cs
-  ✓ ADR-0008 文档存在
+Governance/ADR_008_Governance_Tests.cs
+  ✓ ADR-008 文档存在
   ✓ 裁决权归属原则已定义
   ✓ 文档分级体系已定义
   ✓ 冲突裁决优先级已定义
@@ -78,7 +78,7 @@ Heuristics/DocumentationStyleHeuristicsTests.cs
 | Governance README | `src/tests/.../Governance/README.md` | 宪法层说明 |
 | Enforcement README | `src/tests/.../Enforcement/README.md` | 执法层说明 |
 | Heuristics README | `src/tests/.../Heuristics/README.md` | 启发层说明 |
-| 工程标准 | `docs/engineering-standards/adr-0008-enforcement-standards.md` | 执行细节规范 |
+| 工程标准 | `docs/engineering-standards/adr-008-enforcement-standards.md` | 执行细节规范 |
 | 测试总 README 更新 | `src/tests/ArchitectureTests/README.md` | 添加三层架构章节 |
 
 ### 4. 测试命名优化
@@ -87,14 +87,14 @@ Heuristics/DocumentationStyleHeuristicsTests.cs
 
 | 旧命名 | 新命名 | 原因 |
 |--------|--------|------|
-| `ADR_0008_Architecture_Tests` | `DocumentationDecisionLanguageTests` | 按功能命名更清晰 |
+| `ADR_008_Architecture_Tests` | `DocumentationDecisionLanguageTests` | 按功能命名更清晰 |
 | - | `DocumentationAuthorityDeclarationTests` | ADR 是来源，不是命名空间 |
 | - | `SkillsJudgmentLanguageTests` | 便于理解测试目的 |
 | - | `AdrStructureTests` | 独立的职责 |
 
 ### 5. 兼容性处理
 
-- 创建 `ADR_0008_Architecture_Tests.cs` 重定向文件
+- 创建 `ADR_008_Architecture_Tests.cs` 重定向文件
 - 更新 `ADR_900_Architecture_Tests` 排除重定向测试
 - 保留 `.deprecated` 文件供历史参考
 
@@ -211,7 +211,7 @@ ADR-900 的反作弊机制正确处理重定向测试。
 
 ### 2. 其他 ADR 测试的潜在重构
 
-评估 ADR-0001 至 ADR-0007 是否也需要拆分为三层。目前不建议，除非遇到类似"层级打架"的问题。
+评估 ADR-001 至 ADR-007 是否也需要拆分为三层。目前不建议，除非遇到类似"层级打架"的问题。
 
 ### 3. CI 工作流优化
 
@@ -222,8 +222,8 @@ ADR-900 的反作弊机制正确处理重定向测试。
 ## 相关资源
 
 - **三层架构说明**: [docs/THREE-LAYER-TEST-ARCHITECTURE.md](../../docs/THREE-LAYER-TEST-ARCHITECTURE.md)
-- **ADR-0008**: [docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md](../../docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md)
-- **工程标准**: [docs/engineering-standards/adr-0008-enforcement-standards.md](../../docs/engineering-standards/adr-0008-enforcement-standards.md)
+- **ADR-008**: [docs/adr/constitutional/ADR-008-documentation-governance-constitution.md](../../docs/adr/constitutional/ADR-008-documentation-governance-constitution.md)
+- **工程标准**: [docs/engineering-standards/adr-008-enforcement-standards.md](../../docs/engineering-standards/adr-008-enforcement-standards.md)
 - **测试指南**: [src/tests/ArchitectureTests/README.md](../../src/tests/ArchitectureTests/README.md)
 
 ---

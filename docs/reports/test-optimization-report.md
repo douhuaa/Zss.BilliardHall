@@ -276,15 +276,15 @@ public void Bidirectional_Relationships_Must_Be_Consistent(
 **示例**：
 ```csharp
 // 重构前：硬编码 Markdown
-var markdown = @"# ADR-0001：测试
+var markdown = @"# ADR-001：测试
 **状态**：Final
 ...";
 
 // 重构后：使用构建器
 var markdown = AdrMarkdownBuilder
-    .Create("ADR-0001", "测试 ADR")
+    .Create("ADR-001", "测试 ADR")
     .WithStatus("Final")
-    .DependsOn("ADR-0002", "ADR-0003")
+    .DependsOn("ADR-002", "ADR-003")
     .WithDecision("这是决策内容")
     .Build();
 ```
@@ -485,7 +485,7 @@ violations.Should().BeEmpty(because: "ADR 关系必须一致");
 ## 八、参考资料
 
 - ADR-900：架构测试与 CI 治理元规则
-- ADR-0940：ADR 关系与溯源管理
+- ADR-940：ADR 关系与溯源管理
 - xUnit 参数化测试文档
 - C# Fluent Interface 模式
 

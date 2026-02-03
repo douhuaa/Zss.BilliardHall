@@ -205,7 +205,7 @@ Standard（工程标准，不得引入新约束）
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基础文档规范
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基础文档规范
 
 **被依赖（Depended By）**：
 - [ADR-951：案例库管理规范](ADR-951-case-repository-management.md) - Case 类型细化

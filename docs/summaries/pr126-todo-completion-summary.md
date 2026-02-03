@@ -8,7 +8,7 @@
 
 ## 一、背景
 
-PR#126 建立了 ADR-测试内容映射强一致性校验机制，完成了核心基础设施和示例实现（ADR-0001）。PR 描述中列出了多项"后续任务"
+PR#126 建立了 ADR-测试内容映射强一致性校验机制，完成了核心基础设施和示例实现（ADR-001）。PR 描述中列出了多项"后续任务"
 ，本次工作完成了这些待办事项。
 
 ---
@@ -17,13 +17,13 @@ PR#126 建立了 ADR-测试内容映射强一致性校验机制，完成了核�
 
 ### 2.1 ADR 文档标准化
 
-为 **ADR-0002 至 ADR-0005** 四个宪法级 ADR 文档添加：
+为 **ADR-002 至 ADR-005** 四个宪法级 ADR 文档添加：
 
 1. **【必须架构测试覆盖】标记**
-  - ADR-0002: 14 个关键约束标记
-  - ADR-0003: 9 个关键约束标记
-  - ADR-0004: 9 个关键约束标记
-  - ADR-0005: 12 个关键约束标记
+  - ADR-002: 14 个关键约束标记
+  - ADR-003: 9 个关键约束标记
+  - ADR-004: 9 个关键约束标记
+  - ADR-005: 12 个关键约束标记
 
 2. **快速参考表（Quick Reference Table）**
   - 包含列：约束编号 | 约束描述 | 必须测试 | 测试覆盖 | ADR 章节
@@ -32,14 +32,14 @@ PR#126 建立了 ADR-测试内容映射强一致性校验机制，完成了核�
 
 **文件变更**:
 
-- `docs/adr/constitutional/ADR-0002-platform-application-host-bootstrap.md`
-- `docs/adr/constitutional/ADR-0003-namespace-rules.md`
-- `docs/adr/constitutional/ADR-0004-Cpm-Final.md`
-- `docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md`
+- `docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md`
+- `docs/adr/constitutional/ADR-003-namespace-rules.md`
+- `docs/adr/constitutional/ADR-004-Cpm-Final.md`
+- `docs/adr/constitutional/ADR-005-Application-Interaction-Model-Final.md`
 
 ### 2.2 测试代码规范化
 
-为 **ADR_0002 至 ADR_0005** 四个架构测试类增强：
+为 **ADR_002 至 ADR_005** 四个架构测试类增强：
 
 1. **添加 ADR 映射清单头注释**
    ```csharp
@@ -54,23 +54,23 @@ PR#126 建立了 ADR-测试内容映射强一致性校验机制，完成了核�
    ```
 
 2. **改进测试失败消息格式**
-  - 包含明确的 ADR 编号（如 `❌ ADR-0002.1 违规`）
+  - 包含明确的 ADR 编号（如 `❌ ADR-002.1 违规`）
   - 提供具体的约束描述和当前状态
   - 添加详细的修复建议（2-3 项编号列表）
-  - 包含参考文档链接（如 `参考: docs/copilot/adr-0002.prompts.md`）
+  - 包含参考文档链接（如 `参考: docs/copilot/adr-002.prompts.md`）
 
 **文件变更**:
 
-- `src/tests/ArchitectureTests/ADR/ADR_0002_Architecture_Tests.cs`
-- `src/tests/ArchitectureTests/ADR/ADR_0003_Architecture_Tests.cs`
-- `src/tests/ArchitectureTests/ADR/ADR_0004_Architecture_Tests.cs`
-- `src/tests/ArchitectureTests/ADR/ADR_0005_Architecture_Tests.cs`
+- `src/tests/ArchitectureTests/ADR/ADR_002_Architecture_Tests.cs`
+- `src/tests/ArchitectureTests/ADR/ADR_003_Architecture_Tests.cs`
+- `src/tests/ArchitectureTests/ADR/ADR_004_Architecture_Tests.cs`
+- `src/tests/ArchitectureTests/ADR/ADR_005_Architecture_Tests.cs`
 
 ### 2.3 Copilot Prompts 增强
 
-为 **adr-0002 至 adr-0005** 四个 Prompts 文件添加完整的"测试覆盖自检清单"章节：
+为 **adr-002 至 adr-005** 四个 Prompts 文件添加完整的"测试覆盖自检清单"章节：
 
-**章节结构**（遵循 adr-0001.prompts.md 的模式）：
+**章节结构**（遵循 adr-001.prompts.md 的模式）：
 
 1. **X.1 ADR-测试映射表**: 完整的约束-测试映射表
 2. **X.2 自检问题**: 5-10 个检查点，帮助开发者自检
@@ -80,10 +80,10 @@ PR#126 建立了 ADR-测试内容映射强一致性校验机制，完成了核�
 
 **文件变更**:
 
-- `docs/copilot/adr-0002.prompts.md` (添加"六、测试覆盖自检清单")
-- `docs/copilot/adr-0003.prompts.md` (添加"六、测试覆盖自检清单")
-- `docs/copilot/adr-0004.prompts.md` (添加"六、测试覆盖自检清单")
-- `docs/copilot/adr-0005.prompts.md` (添加"七、测试覆盖自检清单")
+- `docs/copilot/adr-002.prompts.md` (添加"六、测试覆盖自检清单")
+- `docs/copilot/adr-003.prompts.md` (添加"六、测试覆盖自检清单")
+- `docs/copilot/adr-004.prompts.md` (添加"六、测试覆盖自检清单")
+- `docs/copilot/adr-005.prompts.md` (添加"七、测试覆盖自检清单")
 
 ---
 
@@ -104,10 +104,10 @@ PR#126 建立了 ADR-测试内容映射强一致性校验机制，完成了核�
 
 ### 测试覆盖
 
-- **ADR-0002**: 14 个约束 → 14 个测试方法
-- **ADR-0003**: 9 个约束 → 9 个测试方法
-- **ADR-0004**: 9 个约束 → 9 个测试方法
-- **ADR-0005**: 12 个约束 → 12 个测试方法
+- **ADR-002**: 14 个约束 → 14 个测试方法
+- **ADR-003**: 9 个约束 → 9 个测试方法
+- **ADR-004**: 9 个约束 → 9 个测试方法
+- **ADR-005**: 12 个约束 → 12 个测试方法
 - **总计**: 44 个约束完成标记和映射
 
 ---
@@ -141,7 +141,7 @@ Build succeeded.
 
 ### 4.3 模式一致性
 
-- ✅ 所有更改严格遵循 ADR-0001 建立的模式
+- ✅ 所有更改严格遵循 ADR-001 建立的模式
 - ✅ 快速参考表格式统一
 - ✅ 测试失败消息格式统一
 - ✅ Prompts 文件结构统一
@@ -152,7 +152,7 @@ Build succeeded.
 
 ### 5.1 完整的映射体系
 
-现在所有 5 个宪法级 ADR（ADR-0001 至 ADR-0005）都具备：
+现在所有 5 个宪法级 ADR（ADR-001 至 ADR-005）都具备：
 
 1. ✅ 明确的【必须架构测试覆盖】标记
 2. ✅ 完整的快速参考表（约束-测试映射）
@@ -161,7 +161,7 @@ Build succeeded.
 
 ### 5.2 开发者友好
 
-- **测试失败时**: 开发者能立即知道违反了哪条 ADR 约束（如 ADR-0002.1）
+- **测试失败时**: 开发者能立即知道违反了哪条 ADR 约束（如 ADR-002.1）
 - **编写代码时**: 可以参考 Prompts 文件中的自检清单
 - **提交 PR 前**: 可以对照映射表确保测试覆盖完整
 - **学习架构时**: 通过快速参考表快速理解约束和测试的对应关系
@@ -249,14 +249,14 @@ PR#126 更新的 `.github/workflows/architecture-tests.yml` 需要在 CI 环境�
 本次工作的提交记录：
 
 1. `d5ac25f` - Initial plan
-2. `0dc7d04` - docs(ADR-0002): 添加架构测试覆盖标记和增强测试失败消息
-3. `cfa1469` - docs(ADR-0003): 添加架构测试覆盖标记和增强测试失败消息
-4. `632b3b4` - docs(ADR-0004): 添加架构测试覆盖标记、快速参考表和测试覆盖自检清单
-5. `8caa45f` - docs(ADR-0005): 添加测试标记、快速参考表和测试覆盖章节
+2. `0dc7d04` - docs(ADR-002): 添加架构测试覆盖标记和增强测试失败消息
+3. `cfa1469` - docs(ADR-003): 添加架构测试覆盖标记和增强测试失败消息
+4. `632b3b4` - docs(ADR-004): 添加架构测试覆盖标记、快速参考表和测试覆盖自检清单
+5. `8caa45f` - docs(ADR-005): 添加测试标记、快速参考表和测试覆盖章节
 6. *(本提交)* - docs: 添加 PR#126 待办事项完成总结
 
 ---
 
 ## 十、致谢
 
-感谢 PR#126 建立的核心机制和示例模式（ADR-0001），为本次工作提供了清晰的指导和可复制的模板。
+感谢 PR#126 建立的核心机制和示例模式（ADR-001），为本次工作提供了清晰的指导和可复制的模板。

@@ -6,7 +6,7 @@ namespace Zss.BilliardHall.AdrSemanticParser.Models;
 public sealed class AdrSemanticModel
 {
     /// <summary>
-    /// ADR 编号（如 "ADR-0001"）
+    /// ADR 编号（如 "ADR-001"）
     /// </summary>
     public required string Id { get; init; }
 

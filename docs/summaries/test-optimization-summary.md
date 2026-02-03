@@ -83,16 +83,16 @@ public void Bidirectional_Relationships_Must_Be_Consistent(
 ### 3. 测试数据构建器
 ```csharp
 // 优化前：硬编码 Markdown
-var markdown = @"# ADR-0001：测试
+var markdown = @"# ADR-001：测试
 **状态**：Final
-**依赖**：ADR-0002, ADR-0003
+**依赖**：ADR-002, ADR-003
 ...";
 
 // 优化后：使用构建器
 var markdown = AdrMarkdownBuilder
-    .Create("ADR-0001", "测试 ADR")
+    .Create("ADR-001", "测试 ADR")
     .WithStatus("Final")
-    .DependsOn("ADR-0002", "ADR-0003")
+    .DependsOn("ADR-002", "ADR-003")
     .Build();
 ```
 
@@ -246,11 +246,11 @@ var markdown = AdrMarkdownBuilder
 
 #### 迁移文件列表
 **ADR 核心系列**（29 个）：
-- ADR_900, ADR_0002-0008
-- ADR_0120-0124, ADR_0201-0240
-- ADR_0301-0360
+- ADR_900, ADR_002-0008
+- ADR_120-0124, ADR_201-0240
+- ADR_301-0360
 - ADR_0900/0902/0907/0910/0920/0930
-- ADR_0008_Governance_Tests
+- ADR_008_Governance_Tests
 
 **Adr 子系统**（6 个）：
 - AdrCircularDependencyTests

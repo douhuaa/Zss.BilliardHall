@@ -3,7 +3,7 @@
 > ⚠️ **无裁决力声明**：本文档为实践案例说明，不具备架构裁决权。所有架构决策以 [ADR 文档](../adr/) 为准。
 
 **难度**：🟢 简单  
-**相关 ADR**：[ADR-0001](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md), [ADR-0005](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)  
+**相关 ADR**：[ADR-001](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md), [ADR-005](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)  
 **作者**：@douhuaa  
 **日期**：2026-01-27  
 **标签**：模块化, 契约查询, 同步查询, 只读数据, DTO
@@ -30,7 +30,7 @@
 
 ## 背景
 
-在模块化架构中，模块间不能直接引用领域对象（根据 ADR-0001）。但在某些场景下，我们需要跨模块读取数据用于展示。
+在模块化架构中，模块间不能直接引用领域对象（根据 ADR-001）。但在某些场景下，我们需要跨模块读取数据用于展示。
 
 **为什么不能直接引用领域对象？**
 - 创建了编译时依赖
@@ -79,7 +79,7 @@ namespace Zss.BilliardHall.BuildingBlocks.Contracts.Members;
 
 /// <summary>
 /// 会员信息契约
-/// 根据 ADR-0001，契约是模块间数据共享的合规方式
+/// 根据 ADR-001，契约是模块间数据共享的合规方式
 /// </summary>
 public sealed record MemberInfoContract
 {
@@ -449,7 +449,7 @@ public async Task<Guid> Handle(PlaceOrder command)
 }
 ```
 
-**问题**（根据 ADR-0005）：
+**问题**（根据 ADR-005）：
 - 契约查询只能用于**展示**，不能用于**业务决策**
 - 业务逻辑应该在领域模型内
 
@@ -631,7 +631,7 @@ public sealed class CachedMemberQueryService : IMemberQueryService
 
 ## 架构合规检查清单
 
-根据 ADR-0001 和 ADR-0005，确认：
+根据 ADR-001 和 ADR-005，确认：
 
 - [ ] 契约定义在 BuildingBlocks，不暴露领域对象
 - [ ] 查询服务接口是只读的（无修改方法）
@@ -645,8 +645,8 @@ public sealed class CachedMemberQueryService : IMemberQueryService
 
 ## 参考资料
 
-- [ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 第 2.2 节：模块通信规则
-- [ADR-0005：应用内交互模型与执行边界](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 第 2.2 节：Query Handler 规则
+- [ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 第 2.2 节：模块通信规则
+- [ADR-005：应用内交互模型与执行边界](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md) - 第 2.2 节：Query Handler 规则
 - [模块化架构 FAQ](../faqs/architecture-faq.md) - Q: 模块间如何通信？
 - [跨模块通信指南](../guides/cross-module-communication.md)
 

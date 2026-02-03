@@ -18,7 +18,7 @@ public static class TestConstants
 
     /// <summary>
     /// ADR 测试文件名模式（正则表达式）
-    /// 匹配格式：ADR_0001_Architecture_Tests
+    /// 匹配格式：ADR_001_Architecture_Tests
     /// </summary>
     public const string AdrTestPattern = @"ADR_(\d{4})_Architecture_Tests";
 
@@ -49,13 +49,13 @@ public static class TestConstants
 
     /// <summary>
     /// ADR 文件命名模式（正则表达式）
-    /// 匹配格式：ADR-0001-description.md
+    /// 匹配格式：ADR-001-description.md
     /// </summary>
     public const string AdrFilePattern = @"^ADR-\d{4}[^/\\]*\.md$";
 
     /// <summary>
     /// ADR 编号模式（正则表达式）
-    /// 匹配格式：ADR-0001
+    /// 匹配格式：ADR-001
     /// </summary>
     public const string AdrIdPattern = @"^ADR-\d{4}$";
 

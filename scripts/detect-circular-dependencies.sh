@@ -71,7 +71,7 @@ GRAPH_FILE="$TEMP_DIR/graph.txt"
 # 提取所有依赖关系
 while IFS= read -r adr_file; do
     adr_filename=$(basename "$adr_file" .md)
-    # Extract just the ADR number (e.g., ADR-0001 from ADR-0001-modular-monolith-...)
+    # Extract just the ADR number (e.g., ADR-001 from ADR-001-modular-monolith-...)
     adr_id=$(echo "$adr_filename" | grep -oE 'ADR-[0-9]+' || echo "")
     
     # Skip files without valid ADR numeric IDs (like ADR-RELATIONSHIP-MAP)

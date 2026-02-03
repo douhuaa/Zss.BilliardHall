@@ -1,7 +1,7 @@
 # 开发实践常见问题
 
 > 📚 **根据 ADR-950 创建的 FAQ 文档**  
-> **对应 ADR**：ADR-0005, ADR-900, ADR-0930  
+> **对应 ADR**：ADR-005, ADR-900, ADR-930  
 > **最后更新**：2026-01-27
 
 ---
@@ -41,7 +41,7 @@ src/tests/Modules.Orders.Tests/UseCases/CancelOrder/
 5. 在测试项目中镜像相同结构
 6. 编写单元测试
 
-**参考 ADR**：[ADR-0001](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 第 3.2 节
+**参考 ADR**：[ADR-001](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 第 3.2 节
 
 ---
 
@@ -143,7 +143,7 @@ public class CreateOrderHandler
    GetOrderDetailsEndpoint        // ✅
    ```
 
-**参考 ADR**：[ADR-0930](../adr/governance/ADR-0930-code-style-governance.md)
+**参考 ADR**：[ADR-930](../adr/governance/ADR-930-code-style-governance.md)
 
 ---
 
@@ -705,10 +705,10 @@ public async Task<List<OrderDto>> Handle(ListOrders query)
 
 ## 相关文档
 
-- [ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-0005：应用内交互模型与执行边界](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-005：应用内交互模型与执行边界](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
 - [ADR-900：架构测试与 CI 治理元规则](../adr/governance/ADR-900-architecture-tests.md)
-- [ADR-0930：代码风格治理](../adr/governance/ADR-0930-code-style-governance.md)
+- [ADR-930：代码风格治理](../adr/governance/ADR-930-code-style-governance.md)
 - [架构设计指南](../guides/architecture-design-guide.md)
 - [Handler 单元测试案例](../cases/handler-unit-testing-case.md)
 

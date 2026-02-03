@@ -9,7 +9,7 @@
 ## 📋 项目概述
 
 ### 问题背景
-近期对 ADR 进行了大量更新（包括 ADR-902、ADR-0006、ADR-940、ADR-980 等），定义了新的标准和规范，但这些规则没有同步到旧的 ADR，导致大量不一致问题。
+近期对 ADR 进行了大量更新（包括 ADR-902、ADR-006、ADR-940、ADR-980 等），定义了新的标准和规范，但这些规则没有同步到旧的 ADR，导致大量不一致问题。
 
 ### 核心目标
 1. **全面识别**：系统性分析所有不一致问题
@@ -117,9 +117,9 @@
 **语言**：Bash  
 **功能**：
 - ✅ 检查 Front Matter 完整性（ADR-902）
-- ✅ 检查术语表格式（ADR-0006）
+- ✅ 检查术语表格式（ADR-006）
 - ✅ 检查版本号格式（ADR-980）
-- ✅ 检查快速参考表（ADR-0006）
+- ✅ 检查快速参考表（ADR-006）
 
 **使用**：
 ```bash
@@ -158,7 +158,7 @@ python3 ./scripts/validate-adr-relationships.py
 **功能**：
 - ✅ 提取所有术语定义
 - ✅ 查找重复定义
-- ✅ 验证英文对照格式（ADR-0006）
+- ✅ 验证英文对照格式（ADR-006）
 
 **使用**：
 ```bash
@@ -196,7 +196,7 @@ python3 ./scripts/validate-adr-relationships.py
 
 **Phase 4 完成统计**：
 - ✅ ADR-122 ↔ ADR-903 替代关系已修复
-- ✅ ADR-0007 ↔ ADR-0008 相关关系描述已统一
+- ✅ ADR-007 ↔ ADR-008 相关关系描述已统一
 - ✅ 验证工具已改进，支持多行关系声明格式
 - ⚠️ 发现额外 30 个关系不一致问题（属于 P2/P3 范围）
 
@@ -209,8 +209,8 @@ python3 ./scripts/validate-adr-relationships.py
 - ✅ 关系解析准确性提升（依赖关系：89 → 105）
 
 **Phase 3 完成统计**：
-- ✅ ADR-0001 到 ADR-0005 已添加 Front Matter（5个）
-- ✅ ADR-0001 到 ADR-0005 已添加英文术语对照（5个）
+- ✅ ADR-001 到 ADR-005 已添加 Front Matter（5个）
+- ✅ ADR-001 到 ADR-005 已添加英文术语对照（5个）
 - ✅ Front Matter 缺失数量：30 → 25
 
 ---
@@ -246,17 +246,17 @@ python3 ./scripts/validate-adr-relationships.py
 **状态**：✅ 完成
 
 **目标**：
-- [x] 修复 ADR-0001 至 ADR-0005
-- [x] 所有宪法层 ADR 符合新规范（ADR-0001 到 ADR-0005）
+- [x] 修复 ADR-001 至 ADR-005
+- [x] 所有宪法层 ADR 符合新规范（ADR-001 到 ADR-005）
 - [x] Front Matter 缺失从 30 个减少到 25 个
 - [x] 所有 5 个宪法层 ADR 添加英文术语对照
 
 **完成内容**：
-- ADR-0001：添加 Front Matter、更新术语表、版本 v4.0 → v5.0
-- ADR-0002：添加 Front Matter、更新术语表、版本 v1.0 → v2.0
-- ADR-0003：添加 Front Matter、更新术语表、版本 v1.0 → v2.0
-- ADR-0004：添加 Front Matter、更新术语表、版本 v1.0 → v2.0
-- ADR-0005：添加 Front Matter、更新术语表、版本 v1.0 → v2.0
+- ADR-001：添加 Front Matter、更新术语表、版本 v4.0 → v5.0
+- ADR-002：添加 Front Matter、更新术语表、版本 v1.0 → v2.0
+- ADR-003：添加 Front Matter、更新术语表、版本 v1.0 → v2.0
+- ADR-004：添加 Front Matter、更新术语表、版本 v1.0 → v2.0
+- ADR-005：添加 Front Matter、更新术语表、版本 v1.0 → v2.0
 
 ---
 
@@ -271,7 +271,7 @@ python3 ./scripts/validate-adr-relationships.py
 
 **完成内容**：
 - ADR-903：添加替代关系声明（替代 ADR-122）
-- ADR-0007 & ADR-0008：统一相关关系描述
+- ADR-007 & ADR-008：统一相关关系描述
 - 验证工具：改进解析逻辑，支持 `**替代（Supersedes）**：` 格式
 - 验证结果：P1 关系不一致问题已修复 ✅
 
@@ -351,7 +351,7 @@ python3 ./scripts/validate-adr-relationships.py
 - [ ] **一致性验证**
   ```bash
   ./scripts/check-adr-consistency.sh
-  # 返回：⚠️ 发现 2 个问题（ADR-0006 和 ADR-946 特殊情况，可接受）
+  # 返回：⚠️ 发现 2 个问题（ADR-006 和 ADR-946 特殊情况，可接受）
   ```
 
 - [ ] **关系验证**
@@ -382,7 +382,7 @@ python3 ./scripts/validate-adr-relationships.py
 - 📘 [ADR-902: ADR 标准模板](../adr/governance/ADR-902-adr-template-structure-contract.md)
 - 📘 [ADR-940: ADR 关系管理](../adr/governance/ADR-940-adr-relationship-traceability-management.md)
 - 📘 [ADR-980: ADR 生命周期同步](../adr/governance/ADR-980-adr-lifecycle-synchronization.md)
-- 📘 [ADR-0006: 术语与编号宪法](../adr/constitutional/ADR-0006-terminology-numbering-constitution.md)
+- 📘 [ADR-006: 术语与编号宪法](../adr/constitutional/ADR-006-terminology-numbering-constitution.md)
 
 ### 其他报告
 - 📘 [ADR 健康报告](../adr-health-report.md)
@@ -415,7 +415,7 @@ python3 ./scripts/validate-adr-relationships.py
 | 日期 | 版本 | 变更内容 | 责任人 |
 |-----|------|---------|--------|
 | 2026-01-29 | 1.0 | 初始版本，Phase 1-2 完成 | Architecture Team |
-| 2026-01-29 | 1.1 | Phase 3 完成，ADR-0001 至 ADR-0005 更新完毕 | GitHub Copilot |
+| 2026-01-29 | 1.1 | Phase 3 完成，ADR-001 至 ADR-005 更新完毕 | GitHub Copilot |
 | 2026-01-29 | 1.2 | Phase 4 完成，P1 关系声明问题已修复，验证工具已改进 | GitHub Copilot |
 | 2026-01-29 | 2.0 | Phase 5 完成，所有 P2-P4 问题已修复，项目圆满完成 | GitHub Copilot |
 

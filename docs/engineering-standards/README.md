@@ -26,7 +26,7 @@
 
 ### 文档标准
 - [文档维护标准](documentation-maintenance-standard.md) - 文档维护流程和质量标准
-- [ADR-0008 执行标准](adr-0008-enforcement-standards.md) - 文档治理执行细节
+- [ADR-008 执行标准](adr-008-enforcement-standards.md) - 文档治理执行细节
 
 ### 代码标准
 - 待添加：代码格式标准

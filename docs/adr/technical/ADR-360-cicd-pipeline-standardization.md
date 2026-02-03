@@ -153,8 +153,8 @@ CI 失败时**必须**在失败消息中明确归属责任类别。
 ```
 ❌ CI 失败类别：【架构测试】
 责任归属：PR 作者
-失败测试：ADR_0001_Architecture_Tests.Modules_Must_Not_Cross_Reference
-修复指引：docs/copilot/adr-0001.prompts.md
+失败测试：ADR_001_Architecture_Tests.Modules_Must_Not_Cross_Reference
+修复指引：docs/copilot/adr-001.prompts.md
 ```
 
 ---
@@ -208,7 +208,7 @@ CI 失败时**必须**在失败消息中明确归属责任类别。
 
 **依赖（Depends On）**：
 - [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - CI/CD 管道基于 CI 治理机制
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - CI/CD 术语遵循统一规范
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - CI/CD 术语遵循统一规范
 
 **被依赖（Depended By）**：
 - 无
@@ -238,7 +238,7 @@ CI 失败时**必须**在失败消息中明确归属责任类别。
 
 ### 实践指导
 - CI 配置示例参见 `.github/workflows/`
-- 常见问题参见 `docs/copilot/adr-0360.prompts.md`（待创建）
+- 常见问题参见 `docs/copilot/adr-360.prompts.md`（待创建）
 
 ---
 

@@ -1,6 +1,6 @@
-# ADR-0006 合并前校验清单
+# ADR-006 合并前校验清单
 
-**ADR 编号**：ADR-0006  
+**ADR 编号**：ADR-006  
 **ADR 标题**：术语与编号宪法  
 **层级**：宪法层  
 **校验日期**：2026-01-25  
@@ -12,7 +12,7 @@
 
 ### ✅ 1. ADR 正文完整性
 
-**文件路径**：`docs/adr/constitutional/ADR-0006-terminology-numbering-constitution.md`
+**文件路径**：`docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md`
 
 - ✅ 状态：Final（宪法层，不可随意修改）
 - ✅ 级别：架构元规则 / 宪法层
@@ -38,14 +38,14 @@
 
 ### ✅ 2. 架构测试覆盖
 
-**测试文件路径**：`src/tests/ArchitectureTests/ADR/ADR_0006_Architecture_Tests.cs`
+**测试文件路径**：`src/tests/ArchitectureTests/ADR/ADR_006_Architecture_Tests.cs`
 
 **测试清单**：
-- ✅ ADR-0006.1: ADR 文件编号应符合分段规则
-- ✅ ADR-0006.2: ADR 文件名应与编号一致（豁免历史文件）
-- ✅ ADR-0006.3: 宪法层 ADR 应使用前导零
-- ✅ ADR-0006.4: 非宪法层 ADR 不应使用多余前导零
-- ✅ ADR-0006.5: ADR 文件应位于正确目录
+- ✅ ADR-006.1: ADR 文件编号应符合分段规则
+- ✅ ADR-006.2: ADR 文件名应与编号一致（豁免历史文件）
+- ✅ ADR-006.3: 宪法层 ADR 应使用前导零
+- ✅ ADR-006.4: 非宪法层 ADR 不应使用多余前导零
+- ✅ ADR-006.5: ADR 文件应位于正确目录
 
 **测试结果**：
 ```
@@ -64,7 +64,7 @@ Total Architecture Tests: 141/141 全部通过
 
 ### ✅ 3. Copilot 提示词
 
-**提示词文件路径**：`docs/copilot/adr-0006.prompts.md`
+**提示词文件路径**：`docs/copilot/adr-006.prompts.md`
 
 **场景覆盖**：
 - ✅ 场景 1：新增 ADR 时如何选择编号
@@ -72,7 +72,7 @@ Total Architecture Tests: 141/141 全部通过
 - ✅ 场景 3：检查 ADR 编号是否合规
 - ✅ 场景 4：术语澄清与引用
 - ✅ 场景 5：ADR 命名规范
-- ✅ 场景 6：修订 ADR-0006 本身
+- ✅ 场景 6：修订 ADR-006 本身
 - ✅ 场景 7：审查 PR 中的 ADR 编号
 
 **内容要素**：
@@ -90,7 +90,7 @@ Total Architecture Tests: 141/141 全部通过
 
 ### ✅ 1. constitutional/README.md
 
-- ✅ 已在宪法层 ADR 表格中添加 ADR-0006
+- ✅ 已在宪法层 ADR 表格中添加 ADR-006
 - ✅ 核心约束：术语定义、编号规则、语义约束
 
 **更新位置**：`docs/adr/constitutional/README.md` 第 19 行
@@ -99,10 +99,10 @@ Total Architecture Tests: 141/141 全部通过
 
 ### ✅ 2. 主 ADR README.md
 
-- ✅ 已在快速导航表中添加 ADR-0006
-- ✅ 已在 Mermaid 图表中添加 C6[ADR-0006 术语编号]
+- ✅ 已在快速导航表中添加 ADR-006
+- ✅ 已在 Mermaid 图表中添加 C6[ADR-006 术语编号]
 - ✅ 已更新宪法层 ADR 数量（5 个 → 6 个）
-- ✅ 已添加 ADR-0006 专门章节，包含：
+- ✅ 已添加 ADR-006 专门章节，包含：
   - 主轴说明
   - 聚焦内容
   - 核心地位描述
@@ -116,7 +116,7 @@ Total Architecture Tests: 141/141 全部通过
 ### ✅ 3. summaries/README.md
 
 - ✅ 已在架构改进文档列表中添加审计报告
-- ✅ 文档描述：ADR-0006 引入后的全面编号语义审计
+- ✅ 文档描述：ADR-006 引入后的全面编号语义审计
 
 **更新位置**：`docs/summaries/README.md`
 
@@ -126,7 +126,7 @@ Total Architecture Tests: 141/141 全部通过
 
 ### ✅ 审计报告
 
-**报告文件路径**：`docs/summaries/adr-0006-numbering-audit.md`
+**报告文件路径**：`docs/summaries/adr-006-numbering-audit.md`
 
 **审计范围**：
 - ✅ 宪法层 ADR (0001-0006)：6 个
@@ -143,7 +143,7 @@ Total Architecture Tests: 141/141 全部通过
 
 **关键发现**：
 - ✅ 无需重新编号或迁移任何 ADR
-- ✅ ADR-0006 是"立法"而非"追溯执法"
+- ✅ ADR-006 是"立法"而非"追溯执法"
 - ✅ 识别 3 个历史文件名例外（已在测试中豁免）
 
 **报告大小**：26 KB  
@@ -156,8 +156,8 @@ Total Architecture Tests: 141/141 全部通过
 ### ✅ 必须改（3 项）- 已完成
 
 1. ✅ **宪法层编号区间铁律化**
-   - 改前：模糊表述"ADR-0006：宪法层最后一个编号"
-   - 改后：明确"ADR-0001~0006 已使用，0007~0009 预留且非经架构委员会批准不得启用"
+   - 改前：模糊表述"ADR-006：宪法层最后一个编号"
+   - 改后：明确"ADR-001~0006 已使用，0007~0009 预留且非经架构委员会批准不得启用"
    - Commit: 288fd79
 
 2. ✅ **ADR-900 范围约束**
@@ -165,7 +165,7 @@ Total Architecture Tests: 141/141 全部通过
    - Commit: 288fd79
 
 3. ✅ **测试方式去工具化**
-   - 改前：ADR-0006.6 "人工审查 + Copilot 提示"
+   - 改前：ADR-006.6 "人工审查 + Copilot 提示"
    - 改后："人工语义审查（工具可辅助）"
    - Commit: 288fd79
 
@@ -210,9 +210,9 @@ Total Architecture Tests: 141/141 全部通过
 ### 提交历史
 
 ```
-288fd79 - refactor(adr-0006): 收紧宪法边界，明确权责分离
-e29d488 - feat(adr): 完成 ADR-0006 实施与轻量审计
-91d5cbb - feat(adr): 新增 ADR-0006 术语与编号宪法
+288fd79 - refactor(adr-006): 收紧宪法边界，明确权责分离
+e29d488 - feat(adr): 完成 ADR-006 实施与轻量审计
+91d5cbb - feat(adr): 新增 ADR-006 术语与编号宪法
 e88fa0c - Initial plan
 ```
 
@@ -258,10 +258,10 @@ e88fa0c - Initial plan
 ### ✅ 文件完整性
 
 ```bash
-✅ docs/adr/constitutional/ADR-0006-terminology-numbering-constitution.md (21.8 KB)
-✅ docs/copilot/adr-0006.prompts.md (15.4 KB)
-✅ src/tests/ArchitectureTests/ADR/ADR_0006_Architecture_Tests.cs (11.2 KB)
-✅ docs/summaries/adr-0006-numbering-audit.md (26 KB)
+✅ docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md (21.8 KB)
+✅ docs/copilot/adr-006.prompts.md (15.4 KB)
+✅ src/tests/ArchitectureTests/ADR/ADR_006_Architecture_Tests.cs (11.2 KB)
+✅ docs/summaries/adr-006-numbering-audit.md (26 KB)
 ✅ docs/adr/constitutional/README.md (已更新)
 ✅ docs/adr/README.md (已更新)
 ✅ docs/summaries/README.md (已更新)
@@ -271,7 +271,7 @@ e88fa0c - Initial plan
 
 ```bash
 Architecture Tests: 141/141 通过 ✅
-ADR-0006 Tests: 5/5 通过 ✅
+ADR-006 Tests: 5/5 通过 ✅
 Total Duration: 499 ms
 ```
 
@@ -310,7 +310,7 @@ Total Duration: 499 ms
 
 ## 结论
 
-✅ **ADR-0006 已完成所有合并前准备工作，符合既有 ADR 规范要求，可以合并。**
+✅ **ADR-006 已完成所有合并前准备工作，符合既有 ADR 规范要求，可以合并。**
 
 ---
 

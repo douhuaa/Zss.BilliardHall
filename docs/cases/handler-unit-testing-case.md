@@ -3,7 +3,7 @@
 > ⚠️ **无裁决力声明**：本文档为实践案例说明，不具备架构裁决权。所有架构决策以 [ADR 文档](../adr/) 为准。
 
 **难度**：🟢 简单  
-**相关 ADR**：[ADR-0005](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md), [ADR-900](../adr/governance/ADR-900-architecture-tests.md)  
+**相关 ADR**：[ADR-005](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md), [ADR-900](../adr/governance/ADR-900-architecture-tests.md)  
 **作者**：@douhuaa  
 **日期**：2026-01-27  
 **标签**：测试, Handler, CQRS, 单元测试, Mocking
@@ -26,7 +26,7 @@
 
 ## 背景
 
-根据 ADR-0005 和 ADR-900，Handler 是用例的唯一入口点，负责编排业务流程。Handler 的单元测试应该：
+根据 ADR-005 和 ADR-900，Handler 是用例的唯一入口点，负责编排业务流程。Handler 的单元测试应该：
 
 1. **隔离测试**：使用 mock 替换外部依赖
 2. **快速反馈**：不依赖数据库或外部服务
@@ -134,7 +134,7 @@ public sealed class CreateOrderHandler : ICommandHandler<CreateOrder, Guid>
             "Order {OrderId} created successfully",
             order.Id);
 
-        // 4. 返回 ID（根据 ADR-0005）
+        // 4. 返回 ID（根据 ADR-005）
         return order.Id;
     }
 }
@@ -766,7 +766,7 @@ public class CreateOrderHandlerTests : IDisposable
 
 ## 参考资料
 
-- [ADR-0005：应用内交互模型与执行边界](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) - Handler 规则
+- [ADR-005：应用内交互模型与执行边界](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md) - Handler 规则
 - [ADR-900：架构测试与 CI 治理元规则](../adr/governance/ADR-900-architecture-tests.md) - 测试架构
 - [测试架构指南](../guides/test-architecture-guide.md)
 - [测试框架指南](../guides/testing-framework-guide.md)

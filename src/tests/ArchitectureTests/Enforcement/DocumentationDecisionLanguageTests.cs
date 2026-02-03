@@ -6,8 +6,8 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 /// <summary>
 /// 文档裁决语言检查 - Enforcement 层测试
 /// 
-/// 【定位】：执行 ADR-0008 的具体约束
-/// 【来源】：ADR-0008 决策 2.2 和决策 3.3
+/// 【定位】：执行 ADR-008 的具体约束
+/// 【来源】：ADR-008 决策 2.2 和决策 3.3
 /// 【执法】：失败 = CI 阻断
 /// 
 /// 本测试类检查：
@@ -15,8 +15,8 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 /// 2. 允许在特定上下文中使用（引用 ADR 时）
 /// 
 /// 【关联文档】
-/// - ADR: docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md
-/// - 来源决策: ADR-0008 决策 2.2、3.3
+/// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
+/// - 来源决策: ADR-008 决策 2.2、3.3
 /// </summary>
 public sealed class DocumentationDecisionLanguageTests
 {
@@ -25,16 +25,16 @@ public sealed class DocumentationDecisionLanguageTests
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         
-        // 裁决性词汇（ADR-0008 明确禁止 README 使用）
+        // 裁决性词汇（ADR-008 明确禁止 README 使用）
         var forbiddenWords = new[] { "必须", "禁止", "不允许", "不得", "应当" };
         
         // 例外：可以在引用 ADR 的上下文中使用，或在示例标记中使用
         var allowedContextPatterns = new[]
         {
-            @"根据\s*ADR[-\s]*\d+",  // "根据 ADR-0001"
-            @"参考\s*ADR[-\s]*\d+",  // "参考 ADR-0001"
-            @"详见\s*ADR[-\s]*\d+",  // "详见 ADR-0001"
-            @"ADR[-\s]*\d+\s*规定",  // "ADR-0001 规定"
+            @"根据\s*ADR[-\s]*\d+",  // "根据 ADR-001"
+            @"参考\s*ADR[-\s]*\d+",  // "参考 ADR-001"
+            @"详见\s*ADR[-\s]*\d+",  // "详见 ADR-001"
+            @"ADR[-\s]*\d+\s*规定",  // "ADR-001 规定"
             @"本文档无裁决力",        // 声明部分
             @"[❌✅]\s*(禁止|必须)",  // ❌ 禁止（示例标记）
             @"\|\s*(禁止|必须)",     // 表格中的内容
@@ -96,7 +96,7 @@ public sealed class DocumentationDecisionLanguageTests
             {
                 "❌ Enforcement 违规：以下 README/Guide 使用了裁决性语言",
                 "",
-                "根据 ADR-0008 决策 2.2：README/Guide 只能解释'如何使用'，不得使用裁决性语言。",
+                "根据 ADR-008 决策 2.2：README/Guide 只能解释'如何使用'，不得使用裁决性语言。",
                 ""
             }
             .Concat(violations.Take(10)) // 限制输出前10个违规
@@ -109,7 +109,7 @@ public sealed class DocumentationDecisionLanguageTests
                 "  2. 在文档开头添加：'> ⚠️ 本文档无裁决力，所有架构决策以 ADR 正文为准'",
                 "  3. 使用描述性语言代替命令性语言",
                 "",
-                "参考：docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md 决策 3.3"
+                "参考：docs/adr/constitutional/ADR-008-documentation-governance-constitution.md 决策 3.3"
             })));
         }
     }

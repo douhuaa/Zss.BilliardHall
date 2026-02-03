@@ -68,19 +68,19 @@
 2. 定义文档角色边界
 3. 定义 Enforcement / Heuristics 的合法存在性
 
-### 示例：ADR-0008 Governance Tests
+### 示例：ADR-008 Governance Tests
 
 ```csharp
-// 位置: Governance/ADR_0008_Governance_Tests.cs
+// 位置: Governance/ADR_008_Governance_Tests.cs
 
-[Fact(DisplayName = "ADR-0008.G1: 文档治理宪法已定义")]
-public void ADR_0008_Document_Governance_Constitution_Exists()
+[Fact(DisplayName = "ADR-008.G1: 文档治理宪法已定义")]
+public void ADR_008_Document_Governance_Constitution_Exists()
 {
-    // 验证 ADR-0008 文档存在
+    // 验证 ADR-008 文档存在
     // 验证宪法级章节存在（不验证具体内容）
 }
 
-[Fact(DisplayName = "ADR-0008.G2: 裁决权唯一归属原则已定义")]
+[Fact(DisplayName = "ADR-008.G2: 裁决权唯一归属原则已定义")]
 public void Decision_Authority_Principle_Is_Defined()
 {
     // 验证核心原则：只有 ADR 具备裁决力
@@ -122,7 +122,7 @@ public void Decision_Authority_Principle_Is_Defined()
 public class DocumentationDecisionLanguageTests
 
 // ❌ 错误：按 ADR 编号命名
-public class ADR_0008_Architecture_Tests
+public class ADR_008_Architecture_Tests
 ```
 
 **ADR 是来源，不是实现命名空间。**
@@ -143,7 +143,7 @@ public void README_Must_Not_Use_Decision_Language()
 
     // Then
     violations.Should().BeEmpty(
-        "根据 ADR-0008，README / Guide 不具备裁决权");
+        "根据 ADR-008，README / Guide 不具备裁决权");
 }
 ```
 
@@ -152,7 +152,7 @@ public void README_Must_Not_Use_Decision_Language()
 ```
 ❌ Enforcement 违规：以下 README/Guide 使用了裁决性语言
 
-根据 ADR-0008 决策 2.2：README/Guide 只能解释'如何使用'，不得使用裁决性语言。
+根据 ADR-008 决策 2.2：README/Guide 只能解释'如何使用'，不得使用裁决性语言。
 
   • docs/adr/README.md:22 - 使用裁决词 '必须'
     内容: 模块必须使用事件通信
@@ -237,7 +237,7 @@ public void README_Should_Prefer_Descriptive_Language()
 ```text
 /tests/ArchitectureTests/
   ├─ Governance/
-  │   └─ ADR_0008_Governance_Tests.cs          # 宪法级原则验证
+  │   └─ ADR_008_Governance_Tests.cs          # 宪法级原则验证
   │
   ├─ Enforcement/
   │   ├─ DocumentationDecisionLanguageTests.cs  # README 裁决语言检查
@@ -249,25 +249,25 @@ public void README_Should_Prefer_Descriptive_Language()
   │   └─ DocumentationStyleHeuristicsTests.cs   # 风格建议
   │
   └─ ADR/
-      ├─ ADR_0001_Architecture_Tests.cs         # 模块隔离
-      ├─ ADR_0002_Architecture_Tests.cs         # 三层启动
-      ├─ ADR_0008_Architecture_Tests.cs         # 重定向文件
+      ├─ ADR_001_Architecture_Tests.cs         # 模块隔离
+      ├─ ADR_002_Architecture_Tests.cs         # 三层启动
+      ├─ ADR_008_Architecture_Tests.cs         # 重定向文件
       └─ ...
 ```
 
 ---
 
-## 迁移案例：ADR-0008
+## 迁移案例：ADR-008
 
 ### 原有测试（问题）
 
 ```csharp
-// ADR/ADR_0008_Architecture_Tests.cs（旧版）
-public class ADR_0008_Architecture_Tests
+// ADR/ADR_008_Architecture_Tests.cs（旧版）
+public class ADR_008_Architecture_Tests
 {
     // ❌ 混合了三种性质的测试
     
-    [Fact] public void ADR_0008_Document_Exists() { }          // Governance
+    [Fact] public void ADR_008_Document_Exists() { }          // Governance
     [Fact] public void README_Must_Not_Use_X() { }             // Enforcement
     [Fact] public void README_Should_Be_Concise() { }          // Heuristics
 }
@@ -282,7 +282,7 @@ public class ADR_0008_Architecture_Tests
 
 #### Governance 层
 ```csharp
-// Governance/ADR_0008_Governance_Tests.cs
+// Governance/ADR_008_Governance_Tests.cs
 // 职责：验证治理边界定义是否存在
 [Fact] public void Decision_Authority_Principle_Is_Defined() { }
 [Fact] public void Document_Hierarchy_Is_Defined() { }
@@ -329,7 +329,7 @@ public class ADR_0008_Architecture_Tests
 
 | 测试内容 | 层级 | 原因 |
 |---------|------|------|
-| "ADR-0008 文档存在" | Governance | 验证治理宪法定义 |
+| "ADR-008 文档存在" | Governance | 验证治理宪法定义 |
 | "README 使用裁决词" | Enforcement | 可执行硬约束，需要修复 |
 | "ADR 缺少示例" | Heuristics | 品味建议，不强制 |
 | "裁决权归属已定义" | Governance | 宪法级原则 |
@@ -370,8 +370,8 @@ public class ADR_0008_Architecture_Tests
 ### Q: 原有的 ADR_XXXX_Architecture_Tests.cs 文件怎么办？
 
 **A**: 
-- ADR-0008 已拆分为三层，保留重定向文件
-- 其他 ADR 测试（如 ADR-0001 ~ ADR-0007）暂时保留在 ADR/ 目录
+- ADR-008 已拆分为三层，保留重定向文件
+- 其他 ADR 测试（如 ADR-001 ~ ADR-007）暂时保留在 ADR/ 目录
 - 逐步评估是否需要拆分
 
 ---
@@ -379,8 +379,8 @@ public class ADR_0008_Architecture_Tests
 ## 相关资源
 
 - **问题陈述**: Issue "Tests 的命名与分层 ADR"
-- **ADR-0008**: [文档治理宪法](../../adr/constitutional/ADR-0008-documentation-governance-constitution.md)
-- **工程标准**: [ADR-0008 执行标准](../../engineering-standards/adr-0008-enforcement-standards.md)
+- **ADR-008**: [文档治理宪法](../../adr/constitutional/ADR-008-documentation-governance-constitution.md)
+- **工程标准**: [ADR-008 执行标准](../../engineering-standards/adr-008-enforcement-standards.md)
 - **测试指南**: [Architecture Tests README](../../../src/tests/ArchitectureTests/README.md)
 
 ---

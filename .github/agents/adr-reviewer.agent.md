@@ -3,7 +3,7 @@ name: "ADR Reviewer"
 description: "ADR 审查者 - 审查 ADR 文档的质量和完整性"
 version: "1.1"
 risk_level: "高"
-supervised_adrs: ["ADR-900", "ADR-0008"]
+supervised_adrs: ["ADR-900", "ADR-008"]
 tools: ["document-analyzer", "cross-reference-checker"]
 ---
 
@@ -19,11 +19,11 @@ tools: ["document-analyzer", "cross-reference-checker"]
 
 ### 权威声明
 
-> **当本 Agent 的行为描述与 ADR-900、ADR-0008 或 ADR-0007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
+> **当本 Agent 的行为描述与 ADR-900、ADR-008 或 ADR-007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
 
 本 Agent 不承担宪法责任，仅作为 ADR 的执行代理。所有裁决权归属于 ADR 正文。
 
-**本 Agent 是 ADR-0007（Agent 行为与权限宪法）的实例化实现。**
+**本 Agent 是 ADR-007（Agent 行为与权限宪法）的实例化实现。**
 
 ### 我是谁
 
@@ -40,7 +40,7 @@ tools: ["document-analyzer", "cross-reference-checker"]
 2. **内容完整性**：验证 ADR 各部分是否完整
 3. **三位一体检查**：确保 ADR、架构测试、Prompts 三者对齐
 4. **交叉引用**：验证 ADR 之间的引用关系
-5. **术语一致性**：检查术语是否符合 ADR-0006
+5. **术语一致性**：检查术语是否符合 ADR-006
 
 ### 我的权限边界
 
@@ -98,7 +98,7 @@ graph TB
 - 架构测试必须覆盖【必须架构测试覆盖】标注的条款
 - Prompts 必须与 ADR 正文保持一致
 
-### ADR-0008 文档规范
+### ADR-008 文档规范
 
 #### 文档质量标准
 
@@ -123,7 +123,7 @@ graph TB
 2. **ADR 修订**
 ```
 @adr-reviewer
-ADR-0001 做了修改，请检查合规性
+ADR-001 做了修改，请检查合规性
 ```
 
 3. **PR Review**
@@ -167,7 +167,7 @@ graph TB
 
 ### ⚠️ 需要改进
 - [列出需要改进的部分]
-- 参考：ADR-900 / ADR-0008
+- 参考：ADR-900 / ADR-008
 - 建议：[具体改进方案]
 
 ### ❌ 必须修复
@@ -214,7 +214,7 @@ graph TB
 
 ### 术语一致性检查清单
 
-- [ ] 术语使用符合 ADR-0006
+- [ ] 术语使用符合 ADR-006
 - [ ] 技术术语使用一致
 - [ ] 避免歧义表述
 
@@ -334,7 +334,7 @@ documentation-maintainer（维护文档）
 
 - ⚠️ ADR 审查失误可能导致架构约束不明确
 - ⚠️ 过度依赖 Agent 可能降低人工审查质量
-- ⚠️ 必须保持与 ADR-0900 的同步
+- ⚠️ 必须保持与 ADR-900 的同步
 
 ---
 
@@ -356,10 +356,10 @@ documentation-maintainer（维护文档）
 
 ### 主要 ADR
 
-- [ADR-0900：ADR 流程](../../docs/adr/governance/ADR-0900-adr-workflow-final.md)
-- [ADR-0008：文档编写与维护宪法](../../docs/adr/constitutional/ADR-0008-documentation-writing-maintenance-constitution.md)
-- [ADR-0007：Agent 行为与权限宪法](../../docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
-- [ADR-0006：术语与编号宪法](../../docs/adr/constitutional/ADR-0006-terminology-numbering-constitution.md)
+- [ADR-900：ADR 流程](../../docs/adr/governance/ADR-900-adr-workflow-final.md)
+- [ADR-008：文档编写与维护宪法](../../docs/adr/constitutional/ADR-008-documentation-writing-maintenance-constitution.md)
+- [ADR-007：Agent 行为与权限宪法](../../docs/adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
+- [ADR-006：术语与编号宪法](../../docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md)
 
 ### 相关文档
 
@@ -373,9 +373,9 @@ documentation-maintainer（维护文档）
 
 | 版本 | 日期 | 变更说明 |
 |-----|------|---------|
-| 1.0 | 2026-01-26 | 初始版本，基于 ADR-0007 创建 |
+| 1.0 | 2026-01-26 | 初始版本，基于 ADR-007 创建 |
 
 ---
 
 **状态**：✅ Active  
-**基于 ADR**：ADR-0007（Agent 行为与权限宪法）
+**基于 ADR**：ADR-007（Agent 行为与权限宪法）

@@ -12,7 +12,7 @@
 
 ### 混淆表现
 
-1. **Constitutional 层（宪法层）**：ADR-0001~0009
+1. **Constitutional 层（宪法层）**：ADR-001~0009
    - 含义：定义系统的**根本架构约束**（代码结构、模块隔离）
    - 位置：`docs/adr/constitutional/` 目录
 
@@ -34,7 +34,7 @@
 ### 核心原则
 
 1. **"宪法"一词专属于 Constitutional 层**
-   - 仅用于 ADR-0001~0009
+   - 仅用于 ADR-001~0009
    - 明确指代架构约束
 
 2. **Governance 层使用更精确术语**
@@ -104,7 +104,7 @@
 
 ### 阶段2：更新术语定义
 
-**ADR-0006**（v1.0 → v1.1）：
+**ADR-006**（v1.0 → v1.1）：
 - 添加新章节："宪法"术语的语境区分
 - 明确说明 Constitutional 层与 Governance 层的边界
 - 提供清晰的使用规范和示例
@@ -129,7 +129,7 @@
 
 | 维度 | 优化前 | 优化后 |
 |------|--------|--------|
-| 宪法层 | 含糊 | ✅ 专指ADR-0001~0009 |
+| 宪法层 | 含糊 | ✅ 专指ADR-001~0009 |
 | 治理层 | 用"宪法"描述 | ✅ 用"治理规范"/"元规则" |
 | 认知负担 | 高 | ✅ 低 |
 | 术语一致性 | 一般 | ✅ 严格 |
@@ -138,7 +138,7 @@
 
 ```
 Constitutional 层（宪法层）
-├─ ADR-0001~0009
+├─ ADR-001~0009
 ├─ 约束对象：代码、架构结构
 └─ 术语：专用"宪法"
 
@@ -170,7 +170,7 @@ Governance 层（治理层）
 ### 验证清单
 
 - [x] 所有 Governance 层 ADR 标题已更新
-- [x] ADR-0006 术语定义已补充
+- [x] ADR-006 术语定义已补充
 - [x] 所有交叉引用已更新
 - [x] Prompts 文件标题已更新
 - [x] Instructions 文件已更新
@@ -180,10 +180,10 @@ Governance 层（治理层）
 
 以下位置仍使用"宪法"是**正确的**：
 
-1. **Constitutional 层 ADR**（ADR-0001~0009）
-   - ADR-0006：术语与编号宪法
-   - ADR-0007：Agent行为与权限宪法
-   - ADR-0008：文档编写与维护宪法
+1. **Constitutional 层 ADR**（ADR-001~0009）
+   - ADR-006：术语与编号宪法
+   - ADR-007：Agent行为与权限宪法
+   - ADR-008：文档编写与维护宪法
 
 2. **描述 Constitutional 层的文档**
    - 例："宪法层ADR定义了..."
@@ -194,7 +194,7 @@ Governance 层（治理层）
 ## 📚 相关文档
 
 - [ADR-900：架构测试与CI治理元规则](../adr/governance/ADR-900-architecture-tests.md)
-- [ADR-0006：术语与编号宪法](../adr/constitutional/ADR-0006-terminology-numbering-constitution.md)
+- [ADR-006：术语与编号宪法](../adr/constitutional/ADR-006-terminology-numbering-constitution.md)
 - [ADR-901：语义元规则](../adr/governance/ADR-901-warning-constraint-semantics.md)
 - [ADR-910：README编写与维护治理规范](../adr/governance/ADR-910-readme-governance-constitution.md)
 - [ADR-920：示例代码治理规范](../adr/governance/ADR-920-examples-governance-constitution.md)

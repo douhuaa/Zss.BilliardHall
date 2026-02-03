@@ -30,10 +30,10 @@ Governance 测试**不应该**包含：
 ## 测试示例
 
 ```csharp
-[Fact(DisplayName = "ADR-0008.G1: 文档治理宪法已定义")]
-public void ADR_0008_Document_Governance_Constitution_Exists()
+[Fact(DisplayName = "ADR-008.G1: 文档治理宪法已定义")]
+public void ADR_008_Document_Governance_Constitution_Exists()
 {
-    // 验证 ADR-0008 文档存在
+    // 验证 ADR-008 文档存在
     // 验证宪法级章节存在（不验证具体内容）
 }
 ```
@@ -52,7 +52,7 @@ Governance 定义"什么是合法"，Enforcement 检查"是否违规"，Heuristi
 
 ## 当前测试
 
-- `ADR_0008_Governance_Tests.cs` - ADR-0008 文档治理宪法的治理原则验证
+- `ADR_008_Governance_Tests.cs` - ADR-008 文档治理宪法的治理原则验证
 
 ## 何时添加新测试
 

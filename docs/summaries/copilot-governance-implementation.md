@@ -41,11 +41,11 @@
 | 文件                              | 大小   | 用途                  |
 |---------------------------------|------|---------------------|
 | `README.md`                     | 12KB | Copilot 角色定位和使用指南   |
-| `adr-0001.prompts.md`           | 13KB | ADR-0001 模块化单体与垂直切片 |
-| `adr-0002.prompts.md`           | 12KB | ADR-0002 三层启动体系     |
-| `adr-0003.prompts.md`           | 13KB | ADR-0003 命名空间规范     |
-| `adr-0004.prompts.md`           | 13KB | ADR-0004 中央包管理      |
-| `adr-0005.prompts.md`           | 17KB | ADR-0005 应用内交互模型    |
+| `adr-001.prompts.md`           | 13KB | ADR-001 模块化单体与垂直切片 |
+| `adr-002.prompts.md`           | 12KB | ADR-002 三层启动体系     |
+| `adr-003.prompts.md`           | 13KB | ADR-003 命名空间规范     |
+| `adr-004.prompts.md`           | 13KB | ADR-004 中央包管理      |
+| `adr-005.prompts.md`           | 17KB | ADR-005 应用内交互模型    |
 | `architecture-test-failures.md` | 11KB | 架构测试失败解释指南          |
 
 **总计**：7 个文件，约 91KB，覆盖所有核心 ADR
@@ -183,8 +183,8 @@ graph TB
 "我想在 Orders 模块中添加一个新的用例，有哪些架构约束？"
 
 Copilot 会参考：
-- docs/copilot/adr-0001.prompts.md
-- docs/copilot/adr-0005.prompts.md
+- docs/copilot/adr-001.prompts.md
+- docs/copilot/adr-005.prompts.md
 ```
 
 #### 场景 2：架构测试失败
@@ -205,7 +205,7 @@ Copilot 会参考：
 
 ```
 询问 Copilot：
-"请基于 ADR-0001 至 ADR-0005 审查本 PR 的变更，检查是否存在架构违规。"
+"请基于 ADR-001 至 ADR-005 审查本 PR 的变更，检查是否存在架构违规。"
 
 Copilot 会参考：
 - 所有 adr-XXXX.prompts.md
@@ -220,15 +220,15 @@ Copilot 会参考：
 docs/
   copilot/                              ← Copilot 提示词库
     README.md                           ← 角色定位和使用指南
-    adr-0001.prompts.md                 ← ADR-0001 提示词
-    adr-0002.prompts.md                 ← ADR-0002 提示词
-    adr-0003.prompts.md                 ← ADR-0003 提示词
-    adr-0004.prompts.md                 ← ADR-0004 提示词
-    adr-0005.prompts.md                 ← ADR-0005 提示词
+    adr-001.prompts.md                 ← ADR-001 提示词
+    adr-002.prompts.md                 ← ADR-002 提示词
+    adr-003.prompts.md                 ← ADR-003 提示词
+    adr-004.prompts.md                 ← ADR-004 提示词
+    adr-005.prompts.md                 ← ADR-005 提示词
     architecture-test-failures.md       ← 失败解释指南
   adr/                                  ← 架构决策记录
-    ADR-0001-*.md
-    ADR-0002-*.md
+    ADR-001-*.md
+    ADR-002-*.md
     ...
 .github/
   PULL_REQUEST_TEMPLATE.md              ← 增强的 PR 模板

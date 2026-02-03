@@ -85,7 +85,7 @@ dotnet test src/tests/ArchitectureTests/
 
 3. **AdrParserCli 命名空间问题**
    - 文件：`src/tools/AdrSemanticParser/AdrParserCli/AdrParserCli.csproj`
-   - 问题：项目命名不符合 ADR-0003 命名空间约定
+   - 问题：项目命名不符合 ADR-003 命名空间约定
    - 来源：工具项目
    - 建议：重命名或添加豁免
 

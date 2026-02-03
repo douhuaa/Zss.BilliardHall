@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
 
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_0907;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 
 /// <summary>
 /// ADR-907_1: ArchitectureTests 的法律地位
@@ -14,7 +14,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_0907;
 /// 
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md
-/// - Prompts: docs/copilot/adr-0907.prompts.md
+/// - Prompts: docs/copilot/adr-907.prompts.md
 /// </summary>
 public sealed class ADR_907_1_Architecture_Tests
 {

@@ -29,7 +29,7 @@ public class SkillsJudgmentLanguageTests
 
 ❌ **按 ADR 编号命名**（不推荐）：
 ```csharp
-public class ADR_0008_Architecture_Tests  // 太宽泛
+public class ADR_008_Architecture_Tests  // 太宽泛
 ```
 
 **原因**：ADR 是来源，不是实现命名空间。

@@ -144,7 +144,7 @@ Onboarding 文档 **必须**每月进行准确性审计。
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档分级和编写标准
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档分级和编写标准
 - [ADR-950：指南与 FAQ 文档治理规范](../governance/ADR-950-guide-faq-documentation-governance.md) - 基于其文档类型定义
 
 **被依赖（Depended By）**：
@@ -166,7 +166,7 @@ Onboarding 文档 **必须**每月进行准确性审计。
 ## References（非裁决性参考）
 
 ### 相关 ADR
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md)
 - [ADR-950：指南与 FAQ 文档治理规范](../governance/ADR-950-guide-faq-documentation-governance.md)
 
 ### 实施工具

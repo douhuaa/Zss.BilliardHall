@@ -21,11 +21,11 @@
 ┌─────────────────────────────────────────────────────────┐
 │                   ADR 宪法层                             │
 │  定义"什么是正确的架构"                                  │
-│  - ADR-0001: 模块隔离                                    │
-│  - ADR-0002: 三层启动                                    │
-│  - ADR-0003: 命名空间规则                                │
-│  - ADR-0004: 包管理                                      │
-│  - ADR-0005: CQRS 模式                                   │
+│  - ADR-001: 模块隔离                                    │
+│  - ADR-002: 三层启动                                    │
+│  - ADR-003: 命名空间规则                                │
+│  - ADR-004: 包管理                                      │
+│  - ADR-005: CQRS 模式                                   │
 └─────────────────────────────────────────────────────────┘
                         │
         ┌───────────────┼───────────────┐
@@ -273,7 +273,7 @@ jobs:
 **解决方案**：
 
 1. 识别失败的架构测试
-2. 查阅对应 ADR（ADR-0001 ~ 0005）
+2. 查阅对应 ADR（ADR-001 ~ 0005）
 3. 修复架构违规，而非修改格式
 
 **示例**：
@@ -282,7 +282,7 @@ jobs:
 // ❌ EditorConfig 格式正确，但架构测试失败
 namespace Zss.BilliardHall.Modules.Orders;  // ← 格式正确
 
-using Zss.BilliardHall.Modules.Members.Domain;  // ← 违反 ADR-0001（跨模块引用）
+using Zss.BilliardHall.Modules.Members.Domain;  // ← 违反 ADR-001（跨模块引用）
 
 // ✅ 修复方案：移除跨模块引用，使用契约或事件
 using Zss.BilliardHall.Modules.Members.Contracts;  // ← 合规

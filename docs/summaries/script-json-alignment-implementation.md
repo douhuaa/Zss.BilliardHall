@@ -84,11 +84,11 @@
   "details": [
     {
       "test": "ADR_Numbering_Format",
-      "adr": "ADR-0001",
+      "adr": "ADR-001",
       "severity": "info",
       "message": "编号格式正确：0001",
-      "file": "/path/to/ADR-0001-*.md",
-      "fix_guide": "docs/adr/constitutional/ADR-0006-terminology-numbering-constitution.md"
+      "file": "/path/to/ADR-001-*.md",
+      "fix_guide": "docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md"
     }
   ],
   "metadata": {

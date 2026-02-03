@@ -108,7 +108,7 @@ superseded_by: null
 - sed / grep / awk 误抽取
 
 **判定**：
-- ❌ 决策章节中出现 `ADR-0001` 等具体编号
+- ❌ 决策章节中出现 `ADR-001` 等具体编号
 - ❌ 示例代码中出现 `ADR-940` 等具体编号
 - ✅ 使用 `ADR-####` 作为占位符
 
@@ -121,17 +121,17 @@ superseded_by: null
 同一个 ADR 编号：
 
 **禁止**：
-- ❌ 拆分为多个文件（如 `ADR-0005-xxx.md` + `ADR-0005-yyy.md`）
+- ❌ 拆分为多个文件（如 `ADR-005-xxx.md` + `ADR-005-yyy.md`）
 
 **允许**：
 - ✅ 补充内容**必须**以内嵌章节存在于主文件中
 - ✅ 或使用不同编号（如补充文档使用新编号）
 
-**裁决理由**：直接消除 `ADR-0005 → ADR-0005` 这种自指。
+**裁决理由**：直接消除 `ADR-005 → ADR-005` 这种自指。
 
 **判定**：
-- ❌ 存在 `ADR-0005-A.md` 和 `ADR-0005-B.md`
-- ✅ 仅存在一个 `ADR-0005-xxx.md`
+- ❌ 存在 `ADR-005-A.md` 和 `ADR-005-B.md`
+- ✅ 仅存在一个 `ADR-005-xxx.md`
 
 ---
 
@@ -198,7 +198,7 @@ superseded_by: null
 **依赖（Depends On）**：
 - [ADR-940：ADR 关系与溯源管理治理规范](./ADR-940-adr-relationship-traceability-management.md) - 关系管理的基础规则
 - [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md) - 标题语义约束
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档结构规范
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档结构规范
 
 **被依赖（Depended By）**：
 - 无
@@ -210,7 +210,7 @@ superseded_by: null
 - 无
 
 **相关（Related）**：
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - ADR 编号规范
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - ADR 编号规范
 
 ---
 

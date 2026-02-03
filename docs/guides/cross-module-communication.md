@@ -1,7 +1,7 @@
 # 如何实现跨模块通信
 
-> 📘 **Guide - 基于 ADR-0001 的操作指南**  
-> **对应 ADR**：[ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)  
+> 📘 **Guide - 基于 ADR-001 的操作指南**  
+> **对应 ADR**：[ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)  
 > **最后更新**：2026-01-26
 
 ---
@@ -14,7 +14,7 @@
 
 ## 前置条件
 
-- 理解 ADR-0001 中的模块隔离规则
+- 理解 ADR-001 中的模块隔离规则
 - 熟悉领域事件和契约的概念
 - 已设置开发环境
 
@@ -355,7 +355,7 @@ public record CreateOrder(
 
 ```bash
 # 测试模块隔离
-dotnet test --filter "FullyQualifiedName~ADR_0001"
+dotnet test --filter "FullyQualifiedName~ADR_001"
 
 # 查看详细错误
 ./scripts/verify-all.sh
@@ -365,8 +365,8 @@ dotnet test --filter "FullyQualifiedName~ADR_0001"
 
 ## 相关文档
 
-- [ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 第 2.2 节
-- [ADR-0005：应用内交互模型与执行边界](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 第 2.2 节
+- [ADR-005：应用内交互模型与执行边界](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
 - [架构 FAQ](../faqs/architecture-faq.md) - 模块通信相关问题
 - [架构指南](../architecture-guide.md)
 

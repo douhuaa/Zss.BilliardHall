@@ -32,7 +32,7 @@
 
 | 层级      | 编号范围                | 目录                | 说明            | 当前状态     |
 |---------|---------------------|-------------------|---------------|----------|
-| **宪法层** | `ADR-0001~0009`     | `constitutional/` | 系统根基/不可推翻约束   | ✅ 5个 ADR |
+| **宪法层** | `ADR-001~0009`     | `constitutional/` | 系统根基/不可推翻约束   | ✅ 5个 ADR |
 | **结构层** | `ADR-100~199`       | `structure/`      | 模块静态边界/组织细化   | 🔜 未来扩展  |
 | **运行层** | `ADR-200~299`       | `runtime/`        | 运行/交互/协议/事件   | 🔜 未来扩展  |
 | **技术层** | `ADR-300~399`       | `technical/`      | 技术选型/具体落地     | 🔜 未来扩展  |
@@ -50,11 +50,11 @@ docs/adr/
 ├── README.md                          # 主索引，包含编号段映射表
 ├── constitutional/                    # 宪法层 ADR
 │   ├── README.md
-│   ├── ADR-0001-modular-monolith-vertical-slice-architecture.md
-│   ├── ADR-0002-platform-application-host-bootstrap.md
-│   ├── ADR-0003-namespace-rules.md
-│   ├── ADR-0004-Cpm-Final.md
-│   ├── ADR-0005-Application-Interaction-Model-Final.md
+│   ├── ADR-001-modular-monolith-vertical-slice-architecture.md
+│   ├── ADR-002-platform-application-host-bootstrap.md
+│   ├── ADR-003-namespace-rules.md
+│   ├── ADR-004-Cpm-Final.md
+│   ├── ADR-005-Application-Interaction-Model-Final.md
 │   ├── ADR-905-enforcement-level-classification.md
 │   └── ARCHITECTURE-CONSTITUTIONAL-LAYER.md
 ├── governance/                        # 治理层 ADR
@@ -130,7 +130,7 @@ docs/adr/
 
 ```bash
 # 使用 git mv 保留历史
-git mv docs/adr/ADR-0001-*.md docs/adr/constitutional/
+git mv docs/adr/ADR-001-*.md docs/adr/constitutional/
 git mv docs/adr/ADR-900A-adr-process.md docs/adr/governance/ADR-900-architecture-tests.md
 ```
 
@@ -139,7 +139,7 @@ git mv docs/adr/ADR-900A-adr-process.md docs/adr/governance/ADR-900-architecture
 ```bash
 # 更新所有 copilot prompts 中的路径
 for file in docs/copilot/adr-*.prompts.md; do
-  sed -i 's|../adr/ADR-0001-|../adr/constitutional/ADR-0001-|g' "$file"
+  sed -i 's|../adr/ADR-001-|../adr/constitutional/ADR-001-|g' "$file"
   sed -i 's|../adr/ADR-900-|../adr/governance/ADR-900-|g' "$file"
   # ... 更多替换
 done

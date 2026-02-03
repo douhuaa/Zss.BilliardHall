@@ -195,7 +195,7 @@ superseded_by: null
 
 **依赖（Depends On）**：
 - [ADR-120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 事件版本化基于事件命名规范
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 事件版本化基于事件驱动模式
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - 事件版本化基于事件驱动模式
 
 **被依赖（Depended By）**：
 - 无
@@ -218,7 +218,7 @@ superseded_by: null
 > **仅供理解，不具裁决力。**
 
 ### 相关 ADR
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
 - [ADR-120：领域事件命名规范](../structure/ADR-120-event-naming-standard.md)
 - [ADR-220：事件总线集成规范](ADR-220-event-bus-integration.md)
 
@@ -227,7 +227,7 @@ superseded_by: null
 - [JSON Schema 文档](https://json-schema.org/)
 
 ### 实践指导
-- 事件版本化详细示例参见 `docs/copilot/adr-0210.prompts.md`
+- 事件版本化详细示例参见 `docs/copilot/adr-210.prompts.md`
 
 ---
 

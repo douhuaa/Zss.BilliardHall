@@ -73,10 +73,10 @@
    - 实施引用 Prompts 文件
    - Instructions 不引用 Prompts 做裁决
 
-4. **Agent 权限仅参考 ADR-0007**
+4. **Agent 权限仅参考 ADR-007**
    - Instructions 中关于 Agent 行为的描述仅做跳转引用
-   - 不在 Instructions 中内联复述 ADR-0007 内容
-   - 所有三态输出、禁止行为等规则完全遵循 ADR-0007
+   - 不在 Instructions 中内联复述 ADR-007 内容
+   - 所有三态输出、禁止行为等规则完全遵循 ADR-007
 
 ### 与 docs/copilot/ 的关系
 
@@ -93,7 +93,7 @@
 ### 示例
 
 **Instructions 说**：
-> "禁止跨模块直接依赖。详细实施方案参阅 `docs/copilot/adr-0001.prompts.md`"
+> "禁止跨模块直接依赖。详细实施方案参阅 `docs/copilot/adr-001.prompts.md`"
 
 **Prompts 说**：
 > "当开发者想访问另一个模块时：
@@ -131,7 +131,7 @@ Instructions 保留的内容：
 - ✅ "禁止XX"、"允许XX"的边界声明
 - ✅ 危险信号检查清单
 - ✅ 引用路径和优先级
-- ✅ ADR-0007 的跳转链接（不内联复述）
+- ✅ ADR-007 的跳转链接（不内联复述）
 
 ## 何时更新
 

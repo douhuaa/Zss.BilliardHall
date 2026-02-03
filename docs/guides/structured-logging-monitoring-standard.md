@@ -653,6 +653,6 @@ public static class PlatformBootstrapper
 **相关文档**：
 
 - [ADR-340：结构化日志与监控约束](../adr/technical/ADR-340-structured-logging-monitoring-constraints.md)（裁决性）
-- [ADR-0002：Platform/Application/Host 启动体系](../adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)
+- [ADR-002：Platform/Application/Host 启动体系](../adr/constitutional/ADR-002-platform-application-host-bootstrap.md)
 - [Serilog 官方文档](https://serilog.net/)
 - [OpenTelemetry .NET 文档](https://opentelemetry.io/docs/languages/net/)

@@ -85,18 +85,18 @@ enforceable: false
 
 **工具**：ArchitectureTests（NetArchTest）
 
-**适用规则示例**（基于 ADR-0005）：
+**适用规则示例**（基于 ADR-005）：
 
 | 规则编号 | 规则描述 | 测试方法 |
 |---------|---------|---------|
-| ADR-0005.1 | Handler 应有明确的命名约定 | `Handlers_Should_Have_Clear_Naming_Convention` |
-| ADR-0005.3 | Handler 不应依赖 ASP.NET 类型 | `Handlers_Should_Not_Depend_On_AspNet` |
-| ADR-0005.4 | Handler 应该是无状态的（字段检查） | `Handlers_Should_Be_Stateless` |
-| ADR-0005.5 | 模块间不应有未审批的同步调用（依赖检查） | `Modules_Should_Not_Have_Synchronous_Cross_Module_Calls` |
-| ADR-0005.6 | 异步方法应遵循命名约定 | `Async_Methods_Should_Follow_Naming_Convention` |
-| ADR-0005.7 | 模块不应共享领域实体 | `Modules_Should_Not_Share_Domain_Entities` |
-| ADR-0005.9 | Command 和 Query Handler 应明确分离 | `Command_And_Query_Handlers_Should_Be_Separated` |
-| ADR-0005.12 | 所有 Handler 应在模块程序集中 | `All_Handlers_Should_Be_In_Module_Assemblies` |
+| ADR-005.1 | Handler 应有明确的命名约定 | `Handlers_Should_Have_Clear_Naming_Convention` |
+| ADR-005.3 | Handler 不应依赖 ASP.NET 类型 | `Handlers_Should_Not_Depend_On_AspNet` |
+| ADR-005.4 | Handler 应该是无状态的（字段检查） | `Handlers_Should_Be_Stateless` |
+| ADR-005.5 | 模块间不应有未审批的同步调用（依赖检查） | `Modules_Should_Not_Have_Synchronous_Cross_Module_Calls` |
+| ADR-005.6 | 异步方法应遵循命名约定 | `Async_Methods_Should_Follow_Naming_Convention` |
+| ADR-005.7 | 模块不应共享领域实体 | `Modules_Should_Not_Share_Domain_Entities` |
+| ADR-005.9 | Command 和 Query Handler 应明确分离 | `Command_And_Query_Handlers_Should_Be_Separated` |
+| ADR-005.12 | 所有 Handler 应在模块程序集中 | `All_Handlers_Should_Be_In_Module_Assemblies` |
 
 **判定**：
 - ✅ L1 规则测试失败必须修复代码，不可破例
@@ -118,14 +118,14 @@ enforceable: false
 - 当前：ArchitectureTests（启发式检查）
 - 建议：Roslyn Analyzer（自定义分析器）
 
-**适用规则示例**（基于 ADR-0005）：
+**适用规则示例**（基于 ADR-005）：
 
 | 规则编号 | 规则描述 | 当前测试方法 | Analyzer 需求 |
 |---------|---------|-------------|--------------|
-| ADR-0005.2 | Endpoint 不应包含业务逻辑 | `Endpoints_Should_Not_Contain_Business_Logic` | 检查方法体复杂度、业务规则调用 |
-| ADR-0005.5 | 模块间异步通信（Handler 调用检查） | `Modules_Should_Not_Have_Synchronous_Cross_Module_Calls` | 检查方法调用链、跨模块 public 方法调用 |
-| ADR-0005.10 | Command Handler 不应返回业务数据 | `CommandHandlers_Should_Not_Return_Business_Data` | 检查返回类型的语义（简单类型 vs 业务对象） |
-| ADR-0005.11 | Handler 应使用结构化异常 | `Handlers_Should_Use_Structured_Exceptions` | IL 分析，检查 `throw new Exception` |
+| ADR-005.2 | Endpoint 不应包含业务逻辑 | `Endpoints_Should_Not_Contain_Business_Logic` | 检查方法体复杂度、业务规则调用 |
+| ADR-005.5 | 模块间异步通信（Handler 调用检查） | `Modules_Should_Not_Have_Synchronous_Cross_Module_Calls` | 检查方法调用链、跨模块 public 方法调用 |
+| ADR-005.10 | Command Handler 不应返回业务数据 | `CommandHandlers_Should_Not_Return_Business_Data` | 检查返回类型的语义（简单类型 vs 业务对象） |
+| ADR-005.11 | Handler 应使用结构化异常 | `Handlers_Should_Use_Structured_Exceptions` | IL 分析，检查 `throw new Exception` |
 
 **判定**：
 - ✅ L2 规则测试失败可申请破例，需充分理由
@@ -148,12 +148,12 @@ enforceable: false
 - 架构师 Code Review
 - ARCH-VIOLATION 记录表
 
-**适用规则示例**（基于 ADR-0005）：
+**适用规则示例**（基于 ADR-005）：
 
 | 规则编号 | 规则描述 | 人工审查要点 |
 |---------|---------|-------------|
-| ADR-0005.5 | 模块间同步调用破例审批 | 是否有明确的远程调用契约？是否处理了超时/降级？ |
-| ADR-0005.8 | Query Handler 可以返回 Contracts | 返回的 Contract 是否版本化？是否只读？ |
+| ADR-005.5 | 模块间同步调用破例审批 | 是否有明确的远程调用契约？是否处理了超时/降级？ |
+| ADR-005.8 | Query Handler 可以返回 Contracts | 返回的 Contract 是否版本化？是否只读？ |
 | 事务边界 | 跨模块事务与 Saga | 是否真的需要强一致性？Saga 补偿逻辑是否完整？ |
 | 业务决策 | Handler 职责划分 | 业务逻辑是否集中在一个 Handler？是否有隐藏的跨 Handler 协作？ |
 
@@ -209,7 +209,7 @@ enforceable: false
 | 规则编号   | 执行级 | 执法方式 | 关键测试用例/流程 | 必须遵守 |
 |---------|------|----------------|--------------------------|------|
 | ADR-905.1 | L2   | ADR 编写时的执行级别声明检查（Code Review） | ADR_905_EnforcementLevel_Declaration_Test | ✅    |
-| ADR-905.2 | L1   | NetArchTest 架构测试（CI 阻断） | ArchitectureTests（见 ADR-0005 相关用例） | ✅    |
+| ADR-905.2 | L1   | NetArchTest 架构测试（CI 阻断） | ArchitectureTests（见 ADR-005 相关用例） | ✅    |
 | ADR-905.3 | L2   | Roslyn Analyzer（警告）+ 人工审查 | Roslyn Analyzer/启发式检查 | ✅    |
 | ADR-905.4 | L3   | PR Template + 架构师审查 + ARCH-VIOLATIONS 记录 | PR Review 流程/破例登记 | ✅    |
 | ADR-905.5 | L2   | Code Review + 教育培训 | 规则分级宣贯/人工审核 | ✅    |
@@ -250,9 +250,9 @@ enforceable: false
 ## Relationships（关系声明）
 
 **Depends On**：
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 本 ADR 为 ADR-0005 的执行级别补充
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - 本 ADR 为 ADR-005 的执行级别补充
 - [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 执行级别基于测试和 CI 治理机制
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档治理宪法
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档治理宪法
 - [ADR-902：治理类 ADR 标准格式](./ADR-902-adr-template-structure-contract.md) - 本文档标准来源
 
 **Depended By**：
@@ -267,10 +267,10 @@ enforceable: false
 - 无
 
 **Related（相关）**：
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 执行级别应用于模块化约束
-- [ADR-0002：Platform / Application / Host 三层启动体系](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 执行级别应用于三层约束
-- [ADR-0003：命名空间与项目边界规范](../constitutional/ADR-0003-namespace-rules.md) - 执行级别应用于命名空间约束
-- [ADR-0004：中央包管理（CPM）规范](../constitutional/ADR-0004-Cpm-Final.md) - 执行级别应用于依赖管理约束
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 执行级别应用于模块化约束
+- [ADR-002：Platform / Application / Host 三层启动体系](../constitutional/ADR-002-platform-application-host-bootstrap.md) - 执行级别应用于三层约束
+- [ADR-003：命名空间与项目边界规范](../constitutional/ADR-003-namespace-rules.md) - 执行级别应用于命名空间约束
+- [ADR-004：中央包管理（CPM）规范](../constitutional/ADR-004-Cpm-Final.md) - 执行级别应用于依赖管理约束
 - [ADR-124：Endpoint 命名及参数约束规范](../structure/ADR-124-endpoint-naming-constraints.md) - 参考本文档的执行级别
 - [ADR-120：领域事件命名规范](../structure/ADR-120-domain-event-naming-convention.md) - 参考本文档的执行级别
 - [ADR-121：契约（Contract）与 DTO 命名组织规范](../structure/ADR-121-contract-dto-naming-organization.md) - 参考本文档的执行级别
@@ -288,7 +288,7 @@ enforceable: false
 
 ### 背景与原理
 
-ADR-0005 定义的是"运行时秩序"，但工具能力有物理极限：
+ADR-005 定义的是"运行时秩序"，但工具能力有物理极限：
 
 - **NetArchTest** 只能做编译期静态分析
 - **Roslyn Analyzer** 可以做语义级检查
@@ -307,7 +307,7 @@ ADR-0005 定义的是"运行时秩序"，但工具能力有物理极限：
 - **辅助工具层**（Level 2）：提示潜在风险，辅助人工决策
 - **人工决策层**（Level 3）：处理复杂场景，记录权衡过程
 
-> **核心观点**：ADR-0005 的本质是"运行时秩序"，静态测试是"近似执行"，不是"完全执行"。
+> **核心观点**：ADR-005 的本质是"运行时秩序"，静态测试是"近似执行"，不是"完全执行"。
 > 通过三级分类，我们承认工具的局限性，不依赖单一工具的"完美"，建立了人机协作的架构治理体系。
 > 这不是妥协，这是成熟。
 

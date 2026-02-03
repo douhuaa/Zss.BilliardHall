@@ -143,7 +143,7 @@ L3 Best Practice（推荐做法，无强制力）
 **被替代（Superseded By）**：无
 
 **相关（Related）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档分级
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档分级
 
 ---
 

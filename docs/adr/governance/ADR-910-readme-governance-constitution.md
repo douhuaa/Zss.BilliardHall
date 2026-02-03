@@ -72,7 +72,7 @@ README **禁止**：
 **判定**：
 - ❌ README 定义"模块必须隔离"
 - ❌ README 做出"这个设计符合架构"的判断
-- ✅ README 链接到 ADR-0001 并说明如何遵守
+- ✅ README 链接到 ADR-001 并说明如何遵守
 
 ---
 
@@ -91,16 +91,16 @@ README **禁止**使用以下裁决性词汇：
 | 违规    | 做出合规性判断             | "不符合 ADR-XXXX" |
 
 **允许使用的上下文**：
-1. 明确引用 ADR：`"根据 ADR-0001，模块必须隔离"`
+1. 明确引用 ADR：`"根据 ADR-001，模块必须隔离"`
 2. 代码示例标记：`// ✅ 正确 // ❌ 错误`
-3. 对比表格：`| 操作 | 是否允许 | 依据 | ... | 禁止 | ADR-0001 |`
+3. 对比表格：`| 操作 | 是否允许 | 依据 | ... | 禁止 | ADR-001 |`
 
 **核心原则**：
 > README 禁用的裁决性语言必须有 ADR 引用支撑。
 
 **判定**：
 - ❌ "模块必须使用事件通信"（无 ADR 引用）
-- ✅ "根据 ADR-0001，模块必须使用事件通信"
+- ✅ "根据 ADR-001，模块必须使用事件通信"
 - ✅ 代码块中的 `// ✅ 正确` 标记
 
 ---
@@ -140,8 +140,8 @@ README 引用 ADR 必须遵循：
 
 **允许**：
 ```markdown
-✅ "根据 ADR-0001，模块使用事件通信。详见 [ADR-0001](链接)"
-✅ "参考 ADR-0005 了解 Handler 模式"
+✅ "根据 ADR-001，模块使用事件通信。详见 [ADR-001](链接)"
+✅ "参考 ADR-005 了解 Handler 模式"
 ```
 
 **禁止**：
@@ -245,8 +245,8 @@ README 引用 ADR 必须遵循：
 
 **依赖（Depends On）**：
 - [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - README 治理基于测试和 CI 机制
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - README 术语使用遵循统一规范
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - README 约束是文档治理的细化
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - README 术语使用遵循统一规范
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - README 约束是文档治理的细化
 
 **被依赖（Depended By）**：
 - 无（README 约束是终端规则，不被其他 ADR 依赖）
@@ -272,7 +272,7 @@ README 引用 ADR 必须遵循：
 - [GitHub's Guide to README](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes) - GitHub 官方 README 指南
 
 **相关内部文档**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档分级与权限划分
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档分级与权限划分
 - [ADR-920：示例代码治理规范](./ADR-920-examples-governance-constitution.md) - README 中代码示例的约束
 - [ADR-950：Guide/FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md) - 与 Guide 文档的边界
 - [ADR-960：入职文档治理](./ADR-960-onboarding-documentation-governance.md) - 入职文档与 README 的关系

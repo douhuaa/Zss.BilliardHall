@@ -8,7 +8,7 @@ using System.Linq;
 namespace Zss.BilliardHall.ArchitectureAnalyzers;
 
 /// <summary>
-/// ADR-0005.11: Handler 应使用结构化异常
+/// ADR-005.11: Handler 应使用结构化异常
 /// Analyzer that detects usage of generic Exception instead of domain-specific exceptions
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -18,7 +18,7 @@ public class StructuredExceptionAnalyzer : DiagnosticAnalyzer
     private const string Category = "Architecture";
 
     private static readonly LocalizableString Title = "Handler uses generic Exception instead of structured exception";
-    private static readonly LocalizableString MessageFormat = "Handler '{0}' throws generic Exception. Use domain-specific exception types (ADR-0005.11).";
+    private static readonly LocalizableString MessageFormat = "Handler '{0}' throws generic Exception. Use domain-specific exception types (ADR-005.11).";
     private static readonly LocalizableString Description = "Handlers should throw structured, domain-specific exceptions (e.g., DomainException, ValidationException) " + "instead of generic System.Exception to enable proper error handling and domain semantics.";
 
     private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId,

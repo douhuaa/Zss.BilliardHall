@@ -185,8 +185,8 @@ Application 层和 Modules 层**禁止**配置日志框架或 OpenTelemetry。
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 日志架构基于三层体系
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 日志术语遵循统一规范
+- [ADR-002：平台、应用与主机启动器架构](../constitutional/ADR-002-platform-application-host-bootstrap.md) - 日志架构基于三层体系
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - 日志术语遵循统一规范
 
 **被依赖（Depended By）**：
 - [ADR-350：日志可观测性标准](./ADR-350-logging-observability-standards.md) - 可观测性基于结构化日志
@@ -207,7 +207,7 @@ Application 层和 Modules 层**禁止**配置日志框架或 OpenTelemetry。
 ## References（非裁决性参考）
 
 ### 相关 ADR
-- ADR-0002：Platform/Application/Host 启动体系
+- ADR-002：Platform/Application/Host 启动体系
 - ADR-350：日志与可观测性字段标准
 
 ### 技术资源
@@ -215,7 +215,7 @@ Application 层和 Modules 层**禁止**配置日志框架或 OpenTelemetry。
 - [OpenTelemetry .NET 文档](https://opentelemetry.io/docs/languages/net/)
 
 ### 实践指导
-- 详细配置示例参见 `docs/copilot/adr-0340.prompts.md`（待创建）
+- 详细配置示例参见 `docs/copilot/adr-340.prompts.md`（待创建）
 
 ---
 

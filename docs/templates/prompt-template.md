@@ -10,7 +10,7 @@ status: "Active"
 
 > 本模板仅为 Prompts 编写的结构与示例参考，所有决策、约束、解释权均归属 ADR 正文。遇到冲突时，**以 ADR 正文为唯一裁决依据**。Prompts 仅作为示例和解释辅助，不能替代正式 ADR。
 >
-> 依据：[ADR-0007：Agent 行为与权限宪法](../adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+> 依据：[ADR-007：Agent 行为与权限宪法](../adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
 
 ## 目的说明
 简要说明本 Prompt 的设计目的、适用场景。
@@ -38,9 +38,9 @@ status: "Active"
 
 ## 相关链接
 - [文档编写指令](../instructions/documentation.instructions.md)
-- [ADR-0008：文档编写与维护宪法](../adr/constitutional/ADR-0008-documentation-writing-maintenance-constitution.md)
+- [ADR-008：文档编写与维护宪法](../adr/constitutional/ADR-008-documentation-writing-maintenance-constitution.md)
 
 ## 相关 ADR
-- [ADR-0007：Agent 行为与权限宪法](../adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
-- [ADR-0008：文档编写与维护宪法](../adr/constitutional/ADR-0008-documentation-writing-maintenance-constitution.md)
-- [ADR-0900：ADR 流程](../adr/governance/ADR-0900-adr-workflow-final.md)
+- [ADR-007：Agent 行为与权限宪法](../adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
+- [ADR-008：文档编写与维护宪法](../adr/constitutional/ADR-008-documentation-writing-maintenance-constitution.md)
+- [ADR-900：ADR 流程](../adr/governance/ADR-900-adr-workflow-final.md)

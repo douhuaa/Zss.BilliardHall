@@ -8,7 +8,7 @@ using System.Linq;
 namespace Zss.BilliardHall.ArchitectureAnalyzers;
 
 /// <summary>
-/// ADR-0005.2: Endpoint 不应包含业务逻辑
+/// ADR-005.2: Endpoint 不应包含业务逻辑
 /// Analyzer that detects business logic in endpoint methods
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -29,7 +29,7 @@ public class EndpointBusinessLogicAnalyzer : DiagnosticAnalyzer
     private const int SomeStatementsThreshold = 5;
 
     private static readonly LocalizableString Title = "Endpoint contains business logic";
-    private static readonly LocalizableString MessageFormat = "Endpoint method '{0}' contains business logic. Endpoints should only coordinate Handler calls (ADR-0005.2).";
+    private static readonly LocalizableString MessageFormat = "Endpoint method '{0}' contains business logic. Endpoints should only coordinate Handler calls (ADR-005.2).";
     private static readonly LocalizableString Description = "Endpoints should be thin coordination layers that delegate to Handlers. " + "Business logic, conditionals, and data manipulation should be in Handlers.";
 
     private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId,

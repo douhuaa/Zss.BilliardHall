@@ -19,8 +19,8 @@ graph TB
     NewDev -->|处理CI失败| CIFix[CI/CD指南]
     
     QuickStart --> ArchGuide[📘 架构指南<br/>guides/architecture-design-guide.md]
-    QuickStart --> ADR001[📘 ADR-0001<br/>模块化单体架构]
-    QuickStart --> ADR002[📘 ADR-0002<br/>平台应用主机]
+    QuickStart --> ADR001[📘 ADR-001<br/>模块化单体架构]
+    QuickStart --> ADR002[📘 ADR-002<br/>平台应用主机]
     QuickStart --> AutoVerify[📘 架构自动化验证系统]
     
     DevGuide --> ArchGuide
@@ -33,9 +33,9 @@ graph TB
     ArchGuide --> ADRIndex[📁 ADR 目录]
     ADRIndex --> ADR001
     ADRIndex --> ADR002
-    ADRIndex --> ADR003[📘 ADR-0003<br/>命名空间规范]
-    ADRIndex --> ADR004[📘 ADR-0004<br/>中央包管理]
-    ADRIndex --> ADR005[📘 ADR-0005<br/>应用交互模型]
+    ADRIndex --> ADR003[📘 ADR-003<br/>命名空间规范]
+    ADRIndex --> ADR004[📘 ADR-004<br/>中央包管理]
+    ADRIndex --> ADR005[📘 ADR-005<br/>应用交互模型]
     
     ModuleDocs --> Members[📁 Members 模块]
     ModuleDocs --> Orders[📁 Orders 模块]
@@ -61,11 +61,11 @@ graph LR
     end
     
     subgraph ADR[架构决策记录]
-        ADR1[ADR-0001<br/>架构决策]
-        ADR2[ADR-0002<br/>平台应用]
-        ADR3[ADR-0003<br/>命名规范]
-        ADR4[ADR-0004<br/>包管理]
-        ADR5[ADR-0005<br/>交互模型]
+        ADR1[ADR-001<br/>架构决策]
+        ADR2[ADR-002<br/>平台应用]
+        ADR3[ADR-003<br/>命名规范]
+        ADR4[ADR-004<br/>包管理]
+        ADR5[ADR-005<br/>交互模型]
     end
     
     subgraph Modules[模块文档]
@@ -106,11 +106,11 @@ graph LR
 ### 架构决策记录 (ADR)
 
 - [ADR 目录](adr/README.md) - ADR 完整索引和导航
-  - [ADR-0001: 模块化单体与垂直切片架构决策](adr/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-  - [ADR-0002: 平台、应用与主机启动器架构决策](adr/ADR-0002-platform-application-host-bootstrap.md)
-  - [ADR-0003: 命名空间与项目结构规范](adr/ADR-0003-namespace-rules.md)
-  - [ADR-0004: 中央包管理与层级依赖规则](adr/ADR-0004-Cpm-Final.md)
-  - [ADR-0005: 应用内交互模型与执行边界](adr/ADR-0005-Application-Interaction-Model-Final.md)
+  - [ADR-001: 模块化单体与垂直切片架构决策](adr/ADR-001-modular-monolith-vertical-slice-architecture.md)
+  - [ADR-002: 平台、应用与主机启动器架构决策](adr/ADR-002-platform-application-host-bootstrap.md)
+  - [ADR-003: 命名空间与项目结构规范](adr/ADR-003-namespace-rules.md)
+  - [ADR-004: 中央包管理与层级依赖规则](adr/ADR-004-Cpm-Final.md)
+  - [ADR-005: 应用内交互模型与执行边界](adr/ADR-005-Application-Interaction-Model-Final.md)
 
 ### 改进总结
 
@@ -140,8 +140,8 @@ graph LR
 ### 理解架构
 
 1. 阅读 [架构指南](guides/architecture-design-guide.md) 了解整体架构
-2. 阅读 [ADR-0001](adr/ADR-0001-modular-monolith-vertical-slice-architecture.md) 了解架构决策背景
-3. 阅读 [ADR-0002](adr/ADR-0002-platform-application-host-bootstrap.md) 了解启动器架构决策
+2. 阅读 [ADR-001](adr/ADR-001-modular-monolith-vertical-slice-architecture.md) 了解架构决策背景
+3. 阅读 [ADR-002](adr/ADR-002-platform-application-host-bootstrap.md) 了解启动器架构决策
 4. 阅读 [架构自动化验证系统](guides/architecture-verification-guide.md) 了解自动化执行体系
 
 ### 开发新功能
@@ -162,19 +162,19 @@ graph LR
 
 根据相关 ADR 文档，本项目遵循以下核心原则：
 
-1. **模块隔离** - 业务模块之间不能直接相互引用（参见 [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)）
-2. **垂直切片** - 按用例组织功能，而非技术层（参见 [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)）
+1. **模块隔离** - 业务模块之间不能直接相互引用（参见 [ADR-001](adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)）
+2. **垂直切片** - 按用例组织功能，而非技术层（参见 [ADR-001](adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)）
 3. **自动化测试** - 所有架构约束通过测试强制执行（参见 [ADR-900](adr/governance/ADR-900-architecture-tests.md)）
 
 ### 关键约束
 
 根据 ADR 文档，以下为关键架构约束：
 
-1. 模块不应直接引用其他模块实现（[ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)）
+1. 模块不应直接引用其他模块实现（[ADR-001](adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)）
 2. 所有隔离规则通过自动化测试校验（[ADR-900](adr/governance/ADR-900-architecture-tests.md)）
 3. 架构测试失败会阻止构建（[ADR-900](adr/governance/ADR-900-architecture-tests.md)）
-4. 契约用于数据传递，不应驱动业务决策（[ADR-0005](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)）
-5. ADR 为架构裁决的最终依据（[ADR-0008](adr/constitutional/ADR-0008-documentation-governance-constitution.md)）
+4. 契约用于数据传递，不应驱动业务决策（[ADR-005](adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)）
+5. ADR 为架构裁决的最终依据（[ADR-008](adr/constitutional/ADR-008-documentation-governance-constitution.md)）
 
 详见各 ADR 文档了解具体规则。
 

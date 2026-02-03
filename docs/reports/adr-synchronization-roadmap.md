@@ -17,11 +17,11 @@ gantt
     自动化工具开发         :done, p1-2, 2026-01-29, 1d
     
     section Phase 3: P0修复
-    ADR-0001修复         :p3-1, 2026-01-30, 2d
-    ADR-0002修复         :p3-2, 2026-01-30, 2d
-    ADR-0003修复         :p3-3, 2026-02-01, 1d
-    ADR-0004修复         :p3-4, 2026-02-01, 1d
-    ADR-0005修复         :p3-5, 2026-02-02, 1d
+    ADR-001修复         :p3-1, 2026-01-30, 2d
+    ADR-002修复         :p3-2, 2026-01-30, 2d
+    ADR-003修复         :p3-3, 2026-02-01, 1d
+    ADR-004修复         :p3-4, 2026-02-01, 1d
+    ADR-005修复         :p3-5, 2026-02-02, 1d
     验证P0修复           :p3-6, 2026-02-03, 1d
     
     section Phase 4: P1修复
@@ -68,11 +68,11 @@ quadrantChart
 **影响范围**：所有依赖宪法层的 ADR 和开发者
 
 **问题清单**：
-1. ADR-0001: 缺少 Front Matter、标准术语表、快速参考表
-2. ADR-0002: 缺少 Front Matter、执行级别标注
-3. ADR-0003: 缺少 Front Matter、英文对照
-4. ADR-0004: 缺少 Front Matter、完整关系声明
-5. ADR-0005: 缺少 Front Matter、标准化格式
+1. ADR-001: 缺少 Front Matter、标准术语表、快速参考表
+2. ADR-002: 缺少 Front Matter、执行级别标注
+3. ADR-003: 缺少 Front Matter、英文对照
+4. ADR-004: 缺少 Front Matter、完整关系声明
+5. ADR-005: 缺少 Front Matter、标准化格式
 
 **修复策略**：
 - ✅ 按 ADR 顺序逐个修复
@@ -145,7 +145,7 @@ python3 ./scripts/validate-adr-relationships.py
 
 **修复策略**：
 - ✅ 为所有术语表增加英文对照
-- ✅ 建立权威术语表（ADR-0006）
+- ✅ 建立权威术语表（ADR-006）
 - ✅ 清理重复定义
 
 **时间要求**：60 天内完成（2026-03-30前）
@@ -184,7 +184,7 @@ grep -r "## Non-Goals" docs/adr/constitutional/
 ## 每周检查点
 
 ### Week 1 (2026-01-30 - 2026-02-05)
-- [ ] 修复 ADR-0001 至 ADR-0005（P0）
+- [ ] 修复 ADR-001 至 ADR-005（P0）
 - [ ] 验证宪法层 ADR 一致性检查通过
 - [ ] 更新 Phase 3 完成状态
 

@@ -1,7 +1,7 @@
 # 模块化架构常见问题
 
 > 📋 **根据 ADR-950 创建的 FAQ 文档**  
-> **对应 ADR**：ADR-0001, ADR-0005  
+> **对应 ADR**：ADR-001, ADR-005  
 > **最后更新**：2026-01-26
 
 ---
@@ -24,7 +24,7 @@
 
 模块隔离是实现松耦合、高内聚的关键。
 
-**参考 ADR**：[ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 第 2.1 节
+**参考 ADR**：[ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 第 2.1 节
 
 ---
 
@@ -48,7 +48,7 @@
 - ❌ 直接调用其他模块的 Command Handler
 - ❌ 共享领域对象
 
-**参考 ADR**：[ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 第 2.2 节
+**参考 ADR**：[ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 第 2.2 节
 
 ---
 
@@ -66,7 +66,7 @@
 - 事务边界难以管理
 - 开发效率降低
 
-**参考 ADR**：[ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 第 2.1 节
+**参考 ADR**：[ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 第 2.1 节
 
 ---
 
@@ -91,7 +91,7 @@
 - ✅ 修改影响范围小
 - ✅ 易于测试和维护
 
-**参考 ADR**：[ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 第 3.2 节
+**参考 ADR**：[ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 第 3.2 节
 
 ---
 
@@ -115,7 +115,7 @@
 - ❌ 创建横向 Service 层
 - ❌ 创建通用 Manager/Helper 类
 
-**参考 ADR**：[ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 第 3.3 节
+**参考 ADR**：[ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 第 3.3 节
 
 ---
 
@@ -146,7 +146,7 @@ var orderId = await Send(new CreateOrder(...));
 var orderDetails = await Send(new GetOrderDetails(orderId));
 ```
 
-**参考 ADR**：[ADR-0005：应用内交互模型与执行边界](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 第 2.1 节
+**参考 ADR**：[ADR-005：应用内交互模型与执行边界](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md) - 第 2.1 节
 
 ---
 
@@ -166,7 +166,7 @@ var orderDetails = await Send(new GetOrderDetails(orderId));
 - ✅ 可以跨模块边界查询（通过契约）
 - ✅ 需要性能优化（如投影、缓存）
 
-**参考 ADR**：[ADR-0005：应用内交互模型与执行边界](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 第 2 节
+**参考 ADR**：[ADR-005：应用内交互模型与执行边界](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md) - 第 2 节
 
 ---
 
@@ -198,7 +198,7 @@ var orderDetails = await Send(new GetOrderDetails(orderId));
    private readonly Guid _memberId;
    ```
 
-**参考 ADR**：[ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+**参考 ADR**：[ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
 
 ---
 
@@ -213,15 +213,15 @@ var orderDetails = await Send(new GetOrderDetails(orderId));
 dotnet test src/tests/ArchitectureTests/
 
 # 2. 针对特定 ADR
-dotnet test --filter "FullyQualifiedName~ADR_0001"
+dotnet test --filter "FullyQualifiedName~ADR_001"
 
 # 3. 本地验证脚本
 ./scripts/verify-all.sh
 ```
 
 **常见测试**：
-- `ADR_0001_*` - 模块隔离
-- `ADR_0005_*` - Handler 模式和 CQRS
+- `ADR_001_*` - 模块隔离
+- `ADR_005_*` - Handler 模式和 CQRS
 
 **参考**：
 - [ADR-900：架构测试与 CI 治理元规则](../adr/governance/ADR-900-architecture-tests.md)
@@ -261,7 +261,7 @@ Orders/UseCases/CreateOrder/
   └─ CreateOrderHandlerTests.cs     - 测试
 ```
 
-**参考 ADR**：[ADR-0001](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 第 3.2 节
+**参考 ADR**：[ADR-001](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 第 3.2 节
 
 ---
 
@@ -318,7 +318,7 @@ public async Task HandleAsync(InventoryReservedEvent @event)
 - 每个模块监听补偿事件并回滚自己的状态
 
 **参考**：
-- [ADR-0001](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 第 2.2 节
+- [ADR-001](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 第 2.2 节
 - [领域事件通信案例](../cases/domain-event-communication-case.md)
 
 ---
@@ -329,7 +329,7 @@ public async Task HandleAsync(InventoryReservedEvent @event)
 
 **Endpoint 的唯一职责**：适配 HTTP 请求/响应 ↔ Handler
 
-**允许的逻辑**（根据 ADR-0005）：
+**允许的逻辑**（根据 ADR-005）：
 - ✅ 参数绑定和基本验证（如参数非空）
 - ✅ 映射 HTTP 请求到 Command/Query
 - ✅ 映射 Handler 结果到 HTTP 响应
@@ -389,7 +389,7 @@ app.MapPost("/orders", async (request, sender, memberRepo) =>
 });
 ```
 
-**参考 ADR**：[ADR-0005](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 第 3 节
+**参考 ADR**：[ADR-005](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md) - 第 3 节
 
 ---
 
@@ -429,14 +429,14 @@ app.MapPost("/orders", async (request, sender, memberRepo) =>
 **参考**：
 - [领域事件通信案例](../cases/domain-event-communication-case.md)
 - [契约查询模式案例](../cases/contract-query-pattern-case.md)
-- [ADR-0001](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 第 2.2 节
+- [ADR-001](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 第 2.2 节
 
 ---
 
 ## 相关文档
 
-- [ADR-0001：模块化单体与垂直切片架构](../adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-0005：应用内交互模型与执行边界](../adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-001：模块化单体与垂直切片架构](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-005：应用内交互模型与执行边界](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
 - [架构设计指南](../guides/architecture-design-guide.md)
 - [快速开始指南](../guides/quick-start-guide.md)
 - [案例库](../cases/README.md)

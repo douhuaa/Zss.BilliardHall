@@ -19,7 +19,7 @@ required_agent: "architecture-guardian"
 
 ### 用途
 
-根据用例需求生成符合 ADR-0005 规范的 Handler 代码，确保遵循 CQRS 原则和垂直切片架构。
+根据用例需求生成符合 ADR-005 规范的 Handler 代码，确保遵循 CQRS 原则和垂直切片架构。
 
 ### 输入参数
 
@@ -286,8 +286,8 @@ public class {UseCase}Handler : IQueryHandler<{UseCase}, {ReturnType}>
 
 ## 参考资料
 
-- [ADR-0005：应用内交互模型](../../../docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-0001：垂直切片架构](../../../docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-005：应用内交互模型](../../../docs/adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
+- [ADR-001：垂直切片架构](../../../docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
 - [后端开发指令](../../instructions/backend.instructions.md)
 
 ---

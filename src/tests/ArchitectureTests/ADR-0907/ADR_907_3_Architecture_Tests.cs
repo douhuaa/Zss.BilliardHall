@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
 
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_0907;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 
 /// <summary>
 /// ADR-907_3: 最小断言语义规范
@@ -15,7 +15,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_0907;
 /// 
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md
-/// - Prompts: docs/copilot/adr-0907.prompts.md
+/// - Prompts: docs/copilot/adr-907.prompts.md
 /// </summary>
 public sealed class ADR_907_3_Architecture_Tests
 {

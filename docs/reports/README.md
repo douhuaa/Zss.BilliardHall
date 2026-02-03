@@ -57,7 +57,7 @@ docs/reports/
   "details": [
     {
       "test": "test-name",
-      "adr": "ADR-0001",
+      "adr": "ADR-001",
       "severity": "error | warning | info",
       "message": "error message",
       "file": "path/to/file.cs",
@@ -122,10 +122,10 @@ cat docs/reports/architecture-tests/latest.json | jq '.details[] | select(.sever
 ```json
 {
   "test": "Modules_Should_Not_Reference_Other_Modules",
-  "adr": "ADR-0001",
+  "adr": "ADR-001",
   "severity": "error",
   "message": "Modules.Orders references Modules.Members",
-  "fix_guide": "docs/copilot/adr-0001.prompts.md#scenario-3"
+  "fix_guide": "docs/copilot/adr-001.prompts.md#scenario-3"
 }
 ```
 

@@ -19,7 +19,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Heuristics;
 /// 【重要】：这些测试永远不应该 Fail，只输出建议。
 /// 
 /// 【关联文档】
-/// - ADR: docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md
+/// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
 /// - 设计哲学：Heuristics 层不阻断开发流程
 /// </summary>
 public sealed class DocumentationStyleHeuristicsTests

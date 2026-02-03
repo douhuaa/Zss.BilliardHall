@@ -20,7 +20,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// </summary>
 public sealed class ADR_910_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-0910_1_1: README 治理宪法已定义")]
+    [Fact(DisplayName = "ADR-910_1_1: README 治理宪法已定义")]
     public void ADR_910_README_Governance_Constitution_Exists()
     {
         // 验证 ADR-910 文档存在
@@ -39,7 +39,7 @@ public sealed class ADR_910_Architecture_Tests
         content.Should().Contain("README 的变更治理");
     }
 
-    [Fact(DisplayName = "ADR-0910_1_2: 对应的 Copilot Prompts 文件存在")]
+    [Fact(DisplayName = "ADR-910_1_2: 对应的 Copilot Prompts 文件存在")]
     public void ADR_910_Prompts_File_Exists()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -60,7 +60,7 @@ public sealed class ADR_910_Architecture_Tests
         content.Should().Contain("ADR-910");
     }
 
-    [Fact(DisplayName = "ADR-0910_1_3: 核心治理原则已定义")]
+    [Fact(DisplayName = "ADR-910_1_3: 核心治理原则已定义")]
     public void Core_README_Governance_Principles_Are_Defined()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -111,7 +111,7 @@ public sealed class ADR_910_Architecture_Tests
     // it likely indicates organizational issues that should be addressed separately
     private const int MaxReadmeFilesToCheck = 30;
 
-    [Fact(DisplayName = "ADR-0910_1_4: README 不得使用裁决性语言（执法级）")]
+    [Fact(DisplayName = "ADR-910_1_4: README 不得使用裁决性语言（执法级）")]
     public void README_Must_Not_Use_Decision_Language()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -119,10 +119,10 @@ public sealed class ADR_910_Architecture_Tests
         // 例外：可以在引用 ADR 的上下文中使用，或在示例标记中使用
         var allowedContextPatterns = new[]
         {
-            @"根据\s*ADR[-\s]*\d+",  // "根据 ADR-0001"
-            @"参考\s*ADR[-\s]*\d+",  // "参考 ADR-0001"
-            @"详见\s*ADR[-\s]*\d+",  // "详见 ADR-0001"
-            @"ADR[-\s]*\d+\s*规定",  // "ADR-0001 规定"
+            @"根据\s*ADR[-\s]*\d+",  // "根据 ADR-001"
+            @"参考\s*ADR[-\s]*\d+",  // "参考 ADR-001"
+            @"详见\s*ADR[-\s]*\d+",  // "详见 ADR-001"
+            @"ADR[-\s]*\d+\s*规定",  // "ADR-001 规定"
             @"本文档无裁决力",        // 声明部分
             @"不具备裁决力",          // 声明部分（简洁格式）
             @"无架构裁决权",          // 声明部分
@@ -227,7 +227,7 @@ public sealed class ADR_910_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-0910_1_4 违规：以下 README 使用了裁决性语言",
+                "❌ ADR-910_1_4 违规：以下 README 使用了裁决性语言",
                 "",
                 "根据 ADR-910 决策 2：README 不得使用裁决性语言，除非在引用 ADR 的上下文中。",
                 ""
@@ -243,10 +243,10 @@ public sealed class ADR_910_Architecture_Tests
                 "  3. 在表格、示例标记、引用块中使用时，确保有明确的 ADR 引用",
                 "",
                 "允许的使用方式：",
-                "  ✅ '根据 ADR-0001，模块必须隔离'（明确引用 ADR）",
+                "  ✅ '根据 ADR-001，模块必须隔离'（明确引用 ADR）",
                 "  ✅ '// ❌ 禁止：直接引用模块'（代码示例标记）",
-                "  ✅ '| 操作 | 是否允许 | 依据 ADR-0001 |'（表格说明）",
-                "  ✅ '> 根据 ADR-0001：模块禁止...'（引用块转述 ADR）",
+                "  ✅ '| 操作 | 是否允许 | 依据 ADR-001 |'（表格说明）",
+                "  ✅ '> 根据 ADR-001：模块禁止...'（引用块转述 ADR）",
                 "",
                 "参考：docs/adr/governance/ADR-910-readme-governance-constitution.md 决策 2"
             })));
@@ -257,7 +257,7 @@ public sealed class ADR_910_Architecture_Tests
     // Limit number of files to check for performance - same rationale as MaxReadmeFilesToCheck
     private const int MaxReadmeFilesForDeclarationCheck = 20;
 
-    [Fact(DisplayName = "ADR-0910_1_5: README 必须声明无裁决力（执法级）")]
+    [Fact(DisplayName = "ADR-910_1_5: README 必须声明无裁决力（执法级）")]
     public void README_Must_Declare_No_Authority()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -313,7 +313,7 @@ public sealed class ADR_910_Architecture_Tests
         {
             true.Should().BeFalse(string.Join("\n", new[]
             {
-                "❌ ADR-0910_1_5 违规：以下 README 缺少'无裁决力声明'",
+                "❌ ADR-910_1_5 违规：以下 README 缺少'无裁决力声明'",
                 "",
                 "根据 ADR-910 决策 3：所有 README 必须在开头声明无架构裁决权。",
                 ""
@@ -339,7 +339,7 @@ public sealed class ADR_910_Architecture_Tests
         }
     }
 
-    [Fact(DisplayName = "ADR-0910_1_6: README 应引用而非定义规则（指导级）")]
+    [Fact(DisplayName = "ADR-910_1_6: README 应引用而非定义规则（指导级）")]
     public void README_Should_Reference_Not_Define_Rules()
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -419,7 +419,7 @@ public sealed class ADR_910_Architecture_Tests
                 "",
                 "建议：将规则定义改为 ADR 引用，例如：",
                 "  ❌ '模块必须隔离，禁止直接引用'",
-                "  ✅ '根据 ADR-0001，模块使用事件通信。详见 [ADR-0001](链接)'",
+                "  ✅ '根据 ADR-001，模块使用事件通信。详见 [ADR-001](链接)'",
                 "",
                 "注意：这是指导级警告，不会阻断构建。"
             }));

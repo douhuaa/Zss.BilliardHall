@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
 
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_0907;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 
 /// <summary>
 /// ADR-907_2: 命名与组织规范
@@ -19,7 +19,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_0907;
 /// 
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md
-/// - Prompts: docs/copilot/adr-0907.prompts.md
+/// - Prompts: docs/copilot/adr-907.prompts.md
 /// </summary>
 public sealed class ADR_907_2_Architecture_Tests
 {
@@ -75,7 +75,7 @@ public sealed class ADR_907_2_Architecture_Tests
             $"当前路径：{testsDirectory}\n" +
             $"预期格式：ADR-XXXX/ 或 ADR/ADR_XXXX_Architecture_Tests.cs\n\n" +
             $"修复建议：\n" +
-            $"  1. 为每个 ADR 创建独立子目录：/ADR-0001/, /ADR-0907/ 等\n" +
+            $"  1. 为每个 ADR 创建独立子目录：/ADR-001/, /ADR-907/ 等\n" +
             $"  2. 或使用集中式 /ADR/ 目录存放所有测试\n\n" +
             $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.2");
     }

@@ -211,7 +211,7 @@ docs/cases/
 ```markdown
 # [已过时] 案例：Service 层模式
 
-> ⚠️ **过时通知**：本案例已过时（2026-01-26），因 ADR-0001 禁止 Service 层。  
+> ⚠️ **过时通知**：本案例已过时（2026-01-26），因 ADR-001 禁止 Service 层。  
 > 请参考：[Handler 模式案例](../handler-pattern.md)
 ```
 

@@ -14,7 +14,7 @@ echo ""
 echo "📖 示例 1: 解析单个 ADR"
 echo "--------------------------------------"
 dotnet run --project "$REPO_ROOT/src/tools/AdrSemanticParser/AdrParserCli/AdrParserCli.csproj" \
-  -- parse "$REPO_ROOT/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md"
+  -- parse "$REPO_ROOT/docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md"
 
 echo ""
 echo "--------------------------------------"

@@ -6,7 +6,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 /// </summary>
 public sealed class AdrMarkdownBuilder
 {
-    private string _id = "ADR-0001";
+    private string _id = "ADR-001";
     private string _title = "测试 ADR 文档";
     private string _status = "Final";
     private string _level = "架构约束";

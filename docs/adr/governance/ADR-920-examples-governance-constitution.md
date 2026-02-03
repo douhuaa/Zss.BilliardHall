@@ -129,7 +129,7 @@ superseded_by: null
 
 示例代码**禁止**包含以下"示例代码禁止的架构违规行为"：
 
-#### 3.1 跨模块直接引用（ADR-0001）
+#### 3.1 跨模块直接引用（ADR-001）
 ```csharp
 // ❌ 禁止
 using Zss.BilliardHall.Modules.Members.Domain;
@@ -139,7 +139,7 @@ await _eventBus.Publish(new OrderCreated(orderId));
 var memberDto = await _queryBus.Send(new GetMemberById(memberId));
 ```
 
-#### 3.2 违反 Handler 模式（ADR-0005）
+#### 3.2 违反 Handler 模式（ADR-005）
 ```csharp
 // ❌ 禁止：Command Handler 返回业务数据
 public async Task<OrderDto> Handle(CreateOrder command)
@@ -148,7 +148,7 @@ public async Task<OrderDto> Handle(CreateOrder command)
 public async Task<Guid> Handle(CreateOrder command)
 ```
 
-#### 3.3 创建横向 Service 层（ADR-0001）
+#### 3.3 创建横向 Service 层（ADR-001）
 ```csharp
 // ❌ 禁止
 public class OrderService { }
@@ -263,10 +263,10 @@ public class CreateOrderHandler { }
 
 **依赖（Depends On）**：
 - [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 示例治理基于测试和 CI 机制
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 示例必须遵守模块隔离规则
-- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 示例必须遵守层级依赖规则
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 示例必须遵守 Handler 模式
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 示例治理是文档治理的一部分
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 示例必须遵守模块隔离规则
+- [ADR-002：平台、应用与主机启动器架构](../constitutional/ADR-002-platform-application-host-bootstrap.md) - 示例必须遵守层级依赖规则
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - 示例必须遵守 Handler 模式
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 示例治理是文档治理的一部分
 
 **被依赖（Depended By）**：
 - [ADR-951：案例库管理](./ADR-951-case-repository-management.md) - 案例管理参考示例治理规则
@@ -292,7 +292,7 @@ public class CreateOrderHandler { }
 - [The Twelve-Factor App](https://12factor.net/) - 示例应用的架构原则参考
 
 **相关内部文档**：
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 示例必须遵守的核心架构
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 示例必须遵守的核心架构
 - [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 示例的测试和验证机制
 - [ADR-910：README 编写与维护治理规范](./ADR-910-readme-governance-constitution.md) - README 中的示例规范
 - [ADR-950：Guide/FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md) - Guide 文档中的示例规范

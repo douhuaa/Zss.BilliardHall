@@ -120,16 +120,16 @@
 
 ```
 docs/adr/
-  ├── constitutional/     ← 宪法层（ADR-0001~0005）
+  ├── constitutional/     ← 宪法层（ADR-001~0005）
   ├── governance/         ← 治理层（ADR-900, 0900~0999）
-  ├── structure/          ← 结构层（ADR-0100~0199）
-  ├── runtime/            ← 运行层（ADR-0200~0299）
-  └── technical/          ← 技术层（ADR-0300~0399）
+  ├── structure/          ← 结构层（ADR-100~0199）
+  ├── runtime/            ← 运行层（ADR-200~299）
+  └── technical/          ← 技术层（ADR-300~399）
 ```
 
 ### 关键原则
 
-根据 [ADR-0007](adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md) 和 [ADR-0008](adr/constitutional/ADR-0008-documentation-governance-constitution.md)：
+根据 [ADR-007](adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md) 和 [ADR-008](adr/constitutional/ADR-008-documentation-governance-constitution.md)：
 
 - ✅ ADR 是唯一的"事实来源"（Source of Truth）
 - ✅ 所有层级服从 ADR
@@ -141,8 +141,8 @@ docs/adr/
 
 - [ADR 目录](adr/README.md)
 - [ADR-900: 架构测试与 CI 治理元规则](adr/governance/ADR-900-architecture-tests.md)
-- [ADR-0007: Agent 行为与权限宪法](adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
-- [ADR-0008: 文档编写与维护宪法](adr/constitutional/ADR-0008-documentation-governance-constitution.md)
+- [ADR-007: Agent 行为与权限宪法](adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
+- [ADR-008: 文档编写与维护宪法](adr/constitutional/ADR-008-documentation-governance-constitution.md)
 - [ADR-900: ADR 新增与修订流程](adr/governance/ADR-900-architecture-tests.md)
 
 ---
@@ -217,8 +217,8 @@ Agent = Instructions + 特定职责域 + ADR 约束视角
 | architecture-guardian     | 架构约束守护     | 所有 ADR               | 极高   |
 | adr-reviewer              | ADR 文档审查   | ADR-900             | 高    |
 | test-generator            | 测试生成       | ADR-900, 0122       | 中    |
-| module-boundary-checker   | 模块边界检查     | ADR-0001             | 极高   |
-| handler-pattern-enforcer  | Handler 规范执行 | ADR-0005             | 高    |
+| module-boundary-checker   | 模块边界检查     | ADR-001             | 极高   |
+| handler-pattern-enforcer  | Handler 规范执行 | ADR-005             | 高    |
 | documentation-maintainer  | 文档维护       | ADR-900, 文档规范       | 低    |
 
 ### Agent 的硬性约束
@@ -277,8 +277,8 @@ Prompt = ADR → 开发现场的"翻译层"
 docs/copilot/
   ├── README.md                           ← Copilot 角色定位
   ├── adr-900.prompts.md                 ← ADR-900 提示词
-  ├── adr-0001.prompts.md                 ← ADR-0001 提示词
-  ├── adr-0002.prompts.md                 ← ADR-0002 提示词
+  ├── adr-001.prompts.md                 ← ADR-001 提示词
+  ├── adr-002.prompts.md                 ← ADR-002 提示词
   ├── ...（每个 ADR 一个文件）
   ├── architecture-test-failures.md       ← 测试失败诊断指南
   ├── pr-review-pipeline.md               ← PR 审查流程
@@ -298,7 +298,7 @@ docs/copilot/
 ### 参考文档
 
 - [Copilot Prompts 库](copilot/README.md)
-- [ADR-0001 提示词](copilot/adr-0001.prompts.md)
+- [ADR-001 提示词](copilot/adr-001.prompts.md)
 
 ---
 
@@ -466,7 +466,7 @@ graph TB
 
 ## 十、关键原则
 
-根据 [ADR-0007](adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md) 和 [ADR-0008](adr/constitutional/ADR-0008-documentation-governance-constitution.md)：
+根据 [ADR-007](adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md) 和 [ADR-008](adr/constitutional/ADR-008-documentation-governance-constitution.md)：
 
 ### 单向依赖原则
 
@@ -485,7 +485,7 @@ ADR → Instructions → Agents → Prompts → Skills
 
 > ⚖️ **绝对权威仅归属 ADR 正文**
 
-- "ADR 正文"（如 `ADR-0001-modular-monolith-vertical-slice-architecture.md`）= 系统宪法
+- "ADR 正文"（如 `ADR-001-modular-monolith-vertical-slice-architecture.md`）= 系统宪法
 - "Instructions"、"Prompts" 等辅导材料，仅作辅助说明，不具备裁决力
 - 若辅导材料与 ADR 正文冲突，一律以 ADR 正文为准
 
@@ -540,7 +540,7 @@ ADR → Instructions → Agents → Prompts → Skills
 
 | 任务          | 参考文档                                          |
 |-------------|-----------------------------------------------|
-| 添加新功能       | [后端指令](../.github/instructions/backend.instructions.md) → [ADR-0001 Prompts](copilot/adr-0001.prompts.md) |
+| 添加新功能       | [后端指令](../.github/instructions/backend.instructions.md) → [ADR-001 Prompts](copilot/adr-001.prompts.md) |
 | 编写测试        | [测试指令](../.github/instructions/testing.instructions.md) → [ADR-900 Prompts](copilot/adr-900.prompts.md) |
 | 审查 PR       | [评审指令](../.github/instructions/architecture-review.instructions.md) → [PR 流程](copilot/pr-review-pipeline.md) |
 | 新增 ADR      | [ADR-900](adr/governance/ADR-900-architecture-tests.md) |
