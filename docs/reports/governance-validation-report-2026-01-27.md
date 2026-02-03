@@ -21,7 +21,7 @@
 - arch-violations.md 结构：100%
 
 ⚠️ **需要改进**：
-- 12 个治理 ADR 未声明依赖 ADR-0000
+- 12 个治理 ADR 未声明依赖 ADR-900
 - 3 个 ADR 缺少 Copilot Prompt 文件
 - 根 README.md 缺少标准格式声明
 - ADR-905 缺少变更政策章节
@@ -55,11 +55,11 @@
 
 1. ✅ arch-violations.md 结构完整性
 2. ✅ 治理 CI workflows 存在性  
-3. ✅ ADR-0000 测试映射
+3. ✅ ADR-900 测试映射
 
 #### 需改进的检查 ⚠️
 
-1. ⚠️ 12 个治理 ADR 未声明依赖 ADR-0000（补充性 ADR）
+1. ⚠️ 12 个治理 ADR 未声明依赖 ADR-900（补充性 ADR）
 2. ⚠️ 根 README.md 格式需优化
 3. ⚠️ ADR-905 缺少变更政策
 

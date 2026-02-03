@@ -47,7 +47,7 @@ superseded_by: ADR-903-906
 | Rule Mapping | 测试方法或类与 ADR 条目的对应关系 | Rule Mapping |
 | Enforcement Level | 执行等级 L1 / L2，L1 可自动阻断，L2 半自动审核 | Enforcement Level |
 | ADR 可追溯性 | 测试失败必须能定位到具体 ADR 子规则 | ADR Traceability |
-| Exception Mechanism | ADR-0000 定义的破例/补救机制 | Exception Mechanism |
+| Exception Mechanism | ADR-900 定义的破例/补救机制 | Exception Mechanism |
 
 ---
 
@@ -96,7 +96,7 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 ### ADR-906.4:L1 破例与偿还机制
 
 **规则**：
-- 允许通过 ADR-0000 定义的 Exception Mechanism 破例    
+- 允许通过 ADR-900 定义的 Exception Mechanism 破例    
 - 破例必须自动记录，包含：    
     - ADR 编号        
     - 测试类 / 方法        
@@ -179,7 +179,7 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 
 **历史依赖（Historical Context）**：
 
-- [ADR-0000：架构测试与 CI 治理元规则](../../governance/ADR-0000-architecture-tests.md)
+- [ADR-900：架构测试与 CI 治理元规则](../../governance/ADR-900-architecture-tests.md)
 - [ADR-903：ArchitectureTests 命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD)
 - [ADR-904：ArchitectureTests 最小断言语义规范](./ADR-904-architecturetests-minimum-assertion-semantics.md)
 - [ADR-905：执行级别分类](../../governance/ADR-905-enforcement-level-classification.md)

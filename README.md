@@ -71,7 +71,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 | **结构层** | ADR-100~199 | 5 | [structure](docs/adr/structure/) | 静态组织与命名 |
 | **运行层** | ADR-200~299 | 4 | [runtime](docs/adr/runtime/) | 运行时模型与异常 |
 | **技术层** | ADR-300~399 | 4 | [technical](docs/adr/technical/) | 技术选型与实现 |
-| **治理层** | ADR-0000, 900~999 | 23 | [governance](docs/adr/governance/) | 流程与测试治理 |
+| **治理层** | ADR-900, 900~999 | 23 | [governance](docs/adr/governance/) | 流程与测试治理 |
 
 #### 核心 ADR 快速链接
 
@@ -85,7 +85,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 - [ADR-0008：文档编写与维护宪法](docs/adr/constitutional/ADR-0008-documentation-governance-constitution.md) - 文档规范
 
 **治理层（流程与规则）**：
-- [ADR-0000：架构测试与 CI 治理元规则](docs/adr/governance/ADR-0000-architecture-tests.md) - 元治理规则
+- [ADR-900：架构测试与 CI 治理元规则](docs/adr/governance/ADR-900-architecture-tests.md) - 元治理规则
 - [ADR-900：ADR 新增与修订流程](docs/adr/governance/ADR-900-adr-process.md) - ADR 生命周期
 - [ADR-910：README 编写与维护治理规范](docs/adr/governance/ADR-910-readme-governance-constitution.md) - README 治理
 - [ADR-930：代码审查与 ADR 合规自检流程](docs/adr/governance/ADR-930-code-review-compliance.md) - PR 审查流程

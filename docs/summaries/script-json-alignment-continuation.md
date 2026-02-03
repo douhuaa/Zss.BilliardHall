@@ -267,7 +267,7 @@ fi
 
 ### 4. validate-governance-compliance.sh ✅
 
-**功能**：验证治理合规性（ADR-0000, ADR-900, ADR-930, ADR-910, ADR-920）
+**功能**：验证治理合规性（ADR-900, ADR-900, ADR-930, ADR-910, ADR-920）
 
 **更新内容**：
 - 添加 --format 和 --output 参数支持

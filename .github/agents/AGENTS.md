@@ -21,7 +21,7 @@
 - ✅ 最终裁决引用链协调
 - ✅ 统一所有 Agent 响应格式
 - ✅ 解决 Agent 间冲突
-- ✅ 监督所有架构约束（ADR-0000 ~ ADR-0999）
+- ✅ 监督所有架构约束（ADR-900 ~ ADR-0999）
 - ✅ 调用和协调所有 Specialist Agents
 
 **权限边界**：
@@ -91,7 +91,7 @@
 #### 1.2.4 test-generator（测试生成器）
 
 **职责**：生成符合架构规范的测试代码  
-**监督 ADR**：ADR-0000（架构测试）、ADR-0122（测试组织）  
+**监督 ADR**：ADR-900（架构测试）、ADR-0122（测试组织）  
 **风险等级**：⚠️ 中  
 **配置文件**：[test-generator.agent.md](test-generator.agent.md)
 

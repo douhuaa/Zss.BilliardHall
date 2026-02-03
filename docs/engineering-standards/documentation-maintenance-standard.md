@@ -51,7 +51,7 @@ docs/
 ├── adr/                              # 架构决策记录
 │   ├── README.md                     # ADR 索引
 │   ├── constitutional/               # 宪法层 (ADR-0001~0009)
-│   ├── governance/                   # 治理层 (ADR-0000, 900~999)
+│   ├── governance/                   # 治理层 (ADR-900, 900~999)
 │   ├── structure/                    # 结构层 (ADR-100~199)
 │   ├── runtime/                      # 运行层 (ADR-200~299)
 │   └── technical/                    # 技术层 (ADR-300~399)
@@ -288,7 +288,7 @@ graph TB
 提供查询表格
 ```
 
-**详见**：[ADR-900：ADR 新增与修订流程](adr/governance/ADR-900-adr-process.md)
+**详见**：[ADR-900：ADR 新增与修订流程](adr/governance/ADR-900-architecture-tests.md)
 
 ### Copilot Prompts
 
@@ -521,7 +521,7 @@ markdownlint $(git diff --cached --name-only --diff-filter=ACM | grep '\.md$')
 3. 创建对应的 `docs/copilot/adr-XXXX.prompts.md`
 4. 创建对应的 `src/tests/ArchitectureTests/ADR/ADR_XXXX_Architecture_Tests.cs`
 
-详见 [ADR-900](adr/governance/ADR-900-adr-process.md)
+详见 [ADR-900](adr/governance/ADR-900-architecture-tests.md)
 
 ### Q: 如何废弃旧文档？
 
@@ -571,7 +571,7 @@ markdownlint $(git diff --cached --name-only --diff-filter=ACM | grep '\.md$')
 ### 内部文档
 
 - [文档导航中心](index.md)
-- [ADR-900：ADR 新增与修订流程](adr/governance/ADR-900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](adr/governance/ADR-900-architecture-tests.md)
 - [改进总结目录](summaries/README.md)
 
 ### 外部参考

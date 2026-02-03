@@ -381,7 +381,7 @@ git config --global core.autocrlf input
 - [EditorConfig 详细文档](../../configuration/editorconfig.md)
 - [配置文件索引](../../configuration/README.md)
 - [.editorconfig 文件](../../../.editorconfig)
-- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-architecture-tests.md)
 - [架构测试失败诊断](../../copilot/architecture-test-failures.md)
 
 ---

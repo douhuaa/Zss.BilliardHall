@@ -57,9 +57,9 @@ ADR-0008（文档治理宪法）是第一个完成三层拆分的测试：
 
 位于 `ADR/` 子目录下，每个 ADR 文档对应一个测试类：
 
-#### ADR-0000: 架构测试元规则
+#### ADR-900: 架构测试元规则
 
-- **测试类**: `ADR_0000_Architecture_Tests`
+- **测试类**: `ADR_900_Architecture_Tests`
 - **目的**: 确保每条 ADR 都有唯一对应的架构测试类
 - **核心约束**: ADR 与测试类的一一映射关系
 
@@ -124,7 +124,7 @@ ADR-0008（文档治理宪法）是第一个完成三层拆分的测试：
 
 ## 测试统计
 
-- **ADR 测试类**: 6 个（ADR-0000 至 ADR-0005）
+- **ADR 测试类**: 6 个（ADR-900 至 ADR-0005）
 - **覆盖率**: 100% ADR 约束覆盖
 
 ### 架构演进说明
@@ -205,7 +205,7 @@ dotnet test src/tests/ArchitectureTests -c Release
 
 ### 已实现的 ADR 测试覆盖
 
-✅ **ADR-0000**: 架构测试元规则  
+✅ **ADR-900**: 架构测试元规则  
 ✅ **ADR-0001**: 模块化单体与垂直切片架构  
 ✅ **ADR-0002**: Platform / Application / Host 三层启动体系  
 ✅ **ADR-0003**: 命名空间与项目边界规范  
@@ -235,7 +235,7 @@ dotnet test src/tests/ArchitectureTests -c Release
 
 ### 📜 架构宪法层
 
-**ADR-0000 至 ADR-0005 构成系统的"架构宪法层"**，不可被后续 ADR 推翻：
+**ADR-900 至 ADR-0005 构成系统的"架构宪法层"**，不可被后续 ADR 推翻：
 
 - 详见 [架构宪法层文档](../../docs/adr/ARCHITECTURE-CONSTITUTIONAL-LAYER.md)
 - 这些 ADR 只能细化，不能削弱
@@ -262,7 +262,7 @@ dotnet test src/tests/ArchitectureTests -c Release
 
 ### 🔍 反作弊规则
 
-ADR-0000 现已包含反作弊机制，确保架构测试不能被"形式化"：
+ADR-900 现已包含反作弊机制，确保架构测试不能被"形式化"：
 
 - ✅ 测试类必须包含实质性测试（不能是空壳）
 - ✅ 禁止跳过架构测试（禁止使用 `Skip` 属性）

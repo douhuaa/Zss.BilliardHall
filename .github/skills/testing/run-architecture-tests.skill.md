@@ -269,7 +269,7 @@ dotnet test src/tests/ArchitectureTests/ \
 
 ## 参考资料
 
-- [ADR-0000：架构测试与 CI 治理](../../../docs/adr/constitutional/ADR-0000-architecture-testing-ci-governance-constitution.md)
+- [ADR-900：架构测试与 CI 治理](../../../docs/adr/constitutional/ADR-900-architecture-testing-ci-governance-constitution.md)
 - [架构测试失败诊断](../../../docs/copilot/architecture-test-failures.md)
 - [测试编写指令](../../instructions/testing.instructions.md)
 

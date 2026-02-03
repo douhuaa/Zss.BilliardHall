@@ -55,7 +55,7 @@
 
 ## 相关资源
 
-- [ADR 流程管理](../../adr/governance/ADR-900-adr-process.md) - ADR 新增与修订流程
+- [ADR 流程管理](../../adr/governance/ADR-900-architecture-tests.md) - ADR 新增与修订流程
 - [ADR 目录](../../adr/README.md) - 已批准的 ADR
 - [改进总结](../../summaries/README.md) - 实施总结
 

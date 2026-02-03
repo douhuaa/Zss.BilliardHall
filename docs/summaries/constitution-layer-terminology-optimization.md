@@ -16,7 +16,7 @@
    - 含义：定义系统的**根本架构约束**（代码结构、模块隔离）
    - 位置：`docs/adr/constitutional/` 目录
 
-2. **Governance 层（治理层）**：ADR-0000, 900-999
+2. **Governance 层（治理层）**：ADR-900, 900-999
    - 部分 ADR 标题含"宪法"字样
    - 实际含义：该领域的**最高治理规则**
    - 位置：`docs/adr/governance/` 目录
@@ -45,7 +45,7 @@
 
 | 原标题 | 新标题 | 术语变化 | ADR编号 |
 |--------|--------|---------|---------|
-| 架构测试与CI治理**宪法** | 架构测试与CI治理**元规则** | 宪法→元规则 | ADR-0000 |
+| 架构测试与CI治理**宪法** | 架构测试与CI治理**元规则** | 宪法→元规则 | ADR-900 |
 | 语义**宪法** | 语义**元规则** | 宪法→元规则 | ADR-901 |
 | README编写与维护**宪法** | README编写与维护**治理规范** | 宪法→治理规范 | ADR-910 |
 | 示例代码治理**宪法** | 示例代码**治理规范** | 宪法→治理规范 | ADR-920 |
@@ -62,7 +62,7 @@
 
 **已更新的 ADR（共8个）**：
 
-1. **ADR-0000**（v3.0 → v3.1）
+1. **ADR-900**（v3.0 → v3.1）
    - 标题：架构测试与CI治理宪法 → **架构测试与CI治理元规则**
    - 元数据：更新 title、version、date
    - 说明：关于如何执行架构宪法的元规则
@@ -143,7 +143,7 @@ Constitutional 层（宪法层）
 └─ 术语：专用"宪法"
 
 Governance 层（治理层）
-├─ ADR-0000, 900-999
+├─ ADR-900, 900-999
 ├─ 约束对象：ADR流程、文档形式、工具行为
 └─ 术语："治理规范"或"元规则"
 ```
@@ -193,7 +193,7 @@ Governance 层（治理层）
 
 ## 📚 相关文档
 
-- [ADR-0000：架构测试与CI治理元规则](../adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-900：架构测试与CI治理元规则](../adr/governance/ADR-900-architecture-tests.md)
 - [ADR-0006：术语与编号宪法](../adr/constitutional/ADR-0006-terminology-numbering-constitution.md)
 - [ADR-901：语义元规则](../adr/governance/ADR-901-warning-constraint-semantics.md)
 - [ADR-910：README编写与维护治理规范](../adr/governance/ADR-910-readme-governance-constitution.md)

@@ -95,7 +95,7 @@ Heuristics/DocumentationStyleHeuristicsTests.cs
 ### 5. 兼容性处理
 
 - 创建 `ADR_0008_Architecture_Tests.cs` 重定向文件
-- 更新 `ADR_0000_Architecture_Tests` 排除重定向测试
+- 更新 `ADR_900_Architecture_Tests` 排除重定向测试
 - 保留 `.deprecated` 文件供历史参考
 
 ---
@@ -151,7 +151,7 @@ Heuristics/DocumentationStyleHeuristicsTests.cs
 
 ### 5. 反作弊兼容
 
-ADR-0000 的反作弊机制正确处理重定向测试。
+ADR-900 的反作弊机制正确处理重定向测试。
 
 ---
 

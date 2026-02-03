@@ -49,20 +49,20 @@ graph TB
     classDef runtime fill:#FFA07A
     classDef technical fill:#DDA0DD
 
-    ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_0000
+    ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_900
     ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_0006
     ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_0002
     ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_0003
     ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_0005
     ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_120
     ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_121
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_0001
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_0002
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_0003
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_0004
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_0005
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_970
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_980
+    ADR_900_ARCHITECTURE_TESTS --> ADR_0001
+    ADR_900_ARCHITECTURE_TESTS --> ADR_0002
+    ADR_900_ARCHITECTURE_TESTS --> ADR_0003
+    ADR_900_ARCHITECTURE_TESTS --> ADR_0004
+    ADR_900_ARCHITECTURE_TESTS --> ADR_0005
+    ADR_900_ARCHITECTURE_TESTS --> ADR_970
+    ADR_900_ARCHITECTURE_TESTS --> ADR_980
     ADR_940_ADR_RELATIONSHIP_TRACEABILITY_MANAGEMENT --> ADR_0008
     ADR_940_ADR_RELATIONSHIP_TRACEABILITY_MANAGEMENT --> ADR_0900
     ADR_940_ADR_RELATIONSHIP_TRACEABILITY_MANAGEMENT --> ADR_980
@@ -82,17 +82,17 @@ graph TB
     ADR_960_ONBOARDING_DOCUMENTATION_GOVERNANCE --> ADR_950
     ADR_965_ONBOARDING_INTERACTIVE_LEARNING_PATH --> ADR_0008
     ADR_965_ONBOARDING_INTERACTIVE_LEARNING_PATH --> ADR_960
-    ADR_970_AUTOMATION_LOG_INTEGRATION_STANDARD --> ADR_0000
+    ADR_970_AUTOMATION_LOG_INTEGRATION_STANDARD --> ADR_900
     ADR_970_AUTOMATION_LOG_INTEGRATION_STANDARD --> ADR_0008
     ADR_975_DOCUMENTATION_QUALITY_MONITORING --> ADR_0008
-    ADR_980_ADR_LIFECYCLE_SYNCHRONIZATION --> ADR_0000
+    ADR_980_ADR_LIFECYCLE_SYNCHRONIZATION --> ADR_900
     ADR_980_ADR_LIFECYCLE_SYNCHRONIZATION --> ADR_0900
     ADR_990_DOCUMENTATION_EVOLUTION_ROADMAP --> ADR_0008
     ADR_990_DOCUMENTATION_EVOLUTION_ROADMAP --> ADR_0900
     ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE -.替代.-> ADR_0004
     ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE -.替代.-> ADR_0008
-    ADR_0000_ARCHITECTURE_TESTS -.替代.-> ADR_0006
-    ADR_0000_ARCHITECTURE_TESTS -.替代.-> ADR_0008
+    ADR_900_ARCHITECTURE_TESTS -.替代.-> ADR_0006
+    ADR_900_ARCHITECTURE_TESTS -.替代.-> ADR_0008
     ADR_940_ADR_RELATIONSHIP_TRACEABILITY_MANAGEMENT -.替代.-> ADR_0006
     ADR_945_ADR_TIMELINE_EVOLUTION_VIEW -.替代.-> ADR_980
     ADR_950_GUIDE_FAQ_DOCUMENTATION_GOVERNANCE -.替代.-> ADR_910
@@ -129,7 +129,7 @@ graph TB
 **状态**：✅ Final（裁决型ADR）  
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 测试执行机制
+- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - 测试执行机制
 - [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 术语定义标准
 - [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 基于模块隔离规则
 - [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 基于模块边界定义
@@ -222,7 +222,7 @@ graph TB
 
 ---
 
-#### ADR-0000：架构测试与 CI 治理元规则
+#### ADR-900：架构测试与 CI 治理元规则
 
 **状态**：✅ Final（不可随意修改）  
 
@@ -296,7 +296,7 @@ graph TB
 
 **依赖（Depends On）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于文档规范
-- [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md) - 集成到 ADR 流程
+- [ADR-900：ADR 新增与修订流程](ADR-900-architecture-tests.md) - 集成到 ADR 流程
 - [ADR-980：ADR 生命周期一体化同步机制](ADR-980-adr-lifecycle-synchronization-mechanism.md) - 需要关系图更新
 
 **被依赖（Depended By）**：
@@ -391,7 +391,7 @@ graph TB
 
 **依赖（Depends On）**：
 - [ADR-950：指南与 FAQ 文档治理规范](ADR-950-guide-faq-documentation-governance.md) - 基于 Standard 类型定义
-- [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md) - Standard 提升为 ADR 流程
+- [ADR-900：ADR 新增与修订流程](ADR-900-architecture-tests.md) - Standard 提升为 ADR 流程
 
 **被依赖（Depended By）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档分级
@@ -478,7 +478,7 @@ graph TB
 **状态**：✅ Accepted  
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 测试机制
+- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - 基于其 CI 测试机制
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档组织
 
 **被依赖（Depended By）**：
@@ -524,8 +524,8 @@ graph TB
 **状态**：✅ Accepted  
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 检测机制
-- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - 基于其"三位一体交付"要求
+- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - 基于其 CI 检测机制
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-architecture-tests.md) - 基于其"三位一体交付"要求
 
 **被依赖（Depended By）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档版本管理
@@ -550,7 +550,7 @@ graph TB
 
 **依赖（Depends On）**：
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档管理标准
-- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - 基于其 RFC 流程
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-architecture-tests.md) - 基于其 RFC 流程
 
 **被依赖（Depended By）**：
 - [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 路线图项目关联 ADR

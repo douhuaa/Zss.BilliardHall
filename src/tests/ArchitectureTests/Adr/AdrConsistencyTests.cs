@@ -166,7 +166,7 @@ public sealed class AdrConsistencyTests
     {
         return number switch
         {
-            0 => "governance",                       // ADR-0000: 特殊，在 governance
+            0 => "governance",                       // ADR-900: 特殊，在 governance
             >= 1 and <= 9 => "constitutional",      // 0001-0009: 宪法级
             >= 10 and <= 99 => "constitutional",    // 0010-0099: 宪法级扩展
             >= 100 and <= 199 => "structure",       // 0100-0199: 结构级

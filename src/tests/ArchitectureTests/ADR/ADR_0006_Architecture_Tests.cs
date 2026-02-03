@@ -164,7 +164,7 @@ public sealed class ADR_0006_Architecture_Tests
                     var numberStr = match.Groups[1].Value;
                     var number = int.Parse(numberStr);
 
-                    // Special cases: ADR-0000 and ADR-0900 are allowed to have leading zeros
+                    // Special cases: ADR-900 and ADR-0900 are allowed to have leading zeros
                     if (number == 0 || number == 900)
                     {
                         continue;
@@ -196,7 +196,7 @@ public sealed class ADR_0006_Architecture_Tests
         var mapping = new Dictionary<string, (int Min, int Max)>
         {
             ["constitutional"] = (1, 9),
-            ["governance"] = (0, 0), // ADR-0000 special case, and 900-999
+            ["governance"] = (0, 0), // ADR-900 special case, and 900-999
             ["structure"] = (100, 199),
             ["runtime"] = (200, 299),
             ["technical"] = (300, 399)

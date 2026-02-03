@@ -3,7 +3,7 @@ name: "Test Generator"
 description: "测试生成器 - 生成符合架构规范的测试代码"
 version: "1.0"
 risk_level: "中"
-supervised_adrs: ["ADR-0000", "ADR-0122"]
+supervised_adrs: ["ADR-900", "ADR-0122"]
 tools: ["test-template-generator", "architecture-test-generator"]
 ---
 
@@ -19,7 +19,7 @@ tools: ["test-template-generator", "architecture-test-generator"]
 
 ### 权威声明
 
-> **当本 Agent 的行为描述与 ADR-0000、ADR-0122 或 ADR-0007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
+> **当本 Agent 的行为描述与 ADR-900、ADR-0122 或 ADR-0007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
 
 本 Agent 不承担宪法责任，仅作为 ADR 的执行代理。所有裁决权归属于 ADR 正文。
 
@@ -67,7 +67,7 @@ tools: ["test-template-generator", "architecture-test-generator"]
 
 ## 二、监督的核心约束
 
-### ADR-0000 架构测试原则
+### ADR-900 架构测试原则
 
 #### 架构测试的唯一依据
 
@@ -436,7 +436,7 @@ test-generator（为 ADR 生成测试）
 
 ### 主要 ADR
 
-- [ADR-0000：架构测试与 CI 治理宪法](../../docs/adr/constitutional/ADR-0000-architecture-testing-ci-governance-constitution.md)
+- [ADR-900：架构测试与 CI 治理宪法](../../docs/adr/constitutional/ADR-900-architecture-testing-ci-governance-constitution.md)
 - [ADR-0122：测试组织规范](../../docs/adr/structure/ADR-0122-testing-organization.md)
 - [ADR-0007：Agent 行为与权限宪法](../../docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 

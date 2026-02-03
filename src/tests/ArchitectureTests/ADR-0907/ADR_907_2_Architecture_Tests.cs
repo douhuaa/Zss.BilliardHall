@@ -150,7 +150,7 @@ public sealed class ADR_907_2_Architecture_Tests
                 $"  1. 每个测试类只能覆盖一个 ADR\n" +
                 $"  2. 如果需要测试多个 ADR，创建多个测试文件\n" +
                 $"  3. 测试类命名：ADR_<编号>_Architecture_Tests\n" +
-                $"  4. 引用依赖的 ADR（如 ADR-0000）是允许的\n\n" +
+                $"  4. 引用依赖的 ADR（如 ADR-900）是允许的\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.3");
         }
     }

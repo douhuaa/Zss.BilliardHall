@@ -77,12 +77,12 @@
 | **开发者**    | 开发新功能    | [架构指南](guides/architecture-design-guide.md), [模块 README](../src/Modules/)                                                               | [ADR-0001](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md), [ADR-0005](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md) |
 | **开发者**    | 修复 bug   | [测试指南](guides/testing-framework-guide.md), [架构测试失败诊断](copilot/architecture-test-failures.md)                                               | [CI/CD 指南](guides/ci-cd-integration-guide.md)                                                                                                                                              |
 | **开发者**    | 提交 PR    | [PR 模板](../.github/PULL_REQUEST_TEMPLATE.md), [文档维护指南](engineering-standards/documentation-maintenance-standard.md)                                      | [Copilot 评审](copilot/pr-review-pipeline.md)                                                                                                                             |
-| **架构师**    | 制定架构决策   | [ADR-900](adr/governance/ADR-900-adr-process.md), [宪法层说明](adr/constitutional/README.md)                                 | [架构指南](guides/architecture-design-guide.md)                                                                                                                                           |
+| **架构师**    | 制定架构决策   | [ADR-900](adr/governance/ADR-900-architecture-tests.md), [宪法层说明](adr/constitutional/README.md)                                 | [架构指南](guides/architecture-design-guide.md)                                                                                                                                           |
 | **架构师**    | 架构评审     | [ADR 目录](adr/README.md), [架构测试](../src/tests/ArchitectureTests/README.md)                                                 | [违规记录](summaries/arch-violations.md)                                                                                                                                    |
 | **QA/测试**  | 编写测试     | [测试指南](guides/testing-framework-guide.md), [.github/instructions/testing.instructions.md](../.github/instructions/testing.instructions.md) | [架构测试 README](../src/tests/ArchitectureTests/README.md)                                                                                                                 |
 | **QA/测试**  | 调查测试失败   | [架构测试失败诊断](copilot/architecture-test-failures.md), [测试指南-故障处理](guides/testing-framework-guide.md#-测试失败处理流程)                                | [Copilot Prompts](copilot/)                                                                                                                                             |
 | **DevOps** | 配置 CI/CD | [CI/CD 指南](guides/ci-cd-integration-guide.md), [架构自动化验证](guides/architecture-verification-guide.md)                                            | [GitHub Actions](../.github/workflows/)                                                                                                                                 |
-| **DevOps** | 监控健康度    | [文档健康度度量](engineering-standards/documentation-maintenance-standard.md#-文档健康度度量)                                                                          | [ADR-0000](adr/governance/ADR-0000-architecture-tests.md)                                                                                                               |
+| **DevOps** | 监控健康度    | [文档健康度度量](engineering-standards/documentation-maintenance-standard.md#-文档健康度度量)                                                                          | [ADR-900](adr/governance/ADR-900-architecture-tests.md)                                                                                                               |
 | **新成员**    | 快速入门     | [快速开始](guides/quick-start-guide.md), [README](../README.md)                                                                            | [架构指南前3章](guides/architecture-design-guide.md)                                                                                                                                        |
 | **新成员**    | 理解架构     | [ADR-0001~0005](adr/constitutional/), [架构指南](guides/architecture-design-guide.md)                                                       | [Copilot 角色定位](copilot/README.md)                                                                                                                                       |
 
@@ -266,7 +266,7 @@ graph LR
 
 - 📘 **[测试完整指南](guides/testing-framework-guide.md)** - 所有测试类型的完整说明
 - 📘 **[架构测试 README](../src/tests/ArchitectureTests/README.md)** - 测试说明
-- 🏛️ **[ADR-0000](adr/governance/ADR-0000-architecture-tests.md)** - 架构测试治理
+- 🏛️ **[ADR-900](adr/governance/ADR-900-architecture-tests.md)** - 架构测试治理
 
 **运行测试**：
 
@@ -408,14 +408,14 @@ graph TB
 | [ADR-0004](adr/constitutional/ADR-0004-Cpm-Final.md)                                    | 中央包管理（CPM）                       | Directory.Packages.props、层级依赖 |
 | [ADR-0005](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)          | 应用内交互模型与执行边界                     | Use Case、Handler、CQRS         |
 
-#### 🛡️ 治理层（ADR-0000, 900~999）
+#### 🛡️ 治理层（ADR-900, 900~999）
 
 架构治理、流程规范、破例管理
 
 | ADR                                                       | 标题          | 关键内容               |
 |-----------------------------------------------------------|-------------|--------------------|
-| [ADR-0000](adr/governance/ADR-0000-architecture-tests.md) | 架构测试与 CI 治理 | 测试定义、ADR-测试映射、破例流程 |
-| [ADR-900](adr/governance/ADR-900-adr-process.md)        | ADR 新增与修订流程 | ADR 生命周期、修订流程      |
+| [ADR-900](adr/governance/ADR-900-architecture-tests.md) | 架构测试与 CI 治理 | 测试定义、ADR-测试映射、破例流程 |
+| [ADR-900](adr/governance/ADR-900-architecture-tests.md)        | ADR 新增与修订流程 | ADR 生命周期、修订流程      |
 
 #### 📐 其他层级
 
@@ -427,10 +427,10 @@ graph TB
 
 | 角色           | 必读 ADR                     | 选读 ADR               |
 |--------------|----------------------------|----------------------|
-| 新成员          | ADR-0001, 0002, 0005, 0900 | ADR-0000, 0003, 0004 |
+| 新成员          | ADR-0001, 0002, 0005, 0900 | ADR-900, 0003, 0004 |
 | 前端开发         | ADR-0001, 0005             | ADR-0002             |
 | 后端开发         | 全部宪法层 + ADR-900           | 各细化层（按需）             |
-| DevOps / SRE | ADR-0000, 0002, 0004, 0900 | ADR-0001, 0003, 0005 |
+| DevOps / SRE | ADR-900, 0002, 0004, 0900 | ADR-0001, 0003, 0005 |
 | 架构师          | 全部                         | -                    |
 
 ---

@@ -122,9 +122,9 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理元规则](./ADR-0000-architecture-tests.md) - 代码审查流程基于测试和 CI 机制
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 代码审查流程基于测试和 CI 机制
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档变更需遵循文档治理规则
-- [ADR-900：ADR 新增与修订流程](./ADR-900-adr-process.md) - ADR 相关 PR 需遵循 ADR 流程
+- [ADR-900：ADR 新增与修订流程](./ADR-900-architecture-tests.md) - ADR 相关 PR 需遵循 ADR 流程
 
 **被依赖（Depended By）**：
 - 无（代码审查规则是终端流程规则）
@@ -150,9 +150,9 @@ superseded_by: null
 - [The Art of Code Review](https://www.atlassian.com/agile/software-development/code-reviews) - Atlassian 关于代码审查的指南
 
 **相关内部文档**：
-- [ADR-0000：架构测试与 CI 治理元规则](./ADR-0000-architecture-tests.md) - 审查中的测试验证要求
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 审查中的测试验证要求
 - [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md) - Copilot 在审查中的辅助角色
-- [ADR-900：ADR 新增与修订流程](./ADR-900-adr-process.md) - ADR 相关变更的审查流程
+- [ADR-900：ADR 新增与修订流程](./ADR-900-architecture-tests.md) - ADR 相关变更的审查流程
 - [ADR-905：执行级别分类](./ADR-905-enforcement-level-classification.md) - 不同级别违规的审查处理
 
 

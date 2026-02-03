@@ -1,4 +1,4 @@
-# 治理层 ADR（ADR-0000, ADR-900~999）
+# 治理层 ADR（ADR-900, ADR-900~999）
 
 > ⚠️ **无裁决力声明**：本文档无架构裁决权，所有决策以 ADR 正文为准。
 
@@ -6,11 +6,11 @@
 
 ## 概述
 
-治理层 ADR 定义系统的**流程、变更、审查、文档和示例管理规则**。ADR-0000 作为**元决策源**，确立所有治理规则的裁决力基础。
+治理层 ADR 定义系统的**流程、变更、审查、文档和示例管理规则**。ADR-900 作为**元决策源**，确立所有治理规则的裁决力基础。
 
 ### 核心原则
 
-1. **ADR-0000 是唯一元决策源**：所有治理规则的裁决力来自 ADR-0000
+1. **ADR-900 是唯一元决策源**：所有治理规则的裁决力来自 ADR-900
 2. **测试一一映射与自动阻断**：架构约束须有对应测试，违规自动阻断
 3. **破例治理闭环**：所有破例须记录、审批、归还，过期自动失效
 4. **三位一体交付**：ADR 变更须同步更新文档/测试/Prompts
@@ -21,14 +21,14 @@
 
 ### 元治理（Meta-Governance）
 
-- [ADR-0000：架构测试与 CI 治理元规则](ADR-0000-architecture-tests.md) ⭐
+- [ADR-900：架构测试与 CI 治理元规则](ADR-900-architecture-tests.md) ⭐
   - **地位**：元决策源，所有治理规则的裁决力基础
   - **核心**：测试映射、CI 阻断、破例管理、执行分级
   - **强制**：所有 ADR 须遵循本 ADR 的测试和 CI 机制
 
 ### 流程治理（Process Governance）
 
-- [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md)
+- [ADR-900：ADR 新增与修订流程](ADR-900-architecture-tests.md)
   - 定义 ADR 生命周期：新增、修订、废弃、权限、三位一体交付
 - [ADR-930：代码审查与 ADR 合规自检流程](ADR-930-code-review-compliance.md)
   - 定义 PR 必填信息、Copilot 自检、架构测试失败处理、破例标注
@@ -89,7 +89,7 @@
 
 ### 破例治理（Exception Management）
 
-根据 **ADR-0000.Y 破例成本管理**，所有架构破例须：
+根据 **ADR-900.Y 破例成本管理**，所有架构破例须：
 
 - ✅ **强制字段**：到期版本号、偿还负责人、偿还计划、审批人
 - ✅ **自动监控**：CI 定期扫描 `arch-violations.md`，过期即失败构建
@@ -98,7 +98,7 @@
 
 **参考**：
 - [arch-violations.md](/docs/summaries/arch-violations.md) - 破例记录表
-- [ADR-0000.Y](/docs/adr/governance/ADR-0000-architecture-tests.md#adr-0000y破例须绑定偿还计划与到期监控) - 破例管理机制
+- [ADR-900.Y](/docs/adr/governance/ADR-900-architecture-tests.md#adr-900y破例须绑定偿还计划与到期监控) - 破例管理机制
 
 ### PR 与代码审查强制要求（ADR-930）
 
@@ -176,8 +176,8 @@
 
 | 文档                   | 用途              | 链接                                           |
 |----------------------|-----------------|----------------------------------------------|
-| ADR-0000             | 元决策源，测试和 CI 机制  | [查看](ADR-0000-architecture-tests.md)         |
-| ADR-900              | ADR 生命周期流程     | [查看](ADR-900-adr-process.md)                 |
+| ADR-900             | 元决策源，测试和 CI 机制  | [查看](ADR-900-architecture-tests.md)         |
+| ADR-900              | ADR 生命周期流程     | [查看](ADR-900-architecture-tests.md)                 |
 | ADR-907              | ArchitectureTests 执法治理体系 | [查看](ADR-907-architecture-tests-enforcement-governance.md) |
 | ADR-907-A            | ADR-907 对齐执行标准（官方执行附录） | [查看](adr-907-a-adr-alignment-execution-standard.md) |
 | ADR-930              | PR 和代码审查流程     | [查看](ADR-930-code-review-compliance.md)      |

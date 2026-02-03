@@ -41,7 +41,7 @@ superseded_by: null
 |---------------|------------------------------------------------------|--------------------|
 | ADR           | Architecture Decision Record，架构决策记录，定义架构约束的宪法级文档      | ADR                |
 | 宪法层 ADR       | ADR-0001~0009，系统根基，不可推翻，只能细化，破例需特批                  | Constitutional ADR |
-| 治理层 ADR       | ADR-0000, 900~999，架构过程、测试、CI、审批、破例管理 | Governance ADR     |
+| 治理层 ADR       | ADR-900, 900~999，架构过程、测试、CI、审批、破例管理 | Governance ADR     |
 | 结构层 ADR       | ADR-100~199，对宪法层结构约束的细化和补充（命名、组织、静态边界）              | Structure ADR      |
 | 运行层 ADR       | ADR-200~299，对宪法层运行时约束的细化和补充（生命周期、事件、异常）             | Runtime ADR        |
 | 技术层 ADR       | ADR-300~399，技术选型和实现细节，可替换升级                           | Technical ADR      |
@@ -97,7 +97,7 @@ superseded_by: null
   - ADR-0008：文档编写与维护宪法
 
 **治理层 ADR（Governance ADR）**：
-- 编号范围：ADR-0000, ADR-900 ~ ADR-999
+- 编号范围：ADR-900, ADR-900 ~ ADR-999
 - 位置：`docs/adr/governance/` 目录
 - 含义：定义**治理流程和元规则**（ADR 流程、测试规范、文档规范等）
 - 术语使用规范：
@@ -105,7 +105,7 @@ superseded_by: null
   - ✅ 使用"元规则"（Meta-Rule）
   - ❌ 避免使用"宪法"以免与 Constitutional 层混淆
 - 示例：
-  - ADR-0000：架构测试与 CI 治理元规则
+  - ADR-900：架构测试与 CI 治理元规则
   - ADR-901：语义元规则
   - ADR-910：README 编写与维护治理规范
   - ADR-920：示例代码治理规范
@@ -126,7 +126,7 @@ superseded_by: null
 **规则**：
 - 编号段直接对应架构层级：
   - `ADR-0001~0009`：宪法层，系统根基
-  - `ADR-0000, 900~999`：治理层，流程管理
+  - `ADR-900, 900~999`：治理层，流程管理
   - `ADR-100~199`：结构层，静态结构细化
   - `ADR-200~299`：运行层，运行时行为细化
   - `ADR-300~399`：技术层，技术选型
@@ -162,7 +162,7 @@ superseded_by: null
 
 **规则**：
 - 非宪法层（100+）**不应**使用多余前导零
-- 特殊例外：ADR-0000 和 ADR-900 允许使用前导零
+- 特殊例外：ADR-900 和 ADR-900 允许使用前导零
 
 **判定**：
 - ❌ 非宪法层使用多余前导零（如 ADR-0120）
@@ -186,13 +186,13 @@ superseded_by: null
 ### 特殊编号（ADR-0006.6）
 
 **规则**：
-- ADR-0000：治理层，架构测试元规则，保持 0000 编号不变
+- ADR-900：治理层，架构测试元规则，保持 0000 编号不变
 - ADR-0006：宪法层，术语与编号元规则
 - ADR-0007~0009：预留，非经架构委员会批准不得启用
 
 **判定**：
 - ❌ 未授权使用 0007~0009
-- ❌ ADR-0000 添加非元机制内容
+- ❌ ADR-900 添加非元机制内容
 - ✅ 特殊编号按规则使用
 
 ---
@@ -267,10 +267,10 @@ superseded_by: null
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理元规则](../governance/ADR-0000-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-0000
+- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - 本 ADR 的测试执行基于 ADR-900
 
 **被依赖（Depended By）**：
-- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - ADR 流程依赖编号规则
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-architecture-tests.md) - ADR 流程依赖编号规则
 - [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
 - [ADR-124：Endpoint 命名及参数约束规范](../structure/ADR-124-endpoint-naming-constraints.md)
 - [ADR-120：领域事件命名规范](../structure/ADR-120-domain-event-naming-convention.md)

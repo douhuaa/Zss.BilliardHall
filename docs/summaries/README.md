@@ -11,7 +11,7 @@
 ### 架构
 - [ADR 重组总结](adr-restructure-summary.md)
 - [ADR 编号优化总结](adr-numbering-optimization-summary.md)
-- [ADR 0000-0005 重构验证](adr-0000-0005-refactoring-summary.md)
+- [ADR 0000-0005 重构验证](adr-900-0005-refactoring-summary.md)
 - [ADR-0001 v3.2 对齐](adr-0001-v3.2-alignment.md)
 - [ADR-0006 编号审计](adr-0006-numbering-audit.md)
 - [ADR-0006 合并前检查清单](adr-0006-pre-merge-checklist.md)

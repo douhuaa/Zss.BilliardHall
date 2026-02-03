@@ -163,7 +163,7 @@ Copilot Prompts
 需要添加测试文件：
   [ ] 为 ADR-0001 创建测试文件：
       src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
-      参考：docs/adr/governance/ADR-0000-architecture-tests.md
+      参考：docs/adr/governance/ADR-900-architecture-tests.md
 
 需要添加 Prompt 文件：
   [ ] 为 ADR-0001 创建 Prompt 文件：
@@ -645,7 +645,7 @@ Windows 用户可使用：
 
 2. **查看文档**
    - [scripts/README.md](./README.md)
-   - [ADR 流程规范](../docs/adr/governance/ADR-900-adr-process.md)
+   - [ADR 流程规范](../docs/adr/governance/ADR-900-architecture-tests.md)
 
 3. **联系支持**
    - 提交 Issue

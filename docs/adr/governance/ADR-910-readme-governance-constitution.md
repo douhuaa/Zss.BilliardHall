@@ -244,7 +244,7 @@ README 引用 ADR 必须遵循：
 ## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理元规则](./ADR-0000-architecture-tests.md) - README 治理基于测试和 CI 机制
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - README 治理基于测试和 CI 机制
 - [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - README 术语使用遵循统一规范
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - README 约束是文档治理的细化
 

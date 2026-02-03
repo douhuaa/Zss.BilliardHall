@@ -135,7 +135,7 @@ ADR 文档统计：
 
 ✅ **更新了治理层 ADR**：
 
-**ADR-0000（架构测试与 CI 治理）**：
+**ADR-900（架构测试与 CI 治理）**：
 
 - 新增"ADR-测试内容映射机制"章节
 - 明确三方同步要求（ADR ↔ 测试 ↔ Prompts）
@@ -403,8 +403,8 @@ Copilot 会参考：
 
 - [ADR-测试映射规范](../ADR-TEST-MAPPING-SPECIFICATION.md)
 - [ADR-测试一致性开发者指南](../ADR-TEST-CONSISTENCY-DEVELOPER-GUIDE.md)
-- [ADR-0000: 架构测试与 CI 治理](../adr/governance/ADR-0000-architecture-tests.md)
-- [ADR-900: ADR 新增与修订流程](../adr/governance/ADR-900-adr-process.md)
+- [ADR-900: 架构测试与 CI 治理](../adr/governance/ADR-900-architecture-tests.md)
+- [ADR-900: ADR 新增与修订流程](../adr/governance/ADR-900-architecture-tests.md)
 
 ### 7.2 工具和脚本
 

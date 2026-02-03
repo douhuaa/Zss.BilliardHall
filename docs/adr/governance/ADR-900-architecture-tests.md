@@ -1,5 +1,5 @@
 ---
-adr: ADR-0000
+adr: ADR-900
 title: "架构测试与 CI 治理元规则"
 status: Final
 level: Governance
@@ -12,7 +12,7 @@ supersedes: null
 superseded_by: null
 ---
 
-# ADR-0000：架构测试与 CI 治理元规则
+# ADR-900：架构测试与 CI 治理元规则
 
 >⚖️ 唯一架构裁决源声明 
 >本 ADR 是关于「架构合法性判定、CI 执法、破例治理」的最高治理级元规则。
@@ -46,12 +46,12 @@ superseded_by: null
 - 所有【必须架构测试覆盖】的 ADR 条款，须有自动化测试（静态/语义/人工 Gate）
 - 测试类、方法名、失败消息必须显式标注 ADR 编号
 - 架构测试失败 = 架构违规，CI 阻断，无例外
-- 所有 Prompts、流程、辅助材料以 ADR-0000 条款为准，发现冲突应修订辅导材料
+- 所有 Prompts、流程、辅助材料以 ADR-900 条款为准，发现冲突应修订辅导材料
 - 测试组织须按 ADR 编号、内容、类型归档
 - 三级执行级（L1静态、L2语义半自动、L3人工Gate），覆盖范围与映射表公开
 
 
-### ADR-0000.1:L1 规则冲突时的优先级裁决
+### ADR-900.1:L1 规则冲突时的优先级裁决
 
 当 ADR 规则发生冲突时，**必须**按以下优先级从高到低裁决：
 
@@ -73,7 +73,7 @@ superseded_by: null
 
 ---
 
-### ADR-0000.2:L1 破例必须绑定偿还计划与到期监控
+### ADR-900.2:L1 破例必须绑定偿还计划与到期监控
 
 所有架构破例**必须**绑定明确的偿还计划和到期监控机制。
 
@@ -103,7 +103,7 @@ superseded_by: null
 
 ---
 
-### ADR-0000.1:L1 审判权唯一性
+### ADR-900.1:L1 审判权唯一性
 
 - **ADR 正文是唯一裁决依据**
 - README、Prompt、示例、脚本 **不具备裁决权**
@@ -115,7 +115,7 @@ superseded_by: null
 
 ---
 
-### ADR-0000.2:L1 架构违规的判定原则
+### ADR-900.2:L1 架构违规的判定原则
 
 以下任一条件成立，即构成架构违规：
 
@@ -132,7 +132,7 @@ superseded_by: null
 
 ---
 
-### ADR-0000.3:L1 执行级别分离原则
+### ADR-900.3:L1 执行级别分离原则
 
 所有架构规则 **必须**被归类到执行级别之一：
 
@@ -149,7 +149,7 @@ superseded_by: null
 
 ---
 
-### ADR-0000.4:L1 ADR ↔ 测试 ↔ CI 的一一映射
+### ADR-900.4:L1 ADR ↔ 测试 ↔ CI 的一一映射
 
 - 所有【必须架构测试覆盖】的 ADR 条款：
   - 必须存在可追溯的测试或 Gate
@@ -163,7 +163,7 @@ superseded_by: null
 
 ---
 
-### ADR-0000.5:L1 破例治理宪法规则
+### ADR-900.5:L1 破例治理宪法规则
 
 任何架构破例 **必须同时满足**：
 
@@ -181,7 +181,7 @@ superseded_by: null
 
 ---
 
-### ADR-0000.6:L3 冲突裁决优先级
+### ADR-900.6:L3 冲突裁决优先级
 
 当 ADR 规则发生冲突时，裁决顺序为：
 
@@ -201,7 +201,7 @@ superseded_by: null
 
 ## Enforcement（执法模型）
 
-### ADR-0000 测试方法映射表
+### ADR-900 测试方法映射表
 
 - 本 ADR 不实现任何工具
 - 但所有 CI / Analyzer / Test 必须遵守本 ADR 的裁决结果
@@ -241,7 +241,7 @@ superseded_by: null
 - [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md)
 - [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-900：ADR 流程与生命周期](./ADR-900-adr-process.md)
+- [ADR-900：ADR 流程与生命周期](./ADR-900-architecture-tests.md)
 - [ADR-901：ADR 语义元规则](./ADR-901-warning-constraint-semantics.md)
 - [ADR-903：架构测试命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD)
 - [ADR-905：架构约束分类与裁决实施映射](./ADR-905-enforcement-level-classification.md)
@@ -273,6 +273,6 @@ superseded_by: null
 |-----|------------|-------------------|
 |3.1| 2026-01-30 | 术语优化：宪法→元规则，消除与Constitutional层混淆 |
 |3.0| 2026-01-29 | 治理级重写，剥离实现细节 |
-|2.1  | 2026-01-24 | 补充 ADR-0000.X/Y 规则 |
+|2.1  | 2026-01-24 | 补充 ADR-900.X/Y 规则 |
 | 2.0 | 2026-01-23 | 聚焦自动化与治理闭环，细化执行分级 |
 | 1.0 | 2026-01-20 | 初版                |

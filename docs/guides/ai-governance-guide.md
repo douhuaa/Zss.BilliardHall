@@ -6,7 +6,7 @@
 > 📘 **权威依据**：本指南说明如何实施以下 ADR：
 > - [ADR-0007：Agent 行为与权限宪法](../adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
 > - [ADR-0008：文档编写与维护宪法](../adr/constitutional/ADR-0008-documentation-governance-constitution.md)
-> - [ADR-0000：架构测试与 CI 治理元规则](../adr/governance/ADR-0000-architecture-tests.md)
+> - [ADR-900：架构测试与 CI 治理元规则](../adr/governance/ADR-900-architecture-tests.md)
 >
 > 本文档中的"必须"/"禁止"等语言均指代上述 ADR 的要求，本文档不独立产生新规则。
 
@@ -352,7 +352,7 @@ Agent 放大理解能力，不替代理解
 Architecture Tests > Agent 建议 > 口头约定
 ```
 
-- ✅ 根据 ADR-0000，测试失败需要修复
+- ✅ 根据 ADR-900，测试失败需要修复
 - ❌ 不要试图绕过测试
 - ❌ 不要"先 ignore 再说"
 
@@ -439,7 +439,7 @@ Architecture Tests > Agent 建议 > 口头约定
 
 ### 常用 ADR
 
-- [ADR-0000：架构测试](adr/governance/ADR-0000-architecture-tests.md)
+- [ADR-900：架构测试](adr/governance/ADR-900-architecture-tests.md)
 - [ADR-0001：模块化单体](adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
 - [ADR-0002：三层启动](adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)
 - [ADR-0005：Handler 模式](adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)

@@ -601,7 +601,7 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 1. **理解违规原因** - 阅读测试失败信息
 2. **修复代码** - 按照测试建议修改
 3. **重新测试** - 确保修复有效
-4. **如需豁免** - 根据 ADR-0000 规定：
+4. **如需豁免** - 根据 ADR-900 规定：
   - 通过 ADR 记录原因
   - 在 PR 中标注 `ARCH-VIOLATION`
   - 设定偿还时间

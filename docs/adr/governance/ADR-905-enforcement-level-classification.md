@@ -251,7 +251,7 @@ enforceable: false
 
 **Depends On**：
 - [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 本 ADR 为 ADR-0005 的执行级别补充
-- [ADR-0000：架构测试与 CI 治理元规则](./ADR-0000-architecture-tests.md) - 执行级别基于测试和 CI 治理机制
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 执行级别基于测试和 CI 治理机制
 - [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档治理宪法
 - [ADR-902：治理类 ADR 标准格式](./ADR-902-adr-template-structure-contract.md) - 本文档标准来源
 

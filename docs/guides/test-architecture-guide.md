@@ -1,7 +1,7 @@
 # 三层测试架构说明
 
 > ⚠️ **无裁决力声明**：本文档仅供参考，不具备架构裁决权。
-> 所有架构决策以相关 ADR 正文为准。详见 [ADR-905](adr/governance/ADR-905-enforcement-level-classification.md) 和 [ADR-0000](adr/governance/ADR-0000-architecture-tests.md)。
+> 所有架构决策以相关 ADR 正文为准。详见 [ADR-905](adr/governance/ADR-905-enforcement-level-classification.md) 和 [ADR-900](adr/governance/ADR-900-architecture-tests.md)。
 
 > **治理层级已经开始打架了。现在拆还来得及。**
 
@@ -40,12 +40,12 @@
 
 ## 三层架构定义
 
-根据 [ADR-905：执行级别分类宪法](adr/governance/ADR-905-enforcement-level-classification.md) 和 [ADR-0000：架构测试与 CI 治理元规则](adr/governance/ADR-0000-architecture-tests.md)，测试架构划分为三层：
+根据 [ADR-905：执行级别分类宪法](adr/governance/ADR-905-enforcement-level-classification.md) 和 [ADR-900：架构测试与 CI 治理元规则](adr/governance/ADR-900-architecture-tests.md)，测试架构划分为三层：
 
 | 层级 | 本质 | 是否允许破例 | 失败策略 | 依据 |
 |------|------|------------|----------|------|
-| **Governance** | 宪法级规则 | ❌ 不可破例 | 架构宪法违规 | ADR-905, ADR-0000 |
-| **Enforcement** | 可执行硬约束 | ⚠️ 允许登记 | CI 阻断 | ADR-905, ADR-0000 |
+| **Governance** | 宪法级规则 | ❌ 不可破例 | 架构宪法违规 | ADR-905, ADR-900 |
+| **Enforcement** | 可执行硬约束 | ⚠️ 允许登记 | CI 阻断 | ADR-905, ADR-900 |
 | **Heuristics** | 风格/质量启发 | ✅ 允许 | 永不失败，仅警告 | ADR-905 |
 
 **拆层是为了"治理权力分级"，不是为了文件好看。**
@@ -54,7 +54,7 @@
 
 ## Governance（治理宪法层）
 
-根据 [ADR-0000：架构测试与 CI 治理元规则](adr/governance/ADR-0000-architecture-tests.md)，Governance 层负责验证治理宪法本身的存在性和完整性。
+根据 [ADR-900：架构测试与 CI 治理元规则](adr/governance/ADR-900-architecture-tests.md)，Governance 层负责验证治理宪法本身的存在性和完整性。
 
 ### 定位（一句话）
 
@@ -62,7 +62,7 @@
 
 ### Governance 层该干什么
 
-根据 ADR-0000 和 ADR-905，只干三件事：
+根据 ADR-900 和 ADR-905，只干三件事：
 
 1. 定义裁决权归属
 2. 定义文档角色边界
@@ -107,10 +107,10 @@ public void Decision_Authority_Principle_Is_Defined()
 
 ### Enforcement 层该干什么
 
-根据 ADR-905 和 ADR-0000 的要求：
+根据 ADR-905 和 ADR-900 的要求：
 
 - 精确、机械、可失败
-- 根据 ADR-0000，失败信息应能定位到：
+- 根据 ADR-900，失败信息应能定位到：
   - 文件
   - 行号
   - 对应 ADR
