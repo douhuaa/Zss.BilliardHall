@@ -80,6 +80,37 @@
 
 ---
 
+## 🚀 ADR 对齐计划（2026 Q1）
+
+> **状态**：✅ 执行中 | **开始日期**：2026-02-03 | **预计完成**：2026-Q2
+
+我们正在将所有 ADR 对齐到 [ADR-907 v2.0](governance/ADR-907-architecture-tests-enforcement-governance.md) 定义的 **Rule/Clause 双层编号体系**。
+
+### 关键文档
+
+- 📋 **[ADR 对齐执行计划](../ADR-ALIGNMENT-EXECUTION-PLAN.md)** - 完整执行路线图（10-12 周）
+- 📖 **[ADR-907：ArchitectureTests 执法治理体系](governance/ADR-907-architecture-tests-enforcement-governance.md)** - 新格式定义
+- 📘 **[ADR-907-A：对齐执行标准](governance/ADR-907-A-adr-alignment-execution-standard.md)** - 强制规范
+- ✅ **[对齐进度清单](governance/adr-907-a-alignment-checklist.md)** - 实时追踪
+- 🚀 **[快速开始指南](governance/ADR-ALIGNMENT-GETTING-STARTED.md)** - 如何参与
+
+### 当前进度
+
+| 维度 | 完成率 |
+|------|--------|
+| ADR 对齐 | 54% (26/48) |
+| 测试对齐 | 14% (4/29) |
+| Instructions 更新 | 10% |
+
+### 如何参与
+
+1. 阅读 [快速开始指南](governance/ADR-ALIGNMENT-GETTING-STARTED.md)
+2. 查看 [对齐清单](governance/adr-907-a-alignment-checklist.md) 选择工作项
+3. 按照 [执行标准](governance/ADR-907-A-adr-alignment-execution-standard.md) 进行对齐
+4. 提交 PR 并更新清单状态
+
+---
+
 ## 关联资料
 
 - [ADR 实施指南](ADR-IMPLEMENTATION-GUIDE.md)
