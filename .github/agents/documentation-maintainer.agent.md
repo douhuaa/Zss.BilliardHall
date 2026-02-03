@@ -3,13 +3,13 @@ name: "Documentation Maintainer"
 description: "文档维护者 - 维护文档质量和一致性"
 version: "1.0"
 risk_level: "低"
-supervised_adrs: ["ADR-008", "ADR-0900"]
+supervised_adrs: ["ADR-008", "ADR-900"]
 tools: ["document-validator", "link-checker", "index-updater"]
 ---
 
 # Documentation Maintainer Agent
 
-> **权威声明：当本 Agent 的行为描述与 ADR-008、ADR-0900 或 ADR-007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
+> **权威声明：当本 Agent 的行为描述与 ADR-008、ADR-900 或 ADR-007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
 
 ---
 
@@ -416,7 +416,7 @@ documentation-maintainer（维护文档）
 ### 主要 ADR
 
 - [ADR-008：文档编写与维护宪法](../../docs/adr/constitutional/ADR-008-documentation-writing-maintenance-constitution.md)
-- [ADR-0900：ADR 流程](../../docs/adr/governance/ADR-0900-adr-workflow-final.md)
+- [ADR-900：ADR 流程](../../docs/adr/governance/ADR-900-adr-workflow-final.md)
 - [ADR-007：Agent 行为与权限宪法](../../docs/adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
 
 ### 相关指令

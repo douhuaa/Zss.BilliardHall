@@ -301,7 +301,7 @@ dotnet test src/tests/ArchitectureTests/ --filter "ADR_001"
 
 **参考资料**：
 - docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md
-- docs/adr/governance/ADR-0900-adr-process.md
+- docs/adr/governance/ADR-900-adr-process.md
 ```
 
 ---

@@ -10,7 +10,7 @@ tools: ["code-analysis", "architecture-tests", "dependency-scanner"]
 
 # Architecture Guardian Agent
 
-> **权威声明：当本 Agent 的行为描述与 ADR-008、ADR-0900 或 ADR-007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
+> **权威声明：当本 Agent 的行为描述与 ADR-008、ADR-900 或 ADR-007 存在冲突时，以 ADR 正文为唯一裁决依据，Agent 行为必须调整。**
 
 **角色**：架构守护者  
 **版本**：2.1  

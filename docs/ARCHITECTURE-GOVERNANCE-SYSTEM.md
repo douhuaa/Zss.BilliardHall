@@ -122,9 +122,9 @@
 docs/adr/
   ├── constitutional/     ← 宪法层（ADR-001~0005）
   ├── governance/         ← 治理层（ADR-900, 0900~0999）
-  ├── structure/          ← 结构层（ADR-0100~0199）
-  ├── runtime/            ← 运行层（ADR-0200~0299）
-  └── technical/          ← 技术层（ADR-0300~0399）
+  ├── structure/          ← 结构层（ADR-100~0199）
+  ├── runtime/            ← 运行层（ADR-200~299）
+  └── technical/          ← 技术层（ADR-300~399）
 ```
 
 ### 关键原则

@@ -334,7 +334,7 @@ documentation-maintainer（维护文档）
 
 - ⚠️ ADR 审查失误可能导致架构约束不明确
 - ⚠️ 过度依赖 Agent 可能降低人工审查质量
-- ⚠️ 必须保持与 ADR-0900 的同步
+- ⚠️ 必须保持与 ADR-900 的同步
 
 ---
 
@@ -356,7 +356,7 @@ documentation-maintainer（维护文档）
 
 ### 主要 ADR
 
-- [ADR-0900：ADR 流程](../../docs/adr/governance/ADR-0900-adr-workflow-final.md)
+- [ADR-900：ADR 流程](../../docs/adr/governance/ADR-900-adr-workflow-final.md)
 - [ADR-008：文档编写与维护宪法](../../docs/adr/constitutional/ADR-008-documentation-writing-maintenance-constitution.md)
 - [ADR-007：Agent 行为与权限宪法](../../docs/adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
 - [ADR-006：术语与编号宪法](../../docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md)

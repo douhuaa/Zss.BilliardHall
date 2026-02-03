@@ -346,13 +346,13 @@ PR 模板中包含：
 
 **症状**：
 ```
-❌ 目录位置错误：ADR-0150 不在 constitutional 的编号范围内
+❌ 目录位置错误：ADR-150 不在 constitutional 的编号范围内
 ```
 
 **解决**：
 将 ADR 移动到正确的目录：
 ```bash
-mv docs/adr/constitutional/ADR-0150-*.md docs/adr/structure/
+mv docs/adr/constitutional/ADR-150-*.md docs/adr/structure/
 ```
 
 ### 问题：缺少测试文件
@@ -438,7 +438,7 @@ main "$@"
 
 ### 文档
 - [ADR 目录](../docs/adr/README.md)
-- [ADR 流程规范](../docs/adr/governance/ADR-0900-adr-process.md)
+- [ADR 流程规范](../docs/adr/governance/ADR-900-adr-process.md)
 - [架构测试宪法](../docs/adr/governance/ADR-900-architecture-tests.md)
 - [Copilot 治理体系](../docs/copilot/README.md)
 

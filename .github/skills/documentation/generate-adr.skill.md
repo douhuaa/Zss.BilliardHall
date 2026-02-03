@@ -19,7 +19,7 @@ required_agent: "adr-reviewer"
 
 ### 用途
 
-根据 ADR-0900 规范生成标准化的 ADR 文档模板，确保结构完整、格式正确。
+根据 ADR-900 规范生成标准化的 ADR 文档模板，确保结构完整、格式正确。
 
 ### 输入参数
 
@@ -283,7 +283,7 @@ required_agent: "adr-reviewer"
 ```
 
 **输出**：
-- 生成 `docs/adr/constitutional/ADR-0010-event-sourcing-pattern.md`
+- 生成 `docs/adr/constitutional/ADR-010-event-sourcing-pattern.md`
 - 包含标准结构
 - 提醒补充测试和 Prompts
 
@@ -291,7 +291,7 @@ required_agent: "adr-reviewer"
 
 ## 参考资料
 
-- [ADR-0900：ADR 流程](../../../docs/adr/governance/ADR-0900-adr-workflow-final.md)
+- [ADR-900：ADR 流程](../../../docs/adr/governance/ADR-900-adr-workflow-final.md)
 - [ADR-008：文档编写规范](../../../docs/adr/constitutional/ADR-008-documentation-writing-maintenance-constitution.md)
 - [ADR 模板](../../../docs/templates/adr-template.md)
 

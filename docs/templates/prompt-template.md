@@ -43,4 +43,4 @@ status: "Active"
 ## 相关 ADR
 - [ADR-007：Agent 行为与权限宪法](../adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
 - [ADR-008：文档编写与维护宪法](../adr/constitutional/ADR-008-documentation-writing-maintenance-constitution.md)
-- [ADR-0900：ADR 流程](../adr/governance/ADR-0900-adr-workflow-final.md)
+- [ADR-900：ADR 流程](../adr/governance/ADR-900-adr-workflow-final.md)

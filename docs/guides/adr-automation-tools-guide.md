@@ -103,11 +103,11 @@ mv docs/adr/constitutional/ADR-1-*.md docs/adr/constitutional/ADR-001-*.md
 
 **错误：目录层级错误**
 ```
-❌ 目录位置错误：ADR-0150 不在 constitutional 的编号范围内
+❌ 目录位置错误：ADR-150 不在 constitutional 的编号范围内
 ```
 解决：移动到正确目录：
 ```bash
-mv docs/adr/constitutional/ADR-0150-*.md docs/adr/structure/
+mv docs/adr/constitutional/ADR-150-*.md docs/adr/structure/
 ```
 
 ---

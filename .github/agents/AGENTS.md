@@ -21,7 +21,7 @@
 - ✅ 最终裁决引用链协调
 - ✅ 统一所有 Agent 响应格式
 - ✅ 解决 Agent 间冲突
-- ✅ 监督所有架构约束（ADR-900 ~ ADR-0999）
+- ✅ 监督所有架构约束（ADR-900 ~ ADR-999）
 - ✅ 调用和协调所有 Specialist Agents
 
 **权限边界**：
@@ -46,7 +46,7 @@
 #### 1.2.1 adr-reviewer（ADR 审查者）
 
 **职责**：审查 ADR 文档的质量和完整性  
-**监督 ADR**：ADR-0900（ADR 流程）  
+**监督 ADR**：ADR-900（ADR 流程）  
 **风险等级**：⚠️ 高  
 **配置文件**：[adr-reviewer.agent.md](adr-reviewer.agent.md)
 
@@ -106,7 +106,7 @@
 #### 1.2.5 documentation-maintainer（文档维护者）
 
 **职责**：维护文档质量和一致性  
-**监督 ADR**：ADR-008（文档编写与维护宪法）、ADR-0900（ADR 流程）  
+**监督 ADR**：ADR-008（文档编写与维护宪法）、ADR-900（ADR 流程）  
 **风险等级**：⚠️ 低  
 **配置文件**：[documentation-maintainer.agent.md](documentation-maintainer.agent.md)
 
