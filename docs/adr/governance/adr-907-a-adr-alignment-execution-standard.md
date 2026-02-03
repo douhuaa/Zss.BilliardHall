@@ -3,9 +3,9 @@ adr: ADR-907-A
 title: "ADR-907 对齐执行标准"
 status: Final
 level: Governance
-version: "1.0"
+version: "1.1"
 deciders: "Architecture Board"
-date: 2026-02-02
+date: 2026-02-03
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "Architecture Board"
@@ -519,44 +519,17 @@ version: "X.0"    # 主版本号 +1
 
 ---
 
-## 待对齐的 ADR 清单
+## 对齐进度追踪
 
-> ℹ️ **说明**：本节为进度追踪，不具备裁决力。
+> ℹ️ **说明**：对齐清单已提取到独立文档进行追踪。
 
-### Phase 1：治理层 ADR（高优先级）
+所有 ADR 对齐进度请查看：**[ADR-907-A 对齐清单](./adr-907-a-alignment-checklist.md)**
 
-| ADR | 状态 | 规则数量 | 预估难度 | 备注 |
-|-----|------|---------|---------|------|
-| ADR-900 | ✅ 已完成 | 4 Rule, 7 Clause | ⭐⭐⭐ | - |
-| ADR-900 | ⚠️ 待评估 | ? | ⭐⭐⭐ | Decision 章节为空，需补充 |
-| ADR-901 | 🚧 进行中 | 2 Rule, 8 Clause | ⭐⭐ | Front Matter 已更新 |
-| ADR-902 | ⏸️ 待对齐 | 2 Rule, 7 Clause | ⭐⭐ | - |
-| ADR-905 | ⏸️ 待对齐 | 1 Rule, 5 Clause | ⭐⭐ | - |
-| ADR-910 | ⏸️ 待对齐 | 2 Rule, 5 Clause | ⭐ | - |
-| ADR-920 | ⏸️ 待对齐 | 2 Rule, 4 Clause | ⭐ | - |
-| ADR-930 | ⚠️ 待评估 | ? | ⭐⭐ | Decision 章节不完整 |
-| ADR-940 | ⏸️ 待对齐 | 1 Rule, 5 Clause | ⭐⭐ | - |
-
-### Phase 2：宪法层 ADR（高优先级）
-
-| ADR | 状态 | 预估难度 |
-|-----|------|---------|
-| ADR-001 | ⏸️ 待对齐 | ⭐⭐⭐ |
-| ADR-002 | ⏸️ 待对齐 | ⭐⭐⭐ |
-| ADR-003 | ⏸️ 待对齐 | ⭐⭐⭐ |
-| ADR-004 | ⏸️ 待对齐 | ⭐⭐⭐ |
-| ADR-005 | ⏸️ 待对齐 | ⭐⭐⭐ |
-| ADR-006 | ⏸️ 待对齐 | ⭐⭐ |
-| ADR-007 | ⏸️ 待对齐 | ⭐⭐ |
-| ADR-008 | ⏸️ 待对齐 | ⭐⭐ |
-
-### Phase 3：运行层、结构层、技术层 ADR（中优先级）
-
-| ADR 范围 | 数量 | 状态 |
-|---------|------|------|
-| ADR-120 ~ ADR-124 | 5 个 | ⏸️ 待对齐 |
-| ADR-201 ~ ADR-240 | 4 个 | ⏸️ 待对齐 |
-| ADR-301 ~ ADR-360 | 4 个 | ⏸️ 待对齐 |
+该清单包含：
+- 所有待对齐 ADR 的状态、难度评估和备注
+- 分阶段对齐计划（治理层、宪法层、运行层、结构层、技术层）
+- 总体进度统计和完成率
+- 近期对齐计划和里程碑
 
 ---
 
@@ -630,4 +603,5 @@ version: "X.0"    # 主版本号 +1
 
 | 版本 | 日期 | 变更说明 | 修订人 |
 |------|------|----------|-------|
+| 1.1 | 2026-02-03 | 将"待对齐的 ADR 清单"章节提取到独立文件 `adr-907-a-alignment-checklist.md`，便于独立追踪和更新 | Architecture Board |
 | 1.0 | 2026-02-02 | 初始版本：将对齐指南升级为正式 ADR，新增 Authority、Alignment Failure Policy、Test Coupling Rules 三个核心章节 | Architecture Board |
