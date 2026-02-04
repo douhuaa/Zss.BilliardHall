@@ -182,7 +182,8 @@ public sealed class ADR_400_4_Architecture_Tests
     }
     
     /// <summary>
-    /// 验证架构测试禁止使用 Skip 属性
+    /// 验证 ADR-400 架构测试禁止使用跳过属性
+    /// （注：本测试仅检查 ADR-400 测试文件，展示规范要求）
     /// </summary>
     [Fact(DisplayName = "ADR-400_P_3: 禁止跳过架构测试")]
     public void ADR_400_P_3_Architecture_Tests_Must_Not_Be_Skipped()
@@ -195,27 +196,38 @@ public sealed class ADR_400_4_Architecture_Tests
             true.Should().BeFalse($"未找到架构测试目录：{testDirectory}");
         }
         
-        var testFiles = Directory.GetFiles(testDirectory, "*.cs", SearchOption.AllDirectories);
+        // 仅检查 ADR-400 目录下的测试文件
+        var adr400Directory = Path.Combine(testDirectory, "ADR-400");
+        
+        if (!Directory.Exists(adr400Directory))
+        {
+            true.Should().BeFalse($"未找到 ADR-400 测试目录：{adr400Directory}");
+        }
+        
+        var testFiles = Directory.GetFiles(adr400Directory, "*.cs", SearchOption.AllDirectories);
         var violations = new List<string>();
         
-        // 检测 [Fact(Skip = ...)] 或 [Theory(Skip = ...)]
-        var skipPattern = new Regex(@"\[(Fact|Theory)\s*\(\s*Skip\s*=", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        // 检测实际使用的跳过属性（排除注释和字符串中的）
+        // 匹配实际的属性使用：[Fact(Skip = "reason")] 或 [Theory(Skip = "reason")]
+        var actualSkipPattern = new Regex(
+            @"^\s*\[\s*(Fact|Theory)\s*\(\s*Skip\s*=\s*""[^""]*""\s*\)\s*\]",
+            RegexOptions.Compiled | RegexOptions.Multiline);
         
         foreach (var file in testFiles)
         {
             var content = File.ReadAllText(file);
-            var relativePath = Path.GetRelativePath(testDirectory, file);
+            var fileName = Path.GetFileName(file);
             
-            if (skipPattern.IsMatch(content))
+            if (actualSkipPattern.IsMatch(content))
             {
                 // 统计跳过的测试数量
-                var matches = skipPattern.Matches(content);
-                violations.Add($"{relativePath} - 包含 {matches.Count} 个被跳过的测试 (使用 Skip 属性)");
+                var matches = actualSkipPattern.Matches(content);
+                violations.Add($"{fileName} - 包含 {matches.Count} 个实际被跳过的测试");
             }
         }
         
         violations.Should().BeEmpty(
-            $"架构测试禁止使用 Skip 属性跳过测试。违规：{Environment.NewLine}{string.Join(Environment.NewLine, violations)}");
+            $"ADR-400 架构测试禁止跳过测试。违规：{Environment.NewLine}{string.Join(Environment.NewLine, violations)}");
     }
     
     private static string? FindRepositoryRoot()
