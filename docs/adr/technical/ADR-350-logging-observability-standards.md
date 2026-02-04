@@ -43,7 +43,9 @@ superseded_by: null
 
 ## Decision（裁决）
 
-### ADR-350.1：请求日志必须包含 CorrelationId【必须架构测试覆盖】
+### ADR-350_1：请求日志标准（Rule）
+
+#### ADR-350_1_1：请求日志必须包含 CorrelationId【必须架构测试覆盖】
 
 所有与请求相关的日志**必须**包含 `CorrelationId` 字段。
 
@@ -61,11 +63,31 @@ superseded_by: null
 
 ---
 
+#### ADR-350_1_2：日志字段必须使用 PascalCase 命名【必须架构测试覆盖】
+
+结构化日志字段名**必须**使用 PascalCase 命名规范。
+
+**规则**：
+- **必须**使用 PascalCase（如 `UserId`、`OrderId`）
+- **禁止**使用 snake_case（如 `user_id`）
+- **禁止**使用全小写（如 `userid`）
+- **禁止**使用全大写（如 `USER_ID`）
+
+**标准字段命名**：
+- `CorrelationId`、`UserId`、`TraceId`、`SpanId`
+- `ServiceName`、`Environment`、`OrderId`
+
+**判定**：
+- ❌ 字段命名 `user_id` 或 `userid`
+- ✅ 字段命名 `UserId`
+
+---
+
 ---
 
 ### ADR-350_2：敏感信息保护与错误处理（Rule）
 
-#### ADR-350_2_1 禁止记录敏感信息【必须架构测试覆盖】
+#### ADR-350_2_1：禁止记录敏感信息【必须架构测试覆盖】
 
 日志**禁止**包含敏感信息。
 
@@ -87,27 +109,7 @@ superseded_by: null
 
 ---
 
-### ADR-350.3：日志字段必须使用 PascalCase 命名【必须架构测试覆盖】
-
-结构化日志字段名**必须**使用 PascalCase 命名规范。
-
-**规则**：
-- **必须**使用 PascalCase（如 `UserId`、`OrderId`）
-- **禁止**使用 snake_case（如 `user_id`）
-- **禁止**使用全小写（如 `userid`）
-- **禁止**使用全大写（如 `USER_ID`）
-
-**标准字段命名**：
-- `CorrelationId`、`UserId`、`TraceId`、`SpanId`
-- `ServiceName`、`Environment`、`OrderId`
-
-**判定**：
-- ❌ 字段命名 `user_id` 或 `userid`
-- ✅ 字段命名 `UserId`
-
----
-
-#### ADR-350_2_2 错误日志必须包含异常详情【必须架构测试覆盖】
+#### ADR-350_2_2：错误日志必须包含异常详情【必须架构测试覆盖】
 
 错误级别的日志**必须**包含完整的异常信息。
 
@@ -126,7 +128,7 @@ superseded_by: null
 
 ---
 
-#### ADR-350_2_3 日志级别使用必须符合标准【必须架构测试覆盖】
+#### ADR-350_2_3：日志级别使用必须符合标准【必须架构测试覆盖】
 
 日志级别**必须**按标准定义使用。
 

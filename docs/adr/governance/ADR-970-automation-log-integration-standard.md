@@ -432,6 +432,29 @@ jobs:
 
 ---
 
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- 应用程序业务日志的具体格式（由 ADR-350 管理）
+- CI 工具的选择和配置（由 ADR-360 管理）
+- 日志存储和查询系统的实现细节
+- 日志保留和归档策略
+
+---
+
+## Prohibited（禁止行为）
+
+以下行为明确禁止：
+
+- **禁止**自动化工具输出非结构化日志
+- **禁止**在日志中混淆工具类型（Agent、Scanner、Validator）
+- **禁止**在日志中包含敏感信息（密钥、Token）
+- **禁止**绕过 GitHub Actions 直接输出日志
+- **禁止**日志文件格式不符合 JSON Lines 标准
+
+---
+
 ## Relationships（关系声明）
 
 **Depends On**：
@@ -451,6 +474,22 @@ jobs:
 **Related**：
 - [ADR-975：文档质量监控](./ADR-975-documentation-quality-monitoring.md) - 文档质量日志
 - [ADR-980：ADR 生命周期同步机制](./ADR-980-adr-lifecycle-synchronization.md) - 生命周期日志
+
+---
+
+## References（非裁决性参考）
+
+### 相关 ADR
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md)
+- [ADR-907：ArchitectureTests 执法治理体系](./ADR-907-architecture-tests-enforcement-governance.md)
+- [ADR-350：日志与可观测性字段标准](../technical/ADR-350-logging-observability-standards.md)
+
+### 技术资源
+- [JSON Lines](https://jsonlines.org/)
+- [GitHub Actions Workflow Syntax](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)
+
+### 实践指导
+- 自动化工具日志集成实践参见 `docs/guides/automation-logging-guide.md`（待创建）
 
 ---
 
