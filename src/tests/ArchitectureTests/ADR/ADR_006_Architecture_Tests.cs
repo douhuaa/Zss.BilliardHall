@@ -93,13 +93,13 @@ public sealed class ADR_006_Architecture_Tests
                 continue;
             }
 
-            // Check format: ADR-XXXX-descriptive-title.md
+            // Check format: ADR-XXX-descriptive-title.md
             var isValid = System.Text.RegularExpressions.Regex.IsMatch(fileName, @"^ADR-\d+-[a-z0-9-]+\.md$");
 
             isValid.Should().BeTrue($"❌ ADR-006_1_2 违规: ADR 文件名格式不正确\n\n" +
                 $"文件: {file}\n" +
                 $"文件名: {fileName}\n\n" +
-                $"正确格式: ADR-XXXX-descriptive-title.md\n" +
+                $"正确格式: ADR-XXX-descriptive-title.md\n" +
                 $"要求:\n" +
                 $"1. 使用小写字母和连字符\n" +
                 $"2. 不要使用下划线或驼峰命名\n" +

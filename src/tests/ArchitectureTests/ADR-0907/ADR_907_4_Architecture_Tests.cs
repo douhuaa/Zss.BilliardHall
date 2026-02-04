@@ -129,7 +129,7 @@ public sealed class ADR_907_4_Architecture_Tests
             {
                 var displayName = match.Groups[1].Value;
                 
-                // 检查是否包含 RuleId 格式：ADR-XXXX_Y_Z
+                // 检查是否包含 RuleId 格式：ADR-XXX_Y_Z
                 var hasRuleId = Regex.IsMatch(displayName, $@"ADR-0*{adrNumber}_\d+_\d+:");
                 
                 if (!hasRuleId)
