@@ -1,12 +1,13 @@
-using NetArchTest.Rules;
+﻿using NetArchTest.Rules;
 using FluentAssertions;
 using System.Reflection;
 
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
 
 /// <summary>
-/// ADR-005 Rule 2: Handler 职责边界
-/// 验证 Handler 不得持有业务状态、不得作为跨模块粘合层、不得返回领域实体
+/// 验证 ADR-005_2_1：Handler 不得持有业务状态
+/// 验证 ADR-005_2_2：Handler 禁止作为跨模块粘合层
+/// 验证 ADR-005_2_3：Handler 不允许返回领域实体
 /// </summary>
 public sealed class ADR_005_2_Architecture_Tests
 {

@@ -1,12 +1,12 @@
-using NetArchTest.Rules;
+﻿using NetArchTest.Rules;
 using FluentAssertions;
 using System.Reflection;
 
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
 
 /// <summary>
-/// ADR-005 Rule 3: 模块通信及同步/异步边界
-/// 验证模块内允许同步调用，模块间默认异步通信
+/// 验证 ADR-005_3_1：模块内允许同步调用
+/// 验证 ADR-005_3_2：模块间默认异步通信
 /// </summary>
 public sealed class ADR_005_3_Architecture_Tests
 {
@@ -46,7 +46,7 @@ public sealed class ADR_005_3_Architecture_Tests
             foreach (var param in ctorParams)
             {
                 // 检查是否注入了其他模块的 Handler（表示未审批的跨模块同步调用）
-                if (param.Namespace != null && 
+                if (param.Namespace != null &&
                     param.Namespace.StartsWith("Zss.BilliardHall.Modules") &&
                     param.Name.EndsWith("Handler"))
                 {

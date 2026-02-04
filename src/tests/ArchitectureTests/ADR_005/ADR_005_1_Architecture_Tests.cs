@@ -1,12 +1,12 @@
-using NetArchTest.Rules;
+﻿using NetArchTest.Rules;
 using FluentAssertions;
 using System.Reflection;
 
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
 
 /// <summary>
-/// ADR-005 Rule 1: Use Case 执行与裁决权
-/// 验证每个业务用例必须有唯一 Handler，Endpoint 仅做请求适配
+/// 验证 ADR-005_1_1：编号格式强制要求
+/// 验证 ADR-005_1_2：Decision 章节结构要求
 /// </summary>
 public sealed class ADR_005_1_Architecture_Tests
 {

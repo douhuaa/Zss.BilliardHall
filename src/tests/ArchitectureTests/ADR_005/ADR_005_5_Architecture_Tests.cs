@@ -1,12 +1,13 @@
-using NetArchTest.Rules;
+﻿using NetArchTest.Rules;
 using FluentAssertions;
 using System.Reflection;
 
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
 
 /// <summary>
-/// ADR-005 Rule 5: CQRS 与 Handler 唯一性
-/// 验证 Command Handler 只执行业务逻辑，Query Handler 只读返回，Command/Query 必须分离
+/// 验证 ADR-005_5_1：Command Handler 只执行业务逻辑
+/// 验证 ADR-005_5_2：Query Handler 只读返回
+/// 验证 ADR-005_5_3：Command/Query 必须分离
 /// </summary>
 public sealed class ADR_005_5_Architecture_Tests
 {
@@ -54,7 +55,7 @@ public sealed class ADR_005_5_Architecture_Tests
                 if (!allowedTypes.Contains(returnType.Name) && returnType != typeof(void))
                 {
                     // 如果返回类型是复杂业务对象，给出警告
-                    if (returnType.Namespace?.StartsWith("Zss.BilliardHall.Modules") == true || 
+                    if (returnType.Namespace?.StartsWith("Zss.BilliardHall.Modules") == true ||
                         returnType.Namespace?.StartsWith("Zss.BilliardHall.Platform.Contracts") == true)
                     {
                         System.Diagnostics.Debug.WriteLine(

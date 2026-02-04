@@ -4,8 +4,8 @@ title: "应用内交互模型与执行边界"
 status: Final
 level: Constitutional
 deciders: "Architecture Board"
-date: 2026-01-29
-version: "3.0"
+date: 2026-02-04
+version: "3.1"
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "Architecture Board"
@@ -191,7 +191,12 @@ superseded_by: null
 > 
 > 下表展示了 ADR-005 各条款（Clause）的执法方式及执行级别。
 >
-> 所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_005_Architecture_Tests.cs` 强制验证。
+> 所有规则通过 `src/tests/ArchitectureTests/ADR_005/` 目录下的测试类强制验证：
+> - `ADR_005_1_Architecture_Tests.cs` - Rule 1（Use Case 执行与裁决权）
+> - `ADR_005_2_Architecture_Tests.cs` - Rule 2（Handler 职责边界）
+> - `ADR_005_3_Architecture_Tests.cs` - Rule 3（模块通信及同步/异步边界）
+> - `ADR_005_4_Architecture_Tests.cs` - Rule 4（通信契约与领域模型隔离）
+> - `ADR_005_5_Architecture_Tests.cs` - Rule 5（CQRS 与 Handler 唯一性）
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
@@ -327,6 +332,7 @@ superseded_by: null
 
 | 版本  | 日期         | 变更说明                                         | 修订人 |
 |-----|------------|----------------------------------------------|----|
+| 3.1 | 2026-02-04 | 测试文件目录对齐：将 ADR-005 测试文件从 ADR/ 迁移到 ADR_005/ 独立文件夹，按照 ADR-907-A_3_6 测试目录结构规范组织 | Architecture Board |
 | 3.0 | 2026-02-04 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系，移除多余分隔线 | Architecture Board |
 | 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 | Architecture Board |
 | 1.0 | 2026-01-26 | 同步测试映射，格式统一化                                 | Architecture Board |

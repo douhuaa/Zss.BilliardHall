@@ -1,12 +1,12 @@
-using NetArchTest.Rules;
+﻿using NetArchTest.Rules;
 using FluentAssertions;
 using System.Reflection;
 
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
 
 /// <summary>
-/// ADR-005 Rule 4: 通信契约与领域模型隔离
-/// 验证模块间仅通过契约通信，契约不承载业务决策
+/// 验证 ADR-005_4_1：模块间仅通过契约通信
+/// 验证 ADR-005_4_2：契约不承载业务决策
 /// </summary>
 public sealed class ADR_005_4_Architecture_Tests
 {
