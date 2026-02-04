@@ -38,7 +38,7 @@
 
 ### Analyzer / Script 行为约束
 
-所有扫描 ADR 的工具（Analyzer、CI Script、验证脚本等）**必须**：
+根据 ADR-907，所有扫描 ADR 的工具（Analyzer、CI Script、验证脚本等）应当：
 
 1. **排除 archive 目录**
    ```bash

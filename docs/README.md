@@ -99,7 +99,7 @@ graph LR
 - **[架构治理系统](ARCHITECTURE-GOVERNANCE-SYSTEM.md)** - 治理体系设计：四层架构、角色定义、执行链路（面向架构师和治理维护者）
 - **[架构指南](guides/architecture-design-guide.md)** - 代码架构设计：模块设计、垂直切片、编码规则（面向开发者）
 - **[测试完整指南](guides/testing-framework-guide.md)** - 测试入口文档：测试策略概览、运行方法、ADR 映射表
-- **[CI/CD 指南](guides/ci-cd-integration-guide.md)** - 持续集成、架构测试集成和违规处理
+- **[CI/CD 指南](guides/ci-cd-integration-guide.md)** - 持续集成、架构测试集成和不符合记录处理
 - **[架构自动化验证系统](guides/architecture-verification-guide.md)** - 三层自动化防御体系和完整执行指南
 - **[文档维护指南](engineering-standards/documentation-maintenance-standard.md)** - 文档更新流程和长效维护机制
 
@@ -117,7 +117,7 @@ graph LR
 - **[改进总结目录](summaries/README.md)** - 项目改进历程和经验总结（扁平化结构）
   - 架构改进 - ADR 重组、编号优化
   - 测试改进 - 架构测试体系升级
-  - 治理改进 - 违规管理、Copilot 治理
+  - 治理改进 - 不符合记录管理、Copilot 治理
   - 文档改进 - 文档结构优化
 
 ## 模块文档
@@ -153,7 +153,7 @@ graph LR
 ### 处理 CI 失败
 
 1. 参考 [架构自动化验证系统 - 故障排除](guides/architecture-verification-guide.md#故障排除)
-2. 参考 [CI/CD 指南 - 处理架构违规](guides/ci-cd-integration-guide.md#处理架构违规)
+2. 参考 [CI/CD 指南 - 处理架构不符合](guides/ci-cd-integration-guide.md)
 3. 理解失败原因并修复
 
 ## 架构原则
