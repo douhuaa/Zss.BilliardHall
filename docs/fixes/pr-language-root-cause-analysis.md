@@ -112,7 +112,7 @@
 - 或者它使用的是缓存的配置，而不是最新的配置
 
 **问题 3：custom_instruction 的上下文长度限制**
-- 当前的 `copilot-instructions.md` 文件很长（约 242 行）
+- 原 `copilot-instructions.md` 文件有 242 行
 - 当这个文件作为 custom_instruction 注入时，可能超出了某些操作的上下文窗口
 - 在生成 PR 描述这样的关键操作时，系统可能优先使用自己的默认模板
 - 导致 custom_instruction 中的语言要求被忽略或覆盖
