@@ -38,10 +38,7 @@ public sealed class ADR_905_1_Architecture_Tests
         
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
-        if (!Directory.Exists(adrDirectory))
-        {
-            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
-        }
+        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
         // 扫描宪法层和治理层 ADR（这些 ADR 必须有 Enforcement 章节）
         var constitutionalDir = Path.Combine(adrDirectory, "constitutional");
@@ -149,10 +146,7 @@ public sealed class ADR_905_1_Architecture_Tests
         
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
-        if (!Directory.Exists(adrDirectory))
-        {
-            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
-        }
+        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
         // 扫描所有 ADR，提取 L1 规则
         var adrFiles = Directory
