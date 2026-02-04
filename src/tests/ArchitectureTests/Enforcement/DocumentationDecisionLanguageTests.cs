@@ -105,7 +105,7 @@ public sealed class DocumentationDecisionLanguageTests
             {
                 "",
                 "修复建议：",
-                "  1. 将裁决性语句改为引用 ADR：'根据 ADR-XXXX，模块使用事件通信'",
+                "  1. 将裁决性语句改为引用 ADR：'根据 ADR-XXX，模块使用事件通信'",
                 "  2. 在文档开头添加：'> ⚠️ 本文档无裁决力，所有架构决策以 ADR 正文为准'",
                 "  3. 使用描述性语言代替命令性语言",
                 "",

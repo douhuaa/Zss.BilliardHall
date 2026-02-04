@@ -62,7 +62,7 @@ public sealed class ADR_907_2_Architecture_Tests
             $"预期路径：{testsDirectory}\n\n" +
             $"修复建议：\n" +
             $"  1. 创建 ArchitectureTests 测试目录\n" +
-            $"  2. 按 ADR 编号创建子目录：/ADR-XXXX/\n" +
+            $"  2. 按 ADR 编号创建子目录：/ADR-XXX/\n" +
             $"  3. 每个 ADR 的测试文件放在对应子目录中\n\n" +
             $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.2");
 
@@ -73,7 +73,7 @@ public sealed class ADR_907_2_Architecture_Tests
         hasAdrDirectory.Should().BeTrue(
             $"❌ ADR-907_2_2 违规：未找到按 ADR 编号组织的测试目录\n\n" +
             $"当前路径：{testsDirectory}\n" +
-            $"预期格式：ADR-XXXX/ 或 ADR/ADR_XXXX_Architecture_Tests.cs\n\n" +
+            $"预期格式：ADR-XXX/ 或 ADR/ADR_XXX_Architecture_Tests.cs\n\n" +
             $"修复建议：\n" +
             $"  1. 为每个 ADR 创建独立子目录：/ADR-001/, /ADR-907/ 等\n" +
             $"  2. 或使用集中式 /ADR/ 目录存放所有测试\n\n" +
@@ -309,7 +309,7 @@ public sealed class ADR_907_2_Architecture_Tests
                 var message = assert.Groups[1].Value;
                 
                 // 检查失败消息是否包含 ADR 引用
-                // 格式：❌ ADR-XXXX 或 ❌ ADR-XXXX_Y_Z
+                // 格式：❌ ADR-XXX 或 ❌ ADR-XXX_Y_Z
                 var hasAdrReference = Regex.IsMatch(message, $@"ADR-0*{adrNumber}[_\d]*\s+违规");
 
                 if (!hasAdrReference)

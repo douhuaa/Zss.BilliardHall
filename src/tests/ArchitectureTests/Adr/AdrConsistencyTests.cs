@@ -37,9 +37,9 @@ public sealed class AdrConsistencyTests
     }
 
     /// <summary>
-    /// ADR 文件名必须使用 4 位编号格式（ADR-XXXX）
+    /// ADR 文件名必须使用 3 位编号格式（ADR-XXX）
     /// </summary>
-    [Fact(DisplayName = "ADR 文件名必须使用 4 位编号格式")]
+    [Fact(DisplayName = "ADR 文件名必须使用 3 位编号格式")]
     public void ADR_Files_Must_Use_Four_Digit_Numbering()
     {
         var violations = new List<string>();
@@ -52,9 +52,9 @@ public sealed class AdrConsistencyTests
             if (!validPattern.IsMatch(fileName))
             {
                 violations.Add(
-                    $"❌ {fileName} 不符合 4 位编号格式\n" +
+                    $"❌ {fileName} 不符合 3 位编号格式\n" +
                     $"   文件：{file}\n" +
-                    $"   期望格式：ADR-XXXX-title.md（如 ADR-001-xxx.md）"
+                    $"   期望格式：ADR-XXX-title.md（如 ADR-001-xxx.md）"
                 );
             }
         }
