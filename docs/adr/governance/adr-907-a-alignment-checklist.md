@@ -49,7 +49,7 @@ status: Living Document
 | ADR-907 | ✅ 已完成 | - | - | v2.0 已采用新体系 |
 | ADR-910 | ✅ 已完成 | 2 Rule, 5 Clause | ⭐ | 已创建 ADR_910_1_Architecture_Tests 和 ADR_910_2_Architecture_Tests |
 | ADR-920 | ✅ 已完成 | 3 Rule, 4 Clause | ⭐ | 测试已创建，按 Rule/Clause 结构 |
-| ADR-930 | ⚠️ 待评估 | ? | ⭐⭐ | Decision 章节不完整 |
+| ADR-930 | ✅ 已完成 | 1 Rule, 5 Clause | ⭐⭐ | 测试已创建（Rule 1，Clause 1-5），代码审查合规流程 |
 | ADR-940 | ✅ 已完成 | 1 Rule, 1 Clause | ⭐⭐ | 测试已创建（Rule 1），修复了 ADR-970 关系声明缺失 |
 | ADR-945 | ✅ 已完成 | 1 Rule, 1 Clause | ⭐ | 测试已创建（Rule 1） |
 | ADR-946 | ✅ 已完成 | 3 Rule, 4 Clause | ⭐ | 测试已创建（Rule 1-3），标题级别语义约束 |
@@ -58,7 +58,7 @@ status: Living Document
 | ADR-951 | ✅ 已完成 | 4 Rule, 9 Clause | ⭐ | 测试已创建（Rule 1-4），案例库管理规范 |
 | ADR-952 | ✅ 已完成 | 2 Rule, 8 Clause | ⭐⭐ | 测试已创建（Rule 1-2），工程标准与 ADR 分离边界 |
 | ADR-955 | ✅ 已完成 | 3 Rule, 10 Clause | ⭐ | 测试已创建（Rule 1-3），文档搜索与可发现性 |
-| ADR-960 | ⏸️ 待对齐 | - | ⭐ | - |
+| ADR-960 | ✅ 已完成 | 4 Rule, 9 Clause | ⭐ | 测试已创建（Rule 1-4），Onboarding 文档治理规范 |
 | ADR-965 | ⏸️ 待对齐 | - | ⭐ | - |
 | ADR-970 | ⏸️ 待对齐 | - | ⭐ | - |
 | ADR-975 | ⏸️ 待对齐 | - | ⭐ | - |
@@ -130,12 +130,12 @@ status: Living Document
 
 | 阶段 | ADR 总数 | 已完成 | 进行中 | 待对齐 | 待评估 | 完成率 |
 |------|---------|--------|--------|--------|--------|--------|
-| Phase 1: 治理层 | 22 | 15 | 0 | 6 | 1 | 68% |
+| Phase 1: 治理层 | 22 | 17 | 0 | 5 | 0 | 77% |
 | Phase 2: 宪法层 | 8 | 0 | 0 | 8 | 0 | 0% |
 | Phase 3: 运行层 | 5 | 0 | 0 | 5 | 0 | 0% |
 | Phase 4: 结构层 | 4 | 0 | 0 | 4 | 0 | 0% |
 | Phase 5: 技术层 | 4 | 0 | 0 | 4 | 0 | 0% |
-| **总计** | **43** | **15** | **0** | **27** | **1** | **35%** |
+| **总计** | **43** | **17** | **0** | **26** | **0** | **40%** |
 
 ### 难度分布
 
@@ -167,6 +167,8 @@ status: Living Document
 
 | 日期 | 变更内容 | 变更人 |
 |------|----------|-------|
+| 2026-02-04 | 完成 ADR-960 对齐：创建 ADR_960_1/2/3/4_Architecture_Tests，实现所有 4 个 Rule（Onboarding 文档权威定位、分离边界、强制结构、维护与失效治理）和 9 个 Clause 的测试用例。验证 Onboarding 文档的非裁决性定位和治理规范。 | Copilot Agent |
+| 2026-02-04 | 完成 ADR-930 对齐：补充完整 Enforcement 表格（包含所有 5 个 Clause），创建 ADR_930_1_Architecture_Tests，实现 PR 必填信息规范的测试用例。更新 Front Matter version 为 2.1，date 为 2026-02-04。 | Copilot Agent |
 | 2026-02-04 | 完成 ADR-952 和 ADR-955 对齐：创建 ADR_952_1/2_Architecture_Tests 和 ADR_955_1/2/3_Architecture_Tests，实现 ADR-952 的 2 个 Rule（层级定义与权威关系、工程标准必须基于 ADR）和 8 个 Clause，以及 ADR-955 的 3 个 Rule（文档索引策略、搜索优化规则、审计与维护机制）和 10 个 Clause 的测试用例。 | Copilot Agent |
 | 2026-02-04 | 完成 ADR-951 对齐：创建 ADR_951_1/2/3/4_Architecture_Tests，实现所有 4 个 Rule（案例库结构组织、案例文档标准、案例审核标准、案例维护机制）和 9 个 Clause 的测试用例。验证案例库的组织、审核和维护规范。 | Copilot Agent |
 | 2026-02-04 | 完成 ADR-947 对齐：创建 ADR_947_1/2/3/4/5_Architecture_Tests，实现所有 5 个 Rule（唯一顶级关系区原则、关系区边界即标题边界、禁止 ADR 编号出现在非声明语义中、禁止同编号多文档、禁止显式循环声明）和 5 个 Clause 的测试用例。验证关系声明区的结构与解析安全规则。 | Copilot Agent |
