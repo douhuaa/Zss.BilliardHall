@@ -33,7 +33,7 @@ public sealed class ADR_005_Architecture_Tests
 
     [Theory(DisplayName = "ADR-005_1_1: 每个业务用例必须唯一 Handler")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Each_Use_Case_Must_Have_Unique_Handler(Assembly moduleAssembly)
+    public void ADR_005_1_1_Each_Use_Case_Must_Have_Unique_Handler(Assembly moduleAssembly)
     {
         var handlers = Types
             .InAssembly(moduleAssembly)
@@ -61,7 +61,7 @@ public sealed class ADR_005_Architecture_Tests
 
     [Theory(DisplayName = "ADR-005_1_2: Endpoint 仅做请求适配")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Endpoints_Should_Only_Adapt_Requests(Assembly moduleAssembly)
+    public void ADR_005_1_2_Endpoints_Should_Only_Adapt_Requests(Assembly moduleAssembly)
     {
         var endpoints = Types
             .InAssembly(moduleAssembly)
@@ -104,7 +104,7 @@ public sealed class ADR_005_Architecture_Tests
 
     [Theory(DisplayName = "ADR-005_2_1: Handler 不得持有业务状态")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Handlers_Must_Not_Hold_Business_State(Assembly moduleAssembly)
+    public void ADR_005_2_1_Handlers_Must_Not_Hold_Business_State(Assembly moduleAssembly)
     {
         var handlers = Types
             .InAssembly(moduleAssembly)
@@ -135,7 +135,7 @@ public sealed class ADR_005_Architecture_Tests
 
     [Theory(DisplayName = "ADR-005_2_2: Handler 禁止作为跨模块粘合层")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Handlers_Must_Not_Be_Cross_Module_Glue(Assembly moduleAssembly)
+    public void ADR_005_2_2_Handlers_Must_Not_Be_Cross_Module_Glue(Assembly moduleAssembly)
     {
         // 检查模块是否直接依赖其他模块的 Handler（这表示同步调用）
         var handlers = Types
@@ -188,7 +188,7 @@ public sealed class ADR_005_Architecture_Tests
 
     [Theory(DisplayName = "ADR-005_2_3: Handler 不允许返回领域实体")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Handlers_Must_Not_Return_Domain_Entities(Assembly moduleAssembly)
+    public void ADR_005_2_3_Handlers_Must_Not_Return_Domain_Entities(Assembly moduleAssembly)
     {
         var handlers = Types
             .InAssembly(moduleAssembly)
@@ -249,7 +249,7 @@ public sealed class ADR_005_Architecture_Tests
 
     [Theory(DisplayName = "ADR-005_3_1: 模块内允许同步调用")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Module_Internal_Synchronous_Calls_Are_Allowed(Assembly moduleAssembly)
+    public void ADR_005_3_1_Module_Internal_Synchronous_Calls_Are_Allowed(Assembly moduleAssembly)
     {
         // 这是一个"正面"测试，确认模块内同步调用是允许的
         var handlers = Types
@@ -264,7 +264,7 @@ public sealed class ADR_005_Architecture_Tests
 
     [Theory(DisplayName = "ADR-005_3_2: 模块间默认异步通信")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Cross_Module_Must_Use_Async_Communication(Assembly moduleAssembly)
+    public void ADR_005_3_2_Cross_Module_Must_Use_Async_Communication(Assembly moduleAssembly)
     {
         var handlers = Types
             .InAssembly(moduleAssembly)
@@ -305,7 +305,7 @@ public sealed class ADR_005_Architecture_Tests
 
     [Theory(DisplayName = "ADR-005_4_1: 模块间仅通过契约通信")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Cross_Module_Must_Use_Contracts_Only(Assembly moduleAssembly)
+    public void ADR_005_4_1_Cross_Module_Must_Use_Contracts_Only(Assembly moduleAssembly)
     {
         var entities = Types
             .InAssembly(moduleAssembly)
@@ -340,7 +340,7 @@ public sealed class ADR_005_Architecture_Tests
 
     [Theory(DisplayName = "ADR-005_4_2: 契约不承载业务决策")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Contracts_Must_Not_Contain_Business_Logic(Assembly moduleAssembly)
+    public void ADR_005_4_2_Contracts_Must_Not_Contain_Business_Logic(Assembly moduleAssembly)
     {
         var contracts = Types
             .InAssembly(moduleAssembly)
@@ -385,7 +385,7 @@ public sealed class ADR_005_Architecture_Tests
 
     [Theory(DisplayName = "ADR-005_5_1: Command Handler 只执行业务逻辑")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Command_Handlers_Only_Execute_Business_Logic(Assembly moduleAssembly)
+    public void ADR_005_5_1_Command_Handlers_Only_Execute_Business_Logic(Assembly moduleAssembly)
     {
         var commandHandlers = Types
             .InAssembly(moduleAssembly)
@@ -452,7 +452,7 @@ public sealed class ADR_005_Architecture_Tests
 
     [Theory(DisplayName = "ADR-005_5_2: Query Handler 只读返回")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Query_Handlers_Return_Read_Only_Data(Assembly moduleAssembly)
+    public void ADR_005_5_2_Query_Handlers_Return_Read_Only_Data(Assembly moduleAssembly)
     {
         var queryHandlers = Types
             .InAssembly(moduleAssembly)
@@ -490,7 +490,7 @@ public sealed class ADR_005_Architecture_Tests
 
     [Theory(DisplayName = "ADR-005_5_3: Command/Query 必须分离")]
     [ClassData(typeof(ModuleAssemblyData))]
-    public void Command_And_Query_Must_Be_Separated(Assembly moduleAssembly)
+    public void ADR_005_5_3_Command_And_Query_Must_Be_Separated(Assembly moduleAssembly)
     {
         var handlers = Types
             .InAssembly(moduleAssembly)
@@ -525,7 +525,7 @@ public sealed class ADR_005_Architecture_Tests
     #region 辅助验证
 
     [Fact(DisplayName = "ADR-005_辅助: 所有 Handler 应在模块程序集中")]
-    public void All_Handlers_Should_Be_In_Module_Assemblies()
+    public void ADR_005_Auxiliary_All_Handlers_Should_Be_In_Module_Assemblies()
     {
         var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
         var applicationAssembly = typeof(Application.ApplicationBootstrapper).Assembly;
