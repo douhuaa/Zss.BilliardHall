@@ -13,7 +13,6 @@ supersedes: null
 superseded_by: null
 ---
 
-
 # ADR-003：命名空间与项目边界规范
 
 > ⚖️ **本 ADR 是架构宪法的核心，定义命名空间与项目边界的唯一裁决源。**
@@ -31,8 +30,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -41,8 +38,6 @@ superseded_by: null
 | RootNamespace         | 项目根命名空间，由BaseNamespace及目录自动推导        | Root Namespace       |
 | Directory.Build.props | MSBuild全局配置文件，统一定义BaseNamespace      | Directory.Build.props |
 | MSBuild 推导            | 通过 MSBuild 条件和目录映射自动赋值 RootNamespace | MSBuild Inference    |
-
----
 
 ---
 
@@ -172,8 +167,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Enforcement（执法模型）
 
 > 📋 **Enforcement 映射说明**：
@@ -199,7 +192,6 @@ superseded_by: null
 
 **有一项 L1 违规视为架构违规，CI 自动阻断。**
 
----
 ---
 
 ## Non-Goals（明确不管什么）
@@ -250,9 +242,6 @@ superseded_by: null
 - ❌ **注释掉失败的测试**：当架构测试失败时，注释掉测试而不是修复违规代码
 - ❌ **使用反射绕过检查**：使用反射或其他动态技术绕过命名空间约束
 
-
----
-
 ---
 
 ## Relationships（关系声明）
@@ -279,8 +268,6 @@ superseded_by: null
 
 ---
 
----
-
 ## References（非裁决性参考）
 
 ### 官方文档
@@ -302,9 +289,6 @@ superseded_by: null
 - [Screaming Architecture](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html) - Robert C. Martin 关于目录结构应体现业务意图的理念
 - [Package by Feature](https://phauer.com/2020/package-by-feature/) - 按功能组织代码而非按层组织
 
-
----
-
 ---
 
 ## History（版本历史）
@@ -314,5 +298,3 @@ superseded_by: null
 | 3.0 | 2026-02-04 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
 | 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 | Architecture Board |
 | 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   | Architecture Board |
-
----

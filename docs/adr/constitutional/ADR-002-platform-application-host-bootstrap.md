@@ -32,8 +32,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -43,8 +41,6 @@ superseded_by: null
 | Host         | 进程外壳，决定"怎么跑"，如 Web/Worker/Test | Host Layer       |
 | Bootstrapper | 唯一的装配入口，负责注册服务和配置              | Bootstrapper     |
 | 单向依赖         | Host → Application → Platform  | Unidirectional Dependency |
-
----
 
 ---
 
@@ -207,8 +203,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Enforcement（执法模型）
 
 > 📋 **Enforcement 映射说明**：
@@ -240,7 +234,6 @@ superseded_by: null
 
 **有一项 L1 违规视为架构违规，CI 自动阻断。**
 
----
 ---
 
 ## Non-Goals（明确不管什么）
@@ -287,9 +280,6 @@ superseded_by: null
 - ❌ **Platform 访问 Application 配置**：禁止 Platform 依赖 Application 的配置或状态
 - ❌ **跨层直接访问**：禁止通过 ServiceLocator 模式或静态访问器绕过依赖方向
 
-
----
-
 ---
 
 ## Relationships（关系声明）
@@ -317,8 +307,6 @@ superseded_by: null
 
 ---
 
----
-
 ## References（非裁决性参考）
 
 
@@ -333,9 +321,6 @@ superseded_by: null
 - [ADR-004：中央包管理与层级依赖规则](./ADR-004-Cpm-Final.md) - 层级包依赖规则
 - [ADR-005：应用内交互模型与执行边界](./ADR-005-Application-Interaction-Model-Final.md) - 三层运行时交互
 
-
----
-
 ---
 
 ## History（版本历史）
@@ -346,4 +331,3 @@ superseded_by: null
 | 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 | Architecture Board |
 | 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   | Architecture Board |
 
----
