@@ -1,7 +1,8 @@
 # Copilot Instructions
 
 > 本文档统一调度所有 Specialist 与 Guardian instructions，并定义触发规则、委托原则与反馈闭环。
-pr标题和描述一律用中文
+
+## pr标题、描述和回复一律用中文
 ---
 
 ## 基础约束（所有 Agent 必须遵守）
