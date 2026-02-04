@@ -15,7 +15,7 @@ superseded_by: null
 
 # ADR-910：README 编写与维护治理规范
 
-> ⚖️ **本 ADR 是所有 README 文档的治理规范，定义 README 的边界、约束与执法机制。**
+> ⚖️ **Constraint | L1** - 本 ADR 是所有 README 文档的治理规范，定义 README 的边界、约束与执法机制。
 
 **状态**：✅ Final（裁决型ADR）  
 ## Focus（聚焦内容）

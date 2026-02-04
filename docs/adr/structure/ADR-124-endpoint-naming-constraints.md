@@ -16,7 +16,7 @@ superseded_by: null
 
 # ADR-124：Endpoint 命名及参数约束规范
 
-> ⚖️ **本 ADR 定义 HTTP Endpoint 命名、职责边界和单一调用约束的唯一裁决规则。**
+> ⚖️ **Constraint | L1** - 本 ADR 定义 HTTP Endpoint 命名、职责边界和单一调用约束的唯一裁决规则。
 
 **影响范围**：所有 HTTP Endpoint  
 ## Focus（聚焦内容）

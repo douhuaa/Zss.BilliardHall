@@ -15,7 +15,7 @@ superseded_by: null
 
 # ADR-920：示例代码治理规范
 
-> ⚖️ **本 ADR 是所有示例代码（Examples）的治理规范，定义示例的边界、约束与执法机制。**
+> ⚖️ **Constraint | L1** - 本 ADR 是所有示例代码（Examples）的治理规范，定义示例的边界、约束与执法机制。
 
 ## Focus（聚焦内容）
 
