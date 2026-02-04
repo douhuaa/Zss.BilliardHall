@@ -2,11 +2,14 @@
 
 > ⚠️ **无裁决力声明**：本文档为实践案例说明，不具备架构裁决权。所有架构决策以 [ADR 文档](../adr/) 为准。
 
-**难度**：🟢 简单  
-**相关 ADR**：[ADR-005](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md), [ADR-900](../adr/governance/ADR-900-architecture-tests.md)  
-**作者**：@douhuaa  
-**日期**：2026-01-27  
-**标签**：测试, Handler, CQRS, 单元测试, Mocking
+## Metadata
+
+- 难度：🟢 简单
+- 级别: Core
+- 相关 ADR：[ADR-005](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md), [ADR-900](../adr/governance/ADR-900-architecture-tests.md)
+- 作者：@douhuaa
+- 日期：2026-01-27
+- 标签：测试, Handler, CQRS, 单元测试, Mocking
 
 ---
 
@@ -40,6 +43,7 @@
 ### 架构设计
 
 ```
+# 测试金字塔：Handler 单元测试位于底层
 测试金字塔
 ┌────────────────────┐
 │   E2E Tests        │  少量，覆盖关键路径
@@ -58,11 +62,12 @@
 
 ---
 
-### 代码实现
+### 代码示例
 
 #### 前置条件：测试项目结构
 
 ```
+# 测试项目结构：镜像源代码层次
 src/tests/
 ├── Modules.Orders.Tests/          ← 模块测试项目
 │   ├── UseCases/
@@ -770,6 +775,13 @@ public class CreateOrderHandlerTests : IDisposable
 - [ADR-900：架构测试与 CI 治理元规则](../adr/governance/ADR-900-architecture-tests.md) - 测试架构
 - [测试架构指南](../guides/test-architecture-guide.md)
 - [测试框架指南](../guides/testing-framework-guide.md)
+
+---
+
+## 相关案例
+
+- [领域事件通信模式](domain-event-communication-case.md) - 测试事件发布
+- [契约查询模式](contract-query-pattern-case.md) - 测试查询组合
 
 ---
 
