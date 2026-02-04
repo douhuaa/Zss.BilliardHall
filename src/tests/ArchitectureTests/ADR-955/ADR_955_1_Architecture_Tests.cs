@@ -83,7 +83,7 @@ public sealed class ADR_955_1_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var docsDirectory = Path.Combine(repoRoot, "docs");
 
-        docsDirectory.Should().Exist("docs 目录必须存在");
+        Directory.Exists(docsDirectory).Should().BeTrue("docs 目录必须存在");
 
         var expectedDirectories = new[] { "adr", "guides", "faqs", "cases", "engineering-standards" };
         var existingDirectories = new List<string>();
