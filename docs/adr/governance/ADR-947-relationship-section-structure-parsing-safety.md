@@ -59,14 +59,14 @@ superseded_by: null
 
 #### ADR-947_1_1 唯一顶级关系区
 
-- 每个 ADR **必须且仅能**包含一个 `## Relationships（关系声明）`
+- 每个 ADR **必须且仅能**包含一个 `## Relationships` 章节（中文标题为 `##` 级别的关系声明章节）
 - 禁止：
-  - ❌ 出现第二个同名 `## 关系声明`
+  - ❌ 出现第二个同名 `##` 级别的关系声明章节
   - ❌ 模板、示例、说明中使用同级标题
 - 允许：
   - ✅ 模板示例降级为 `###` 或更低
 - 判定：
-  - ❌ 文档中存在多个 `## 关系声明`
+  - ❌ 文档中存在多个 `##` 级别的关系声明章节
   - ✅ 仅有一个顶级关系声明区
 
 ---
@@ -75,7 +75,7 @@ superseded_by: null
 
 #### ADR-947_2_1 边界限制
 
-- "关系声明"区内容仅存在于从 `## Relationships` 到下一个 `##` 或 `#`
+- "关系声明"区内容仅存在于从 `## Relationships` 到下一个同级 `##` 标题 或 `#`
 - 禁止：
   - ❌ 使用 `###` / `####` 扩展关系区
   - ❌ 包含 ADR 编号说明性文字
@@ -162,25 +162,25 @@ superseded_by: null
 
 ## Relationships（关系声明）
 
-**依赖（Depends On）**：
+**Depends On**：
 
 - [ADR-940：ADR 关系与溯源管理治理规范](./ADR-940-adr-relationship-traceability-management.md) - 关系管理的基础规则
 - [ADR-946：ADR 标题级别即语义级别约束](./ADR-946-adr-heading-level-semantic-constraint.md) - 标题语义约束
 - [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档结构规范
 
-**被依赖（Depended By）**：
+**Depended By**：
 
 - 无
 
-**替代（Supersedes）**：
+**Supersedes**：
 
 - 无
 
-**被替代（Superseded By）**：
+**Superseded By**：
 
 - 无
 
-**相关（Related）**：
+**Related**：
 
 - [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - ADR 编号规范
 

@@ -125,21 +125,21 @@ superseded_by: null
 
 ## Relationships（关系声明）
 
-**依赖（Depends On）**：
+**Depends On**：
 - [ADR-940：ADR 关系与溯源管理治理规范](./ADR-940-adr-relationship-traceability-management.md) - 关系解析依赖标题语义
 - [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - ADR 文档结构规范
 - [ADR-007：Agent 行为与权限宪法](../constitutional/ADR-007-agent-behavior-permissions-constitution.md) - ADR Reviewer 审查依赖的权限宪法
 
-**被依赖（Depended By）**：
+**Depended By**：
 - [ADR-947：关系声明区的结构与解析安全规则](./ADR-947-relationship-section-structure-parsing-safety.md)
 
-**替代（Supersedes）**：
+**Supersedes**：
 - 无
 
-**被替代（Superseded By）**：
+**Superseded By**：
 - 无
 
-**相关（Related）**：
+**Related**：
 - [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - 同为 ADR 结构约束
 
 ---
