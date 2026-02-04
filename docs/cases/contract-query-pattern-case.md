@@ -665,4 +665,5 @@ public sealed class CachedMemberQueryService : IMemberQueryService
 
 **维护**：Tech Lead  
 **状态**：✅ Active  
+**审核**: 已通过架构委员会审查（2026-01-27）  
 **最后更新**：2026-01-27
