@@ -79,8 +79,8 @@ status: Living Document
 | ADR-004 | ✅ 已完成 | 3 Rule, 9 Clause | ⭐⭐⭐ | 文档已对齐 v3.0，测试已拆分为 Rule/Clause 结构（ADR_004_1/2/3_Architecture_Tests） |
 | ADR-005 | ✅ 已完成 | 5 Rule, 12 Clause | ⭐⭐⭐ | 测试已拆分为 Rule/Clause 结构（ADR_005_1-5_Architecture_Tests） |
 | ADR-006 | ✅ 已完成 | 5 Rule, 6 Clause | ⭐⭐ | 测试已拆分为 Rule/Clause 结构（ADR_006_1-5_Architecture_Tests） |
-| ADR-007 | ⏸️ 待对齐 | - | ⭐⭐ | 异常处理与错误传播策略 |
-| ADR-008 | ⏸️ 待对齐 | - | ⭐⭐ | 文档编写与维护宪法 |
+| ADR-007 | ✅ 已完成 | 6 Rule, 19 Clause | ⭐⭐ | 异常处理与错误传播策略 - 已完成对齐 v2.0 |
+| ADR-008 | ✅ 已完成 | 7 Rule, 21 Clause | ⭐⭐ | 文档编写与维护宪法 - 已完成对齐 v2.0 |
 
 ---
 
@@ -131,11 +131,11 @@ status: Living Document
 | 阶段 | ADR 总数 | 已完成 | 进行中 | 待对齐 | 待评估 | 完成率 |
 |------|---------|--------|--------|--------|--------|--------|
 | Phase 1: 治理层 | 22 | 22 | 0 | 0 | 0 | 100% |
-| Phase 2: 宪法层 | 8 | 6 | 0 | 2 | 0 | 75% |
+| Phase 2: 宪法层 | 8 | 8 | 0 | 0 | 0 | 100% |
 | Phase 3: 运行层 | 5 | 0 | 0 | 5 | 0 | 0% |
 | Phase 4: 结构层 | 4 | 0 | 0 | 4 | 0 | 0% |
 | Phase 5: 技术层 | 4 | 0 | 0 | 4 | 0 | 0% |
-| **总计** | **43** | **28** | **0** | **15** | **0** | **65%** |
+| **总计** | **43** | **30** | **0** | **13** | **0** | **70%** |
 
 ### 难度分布
 
@@ -159,7 +159,8 @@ status: Living Document
 ### 本月目标
 
 - ✅ 完成所有治理层 ADR 对齐（Phase 1）- **已完成**
-- 🚧 开始宪法层 ADR 对齐（Phase 2）- **待开始**
+- ✅ 完成所有宪法层 ADR 对齐（Phase 2）- **已完成**
+- 🚧 开始运行层 ADR 对齐（Phase 3）- **待开始**
 
 ---
 
@@ -178,6 +179,7 @@ status: Living Document
 
 | 日期 | 变更内容 | 变更人 |
 |------|----------|-------|
+| 2026-02-04 | 完成 ADR-007 和 ADR-008 对齐：ADR-007 更新为 v2.0（6 个 Rule，19 个 Clause），ADR-008 对齐为 v2.0（7 个 Rule，21 个 Clause）。Phase 2 宪法层对齐工作全部完成，完成率 100%。 | Copilot Agent |
 | 2026-02-04 | 完成 ADR-006 对齐：拆分测试为 Rule/Clause 结构。ADR-006 v2.0 定义 5 个 Rule（编号分层规则、编号格式规则、前导零规则、目录归属规则、特殊编号规则），共 6 个 Clause。测试拆分为 5 个测试类文件（ADR_006_1-5_Architecture_Tests），所有测试方法遵循 ADR_006_X_Y 命名格式。Phase 2 宪法层完成率 75%。 | Copilot Agent |
 | 2026-02-04 | 完成 ADR-005 对齐：拆分测试为 Rule/Clause 结构。ADR-005 v3.0 定义 5 个 Rule（Use Case 执行与裁决权、Handler 职责边界、模块通信及同步/异步边界、通信契约与领域模型隔离、CQRS 与 Handler 唯一性），共 12 个 Clause。测试拆分为 5 个测试类文件（ADR_005_1-5_Architecture_Tests），所有测试方法遵循 ADR_005_X_Y 命名格式。Phase 2 宪法层完成率 63%。 | Copilot Agent |
 | 2026-02-04 | 完成 ADR-004 对齐：重构文档和测试为 Rule/Clause 结构。ADR-004 v2.0→v3.0，拆分为 3 个 Rule（CPM 基础设施约束、项目依赖管理约束、层级依赖与分组约束），共 9 个 Clause。测试拆分为 3 个测试类文件（ADR_004_1/2/3_Architecture_Tests），所有测试方法遵循 ADR_004_X_Y 命名格式。Phase 2 宪法层完成率 50%。 | Copilot Agent |

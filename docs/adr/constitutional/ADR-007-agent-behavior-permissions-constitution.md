@@ -3,9 +3,9 @@ adr: ADR-007
 title: "Agent 行为与权限宪法"
 status: Final
 level: Constitutional
-version: "1.0"
+version: "2.0"
 deciders: "Architecture Board"
-date: 2026-01-23
+date: 2026-02-04
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "Architecture Board"
@@ -331,5 +331,6 @@ superseded_by: null
 
 | 版本  | 日期         | 说明       | 修订人 |
 |-----|------------|----------|-----|
-| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |
+| 2.0 | 2026-02-04 | 对齐 ADR-907 v2.0，完成 Rule/Clause 双层编号体系对齐，更新测试结构 | Architecture Board |
 | 1.1 | 2026-02-03 | 对齐 ADR-907 格式标准，引入 Rule/Clause 双层编号体系，实现 Decision 与 Enforcement 一一映射 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |
