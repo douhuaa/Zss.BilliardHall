@@ -72,12 +72,12 @@
 - [ADR-905：执行级别分类](ADR-905-enforcement-level-classification.md)
   - L1 静态/L2 语义/L3 人工的执行分级标准
 - [ADR-907：ArchitectureTests 执法治理体系](ADR-907-architecture-tests-enforcement-governance.md) ⭐
-  - 整合 ArchitectureTests 命名、组织、最小断言及 CI/Analyzer 映射规则
-  - 实现完整的自动裁决闭环
+  - 整合 ArchitectureTests 命名、组织、最小断言及 CI/Analyzer 映射
+  - 实现完整的自动化执法闭环
 - [ADR-907-A：ADR-907 对齐执行标准](adr-907-a-adr-alignment-execution-standard.md) ⭐
   - **ADR-907 的官方执行附录**
   - 定义 ADR 向 Rule/Clause 双层编号体系对齐的强制规范
-  - 包含权威性声明、对齐失败策略、测试绑定规则
+  - 包含权威性声明、对齐失败策略、测试绑定要求
 - [ADR-970：自动化工具日志集成标准](ADR-970-automation-log-integration-standard.md)
   - CI/测试/Copilot 日志的统一格式和集成
 - [ADR-975：文档质量监控](ADR-975-documentation-quality-monitoring.md)

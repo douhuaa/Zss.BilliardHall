@@ -2,11 +2,14 @@
 
 > ⚠️ **无裁决力声明**：本文档为实践案例说明，不具备架构裁决权。所有架构决策以 [ADR 文档](../adr/) 为准。
 
-**难度**：🟡 中等  
-**相关 ADR**：[ADR-001](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md), [ADR-005](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)  
-**作者**：@douhuaa  
-**日期**：2026-01-27  
-**标签**：模块化, 领域事件, 异步通信, 模块隔离
+## Metadata
+
+- 难度：🟡 中等
+- 级别: Core
+- 相关 ADR：[ADR-001](../adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md), [ADR-005](../adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
+- 作者：@douhuaa
+- 日期：2026-01-27
+- 标签：模块化, 领域事件, 异步通信, 模块隔离
 
 ---
 
@@ -37,6 +40,7 @@
 ### 架构设计
 
 ```
+# 模块间事件通信流程
 Orders Module                    Billing Module
 ┌────────────────┐              ┌────────────────┐
 │ CreateOrder    │              │ Event Handler  │
@@ -58,7 +62,7 @@ Orders Module                    Billing Module
 
 ---
 
-### 代码实现
+### 代码示例
 
 #### 步骤 1：定义领域事件（BuildingBlocks）
 
@@ -442,6 +446,14 @@ public async Task HandleAsync(OrderCreatedEvent @event)
 
 ---
 
+## 相关案例
+
+- [契约查询模式](contract-query-pattern-case.md) - 跨模块同步查询数据
+- [Handler 单元测试](handler-unit-testing-case.md) - 测试事件发布逻辑
+
+---
+
 **维护**：Tech Lead  
 **状态**：✅ Active  
+**审核**: 已通过架构委员会审查（2026-01-27）  
 **最后更新**：2026-01-27
