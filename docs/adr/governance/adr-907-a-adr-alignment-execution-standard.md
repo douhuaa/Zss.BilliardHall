@@ -469,20 +469,24 @@ version: "X.0"    # 主版本号 +1
    - 每个原规则转换为 Clause
    - 使用新的编号格式
 
-4. **更新或创建 Enforcement 章节**
+4. **整理md格式**
+   - 确保markdown格式规范
+   - 检查列表、标题、代码块、分隔线等
+
+5. **更新或创建 Enforcement 章节**
    - 创建 Enforcement 表格
    - 列出所有 RuleId
    - 标明执行级别
 
-5. **更新 History 章节**
+6. **更新 History 章节**
    - 添加新版本记录
 
-6. **同步更新 ArchitectureTests**
+7. **同步更新 ArchitectureTests**
    - 更新测试类名
    - 更新测试方法名
    - 更新失败信息
 
-7. **提交变更**
+8. **提交变更**
    ```
    使用 report_progress 提交
    ```
