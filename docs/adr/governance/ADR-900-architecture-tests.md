@@ -243,10 +243,10 @@ CI **必须**自动扫描破例状态：
 - [ADR-301：集成测试自动化](../technical/ADR-301-integration-test-automation.md)
 - [ADR-360：CI/CD Pipeline 流程标准化](../technical/ADR-360-cicd-pipeline-standardization.md)
 
-**Supersedes（替代）**：
+**Supersedes**：
 - 无
 
-**Superseded By（被替代）**：
+**Superseded By**：
 - 无
 
 ---

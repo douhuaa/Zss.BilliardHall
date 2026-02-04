@@ -169,11 +169,22 @@ Guardian 的历史决策：
 
 **Depends On**：
 - [ADR-007](../ADR-007-agent-behavior-permissions-constitution.md) - 定义 Guardian 的基本权限与行为边界
-- 
+
+**Depended By**：
+- 所有 Guardian 配置与 Instructions
+
+**Supersedes**：
+- 无
+
+**Superseded By**：
+- 无
+
 **Related**：
 - [ADR-900（架构测试与 CI 治理）](../../governance/ADR-900-architecture-tests.md)
 
-**Depended By**：所有 Guardian 配置与 Instructions
+---
+
+## Activation Condition（激活条件）
 
 **Activation Condition**：
 - Guardian 决策被引用为判例

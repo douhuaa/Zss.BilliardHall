@@ -233,44 +233,28 @@ graph TB
 
 ## Relationships（关系声明）
 
-### Depends On
-
+**Depends On**：
 - [ADR-900：架构测试与 CI 治理元规则](https://chatgpt.com/c/ADR-900-architecture-tests.md)
-
 - [ADR-008：文档编写与维护宪法](https://chatgpt.com/constitutional/ADR-008-documentation-governance-constitution.md)
-
 - [ADR-900：ADR 新增与修订流程](https://chatgpt.com/c/ADR-900-architecture-tests.md)
 
-
-### Depended By
-
+**Depended By**：
 - [ADR-945：ADR 全局时间线与演进视图](https://chatgpt.com/c/ADR-945-adr-timeline-evolution-view.md)
-
 - [ADR-946：ADR 标题级别即语义级别约束](https://chatgpt.com/c/ADR-946-adr-heading-level-semantic-constraint.md)
-
 - [ADR-947：关系声明区的结构与解析安全规则](https://chatgpt.com/c/ADR-947-relationship-section-structure-parsing-safety.md)
-
 - [ADR-955：文档搜索与可发现性优化](https://chatgpt.com/c/ADR-955-documentation-search-discoverability.md)
-
 - [ADR-980：ADR 生命周期一体化同步机制治理规范](https://chatgpt.com/c/ADR-980-adr-lifecycle-synchronization.md)
 
+**Supersedes**：
+- 无
 
-### Supersedes
+**Superseded By**：
+- 无
 
-无
-
-### Superseded By
-
-无
-
-### Related
-
+**Related**：
 - [ADR-006：术语与编号宪法](https://chatgpt.com/constitutional/ADR-006-terminology-numbering-constitution.md)
-
 - [ADR-008：文档编写与维护宪法](https://chatgpt.com/constitutional/ADR-008-documentation-governance-constitution.md)
-
 - [ADR-946：标题语义约束](https://chatgpt.com/c/ADR-946-adr-heading-level-semantic-constraint.md)
-
 
 ---
 

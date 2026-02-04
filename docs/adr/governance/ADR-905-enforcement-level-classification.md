@@ -278,15 +278,14 @@ enforceable: false
 **Depended By**：
 - [ADR-903：ArchitectureTests 命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD) - 测试组织需要明确执行级别
 - [ADR-906：Analyzer 与 CI Gate 映射协议](./ADR-906-analyzer-ci-gate-mapping-protocol.md) - CI Gate 映射依赖执行级别分类
+
+**Supersedes**：
 - 无
 
-**Supersedes（替代）**：
+**Superseded By**：
 - 无
 
-**Superseded By（被替代）**：
-- 无
-
-**Related（相关）**：
+**Related**：
 - [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 执行级别应用于模块化约束
 - [ADR-002：Platform / Application / Host 三层启动体系](../constitutional/ADR-002-platform-application-host-bootstrap.md) - 执行级别应用于三层约束
 - [ADR-003：命名空间与项目边界规范](../constitutional/ADR-003-namespace-rules.md) - 执行级别应用于命名空间约束
