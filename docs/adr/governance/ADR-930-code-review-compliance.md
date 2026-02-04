@@ -3,9 +3,9 @@ adr: ADR-930
 title: "代码审查与 ADR 合规自检流程"
 status: Final
 level: Governance
-version: "2.0"
+version: "2.1"
 deciders: "Architecture Board"
-date: 2026-02-03
+date: 2026-02-04
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -144,6 +144,10 @@ superseded_by: null
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
 | **ADR-930_1_1** | L2 | PR 模板验证 + 人工审查 | §ADR-930_1_1 |
+| **ADR-930_1_2** | L2 | CI 提醒 + 人工审查 | §ADR-930_1_2 |
+| **ADR-930_1_3** | L1 | ArchitectureTests 自动阻断 + CI Gate | §ADR-930_1_3 |
+| **ADR-930_1_4** | L2 | GitHub Branch Protection + 人工审查 | §ADR-930_1_4 |
+| **ADR-930_1_5** | L2 | 人工审查 + PR 标签检查 | §ADR-930_1_5 |
 
 ### 执行级别说明
 
@@ -243,5 +247,6 @@ superseded_by: null
 
 | 版本  | 日期         | 变更说明   | 修订人 |
 |-----|------------|--------|-------|
+| 2.1 | 2026-02-04 | 补充完整 Enforcement 表格，包含所有 5 个 Clause 的执法方式 | Copilot Agent |
 | 2.0 | 2026-02-03 | 对齐 ADR-907 v2.0（部分），Rule 1 已完成。**Alignment Incomplete**：其他规则待后续补充 | Architecture Board |
 | 1.0 | 2026-01-29 | 初始版本 | Architecture Board |
