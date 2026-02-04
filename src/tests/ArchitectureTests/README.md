@@ -124,8 +124,9 @@ ADR-008（文档治理宪法）是第一个完成三层拆分的测试：
 
 ## 测试统计
 
-- **ADR 测试类**: 6 个（ADR-900 至 ADR-005）
-- **覆盖率**: 100% ADR 约束覆盖
+- **ADR 测试类**: 7 个（ADR-900, ADR-001 至 ADR-005, ADR-400）
+- **覆盖率**: 核心 ADR 约束 100% 覆盖
+- **技术层 ADR**: ADR-400（测试工程规范）新增
 
 ### 架构演进说明
 
@@ -210,7 +211,29 @@ dotnet test src/tests/ArchitectureTests -c Release
 ✅ **ADR-002**: Platform / Application / Host 三层启动体系  
 ✅ **ADR-003**: 命名空间与项目边界规范  
 ✅ **ADR-004**: 中央包管理 (CPM) 规范  
-✅ **ADR-005**: 应用内交互模型与执行边界
+✅ **ADR-005**: 应用内交互模型与执行边界  
+✅ **ADR-400**: 测试工程规范（新增）
+
+#### ADR-400: 测试工程规范
+
+- **测试类**: `ADR_400_1_Architecture_Tests`, `ADR_400_2_Architecture_Tests`, `ADR_400_3_Architecture_Tests`, `ADR_400_4_Architecture_Tests`
+- **测试数量**: 12 个测试
+- **核心约束**:
+  - 测试目录结构规范（`src/tests/ArchitectureTests/ADR-XXX/`）
+  - 测试文件命名规则（`ADR_XXX_Architecture_Tests.cs`）
+  - Rule → Test 映射关系验证
+  - 测试必须包含 RuleId 引用
+  - CI/CD 集成要求
+  - Guardian 执法机制验证
+  - 禁止跳过架构测试
+
+**规范说明**：ADR-400 定义了测试工程的标准化规范，确保：
+- 每个 ADR Rule 都有对应的测试用例
+- 测试代码组织清晰、可追溯
+- Guardian 能够自动验证 Rule-Test 映射关系
+- 测试集成到 CI/CD 并在失败时阻断构建
+
+详见：[ADR-400 文档](../../docs/adr/technical/ADR-400-testing-engineering-standards.md)
 
 ### 未来增强方向
 
