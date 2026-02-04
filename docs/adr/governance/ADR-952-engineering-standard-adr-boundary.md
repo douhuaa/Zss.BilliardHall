@@ -174,7 +174,11 @@ L3 Best Practice（推荐做法，无强制力）
 
 * 所有 Standard 依赖管理和引用
 
-**Supersedes / Superseded By**：无
+**Supersedes**：
+- 无
+
+**Superseded By**：
+- 无
 
 **Related**：
 

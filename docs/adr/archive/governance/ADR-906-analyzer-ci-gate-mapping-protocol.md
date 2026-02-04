@@ -170,19 +170,22 @@ Analyzer.Register("ADR-240.1", "ADR_240_1_HandlerMustNotCatchExceptionTests");
 
 ## Relationships（关系声明）
 
-> 🏛️ **归档文档声明**：
-> 本节仅保留历史追溯所需的最小关系集。所有执法、测试、CI 映射关系均已失效。
-
-**被替代（Superseded By）**：
-
+**Superseded By**：
 - [ADR-907：ArchitectureTests 执法治理体系](../../governance/ADR-907-architecture-tests-enforcement-governance.md)
 
-**历史依赖（Historical Context）**：
-
+**Depends On** (Historical Context)：
 - [ADR-900：架构测试与 CI 治理元规则](../../governance/ADR-900-architecture-tests.md)
 - [ADR-903：ArchitectureTests 命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD)
 - [ADR-904：ArchitectureTests 最小断言语义规范](./ADR-904-architecturetests-minimum-assertion-semantics.md)
 - [ADR-905：执行级别分类](../../governance/ADR-905-enforcement-level-classification.md)
+
+---
+
+## Archive Status（归档状态）
+
+> 🏛️ **归档文档声明**：
+> 本 ADR 已被 ADR-907 替代。所有执法、测试、CI 映射关系均已失效。
+> 本文档仅保留用于历史追溯与设计演进说明。
 
 ---
 

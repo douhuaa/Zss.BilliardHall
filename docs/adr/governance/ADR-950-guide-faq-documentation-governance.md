@@ -170,7 +170,11 @@ Standard（不得引入新约束）
 * [ADR-952：工程标准与 ADR 分离边界](ADR-952-engineering-standard-adr-boundary.md)
 * [ADR-960：Onboarding 文档治理规范](ADR-960-onboarding-documentation-governance.md)
 
-**Supersedes / Superseded By**：无
+**Supersedes**：
+- 无
+
+**Superseded By**：
+- 无
 
 **Related**：
 

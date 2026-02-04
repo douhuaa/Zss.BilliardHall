@@ -281,10 +281,16 @@ superseded_by: null
 - [ADR-907-A：ADR-907 对齐执行标准](./adr-907-a-adr-alignment-execution-standard.md)（执行附录）
 
 **Supersedes**：
-
 - [ADR-903：ArchitectureTests 命名与组织规范](../archive/governance/ADR-903-architecture-tests-naming-organization.MD)
 - [ADR-904：ArchitectureTests 最小断言语义规范](../archive/governance/ADR-904-architecturetests-minimum-assertion-semantics.md)
 - [ADR-906：Analyzer 与 CI Gate 映射协议](../archive/governance/ADR-906-analyzer-ci-gate-mapping-protocol.md)
+
+**Superseded By**：
+- 无
+
+---
+
+## Superseded ADRs（已替代的 ADR）
 
 > ⚖️ **治理级宣告**：
 > 

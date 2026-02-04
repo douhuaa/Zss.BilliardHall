@@ -168,7 +168,11 @@ superseded_by: null
 **Depended By**：
 - 所有案例引用与管理流程
 
-**Supersedes / Superseded By**：无
+**Supersedes**：
+- 无
+
+**Superseded By**：
+- 无
 
 **Related**：
 - [ADR-920：示例代码治理规范](ADR-920-examples-governance-constitution.md)

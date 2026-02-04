@@ -172,7 +172,7 @@ private const string RuleId = "ADR-240.1";
 
 ## Relationships（关系声明）
 
-**上位裁决（Supersedes）**：
+**Supersedes**：
 - [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md)
 
 **Depends On**：
