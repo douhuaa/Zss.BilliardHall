@@ -430,6 +430,30 @@ jobs:
 | **ADR-970_5_3** | L1 | 文档扫描分发规则 | §ADR-970_5_3 |
 | **ADR-970_5_4** | L1 | 文档扫描访问权限 | §ADR-970_5_4 |
 
+---
+
+## Relationships（关系声明）
+
+**Depends On**：
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 日志集成基于 CI 治理机制
+- [ADR-907：ArchitectureTests 执法治理体系](./ADR-907-architecture-tests-enforcement-governance.md) - 测试报告日志关联
+- [ADR-940：ADR 关系与溯源管理](./ADR-940-adr-relationship-traceability-management.md) - 日志与 ADR 关联机制
+
+**Depended By**：
+- 无
+
+**Supersedes**：
+- 无
+
+**Superseded By**：
+- 无
+
+**Related**：
+- [ADR-975：文档质量监控](./ADR-975-documentation-quality-monitoring.md) - 文档质量日志
+- [ADR-980：ADR 生命周期同步机制](./ADR-980-adr-lifecycle-synchronization.md) - 生命周期日志
+
+---
+
 ## History（版本历史）
 
 

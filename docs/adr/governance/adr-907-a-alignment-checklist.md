@@ -48,10 +48,10 @@ status: Living Document
 | ADR-905 | ✅ 已完成 | 1 Rule, 5 Clause | ⭐⭐ | 测试已创建，L1/L2 测试为警告级 |
 | ADR-907 | ✅ 已完成 | - | - | v2.0 已采用新体系 |
 | ADR-910 | ✅ 已完成 | 2 Rule, 5 Clause | ⭐ | 已创建 ADR_910_1_Architecture_Tests 和 ADR_910_2_Architecture_Tests |
-| ADR-920 | ⏸️ 待对齐 | 2 Rule, 4 Clause | ⭐ | - |
+| ADR-920 | ✅ 已完成 | 3 Rule, 4 Clause | ⭐ | 测试已创建，按 Rule/Clause 结构 |
 | ADR-930 | ⚠️ 待评估 | ? | ⭐⭐ | Decision 章节不完整 |
-| ADR-940 | ⏸️ 待对齐 | 1 Rule, 5 Clause | ⭐⭐ | - |
-| ADR-945 | ⏸️ 待对齐 | - | ⭐ | - |
+| ADR-940 | ✅ 已完成 | 1 Rule, 1 Clause | ⭐⭐ | 测试已创建（Rule 1），修复了 ADR-970 关系声明缺失 |
+| ADR-945 | ✅ 已完成 | 1 Rule, 1 Clause | ⭐ | 测试已创建（Rule 1） |
 | ADR-946 | ⏸️ 待对齐 | - | ⭐ | - |
 | ADR-947 | ⏸️ 待对齐 | - | ⭐⭐ | - |
 | ADR-950 | ⏸️ 待对齐 | - | ⭐ | - |
@@ -130,7 +130,7 @@ status: Living Document
 
 | 阶段 | ADR 总数 | 已完成 | 进行中 | 待对齐 | 待评估 | 完成率 |
 |------|---------|--------|--------|--------|--------|--------|
-| Phase 1: 治理层 | 22 | 6 | 0 | 15 | 1 | 27% |
+| Phase 1: 治理层 | 22 | 9 | 0 | 12 | 1 | 41% |
 | Phase 2: 宪法层 | 8 | 0 | 0 | 8 | 0 | 0% |
 | Phase 3: 运行层 | 5 | 0 | 0 | 5 | 0 | 0% |
 | Phase 4: 结构层 | 4 | 0 | 0 | 4 | 0 | 0% |
@@ -167,6 +167,7 @@ status: Living Document
 
 | 日期 | 变更内容 | 变更人 |
 |------|----------|-------|
+| 2026-02-04 | 完成 ADR-920、ADR-940、ADR-945 测试对齐：创建 Rule/Clause 结构的测试类。ADR-920 有 3 个 Rule（权限边界、架构约束、类型边界），ADR-940_1_1 验证关系声明章节存在性，ADR-945_1_1 验证时间线生成机制。修复了 ADR-970 缺少关系声明章节的问题。 | Copilot Agent |
 | 2026-02-04 | 完成 ADR-910 对齐：创建 ADR_910_1_Architecture_Tests 和 ADR_910_2_Architecture_Tests，实现所有 5 个 Clause 的测试用例。测试涵盖 README 的定位与权限边界、裁决性语言禁用、无裁决力声明、ADR 引用规范和变更治理规则。ADR-910_2_2 采用 L2 警告级别。 | Copilot Agent |
 | 2026-02-04 | 完成 ADR-905 对齐：创建 ADR_905_1_Architecture_Tests，实现所有 5 个 Clause 的测试用例。ADR-905_1_1 和 ADR-905_1_2 采用 L2 警告级别，不会阻断构建。 | Copilot Agent |
 | 2026-02-04 | 完成 ADR-902 对齐：拆分测试为 ADR_902_1_Architecture_Tests 和 ADR_902_2_Architecture_Tests，遵循 Rule/Clause 双层结构 | Copilot Agent |
