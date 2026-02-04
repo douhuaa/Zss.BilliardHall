@@ -422,6 +422,23 @@ docs/ROADMAP.md
 **Related**：
 - ADR-950：指南与 FAQ 文档治理规范
 
+---
+
+## References（非裁决性参考）
+
+### 相关 ADR
+- [ADR-902：ADR 标准模板与结构契约](./ADR-902-adr-template-structure-contract.md)
+- [ADR-940：ADR 关系可追溯性管理](./ADR-940-adr-relationship-traceability-management.md)
+- [ADR-950：指南与 FAQ 文档治理规范](./ADR-950-guide-faq-governance-specification.md)
+
+### 技术资源
+- [Architecture Decision Records](https://adr.github.io/)
+- [Documentation as Code](https://www.writethedocs.org/guide/docs-as-code/)
+
+### 实践指导
+- 文档演进实践参见 `docs/guides/documentation-evolution-guide.md`（待创建）
+
+---
 
 ## History（版本历史）
 
