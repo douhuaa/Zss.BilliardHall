@@ -193,7 +193,7 @@ public sealed class ADR_400_4_Architecture_Tests
         
         if (!Directory.Exists(testDirectory))
         {
-            true.Should().BeFalse($"未找到架构测试目录：{testDirectory}");
+            Assert.Fail($"未找到架构测试目录：{testDirectory}");
         }
         
         // 仅检查 ADR-400 目录下的测试文件
@@ -201,7 +201,7 @@ public sealed class ADR_400_4_Architecture_Tests
         
         if (!Directory.Exists(adr400Directory))
         {
-            true.Should().BeFalse($"未找到 ADR-400 测试目录：{adr400Directory}");
+            Assert.Fail($"未找到 ADR-400 测试目录：{adr400Directory}");
         }
         
         var testFiles = Directory.GetFiles(adr400Directory, "*.cs", SearchOption.AllDirectories);

@@ -66,7 +66,7 @@ public sealed class ADR_400_1_Architecture_Tests
         
         if (!Directory.Exists(testDirectory))
         {
-            true.Should().BeFalse($"未找到架构测试目录：{testDirectory}");
+            Assert.Fail($"未找到架构测试目录：{testDirectory}");
         }
         
         // 查找所有 ADR-* 子目录中的测试文件
@@ -108,7 +108,7 @@ public sealed class ADR_400_1_Architecture_Tests
         
         if (!Directory.Exists(testDirectory))
         {
-            true.Should().BeFalse($"未找到架构测试目录：{testDirectory}");
+            Assert.Fail($"未找到架构测试目录：{testDirectory}");
         }
         
         var adrDirectories = Directory.GetDirectories(testDirectory, "ADR-*", SearchOption.TopDirectoryOnly);

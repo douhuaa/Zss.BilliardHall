@@ -33,12 +33,12 @@ public sealed class ADR_400_2_Architecture_Tests
         
         if (!Directory.Exists(adrDirectory))
         {
-            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
+            Assert.Fail($"未找到 ADR 文档目录：{adrDirectory}");
         }
         
         if (!Directory.Exists(testDirectory))
         {
-            true.Should().BeFalse($"未找到架构测试目录：{testDirectory}");
+            Assert.Fail($"未找到架构测试目录：{testDirectory}");
         }
         
         // 仅验证 ADR-400 本身（本 ADR 定义的规范）
@@ -46,7 +46,7 @@ public sealed class ADR_400_2_Architecture_Tests
         
         if (!File.Exists(adr400File))
         {
-            true.Should().BeFalse($"未找到 ADR-400 文档：{adr400File}");
+            Assert.Fail($"未找到 ADR-400 文档：{adr400File}");
         }
         
         var content = File.ReadAllText(adr400File);
@@ -99,7 +99,7 @@ public sealed class ADR_400_2_Architecture_Tests
         
         if (!Directory.Exists(testDirectory))
         {
-            true.Should().BeFalse($"未找到架构测试目录：{testDirectory}");
+            Assert.Fail($"未找到架构测试目录：{testDirectory}");
         }
         
         var adrDirectories = Directory.GetDirectories(testDirectory, "ADR-*", SearchOption.TopDirectoryOnly);
@@ -165,7 +165,7 @@ public sealed class ADR_400_2_Architecture_Tests
         
         if (!Directory.Exists(testDirectory))
         {
-            true.Should().BeFalse($"未找到架构测试目录：{testDirectory}");
+            Assert.Fail($"未找到架构测试目录：{testDirectory}");
         }
         
         var adrDirectories = Directory.GetDirectories(testDirectory, "ADR-*", SearchOption.TopDirectoryOnly);
