@@ -1,5 +1,7 @@
 # 自动化工具日志存储
 
+> ⚠️ 本文档不具备裁决力。所有架构决策以对应 ADR 正文为准。
+
 > 依据 [ADR-970：自动化工具日志集成标准](../adr/governance/ADR-970-automation-log-integration-standard.md)
 
 本目录用于存储自动化工具生成的结构化日志报告。
