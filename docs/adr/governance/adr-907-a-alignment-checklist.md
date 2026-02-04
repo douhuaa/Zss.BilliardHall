@@ -163,6 +163,17 @@ status: Living Document
 
 ---
 
+## Relationships
+
+- **Supersedes**: None
+- **Related**: 
+  - ADR-907: ArchitectureTests 执法治理体系
+  - ADR-907-A: ADR-907 对齐执行标准
+- **Depends on**: 
+  - ADR-907-A: ADR-907 对齐执行标准
+
+---
+
 ## 变更日志
 
 | 日期 | 变更内容 | 变更人 |
@@ -182,10 +193,3 @@ status: Living Document
 | 2026-02-04 | 完成 ADR-902 对齐：拆分测试为 ADR_902_1_Architecture_Tests 和 ADR_902_2_Architecture_Tests，遵循 Rule/Clause 双层结构 | Copilot Agent |
 | 2026-02-03 | 完成 ADR-901 对齐：创建 ADR_901_Architecture_Tests.cs，实现所有 8 个 Clause 的测试用例 | Architecture Board |
 | 2026-02-03 | 初始版本：从 ADR-907-A 提取待对齐清单，创建独立追踪文档 | Architecture Board |
-
----
-
-## 参考文档
-
-- [ADR-907-A：ADR-907 对齐执行标准](./adr-907-a-adr-alignment-execution-standard.md) - 对齐规范和执行标准
-- [ADR-907：ArchitectureTests 执法治理体系](./ADR-907-architecture-tests-enforcement-governance.md) - 治理体系主文档
