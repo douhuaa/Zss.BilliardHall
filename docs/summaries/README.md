@@ -26,7 +26,7 @@
 - [测试三层架构实施](three-layer-test-architecture-implementation.md)
 
 ### 治理
-- [架构违规记录](arch-violations.md)
+- [架构不符合记录](arch-violations.md)
 - [AI 治理体系架构实施](ai-governance-architecture-implementation.md)
 - [Copilot 治理实施](copilot-governance-implementation.md)
 - [治理层 ADR 改进实施](governance-adr-improvement-implementation.md)
