@@ -31,8 +31,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -42,8 +40,6 @@ superseded_by: null
 | 传递依赖固定                   | 通过 CPM 禁止传递依赖的漂移                 | Transitive Dependency Lock |
 | 层级依赖                     | 不同层项目允许的包类型约束                    | Layered Dependencies  |
 | 包分组                      | 依赖包按技术栈、场景分隔分组                   | Package Grouping      |
-
----
 
 ---
 
@@ -162,8 +158,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Enforcement（执法模型）
 
 > 📋 **Enforcement 映射说明**：
@@ -186,7 +180,6 @@ superseded_by: null
 
 **有一项违规视为架构违规，CI 自动阻断。**
 
----
 ---
 
 ## Non-Goals（明确不管什么）
@@ -236,9 +229,6 @@ superseded_by: null
 - ❌ **添加测试排除项**：禁止通过 `[Fact(Skip = "...")]` 或条件编译跳过包管理测试
 - ❌ **修改测试阈值**：禁止修改测试中的层级依赖规则（如允许 Platform 依赖更多包）
 
-
----
-
 ---
 
 ## Relationships（关系声明）
@@ -258,9 +248,8 @@ superseded_by: null
 - 无
 
 **相关（Related）**：
-- 无
 
----
+- 无
 
 ---
 
@@ -281,9 +270,6 @@ superseded_by: null
 - [ADR-002：平台、应用与主机启动器架构](./ADR-002-platform-application-host-bootstrap.md) - 了解层级职责划分
 - [ADR-003：命名空间与项目结构规范](./ADR-003-namespace-rules.md) - 了解项目组织结构
 
-
----
-
 ---
 
 ## History（版本历史）
@@ -293,5 +279,3 @@ superseded_by: null
 | 3.0 | 2026-02-04 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系。重构 Decision 章节为 3 个 Rule（Rule 1: CPM 基础设施约束，Rule 2: 项目依赖管理约束，Rule 3: 层级依赖与分组约束），共 9 个 Clause。更新 Enforcement 表格，架构测试将拆分为多个文件。 |
 | 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 |
 | 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
-
----
