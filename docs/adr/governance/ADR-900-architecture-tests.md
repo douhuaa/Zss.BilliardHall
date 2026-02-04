@@ -221,14 +221,14 @@ CI **必须**自动扫描破例状态：
 - 无（本 ADR 为元规则，不依赖其他 ADR）
 
 **Depended By**：
-- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-002：Platform / Application / Host 三层启动体系](../constitutional/ADR-002-platform-application-host-bootstrap.md)
-- [ADR-003：命名空间规则](../constitutional/ADR-003-namespace-rules.md)
-- [ADR-004：CPM 架构合约](../constitutional/ADR-004-Cpm-Final.md)
-- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md)
-- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md)
-- [ADR-007：Agent 行为与权限宪法](../constitutional/ADR-007-agent-behavior-permissions-constitution.md)
-- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md)
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-002：Platform / Application / Host 三层启动体系](../constitutional/ADR-0002-platform-application-host-bootstrap.md)
+- [ADR-003：命名空间规则](../constitutional/ADR-0003-namespace-rules.md)
+- [ADR-004：CPM 架构合约](../constitutional/ADR-0004-Cpm-Final.md)
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md)
+- [ADR-007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
 - [ADR-900：ADR 流程与生命周期](./ADR-900-architecture-tests.md)
 - [ADR-901：ADR 语义元规则](./ADR-901-warning-constraint-semantics.md)
 - [ADR-903：架构测试命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD)

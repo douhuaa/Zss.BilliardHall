@@ -168,7 +168,7 @@ Guardian 的历史决策：
 ## Relationships（关系）
 
 **Depends On**：
-- [ADR-007](../ADR-007-agent-behavior-permissions-constitution.md) - 定义 Guardian 的基本权限与行为边界
+- [ADR-007](../ADR-0007-agent-behavior-permissions-constitution.md) - 定义 Guardian 的基本权限与行为边界
 - 
 **Related**：
 - [ADR-900（架构测试与 CI 治理）](../../governance/ADR-900-architecture-tests.md)
