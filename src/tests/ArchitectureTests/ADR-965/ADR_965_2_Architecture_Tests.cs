@@ -22,15 +22,22 @@ public sealed class ADR_965_2_Architecture_Tests
     [Fact(DisplayName = "ADR-965_2_1: 必须包含可视化学习路径图")]
     public void ADR_965_2_1_Must_Include_Visual_Learning_Path()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr965Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
-
-        var content = File.ReadAllText(adr965Path);
+        var adr965Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr965Path);
 
         // 验证包含可视化路径图的说明
-        content.Should().Contain("可视化学习路径图",
-            $"❌ ADR-965_2_1 违规：ADR-965 必须说明包含可视化学习路径图\n\n" +
-            $"参考：docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md §2.1");
+        var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-965_2_1",
+            filePath: adr965Path,
+            missingContent: "可视化学习路径图",
+            remediationSteps: new[]
+            {
+                "在 ADR-965 中添加关于可视化学习路径图的说明",
+                "说明路径图的目的和作用",
+                "提供路径图的创建指南"
+            },
+            adrReference: TestConstants.Adr965Path);
+
+        FileSystemTestHelper.AssertFileContains(adr965Path, "可视化学习路径图", missingMessage);
     }
 
     /// <summary>
@@ -40,15 +47,22 @@ public sealed class ADR_965_2_Architecture_Tests
     [Fact(DisplayName = "ADR-965_2_2: 必须定义路径图位置")]
     public void ADR_965_2_2_Path_Location_Must_Be_Defined()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr965Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
-
-        var content = File.ReadAllText(adr965Path);
+        var adr965Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr965Path);
 
         // 验证定义了路径图位置
-        content.Should().Contain("docs/onboarding/README.md",
-            $"❌ ADR-965_2_2 违规：ADR-965 必须定义路径图位置为 docs/onboarding/README.md\n\n" +
-            $"参考：docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md §2.2");
+        var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-965_2_2",
+            filePath: adr965Path,
+            missingContent: "docs/onboarding/README.md",
+            remediationSteps: new[]
+            {
+                "在 ADR-965 中明确定义路径图位置为 docs/onboarding/README.md",
+                "说明路径图位置选择的原因",
+                "提供路径图访问方式"
+            },
+            adrReference: TestConstants.Adr965Path);
+
+        FileSystemTestHelper.AssertFileContains(adr965Path, "docs/onboarding/README.md", missingMessage);
     }
 
     /// <summary>
@@ -58,19 +72,36 @@ public sealed class ADR_965_2_Architecture_Tests
     [Fact(DisplayName = "ADR-965_2_3: 必须使用 Mermaid 格式")]
     public void ADR_965_2_3_Must_Use_Mermaid_Format()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr965Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
-
-        var content = File.ReadAllText(adr965Path);
+        var adr965Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr965Path);
 
         // 验证定义了 Mermaid 格式
-        content.Should().Contain("Mermaid",
-            $"❌ ADR-965_2_3 违规：ADR-965 必须定义使用 Mermaid 图表格式\n\n" +
-            $"参考：docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md §2.3");
+        var missingMermaidMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-965_2_3",
+            filePath: adr965Path,
+            missingContent: "Mermaid",
+            remediationSteps: new[]
+            {
+                "在 ADR-965 中说明使用 Mermaid 图表格式",
+                "解释选择 Mermaid 的原因",
+                "提供 Mermaid 使用指南"
+            },
+            adrReference: TestConstants.Adr965Path);
+
+        FileSystemTestHelper.AssertFileContains(adr965Path, "Mermaid", missingMermaidMessage);
 
         // 验证包含 Mermaid 代码块示例
-        content.Should().Contain("```mermaid",
-            $"❌ ADR-965_2_3 违规：ADR-965 必须包含 Mermaid 图表示例");
-    }
+        var missingExampleMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-965_2_3",
+            filePath: adr965Path,
+            missingContent: "```mermaid",
+            remediationSteps: new[]
+            {
+                "在 ADR-965 中添加 Mermaid 图表示例",
+                "提供完整的 Mermaid 代码块",
+                "确保示例清晰易懂"
+            },
+            adrReference: TestConstants.Adr965Path);
 
+        FileSystemTestHelper.AssertFileContains(adr965Path, "```mermaid", missingExampleMessage);
+    }
 }
