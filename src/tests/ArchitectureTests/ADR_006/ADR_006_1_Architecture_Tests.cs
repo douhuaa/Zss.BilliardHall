@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_006;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-006_1: 编号分层规则
 /// 验证 ADR-006_1_1：编号段层级映射
@@ -102,7 +104,7 @@ public sealed class ADR_006_1_Architecture_Tests
             var dirPath = Path.Combine(_adrRoot, dir);
             if (Directory.Exists(dirPath))
             {
-                adrFiles.AddRange(Directory.GetFiles(dirPath, "ADR-*.md", SearchOption.TopDirectoryOnly));
+                adrFiles.AddRange(AdrFileFilter.GetAdrFiles(dirPath, SearchOption.TopDirectoryOnly));
             }
         }
 

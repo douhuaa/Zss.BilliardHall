@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_008;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// 验证 ADR-008_1：文档分级与裁决权（Rule）
 /// 验证 ADR-008_1_1：文档分级定义
@@ -23,7 +25,7 @@ public sealed class ADR_008_1_Architecture_Tests
             "2. 将所有 ADR 文档放置在该目录下\n" +
             "3. 参考 ADR-008_1_1 文档分级定义");
 
-        var adrFiles = Directory.GetFiles(adrPath, "ADR-*.md", SearchOption.AllDirectories);
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrPath);
         adrFiles.Should().NotBeEmpty(
             $"❌ ADR-008_1_1 违规：未找到任何 ADR 文档\n\n" +
             "修复建议：\n" +
@@ -39,8 +41,7 @@ public sealed class ADR_008_1_Architecture_Tests
         var adrPath = Path.Combine(DocsRoot, "adr");
         if (!Directory.Exists(adrPath)) return;
 
-        var adrFiles = Directory.GetFiles(adrPath, "ADR-*.md", SearchOption.AllDirectories)
-            .Take(5); // 抽样检查
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrPath).Take(5); // 抽样检查
 
         foreach (var file in adrFiles)
         {

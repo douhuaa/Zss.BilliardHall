@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_905;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-905_1: 执行级别分类体系
 /// 验证架构规则按照 L1/L2/L3 执行级别正确分类和实施
@@ -43,18 +45,12 @@ public sealed class ADR_905_1_Architecture_Tests
 
         if (Directory.Exists(constitutionalDir))
         {
-            adrFiles.AddRange(Directory
-                .GetFiles(constitutionalDir, "ADR-*.md", SearchOption.AllDirectories)
-                .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
-                .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase)));
+            adrFiles.AddRange(AdrFileFilter.GetAdrFiles(constitutionalDir));
         }
 
         if (Directory.Exists(governanceDir))
         {
-            adrFiles.AddRange(Directory
-                .GetFiles(governanceDir, "ADR-*.md", SearchOption.AllDirectories)
-                .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
-                .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase)));
+            adrFiles.AddRange(AdrFileFilter.GetAdrFiles(governanceDir));
         }
 
         adrFiles = adrFiles.Take(MaxAdrFilesToCheck).ToList();
@@ -145,10 +141,8 @@ public sealed class ADR_905_1_Architecture_Tests
         Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
         // 扫描所有 ADR，提取 L1 规则
-        var adrFiles = Directory
-            .GetFiles(adrDirectory, "ADR-*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
+        var adrFiles = AdrFileFilter
+            .GetAdrFiles(adrDirectory)
             .Take(MaxAdrFilesToCheck);
 
         var l1RulesWithoutTests = new List<string>();

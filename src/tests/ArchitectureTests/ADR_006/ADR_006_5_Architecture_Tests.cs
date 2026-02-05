@@ -1,4 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_006;
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
 /// ADR-006_5: 特殊编号规则
@@ -92,7 +93,7 @@ public sealed class ADR_006_5_Architecture_Tests
             var dirPath = Path.Combine(_adrRoot, dir);
             if (Directory.Exists(dirPath))
             {
-                adrFiles.AddRange(Directory.GetFiles(dirPath, "ADR-*.md", SearchOption.TopDirectoryOnly));
+                adrFiles.AddRange(AdrFileFilter.GetAdrFiles(dirPath, SearchOption.TopDirectoryOnly));
             }
         }
 
