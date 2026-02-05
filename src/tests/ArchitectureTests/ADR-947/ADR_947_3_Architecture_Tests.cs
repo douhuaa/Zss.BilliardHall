@@ -32,14 +32,21 @@ public sealed class ADR_947_3_Architecture_Tests
         foreach (var adrFile in adrFiles)
         {
             var fileName = Path.GetFileName(adrFile);
+            
+            // 跳过特殊文件：关系映射文档本身就是用来列出 ADR 编号的
+            if (fileName.Contains("RELATIONSHIP-MAP", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+            
             var content = File.ReadAllText(adrFile);
 
-            // 移除 Relationships 和 References 章节（这些章节允许使用 ADR 编号）
-            var contentWithoutRelationships = RemoveRelationshipsAndReferencesSection(content);
+            // 移除允许使用 ADR 编号的章节
+            var contentWithoutAllowedSections = RemoveAllowedSectionsForAdrNumbers(content);
 
             // 查找所有 ADR-XXX 编号（排除占位符 ADR-####）
             var adrPattern = @"ADR-\d{3,4}(?!#)"; // 匹配 ADR-001 到 ADR-9999，但不匹配 ADR-####
-            var matches = Regex.Matches(contentWithoutRelationships, adrPattern);
+            var matches = Regex.Matches(contentWithoutAllowedSections, adrPattern);
 
             if (matches.Count > 0)
             {
@@ -83,7 +90,7 @@ public sealed class ADR_947_3_Architecture_Tests
         return null;
     }
 
-    private static string RemoveRelationshipsAndReferencesSection(string content)
+    private static string RemoveAllowedSectionsForAdrNumbers(string content)
     {
         // 移除 Relationships 章节
         var pattern1 = @"##\s*(Relationships|关系声明).*?\n(.*?)(?=\n##\s|\z)";
@@ -92,6 +99,10 @@ public sealed class ADR_947_3_Architecture_Tests
         // 移除 References 章节
         var pattern2 = @"##\s*(References|参考|非裁决性参考).*?\n(.*?)(?=\n##\s|\z)";
         content = Regex.Replace(content, pattern2, "", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+        // 移除 History 章节（版本历史中经常引用 ADR 编号）
+        var pattern3 = @"##\s*(History|版本历史|变更历史).*?\n(.*?)(?=\n##\s|\z)";
+        content = Regex.Replace(content, pattern3, "", RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
         return content;
     }
