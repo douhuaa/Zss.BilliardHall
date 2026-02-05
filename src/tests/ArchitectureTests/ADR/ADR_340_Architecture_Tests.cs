@@ -58,17 +58,19 @@ public sealed class ADR_340_Architecture_Tests
         };
 
         var missingPackages = requiredPackages.Where(pkg => !content.Contains(pkg)).ToList();
+        
+        var missingPackagesText = missingPackages.Any()
+            ? string.Join("\n", missingPackages.Select(pkg => $"  - {pkg}"))
+            : "";
 
-        missingPackages.Any().Should().BeFalse($"❌ ADR-340_1_1 违规: Platform 层必须引用以下日志和监控基础设施包。\n\n" +
-            $"缺失的包:\n" +
-            string.Join("\n", missingPackages.Select(pkg => $"  - {pkg}")) + "\n\n" +
-            $"修复建议:\n" +
-            $"1. 在 Platform.csproj 中添加缺失的包引用:\n" +
+        missingPackages.Any().Should().BeFalse($"❌ ADR-340_1_1 违规：Platform 层必须引用以下日志和监控基础设施包。\n\n" +
+            $"缺失的包：\n{missingPackagesText}\n\n" +
+            $"修复建议：\n" +
+            $"1. 在 Platform.csproj 中添加缺失的包引用：\n" +
             $"   <PackageReference Include=\"<包名>\" />\n" +
             $"2. 确保 Directory.Packages.props 中定义了这些包的版本\n\n" +
-            $"执行级别: L1（依赖验证）- 此规则仅验证包引用，不保证实际配置\n\n" +
-            $"参考：docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.1)\n" +
-            $"工程标准: docs/guides/structured-logging-monitoring-standard.md");
+            $"执行级别：L1【依赖验证】- 此规则仅验证包引用，不保证实际配置\n\n" +
+            $"参考：docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md【ADR-340.1】");
     }
 
     [Fact(DisplayName = "ADR-340_1_2: PlatformBootstrapper 必须包含日志配置代码")]
@@ -160,20 +162,23 @@ public sealed class ADR_340_Architecture_Tests
             .HaveDependencyOn("Serilog")
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-340_1_5 违规: Modules 层禁止直接引用 Serilog。\n\n" +
-            $"违规类型:\n" +
-            string.Join("\n", result.FailingTypeNames?.Select(t => $"  - {t}") ?? Array.Empty<string>()) + "\n\n" +
-            $"修复建议:\n" +
+        var failingTypesText = result.FailingTypeNames != null && result.FailingTypeNames.Any()
+            ? string.Join("\n", result.FailingTypeNames.Select(t => $"  - {t}"))
+            : "";
+
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-340_1_5 违规：Modules 层禁止直接引用 Serilog。\n\n" +
+            $"违规类型：\n{failingTypesText}\n\n" +
+            $"修复建议：\n" +
             $"1. 移除 Modules 项目中对 Serilog 包的直接引用\n" +
             $"2. 仅使用 Microsoft.Extensions.Logging.ILogger<T> 接口\n" +
             $"3. 通过依赖注入获取 ILogger<T>\n\n" +
-            $"正确示例:\n" +
-            $"  public class CreateOrderHandler(ILogger<CreateOrderHandler> logger)\n" +
+            $"正确示例：\n" +
+            $"  public class CreateOrderHandler【ILogger<CreateOrderHandler> logger】\n" +
             $"  {{\n" +
-            $"      logger.LogInformation(\"订单创建 {{OrderId}}\", orderId);\n" +
+            $"      logger.LogInformation【\\\"订单创建 {{{{OrderId}}}}\\\"，orderId】;\n" +
             $"  }}\n\n" +
-            $"执行级别: L1（依赖隔离）\n\n" +
-            $"参考：docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.5)");
+            $"执行级别：L1【依赖隔离】\n\n" +
+            $"参考：docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md【ADR-340.5】");
     }
 
     [Fact(DisplayName = "ADR-340_1_6: Modules 层不应直接引用 OpenTelemetry")]
@@ -199,9 +204,13 @@ public sealed class ADR_340_Architecture_Tests
             .HaveDependencyOn("OpenTelemetry")
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-340_1_5 违规: Modules 层禁止直接引用 OpenTelemetry（配置类）。\n\n" +
+        var failingTypesText = result.FailingTypeNames != null && result.FailingTypeNames.Any()
+            ? string.Join("\n", result.FailingTypeNames.Select(t => $"  - {t}"))
+            : "";
+
+        result.IsSuccessful.Should().BeTrue($"❌ ADR-340_1_5 违规: Modules 层禁止直接引用 OpenTelemetry【配置类】。\n\n" +
             $"违规类型:\n" +
-            string.Join("\n", result.FailingTypeNames?.Select(t => $"  - {t}") ?? Array.Empty<string>()) + "\n\n" +
+            $"{failingTypesText}\n\n" +
             $"修复建议:\n" +
             $"1. 移除 Modules 项目中对 OpenTelemetry 配置包的引用\n" +
             $"2. 如需创建自定义 Activity，可使用 System.Diagnostics.ActivitySource\n" +
@@ -241,9 +250,13 @@ public sealed class ADR_340_Architecture_Tests
             .HaveDependencyOn("Serilog")
             .GetResult();
 
+        var failingTypesText = result.FailingTypeNames != null && result.FailingTypeNames.Any()
+            ? string.Join("\n", result.FailingTypeNames.Select(t => $"  - {t}"))
+            : "";
+
         result.IsSuccessful.Should().BeTrue($"❌ ADR-340_1_5 违规: Application 层禁止直接引用 Serilog。\n\n" +
             $"违规类型:\n" +
-            string.Join("\n", result.FailingTypeNames?.Select(t => $"  - {t}") ?? Array.Empty<string>()) + "\n\n" +
+            $"{failingTypesText}\n\n" +
             $"修复建议:\n" +
             $"1. 移除 Application 项目中对 Serilog 包的引用\n" +
             $"2. 仅使用 Microsoft.Extensions.Logging.ILogger<T> 接口\n" +
@@ -281,9 +294,13 @@ public sealed class ADR_340_Architecture_Tests
             .HaveDependencyOn("OpenTelemetry")
             .GetResult();
 
+        var failingTypesText = result.FailingTypeNames != null && result.FailingTypeNames.Any()
+            ? string.Join("\n", result.FailingTypeNames.Select(t => $"  - {t}"))
+            : "";
+
         result.IsSuccessful.Should().BeTrue($"❌ ADR-340_1_5 违规: Application 层禁止直接引用 OpenTelemetry 配置包。\n\n" +
             $"违规类型:\n" +
-            string.Join("\n", result.FailingTypeNames?.Select(t => $"  - {t}") ?? Array.Empty<string>()) + "\n\n" +
+            $"{failingTypesText}\n\n" +
             $"修复建议:\n" +
             $"1. 移除 Application 项目中对 OpenTelemetry 配置包的引用\n" +
             $"2. OpenTelemetry 配置由 Platform 层的 PlatformBootstrapper 负责\n\n" +
