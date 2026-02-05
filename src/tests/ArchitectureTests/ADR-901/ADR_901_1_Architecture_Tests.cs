@@ -6,9 +6,6 @@
 /// </summary>
 public sealed class ADR_901_1_Architecture_Tests
 {
-    private const string AdrDocsPath = "docs/adr";
-    private const string DocsPath = "docs";
-
     // 三态语义关键词
     private static readonly string[] ConstraintKeywords = { "Constraint", "约束" };
     private static readonly string[] WarningKeywords = { "Warning", "警告" };
@@ -45,13 +42,20 @@ public sealed class ADR_901_1_Architecture_Tests
     [Fact(DisplayName = "ADR-901_1_1: 风险表达必须使用三态语义模型")]
     public void ADR_901_1_1_Risk_Expressions_Must_Use_Tristate_Semantic_Model()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
-        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_1_1 违规：ADR 文档目录不存在\n\n" +
-            $"预期路径：{AdrDocsPath}\n\n" +
-            $"修复建议：确保 docs/adr 目录存在\n\n" +
-            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§1.1）");
+        var directoryMessage = AssertionMessageBuilder.BuildDirectoryNotFoundMessage(
+            ruleId: "ADR-901_1_1",
+            directoryPath: adrDirectory,
+            directoryDescription: "ADR 文档目录",
+            remediationSteps: new[]
+            {
+                "确保 docs/adr 目录存在",
+                "创建必要的 ADR 文档"
+            },
+            adrReference: TestConstants.Adr901Path);
+
+        Directory.Exists(adrDirectory).Should().BeTrue(directoryMessage);
 
         var adrFiles = GetActiveAdrFiles(adrDirectory);
 
@@ -69,22 +73,24 @@ public sealed class ADR_901_1_Architecture_Tests
                 var pattern = $@">\s*.*?\b{Regex.Escape(prohibited)}\b|^#+.*?\b{Regex.Escape(prohibited)}\b";
                 if (Regex.IsMatch(content, pattern, RegexOptions.Multiline | RegexOptions.IgnoreCase))
                 {
-                    violations.Add($"❌ {fileName}: 使用了禁止的语义关键词 '{prohibited}'");
+                    violations.Add($"{fileName}: 使用了禁止的语义关键词 '{prohibited}'");
                 }
             }
         }
 
-        if (violations.Any())
-        {
-            var message = "❌ ADR-901_1_1 违规: 风险表达必须使用三态语义模型（Constraint / Warning / Notice）\n\n" +
-                         string.Join("\n", violations) +
-                         "\n\n修复建议：\n" +
-                         "1. 移除所有禁止的语义关键词（Suggestion、Recommendation、Attention等）\n" +
-                         "2. 将所有风险表达明确归类为 Constraint、Warning 或 Notice 之一\n" +
-                         "3. 使用标准的语义声明块格式\n\n" +
-                         "参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§1.1）";
-            throw new Xunit.Sdk.XunitException(message);
-        }
+        var message = AssertionMessageBuilder.BuildWithViolations(
+            ruleId: "ADR-901_1_1",
+            summary: "风险表达必须使用三态语义模型（Constraint / Warning / Notice）",
+            failingTypes: violations,
+            remediationSteps: new[]
+            {
+                "移除所有禁止的语义关键词（Suggestion、Recommendation、Attention等）",
+                "将所有风险表达明确归类为 Constraint、Warning 或 Notice 之一",
+                "使用标准的语义声明块格式"
+            },
+            adrReference: TestConstants.Adr901Path);
+
+        violations.Should().BeEmpty(message);
     }
 
     /// <summary>
@@ -93,13 +99,8 @@ public sealed class ADR_901_1_Architecture_Tests
     [Fact(DisplayName = "ADR-901_1_2: Constraint 必须包含完整的合法性元素")]
     public void ADR_901_1_2_Constraint_Must_Have_Legality_Conditions()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
-
-        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_1_2 违规：ADR 文档目录不存在\n\n" +
-            $"预期路径：{AdrDocsPath}\n\n" +
-            $"修复建议：确保 docs/adr 目录存在\n\n" +
-            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§1.2）");
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        FileSystemTestHelper.AssertDirectoryExists(adrDirectory, $"ADR 文档目录不存在: {adrDirectory}");
 
         var adrFiles = GetActiveAdrFiles(adrDirectory);
 
@@ -118,7 +119,7 @@ public sealed class ADR_901_1_Architecture_Tests
                 // 检查是否包含执行级别声明（L1/L2/L3）
                 if (!Regex.IsMatch(block, @"\bL[123]\b"))
                 {
-                    violations.Add($"⚠️ {fileName}: Constraint 块缺少执行级别声明（L1/L2/L3）");
+                    violations.Add($"{fileName}: Constraint 块缺少执行级别声明（L1/L2/L3）");
                 }
 
                 // 检查是否包含必须的元素（至少中文或英文之一）
@@ -128,15 +129,15 @@ public sealed class ADR_901_1_Architecture_Tests
 
                 if (!hasRule)
                 {
-                    violations.Add($"⚠️ {fileName}: Constraint 块缺少规则描述（规则/Rule）");
+                    violations.Add($"{fileName}: Constraint 块缺少规则描述（规则/Rule）");
                 }
                 if (!hasScope)
                 {
-                    violations.Add($"⚠️ {fileName}: Constraint 块缺少范围说明（范围/Scope）");
+                    violations.Add($"{fileName}: Constraint 块缺少范围说明（范围/Scope）");
                 }
                 if (!hasConsequence)
                 {
-                    violations.Add($"⚠️ {fileName}: Constraint 块缺少后果说明（后果/Consequence）");
+                    violations.Add($"{fileName}: Constraint 块缺少后果说明（后果/Consequence）");
                 }
             }
         }
@@ -158,13 +159,8 @@ public sealed class ADR_901_1_Architecture_Tests
     [Fact(DisplayName = "ADR-901_1_3: Warning 必须明确风险和放行条件")]
     public void ADR_901_1_3_Warning_Must_Have_Clear_Boundaries()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
-
-        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_1_3 违规：ADR 文档目录不存在\n\n" +
-            $"预期路径：{AdrDocsPath}\n\n" +
-            $"修复建议：确保 docs/adr 目录存在\n\n" +
-            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§1.3）");
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        FileSystemTestHelper.AssertDirectoryExists(adrDirectory, $"ADR 文档目录不存在: {adrDirectory}");
 
         var adrFiles = GetActiveAdrFiles(adrDirectory);
 
@@ -183,7 +179,7 @@ public sealed class ADR_901_1_Architecture_Tests
                 // 检查是否包含执行级别声明
                 if (!Regex.IsMatch(block, @"\bL[123]\b"))
                 {
-                    violations.Add($"⚠️ {fileName}: Warning 块缺少执行级别声明（L1/L2/L3）");
+                    violations.Add($"{fileName}: Warning 块缺少执行级别声明（L1/L2/L3）");
                 }
 
                 // 检查是否包含风险说明
@@ -192,11 +188,11 @@ public sealed class ADR_901_1_Architecture_Tests
 
                 if (!hasRisk)
                 {
-                    violations.Add($"⚠️ {fileName}: Warning 块缺少风险说明（风险/Risk）");
+                    violations.Add($"{fileName}: Warning 块缺少风险说明（风险/Risk）");
                 }
                 if (!hasOverride)
                 {
-                    violations.Add($"⚠️ {fileName}: Warning 块缺少放行条件（放行/Override）");
+                    violations.Add($"{fileName}: Warning 块缺少放行条件（放行/Override）");
                 }
 
                 // 检查是否使用了禁止的表述
@@ -205,7 +201,7 @@ public sealed class ADR_901_1_Architecture_Tests
                 {
                     if (block.Contains(phrase, StringComparison.OrdinalIgnoreCase))
                     {
-                        violations.Add($"❌ {fileName}: Warning 块使用了禁止的弱化表述 '{phrase}'");
+                        violations.Add($"{fileName}: Warning 块使用了禁止的弱化表述 '{phrase}'");
                     }
                 }
             }
@@ -228,13 +224,8 @@ public sealed class ADR_901_1_Architecture_Tests
     [Fact(DisplayName = "ADR-901_1_4: Notice 必须保持纯信息性，不得包含隐性规则")]
     public void ADR_901_1_4_Notice_Must_Be_Pure_Informational()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
-
-        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_1_4 违规：ADR 文档目录不存在\n\n" +
-            $"预期路径：{AdrDocsPath}\n\n" +
-            $"修复建议：确保 docs/adr 目录存在\n\n" +
-            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§1.4）");
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        FileSystemTestHelper.AssertDirectoryExists(adrDirectory, $"ADR 文档目录不存在: {adrDirectory}");
 
         var adrFiles = GetActiveAdrFiles(adrDirectory);
 
@@ -256,7 +247,7 @@ public sealed class ADR_901_1_Architecture_Tests
                 {
                     if (Regex.IsMatch(block, $@"\b{Regex.Escape(keyword)}\b", RegexOptions.IgnoreCase))
                     {
-                        violations.Add($"❌ {fileName}: Notice 块包含强制性关键词 '{keyword}'，违反纯信息性约束");
+                        violations.Add($"{fileName}: Notice 块包含强制性关键词 '{keyword}'，违反纯信息性约束");
                     }
                 }
 
@@ -266,23 +257,25 @@ public sealed class ADR_901_1_Architecture_Tests
                 {
                     if (block.Contains(keyword, StringComparison.OrdinalIgnoreCase))
                     {
-                        violations.Add($"⚠️ {fileName}: Notice 块可能包含流程性约束 '{keyword}'");
+                        violations.Add($"{fileName}: Notice 块可能包含流程性约束 '{keyword}'");
                     }
                 }
             }
         }
 
-        if (violations.Any())
-        {
-            var message = "❌ ADR-901_1_4 违规: Notice 必须保持纯信息性\n\n" +
-                         string.Join("\n", violations) +
-                         "\n\n修复建议：\n" +
-                         "1. 从 Notice 块中移除所有强制性关键词（MUST、SHOULD、SHALL、必须、应该、禁止、不得）\n" +
-                         "2. Notice 只能用于背景说明、设计动机、经验性解释\n" +
-                         "3. 如需表达约束，将内容移至 Constraint 或 Warning 块\n\n" +
-                         "参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§1.4）";
-            throw new Xunit.Sdk.XunitException(message);
-        }
+        var message = AssertionMessageBuilder.BuildWithViolations(
+            ruleId: "ADR-901_1_4",
+            summary: "Notice 必须保持纯信息性",
+            failingTypes: violations,
+            remediationSteps: new[]
+            {
+                "从 Notice 块中移除所有强制性关键词（MUST、SHOULD、SHALL、必须、应该、禁止、不得）",
+                "Notice 只能用于背景说明、设计动机、经验性解释",
+                "如需表达约束，将内容移至 Constraint 或 Warning 块"
+            },
+            adrReference: TestConstants.Adr901Path);
+
+        violations.Should().BeEmpty(message);
     }
 
     // 辅助方法
