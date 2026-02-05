@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
@@ -21,7 +22,7 @@ public sealed class AdrConsistencyTests
 
     public AdrConsistencyTests()
     {
-        var repoRoot = FindRepositoryRoot()
+        var repoRoot = TestEnvironment.RepositoryRoot
             ?? throw new InvalidOperationException("未找到仓库根目录");
 
         _adrRoot = Path.Combine(repoRoot, "docs", "adr");
@@ -181,21 +182,4 @@ public sealed class AdrConsistencyTests
     /// <summary>
     /// 查找仓库根目录
     /// </summary>
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                Directory.Exists(Path.Combine(currentDir, ".git")))
-            {
-                return currentDir;
-            }
-
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-
-        return null;
-    }
 }

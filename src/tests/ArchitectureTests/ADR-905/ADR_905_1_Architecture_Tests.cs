@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_905;
 
@@ -33,7 +34,7 @@ public sealed class ADR_905_1_Architecture_Tests
     [Fact(DisplayName = "ADR-905_1_1: 架构规则必须分级执行")]
     public void ADR_905_1_1_Architecture_Rules_Must_Have_Enforcement_Level()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var warnings = new List<string>();
         
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
@@ -141,7 +142,7 @@ public sealed class ADR_905_1_Architecture_Tests
     [Fact(DisplayName = "ADR-905_1_2: Level 1（L1）规则的执行标准")]
     public void ADR_905_1_2_L1_Rules_Must_Have_Architecture_Tests()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var warnings = new List<string>();
         
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
@@ -232,7 +233,7 @@ public sealed class ADR_905_1_Architecture_Tests
     [Fact(DisplayName = "ADR-905_1_3: Level 2（L2）规则的执行标准")]
     public void ADR_905_1_3_L2_Rules_Should_Be_Warning_Level()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-905-enforcement-level-classification.md");
         
         File.Exists(adrFile).Should().BeTrue($"ADR-905 文档不存在：{adrFile}");
@@ -265,7 +266,7 @@ public sealed class ADR_905_1_Architecture_Tests
     [Fact(DisplayName = "ADR-905_1_4: Level 3（L3）规则的执行标准")]
     public void ADR_905_1_4_L3_Rules_Must_Have_Manual_Review_Process()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-905-enforcement-level-classification.md");
         
         File.Exists(adrFile).Should().BeTrue($"ADR-905 文档不存在：{adrFile}");
@@ -304,7 +305,7 @@ public sealed class ADR_905_1_Architecture_Tests
     [Fact(DisplayName = "ADR-905_1_5: 执行级别的分级意义")]
     public void ADR_905_1_5_Enforcement_Levels_Must_Be_Understood_By_All_Roles()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-905-enforcement-level-classification.md");
         
         File.Exists(adrFile).Should().BeTrue($"ADR-905 文档不存在：{adrFile}");
@@ -338,21 +339,6 @@ public sealed class ADR_905_1_Architecture_Tests
 
     // ========== 辅助方法 ==========
 
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 
     private static string ExtractEnforcementSection(string content)
     {

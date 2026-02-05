@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_950;
 
@@ -31,7 +32,7 @@ public sealed class ADR_950_1_Architecture_Tests
     [Fact(DisplayName = "ADR-950_1_1: 非裁决性文档不得定义新架构规则")]
     public void ADR_950_1_1_NonDecision_Documents_Must_Not_Define_New_Rules()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var docsPath = Path.Combine(repoRoot, DocsPath);
 
         if (!Directory.Exists(docsPath))
@@ -86,7 +87,7 @@ public sealed class ADR_950_1_Architecture_Tests
     [Fact(DisplayName = "ADR-950_1_2: 文档引用必须遵循权威层级")]
     public void ADR_950_1_2_Document_References_Must_Follow_Authority_Hierarchy()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var docsPath = Path.Combine(repoRoot, DocsPath);
 
         if (!Directory.Exists(docsPath))
@@ -168,25 +169,4 @@ public sealed class ADR_950_1_Architecture_Tests
         }
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

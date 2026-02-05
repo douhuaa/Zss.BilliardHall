@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_975;
 
@@ -19,7 +20,7 @@ public sealed class ADR_975_2_Architecture_Tests
     [Fact(DisplayName = "ADR-975_2_1: 质量检测必须自动化执行")]
     public void ADR_975_2_1_Quality_Checks_Must_Be_Automated()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
         var content = File.ReadAllText(adr975Path);
@@ -32,7 +33,7 @@ public sealed class ADR_975_2_Architecture_Tests
     [Fact(DisplayName = "ADR-975_2_2: 必须包含链接有效性检测")]
     public void ADR_975_2_2_Link_Validity_Check_Must_Be_Included()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
         var content = File.ReadAllText(adr975Path);
@@ -42,17 +43,4 @@ public sealed class ADR_975_2_Architecture_Tests
             $"参考：docs/adr/governance/ADR-975-documentation-quality-monitoring.md §2.2");
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
-    }
 }

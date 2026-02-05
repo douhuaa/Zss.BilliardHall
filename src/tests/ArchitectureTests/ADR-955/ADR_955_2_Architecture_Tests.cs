@@ -1,5 +1,6 @@
 using FluentAssertions;
 using System.Text.RegularExpressions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_955;
 
@@ -23,7 +24,7 @@ public sealed class ADR_955_2_Architecture_Tests
     [Fact(DisplayName = "ADR-955_2_1: 文档标题必须包含核心关键词")]
     public void ADR_955_2_1_Document_Titles_Must_Contain_Keywords()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var docsDirectory = Path.Combine(repoRoot, "docs");
 
         if (!Directory.Exists(docsDirectory))
@@ -61,27 +62,4 @@ public sealed class ADR_955_2_Architecture_Tests
         true.Should().BeTrue("ADR-955_2_1 是建议性检查");
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

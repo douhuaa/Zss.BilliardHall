@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_965;
 
@@ -24,7 +25,7 @@ public sealed class ADR_965_2_Architecture_Tests
     [Fact(DisplayName = "ADR-965_2_1: 必须包含可视化学习路径图")]
     public void ADR_965_2_1_Must_Include_Visual_Learning_Path()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr965Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
         var content = File.ReadAllText(adr965Path);
@@ -42,7 +43,7 @@ public sealed class ADR_965_2_Architecture_Tests
     [Fact(DisplayName = "ADR-965_2_2: 必须定义路径图位置")]
     public void ADR_965_2_2_Path_Location_Must_Be_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr965Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
         var content = File.ReadAllText(adr965Path);
@@ -60,7 +61,7 @@ public sealed class ADR_965_2_Architecture_Tests
     [Fact(DisplayName = "ADR-965_2_3: 必须使用 Mermaid 格式")]
     public void ADR_965_2_3_Must_Use_Mermaid_Format()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr965Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
         var content = File.ReadAllText(adr965Path);
@@ -75,17 +76,4 @@ public sealed class ADR_965_2_Architecture_Tests
             $"❌ ADR-965_2_3 违规：ADR-965 必须包含 Mermaid 图表示例");
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
-    }
 }
