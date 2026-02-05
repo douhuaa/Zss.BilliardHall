@@ -16,7 +16,7 @@ superseded_by: ADR-903
 
 # ADR-122：ArchitectureTests 命名与组织规范（ARD）
 
-> ⚖️ 本 ADR 的全部裁决已被 ADR-903 吸收并强化，不再具有独立裁决力。
+> ⚖️ 本 ADR 的全部裁决已被 ADR-#### 吸收并强化，不再具有独立裁决力。
 
 ---
 
@@ -37,7 +37,7 @@ superseded_by: ADR-903
 |------|------|----------|
 | ArchitectureTests | 用于验证架构约束、依赖关系、分层规则的测试集合 | ArchitectureTests |
 | ARD | ADR 在测试层的可执行映射形式 | Architecture Rule Definition |
-| RuleId | 与 ADR 条目一一对应的规则编号（如 ADR-240.1） | RuleId |
+| RuleId | 与 ADR 条目一一对应的规则编号（如 ADR-####_X_Y） | RuleId |
 
 ---
 
@@ -88,9 +88,9 @@ public class ADR_240_1_HandlerMustNotCatchExceptionTests
 
 ```csharp
 /// <summary>
-/// Enforces ADR-240.1: Handler 禁止捕获异常
+/// Enforces ADR-####_X_Y: Handler 禁止捕获异常
 /// </summary>
-public class ADR_240_1_HandlerMustNotCatchExceptionTests
+public class ADR_XXX_Y_Z_HandlerMustNotCatchExceptionTests
 {
 }
 ```
@@ -98,7 +98,7 @@ public class ADR_240_1_HandlerMustNotCatchExceptionTests
 或：
 
 ```csharp
-private const string RuleId = "ADR-240.1";
+private const string RuleId = "ADR-####_X_Y";
 ```
 
 ---
@@ -120,7 +120,7 @@ private const string RuleId = "ADR-240.1";
 
 **示例**：
 ```csharp
-.Should().BeTrue("违反 ADR-240.1：Handler 不允许捕获异常");
+.Should().BeTrue("违反 ADR-####_X_Y：Handler 不允许捕获异常");
 ```
 
 ---

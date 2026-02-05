@@ -45,7 +45,7 @@ superseded_by: null
 ## Decision（裁决）
 
 > ⚠️ **本节为唯一裁决来源，所有条款具备执行级别**  
-> 本 ADR 仅在 ADR-902 结构合规的前提下生效。不合规的 ADR 视为不存在，其关系不进入本 ADR 的裁决范围。  
+> 本 ADR 仅在 ADR-#### 结构合规的前提下生效。不合规的 ADR 视为不存在，其关系不进入本 ADR 的裁决范围。  
 > 所有可执法条款稳定 RuleId 格式：
 >
 > ```
@@ -82,11 +82,11 @@ superseded_by: null
 
 | 关系类型 | 定义 | 使用场景 | 强制双向 |
 |---------|------|----------|----------|
-| Depends On | 本 ADR 基于另一 ADR | ADR-005 依赖 ADR-001 | ✅ |
-| Depended By | 其他 ADR 基于本 ADR | ADR-001 被 ADR-005 依赖 | ✅ |
-| Supersedes | 本 ADR 取代已废弃 ADR | ADR-005-v2 替代 ADR-005-v1 | ✅ |
-| Superseded By | 本 ADR 已被新 ADR 替代 | ADR-005-v1 被 ADR-005-v2 替代 | ✅ |
-| Related | 与本 ADR 相关但不存在依赖 | ADR-001 与 ADR-002 | ❌ |
+| Depends On | 本 ADR 基于另一 ADR | ADR-#### 依赖 ADR-#### | ✅ |
+| Depended By | 其他 ADR 基于本 ADR | ADR-#### 被 ADR-#### 依赖 | ✅ |
+| Supersedes | 本 ADR 取代已废弃 ADR | ADR-####-v2 替代 ADR-####-v1 | ✅ |
+| Superseded By | 本 ADR 已被新 ADR 替代 | ADR-####-v1 被 ADR-####-v2 替代 | ✅ |
+| Related | 与本 ADR 相关但不存在依赖 | ADR-#### 与 ADR-#### | ❌ |
 
 **裁决性约束**：
 
@@ -212,9 +212,9 @@ graph TB
 
 本 ADR 明确不涉及以下内容：
 
-- ADR 文档内容的语义校验（由 ADR-902 管理）
-- ADR 文档的审批流程（由 ADR-900 管理）
-- 文档编写的具体规范（由 ADR-008 管理）
+- ADR 文档内容的语义校验（由 ADR-#### 管理）
+- ADR 文档的审批流程（由 ADR-#### 管理）
+- 文档编写的具体规范（由 ADR-#### 管理）
 - 关系图的具体渲染样式（由工具自行决定）
 
 ---

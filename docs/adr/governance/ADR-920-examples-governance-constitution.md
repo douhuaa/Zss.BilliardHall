@@ -134,7 +134,7 @@ superseded_by: null
 
 示例代码**禁止**包含以下"示例代码禁止的架构违规行为"：
 
-##### ADR-920_2_1_a 跨模块直接引用（ADR-001）
+##### ADR-920_2_1_a 跨模块直接引用（ADR-####）
 ```csharp
 // ❌ 禁止
 using Zss.BilliardHall.Modules.Members.Domain;
@@ -144,7 +144,7 @@ await _eventBus.Publish(new OrderCreated(orderId));
 var memberDto = await _queryBus.Send(new GetMemberById(memberId));
 ```
 
-##### ADR-920_2_1_b 违反 Handler 模式（ADR-005）
+##### ADR-920_2_1_b 违反 Handler 模式（ADR-####）
 ```csharp
 // ❌ 禁止：Command Handler 返回业务数据
 public async Task<OrderDto> Handle(CreateOrder command)
@@ -153,7 +153,7 @@ public async Task<OrderDto> Handle(CreateOrder command)
 public async Task<Guid> Handle(CreateOrder command)
 ```
 
-##### ADR-920_2_1_c 创建横向 Service 层（ADR-001）
+##### ADR-920_2_1_c 创建横向 Service 层（ADR-####）
 ```csharp
 // ❌ 禁止
 public class OrderService { }

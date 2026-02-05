@@ -144,8 +144,8 @@ superseded_by: null
 | 冲突处理 | ADR 优先    | Prompts 修正  |
 
 #### ADR-007_4_3 判定规则
-- ❌ "根据 adr-001.prompts.md，这不允许"
-- ✅ "根据 ADR-001 第 X 章，这不允许。参考 adr-001.prompts.md 场景示例"
+- ❌ "根据 adr-####.prompts.md，这不允许"
+- ✅ "根据 ADR-#### 第 X 章，这不允许。参考 adr-####.prompts.md 场景示例"
 
 ---
 

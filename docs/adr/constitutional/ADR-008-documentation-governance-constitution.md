@@ -66,7 +66,7 @@ superseded_by: null
 
 | 级别  | 类型                    | 裁决力   | 示例                     | 权限边界                |
 |-----|------------------------|-------|------------------------|--------------------|
-| 宪法级 | ADR                    | **最高** | ADR-001 ~ ADR-0099    | 定义规则、明确约束、裁决冲突    |
+| 宪法级 | ADR                    | **最高** | ADR-####~ADR-####    | 定义规则、明确约束、裁决冲突    |
 | 治理级 | Instructions / Agents  | 中     | copilot-instructions.md | 定义流程、行为规范、不得覆盖 ADR |
 | 执行级 | Skills                 | 低（事实） | scan-cross-module-refs | 仅输出事实、不得解释或判断     |
 | 说明级 | README / Guide         | **无**  | docs/*.md              | 仅解释使用方法、必须声明无裁决力  |
@@ -148,13 +148,13 @@ ADR 禁止包含：
 **禁止行为**：
 - ❌ 定义规则或做架构判断
 
-> ℹ️ **Notice**: README 详细内容见 [ADR-910](../../governance/ADR-910-readme-governance-constitution.md)
+> ℹ️ **Notice**: README 详细内容见 [ADR-####](../../governance/ADR-####-readme-governance-constitution.md)
 
 #### ADR-008_3_4 非 ADR 文档判定规则
 
 **禁止行为**：
 - ❌ Instructions 定义新架构规则
-- ❌ Skills 输出"违反 ADR-001"
+- ❌ Skills 输出"违反 ADR-####"
 - ❌ README 包含"模块必须..."
 
 **允许行为**：
@@ -258,7 +258,7 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 |-------------------------|-----------|----------------------------|
 | 非 ADR 文档引入规则            | PR **必须拒绝** | README 定义"模块必须使用事件通信"     |
 | README 试图裁决架构问题         | 标记为违规     | README 判定"这个设计不符合架构"       |
-| Skills 输出判断性结论          | Agent 阻断   | Skills 输出"违反 ADR-001"    |
+| Skills 输出判断性结论          | Agent 阻断   | Skills 输出"违反 ADR-####"    |
 | Instructions 覆盖 ADR 语义 | PR 必须拒绝   | Instructions 弱化"禁止"为"不推荐" |
 | 文档缺失"无裁决力"声明           | CI 失败      | README 未声明无裁决力             |
 

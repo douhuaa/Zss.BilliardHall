@@ -156,7 +156,7 @@ public record OrderCreatedEvent(Guid OrderId)
 
 - ❌ 禁止直接修改现有事件
 - ✅ 必须提供转换适配器
-- ⚠️  类型版本 ≠ 序列化兼容性（在 ADR-300 系列定义）
+- ⚠️  类型版本 ≠ 序列化兼容性（在 ADR-#### 系列定义）
 
 **示例**：
 

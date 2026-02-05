@@ -24,17 +24,17 @@ superseded_by: null
 
 本体系覆盖以下治理目标：
 
-1. **命名与组织规范（ADR-903）**  
+1. **命名与组织规范（ADR-####）**  
    - 测试类、方法与项目命名必须明确映射 ADR  
    - 测试目录结构与 ADR 编号一一对应  
    - 禁止跨 ADR 混合测试或空弱测试
 
-2. **最小断言语义（ADR-904）**  
+2. **最小断言语义（ADR-####）**  
    - 每条 ArchitectureTest 至少包含 1 个有效断言  
    - 测试方法映射单一 ADR 子规则  
    - 弱断言或形式化断言禁止
 
-3. **Analyzer / CI Gate 映射协议（ADR-906）**  
+3. **Analyzer / CI Gate 映射协议（ADR-####）**  
    - 所有 ArchitectureTests 必须自动注册至 CI / Analyzer  
    - 测试失败直接映射 ADR 子规则，支持 L1/L2 执行等级  
    - 支持破例与偿还机制  
@@ -58,7 +58,7 @@ superseded_by: null
 | CI Gate | 持续集成管道中自动执行架构测试 | CI Gate |
 | Analyzer | 静态/运行时分析工具，验证规则与 ADR 映射 | Analyzer |
 | Enforcement Level | L1 / L2 执行等级，L1 可自动阻断 | Enforcement Level |
-| Exception Mechanism | ADR-900 定义的破例 / 补救机制 | Exception Mechanism |
+| Exception Mechanism | ADR-#### 定义的破例 / 补救机制 | Exception Mechanism |
 
 
 ---
@@ -98,7 +98,7 @@ superseded_by: null
 
 ---
 
-### ADR-907_2：命名与组织规范（Rule，原 ADR-903）
+### ADR-907_2：命名与组织规范（Rule，原 ADR-####）
 
 #### ADR-907_2_1 独立测试项目要求
 - ArchitectureTests **必须集中于独立测试项目**
@@ -134,7 +134,7 @@ superseded_by: null
 
 ---
 
-### ADR-907_3：最小断言语义规范（Rule，原 ADR-904）
+### ADR-907_3：最小断言语义规范（Rule，原 ADR-####）
 
 #### ADR-907_3_1 最小断言数量要求
 - 每个测试类 **至少包含 1 个有效断言**
@@ -155,7 +155,7 @@ superseded_by: null
 
 ---
 
-### ADR-907_4：Analyzer / CI Gate 映射协议（Rule，原 ADR-906）
+### ADR-907_4：Analyzer / CI Gate 映射协议（Rule，原 ADR-####）
 
 #### ADR-907_4_1 自动发现注册要求
 - 所有 ArchitectureTests 必须被 Analyzer 自动发现并注册
@@ -166,7 +166,7 @@ superseded_by: null
 - 使用 `ADR-907_<Rule>_<Clause>` 格式标识
 
 #### ADR-907_4_3 执行级别分类支持
-- 支持执行级别分类（依赖 ADR-905）：
+- 支持执行级别分类（依赖 ADR-####）：
   - **L1**：失败即阻断 CI / 合并 / 部署
   - **L2**：失败记录告警，进入人工 Code Review
 
