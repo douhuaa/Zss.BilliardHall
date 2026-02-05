@@ -162,18 +162,24 @@ public sealed class ADR_960_1_Architecture_Tests
 
 **现状分析**：
 - 279 个断言包含"修复建议"
-- 断言消息格式多样（有的使用 emoji，有的不使用）
-- 错误信息结构不统一
+- 断言消息格式多样（有的包含"问题分析"，有的包含"当前状态"，有的包含"执行级别"）
+- 错误信息结构不统一，缺乏标准化的字段规范
 
 **问题影响**：
 - ❌ 测试失败时难以快速定位问题
 - ❌ 修复建议质量参差不齐
 - ❌ 不利于自动化处理失败信息
+- ❌ 开发者需要理解多种不同的错误消息格式
 
 **解决方案**：
 ✅ 遵循统一的断言消息格式
 
-**标准格式**：
+---
+
+#### 标准格式规范
+
+**必需字段**：
+
 ```
 ❌ ADR-XXX_Y_Z 违规：<简短问题描述>
 
@@ -187,35 +193,108 @@ public sealed class ADR_960_1_Architecture_Tests
 参考：<ADR 文档路径> §ADR-XXX_Y_Z
 ```
 
-**反例（❌ 不推荐）**：
+**字段说明**：
+
+1. **❌ ADR-XXX_Y_Z 违规**：（必需）
+   - 必须使用 ❌ emoji 开头
+   - 必须包含完整的 RuleId（格式：`ADR-XXX_Y_Z`）
+   - 必须包含简短的问题描述（一句话说明违规内容）
+   - 示例：`❌ ADR-002_1_1 违规：Platform 层不应依赖 Application 层`
+
+2. **当前状态**：（必需）
+   - 说明当前的具体违规情况
+   - 可以包含具体的文件路径、类型名称、缺失的内容等
+   - 使用具体的数据和事实，避免模糊描述
+   - 示例：`当前状态：PlatformBootstrapper.cs 未 using Serilog`
+
+3. **修复建议**：（必需）
+   - 使用编号列表（1. 2. 3. ...）
+   - 每个步骤应该是可操作的具体行动
+   - 步骤之间应该有逻辑顺序
+   - 至少包含 1 个步骤，建议 2-4 个步骤
+   - 避免模糊的建议（如"修复问题"、"检查代码"）
+
+4. **参考**：（必需）
+   - 必须包含完整的 ADR 文档路径（相对于仓库根目录）
+   - 必须包含章节引用（格式：`§ADR-XXX_Y_Z`）
+   - 示例：`参考：docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md §ADR-002_1_1`
+
+**可选字段**（根据具体情况决定是否包含）：
+
+- **问题分析**：当需要解释问题背景和影响时使用
+- **预期路径**：当验证文件或目录存在性时使用
+- **违规类型**：当有多个违规项需要列举时使用
+- **执行级别**：当需要说明测试的执行能力限制时使用（如 L1/L2/L3）
+
+---
+
+#### 反例（❌ 不推荐）
+
+**反例 1：信息不完整**
 ```csharp
 result.IsSuccessful.Should().BeTrue(
-    "Platform 层不应依赖 Application 层");  // 信息不够详细
-
-content.Should().Contain("必需内容");  // 缺少错误上下文
-
-File.Exists(path).Should().BeTrue();  // 完全没有错误信息
+    "Platform 层不应依赖 Application 层");  // 缺少 RuleId、当前状态、修复建议、参考文档
 ```
 
-**正例（✅ 推荐）**：
+**反例 2：缺少错误上下文**
+```csharp
+content.Should().Contain("必需内容");  // 没有说明为什么需要这个内容，如何修复
+```
+
+**反例 3：完全没有错误信息**
+```csharp
+File.Exists(path).Should().BeTrue();  // 测试失败时无法知道是什么文件，为什么需要它
+```
+
+**反例 4：格式不规范**
+```csharp
+violations.Should().BeEmpty(
+    $"ADR-007_1_1 违规：以下 Agent 文件违反了定位规则\n\n" +  // 缺少 ❌ emoji
+    string.Join("\n", violations) + "\n\n" +
+    "修复建议：\n" +  // 没有使用编号列表
+    "移除所有声称拥有裁决权的表述\n" +
+    "参考 ADR-007_1_1 Agent 定位规则");  // 缺少完整的文档路径和 § 引用
+```
+
+---
+
+#### 正例（✅ 推荐）
+
+**正例 1：完整的标准格式**
 ```csharp
 result.IsSuccessful.Should().BeTrue(
     $"❌ ADR-002_1_1 违规：Platform 层不应依赖 Application 层\n\n" +
-    $"违规类型：\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+    $"当前状态：\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
     $"修复建议：\n" +
     $"1. 移除 Platform 对 Application 的引用\n" +
     $"2. 将共享的技术抽象提取到 Platform 层\n" +
     $"3. 确保依赖方向正确：Host → Application → Platform\n\n" +
     $"参考：docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md §ADR-002_1_1");
+```
 
+**正例 2：包含预期路径的格式**
+```csharp
 File.Exists(cpmFile).Should().BeTrue(
-    $"❌ ADR-004_1_1 违规：仓库根目录必须存在 Directory.Packages.props 文件以启用 Central Package Management (CPM)。\n\n" +
+    $"❌ ADR-004_1_1 违规：仓库根目录必须存在 Directory.Packages.props 文件以启用 Central Package Management (CPM)\n\n" +
+    $"当前状态：文件不存在\n" +
     $"预期路径：{cpmFile}\n\n" +
     $"修复建议：\n" +
     $"1. 在仓库根目录创建 Directory.Packages.props 文件\n" +
     $"2. 添加 <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>\n" +
     $"3. 添加 <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>\n\n" +
     $"参考：docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_1_1");
+```
+
+**正例 3：包含可选字段的格式**
+```csharp
+violations.Should().BeEmpty(
+    $"❌ ADR-007_1_1 违规：以下 Agent 文件违反了定位规则\n\n" +
+    $"当前状态：\n{string.Join("\n", violations)}\n\n" +
+    $"修复建议：\n" +
+    $"1. Agent 应定位为工具，而非决策者\n" +
+    $"2. 移除所有声称拥有裁决权的表述\n" +
+    $"3. 确保 Agent 配置明确引用 ADR 作为权威来源\n\n" +
+    $"参考：docs/adr/governance/ADR-007-agent-behavior-permissions-constitution.md §ADR-007_1_1");
 ```
 
 ---
@@ -381,18 +460,43 @@ Assert.Empty(violations);
 
 **正例（✅ 推荐）**：
 ```csharp
-result.IsSuccessful.Should().BeTrue("Platform 层不应依赖 Application 层");
-bootstrapper.Should().NotBeNull();
-violations.Should().BeEmpty();
+result.IsSuccessful.Should().BeTrue(
+    $"❌ ADR-002_1_1 违规：Platform 层不应依赖 Application 层\n\n" +
+    $"当前状态：{/* 具体违规情况 */}\n\n" +
+    $"修复建议：\n" +
+    $"1. {/* 具体步骤 */}\n\n" +
+    $"参考：docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md §ADR-002_1_1");
+    
+bootstrapper.Should().NotBeNull(
+    $"❌ ADR-XXX_Y_Z 违规：{/* 简短问题描述 */}\n\n" +
+    $"当前状态：{/* 具体违规情况 */}\n\n" +
+    $"修复建议：\n" +
+    $"1. {/* 具体步骤 */}\n\n" +
+    $"参考：{/* ADR 文档路径 */} §ADR-XXX_Y_Z");
+    
+violations.Should().BeEmpty(
+    $"❌ ADR-XXX_Y_Z 违规：{/* 简短问题描述 */}\n\n" +
+    $"当前状态：\n{string.Join("\n", violations)}\n\n" +
+    $"修复建议：\n" +
+    $"1. {/* 具体步骤 */}\n\n" +
+    $"参考：{/* ADR 文档路径 */} §ADR-XXX_Y_Z");
 ```
 
 ### 提供详细的错误信息
 
-每个断言都应包含：
-1. ❌ 明确的违规标识（ADR-XXX_Y_Z）
-2. 📋 当前状态描述
-3. 🔧 具体的修复建议
-4. 📖 相关 ADR 文档引用
+每个断言都应遵循标准格式（详见"问题 3：不一致的断言消息格式"），包含：
+
+1. **❌ ADR-XXX_Y_Z 违规**：明确的违规标识和简短问题描述
+2. **当前状态**：具体的违规情况说明
+3. **修复建议**：编号列表形式的具体操作步骤（至少 1 个步骤）
+4. **参考**：完整的 ADR 文档路径和章节引用（§ADR-XXX_Y_Z）
+
+**重要提醒**：
+- ✅ 所有必需字段都必须包含，不能省略
+- ✅ 修复建议必须使用编号列表，每个步骤应该是可操作的
+- ✅ 参考必须包含完整路径和 § 引用
+- ❌ 不要使用模糊的描述（如"检查代码"、"修复问题"）
+- ❌ 不要省略 ❌ emoji 和 RuleId
 
 ---
 
@@ -457,12 +561,22 @@ public sealed class ADR_002_1_Architecture_Tests
 - [ ] 使用 `TestEnvironment.RepositoryRoot` 替代本地实现
 - [ ] 使用 `TestEnvironment` 提供的其他辅助属性/方法
 
-### 断言格式
+### 断言格式（必需字段）
 - [ ] 使用 FluentAssertions 风格（`.Should()` 方法）
-- [ ] 断言消息包含 ❌ 违规标识
-- [ ] 断言消息包含当前状态描述
-- [ ] 断言消息包含具体修复建议（编号列表）
-- [ ] 断言消息包含 ADR 文档引用
+- [ ] 断言消息以 `❌ ADR-XXX_Y_Z 违规：` 开头
+- [ ] 断言消息包含"当前状态："字段
+- [ ] 断言消息包含"修复建议："字段（使用编号列表：1. 2. 3.）
+- [ ] 断言消息包含"参考："字段（格式：`<ADR 文档路径> §ADR-XXX_Y_Z`）
+- [ ] 修复建议至少包含 1 个具体的操作步骤
+- [ ] 所有步骤都是可操作的具体行动（避免模糊描述）
+
+### 断言格式（质量检查）
+- [ ] RuleId 格式正确（`ADR-XXX_Y_Z`，使用下划线而非点号）
+- [ ] 简短问题描述清晰明了（一句话说明违规内容）
+- [ ] 当前状态包含具体数据和事实（文件路径、类型名称等）
+- [ ] 修复建议步骤之间有逻辑顺序
+- [ ] ADR 文档路径完整且正确（相对于仓库根目录）
+- [ ] 章节引用格式正确（使用 § 符号：`§ADR-XXX_Y_Z`）
 
 ---
 
