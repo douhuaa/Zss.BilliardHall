@@ -1,7 +1,6 @@
 ﻿using NetArchTest.Rules;
 using FluentAssertions;
 using System.Reflection;
-using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
 
@@ -62,24 +61,19 @@ public sealed class ADR_005_3_Architecture_Tests
 
                     if (paramModule != null && paramModule != currentModule)
                     {
-                        true.Should().BeFalse(Build(
-                            ruleId: "ADR-005_3_2",
-                            violation: "未审批的跨模块同步调用",
-                            evidence: new[]
-                            {
-                                $"违规 Handler: {handler.FullName}",
-                                $"当前模块: {currentModule}",
-                                $"依赖模块: {paramModule}",
-                                $"依赖类型: {param.FullName}"
-                            },
-                            analysis: "模块间默认只能异步通信（领域事件/集成事件）",
-                            remediation: new[]
-                            {
-                                "1. 使用异步事件: await _eventBus.Publish(new SomeEvent(...))",
-                                "2. 如确需同步调用，必须提交 ADR 破例审批",
-                                "3. 通过契约查询而非直接依赖: var dto = await _queryBus.Send(new GetSomeData(...))"
-                            },
-                            reference: "ADR-005_3_2 - 模块间默认异步通信"));
+                        true.Should().BeFalse(
+                            $"❌ ADR-005_3_2 违规: 未审批的跨模块同步调用\n\n" +
+                            $"违规 Handler: {handler.FullName}\n" +
+                            $"当前模块: {currentModule}\n" +
+                            $"依赖模块: {paramModule}\n" +
+                            $"依赖类型: {param.FullName}\n\n" +
+                            $"问题分析:\n" +
+                            $"模块间默认只能异步通信（领域事件/集成事件）\n\n" +
+                            $"修复建议：\n" +
+                            $"1. 使用异步事件: await _eventBus.Publish(new SomeEvent(...))\n" +
+                            $"2. 如确需同步调用，必须提交 ADR 破例审批\n" +
+                            $"3. 通过契约查询而非直接依赖: var dto = await _queryBus.Send(new GetSomeData(...))\n\n" +
+                            $"参考: ADR-005_3_2 - 模块间默认异步通信");
                     }
                 }
             }

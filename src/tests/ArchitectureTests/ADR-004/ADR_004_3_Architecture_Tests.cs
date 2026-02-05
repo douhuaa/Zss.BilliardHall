@@ -1,7 +1,6 @@
 using System.Xml;
 using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_004;
 
@@ -38,15 +37,14 @@ public sealed class ADR_004_3_Architecture_Tests
 
         var itemGroups = doc.SelectNodes("//ItemGroup[@Label]");
 
-        (itemGroups != null && itemGroups.Count > 0).Should().BeTrue(BuildSimple(
-            ruleId: "ADR-004_3_1",
-            violation: "建议在 Directory.Packages.props 中使用 Label 属性对包进行分组",
-            detail: "当前状态: 未发现使用 Label 属性的包分组",
-            remediation: "1. 使用 <ItemGroup Label=\"分组名称\"> 对包进行逻辑分组\n" +
-                         "2. 常见分组: Logging, Testing, Wolverine Framework, Marten, Aspire 等\n" +
-                         "3. 这有助于快速定位和管理相关包",
-            reference: "docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_3_1",
-            level: "建议"));
+        (itemGroups != null && itemGroups.Count > 0).Should().BeTrue(
+            $"⚠️ ADR-004_3_1 建议: 建议在 Directory.Packages.props 中使用 Label 属性对包进行分组。\n\n" +
+            $"当前状态: 未发现使用 Label 属性的包分组\n\n" +
+            $"修复建议：\n" +
+            $"1. 使用 <ItemGroup Label=\"分组名称\"> 对包进行逻辑分组\n" +
+            $"2. 常见分组: Logging, Testing, Wolverine Framework, Marten, Aspire 等\n" +
+            $"3. 这有助于快速定位和管理相关包\n\n" +
+            $"参考: docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_3_1");
     }
 
     /// <summary>
@@ -104,17 +102,14 @@ public sealed class ADR_004_3_Architecture_Tests
             }
         }
 
-        (violations.Count == 0).Should().BeTrue(Build(
-            ruleId: "ADR-004_3_2",
-            violation: "Platform 项目不应引用业务包",
-            evidence: violations,
-            remediation: new[]
-            {
-                "1. 从 Platform 项目中移除这些业务包引用",
-                "2. Platform 层只能引用技术基础包（Serilog, OpenTelemetry, HealthChecks 等）",
-                "3. 业务包应在 Application/Modules 层引用"
-            },
-            reference: "docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_3_2"));
+        (violations.Count == 0).Should().BeTrue(
+            $"❌ ADR-004_3_2 违规: Platform 项目不应引用业务包。\n\n" +
+            $"违规项目:\n{string.Join("\n", violations)}\n\n" +
+            $"修复建议：\n" +
+            $"1. 从 Platform 项目中移除这些业务包引用\n" +
+            $"2. Platform 层只能引用技术基础包（Serilog, OpenTelemetry, HealthChecks 等）\n" +
+            $"3. 业务包应在 Application/Modules 层引用\n\n" +
+            $"参考: docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_3_2");
     }
 
     /// <summary>
@@ -178,17 +173,14 @@ public sealed class ADR_004_3_Architecture_Tests
 
         var violations = packageVersions.Where(kvp => kvp.Value.Count > 1).ToList();
 
-        (violations.Count == 0).Should().BeTrue(Build(
-            ruleId: "ADR-004_3_3",
-            violation: "发现测试包存在多个版本",
-            evidence: violations.Select(v => $"{v.Key}: {string.Join(", ", v.Value)}"),
-            remediation: new[]
-            {
-                "1. 在 Directory.Packages.props 中统一这些包的版本",
-                "2. 从所有项目文件中移除手动指定的版本号",
-                "3. 确保所有测试项目使用相同的测试框架版本"
-            },
-            reference: "docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_3_3"));
+        (violations.Count == 0).Should().BeTrue(
+            $"❌ ADR-004_3_3 违规: 发现测试包存在多个版本。\n\n" +
+            $"违规详情:\n{string.Join("\n", violations.Select(v => $"  • {v.Key}: {string.Join(", ", v.Value)}"))}\n\n" +
+            $"修复建议：\n" +
+            $"1. 在 Directory.Packages.props 中统一这些包的版本\n" +
+            $"2. 从所有项目文件中移除手动指定的版本号\n" +
+            $"3. 确保所有测试项目使用相同的测试框架版本\n\n" +
+            $"参考: docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_3_3");
     }
 
     /// <summary>
@@ -234,13 +226,12 @@ public sealed class ADR_004_3_Architecture_Tests
                     if (string.IsNullOrEmpty(include)) continue;
 
                     // Host 不应直接引用 Modules 目录下的项目
-                    include.Contains("/Modules/", StringComparison.OrdinalIgnoreCase).Should().BeFalse(BuildSimple(
-                        ruleId: "ADR-004_3_4",
-                        violation: $"Host 项目 {Path.GetFileName(projectFile)} 不应直接引用模块项目 {include}",
-                        detail: "",
-                        remediation: "1. Host 应仅引用 Bootstrapper\n" +
-                                     "2. 模块装配由 Application 层负责",
-                        reference: "docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_3_4"));
+                    include.Contains("/Modules/", StringComparison.OrdinalIgnoreCase).Should().BeFalse(
+                        $"❌ ADR-004_3_4 违规: Host 项目 {Path.GetFileName(projectFile)} 不应直接引用模块项目 {include}。\n\n" +
+                        $"修复建议：\n" +
+                        $"1. Host 应仅引用 Bootstrapper\n" +
+                        $"2. 模块装配由 Application 层负责\n\n" +
+                        $"参考: docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_3_4");
                 }
             }
         }
