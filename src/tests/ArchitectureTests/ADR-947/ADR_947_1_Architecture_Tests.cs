@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_947;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-947_1: 唯一顶级关系区原则（Rule）
 /// 验证每个 ADR 必须且仅能包含一个顶级关系声明章节
@@ -22,8 +24,8 @@ public sealed class ADR_947_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, "docs/adr");
 
-        // 获取所有 ADR 文档（排除非 ADR 文档）
-        var adrFiles = Directory.GetFiles(adrDirectory, "ADR-*.md", SearchOption.AllDirectories);
+        // 获取所有 ADR 文档（使用 AdrFileFilter 自动排除非 ADR 文档）
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory);
 
         var violations = new List<string>();
 

@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_950;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-950_2: ADR 与非裁决性文档的分离边界
 /// 验证不同文档类型的内容边界和使用场景
@@ -71,11 +73,7 @@ public sealed class ADR_950_2_Architecture_Tests
             throw new DirectoryNotFoundException($"ADR 目录不存在: {adrPath}");
         }
 
-        var adrFiles = Directory.GetFiles(adrPath, "ADR-*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("RELATIONSHIP-MAP", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("TIMELINE", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("INDEX", StringComparison.OrdinalIgnoreCase))
-            .ToList();
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrPath).ToList();
         var violations = new List<string>();
 
         foreach (var adrFile in adrFiles)

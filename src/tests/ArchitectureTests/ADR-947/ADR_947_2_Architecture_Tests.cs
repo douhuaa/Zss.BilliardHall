@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_947;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-947_2: 关系区边界即标题边界（Rule）
 /// 验证关系声明区内容仅限于列表项，不包含说明性段落或子章节
@@ -22,7 +24,7 @@ public sealed class ADR_947_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, "docs/adr");
 
-        var adrFiles = Directory.GetFiles(adrDirectory, "ADR-*.md", SearchOption.AllDirectories);
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory);
 
         var violations = new List<string>();
 

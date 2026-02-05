@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_947;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-947_3: 禁止显式循环声明（Rule）
 /// 验证关系声明区不能同时出现 A→B 和 B→A 的循环依赖声明
@@ -22,7 +24,7 @@ public sealed class ADR_947_3_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, "docs/adr");
 
-        var adrFiles = Directory.GetFiles(adrDirectory, "ADR-*.md", SearchOption.AllDirectories);
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory);
 
         // 构建所有 ADR 的依赖关系图
         var dependencies = new Dictionary<string, HashSet<string>>();
