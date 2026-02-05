@@ -26,6 +26,12 @@ superseded_by: null
 
 ---
 
+## Decision
+
+本文档作为自动生成的可视化工具，不定义架构规则，仅提供 ADR 关系的可视化展示。所有架构决策以各 ADR 正文为准。
+
+---
+
 ## 用途说明（Purpose）
 
 本文档提供 ADR 之间依赖关系的可视化图表，用于：
@@ -33,7 +39,7 @@ superseded_by: null
 - 发现循环依赖
 - 追溯架构决策的演进路径
 
-**注意**：本文档不是决策文档，而是从 ADR 正文中提取的关系可视化。权威信息请参考各 ADR 正文。
+> ℹ️ **Notice**: 本文档不是决策文档，而是从 ADR 正文中提取的关系可视化。权威信息请参考各 ADR 正文。
 
 ---
 
@@ -683,8 +689,25 @@ graph TB
 - **替代关系数**：18
 - **相关关系数**：18
 
----
-
 **生成时间**：2026-01-26 14:20:07  
 **维护**：架构委员会  
 **状态**：🤖 自动生成
+
+---
+
+## Relationships（关系声明）
+
+**Depends On**：
+- [ADR-940：ADR 关系与溯源管理治理规范](./governance/ADR-940-adr-relationship-traceability-management.md) - 本文档基于 ADR-940 的关系映射规范生成
+
+**Depended By**：
+- 所有 ADR 文档 - 作为关系声明的集中视图
+
+**Supersedes**：
+- 无
+
+**Superseded By**：
+- 无
+
+**Related**：
+- 无

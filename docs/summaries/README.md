@@ -1,6 +1,6 @@
 # 改进总结文档
 
-> ⚠️ **无裁决力声明**：本文档无架构裁决权，所有决策以 ADR 正文为准。
+> ⚠️ 本文档不具备裁决力。所有架构决策以对应 ADR 正文为准。
 
 ## 目录说明
 
@@ -26,7 +26,7 @@
 - [测试三层架构实施](three-layer-test-architecture-implementation.md)
 
 ### 治理
-- [架构违规记录](arch-violations.md)
+- [架构不符合记录](arch-violations.md)
 - [AI 治理体系架构实施](ai-governance-architecture-implementation.md)
 - [Copilot 治理实施](copilot-governance-implementation.md)
 - [治理层 ADR 改进实施](governance-adr-improvement-implementation.md)

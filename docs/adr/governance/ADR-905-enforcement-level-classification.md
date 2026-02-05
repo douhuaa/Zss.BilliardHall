@@ -96,18 +96,18 @@ enforceable: false
 
 **工具**：ArchitectureTests（NetArchTest）
 
-**适用规则示例**（基于 ADR-005）：
+**适用规则示例**（基于 ADR-####）：
 
 | 规则编号 | 规则描述 | 测试方法 |
 |---------|---------|---------|
-| ADR-005.1 | Handler 应有明确的命名约定 | `Handlers_Should_Have_Clear_Naming_Convention` |
-| ADR-005.3 | Handler 不应依赖 ASP.NET 类型 | `Handlers_Should_Not_Depend_On_AspNet` |
-| ADR-005.4 | Handler 应该是无状态的（字段检查） | `Handlers_Should_Be_Stateless` |
-| ADR-005.5 | 模块间不应有未审批的同步调用（依赖检查） | `Modules_Should_Not_Have_Synchronous_Cross_Module_Calls` |
-| ADR-005.6 | 异步方法应遵循命名约定 | `Async_Methods_Should_Follow_Naming_Convention` |
-| ADR-005.7 | 模块不应共享领域实体 | `Modules_Should_Not_Share_Domain_Entities` |
-| ADR-005.9 | Command 和 Query Handler 应明确分离 | `Command_And_Query_Handlers_Should_Be_Separated` |
-| ADR-005.12 | 所有 Handler 应在模块程序集中 | `All_Handlers_Should_Be_In_Module_Assemblies` |
+| ADR-####.1 | Handler 应有明确的命名约定 | `Handlers_Should_Have_Clear_Naming_Convention` |
+| ADR-####.3 | Handler 不应依赖 ASP.NET 类型 | `Handlers_Should_Not_Depend_On_AspNet` |
+| ADR-####.4 | Handler 应该是无状态的（字段检查） | `Handlers_Should_Be_Stateless` |
+| ADR-####.5 | 模块间不应有未审批的同步调用（依赖检查） | `Modules_Should_Not_Have_Synchronous_Cross_Module_Calls` |
+| ADR-####.6 | 异步方法应遵循命名约定 | `Async_Methods_Should_Follow_Naming_Convention` |
+| ADR-####.7 | 模块不应共享领域实体 | `Modules_Should_Not_Share_Domain_Entities` |
+| ADR-####.9 | Command 和 Query Handler 应明确分离 | `Command_And_Query_Handlers_Should_Be_Separated` |
+| ADR-####.12 | 所有 Handler 应在模块程序集中 | `All_Handlers_Should_Be_In_Module_Assemblies` |
 
 **判定**：
 - ✅ L1 规则测试失败必须修复代码，不可破例
@@ -129,14 +129,14 @@ enforceable: false
 - 当前：ArchitectureTests（启发式检查）
 - 建议：Roslyn Analyzer（自定义分析器）
 
-**适用规则示例**（基于 ADR-005）：
+**适用规则示例**（基于 ADR-####）：
 
 | 规则编号 | 规则描述 | 当前测试方法 | Analyzer 需求 |
 |---------|---------|-------------|--------------|
-| ADR-005.2 | Endpoint 不应包含业务逻辑 | `Endpoints_Should_Not_Contain_Business_Logic` | 检查方法体复杂度、业务规则调用 |
-| ADR-005.5 | 模块间异步通信（Handler 调用检查） | `Modules_Should_Not_Have_Synchronous_Cross_Module_Calls` | 检查方法调用链、跨模块 public 方法调用 |
-| ADR-005.10 | Command Handler 不应返回业务数据 | `CommandHandlers_Should_Not_Return_Business_Data` | 检查返回类型的语义（简单类型 vs 业务对象） |
-| ADR-005.11 | Handler 应使用结构化异常 | `Handlers_Should_Use_Structured_Exceptions` | IL 分析，检查 `throw new Exception` |
+| ADR-####.2 | Endpoint 不应包含业务逻辑 | `Endpoints_Should_Not_Contain_Business_Logic` | 检查方法体复杂度、业务规则调用 |
+| ADR-####.5 | 模块间异步通信（Handler 调用检查） | `Modules_Should_Not_Have_Synchronous_Cross_Module_Calls` | 检查方法调用链、跨模块 public 方法调用 |
+| ADR-####.10 | Command Handler 不应返回业务数据 | `CommandHandlers_Should_Not_Return_Business_Data` | 检查返回类型的语义（简单类型 vs 业务对象） |
+| ADR-####.11 | Handler 应使用结构化异常 | `Handlers_Should_Use_Structured_Exceptions` | IL 分析，检查 `throw new Exception` |
 
 **判定**：
 - ✅ L2 规则测试失败可申请破例，需充分理由
@@ -159,12 +159,12 @@ enforceable: false
 - 架构师 Code Review
 - ARCH-VIOLATION 记录表
 
-**适用规则示例**（基于 ADR-005）：
+**适用规则示例**（基于 ADR-####）：
 
 | 规则编号 | 规则描述 | 人工审查要点 |
 |---------|---------|-------------|
-| ADR-005.5 | 模块间同步调用破例审批 | 是否有明确的远程调用契约？是否处理了超时/降级？ |
-| ADR-005.8 | Query Handler 可以返回 Contracts | 返回的 Contract 是否版本化？是否只读？ |
+| ADR-####.5 | 模块间同步调用破例审批 | 是否有明确的远程调用契约？是否处理了超时/降级？ |
+| ADR-####.8 | Query Handler 可以返回 Contracts | 返回的 Contract 是否版本化？是否只读？ |
 | 事务边界 | 跨模块事务与 Saga | 是否真的需要强一致性？Saga 补偿逻辑是否完整？ |
 | 业务决策 | Handler 职责划分 | 业务逻辑是否集中在一个 Handler？是否有隐藏的跨 Handler 协作？ |
 
@@ -278,15 +278,14 @@ enforceable: false
 **Depended By**：
 - [ADR-903：ArchitectureTests 命名与组织规范](./ADR-903-architecture-tests-naming-organization.MD) - 测试组织需要明确执行级别
 - [ADR-906：Analyzer 与 CI Gate 映射协议](./ADR-906-analyzer-ci-gate-mapping-protocol.md) - CI Gate 映射依赖执行级别分类
+
+**Supersedes**：
 - 无
 
-**Supersedes（替代）**：
+**Superseded By**：
 - 无
 
-**Superseded By（被替代）**：
-- 无
-
-**Related（相关）**：
+**Related**：
 - [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 执行级别应用于模块化约束
 - [ADR-002：Platform / Application / Host 三层启动体系](../constitutional/ADR-002-platform-application-host-bootstrap.md) - 执行级别应用于三层约束
 - [ADR-003：命名空间与项目边界规范](../constitutional/ADR-003-namespace-rules.md) - 执行级别应用于命名空间约束

@@ -45,7 +45,7 @@ superseded_by: null
 ## Decision（裁决）
 
 > ⚠️ **本节为唯一裁决来源，所有条款具备执行级别**  
-> 本 ADR 仅在 ADR-902 结构合规的前提下生效。不合规的 ADR 视为不存在，其关系不进入本 ADR 的裁决范围。  
+> 本 ADR 仅在 ADR-#### 结构合规的前提下生效。不合规的 ADR 视为不存在，其关系不进入本 ADR 的裁决范围。  
 > 所有可执法条款稳定 RuleId 格式：
 >
 > ```
@@ -82,11 +82,11 @@ superseded_by: null
 
 | 关系类型 | 定义 | 使用场景 | 强制双向 |
 |---------|------|----------|----------|
-| Depends On | 本 ADR 基于另一 ADR | ADR-005 依赖 ADR-001 | ✅ |
-| Depended By | 其他 ADR 基于本 ADR | ADR-001 被 ADR-005 依赖 | ✅ |
-| Supersedes | 本 ADR 取代已废弃 ADR | ADR-005-v2 替代 ADR-005-v1 | ✅ |
-| Superseded By | 本 ADR 已被新 ADR 替代 | ADR-005-v1 被 ADR-005-v2 替代 | ✅ |
-| Related | 与本 ADR 相关但不存在依赖 | ADR-001 与 ADR-002 | ❌ |
+| Depends On | 本 ADR 基于另一 ADR | ADR-#### 依赖 ADR-#### | ✅ |
+| Depended By | 其他 ADR 基于本 ADR | ADR-#### 被 ADR-#### 依赖 | ✅ |
+| Supersedes | 本 ADR 取代已废弃 ADR | ADR-####-v2 替代 ADR-####-v1 | ✅ |
+| Superseded By | 本 ADR 已被新 ADR 替代 | ADR-####-v1 被 ADR-####-v2 替代 | ✅ |
+| Related | 与本 ADR 相关但不存在依赖 | ADR-#### 与 ADR-#### | ❌ |
 
 **裁决性约束**：
 
@@ -164,8 +164,8 @@ superseded_by: null
 
 ```mermaid
 graph TB
-    ADR0001[ADR-001: 模块化架构] --> ADR0005[ADR-005: 交互模型]
-    ADR0005 --> ADR0201[ADR-201: Handler 生命周期]
+    ADR0001[ADR-####: 模块化架构] --> ADR0005[ADR-####: 交互模型]
+    ADR0005 --> ADR0201[ADR-####: Handler 生命周期]
 
     style ADR0001 fill:#90EE90
     style ADR0005 fill:#87CEEB
@@ -212,9 +212,9 @@ graph TB
 
 本 ADR 明确不涉及以下内容：
 
-- ADR 文档内容的语义校验（由 ADR-902 管理）
-- ADR 文档的审批流程（由 ADR-900 管理）
-- 文档编写的具体规范（由 ADR-008 管理）
+- ADR 文档内容的语义校验（由 ADR-#### 管理）
+- ADR 文档的审批流程（由 ADR-#### 管理）
+- 文档编写的具体规范（由 ADR-#### 管理）
 - 关系图的具体渲染样式（由工具自行决定）
 
 ---
@@ -233,44 +233,28 @@ graph TB
 
 ## Relationships（关系声明）
 
-### Depends On
-
+**Depends On**：
 - [ADR-900：架构测试与 CI 治理元规则](https://chatgpt.com/c/ADR-900-architecture-tests.md)
-
 - [ADR-008：文档编写与维护宪法](https://chatgpt.com/constitutional/ADR-008-documentation-governance-constitution.md)
-
 - [ADR-900：ADR 新增与修订流程](https://chatgpt.com/c/ADR-900-architecture-tests.md)
 
-
-### Depended By
-
+**Depended By**：
 - [ADR-945：ADR 全局时间线与演进视图](https://chatgpt.com/c/ADR-945-adr-timeline-evolution-view.md)
-
 - [ADR-946：ADR 标题级别即语义级别约束](https://chatgpt.com/c/ADR-946-adr-heading-level-semantic-constraint.md)
-
 - [ADR-947：关系声明区的结构与解析安全规则](https://chatgpt.com/c/ADR-947-relationship-section-structure-parsing-safety.md)
-
 - [ADR-955：文档搜索与可发现性优化](https://chatgpt.com/c/ADR-955-documentation-search-discoverability.md)
-
 - [ADR-980：ADR 生命周期一体化同步机制治理规范](https://chatgpt.com/c/ADR-980-adr-lifecycle-synchronization.md)
 
+**Supersedes**：
+- 无
 
-### Supersedes
+**Superseded By**：
+- 无
 
-无
-
-### Superseded By
-
-无
-
-### Related
-
+**Related**：
 - [ADR-006：术语与编号宪法](https://chatgpt.com/constitutional/ADR-006-terminology-numbering-constitution.md)
-
 - [ADR-008：文档编写与维护宪法](https://chatgpt.com/constitutional/ADR-008-documentation-governance-constitution.md)
-
 - [ADR-946：标题语义约束](https://chatgpt.com/c/ADR-946-adr-heading-level-semantic-constraint.md)
-
 
 ---
 

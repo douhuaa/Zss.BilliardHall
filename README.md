@@ -185,7 +185,7 @@ dotnet run --project src/Host/Worker/Worker.csproj
 
 ```
 @adr-reviewer
-请基于 ADR-001 至 ADR-005 审查本 PR 的变更，检查是否存在架构违规。
+请基于 ADR-001 至 ADR-005 审查本 PR 的变更，检查是否存在架构不符合。
 ```
 
 **场景 4：检查模块边界（使用 module-boundary-checker）**
@@ -197,16 +197,16 @@ dotnet run --project src/Host/Worker/Worker.csproj
 
 ### 三大核心价值
 
-1. **预防架构违规** - 通过 Agents 在编码阶段就识别潜在问题
+1. **预防架构不符合** - 通过 Agents 在编码阶段就识别潜在问题
 2. **人话翻译 ADR** - 通过 Prompts 将架构规则翻译为具体的开发指导
 3. **新人快速上手** - 通过 Instructions 实现对话式学习架构约束
 
 ### PR 要求
 
-所有 PR 必须完成 [AI 参与检查清单](.github/PULL_REQUEST_TEMPLATE.md#-ai-参与检查清单)：
+根据 [ADR-930](docs/adr/governance/ADR-930-code-review-compliance.md)，所有 PR 需要完成 [AI 参与检查清单](.github/PULL_REQUEST_TEMPLATE.md#-ai-参与检查清单)：
 
 - ✅ 已使用 Architecture Guardian 审查架构合规性
-- ✅ AI Agents 未发现违规问题或已修复
+- ✅ AI Agents 未发现不符合问题或已修复
 - ✅ 已评估并采纳 AI Agents 的合理建议
 - ✅ 理解并遵守所有相关 ADR
 
@@ -357,7 +357,7 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 测试覆盖：
 
 - ✅ 模块隔离（不能相互引用）
-- ✅ 垂直切片（禁止横向 Service）
+- ✅ 垂直切片（根据 ADR-001，不使用横向 Service）
 - ✅ 契约使用规则
 - ✅ Platform 层约束
 
@@ -394,7 +394,7 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 
 ### 架构约束
 
-所有代码必须遵守架构约束：
+根据相关 ADR，代码应遵守以下架构约束：
 
 - ❌ 模块之间不能直接引用
 - ❌ 不能创建横向 Service

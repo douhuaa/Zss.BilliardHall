@@ -334,19 +334,19 @@ docs/reports/quality/YYYY-MM.md
 
 ## Relationships（关系声明）
 
-**依赖（Depends On）**：
+**Depends On**：
 - [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档标准
 
-**被依赖（Depended By）**：
+**Depended By**：
 - 无
 
-**替代（Supersedes）**：
+**Supersedes**：
 - 无
 
-**被替代（Superseded By）**：
+**Superseded By**：
 - 无
 
-**相关（Related）**：
+**Related**：
 - [ADR-955：文档搜索与可发现性优化](../governance/ADR-955-documentation-search-discoverability.md) - 可查找性是质量指标之一
 
 ---

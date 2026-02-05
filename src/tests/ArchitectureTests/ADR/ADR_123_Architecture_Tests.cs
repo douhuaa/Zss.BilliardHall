@@ -27,10 +27,15 @@ public sealed class ADR_123_Architecture_Tests
                            repoInterface.Namespace?.EndsWith(".Domain") == true;
 
             isInDomain.Should().BeTrue($"❌ ADR-123_1_1 违规: Repository 接口不在 Domain 层\n\n" +
-                $"违规接口: {repoInterface.FullName}\n\n" +
-                $"修复建议:\n" +
-                $"将接口移动到 {{Module}}.Domain.Repositories 命名空间\n\n" +
-                $"参考: docs/copilot/adr-123.prompts.md");
+                $"违规接口：{repoInterface.FullName}\n" +
+                $"当前命名空间：{repoInterface.Namespace}\n\n" +
+                $"问题分析：\n" +
+                $"Repository 接口应该定义在领域层，作为领域模型的一部分\n\n" +
+                $"修复建议：\n" +
+                $"1. 将接口移动到 {{Module}}.Domain.Repositories 命名空间\n" +
+                $"2. 示例：Zss.BilliardHall.Modules.Orders.Domain.Repositories\n" +
+                $"3. 确保接口只定义领域相关的持久化操作\n\n" +
+                $"参考：docs/adr/structure/ADR-123-repository-interface-layering-naming.md（§1.1）");
         }
     }
 
@@ -51,10 +56,16 @@ public sealed class ADR_123_Architecture_Tests
             var startsWithI = repoInterface.Name.StartsWith("I");
             
             startsWithI.Should().BeTrue($"❌ ADR-123_1_2 违规: Repository 接口命名不符合规范\n\n" +
-                $"违规接口: {repoInterface.FullName}\n\n" +
-                $"修复建议:\n" +
-                $"接口名称必须以 I 开头，格式为 I{{Aggregate}}Repository\n\n" +
-                $"参考: docs/copilot/adr-123.prompts.md");
+                $"违规接口：{repoInterface.FullName}\n" +
+                $"当前名称：{repoInterface.Name}\n\n" +
+                $"问题分析：\n" +
+                $"Repository 接口必须遵循 I{{Aggregate}}Repository 命名模式以保持一致性\n\n" +
+                $"修复建议：\n" +
+                $"1. 接口名称必须以 I 开头\n" +
+                $"2. 格式为 I{{Aggregate}}Repository\n" +
+                $"3. 示例：IOrderRepository, IMemberRepository\n" +
+                $"4. 避免使用 IGenericRepository 等泛型命名\n\n" +
+                $"参考：docs/adr/structure/ADR-123-repository-interface-layering-naming.md（§1.2）");
         }
     }
 }

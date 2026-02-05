@@ -158,24 +158,19 @@ superseded_by: null
 
 ## Relationships（关系声明）
 
-### Depends On
-
+**Depends On**：
 - [ADR-940：ADR 关系与溯源管理治理规范](ADR-940-adr-relationship-traceability-management.md)
 
-### Depended By
-
+**Depended By**：
 - 无
 
-### Supersedes
-
+**Supersedes**：
 - 无
 
-### Superseded By
-
+**Superseded By**：
 - 无
 
-### Related
-
+**Related**：
 - [ADR-980：ADR 生命周期一体化同步机制](ADR-980-adr-lifecycle-synchronization-mechanism.md)
 
 ---

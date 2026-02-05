@@ -1,6 +1,6 @@
 # 治理层 ADR（ADR-900, ADR-900~999）
 
-> ⚠️ **无裁决力声明**：本文档无架构裁决权，所有决策以 ADR 正文为准。
+> ⚠️ 本文档不具备裁决力。所有架构决策以对应 ADR 正文为准。
 
 ---
 
@@ -11,7 +11,7 @@
 ### 核心原则
 
 1. **ADR-900 是唯一元决策源**：所有治理规则的裁决力来自 ADR-900
-2. **测试一一映射与自动阻断**：架构约束须有对应测试，违规自动阻断
+2. **测试一一映射与自动阻断**：架构约束须有对应测试，不符合时自动阻断
 3. **破例治理闭环**：所有破例须记录、审批、归还，过期自动失效
 4. **三位一体交付**：ADR 变更须同步更新文档/测试/Prompts
 
@@ -72,12 +72,12 @@
 - [ADR-905：执行级别分类](ADR-905-enforcement-level-classification.md)
   - L1 静态/L2 语义/L3 人工的执行分级标准
 - [ADR-907：ArchitectureTests 执法治理体系](ADR-907-architecture-tests-enforcement-governance.md) ⭐
-  - 整合 ArchitectureTests 命名、组织、最小断言及 CI/Analyzer 映射规则
-  - 实现完整的自动裁决闭环
+  - 整合 ArchitectureTests 命名、组织、最小断言及 CI/Analyzer 映射
+  - 实现完整的自动化执法闭环
 - [ADR-907-A：ADR-907 对齐执行标准](adr-907-a-adr-alignment-execution-standard.md) ⭐
   - **ADR-907 的官方执行附录**
   - 定义 ADR 向 Rule/Clause 双层编号体系对齐的强制规范
-  - 包含权威性声明、对齐失败策略、测试绑定规则
+  - 包含权威性声明、对齐失败策略、测试绑定要求
 - [ADR-970：自动化工具日志集成标准](ADR-970-automation-log-integration-standard.md)
   - CI/测试/Copilot 日志的统一格式和集成
 - [ADR-975：文档质量监控](ADR-975-documentation-quality-monitoring.md)
@@ -112,8 +112,8 @@
 
 ### README/示例治理（ADR-910/920）
 
-- ✅ **README 禁止**：定义架构规则、使用裁决性语言（除非明确引用 ADR）
-- ✅ **示例代码禁止**：违反架构约束、引入 ADR 未允许的模式
+- ✅ 根据 **ADR-910**，**README 不应**：定义架构规则、使用裁决性语言（除非明确引用 ADR）
+- ✅ 根据 **ADR-920**，**示例代码不应**：违反架构约束、引入 ADR 未允许的模式
 - ✅ **强制声明**：须包含"无裁决力声明"或"示例免责声明"
 
 ---

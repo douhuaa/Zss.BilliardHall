@@ -294,23 +294,19 @@ public sealed class ADR_907_2_Architecture_Tests
 
             var adrNumber = fileAdrMatch.Groups[1].Value;
 
-            // 查找所有断言语句
-            var assertStatements = Regex.Matches(content, @"Should\(\)\.BeTrue\s*\([^)]*""([^""]+)""", RegexOptions.Singleline);
-            var assertTrueStatements = Regex.Matches(content, @"Assert\.True\s*\([^,]+,\s*""([^""]+)""", RegexOptions.Singleline);
-            var assertFalseStatements = Regex.Matches(content, @"Assert\.False\s*\([^,]+,\s*""([^""]+)""", RegexOptions.Singleline);
+            // 查找所有断言语句及其完整消息（包括多行字符串连接）
+            // 使用统一的断言模式定义，支持所有常用的 FluentAssertions API
+            var assertPattern = AssertionPatternHelper.GetAssertionMessagePattern();
+            var assertMatches = Regex.Matches(content, assertPattern, RegexOptions.Singleline);
 
-            var allAsserts = assertStatements.Cast<Match>()
-                .Concat(assertTrueStatements.Cast<Match>())
-                .Concat(assertFalseStatements.Cast<Match>())
-                .ToList();
-
-            foreach (var assert in allAsserts)
+            foreach (Match assertMatch in assertMatches)
             {
-                var message = assert.Groups[1].Value;
+                // 使用辅助方法提取完整消息
+                var fullMessage = AssertionPatternHelper.ExtractFullMessage(assertMatch);
                 
-                // 检查失败消息是否包含 ADR 引用
+                // 检查完整消息是否包含 ADR 引用
                 // 格式：❌ ADR-XXX 或 ❌ ADR-XXX_Y_Z
-                var hasAdrReference = Regex.IsMatch(message, $@"ADR-0*{adrNumber}[_\d]*\s+违规");
+                var hasAdrReference = Regex.IsMatch(fullMessage, $@"ADR-0*{adrNumber}[_\d]*\s+违规");
 
                 if (!hasAdrReference)
                 {

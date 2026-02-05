@@ -73,7 +73,7 @@ public sealed class ADR_907_1_Architecture_Tests
     {
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDocsDirectory = Path.Combine(repoRoot, AdrDocsPath);
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
 
         if (!Directory.Exists(adrDocsDirectory))
         {
@@ -102,6 +102,7 @@ public sealed class ADR_907_1_Architecture_Tests
                 continue;
 
             var adrNumber = adrMatch.Groups[1].Value.PadLeft(4, '0');
+            var adrNumber3Digit = adrMatch.Groups[1].Value.PadLeft(3, '0');  // 同时保留3位格式
 
             // 检查是否为 Final 或 Active 状态
             var isFinalOrActive = Regex.IsMatch(content, @"status:\s*(Final|Active)", RegexOptions.IgnoreCase);
@@ -115,12 +116,20 @@ public sealed class ADR_907_1_Architecture_Tests
             if (isNonEnforceable)
                 continue;
 
-            // 检查是否存在对应的测试文件
-            var testFilePattern = $"ADR_{adrNumber}_Architecture_Tests.cs";
-            var testFilePattern3Digit = $"ADR_{int.Parse(adrNumber)}_Architecture_Tests.cs";
+            // 检查是否存在对应的测试文件（递归搜索所有子目录）
+            // 新格式：ADR_XXX_<Rule>_Architecture_Tests.cs 或 ADR_XXXX_<Rule>_Architecture_Tests.cs
+            // 旧格式：ADR_XXX_Architecture_Tests.cs（无Rule编号，在迁移期间允许）
+            var testFilePattern4Digit = $"ADR_{adrNumber}_*_Architecture_Tests.cs";
+            var testFilePattern3Digit = $"ADR_{adrNumber3Digit}_*_Architecture_Tests.cs";
             
-            var hasTest = Directory.GetFiles(testsDirectory, testFilePattern).Any() ||
-                         Directory.GetFiles(testsDirectory, testFilePattern3Digit).Any();
+            // 也检查旧格式的测试文件（无Rule编号）
+            var oldTestFilePattern4Digit = $"ADR_{adrNumber}_Architecture_Tests.cs";
+            var oldTestFilePattern3Digit = $"ADR_{adrNumber3Digit}_Architecture_Tests.cs";
+            
+            var hasTest = Directory.GetFiles(testsDirectory, testFilePattern4Digit, SearchOption.AllDirectories).Any() ||
+                         Directory.GetFiles(testsDirectory, testFilePattern3Digit, SearchOption.AllDirectories).Any() ||
+                         Directory.GetFiles(testsDirectory, oldTestFilePattern4Digit, SearchOption.AllDirectories).Any() ||
+                         Directory.GetFiles(testsDirectory, oldTestFilePattern3Digit, SearchOption.AllDirectories).Any();
 
             if (!hasTest)
             {

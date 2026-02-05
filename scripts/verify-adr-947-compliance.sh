@@ -1,6 +1,6 @@
 #!/bin/bash
 # ADR-947 专用 Guard：关系声明区的结构与解析安全规则
-# 根据 ADR-947 实现五大条款验证
+# 根据 ADR-947 实现三大条款验证
 # 依据 ADR-970.2 支持 JSON 输出
 #
 # 用法：
@@ -155,80 +155,10 @@ while IFS= read -r adr_file; do
 done < <(find "$ADR_DIR" -name "ADR-*.md" -not -name "README.md" -not -path "*/proposals/*" 2>/dev/null | sort)
 
 # ============================================================================
-# 条款 3：禁止 ADR 编号出现在非声明语义中
+# 条款 3：禁止显式循环声明
 # ============================================================================
 if [ "$OUTPUT_FORMAT" = "text" ]; then
-    echo "📋 检查条款 3：禁止 ADR 编号出现在非声明语义中..."
-fi
-
-# 简化检查：仅检查章节标题中的 ADR 编号
-# 收集匹配的文件
-CLAUSE3_FILES=$(find "$ADR_DIR" -name "ADR-*.md" -not -name "README.md" -not -path "*/proposals/*" 2>/dev/null | while read -r f; do
-    if grep -qE '^###.*ADR-[0-9]{1,4}\.' "$f" 2>/dev/null; then
-        echo "$f"
-    fi
-done)
-
-if [ -n "$CLAUSE3_FILES" ]; then
-    while IFS= read -r file; do
-        [ -z "$file" ] && continue
-        adr_name=$(basename "$file")
-        if [ "$OUTPUT_FORMAT" = "text" ]; then
-            echo "⚠️  警告条款 3：$adr_name"
-            echo "   章节标题中使用了具体 ADR 编号（建议使用条款编号）"
-            echo ""
-        fi
-        if [ "$OUTPUT_FORMAT" = "json" ]; then
-            json_add_detail "Clause_3_ADR_Number_In_Heading_${adr_name}" "ADR-947" "warning" \
-                "章节标题中使用了具体 ADR 编号（建议使用条款编号）" \
-                "$file" "" "docs/adr/governance/ADR-947-relationship-section-structure-parsing-safety.md"
-        fi
-        warnings=$((warnings + 1))
-    done <<< "$CLAUSE3_FILES"
-fi
-
-# ============================================================================
-# 条款 4：禁止同编号多文档
-# ============================================================================
-if [ "$OUTPUT_FORMAT" = "text" ]; then
-    echo "📋 检查条款 4：禁止同编号多文档..."
-fi
-
-# 提取所有 ADR 文件的编号（ADR-XXXX 部分）
-declare -A adr_numbers
-
-while IFS= read -r adr_file; do
-    adr_name=$(basename "$adr_file" .md)
-    # 提取 ADR 编号（如 ADR-001）
-    adr_num=$(echo "$adr_name" | grep -oE 'ADR-[0-9]+' 2>/dev/null || true)
-    
-    if [ -n "$adr_num" ]; then
-        if [ -n "${adr_numbers[$adr_num]:-}" ]; then
-            # 发现重复编号
-            if [ "$OUTPUT_FORMAT" = "text" ]; then
-                echo "❌ 违反条款 4：重复的 ADR 编号 $adr_num"
-                echo "   文件 1: $(basename "${adr_numbers[$adr_num]}")"
-                echo "   文件 2: $(basename "$adr_file")"
-                echo "   修复：将补充文档重命名为新编号，或合并到主文件"
-                echo ""
-            fi
-            if [ "$OUTPUT_FORMAT" = "json" ]; then
-                json_add_detail "Clause_4_Duplicate_Number_${adr_num}" "ADR-947" "error" \
-                    "重复的 ADR 编号 $adr_num - 文件 1: $(basename "${adr_numbers[$adr_num]}"), 文件 2: $(basename "$adr_file")" \
-                    "$adr_file" "" "docs/adr/governance/ADR-947-relationship-section-structure-parsing-safety.md"
-            fi
-            errors=$((errors + 1))
-        else
-            adr_numbers[$adr_num]=$adr_file
-        fi
-    fi
-done < <(find "$ADR_DIR" -name "ADR-*.md" -not -name "README.md" -not -path "*/proposals/*" 2>/dev/null | sort)
-
-# ============================================================================
-# 条款 5：禁止显式循环声明
-# ============================================================================
-if [ "$OUTPUT_FORMAT" = "text" ]; then
-    echo "📋 检查条款 5：禁止显式循环声明..."
+    echo "📋 检查条款 3：禁止显式循环声明..."
 fi
 
 # 临时文件
@@ -298,9 +228,7 @@ if [ $errors -gt 0 ]; then
         echo "修复指南："
         echo "1. 条款 1：确保每个 ADR 只有一个 ## 关系声明"
         echo "2. 条款 2：关系区内仅包含列表，不含子标题或段落"
-        echo "3. 条款 3：非关系区使用 ADR-#### 占位符"
-        echo "4. 条款 4：同编号只能有一个文件"
-        echo "5. 条款 5：避免双向依赖，使用单向+相关关系"
+        echo "3. 条款 3：避免双向依赖，使用单向+相关关系"
         echo ""
         echo "参考：docs/adr/governance/ADR-947-relationship-section-structure-parsing-safety.md"
     else

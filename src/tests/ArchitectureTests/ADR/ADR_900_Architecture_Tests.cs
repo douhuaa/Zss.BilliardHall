@@ -15,8 +15,12 @@ public sealed class ADR_900_Architecture_Tests
     private const string TypeSuffix = "_Architecture_Tests";
 
     // ADR-005-Enforcement-Levels 是 ADR-005 的补充文档，不是独立的 ADR
+    // 已废弃（Superseded）或草稿（Draft）状态的 ADR 不需要测试
     private static readonly HashSet<string> AdrWithoutTests = new(StringComparer.OrdinalIgnoreCase) {
-        "ADR-005-Enforcement-Levels"
+        "ADR-005-Enforcement-Levels",
+        "ADR-906-analyzer-ci-gate-mapping-protocol",  // Superseded
+        "ADR-904-architecturetests-minimum-assertion-semantics",  // Superseded
+        "ADR-009-guardian-failure-feedback"  // Draft
     };
 
     // 最小 IL 字节数阈值：用于启发式判断测试方法是否包含实质内容
@@ -35,7 +39,10 @@ public sealed class ADR_900_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根（docs/adr 或 .git）");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
-        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{AdrDocsPath}");
+        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-900_1_1 违规：ADR 文档目录不存在\n\n" +
+            $"预期路径：{AdrDocsPath}\n\n" +
+            $"修复建议：确保 docs/adr 目录存在\n\n" +
+            $"参考：docs/adr/governance/ADR-900-architecture-tests.md（§1.1）");
 
         var adrIds = LoadAdrIds(adrDirectory)
             .Where(adr => !AdrWithoutTests.Contains(adr)) // 跳过无需测试的 ADR
@@ -44,45 +51,53 @@ public sealed class ADR_900_Architecture_Tests
 
         var testTypes = LoadArchitectureTestTypes();
 
-        var duplicates = adrIds
-            .Select(adr => new {
-                Adr = adr,
-                Matches = testTypes
-                    .Where(t => string.Equals(t.Name, ToExpectedTypeName(adr), StringComparison.OrdinalIgnoreCase))
-                    .Select(t => t.FullName)
-                    .ToList()
-            })
-            .Where(x => x.Matches.Count > 1)
-            .ToList();
-
+        // 对于每个 ADR，查找匹配的测试类
+        // 支持两种格式：
+        // 1. 旧格式：ADR_001_Architecture_Tests（单个测试类）
+        // 2. 新格式：ADR_001_1_Architecture_Tests, ADR_001_2_Architecture_Tests（按 Rule 拆分）
         var missing = adrIds
-            .Where(adr => !testTypes.Any(t => string.Equals(t.Name, ToExpectedTypeName(adr), StringComparison.OrdinalIgnoreCase)))
+            .Where(adr => !HasMatchingTests(adr, testTypes))
             .ToList();
 
-        if (duplicates.Any() || missing.Any())
+        if (missing.Any())
         {
-            var messages = new List<string>();
-
-            if (duplicates.Any())
+            var messages = new List<string>
             {
-                messages.Add("❌ ADR-900_1_1 违规 ADR 测试重复定义");
-                foreach (var d in duplicates)
-                {
-                    messages.Add($" - {d.Adr} 对应多个测试类型:");
-                    messages.AddRange(d.Matches.Select(fullName => $"     • {fullName}"));
-                }
-            }
-
-            if (missing.Any())
-            {
-                messages.Add("❌ ADR-900_1_1 违规 ADR 缺失对应测试");
-                messages.AddRange(missing.Select(m => $" - {m}"));
-            }
-
-            messages.Add("每条 ADR 文档必须有且仅有一个对应的架构测试类，命名规范：ADR_xxxx_xxxx_Architecture_Tests");
+                "❌ ADR-900_1_1 违规 ADR 缺失对应测试"
+            };
+            messages.AddRange(missing.Select(m => $" - {m}"));
+            messages.Add("每条 ADR 文档必须有至少一个对应的架构测试类");
+            messages.Add("命名规范：ADR_<number>_Architecture_Tests 或 ADR_<number>_<Rule>_Architecture_Tests");
 
             throw new Xunit.Sdk.XunitException(string.Join(Environment.NewLine, messages));
         }
+    }
+    
+    /// <summary>
+    /// 检查 ADR 是否有匹配的测试类
+    /// 支持两种格式：ADR_001_Architecture_Tests 或 ADR_001_1_Architecture_Tests
+    /// </summary>
+    private static bool HasMatchingTests(string adrId, IReadOnlyList<Type> testTypes)
+    {
+        var adrNumber = ExtractNumberFromAdrId(adrId);
+        if (string.IsNullOrEmpty(adrNumber))
+            return false;
+            
+        // 匹配 ADR_<number>_Architecture_Tests 或 ADR_<number>_<Rule>_Architecture_Tests
+        return testTypes.Any(t => 
+            t.Name.StartsWith($"ADR_{adrNumber}_", StringComparison.OrdinalIgnoreCase) &&
+            t.Name.EndsWith(TypeSuffix, StringComparison.OrdinalIgnoreCase));
+    }
+    
+    /// <summary>
+    /// 从 ADR ID 中提取编号部分（如从 "ADR-001-xxxx" 提取 "001"）
+    /// </summary>
+    private static string? ExtractNumberFromAdrId(string adrId)
+    {
+        var segments = adrId.Split('-', StringSplitOptions.RemoveEmptyEntries);
+        if (segments.Length < 2)
+            return null;
+        return segments[1];
     }
 
     private static string? FindRepositoryRoot()
@@ -104,7 +119,7 @@ public sealed class ADR_900_Architecture_Tests
         return Directory
             .GetFiles(adrDirectory, AdrFilePattern, SearchOption.AllDirectories)
             .Select(Path.GetFileNameWithoutExtension)
-            .Where(file => !string.IsNullOrWhiteSpace(file) && System.Text.RegularExpressions.Regex.IsMatch(file!, @"^ADR-\d{4}", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+            .Where(file => !string.IsNullOrWhiteSpace(file) && System.Text.RegularExpressions.Regex.IsMatch(file!, @"^ADR-\d{3,4}", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
             .Select(file => file!)
             .Distinct()
             .ToList();

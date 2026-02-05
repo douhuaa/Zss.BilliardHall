@@ -129,8 +129,9 @@ public sealed class ADR_947_2_Architecture_Tests
     private static string ExtractRelationshipsSection(string content)
     {
         // 使用正则表达式提取 Relationships 章节内容
-        var pattern = @"##\s*(Relationships|关系声明).*?\n(.*?)(?=\n##\s|\z)";
-        var match = Regex.Match(content, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
+        // 必须是行首的 ## Relationships，不匹配代码示例中的内容
+        var pattern = @"^##\s+(Relationships|关系声明).*?\n(.*?)(?=\n##\s|\z)";
+        var match = Regex.Match(content, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Multiline);
         
         return match.Success ? match.Groups[2].Value : string.Empty;
     }
