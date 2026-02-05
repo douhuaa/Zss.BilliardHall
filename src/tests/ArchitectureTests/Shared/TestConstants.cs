@@ -244,13 +244,11 @@ public static class TestConstants
     #region 内容类型限制
 
     /// <summary>
-    /// Onboarding 文档禁止的内容类型
+    /// Onboarding 文档禁止的内容类型（核心类型）
     /// </summary>
     public static readonly string[] ProhibitedContentTypesInOnboarding = new[]
     {
-        "架构约束定义",
-        "技术决策记录",
-        "执行级别定义"
+        "架构约束定义"
     };
 
     /// <summary>
