@@ -50,7 +50,6 @@ GitHub Copilot 场景化提示词。
 - [adr-940.prompts.md](adr-940.prompts.md) - ADR 关系与溯源管理治理规范
 - [adr-945.prompts.md](adr-945.prompts.md) - ADR 时间线演进视图
 - [adr-946.prompts.md](adr-946.prompts.md) - ADR 标题级别即语义级别约束
-- [adr-947.prompts.md](adr-947.prompts.md) - 关系声明区的结构与解析安全规则
 - [adr-950.prompts.md](adr-950.prompts.md) - 指南与 FAQ 文档治理
 - [adr-951.prompts.md](adr-951.prompts.md) - 案例库管理
 - [adr-952.prompts.md](adr-952.prompts.md) - 工程标准与 ADR 边界

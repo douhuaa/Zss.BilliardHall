@@ -400,7 +400,6 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 - [ADR-920：示例治理](../governance/ADR-920-examples-governance-constitution.md) - 示例文档约束基于本 ADR
 - [ADR-940：ADR 关系与溯源管理](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系声明是文档的一部分
 - [ADR-946：ADR 标题级别即语义级别约束](../governance/ADR-946-adr-heading-level-semantic-constraint.md) - ADR 文档结构规范
-- [ADR-947：关系声明区的结构与解析安全规则](../governance/ADR-947-relationship-section-structure-parsing-safety.md) - 文档结构规范
 - [ADR-950：指南与 FAQ 文档治理](../governance/ADR-950-guide-faq-documentation-governance.md) - 非裁决性文档约束基于本 ADR
 - [ADR-955：文档搜索与可发现性](../governance/ADR-955-documentation-search-discoverability.md) - 文档组织规范基于本 ADR
 - [ADR-960：新人入职文档治理](../governance/ADR-960-onboarding-documentation-governance.md) - 入职文档约束基于本 ADR

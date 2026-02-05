@@ -60,8 +60,6 @@
   - ADR 演进历史的可视化和溯源
 - [ADR-946：ADR 标题层级语义约束](ADR-946-adr-heading-level-semantic-constraint.md)
   - ADR 文档结构的标准化约束
-- [ADR-947：关系章节结构解析安全](ADR-947-relationship-section-structure-parsing-safety.md)
-  - 关系声明的解析和验证规则
 - [ADR-980：ADR 生命周期一体化同步机制](ADR-980-adr-lifecycle-synchronization.md)
   - ADR 变更的全链同步和一致性保障
 - [ADR-990：文档演进路线图](ADR-990-documentation-evolution-roadmap.md)

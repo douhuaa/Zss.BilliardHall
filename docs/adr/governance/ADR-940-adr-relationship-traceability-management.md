@@ -241,7 +241,6 @@ graph TB
 **Depended By**：
 - [ADR-945：ADR 全局时间线与演进视图](https://chatgpt.com/c/ADR-945-adr-timeline-evolution-view.md)
 - [ADR-946：ADR 标题级别即语义级别约束](https://chatgpt.com/c/ADR-946-adr-heading-level-semantic-constraint.md)
-- [ADR-947：关系声明区的结构与解析安全规则](https://chatgpt.com/c/ADR-947-relationship-section-structure-parsing-safety.md)
 - [ADR-955：文档搜索与可发现性优化](https://chatgpt.com/c/ADR-955-documentation-search-discoverability.md)
 - [ADR-980：ADR 生命周期一体化同步机制治理规范](https://chatgpt.com/c/ADR-980-adr-lifecycle-synchronization.md)
 

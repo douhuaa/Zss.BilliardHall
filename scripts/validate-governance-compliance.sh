@@ -258,8 +258,8 @@ while IFS= read -r adr; do
     # 检查是否包含变更政策或权限章节
     if ! grep -qi "变更政策\|change.*policy\|修订权限\|审批要求" "$adr" 2>/dev/null; then
         adr_name=$(basename "$adr")
-        # ADR-905, 945, 946, 947 等补充性 ADR 可能不需要变更政策
-        if [[ ! "$adr_name" =~ ADR-9[456][0-9] ]]; then
+        # ADR-905, 945, 946 等补充性 ADR 可能不需要变更政策
+        if [[ ! "$adr_name" =~ ADR-9[45][0-9] ]]; then
             adrs_without_change_policy+=("$adr_name")
         fi
     fi

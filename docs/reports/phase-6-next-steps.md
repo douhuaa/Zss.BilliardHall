@@ -53,7 +53,7 @@
 1. 使用 adr-reviewer agent 分析所有关系声明
 2. 生成关系不一致报告
 3. 手动或自动修正关系声明
-4. 运行 ADR-940 和 ADR-947 测试验证
+4. 运行 ADR-940 测试验证
 5. 更新 ADR-RELATIONSHIP-MAP.md
 
 **预估工期**：2-3 天

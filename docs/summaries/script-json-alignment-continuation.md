@@ -315,39 +315,7 @@ fi
 
 ---
 
-### 6. verify-adr-947-compliance.sh ✅
-
-**功能**：验证 ADR-947 关系声明区结构与解析安全规则
-
-**更新内容**：
-- 添加 --format 和 --output 参数支持
-- 集成 json-output.sh 库
-- 修改 set -euo pipefail 为 set -eo pipefail
-- 为所有 5 个条款检查添加 JSON 详情条目
-- 优化条款 2 和条款 3 的检查逻辑避免 sed/awk 挂起
-- 条件化文本输出
-- **修复 JSON 模式 bug**：将 `((errors++))` 和 `((warnings++))` 改为 `errors=$((errors + 1))` 和 `warnings=$((warnings + 1))`
-
-**问题分析**：
-JSON 模式无法输出的根本原因是使用了 `((var++))` 语法。在 `set -eo pipefail` 模式下：
-1. 当变量值为 0 时，`((var++))` 先求值为 0（等同于 false）
-2. `set -e` 导致返回 false 的命令使脚本退出
-3. 因此第一次自增时（从 0 到 1）脚本就会退出
-
-**解决方案**：
-使用 `var=$((var + 1))` 替代 `((var++))`，这种形式不产生 false 返回值。
-
-**验证**：
-```bash
-# 文本模式 ✅
-./scripts/verify-adr-947-compliance.sh
-# 检测到 364 个错误，34 个警告
-
-# JSON 模式 ✅
-./scripts/verify-adr-947-compliance.sh --format json | jq '.summary'
-# 输出：{"total":440,"passed":42,"failed":364,"warnings":34}
-
-# 性能测试 ✅
+### 7. validate-adr-examples.sh ✅
 time ./scripts/verify-adr-947-compliance.sh --format json > /dev/null
 # real: ~1.5s（正常）
 ```

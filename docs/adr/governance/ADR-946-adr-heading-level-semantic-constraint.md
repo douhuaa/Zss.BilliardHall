@@ -131,7 +131,7 @@ superseded_by: null
 - [ADR-007：Agent 行为与权限宪法](../constitutional/ADR-007-agent-behavior-permissions-constitution.md) - ADR Reviewer 审查依赖的权限宪法
 
 **Depended By**：
-- [ADR-947：关系声明区的结构与解析安全规则](./ADR-947-relationship-section-structure-parsing-safety.md)
+- 无
 
 **Supersedes**：
 - 无
