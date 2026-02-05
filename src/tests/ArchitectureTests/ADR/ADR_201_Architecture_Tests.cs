@@ -62,7 +62,7 @@ public sealed class ADR_201_Architecture_Tests
     {
         // 注意：此测试需要在集成测试中验证 DI 容器配置
         // 这里仅作为占位符，提醒团队此规则存在
-        true.Should().BeTrue($"❌ ADR-201_1_1 提示：Handler 生命周期验证需在集成测试中检查\n\n" +
+        true.Should().BeTrue($"ℹ️ ADR-201_1_1 违规: Handler 生命周期验证需在集成测试中检查（此测试为提示性占位符）\n\n" +
             $"验证内容：\n" +
             $"所有 Handler 类型必须在 DI 容器中注册为 Scoped 生命周期\n\n" +
             $"验证方法：\n" +
@@ -70,6 +70,8 @@ public sealed class ADR_201_Architecture_Tests
             $"2. 验证所有 *Handler 类型都已正确注册\n" +
             $"3. 示例代码：\n" +
             $"   services.AddScoped<ICommandHandler<CreateOrderCommand>, CreateOrderCommandHandler>();\n\n" +
+            $"修复建议：\n" +
+            $"在集成测试项目中添加 DI 容器配置验证测试\n\n" +
             $"参考：docs/adr/runtime/ADR-201-command-handler-lifecycle-management.md（§1.1）");
     }
 }

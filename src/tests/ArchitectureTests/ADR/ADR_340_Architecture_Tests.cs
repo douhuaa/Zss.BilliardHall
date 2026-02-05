@@ -34,8 +34,16 @@ public sealed class ADR_340_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var platformCsproj = Path.Combine(root, "src", "Platform", "Platform.csproj");
 
-        File.Exists(platformCsproj).Should().BeTrue($"❌ ADR-340_1_1 违规: 找不到 Platform.csproj 文件。\n\n" +
-            $"预期路径: {platformCsproj}");
+        File.Exists(platformCsproj).Should().BeTrue($"❌ ADR-340_1_1 违规: 找不到 Platform.csproj 文件\n\n" +
+            $"预期路径: {platformCsproj}\n\n" +
+            $"问题分析：\n" +
+            $"Platform 层是可观测性基础设施的核心，必须包含项目文件以配置日志和监控依赖\n\n" +
+            $"修复建议：\n" +
+            $"1. 检查 src/Platform 目录是否存在\n" +
+            $"2. 如果目录不存在，创建 Platform 目录\n" +
+            $"3. 在目录中创建 Platform.csproj 项目文件\n" +
+            $"4. 添加必要的包引用（Serilog、OpenTelemetry 等）\n\n" +
+            $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.1）");
 
         var content = File.ReadAllText(platformCsproj);
 
@@ -69,7 +77,16 @@ public sealed class ADR_340_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var bootstrapperFile = Path.Combine(root, "src", "Platform", "PlatformBootstrapper.cs");
 
-        File.Exists(bootstrapperFile).Should().BeTrue($"❌ ADR-340_1_2 违规: 找不到 PlatformBootstrapper.cs 文件。");
+        File.Exists(bootstrapperFile).Should().BeTrue($"❌ ADR-340_1_2 违规: 找不到 PlatformBootstrapper.cs 文件\n\n" +
+            $"预期路径: {bootstrapperFile}\n\n" +
+            $"问题分析：\n" +
+            $"PlatformBootstrapper 是应用程序启动时配置可观测性基础设施的唯一入口，缺少此文件将导致日志和监控功能无法初始化\n\n" +
+            $"修复建议：\n" +
+            $"1. 在 src/Platform 目录中创建 PlatformBootstrapper.cs 文件\n" +
+            $"2. 实现 Configure() 方法用于配置 Serilog 和 OpenTelemetry\n" +
+            $"3. 确保在应用程序启动时调用此配置方法\n" +
+            $"4. 参考工程标准文档中的代码示例\n\n" +
+            $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.2）");
 
         var content = File.ReadAllText(bootstrapperFile);
 
@@ -127,7 +144,15 @@ public sealed class ADR_340_Architecture_Tests
 
         if (!modulesAssemblies.Any())
         {
-            true.Should().BeFalse("❌ 未加载任何模块程序集。请先运行 `dotnet build` 构建所有模块。");
+            true.Should().BeFalse($"❌ ADR-340_1_5 违规: 未加载任何模块程序集，无法验证依赖隔离\n\n" +
+                $"问题分析：\n" +
+                $"测试需要加载模块程序集以验证其是否违规引用 Serilog，当前未找到任何模块\n\n" +
+                $"修复建议：\n" +
+                $"1. 运行 `dotnet build` 构建所有模块项目\n" +
+                $"2. 确保模块项目配置正确且能成功编译\n" +
+                $"3. 检查 ModuleAssemblyData 是否正确扫描模块程序集\n" +
+                $"4. 验证模块项目输出路径是否正确\n\n" +
+                $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.5）");
         }
 
         var result = Types.InAssemblies(modulesAssemblies)
@@ -158,7 +183,15 @@ public sealed class ADR_340_Architecture_Tests
 
         if (!modulesAssemblies.Any())
         {
-            true.Should().BeFalse("❌ 未加载任何模块程序集。请先运行 `dotnet build` 构建所有模块。");
+            true.Should().BeFalse($"❌ ADR-340_1_6 违规: 未加载任何模块程序集，无法验证依赖隔离\n\n" +
+                $"问题分析：\n" +
+                $"测试需要加载模块程序集以验证其是否违规引用 OpenTelemetry，当前未找到任何模块\n\n" +
+                $"修复建议：\n" +
+                $"1. 运行 `dotnet build` 构建所有模块项目\n" +
+                $"2. 确保模块项目配置正确且能成功编译\n" +
+                $"3. 检查 ModuleAssemblyData 是否正确扫描模块程序集\n" +
+                $"4. 验证模块项目输出路径是否正确\n\n" +
+                $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.6）");
         }
 
         var result = Types.InAssemblies(modulesAssemblies)
@@ -189,7 +222,16 @@ public sealed class ADR_340_Architecture_Tests
         
         if (!File.Exists(applicationDll))
         {
-            true.Should().BeFalse($"❌ 未找到 Application.dll。请先运行 `dotnet build` 构建 Application 项目。路径: {applicationDll}");
+            true.Should().BeFalse($"❌ ADR-340_1_5 违规: 未找到 Application.dll，无法验证 Serilog 依赖隔离\n\n" +
+                $"预期路径: {applicationDll}\n\n" +
+                $"问题分析：\n" +
+                $"测试需要加载 Application 程序集以验证其是否违规引用 Serilog，当前未找到编译输出\n\n" +
+                $"修复建议：\n" +
+                $"1. 运行 `dotnet build` 构建 Application 项目\n" +
+                $"2. 确保 Application 项目配置正确且能成功编译\n" +
+                $"3. 检查构建配置是否为 {configuration}\n" +
+                $"4. 验证项目输出路径是否正确\n\n" +
+                $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.5）");
         }
 
         var applicationAssembly = Assembly.LoadFrom(applicationDll);
@@ -220,7 +262,16 @@ public sealed class ADR_340_Architecture_Tests
         
         if (!File.Exists(applicationDll))
         {
-            true.Should().BeFalse($"❌ 未找到 Application.dll。请先运行 `dotnet build` 构建 Application 项目。路径: {applicationDll}");
+            true.Should().BeFalse($"❌ ADR-340_1_5 违规: 未找到 Application.dll，无法验证 OpenTelemetry 依赖隔离\n\n" +
+                $"预期路径: {applicationDll}\n\n" +
+                $"问题分析：\n" +
+                $"测试需要加载 Application 程序集以验证其是否违规引用 OpenTelemetry，当前未找到编译输出\n\n" +
+                $"修复建议：\n" +
+                $"1. 运行 `dotnet build` 构建 Application 项目\n" +
+                $"2. 确保 Application 项目配置正确且能成功编译\n" +
+                $"3. 检查构建配置是否为 {configuration}\n" +
+                $"4. 验证项目输出路径是否正确\n\n" +
+                $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.5）");
         }
 
         var applicationAssembly = Assembly.LoadFrom(applicationDll);
