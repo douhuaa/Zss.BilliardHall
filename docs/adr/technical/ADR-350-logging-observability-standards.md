@@ -43,6 +43,8 @@ superseded_by: null
 
 ## Decision（裁决）
 
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+
 ### ADR-350_1：请求日志标准（Rule）
 
 #### ADR-350_1_1：请求日志必须包含 CorrelationId【必须架构测试覆盖】

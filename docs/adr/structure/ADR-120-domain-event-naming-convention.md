@@ -44,6 +44,8 @@ superseded_by: null
 
 ## Decision（裁决）
 
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+
 ### 事件命名规则
 
 **命名模式**：`{AggregateRoot}{Action}Event[{Version}]`

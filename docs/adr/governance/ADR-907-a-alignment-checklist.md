@@ -37,6 +37,8 @@ superseded_by: null
 
 ## Decision（决策内容）
 
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+
 > ⚠️ **重要说明**：本文档是配套追踪文档，不包含架构决策。
 > 
 > 所有对齐标准和规范以 [ADR-907-A](./adr-907-a-adr-alignment-execution-standard.md) 为准。

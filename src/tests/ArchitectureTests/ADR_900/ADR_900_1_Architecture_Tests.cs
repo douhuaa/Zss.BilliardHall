@@ -1,5 +1,7 @@
 ﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_900;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-900_1: 架构裁决权威性
 /// 验证 ADR 正文作为唯一裁决依据的相关规则
@@ -34,10 +36,8 @@ public sealed class ADR_900_1_Architecture_Tests
             $"  2. ADR 正文是架构裁决的唯一依据\n\n" +
             $"参考：docs/adr/governance/ADR-900-architecture-tests.md §1.1");
 
-        // 获取所有 ADR 文件
-        var adrFiles = Directory.GetFiles(adrDirectory, "*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("\\archive\\") && !f.Contains("\\README.md"))
-            .ToArray();
+        // 获取所有正式 ADR 文件（使用 AdrFileFilter 自动排除非 ADR 文档）
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory).ToArray();
 
         adrFiles.Should().NotBeEmpty("❌ ADR-900_1_1 违规：未找到任何 ADR 文档文件");
 
