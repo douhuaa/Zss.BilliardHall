@@ -76,9 +76,13 @@ public sealed class ADR_901_Architecture_Tests
         
         if (violations.Any())
         {
-            var message = "❌ ADR-901_1_1 违规：风险表达必须使用三态语义模型（Constraint / Warning / Notice）\n" +
+            var message = "❌ ADR-901_1_1 违规: 风险表达必须使用三态语义模型（Constraint / Warning / Notice）\n\n" +
                          string.Join("\n", violations) +
-                         "\n\n修复建议：所有风险表达必须明确归类为 Constraint、Warning 或 Notice 之一，禁止使用 Suggestion、Recommendation 等模糊关键词。";
+                         "\n\n修复建议：\n" +
+                         "1. 移除所有禁止的语义关键词（Suggestion、Recommendation、Attention等）\n" +
+                         "2. 将所有风险表达明确归类为 Constraint、Warning 或 Notice 之一\n" +
+                         "3. 使用标准的语义声明块格式\n\n" +
+                         "参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§1.1）";
             throw new Xunit.Sdk.XunitException(message);
         }
     }
@@ -261,9 +265,13 @@ public sealed class ADR_901_Architecture_Tests
         
         if (violations.Any())
         {
-            var message = "❌ ADR-901_1_4 违规：Notice 必须保持纯信息性\n" +
+            var message = "❌ ADR-901_1_4 违规: Notice 必须保持纯信息性\n\n" +
                          string.Join("\n", violations) +
-                         "\n\n修复建议：Notice 只能用于背景说明、设计动机、经验性解释，严禁包含 MUST/SHOULD/SHALL 或隐性规则。";
+                         "\n\n修复建议：\n" +
+                         "1. 从 Notice 块中移除所有强制性关键词（MUST、SHOULD、SHALL、必须、应该、禁止、不得）\n" +
+                         "2. Notice 只能用于背景说明、设计动机、经验性解释\n" +
+                         "3. 如需表达约束，将内容移至 Constraint 或 Warning 块\n\n" +
+                         "参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§1.4）";
             throw new Xunit.Sdk.XunitException(message);
         }
     }
@@ -398,9 +406,14 @@ public sealed class ADR_901_Architecture_Tests
         
         if (violations.Any())
         {
-            var message = "❌ ADR-901_2_3 违规：Constraint/Warning 必须显式声明执行级别\n" +
+            var message = "❌ ADR-901_2_3 违规: Constraint/Warning 必须显式声明执行级别\n\n" +
                          string.Join("\n", violations) +
-                         "\n\n修复建议：所有 Constraint 和 Warning 必须显式声明执行级别（L1/L2/L3）。";
+                         "\n\n修复建议：\n" +
+                         "1. 为所有 Constraint 块添加执行级别（L1/L2/L3）\n" +
+                         "2. 为所有 Warning 块添加执行级别（L1/L2/L3）\n" +
+                         "3. 使用标准格式：> 🚨 **Constraint | L1**\n" +
+                         "4. 使用标准格式：> ⚠️ **Warning | L2**\n\n" +
+                         "参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§2.3）";
             throw new Xunit.Sdk.XunitException(message);
         }
     }
