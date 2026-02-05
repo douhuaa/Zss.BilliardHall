@@ -47,16 +47,50 @@ public sealed class ADR_907_3_Architecture_Tests
             var content = File.ReadAllText(testFile);
 
             // 统计有效断言数量
+            // 扩展支持所有常用的 FluentAssertions API（基于实际使用统计）
             var assertPatterns = new[]
             {
+                // xUnit Assert 方法
                 @"Assert\.True\s*\(",
                 @"Assert\.False\s*\(",
                 @"Assert\.Equal\s*\(",
                 @"Assert\.NotEqual\s*\(",
+                @"Assert\.Matches\s*\(",
+                @"Assert\.Fail\s*\(",
+                
+                // FluentAssertions 基础断言
                 @"\.Should\(\)\.BeTrue\s*\(",
                 @"\.Should\(\)\.BeFalse\s*\(",
                 @"\.Should\(\)\.Be\s*\(",
                 @"\.Should\(\)\.NotBe\s*\(",
+                
+                // FluentAssertions 集合断言
+                @"\.Should\(\)\.BeEmpty\s*\(",
+                @"\.Should\(\)\.NotBeEmpty\s*\(",
+                @"\.Should\(\)\.Contain\s*\(",
+                @"\.Should\(\)\.NotContain\s*\(",
+                
+                // FluentAssertions null 检查
+                @"\.Should\(\)\.BeNull\s*\(",
+                @"\.Should\(\)\.NotBeNull\s*\(",
+                @"\.Should\(\)\.NotBeNullOrEmpty\s*\(",
+                @"\.Should\(\)\.NotBeNullOrWhiteSpace\s*\(",
+                
+                // FluentAssertions 字符串断言
+                @"\.Should\(\)\.StartWith\s*\(",
+                @"\.Should\(\)\.EndWith\s*\(",
+                @"\.Should\(\)\.Match\s*\(",
+                @"\.Should\(\)\.MatchRegex\s*\(",
+                
+                // FluentAssertions 数值比较
+                @"\.Should\(\)\.BeGreaterThan\s*\(",
+                @"\.Should\(\)\.BeLessThan\s*\(",
+                @"\.Should\(\)\.BeGreaterThanOrEqualTo\s*\(",
+                @"\.Should\(\)\.BeLessThanOrEqualTo\s*\(",
+                
+                // FluentAssertions 类型检查
+                @"\.Should\(\)\.BeOfType\s*\(",
+                @"\.Should\(\)\.BeAssignableTo\s*\(",
             };
 
             var assertCount = assertPatterns.Sum(pattern => 
@@ -205,8 +239,9 @@ public sealed class ADR_907_3_Architecture_Tests
             // 查找所有断言语句及其完整消息（包括多行字符串连接）
             // 支持字符串插值 ($"...") 和普通字符串 ("...")
             // 支持多行字符串连接：.BeTrue($"part1" + $"part2" + ...)
+            // 扩展支持所有常用的 FluentAssertions API
             
-            var assertPattern = @"(Should\(\)\.(BeTrue|BeFalse)|Assert\.(True|False))\s*\(([^)]*\$?""[^""]+""(?:\s*\+\s*\$?""[^""]+"")*)\s*\)";
+            var assertPattern = @"(Should\(\)\.(BeTrue|BeFalse|BeEmpty|NotBeEmpty|Contain|NotContain|BeNull|NotBeNull|NotBeNullOrEmpty|StartWith|EndWith|Be|NotBe)|Assert\.(True|False|Equal|NotEqual|Matches|Fail))\s*\(([^)]*\$?""[^""]+""(?:\s*\+\s*\$?""[^""]+"")*)\s*\)";
             var assertMatches = Regex.Matches(content, assertPattern, RegexOptions.Singleline);
 
             foreach (Match assertMatch in assertMatches)

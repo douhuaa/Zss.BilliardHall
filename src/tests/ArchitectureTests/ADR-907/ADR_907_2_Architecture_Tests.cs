@@ -297,8 +297,9 @@ public sealed class ADR_907_2_Architecture_Tests
             // 查找所有断言语句及其完整消息（包括多行字符串连接）
             // 支持字符串插值 ($"...") 和普通字符串 ("...")
             // 支持多行字符串连接：.BeTrue($"part1" + $"part2" + ...)
+            // 扩展支持所有常用的 FluentAssertions API
             
-            var assertPattern = @"(Should\(\)\.(BeTrue|BeFalse)|Assert\.(True|False))\s*\(([^)]*\$?""[^""]+""(?:\s*\+\s*\$?""[^""]+"")*)\s*\)";
+            var assertPattern = @"(Should\(\)\.(BeTrue|BeFalse|BeEmpty|NotBeEmpty|Contain|NotContain|BeNull|NotBeNull|NotBeNullOrEmpty|StartWith|EndWith|Be|NotBe)|Assert\.(True|False|Equal|NotEqual|Matches|Fail))\s*\(([^)]*\$?""[^""]+""(?:\s*\+\s*\$?""[^""]+"")*)\s*\)";
             var assertMatches = Regex.Matches(content, assertPattern, RegexOptions.Singleline);
 
             foreach (Match assertMatch in assertMatches)
