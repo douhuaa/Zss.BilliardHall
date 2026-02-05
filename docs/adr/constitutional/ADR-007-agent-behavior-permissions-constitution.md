@@ -16,7 +16,7 @@ superseded_by: null
 
 # ADR-007：Agent 行为与权限宪法
 
-> ⚖️ **本 ADR 是所有 Agent 的元规则，定义 Agent 行为边界和权限约束的唯一裁决源。**
+> ⚖️ **Constraint | L1** - 本 ADR 是所有 Agent 的元规则，定义 Agent 行为边界和权限约束的唯一裁决源。
 
 ---
 
@@ -56,7 +56,7 @@ superseded_by: null
 > 
 > - **Rule**：主要规则编号（1-9）
 > - **Clause**：具体条款编号（1-n）
-> - 每个 Clause 对应一个可测试的架构约束
+> - 每个 Clause 对应一个可测试的架构约束（L1）
 > - 测试方法必须一一映射到 Clause
 
 ---

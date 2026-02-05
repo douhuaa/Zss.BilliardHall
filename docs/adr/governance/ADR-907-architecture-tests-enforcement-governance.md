@@ -74,7 +74,7 @@ superseded_by: null
 > 
 > - **Rule**：主要规则编号（1-4）
 > - **Clause**：具体条款编号（1-n）
-> - 每个 Clause 对应一个可测试的架构约束
+> - 每个 Clause 对应一个可测试的架构约束（L1）
 > - 测试方法必须一一映射到 Clause
 
 ---

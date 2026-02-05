@@ -137,7 +137,7 @@ ADR 禁止包含：
 **禁止行为**：
 - ❌ 解释 ADR
 - ❌ 输出"合规/不合规"结论
-- ❌ 包含"建议"或"推荐"
+- ❌ 包含判断性或指导性内容
 
 #### ADR-008_3_3 README/Guide 约束
 
@@ -148,7 +148,7 @@ ADR 禁止包含：
 **禁止行为**：
 - ❌ 定义规则或做架构判断
 
-> **注意**：README 详细约束见 [ADR-910](../../governance/ADR-910-readme-governance-constitution.md)
+> ℹ️ **Notice**: README 详细内容见 [ADR-910](../../governance/ADR-910-readme-governance-constitution.md)
 
 #### ADR-008_3_4 非 ADR 文档判定规则
 
@@ -191,8 +191,8 @@ ADR 禁止包含：
 #### ADR-008_5_1 ADR 禁用语言
 
 ADR 中**禁止**使用模糊词汇：
-- ❌ "建议"（suggest）
-- ❌ "推荐"（recommend）
+- ❌ "指导性内容"（suggest）
+- ❌ "推荐性内容"（recommend）
 - ❌ "通常"（usually）
 - ❌ "可能"（might）
 - ❌ "尽量"（try to）
@@ -207,12 +207,12 @@ ADR 中**禁止**使用模糊词汇：
 
 #### ADR-008_5_3 ADR 语言核心原则
 
-> **ADR 中没有"建议"，只有"规则"。**
+> ℹ️ **Notice**: ADR 中只有裁决性规则，不使用模糊的指导性语言。
 
 #### ADR-008_5_4 ADR 语言判定规则
 
 **禁止行为**：
-- ❌ ADR 包含"建议使用..."
+- ❌ ADR 包含指导性语言
 - ❌ ADR 包含"通常情况下..."
 
 **允许行为**：
