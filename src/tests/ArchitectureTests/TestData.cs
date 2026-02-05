@@ -14,7 +14,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests;
 /// - 使用 Lazy<T> 延迟加载避免重复初始化
 /// - 使用 TestConstants 和 TestEnvironment 消除重复代码
 /// </summary>
-public class ModuleAssemblyData : IEnumerable<object[]>
+public sealed class ModuleAssemblyData : IEnumerable<object[]>
 {
     private static readonly Lazy<List<Assembly>> _moduleAssemblies = 
         new(LoadModuleAssemblies, LazyThreadSafetyMode.ExecutionAndPublication);
@@ -195,7 +195,7 @@ public class ModuleAssemblyData : IEnumerable<object[]>
 /// 优化说明：
 /// - 使用 Lazy<T> 延迟加载避免重复初始化
 /// </summary>
-public class HostAssemblyData : IEnumerable<object[]>
+public sealed class HostAssemblyData : IEnumerable<object[]>
 {
     private static readonly Lazy<List<Assembly>> _hostAssemblies = 
         new(LoadHostAssemblies, LazyThreadSafetyMode.ExecutionAndPublication);

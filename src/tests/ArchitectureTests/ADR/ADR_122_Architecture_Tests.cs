@@ -99,7 +99,7 @@ public sealed class ADR_122_Architecture_Tests
 }
 
 // 辅助类：获取所有测试程序集
-public class TestAssemblyData : TheoryData<Assembly>
+public sealed class TestAssemblyData : TheoryData<Assembly>
 {
     public TestAssemblyData()
     {

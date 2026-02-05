@@ -3,7 +3,7 @@ using Zss.BilliardHall.AdrSemanticParser.Models;
 
 namespace Zss.BilliardHall.AdrSemanticParser.Tests;
 
-public class AdrParserTests
+public sealed class AdrParserTests
 {
     private readonly AdrParser _parser;
 
