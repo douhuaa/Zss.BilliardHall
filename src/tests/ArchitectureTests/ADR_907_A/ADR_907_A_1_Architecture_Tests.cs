@@ -1,5 +1,7 @@
 ﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907_A;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-907-A_1: 对齐标准与格式规范
 /// 验证 ADR 文档向 Rule/Clause 双层编号体系的对齐要求
@@ -28,9 +30,8 @@ public sealed class ADR_907_A_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
-        var adrFiles = Directory.GetFiles(adrDirectory, "*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("\\archive\\") && !f.Contains("\\README.md"))
-            .ToArray();
+        // 使用 AdrFileFilter 自动排除非 ADR 文档（如 type: tool, checklist 等）
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory).ToArray();
 
         foreach (var adrFile in adrFiles)
         {
@@ -68,8 +69,8 @@ public sealed class ADR_907_A_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
-        var adrFiles = Directory.GetFiles(adrDirectory, "*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("\\archive\\") && !f.Contains("\\README.md"))
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory)
+            
             .ToArray();
 
         foreach (var adrFile in adrFiles)
@@ -110,8 +111,8 @@ public sealed class ADR_907_A_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
-        var adrFiles = Directory.GetFiles(adrDirectory, "*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("\\archive\\") && !f.Contains("\\README.md"))
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory)
+            
             .ToArray();
 
         foreach (var adrFile in adrFiles)
@@ -146,8 +147,8 @@ public sealed class ADR_907_A_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
-        var adrFiles = Directory.GetFiles(adrDirectory, "*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("\\archive\\") && !f.Contains("\\README.md"))
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory)
+            
             .ToArray();
 
         foreach (var adrFile in adrFiles)
@@ -180,8 +181,8 @@ public sealed class ADR_907_A_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
-        var adrFiles = Directory.GetFiles(adrDirectory, "*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("\\archive\\") && !f.Contains("\\README.md"))
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory)
+            
             .ToArray();
 
         foreach (var adrFile in adrFiles)
