@@ -11,18 +11,28 @@ public sealed class ADR_008_6_Architecture_Tests
     {
         // 验证本测试类已定义并包含实质性测试
         var testType = typeof(ADR_008_6_Architecture_Tests);
-        testType.Should().NotBeNull($"❌ ADR-008_6_1 违规：测试类不存在\n\n" +
-            $"修复建议：确保 ADR_008_6_Architecture_Tests 测试类存在\n\n" +
-            $"参考：docs/adr/governance/ADR-008-documentation-governance-constitution.md（§6.1）");
+        var classMessage = AssertionMessageBuilder.BuildSimple(
+            "ADR-008_6_1",
+            "测试类不存在",
+            "测试类缺失",
+            "确保 ADR_008_6_Architecture_Tests 测试类存在",
+            TestConstants.Adr007Path);
+        
+        testType.Should().NotBeNull(classMessage);
 
         // 验证至少包含一个测试方法
         var methods = testType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
             .Where(m => m.GetCustomAttributes(typeof(FactAttribute), false).Any())
             .ToList();
 
-        methods.Should().NotBeEmpty($"❌ ADR-008_6_1 违规：测试类缺少测试方法\n\n" +
-            $"修复建议：添加验证 ADR-008_6 相关规则的测试方法\n\n" +
-            $"参考：docs/adr/governance/ADR-008-documentation-governance-constitution.md（§6.1）");
+        var methodsMessage = AssertionMessageBuilder.BuildSimple(
+            "ADR-008_6_1",
+            "测试类缺少测试方法",
+            "测试类中没有测试方法",
+            "添加验证 ADR-008_6 相关规则的测试方法",
+            TestConstants.Adr007Path);
+
+        methods.Should().NotBeEmpty(methodsMessage);
 
         methods.Count.Should().BeGreaterThan(0);
     }
