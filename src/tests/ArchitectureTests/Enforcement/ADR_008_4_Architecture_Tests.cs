@@ -5,24 +5,28 @@ using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
 /// <summary>
-/// 文档裁决语言检查 - Enforcement 层测试
-/// 
-/// 【定位】：执行 ADR-008 的具体约束
-/// 【来源】：ADR-008 决策 2.2 和决策 3.3
-/// 【执法】：失败 = CI 阻断
-/// 
-/// 本测试类检查：
-/// 1. README/Guide 不得使用裁决性语言（必须、禁止等）
-/// 2. 允许在特定上下文中使用（引用 ADR 时）
-/// 
-/// 【关联文档】
+/// ADR-008_4: 文档裁决语言规范（Rule）
+/// 执行 ADR-008 对说明级文档语言的约束
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-008_4_1: README/Guide 不得使用裁决性语言
+///
+/// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
 /// - 来源决策: ADR-008 决策 2.2、3.3
+/// 
+/// 执法说明：
+/// - 失败 = CI 阻断
+/// - 允许在特定上下文中使用（引用 ADR 时）
 /// </summary>
-public sealed class DocumentationDecisionLanguageTests
+public sealed class ADR_008_4_Architecture_Tests
 {
-    [Fact(DisplayName = "README/Guide 不得使用裁决性语言")]
-    public void README_And_Guides_Must_Not_Use_Decision_Language()
+    /// <summary>
+    /// ADR-008_4_1: README/Guide 不得使用裁决性语言
+    /// 验证说明级文档不使用裁决性词汇（除非在引用 ADR 的上下文中）（§ADR-008_4_1）
+    /// </summary>
+    [Fact(DisplayName = "ADR-008_4_1: README/Guide 不得使用裁决性语言")]
+    public void ADR_008_4_1_README_And_Guides_Must_Not_Use_Decision_Language()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         
