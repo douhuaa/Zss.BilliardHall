@@ -93,9 +93,7 @@ public sealed class ADR_008_3_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ Enforcement 违规：以下治理级文档未正确声明权威依据",
                 "",
@@ -122,7 +120,6 @@ public sealed class ADR_008_3_Architecture_Tests
                 "",
                 "参考：docs/adr/constitutional/ADR-008-documentation-governance-constitution.md 决策 3.1"
             })));
-        }
     }
 
 }

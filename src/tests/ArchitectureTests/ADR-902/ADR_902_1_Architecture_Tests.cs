@@ -257,9 +257,7 @@ public sealed class ADR_902_1_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ ADR-902_1_3 违规：以下 ADR 文档的 Front Matter 不符合标准",
                 "",
@@ -279,7 +277,6 @@ public sealed class ADR_902_1_Architecture_Tests
                 "",
                 "参考：docs/adr/governance/ADR-902-adr-template-structure-contract.md §1.3"
             })));
-        }
     }
 
     /// <summary>
@@ -358,9 +355,7 @@ public sealed class ADR_902_1_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ ADR-902_1_4 违规：以下 ADR 文档缺少必需章节或章节顺序不正确",
                 "",
@@ -380,7 +375,6 @@ public sealed class ADR_902_1_Architecture_Tests
                 "",
                 "参考：docs/adr/governance/ADR-902-adr-template-structure-contract.md §1.4"
             })));
-        }
     }
 
     // ========== 辅助方法 ==========

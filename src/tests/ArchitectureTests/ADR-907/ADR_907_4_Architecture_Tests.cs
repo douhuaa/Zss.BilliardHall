@@ -148,10 +148,7 @@ public sealed class ADR_907_4_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(
-                $"❌ ADR-907_4_2 违规：以下测试缺少 RuleId 映射\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-907_4_2 违规：以下测试缺少 RuleId 映射\n\n" +
                 $"{string.Join("\n", violations.Distinct())}\n\n" +
                 $"修复建议：\n" +
                 $"  1. DisplayName 必须包含完整的 RuleId\n" +
@@ -162,7 +159,6 @@ public sealed class ADR_907_4_Architecture_Tests
                 $"     示例：\"❌ ADR-907_4_2 违规：测试失败必须映射到 RuleId\"\n" +
                 $"  3. RuleId 用于自动化执法和追溯\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §4.2");
-        }
     }
 
     /// <summary>

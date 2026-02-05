@@ -61,10 +61,7 @@ public sealed class ADR_907_3_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(
-                $"❌ ADR-907_3_1 违规：以下测试类缺少有效断言\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-907_3_1 违规：以下测试类缺少有效断言\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 每个测试类必须包含至少 1 个有效断言\n" +
@@ -76,7 +73,6 @@ public sealed class ADR_907_3_Architecture_Tests
                 $"     - Assert.True(true)\n" +
                 $"     - Assert.False(false)\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §3.1");
-        }
     }
 
     /// <summary>
@@ -132,10 +128,7 @@ public sealed class ADR_907_3_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(
-                $"❌ ADR-907_3_2 违规：以下测试方法违反单一子规则映射\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-907_3_2 违规：以下测试方法违反单一子规则映射\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 每个测试方法只能映射一个 ADR 子规则（Clause）\n" +
@@ -145,7 +138,6 @@ public sealed class ADR_907_3_Architecture_Tests
                 $"  4. DisplayName 格式：ADR-<编号>_<Rule>_<Clause>: <描述>\n" +
                 $"     示例：\"ADR-907_3_2: 测试方法必须映射到单一子规则\"\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §3.2");
-        }
     }
 
     /// <summary>
@@ -297,10 +289,7 @@ public sealed class ADR_907_3_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(
-                $"❌ ADR-907_3_4 违规：以下测试包含形式化断言\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-907_3_4 违规：以下测试包含形式化断言\n\n" +
                 $"{string.Join("\n", violations.Distinct())}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 禁止以下形式化断言：\n" +
@@ -315,7 +304,6 @@ public sealed class ADR_907_3_Architecture_Tests
                 $"     ✅ violations.Should().BeEmpty(\"不应有违规\")\n" +
                 $"  4. 测试不应仅验证代码可运行，必须验证架构约束\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §3.4");
-        }
     }
 
     #region Helper Methods

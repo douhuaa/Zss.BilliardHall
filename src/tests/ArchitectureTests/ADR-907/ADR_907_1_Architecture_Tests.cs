@@ -137,10 +137,7 @@ public sealed class ADR_907_1_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(
-                $"❌ ADR-907_1_2 违规：以下 ADR 缺少架构测试且未声明 Non-Enforceable\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-907_1_2 违规：以下 ADR 缺少架构测试且未声明 Non-Enforceable\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 为每个 Final/Active ADR 创建对应的架构测试\n" +
@@ -148,7 +145,6 @@ public sealed class ADR_907_1_Architecture_Tests
                 $"  3. 或在 ADR 正文中添加 Non-Enforceable 标记\n" +
                 $"  4. 测试文件命名：ADR_<编号>_Architecture_Tests.cs\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §1.2");
-        }
     }
 
     /// <summary>
@@ -196,10 +192,7 @@ public sealed class ADR_907_1_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(
-                $"❌ ADR-907_1_3 违规：以下 ADR 包含\"仅文档约束\"的禁止声明\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-907_1_3 违规：以下 ADR 包含\"仅文档约束\"的禁止声明\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 移除\"仅文档约束\"、\"不接受执行\"等声明\n" +
@@ -208,7 +201,6 @@ public sealed class ADR_907_1_Architecture_Tests
                 $"     b. 明确声明为 Non-Enforceable\n" +
                 $"  3. 所有架构规则必须可执法或明确声明不可执法\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §1.3");
-        }
     }
 
     #region Helper Methods
