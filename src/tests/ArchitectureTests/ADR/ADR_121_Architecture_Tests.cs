@@ -1,6 +1,7 @@
 using NetArchTest.Rules;
 using FluentAssertions;
 using System.Reflection;
+using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -51,21 +52,25 @@ public sealed class ADR_121_Architecture_Tests
             var hasValidSuffix = contractType.Name.EndsWith("Dto") || 
                                  contractType.Name.EndsWith("Contract");
 
-            hasValidSuffix.Should().BeTrue($"❌ ADR-121_1_1 违规: 契约类型缺少 'Dto' 或 'Contract' 后缀\n\n" +
-                $"违规类型: {contractType.FullName}\n\n" +
-                $"问题分析:\n" +
-                $"所有位于 Contracts 命名空间的类型必须以 'Dto' 或 'Contract' 后缀结尾，\n" +
-                $"以明确标识其为数据传输对象（契约）\n\n" +
-                $"修复建议：\n" +
-                $"1. 如果是信息摘要，使用 'InfoDto' 或 'SummaryDto' 后缀：\n" +
-                $"   - {contractType.Name}InfoDto\n" +
-                $"   - {contractType.Name}SummaryDto\n" +
-                $"2. 如果是详细信息，使用 'DetailContract' 或 'Dto' 后缀：\n" +
-                $"   - {contractType.Name}DetailContract\n" +
-                $"   - {contractType.Name}Dto\n" +
-                $"3. 如果是列表项，使用 'ListDto' 后缀：\n" +
-                $"   - {contractType.Name}ListDto\n\n" +
-                $"参考：docs/adr/structure/ADR-121-contract-dto-naming-organization.md（命名规范）");
+            var message = BuildWithAnalysis(
+                ruleId: "ADR-121_1_1",
+                summary: "契约类型缺少 'Dto' 或 'Contract' 后缀",
+                currentState: $"违规类型: {contractType.FullName}",
+                problemAnalysis: "所有位于 Contracts 命名空间的类型必须以 'Dto' 或 'Contract' 后缀结尾，以明确标识其为数据传输对象（契约）",
+                remediationSteps: new[]
+                {
+                    $"如果是信息摘要，使用 'InfoDto' 或 'SummaryDto' 后缀：",
+                    $"   - {contractType.Name}InfoDto",
+                    $"   - {contractType.Name}SummaryDto",
+                    $"如果是详细信息，使用 'DetailContract' 或 'Dto' 后缀：",
+                    $"   - {contractType.Name}DetailContract",
+                    $"   - {contractType.Name}Dto",
+                    $"如果是列表项，使用 'ListDto' 后缀：",
+                    $"   - {contractType.Name}ListDto"
+                },
+                adrReference: "docs/adr/structure/ADR-121-contract-dto-naming-organization.md");
+            
+            hasValidSuffix.Should().BeTrue(message);
         }
     }
 
@@ -111,23 +116,26 @@ public sealed class ADR_121_Architecture_Tests
                 // 属性必须是只读的（没有 setter）或者是 init-only
                 var isImmutable = !hasSetter || isInitOnly;
 
-                isImmutable.Should().BeTrue($"❌ ADR-121_2_1 违规: 契约属性必须是只读的\n\n" +
-                    $"违规类型: {contractType.FullName}\n" +
-                    $"可变属性: {property.Name}\n\n" +
-                    $"问题分析:\n" +
-                    $"契约必须是不可变的，以确保数据传输的安全性和一致性。\n" +
-                    $"属性 '{property.Name}' 具有公共 set 访问器，违反了不可变性约束。\n\n" +
-                    $"修复建议：\n" +
-                    $"1. 推荐使用 record 类型（自动不可变）：\n" +
-                    $"   public record {contractType.Name}(/* 属性 */);\n\n" +
-                    $"2. 或使用 init-only 属性：\n" +
-                    $"   public class {contractType.Name}\n" +
-                    $"   {{\n" +
-                    $"       public required {property.PropertyType.Name} {property.Name} {{ get; init; }}\n" +
-                    $"   }}\n\n" +
-                    $"3. 或使用只读属性：\n" +
-                    $"   public {property.PropertyType.Name} {property.Name} {{ get; }}\n\n" +
-                    $"参考：docs/adr/structure/ADR-121-contract-dto-naming-organization.md（契约约束 - 只读属性）");
+                var message = BuildWithAnalysis(
+                    ruleId: "ADR-121_2_1",
+                    summary: "契约属性必须是只读的",
+                    currentState: $"违规类型: {contractType.FullName}\n可变属性: {property.Name}",
+                    problemAnalysis: $"契约必须是不可变的，以确保数据传输的安全性和一致性。属性 '{property.Name}' 具有公共 set 访问器，违反了不可变性约束。",
+                    remediationSteps: new[]
+                    {
+                        $"推荐使用 record 类型（自动不可变）：",
+                        $"   public record {contractType.Name}(/* 属性 */);",
+                        $"或使用 init-only 属性：",
+                        $"   public class {contractType.Name}",
+                        $"   {{",
+                        $"       public required {property.PropertyType.Name} {property.Name} {{ get; init; }}",
+                        $"   }}",
+                        $"或使用只读属性：",
+                        $"   public {property.PropertyType.Name} {property.Name} {{ get; }}"
+                    },
+                    adrReference: "docs/adr/structure/ADR-121-contract-dto-naming-organization.md");
+                
+                isImmutable.Should().BeTrue(message);
             }
         }
     }
@@ -190,22 +198,24 @@ public sealed class ADR_121_Architecture_Tests
 
             if (businessMethods.Any())
             {
-                true.Should().BeFalse(
-                    $"❌ ADR-121_3_1 违规: 契约包含业务方法\n\n" +
-                    $"违规类型: {contractType.FullName}\n" +
-                    $"业务方法: {string.Join(", ", businessMethods.Select(m => m.Name))}\n\n" +
-                    $"问题分析:\n" +
-                    $"契约应该是纯数据对象（Data Object），不应包含业务逻辑或判断方法。\n" +
-                    $"检测到的方法可能包含业务逻辑，违反了契约的纯数据约束。\n\n" +
-                    $"修复建议：\n" +
-                    $"1. 移除契约中的所有业务方法，只保留属性\n" +
-                    $"2. 允许的例外：计算属性（基于现有数据的只读属性）：\n" +
-                    $"   public decimal TotalAmount => Items.Sum(i => i.Price); // ✅ 允许\n" +
-                    $"3. 业务逻辑应该在以下位置实现：\n" +
-                    $"   - 判断逻辑 → 领域模型方法\n" +
-                    $"   - 协调逻辑 → Handler\n" +
-                    $"   - 验证逻辑 → Validator\n\n" +
-                    $"参考：docs/adr/structure/ADR-121-contract-dto-naming-organization.md（契约约束 - 无行为方法）");
+                var message = BuildWithAnalysis(
+                    ruleId: "ADR-121_3_1",
+                    summary: "契约包含业务方法",
+                    currentState: $"违规类型: {contractType.FullName}\n业务方法: {string.Join(", ", businessMethods.Select(m => m.Name))}",
+                    problemAnalysis: "契约应该是纯数据对象（Data Object），不应包含业务逻辑或判断方法。检测到的方法可能包含业务逻辑，违反了契约的纯数据约束。",
+                    remediationSteps: new[]
+                    {
+                        "移除契约中的所有业务方法，只保留属性",
+                        "允许的例外：计算属性（基于现有数据的只读属性）：",
+                        "   public decimal TotalAmount => Items.Sum(i => i.Price); // ✅ 允许",
+                        "业务逻辑应该在以下位置实现：",
+                        "   - 判断逻辑 → 领域模型方法",
+                        "   - 协调逻辑 → Handler",
+                        "   - 验证逻辑 → Validator"
+                    },
+                    adrReference: "docs/adr/structure/ADR-121-contract-dto-naming-organization.md");
+                
+                true.Should().BeFalse(message);
             }
         }
     }
@@ -306,22 +316,24 @@ public sealed class ADR_121_Architecture_Tests
 
                 if (isDomainType && !isContractType)
                 {
-                    true.Should().BeFalse(
-                        $"❌ ADR-121_4_1 违规: 契约包含领域模型类型\n\n" +
-                        $"违规契约: {contractType.FullName}\n" +
-                        $"领域模型类型: {type.FullName}\n\n" +
-                        $"问题分析:\n" +
-                        $"契约不得包含领域实体（Entity/Aggregate/ValueObject），\n" +
-                        $"只能包含原始类型、系统类型和其他契约类型（DTO）。\n\n" +
-                        $"修复建议：\n" +
-                        $"1. 将领域实体转换为简单 DTO：\n" +
-                        $"   - 创建对应的 DTO：{type.Name}Dto\n" +
-                        $"   - 只包含需要传输的属性\n" +
-                        $"2. 或使用原始类型：\n" +
-                        $"   - Guid {type.Name}Id（而非 {type.Name} 对象）\n" +
-                        $"   - string {type.Name}Name（而非 {type.Name} 对象）\n" +
-                        $"3. 契约应该是数据快照，不包含领域行为\n\n" +
-                        $"参考：docs/adr/structure/ADR-121-contract-dto-naming-organization.md（契约约束 - 不包含领域模型类型）");
+                    var message = BuildWithAnalysis(
+                        ruleId: "ADR-121_4_1",
+                        summary: "契约包含领域模型类型",
+                        currentState: $"违规契约: {contractType.FullName}\n领域模型类型: {type.FullName}",
+                        problemAnalysis: "契约不得包含领域实体（Entity/Aggregate/ValueObject），只能包含原始类型、系统类型和其他契约类型（DTO）。",
+                        remediationSteps: new[]
+                        {
+                            "将领域实体转换为简单 DTO：",
+                            $"   - 创建对应的 DTO：{type.Name}Dto",
+                            "   - 只包含需要传输的属性",
+                            "或使用原始类型：",
+                            $"   - Guid {type.Name}Id（而非 {type.Name} 对象）",
+                            $"   - string {type.Name}Name（而非 {type.Name} 对象）",
+                            "契约应该是数据快照，不包含领域行为"
+                        },
+                        adrReference: "docs/adr/structure/ADR-121-contract-dto-naming-organization.md");
+                    
+                    true.Should().BeFalse(message);
                 }
             }
         }
@@ -378,22 +390,23 @@ public sealed class ADR_121_Architecture_Tests
 
             if (looksLikePublicContract && !isInContractsNamespace)
             {
-                true.Should().BeFalse(
-                    $"❌ ADR-121_5_1 违规: 公共契约未在 Contracts 命名空间下\n\n" +
-                    $"违规类型: {dtoType.FullName}\n" +
-                    $"当前命名空间: {ns}\n" +
-                    $"期望命名空间: Zss.BilliardHall.Platform.Contracts.* 或 Zss.BilliardHall.Modules.{{ModuleName}}.Contracts.*\n\n" +
-                    $"问题分析:\n" +
-                    $"该类型看起来是公共契约（名称包含 Info/Detail/Summary 或以 Contract 结尾），\n" +
-                    $"但未位于 Contracts 命名空间下，违反了契约组织规范。\n\n" +
-                    $"修复建议：\n" +
-                    $"1. 如果是跨模块契约，移动到 Platform.Contracts：\n" +
-                    $"   namespace Zss.BilliardHall.Platform.Contracts.{{ModuleName}};\n" +
-                    $"2. 如果是模块内契约，移动到模块的 Contracts 目录：\n" +
-                    $"   namespace Zss.BilliardHall.Modules.{{ModuleName}}.Contracts;\n" +
-                    $"3. 如果是模块内部使用的 DTO，可以保持在 Features 下，\n" +
-                    $"   但应避免使用 Info/Detail/Summary/Contract 等公共契约命名模式\n\n" +
-                    $"参考：docs/adr/structure/ADR-121-contract-dto-naming-organization.md（目录与分包组织）");
+                var message = BuildWithAnalysis(
+                    ruleId: "ADR-121_5_1",
+                    summary: "公共契约未在 Contracts 命名空间下",
+                    currentState: $"违规类型: {dtoType.FullName}\n当前命名空间: {ns}\n期望命名空间: Zss.BilliardHall.Platform.Contracts.* 或 Zss.BilliardHall.Modules.{{ModuleName}}.Contracts.*",
+                    problemAnalysis: "该类型看起来是公共契约（名称包含 Info/Detail/Summary 或以 Contract 结尾），但未位于 Contracts 命名空间下，违反了契约组织规范。",
+                    remediationSteps: new[]
+                    {
+                        "如果是跨模块契约，移动到 Platform.Contracts：",
+                        "   namespace Zss.BilliardHall.Platform.Contracts.{ModuleName};",
+                        "如果是模块内契约，移动到模块的 Contracts 目录：",
+                        "   namespace Zss.BilliardHall.Modules.{ModuleName}.Contracts;",
+                        "如果是模块内部使用的 DTO，可以保持在 Features 下，",
+                        "   但应避免使用 Info/Detail/Summary/Contract 等公共契约命名模式"
+                    },
+                    adrReference: "docs/adr/structure/ADR-121-contract-dto-naming-organization.md");
+                
+                true.Should().BeFalse(message);
             }
         }
     }
