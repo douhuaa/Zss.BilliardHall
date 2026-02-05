@@ -22,8 +22,6 @@ superseded_by: null
 ## Focus（聚焦内容）
 
 - 关系声明区的唯一性与边界
-- ADR 编号的使用约束
-- 同编号多文档禁止
 - 循环依赖的声明约束
 - 机器解析的结构保证
 
@@ -48,7 +46,7 @@ superseded_by: null
 > ```
 > ADR-947_<Rule>_<Clause>
 > ```
-> - Rule：主要规则编号（1-5）
+> - Rule：主要规则编号（1-3）
 > - Clause：具体条款编号
 > - 每条 Clause 对应一个可执行 ArchitectureTest
 > - 测试方法必须一一映射到 Clause
