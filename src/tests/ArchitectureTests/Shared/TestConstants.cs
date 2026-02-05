@@ -169,6 +169,11 @@ public static class TestConstants
     public const string Adr902Path = "docs/adr/governance/ADR-902-adr-document-quality-specification.md";
 
     /// <summary>
+    /// ADR-905：RuleId 格式标准文档路径
+    /// </summary>
+    public const string Adr905Path = "docs/adr/governance/ADR-905-ruleid-format-standard.md";
+
+    /// <summary>
     /// ADR-907：ArchitectureTests 执法治理体系文档路径
     /// </summary>
     public const string Adr907Path = "docs/adr/governance/ADR-907-architecturetests-enforcement-governance.md";
@@ -177,6 +182,16 @@ public static class TestConstants
     /// ADR-907-A：ADR-907 对齐执行标准文档路径
     /// </summary>
     public const string Adr907APath = "docs/adr/governance/ADR-907-A-adr907-alignment-execution-standard.md";
+
+    /// <summary>
+    /// ADR-910：文档交叉引用规范文档路径
+    /// </summary>
+    public const string Adr910Path = "docs/adr/governance/ADR-910-documentation-cross-reference-specification.md";
+
+    /// <summary>
+    /// ADR-951：案例仓库管理文档路径
+    /// </summary>
+    public const string Adr951Path = "docs/adr/governance/ADR-951-case-repository-management.md";
 
     #endregion
 
