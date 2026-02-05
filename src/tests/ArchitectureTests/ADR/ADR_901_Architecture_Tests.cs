@@ -51,7 +51,10 @@ public sealed class ADR_901_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
-        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{AdrDocsPath}");
+        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_1_1 违规：ADR 文档目录不存在\n\n" +
+            $"预期路径：{AdrDocsPath}\n\n" +
+            $"修复建议：确保 docs/adr 目录存在\n\n" +
+            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§1.1）");
         
         var adrFiles = GetActiveAdrFiles(adrDirectory);
         
@@ -96,7 +99,10 @@ public sealed class ADR_901_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
-        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{AdrDocsPath}");
+        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_1_2 违规：ADR 文档目录不存在\n\n" +
+            $"预期路径：{AdrDocsPath}\n\n" +
+            $"修复建议：确保 docs/adr 目录存在\n\n" +
+            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§1.2）");
         
         var adrFiles = GetActiveAdrFiles(adrDirectory);
         
@@ -158,7 +164,10 @@ public sealed class ADR_901_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
-        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{AdrDocsPath}");
+        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_1_3 违规：ADR 文档目录不存在\n\n" +
+            $"预期路径：{AdrDocsPath}\n\n" +
+            $"修复建议：确保 docs/adr 目录存在\n\n" +
+            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§1.3）");
         
         var adrFiles = GetActiveAdrFiles(adrDirectory);
         
@@ -225,7 +234,10 @@ public sealed class ADR_901_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
-        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{AdrDocsPath}");
+        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_1_4 违规：ADR 文档目录不存在\n\n" +
+            $"预期路径：{AdrDocsPath}\n\n" +
+            $"修复建议：确保 docs/adr 目录存在\n\n" +
+            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§1.4）");
         
         var adrFiles = GetActiveAdrFiles(adrDirectory);
         
@@ -285,7 +297,10 @@ public sealed class ADR_901_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
-        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{AdrDocsPath}");
+        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_2_1 违规：ADR 文档目录不存在\n\n" +
+            $"预期路径：{AdrDocsPath}\n\n" +
+            $"修复建议：确保 docs/adr 目录存在\n\n" +
+            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§2.1）");
         
         var adrFiles = GetActiveAdrFiles(adrDirectory);
         
@@ -356,11 +371,16 @@ public sealed class ADR_901_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
-        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{AdrDocsPath}");
+        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_2_2 违规：ADR 文档目录不存在\n\n" +
+            $"预期路径：{AdrDocsPath}\n\n" +
+            $"修复建议：确保 docs/adr 目录存在\n\n" +
+            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§2.2）");
         
         // 这个测试主要是文档性的，确保 ADR-901_2_2 的概念被测试覆盖
         // 实际的执行由 ADR-901_2_1 完成
-        true.Should().BeTrue("ADR-901_2_2 概念已通过 ADR-901_2_1 测试覆盖");
+        true.Should().BeTrue($"❌ ADR-901_2_2 违规：语义块可识别性验证失败\n\n" +
+            $"修复建议：确保所有语义块使用统一格式，以便自动化工具识别\n\n" +
+            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§2.2）");
     }
 
     /// <summary>
@@ -372,7 +392,10 @@ public sealed class ADR_901_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
-        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{AdrDocsPath}");
+        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_2_3 违规：ADR 文档目录不存在\n\n" +
+            $"预期路径：{AdrDocsPath}\n\n" +
+            $"修复建议：确保 docs/adr 目录存在\n\n" +
+            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§2.3）");
         
         var adrFiles = GetActiveAdrFiles(adrDirectory);
         
@@ -434,12 +457,16 @@ public sealed class ADR_901_Architecture_Tests
         
         // 这个测试主要是确保概念被覆盖
         // 实际的三态输出（✅ Allowed / ⛔ Blocked / ❓ Uncertain）应该在各个测试的实现中体现
-        testTypes.Should().NotBeEmpty("应该存在架构测试类");
+        testTypes.Should().NotBeEmpty($"❌ ADR-901_2_4 违规：架构测试类不存在\n\n" +
+            $"修复建议：确保存在架构测试类以验证三态判定模型\n\n" +
+            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§2.4）");
         
         // 验证本测试类的输出格式
         var currentType = typeof(ADR_901_Architecture_Tests);
         var methods = currentType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-        methods.Should().NotBeEmpty("ADR-901 测试类应包含测试方法");
+        methods.Should().NotBeEmpty($"❌ ADR-901_2_4 违规：测试类缺少测试方法\n\n" +
+            $"修复建议：ADR-901 测试类应包含验证三态判定模型的测试方法\n\n" +
+            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§2.4）");
     }
 
     // 辅助方法

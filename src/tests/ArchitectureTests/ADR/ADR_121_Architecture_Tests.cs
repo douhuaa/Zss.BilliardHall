@@ -65,7 +65,7 @@ public sealed class ADR_121_Architecture_Tests
                 $"   - {contractType.Name}Dto\n" +
                 $"3. 如果是列表项，使用 'ListDto' 后缀：\n" +
                 $"   - {contractType.Name}ListDto\n\n" +
-                $"参考: docs/adr/structure/ADR-121-contract-dto-naming-organization.md（命名规范）");
+                $"参考：docs/adr/structure/ADR-121-contract-dto-naming-organization.md（命名规范）");
         }
     }
 
@@ -127,7 +127,7 @@ public sealed class ADR_121_Architecture_Tests
                     $"   }}\n\n" +
                     $"3. 或使用只读属性：\n" +
                     $"   public {property.PropertyType.Name} {property.Name} {{ get; }}\n\n" +
-                    $"参考: docs/adr/structure/ADR-121-contract-dto-naming-organization.md（契约约束 - 只读属性）");
+                    $"参考：docs/adr/structure/ADR-121-contract-dto-naming-organization.md（契约约束 - 只读属性）");
             }
         }
     }
@@ -205,7 +205,7 @@ public sealed class ADR_121_Architecture_Tests
                     $"   - 判断逻辑 → 领域模型方法\n" +
                     $"   - 协调逻辑 → Handler\n" +
                     $"   - 验证逻辑 → Validator\n\n" +
-                    $"参考: docs/adr/structure/ADR-121-contract-dto-naming-organization.md（契约约束 - 无行为方法）");
+                    $"参考：docs/adr/structure/ADR-121-contract-dto-naming-organization.md（契约约束 - 无行为方法）");
             }
         }
     }
@@ -321,7 +321,7 @@ public sealed class ADR_121_Architecture_Tests
                         $"   - Guid {type.Name}Id（而非 {type.Name} 对象）\n" +
                         $"   - string {type.Name}Name（而非 {type.Name} 对象）\n" +
                         $"3. 契约应该是数据快照，不包含领域行为\n\n" +
-                        $"参考: docs/adr/structure/ADR-121-contract-dto-naming-organization.md（契约约束 - 不包含领域模型类型）");
+                        $"参考：docs/adr/structure/ADR-121-contract-dto-naming-organization.md（契约约束 - 不包含领域模型类型）");
                 }
             }
         }
@@ -393,7 +393,7 @@ public sealed class ADR_121_Architecture_Tests
                     $"   namespace Zss.BilliardHall.Modules.{{ModuleName}}.Contracts;\n" +
                     $"3. 如果是模块内部使用的 DTO，可以保持在 Features 下，\n" +
                     $"   但应避免使用 Info/Detail/Summary/Contract 等公共契约命名模式\n\n" +
-                    $"参考: docs/adr/structure/ADR-121-contract-dto-naming-organization.md（目录与分包组织）");
+                    $"参考：docs/adr/structure/ADR-121-contract-dto-naming-organization.md（目录与分包组织）");
             }
         }
     }

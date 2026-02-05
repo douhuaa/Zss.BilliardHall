@@ -67,7 +67,7 @@ public sealed class ADR_340_Architecture_Tests
             $"   <PackageReference Include=\"<包名>\" />\n" +
             $"2. 确保 Directory.Packages.props 中定义了这些包的版本\n\n" +
             $"执行级别: L1（依赖验证）- 此规则仅验证包引用，不保证实际配置\n\n" +
-            $"参考: docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.1)\n" +
+            $"参考：docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.1)\n" +
             $"工程标准: docs/guides/structured-logging-monitoring-standard.md");
     }
 
@@ -94,13 +94,13 @@ public sealed class ADR_340_Architecture_Tests
         var hasSerilogUsing = content.Contains("using Serilog") || content.Contains("Serilog.");
         var hasSerilogConfig = content.Contains("Log.Logger") || content.Contains("LoggerConfiguration");
 
-        hasSerilogUsing.Should().BeTrue($"❌ ADR-340_1_2 违规: PlatformBootstrapper 必须引用 Serilog 命名空间。\n\n" +
-            $"当前状态: PlatformBootstrapper.cs 未 using Serilog\n\n" +
-            $"修复建议:\n" +
+        hasSerilogUsing.Should().BeTrue($"❌ ADR-340_1_2 违规：PlatformBootstrapper 必须引用 Serilog 命名空间。\n\n" +
+            $"当前状态：PlatformBootstrapper.cs 未 using Serilog\n\n" +
+            $"修复建议：\n" +
             $"1. 在文件顶部添加 'using Serilog;'\n" +
             $"2. 在 Configure() 方法中配置 Log.Logger\n\n" +
-            $"执行级别: L1（文本匹配）- 此规则仅验证代码存在，不验证配置正确性\n\n" +
-            $"参考: docs/guides/structured-logging-monitoring-standard.md (附录 A)");
+            $"执行级别：L1（文本匹配）- 此规则仅验证代码存在，不验证配置正确性\n\n" +
+            $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.2）");
 
         hasSerilogConfig.Should().BeTrue($"❌ ADR-340_1_2 违规: PlatformBootstrapper 必须包含 Serilog 配置代码。\n\n" +
             $"当前状态: 未发现 Log.Logger 或 LoggerConfiguration\n\n" +
@@ -109,19 +109,19 @@ public sealed class ADR_340_Architecture_Tests
             $"2. 配置至少一个 Sink（Console 或 File）\n" +
             $"3. 调用 .CreateLogger() 并赋值给 Log.Logger\n\n" +
             $"执行级别: L1（文本匹配）- 此规则仅验证代码存在，不验证配置正确性\n\n" +
-            $"参考: docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.2)");
+            $"参考：docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.2)");
 
         // 检查 OpenTelemetry 配置代码
         var hasOpenTelemetryConfig = content.Contains("AddOpenTelemetry");
         var hasTracingAndMetrics = content.Contains("WithTracing") && content.Contains("WithMetrics");
 
-        hasOpenTelemetryConfig.Should().BeTrue($"❌ ADR-340_1_2 违规: PlatformBootstrapper 必须包含 OpenTelemetry 配置代码。\n\n" +
-            $"当前状态: 未发现 AddOpenTelemetry 调用\n\n" +
-            $"修复建议:\n" +
+        hasOpenTelemetryConfig.Should().BeTrue($"❌ ADR-340_1_2 违规：PlatformBootstrapper 必须包含 OpenTelemetry 配置代码。\n\n" +
+            $"当前状态：未发现 AddOpenTelemetry 调用\n\n" +
+            $"修复建议：\n" +
             $"1. 在 PlatformBootstrapper.Configure() 中调用 services.AddOpenTelemetry()\n" +
             $"2. 配置 .WithTracing() 和 .WithMetrics()\n\n" +
-            $"执行级别: L1（文本匹配）- 此规则仅验证代码存在，不验证配置正确性\n\n" +
-            $"参考: docs/guides/structured-logging-monitoring-standard.md (二、OpenTelemetry 追踪和指标配置)");
+            $"执行级别：L1（文本匹配）- 此规则仅验证代码存在，不验证配置正确性\n\n" +
+            $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.2）");
 
         hasTracingAndMetrics.Should().BeTrue($"❌ ADR-340_1_2 违规: OpenTelemetry 必须同时配置 Tracing 和 Metrics。\n\n" +
             $"当前状态: 缺少 WithTracing 或 WithMetrics 配置\n\n" +
@@ -130,7 +130,7 @@ public sealed class ADR_340_Architecture_Tests
             $"2. 在 WithTracing 中添加 AspNetCore 和 Http 插桩\n" +
             $"3. 在 WithMetrics 中添加 Runtime 插桩\n\n" +
             $"执行级别: L1（文本匹配）- 此规则仅验证代码存在，不验证配置正确性\n\n" +
-            $"参考: docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.2)");
+            $"参考：docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.2)");
     }
 
     #endregion
@@ -173,7 +173,7 @@ public sealed class ADR_340_Architecture_Tests
             $"      logger.LogInformation(\"订单创建 {{OrderId}}\", orderId);\n" +
             $"  }}\n\n" +
             $"执行级别: L1（依赖隔离）\n\n" +
-            $"参考: docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.5)");
+            $"参考：docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.5)");
     }
 
     [Fact(DisplayName = "ADR-340_1_6: Modules 层不应直接引用 OpenTelemetry")]
@@ -210,7 +210,7 @@ public sealed class ADR_340_Architecture_Tests
             $"  - 使用 System.Diagnostics.Activity（.NET BCL）\n" +
             $"  - 使用 ILogger<T> 记录日志\n\n" +
             $"执行级别: L1（依赖隔离）\n\n" +
-            $"参考: docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.5)");
+            $"参考：docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.5)");
     }
 
     [Fact(DisplayName = "ADR-340_1_5: Application 层不应直接配置 Serilog")]
@@ -249,8 +249,8 @@ public sealed class ADR_340_Architecture_Tests
             $"2. 仅使用 Microsoft.Extensions.Logging.ILogger<T> 接口\n" +
             $"3. 日志配置由 Platform 层的 PlatformBootstrapper 负责\n\n" +
             $"执行级别: L1（依赖隔离）\n\n" +
-            $"参考: docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.5)\n" +
-            $"参考: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+            $"参考：docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.5)\n" +
+            $"参考：docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
     }
 
     [Fact(DisplayName = "ADR-340_1_5: Application 层不应直接配置 OpenTelemetry")]
@@ -288,8 +288,8 @@ public sealed class ADR_340_Architecture_Tests
             $"1. 移除 Application 项目中对 OpenTelemetry 配置包的引用\n" +
             $"2. OpenTelemetry 配置由 Platform 层的 PlatformBootstrapper 负责\n\n" +
             $"执行级别: L1（依赖隔离）\n\n" +
-            $"参考: docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.5)\n" +
-            $"参考: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+            $"参考：docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md (ADR-340.5)\n" +
+            $"参考：docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
     }
 
     #endregion
