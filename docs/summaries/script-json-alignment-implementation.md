@@ -205,7 +205,6 @@ dotnet test src/tests/ArchitectureTests/
 - `validate-adr-test-mapping.sh`
 - `validate-governance-compliance.sh`
 - `verify-adr-relationships.sh`
-- `verify-adr-947-compliance.sh`
 - `verify-adr-heading-semantics.sh`
 - `check-relationship-consistency.sh`
 - `detect-circular-dependencies.sh`

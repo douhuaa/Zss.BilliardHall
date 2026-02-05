@@ -96,9 +96,8 @@
 
 1. `docs/copilot/adr-905.prompts.md`
 2. `docs/copilot/adr-946.prompts.md`
-3. `docs/copilot/adr-947.prompts.md`
 
-**工作量**：每个 30 分钟，共 1.5 小时
+**工作量**：每个 30 分钟，共 1 小时
 
 ---
 

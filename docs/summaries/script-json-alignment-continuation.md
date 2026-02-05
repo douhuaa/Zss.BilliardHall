@@ -252,7 +252,6 @@ fi
 - verify-adr-relationships.sh ✅ (前期 PR)
 - validate-governance-compliance.sh ✅ (本PR - 中期计划)
 - validate-adr-version-sync.sh ✅ (本PR - 中期计划)
-- verify-adr-947-compliance.sh ✅ (本PR - 已修复)
 - check-relationship-consistency.sh ✅ (本 PR - P2 计划)
 - detect-circular-dependencies.sh ✅ (本 PR - P2 计划)
 - generate-health-report.sh ✅ (本 PR - P2 计划)
@@ -315,15 +314,6 @@ fi
 
 ---
 
-### 7. validate-adr-examples.sh ✅
-time ./scripts/verify-adr-947-compliance.sh --format json > /dev/null
-# real: ~1.5s（正常）
-```
-
-**状态**：✅ 完全修复，文本和 JSON 模式均正常工作
-
----
-
 ## 测试结果
 
 所有新对齐的脚本都经过测试：
@@ -358,20 +348,18 @@ time ./scripts/verify-adr-947-compliance.sh --format json > /dev/null
 ### 短期（已完成）✅
 1. ✅ 对齐 validate-governance-compliance.sh
 2. ✅ 对齐 validate-adr-version-sync.sh
-3. ✅ 对齐 verify-adr-947-compliance.sh（文本模式完成，JSON 模式已修复）
-4. ✅ 对齐 check-relationship-consistency.sh
-5. ✅ 对齐 detect-circular-dependencies.sh
-6. ✅ 对齐 generate-health-report.sh
-7. ✅ 对齐 verify-all.sh（基础框架完成，JSON 模式优化已完成）
+3. ✅ 对齐 check-relationship-consistency.sh
+4. ✅ 对齐 detect-circular-dependencies.sh
+5. ✅ 对齐 generate-health-report.sh
+6. ✅ 对齐 verify-all.sh（基础框架完成，JSON 模式优化已完成）
 
 ### 中期（1-2 周）✅ 已完成
-1. ~~修复 verify-adr-947-compliance.sh JSON 模式性能问题~~ ✅ 已完成（2026-01-27）
-2. ~~优化 verify-all.sh 的 JSON 模式：~~ ✅ 已完成（2026-01-27）
+1. ~~优化 verify-all.sh 的 JSON 模式：~~ ✅ 已完成（2026-01-27）
    - ~~让 verify-all.sh 在 JSON 模式下传递 --format json 给子脚本~~ ✅
    - ~~完整条件化所有文本输出~~ ✅
-3. ~~评估 adr-cli.sh 的 JSON 支持需求~~ ✅ 已评估（交互式工具，跳过）
-4. ~~更新相关文档和使用指南~~ ✅ 已更新（本文档）
-5. 在 CI/CD 中试点 JSON 输出（长期规划）
+2. ~~评估 adr-cli.sh 的 JSON 支持需求~~ ✅ 已评估（交互式工具，跳过）
+3. ~~更新相关文档和使用指南~~ ✅ 已更新（本文档）
+4. 在 CI/CD 中试点 JSON 输出（长期规划）
 
 ### 长期（1-2 月）
 1. 实现 CI Workflow 完整自动化
@@ -401,8 +389,7 @@ time ./scripts/verify-adr-947-compliance.sh --format json > /dev/null
 3. ✅ 完整的测试验证覆盖
 4. ✅ 向后兼容的实现方式
 5. ✅ 综合验证脚本基础框架完成
-6. ✅ **修复了 verify-adr-947-compliance.sh 的 JSON 模式 bug**（2026-01-27）
-7. ✅ **完成 verify-all.sh 的 JSON 模式优化**（2026-01-27）
+6. ✅ **完成 verify-all.sh 的 JSON 模式优化**（2026-01-27）
    - 子脚本正确接收 --format json 参数
    - 所有输出完全条件化
    - JSON 和文本模式均正常工作
@@ -493,72 +480,6 @@ $ ./scripts/verify-all.sh --format json --output report.json
 - 约 15 处子脚本调用点
 
 **状态**：✅ 完全完成，已测试验证
-
----
-
-### verify-adr-947-compliance.sh JSON 模式 bug 修复
-
-**问题描述**：
-脚本在 JSON 模式下无法产生任何输出，虽然能够正常执行并退出，但 stdout 和 stderr 都为空。
-
-**调试过程**：
-1. 确认脚本能够正常启动并加载 JSON 库
-2. 逐步添加 debug 语句追踪执行流程
-3. 发现脚本在条款 5 的循环依赖检测中提前退出
-4. 定位到 `((errors++))` 语句导致脚本退出
-
-**根本原因**：
-```bash
-# 问题代码
-((errors++))  # 当 errors=0 时，先求值为 0（false），然后自增
-
-# 在 set -e 模式下的行为：
-# 1. ((0++)) 求值为 0
-# 2. 0 等同于 false
-# 3. set -e 导致脚本退出
-# 4. 自增操作未执行，也未到达 json_finalize
-```
-
-**验证测试**：
-```bash
-$ bash -c 'set -e; x=0; ((x++)); echo "Success"' || echo "Failed"
-# 结果：Failed（脚本退出）
-
-$ bash -c 'set -e; x=0; x=$((x + 1)); echo "Success: x=$x"'
-# 结果：Success: x=1（正常执行）
-```
-
-**解决方案**：
-将所有 `((errors++))` 改为 `errors=$((errors + 1))`，将所有 `((warnings++))` 改为 `warnings=$((warnings + 1))`。
-
-**影响范围**：
-- `scripts/verify-adr-947-compliance.sh` 中的 5 处修改
-  - 第 106 行：条款 1 错误计数
-  - 第 128 行：条款 1 警告计数
-  - 第 163 行：条款 2 错误计数
-  - 第 233 行：条款 4 错误计数
-  - 第 311 行：条款 5 错误计数
-
-**测试确认**：
-```bash
-# 文本模式
-./scripts/verify-adr-947-compliance.sh
-# ✅ 输出正常，显示 364 个错误和 34 个警告
-
-# JSON 模式
-./scripts/verify-adr-947-compliance.sh --format json | jq -c '.summary'
-# ✅ 输出：{"total":440,"passed":42,"failed":364,"warnings":34}
-
-# 性能
-time ./scripts/verify-adr-947-compliance.sh --format json > /dev/null
-# ✅ real: ~1.5s（正常，无性能问题）
-```
-
-**经验教训**：
-1. 在 `set -e` 模式下避免使用 `((var++))` 进行自增
-2. 推荐使用 `var=$((var + 1))` 或 `((var++)) || true`
-3. 算术表达式的返回值会影响脚本流程控制
-4. 添加充分的 debug 语句有助于快速定位问题
 
 ---
 
