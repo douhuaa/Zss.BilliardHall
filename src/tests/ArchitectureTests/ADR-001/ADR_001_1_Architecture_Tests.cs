@@ -2,6 +2,7 @@ using FluentAssertions;
 using NetArchTest.Rules;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 using System.Reflection;
+using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_001;
 
@@ -40,13 +41,17 @@ public sealed class ADR_001_1_Architecture_Tests
                 .GetResult();
 
             result.IsSuccessful.Should().BeTrue(
-            $"❌ ADR-001_1_1 违规: 模块 {moduleName} 不应依赖模块 {other}。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：\n" +
-            $"  1. 使用领域事件进行异步通信\n" +
-            $"  2. 使用数据契约进行只读查询\n" +
-            $"  3. 传递原始类型（Guid、string）而非领域对象\n" +
-            $"参考：docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md");
+                BuildFromArchTestResult(
+                    ruleId: "ADR-001_1_1",
+                    summary: $"模块 {moduleName} 不应依赖模块 {other}",
+                    failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+                    remediationSteps: new[]
+                    {
+                        "使用领域事件进行异步通信",
+                        "使用数据契约进行只读查询",
+                        "传递原始类型（Guid、string）而非领域对象"
+                    },
+                    adrReference: "docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md"));
         }
     }
 
@@ -87,10 +92,17 @@ public sealed class ADR_001_1_Architecture_Tests
                 continue;
 
             true.Should().BeFalse(
-                $"❌ ADR-001_1_2 违规: 模块 {projectName} 不应引用其他模块或非白名单项目: {refName}。\n" + 
-                $"项目路径: {csprojPath}\n" + 
-                $"引用路径: {include}\n" + 
-                $"修复建议：将共享代码移至 Platform/BuildingBlocks，或改用消息通信。");
+                Build(
+                    ruleId: "ADR-001_1_2",
+                    summary: $"模块 {projectName} 不应引用其他模块或非白名单项目: {refName}",
+                    currentState: $"项目路径: {csprojPath}\n引用路径: {include}",
+                    remediationSteps: new[]
+                    {
+                        "将共享代码移至 Platform/BuildingBlocks",
+                        "使用领域事件进行模块间通信",
+                        "使用消息总线传递数据而非直接依赖"
+                    },
+                    adrReference: "docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md"));
         }
     }
 
@@ -119,9 +131,17 @@ public sealed class ADR_001_1_Architecture_Tests
             .GetResult();
 
         result.IsSuccessful.Should().BeTrue(
-            $"❌ ADR-001_1_3 违规: 模块 {moduleName} 的类型必须在命名空间 {expectedNamespace} 下。\n" + 
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" + 
-            $"修复建议：确保所有类型都在正确的模块命名空间下，遵循目录结构与命名空间一致性原则。");
+            BuildFromArchTestResult(
+                ruleId: "ADR-001_1_3",
+                summary: $"模块 {moduleName} 的类型必须在命名空间 {expectedNamespace} 下",
+                failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+                remediationSteps: new[]
+                {
+                    "确保所有类型都在正确的模块命名空间下",
+                    "遵循目录结构与命名空间一致性原则",
+                    "检查文件的物理位置是否与命名空间匹配"
+                },
+                adrReference: "docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md"));
     }
 
     // ========== 辅助方法 ==========

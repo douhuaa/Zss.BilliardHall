@@ -2,6 +2,7 @@ using FluentAssertions;
 using NetArchTest.Rules;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 using System.Reflection;
+using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_001;
 
@@ -47,13 +48,17 @@ public sealed class ADR_001_3_Architecture_Tests
                     .GetResult();
 
                 result.IsSuccessful.Should().BeTrue(
-                $"❌ ADR-001_3_1 违规: 模块 {moduleName} 不应依赖其他模块 {other} 的领域对象。\n" +
-                $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-                $"修复建议：\n" +
-                $"  1. 使用领域事件进行异步通信\n" +
-                $"  2. 使用只读契约（Contracts）传递数据\n" +
-                $"  3. 传递原始类型（Guid、string、int）而非领域对象\n" +
-                $"参考：docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md");
+                    BuildFromArchTestResult(
+                        ruleId: "ADR-001_3_1",
+                        summary: $"模块 {moduleName} 不应依赖其他模块 {other} 的领域对象",
+                        failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+                        remediationSteps: new[]
+                        {
+                            "使用领域事件进行异步通信",
+                            "使用只读契约（Contracts）传递数据",
+                            "传递原始类型（Guid、string、int）而非领域对象"
+                        },
+                        adrReference: "docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md"));
             }
         }
     }
@@ -92,13 +97,12 @@ public sealed class ADR_001_3_Architecture_Tests
                 var hasBusinessDecisionPattern = businessDecisionPatterns.Any(pattern => prop.Name.Contains(pattern, StringComparison.OrdinalIgnoreCase));
 
                 hasBusinessDecisionPattern.Should().BeFalse(
-                $"❌ ADR-001_3_2 违规: Contract {contractType.Name} 包含疑似业务判断字段: {prop.Name}。\n" +
-                $"修复建议：\n" +
-                $"  1. Contract 应仅用于数据传递，不包含业务决策字段\n" +
-                $"  2. 将业务判断逻辑移至 Handler 或领域模型中\n" +
-                $"  3. 使用简单的数据字段（如状态枚举）而非判断字段\n" +
-                $"参考：docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md\n" +
-                $"注意：此为 L2/L3 级别检查，可能需要人工确认是否真的违规。");
+                    BuildSimple(
+                        ruleId: "ADR-001_3_2",
+                        summary: $"Contract {contractType.Name} 包含疑似业务判断字段: {prop.Name}",
+                        currentState: "Contract 应仅用于数据传递，不包含业务决策字段。注意：此为 L2/L3 级别检查，可能需要人工确认是否真的违规",
+                        remediation: "将业务判断逻辑移至 Handler 或领域模型中，使用简单的数据字段（如状态枚举）而非判断字段",
+                        adrReference: "docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md"));
             }
         }
     }
