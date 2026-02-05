@@ -188,11 +188,6 @@ public static class TestConstants
     /// </summary>
     public const string Adr910Path = "docs/adr/governance/ADR-910-documentation-cross-reference-specification.md";
 
-    /// <summary>
-    /// ADR-951：案例仓库管理文档路径
-    /// </summary>
-    public const string Adr951Path = "docs/adr/governance/ADR-951-case-repository-management.md";
-
     #endregion
 
     #region 裁决性关键词

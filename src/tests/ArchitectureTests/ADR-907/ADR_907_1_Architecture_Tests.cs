@@ -166,8 +166,7 @@ public sealed class ADR_907_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907_1_3: 禁止仅文档约束的架构规则")]
     public void ADR_907_1_3_No_Documentation_Only_Rules_Allowed()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adrDocsDirectory = Path.Combine(repoRoot, AdrDocsPath);
+        var adrDocsDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
         if (!Directory.Exists(adrDocsDirectory))
         {
