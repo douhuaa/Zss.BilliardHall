@@ -12,7 +12,7 @@ public sealed class AdrParserTests
         _parser = new AdrParser();
     }
 
-    [Fact]
+    [Fact(DisplayName = "解析有效的 ADR 文档返回正确的 ID")]
     public void Parse_ValidAdr_ReturnsCorrectId()
     {
         // Arrange
@@ -41,7 +41,7 @@ public sealed class AdrParserTests
         result.Id.Should().Be("ADR-001");
     }
 
-    [Fact]
+    [Fact(DisplayName = "解析有效的 ADR 文档返回正确的标题")]
     public void Parse_ValidAdr_ReturnsCorrectTitle()
     {
         // Arrange
@@ -57,7 +57,7 @@ public sealed class AdrParserTests
         result.Title.Should().Be("模块化单体架构");
     }
 
-    [Fact]
+    [Fact(DisplayName = "解析包含元数据的 ADR 文档提取所有字段")]
     public void Parse_WithMetadata_ExtractsAllFields()
     {
         // Arrange
@@ -85,7 +85,7 @@ public sealed class AdrParserTests
         result.EffectiveDate.Should().Be("即刻");
     }
 
-    [Fact]
+    [Fact(DisplayName = "解析包含依赖关系的 ADR 文档正确提取")]
     public void Parse_WithDependencies_ExtractsCorrectly()
     {
         // Arrange
@@ -110,7 +110,7 @@ public sealed class AdrParserTests
         result.Relationships.DependsOn[0].Reason.Should().Be("基于模块隔离规则");
     }
 
-    [Fact]
+    [Fact(DisplayName = "解析包含术语表的 ADR 文档提取术语")]
     public void Parse_WithGlossary_ExtractsTerms()
     {
         // Arrange
@@ -134,7 +134,7 @@ public sealed class AdrParserTests
         result.Glossary[0].EnglishTerm.Should().Be("Module");
     }
 
-    [Fact]
+    [Fact(DisplayName = "解析包含快速参考表的 ADR 文档提取约束")]
     public void Parse_WithQuickReference_ExtractsConstraints()
     {
         // Arrange
@@ -157,7 +157,7 @@ public sealed class AdrParserTests
         result.QuickReference[0].IsMandatory.Should().BeTrue();
     }
 
-    [Fact]
+    [Fact(DisplayName = "解析无关系声明的 ADR 文档返回空列表")]
     public void Parse_NoRelationships_ReturnsEmptyLists()
     {
         // Arrange
@@ -179,21 +179,21 @@ public sealed class AdrParserTests
         result.Relationships.Related.Should().BeEmpty();
     }
 
-    [Fact]
+    [Fact(DisplayName = "解析 null Markdown 抛出异常")]
     public void Parse_NullMarkdown_ThrowsException()
     {
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() => _parser.Parse(null!));
     }
 
-    [Fact]
+    [Fact(DisplayName = "解析空 Markdown 抛出异常")]
     public void Parse_EmptyMarkdown_ThrowsException()
     {
         // Act & Assert
         Assert.Throws<ArgumentException>(() => _parser.Parse(""));
     }
 
-    [Fact]
+    [Fact(DisplayName = "解析无 ADR 编号的文档抛出异常")]
     public void Parse_NoAdrNumber_ThrowsException()
     {
         // Arrange - 没有 ADR 编号的文档
@@ -211,7 +211,7 @@ public sealed class AdrParserTests
         exception.Message.Should().Contain("Unable to extract ADR number");
     }
 
-    [Fact]
+    [Fact(DisplayName = "解析非数字 ADR ID 的文档抛出异常")]
     public void Parse_NonNumericAdrId_ThrowsException()
     {
         // Arrange - ADR 编号不是数字
@@ -225,7 +225,7 @@ public sealed class AdrParserTests
         exception.Message.Should().Contain("Unable to extract ADR number");
     }
 
-    [Fact]
+    [Fact(DisplayName = "解析畸形 ADR ID 的文档抛出异常")]
     public void Parse_MalformedAdrId_ThrowsException()
     {
         // Arrange - 畸形的 ADR 编号
@@ -239,7 +239,7 @@ public sealed class AdrParserTests
         exception.Message.Should().Contain("Unable to extract ADR number");
     }
 
-    [Theory]
+    [Theory(DisplayName = "解析各种 ADR ID 格式正确提取")]
     [InlineData("# ADR-001：测试", "ADR-001")]  // 短格式
     [InlineData("# ADR-001：测试", "ADR-001")]  // 标准格式
     [InlineData("# ADR-12345：测试", "ADR-12345")]  // 长编号

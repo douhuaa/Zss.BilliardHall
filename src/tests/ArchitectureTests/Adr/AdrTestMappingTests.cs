@@ -18,7 +18,7 @@ public sealed class AdrTestMappingTests
     /// ADR-900: 每条核心 ADR（0000-0099）必须有对应的架构测试类
     /// </summary>
     [Fact(DisplayName = "ADR-900: 每条核心 ADR 必须有对应的架构测试类")]
-    public void Core_ADRs_Must_Have_Architecture_Test_Classes()
+    public void ADR_900_Core_ADRs_Must_Have_Architecture_Test_Classes()
     {
         var repoRoot = TestEnvironment.RepositoryRoot 
             ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -67,7 +67,7 @@ public sealed class AdrTestMappingTests
     /// 架构测试类必须包含实质性的测试方法
     /// </summary>
     [Fact(DisplayName = "架构测试类必须包含实质性的测试方法")]
-    public void Architecture_Test_Classes_Must_Have_Substantial_Test_Methods()
+    public void ADR_900_Architecture_Test_Classes_Must_Have_Substantial_Test_Methods()
     {
         var testAssembly = Assembly.GetExecutingAssembly();
         var violations = new List<string>();

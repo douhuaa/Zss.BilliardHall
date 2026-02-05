@@ -41,7 +41,7 @@ public sealed class AdrConsistencyTests
     /// ADR 文件名必须使用 3 位编号格式（ADR-XXX）
     /// </summary>
     [Fact(DisplayName = "ADR 文件名必须使用 3 位编号格式")]
-    public void ADR_Files_Must_Use_Four_Digit_Numbering()
+    public void ADR_Files_Must_Use_Three_Digit_Numbering()
     {
         var violations = new List<string>();
         var validPattern = new Regex(@"^ADR-\d{3}[^/\\]*\.md$", RegexOptions.Compiled);

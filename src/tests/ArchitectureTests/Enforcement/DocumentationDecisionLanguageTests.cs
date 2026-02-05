@@ -22,7 +22,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 public sealed class DocumentationDecisionLanguageTests
 {
     [Fact(DisplayName = "README/Guide 不得使用裁决性语言")]
-    public void README_Must_Not_Use_Decision_Language()
+    public void README_And_Guides_Must_Not_Use_Decision_Language()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         
