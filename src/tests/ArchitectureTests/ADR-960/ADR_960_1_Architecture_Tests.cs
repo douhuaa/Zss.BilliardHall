@@ -34,16 +34,14 @@ public sealed class ADR_960_1_Architecture_Tests
     [Fact(DisplayName = "ADR-960_1_1: Onboarding 文档不得包含裁决性语言")]
     public void ADR_960_1_1_Onboarding_Must_Not_Contain_Decision_Language()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var docsPath = Path.Combine(repoRoot, DocsPath);
+        var docsPath = FileSystemTestHelper.GetAbsolutePath(DocsPath);
 
-        if (!Directory.Exists(docsPath))
-        {
-            throw new DirectoryNotFoundException($"文档目录不存在: {docsPath}");
-        }
+        FileSystemTestHelper.AssertDirectoryExists(docsPath,
+            $"文档目录不存在: {docsPath}");
 
         // 查找 Onboarding 文档
-        var onboardingFiles = Directory.GetFiles(docsPath, "*onboarding*.md", SearchOption.AllDirectories)
+        var onboardingFiles = FileSystemTestHelper
+            .GetFilesInDirectory(docsPath, "*onboarding*.md", SearchOption.AllDirectories)
             .Where(f => !f.Contains("ADR-960", StringComparison.OrdinalIgnoreCase)) // 排除 ADR-960 本身
             .ToList();
 
@@ -51,8 +49,8 @@ public sealed class ADR_960_1_Architecture_Tests
 
         foreach (var file in onboardingFiles)
         {
-            var content = File.ReadAllText(file);
-            var relativePath = Path.GetRelativePath(repoRoot, file);
+            var content = FileSystemTestHelper.ReadFileContent(file);
+            var relativePath = FileSystemTestHelper.GetRelativePath(file);
 
             // 检查是否包含裁决性关键词（避免误报，检查上下文）
             foreach (var keyword in DecisionKeywords)
