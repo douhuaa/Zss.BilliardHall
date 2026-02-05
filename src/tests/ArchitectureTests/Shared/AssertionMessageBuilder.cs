@@ -214,4 +214,159 @@ public static class AssertionMessageBuilder
             adrReference,
             includeClauseReference: false);
     }
+
+    /// <summary>
+    /// 构建文件不存在的断言消息
+    /// </summary>
+    /// <param name="ruleId">规则编号</param>
+    /// <param name="filePath">缺失的文件路径</param>
+    /// <param name="fileDescription">文件描述（如"ADR-960 文档"）</param>
+    /// <param name="remediationSteps">修复建议步骤</param>
+    /// <param name="adrReference">ADR 文档路径</param>
+    /// <returns>格式化的断言消息</returns>
+    public static string BuildFileNotFoundMessage(
+        string ruleId,
+        string filePath,
+        string fileDescription,
+        IEnumerable<string> remediationSteps,
+        string adrReference)
+    {
+        var sb = new StringBuilder();
+        
+        // 1. 违规标题
+        sb.AppendLine($"❌ {ruleId} 违规：{fileDescription}不存在");
+        sb.AppendLine();
+        
+        // 2. 当前状态
+        sb.AppendLine("当前状态：文件不存在");
+        sb.AppendLine($"预期路径：{filePath}");
+        sb.AppendLine();
+        
+        // 3. 修复建议
+        sb.AppendLine("修复建议：");
+        int stepNumber = 1;
+        foreach (var step in remediationSteps)
+        {
+            sb.AppendLine($"{stepNumber}. {step}");
+            stepNumber++;
+        }
+        sb.AppendLine();
+        
+        // 4. 参考
+        sb.Append($"参考：{adrReference} §{ruleId}");
+        
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// 构建目录不存在的断言消息
+    /// </summary>
+    /// <param name="ruleId">规则编号</param>
+    /// <param name="directoryPath">缺失的目录路径</param>
+    /// <param name="directoryDescription">目录描述（如"案例库目录"）</param>
+    /// <param name="remediationSteps">修复建议步骤</param>
+    /// <param name="adrReference">ADR 文档路径</param>
+    /// <returns>格式化的断言消息</returns>
+    public static string BuildDirectoryNotFoundMessage(
+        string ruleId,
+        string directoryPath,
+        string directoryDescription,
+        IEnumerable<string> remediationSteps,
+        string adrReference)
+    {
+        var sb = new StringBuilder();
+        
+        // 1. 违规标题
+        sb.AppendLine($"❌ {ruleId} 违规：{directoryDescription}不存在");
+        sb.AppendLine();
+        
+        // 2. 当前状态
+        sb.AppendLine("当前状态：目录不存在");
+        sb.AppendLine($"预期路径：{directoryPath}");
+        sb.AppendLine();
+        
+        // 3. 修复建议
+        sb.AppendLine("修复建议：");
+        int stepNumber = 1;
+        foreach (var step in remediationSteps)
+        {
+            sb.AppendLine($"{stepNumber}. {step}");
+            stepNumber++;
+        }
+        sb.AppendLine();
+        
+        // 4. 参考
+        sb.Append($"参考：{adrReference} §{ruleId}");
+        
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// 构建内容缺失的断言消息（用于验证文件必须包含特定内容）
+    /// </summary>
+    /// <param name="ruleId">规则编号</param>
+    /// <param name="filePath">文件路径</param>
+    /// <param name="missingContent">缺失的内容描述</param>
+    /// <param name="remediationSteps">修复建议步骤</param>
+    /// <param name="adrReference">ADR 文档路径</param>
+    /// <returns>格式化的断言消息</returns>
+    public static string BuildContentMissingMessage(
+        string ruleId,
+        string filePath,
+        string missingContent,
+        IEnumerable<string> remediationSteps,
+        string adrReference)
+    {
+        var relativePath = Path.GetRelativePath(TestEnvironment.RepositoryRoot, filePath);
+        
+        var sb = new StringBuilder();
+        
+        // 1. 违规标题
+        sb.AppendLine($"❌ {ruleId} 违规：文件缺少必需内容");
+        sb.AppendLine();
+        
+        // 2. 当前状态
+        sb.AppendLine($"当前状态：{relativePath} 缺少 '{missingContent}'");
+        sb.AppendLine();
+        
+        // 3. 修复建议
+        sb.AppendLine("修复建议：");
+        int stepNumber = 1;
+        foreach (var step in remediationSteps)
+        {
+            sb.AppendLine($"{stepNumber}. {step}");
+            stepNumber++;
+        }
+        sb.AppendLine();
+        
+        // 4. 参考
+        sb.Append($"参考：{adrReference} §{ruleId}");
+        
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// 构建格式违规的断言消息（用于验证文件内容格式）
+    /// </summary>
+    /// <param name="ruleId">规则编号</param>
+    /// <param name="summary">简短问题描述</param>
+    /// <param name="violations">违规项列表（文件名和违规描述）</param>
+    /// <param name="remediationSteps">修复建议步骤</param>
+    /// <param name="adrReference">ADR 文档路径</param>
+    /// <returns>格式化的断言消息</returns>
+    public static string BuildFormatViolationMessage(
+        string ruleId,
+        string summary,
+        IEnumerable<string> violations,
+        IEnumerable<string> remediationSteps,
+        string adrReference)
+    {
+        return BuildWithViolations(
+            ruleId,
+            summary,
+            violations,
+            remediationSteps,
+            adrReference,
+            includeClauseReference: true);
+    }
 }

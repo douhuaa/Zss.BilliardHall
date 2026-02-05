@@ -120,4 +120,160 @@ public static class FileSystemTestHelper
     {
         return Path.Combine(TestEnvironment.RepositoryRoot, relativePath);
     }
+
+    /// <summary>
+    /// 获取指定目录下所有 ADR 文档文件
+    /// </summary>
+    /// <param name="subfolder">子文件夹路径（相对于 ADR 根目录），为 null 则搜索整个 ADR 目录</param>
+    /// <param name="excludeReadme">是否排除 README.md 文件，默认为 true</param>
+    /// <param name="excludeTimeline">是否排除 TIMELINE 文件，默认为 true</param>
+    /// <param name="excludeChecklist">是否排除 CHECKLIST 文件，默认为 true</param>
+    /// <returns>ADR 文件路径列表</returns>
+    public static IEnumerable<string> GetAdrFiles(
+        string? subfolder = null,
+        bool excludeReadme = true,
+        bool excludeTimeline = true,
+        bool excludeChecklist = true)
+    {
+        var adrPath = subfolder != null
+            ? GetAbsolutePath(Path.Combine(TestConstants.AdrDocsPath, subfolder))
+            : GetAbsolutePath(TestConstants.AdrDocsPath);
+
+        if (!Directory.Exists(adrPath))
+        {
+            return Enumerable.Empty<string>();
+        }
+
+        var files = Directory.GetFiles(adrPath, "*.md", SearchOption.AllDirectories);
+
+        if (excludeReadme)
+        {
+            files = files.Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase)).ToArray();
+        }
+
+        if (excludeTimeline)
+        {
+            files = files.Where(f => !f.Contains("TIMELINE", StringComparison.OrdinalIgnoreCase)).ToArray();
+        }
+
+        if (excludeChecklist)
+        {
+            files = files.Where(f => !f.Contains("CHECKLIST", StringComparison.OrdinalIgnoreCase)).ToArray();
+        }
+
+        return files.Where(f => Path.GetFileName(f).StartsWith("ADR-", StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// 获取指定目录下所有 Agent 配置文件
+    /// </summary>
+    /// <param name="includeSystemAgents">是否包含系统 Agent（如 expert-dotnet-software-engineer），默认为 false</param>
+    /// <param name="excludeGuardian">是否排除 architecture-guardian，默认为 false</param>
+    /// <returns>Agent 文件路径列表</returns>
+    public static IEnumerable<string> GetAgentFiles(bool includeSystemAgents = false, bool excludeGuardian = false)
+    {
+        var agentPath = GetAbsolutePath(TestConstants.AgentFilesPath);
+
+        if (!Directory.Exists(agentPath))
+        {
+            return Enumerable.Empty<string>();
+        }
+
+        var files = Directory.GetFiles(agentPath, "*.agent.md", SearchOption.AllDirectories);
+
+        if (!includeSystemAgents)
+        {
+            var systemAgents = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "expert-dotnet-software-engineer.agent.md",
+                "README.md"
+            };
+            files = files.Where(f => !systemAgents.Contains(Path.GetFileName(f))).ToArray();
+        }
+
+        if (excludeGuardian)
+        {
+            files = files.Where(f => !Path.GetFileName(f).Equals("architecture-guardian.agent.md", StringComparison.OrdinalIgnoreCase)).ToArray();
+        }
+
+        return files;
+    }
+
+    /// <summary>
+    /// 检查文件内容是否匹配正则表达式模式
+    /// </summary>
+    /// <param name="filePath">文件路径（绝对路径）</param>
+    /// <param name="pattern">正则表达式模式</param>
+    /// <returns>如果匹配返回 true，否则返回 false</returns>
+    public static bool FileContentMatches(string filePath, string pattern)
+    {
+        if (!File.Exists(filePath))
+        {
+            return false;
+        }
+
+        var content = File.ReadAllText(filePath);
+        return Regex.IsMatch(content, pattern);
+    }
+
+    /// <summary>
+    /// 获取文件中匹配正则表达式的所有行
+    /// </summary>
+    /// <param name="filePath">文件路径（绝对路径）</param>
+    /// <param name="pattern">正则表达式模式</param>
+    /// <returns>匹配的行列表</returns>
+    public static IEnumerable<string> GetMatchingLines(string filePath, string pattern)
+    {
+        if (!File.Exists(filePath))
+        {
+            return Enumerable.Empty<string>();
+        }
+
+        var content = File.ReadAllText(filePath);
+        var lines = content.Split('\n');
+
+        return lines.Where(line => Regex.IsMatch(line, pattern));
+    }
+
+    /// <summary>
+    /// 统计文件中特定模式出现的次数（不在代码块中）
+    /// </summary>
+    /// <param name="filePath">文件路径（绝对路径）</param>
+    /// <param name="pattern">正则表达式模式</param>
+    /// <param name="excludeCodeBlocks">是否排除代码块中的匹配，默认为 true</param>
+    /// <returns>匹配次数</returns>
+    public static int CountPatternOccurrences(string filePath, string pattern, bool excludeCodeBlocks = true)
+    {
+        if (!File.Exists(filePath))
+        {
+            return 0;
+        }
+
+        var content = File.ReadAllText(filePath);
+        var lines = content.Split('\n');
+
+        var count = 0;
+        var inCodeBlock = false;
+
+        foreach (var line in lines)
+        {
+            var trimmed = line.TrimStart();
+
+            if (excludeCodeBlocks && trimmed.StartsWith("```"))
+            {
+                inCodeBlock = !inCodeBlock;
+                continue;
+            }
+
+            if (!excludeCodeBlocks || !inCodeBlock)
+            {
+                if (Regex.IsMatch(line, pattern))
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
 }

@@ -19,7 +19,7 @@ public sealed class ADR_951_1_Architecture_Tests
     [Fact(DisplayName = "ADR-951_1_1: 案例库目录结构必须符合规范")]
     public void ADR_951_1_1_Case_Repository_Must_Have_Valid_Directory_Structure()
     {
-        var casesDirectory = FileSystemTestHelper.GetAbsolutePath("docs/cases");
+        var casesDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.CasesPath);
 
         // 检查案例库目录是否存在
         if (!Directory.Exists(casesDirectory))
@@ -31,8 +31,20 @@ public sealed class ADR_951_1_Architecture_Tests
 
         // 检查是否有 README.md 索引文件
         var readmePath = Path.Combine(casesDirectory, "README.md");
-        FileSystemTestHelper.AssertFileExists(readmePath,
-            "违反 ADR-951_1_1：案例库目录必须包含 README.md 索引文件");
+        
+        var readmeMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-951_1_1",
+            filePath: readmePath,
+            fileDescription: "案例库索引文件（README.md）",
+            remediationSteps: new[]
+            {
+                "在案例库目录创建 README.md 索引文件",
+                "在索引文件中列出所有案例分类",
+                "提供案例的简要说明和链接"
+            },
+            adrReference: TestConstants.Adr951Path);
+        
+        FileSystemTestHelper.AssertFileExists(readmePath, readmeMessage);
 
         // 检查是否有分类子目录
         var subdirectories = FileSystemTestHelper.GetSubdirectories(casesDirectory);
@@ -51,8 +63,19 @@ public sealed class ADR_951_1_Architecture_Tests
                 }
             }
 
-            missingReadmes.Should().BeEmpty(
-                $"违反 ADR-951_1_1：以下分类目录缺少 README.md 索引：{string.Join(", ", missingReadmes)}");
+            var message = AssertionMessageBuilder.BuildWithViolations(
+                ruleId: "ADR-951_1_1",
+                summary: "以下分类目录缺少 README.md 索引",
+                failingTypes: missingReadmes,
+                remediationSteps: new[]
+                {
+                    "在每个分类目录中创建 README.md 索引文件",
+                    "在索引文件中列出该分类下的所有案例",
+                    "提供分类的简要说明"
+                },
+                adrReference: TestConstants.Adr951Path);
+
+            missingReadmes.Should().BeEmpty(message);
         }
     }
 
