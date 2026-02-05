@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_965;
 
@@ -23,7 +24,7 @@ public sealed class ADR_965_1_Architecture_Tests
     [Fact(DisplayName = "ADR-965_1_1: 必须包含可互动的任务清单")]
     public void ADR_965_1_1_Must_Include_Interactive_Checklist()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr965Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
         File.Exists(adr965Path).Should().BeTrue(
@@ -45,7 +46,7 @@ public sealed class ADR_965_1_Architecture_Tests
     [Fact(DisplayName = "ADR-965_1_2: 必须使用 GitHub Issue Template")]
     public void ADR_965_1_2_Must_Use_GitHub_Issue_Template()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr965Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
         var content = File.ReadAllText(adr965Path);
@@ -58,19 +59,5 @@ public sealed class ADR_965_1_Architecture_Tests
         // 验证包含第1-4周的清单结构
         content.Should().Contain("第 1 周",
             $"❌ ADR-965_1_2 违规：必须包含第 1 周学习清单");
-    }
-
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
     }
 }

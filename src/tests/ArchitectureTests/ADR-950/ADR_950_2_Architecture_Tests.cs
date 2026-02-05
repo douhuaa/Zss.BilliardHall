@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_950;
 
@@ -27,7 +28,7 @@ public sealed class ADR_950_2_Architecture_Tests
     [Fact(DisplayName = "ADR-950_2: 文档类型必须按照目录结构组织")]
     public void ADR_950_2_Document_Types_Must_Be_Organized_By_Directory_Structure()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var docsPath = Path.Combine(repoRoot, DocsPath);
 
         if (!Directory.Exists(docsPath))
@@ -65,7 +66,7 @@ public sealed class ADR_950_2_Architecture_Tests
     [Fact(DisplayName = "ADR-950_2_1: ADR 文档必须在 adr/ 目录且包含 Decision 章节")]
     public void ADR_950_2_1_ADR_Documents_Must_Be_In_ADR_Directory_With_Decision()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrPath = Path.Combine(repoRoot, DocsPath, "adr");
 
         if (!Directory.Exists(adrPath))
@@ -102,7 +103,7 @@ public sealed class ADR_950_2_Architecture_Tests
     [Fact(DisplayName = "ADR-950_2_2: Guide 文档应该提供操作步骤和 ADR 引用")]
     public void ADR_950_2_2_Guide_Documents_Should_Provide_Steps_And_ADR_References()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var guidesPath = Path.Combine(repoRoot, DocsPath, "guides");
 
         if (!Directory.Exists(guidesPath))
@@ -148,7 +149,7 @@ public sealed class ADR_950_2_Architecture_Tests
     [Fact(DisplayName = "ADR-950_2_3~2_5: FAQ/Case/Standard 文档必须在相应目录")]
     public void ADR_950_2_3_To_2_5_FAQ_Case_Standard_Documents_Must_Be_In_Correct_Directories()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var docsPath = Path.Combine(repoRoot, DocsPath);
 
         // 验证目录存在（不强制要求有内容）
@@ -161,27 +162,6 @@ public sealed class ADR_950_2_Architecture_Tests
         Console.WriteLine("✓ ADR-950_2_3~2_5: 文档类型目录结构正确");
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
+    }
     }
 }

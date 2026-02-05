@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -24,7 +25,7 @@ public sealed class ADR_910_Architecture_Tests
     public void ADR_910_README_Governance_Constitution_Exists()
     {
         // 验证 ADR-910 文档存在
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-910-readme-governance-constitution.md");
         
         File.Exists(adrFile).Should().BeTrue($"❌ ADR-910_1_1 违规：ADR-910 文档不存在\n\n" +
@@ -60,7 +61,7 @@ public sealed class ADR_910_Architecture_Tests
     [Fact(DisplayName = "ADR-910_1_2: 对应的 Copilot Prompts 文件存在")]
     public void ADR_910_Prompts_File_Exists()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var promptsFile = Path.Combine(repoRoot, "docs/copilot/adr-910.prompts.md");
         
         // 注意：此测试在 Prompts 文件创建后才会通过
@@ -92,7 +93,7 @@ public sealed class ADR_910_Architecture_Tests
     [Fact(DisplayName = "ADR-910_1_3: 核心治理原则已定义")]
     public void Core_README_Governance_Principles_Are_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-910-readme-governance-constitution.md");
         var content = File.ReadAllText(adrFile);
         
@@ -113,21 +114,6 @@ public sealed class ADR_910_Architecture_Tests
             $"❌ ADR-910_1_3 违规：ADR-910 缺少声明要求\n\n" +
             $"修复建议：在 ADR-910 中添加 README 必需声明的章节\n\n" +
             $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.3）");
-    }
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
     }
 
     // ========== 执法级测试：真正阻止违规行为 ==========
@@ -152,7 +138,7 @@ public sealed class ADR_910_Architecture_Tests
     [Fact(DisplayName = "ADR-910_1_4: README 不得使用裁决性语言（执法级）")]
     public void README_Must_Not_Use_Decision_Language()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         
         // 例外：可以在引用 ADR 的上下文中使用，或在示例标记中使用
         var allowedContextPatterns = new[]
@@ -298,7 +284,7 @@ public sealed class ADR_910_Architecture_Tests
     [Fact(DisplayName = "ADR-910_1_5: README 必须声明无裁决力（执法级）")]
     public void README_Must_Declare_No_Authority()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
         
         // 收集需要检查的 README 文件
@@ -380,7 +366,7 @@ public sealed class ADR_910_Architecture_Tests
     [Fact(DisplayName = "ADR-910_1_6: README 应引用而非定义规则（指导级）")]
     public void README_Should_Reference_Not_Define_Rules()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var warnings = new List<string>();
         
         // 收集 README 文件

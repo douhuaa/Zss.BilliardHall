@@ -53,7 +53,6 @@ public static class AdrParser
                     headingText.Contains("关系声明", StringComparison.OrdinalIgnoreCase))
                 {
                     inRelationshipsSection = true;
-                }
                 else if (inRelationshipsSection)
                 {
                     // 遇到下一个 ## 标题，退出关系声明区
@@ -148,9 +147,6 @@ public static class AdrParser
             return "Related";
         }
 
-        return null;
-    }
-
     /// <summary>
     /// 将提取的关系添加到 ADR 模型中
     /// </summary>
@@ -173,6 +169,5 @@ public static class AdrParser
             case "Related":
                 adr.Related.Add(targetAdr);
                 break;
-        }
-    }
+}
 }

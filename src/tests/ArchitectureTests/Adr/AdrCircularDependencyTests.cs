@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
@@ -12,8 +13,7 @@ public sealed class AdrCircularDependencyTests
 
     public AdrCircularDependencyTests()
     {
-        var repoRoot = FindRepositoryRoot() 
-            ?? throw new InvalidOperationException("未找到仓库根目录（无法定位 docs/adr 或 .git）");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         
         var adrPath = Path.Combine(repoRoot, "docs", "adr");
         var repo = new AdrRepository(adrPath);
@@ -90,7 +90,6 @@ public sealed class AdrCircularDependencyTests
                         var cycle = path.Skip(cycleStart).ToList();
                         cycles.Add(cycle);
                     }
-                }
                 else if (!visited.Contains(dependency))
                 {
                     DfsDetectCycle(dependency, visited, recursionStack, path, cycles);
@@ -105,21 +104,5 @@ public sealed class AdrCircularDependencyTests
     /// <summary>
     /// 查找仓库根目录
     /// </summary>
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
         
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                Directory.Exists(Path.Combine(currentDir, ".git")))
-            {
-                return currentDir;
-            }
-            
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        
-        return null;
-    }
 }

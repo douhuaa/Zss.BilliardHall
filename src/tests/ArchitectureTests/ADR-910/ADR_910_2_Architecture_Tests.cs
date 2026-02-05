@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_910;
 
@@ -27,7 +28,7 @@ public sealed class ADR_910_2_Architecture_Tests
     [Fact(DisplayName = "ADR-910_2_1: README 引用 ADR 的规范")]
     public void ADR_910_2_1_README_Must_Reference_ADR_Properly()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
         
         var docsDirectory = Path.Combine(repoRoot, DocsPath);
@@ -99,10 +100,6 @@ public sealed class ADR_910_2_Architecture_Tests
                             violations.Add($"     - 可能包含长篇 ADR 内容转述（{wordCount} 字符）");
                             violations.Add($"     - 建议：使用简短说明 + ADR 链接，而非复制完整内容");
                             break;
-                        }
-                    }
-                }
-            }
         }
 
         if (violations.Any())
@@ -147,7 +144,7 @@ public sealed class ADR_910_2_Architecture_Tests
     [Fact(DisplayName = "ADR-910_2_2: README 的变更治理规则（L2警告）")]
     public void ADR_910_2_2_README_Changes_Must_Follow_Governance()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var warnings = new List<string>();
         
         var docsDirectory = Path.Combine(repoRoot, DocsPath);
@@ -203,9 +200,6 @@ public sealed class ADR_910_2_Architecture_Tests
                 {
                     warnings.Add($"  ⚠️ {relativePath}");
                     warnings.Add($"     - 建议：根 README 应说明文档治理规则或引用相关 ADR");
-                }
-            }
-        }
 
         // L2 警告级别：警告但不失败构建
         if (warnings.Any())
@@ -240,24 +234,6 @@ public sealed class ADR_910_2_Architecture_Tests
         // L2 警告：测试总是通过，但已输出警告信息
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
-
     private static bool CheckAdrExists(string repoRoot, string adrNumber)
     {
         var adrDirectory = Path.Combine(repoRoot, AdrPath);
@@ -267,5 +243,11 @@ public sealed class ADR_910_2_Architecture_Tests
             .GetFiles(adrDirectory, $"{adrNumber}*.md", SearchOption.AllDirectories);
         
         return adrFiles.Length > 0;
-    }
+}
+}
+}
+}
+}
+}
+}
 }

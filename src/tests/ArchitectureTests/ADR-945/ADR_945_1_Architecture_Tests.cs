@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_945;
 
@@ -21,7 +22,7 @@ public sealed class ADR_945_1_Architecture_Tests
     [Fact(DisplayName = "ADR-945_1_1: 自动生成 ADR 演进时间线")]
     public void ADR_945_1_1_ADR_Timeline_Must_Be_Generated()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var timelineFile = Path.Combine(repoRoot, "docs/adr/ADR-TIMELINE.md");
 
         // 检查时间线文件是否存在（如果不存在，视为待实现功能）
@@ -45,27 +46,6 @@ public sealed class ADR_945_1_Architecture_Tests
         hasTimeInfo.Should().BeTrue("时间线文件应包含日期信息");
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
+    }
     }
 }

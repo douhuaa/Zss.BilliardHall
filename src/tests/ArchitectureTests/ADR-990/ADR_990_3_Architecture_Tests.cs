@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_990;
 
@@ -18,7 +19,7 @@ public sealed class ADR_990_3_Architecture_Tests
     [Fact(DisplayName = "ADR-990_3_1: 路线图项目必须与 ADR/RFC 关联")]
     public void ADR_990_3_1_Roadmap_Items_Must_Link_To_ADR_Or_RFC()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
         var content = File.ReadAllText(adr990Path);
@@ -26,19 +27,5 @@ public sealed class ADR_990_3_Architecture_Tests
         content.Should().Contain("与 ADR/RFC 关联",
             $"❌ ADR-990_3_1 违规：ADR-990 必须要求路线图项目与 ADR/RFC 关联\n\n" +
             $"参考：docs/adr/governance/ADR-990-documentation-evolution-roadmap.md §3.1");
-    }
-
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
     }
 }

@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 
@@ -28,7 +29,7 @@ public sealed class ADR_907_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907_1_1: ArchitectureTests 必须是 ADR 的唯一自动化执法形式")]
     public void ADR_907_1_1_ArchitectureTests_Are_Sole_Automated_Enforcement()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
 
         // 验证 ArchitectureTests 项目存在
@@ -71,7 +72,7 @@ public sealed class ADR_907_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907_1_2: 具备裁决力的 ADR 必须有测试或声明 Non-Enforceable")]
     public void ADR_907_1_2_ADRs_Must_Have_Tests_Or_Be_Non_Enforceable()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDocsDirectory = Path.Combine(repoRoot, AdrDocsPath);
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
 
@@ -158,7 +159,7 @@ public sealed class ADR_907_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907_1_3: 禁止仅文档约束的架构规则")]
     public void ADR_907_1_3_No_Documentation_Only_Rules_Allowed()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDocsDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
         if (!Directory.Exists(adrDocsDirectory))
@@ -217,24 +218,6 @@ public sealed class ADR_907_1_Architecture_Tests
     }
 
     #region Helper Methods
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, AdrDocsPath)))
-            {
-                return currentDir;
-            }
-
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-
-        return null;
-    }
 
     #endregion
 }

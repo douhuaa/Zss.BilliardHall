@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_960;
 
@@ -33,7 +34,7 @@ public sealed class ADR_960_1_Architecture_Tests
     [Fact(DisplayName = "ADR-960_1_1: Onboarding 文档不得包含裁决性语言")]
     public void ADR_960_1_1_Onboarding_Must_Not_Contain_Decision_Language()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var docsPath = Path.Combine(repoRoot, DocsPath);
 
         if (!Directory.Exists(docsPath))
@@ -62,9 +63,6 @@ public sealed class ADR_960_1_Architecture_Tests
                 {
                     violations.Add($"{relativePath} - 包含裁决性语言：'{keyword}'");
                     break; // 每个文件只报告一次
-                }
-            }
-        }
 
         if (violations.Count > 0)
         {
@@ -86,7 +84,7 @@ public sealed class ADR_960_1_Architecture_Tests
     [Fact(DisplayName = "ADR-960_1_2: Onboarding 不得定义新架构约束")]
     public void ADR_960_1_2_Onboarding_Must_Not_Define_New_Constraints()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         
         // 验证 ADR-960 文档存在以定义此规则
         var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
@@ -113,7 +111,7 @@ public sealed class ADR_960_1_Architecture_Tests
     [Fact(DisplayName = "ADR-960_1_3: Onboarding 唯一职责必须明确定义")]
     public void ADR_960_1_3_Onboarding_Responsibilities_Must_Be_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
         
         File.Exists(adr960Path).Should().BeTrue(
@@ -137,7 +135,7 @@ public sealed class ADR_960_1_Architecture_Tests
     [Fact(DisplayName = "ADR-960_1_4: Onboarding 权威层级必须明确")]
     public void ADR_960_1_4_Onboarding_Authority_Level_Must_Be_Clear()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
         
         File.Exists(adr960Path).Should().BeTrue(
@@ -152,23 +150,7 @@ public sealed class ADR_960_1_Architecture_Tests
         hasAuthorityHierarchy.Should().BeTrue(
             $"❌ ADR-960_1_4 违规：ADR-960 必须定义 Onboarding 在权威层级中的位置\n\n" +
             $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §1.4");
-    }
-
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
+}
+}
+}
 }

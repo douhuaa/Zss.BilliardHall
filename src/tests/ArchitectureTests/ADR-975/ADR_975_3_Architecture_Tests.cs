@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_975;
 
@@ -19,7 +20,7 @@ public sealed class ADR_975_3_Architecture_Tests
     [Fact(DisplayName = "ADR-975_3_1: 必须每月生成文档质量报告")]
     public void ADR_975_3_1_Monthly_Quality_Report_Must_Be_Generated()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
         var content = File.ReadAllText(adr975Path);
@@ -32,7 +33,7 @@ public sealed class ADR_975_3_Architecture_Tests
     [Fact(DisplayName = "ADR-975_3_2: 必须定义报告位置")]
     public void ADR_975_3_2_Report_Location_Must_Be_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
         var content = File.ReadAllText(adr975Path);
@@ -40,19 +41,5 @@ public sealed class ADR_975_3_Architecture_Tests
         content.Should().Contain("docs/reports/quality",
             $"❌ ADR-975_3_2 违规：ADR-975 必须定义报告位置\n\n" +
             $"参考：docs/adr/governance/ADR-975-documentation-quality-monitoring.md §3.2");
-    }
-
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
     }
 }

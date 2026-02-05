@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 
@@ -29,7 +30,7 @@ public sealed class ADR_907_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907_3_1: 测试类必须包含至少一个有效断言")]
     public void ADR_907_3_1_Test_Classes_Must_Have_Minimum_Assertions()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
@@ -96,7 +97,7 @@ public sealed class ADR_907_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907_3_2: 测试方法必须映射到单一子规则")]
     public void ADR_907_3_2_Test_Methods_Must_Map_To_Single_Subrule()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
@@ -169,7 +170,7 @@ public sealed class ADR_907_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907_3_3: 失败信息必须可溯源到 ADR")]
     public void ADR_907_3_3_Failure_Messages_Must_Be_Traceable()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
@@ -266,7 +267,7 @@ public sealed class ADR_907_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907_3_4: 禁止形式化断言")]
     public void ADR_907_3_4_Formal_Assertions_Are_Prohibited()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
@@ -341,24 +342,6 @@ public sealed class ADR_907_3_Architecture_Tests
     }
 
     #region Helper Methods
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, AdrDocsPath)))
-            {
-                return currentDir;
-            }
-
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-
-        return null;
-    }
 
     #endregion
 }

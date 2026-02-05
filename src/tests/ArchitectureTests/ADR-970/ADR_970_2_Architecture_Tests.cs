@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_970;
 
@@ -19,7 +20,7 @@ public sealed class ADR_970_2_Architecture_Tests
     [Fact(DisplayName = "ADR-970_2_1: 日志必须使用 JSON 格式")]
     public void ADR_970_2_1_Logs_Must_Use_JSON_Format()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
         var content = File.ReadAllText(adr970Path);
@@ -32,7 +33,7 @@ public sealed class ADR_970_2_Architecture_Tests
     [Fact(DisplayName = "ADR-970_2_2: 必须定义标准 JSON 架构")]
     public void ADR_970_2_2_Standard_JSON_Schema_Must_Be_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
         var content = File.ReadAllText(adr970Path);
@@ -44,19 +45,5 @@ public sealed class ADR_970_2_Architecture_Tests
                 $"❌ ADR-970_2_2 违规：标准 JSON 架构必须包含 '{field}' 字段\n\n" +
                 $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §2.2");
         }
-    }
-
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
     }
 }

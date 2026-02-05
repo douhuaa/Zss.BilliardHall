@@ -1,5 +1,6 @@
 using FluentAssertions;
 using System.Text.RegularExpressions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_947;
 
@@ -22,7 +23,7 @@ public sealed class ADR_947_3_Architecture_Tests
     [Fact(DisplayName = "ADR-947_3_1: 禁止显式循环依赖声明")]
     public void ADR_947_3_1_Relationships_Must_Not_Have_Bidirectional_Dependencies()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, "docs/adr");
 
         var adrFiles = Directory.GetFiles(adrDirectory, "ADR-*.md", SearchOption.AllDirectories);
@@ -91,49 +92,6 @@ public sealed class ADR_947_3_Architecture_Tests
             "建议：使用单向声明 + 相关关系（Related）来表示双向关联。");
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
     }
-
-    private static string ExtractAdrNumber(string fileName)
-    {
-        var match = Regex.Match(fileName, @"ADR-(\d{3,4})");
-        return match.Success ? match.Groups[1].Value : string.Empty;
-    }
-
-    private static string ExtractRelationshipsSection(string content)
-    {
-        var pattern = @"##\s*(Relationships|关系声明).*?\n(.*?)(?=\n##\s|\z)";
-        var match = Regex.Match(content, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
-        
-        return match.Success ? match.Groups[2].Value : string.Empty;
-    }
-
-    private static List<string> ExtractAdrNumbers(string content)
-    {
-        var pattern = @"ADR-(\d{3,4})";
-        var matches = Regex.Matches(content, pattern);
-        
-        return matches.Select(m => m.Groups[1].Value).Distinct().ToList();
     }
 }

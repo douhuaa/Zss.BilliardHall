@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 
@@ -34,7 +35,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_1: ArchitectureTests 项目必须存在")]
     public void ADR_907_2_1_ArchitectureTests_Project_Must_Exist()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var projectPath = Path.Combine(repoRoot, AdrTestsProjectPath);
 
         File.Exists(projectPath).Should().BeTrue(
@@ -54,7 +55,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_2: 测试目录必须按 ADR 编号分组")]
     public void ADR_907_2_2_Test_Directory_Must_Be_Organized_By_ADR_Number()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
 
         Directory.Exists(testsDirectory).Should().BeTrue(
@@ -87,7 +88,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_3: 测试类必须映射到单一 ADR")]
     public void ADR_907_2_3_Test_Classes_Must_Map_To_Single_ADR()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
@@ -162,7 +163,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_4: 测试类命名必须遵循规范")]
     public void ADR_907_2_4_Test_Class_Names_Must_Follow_Convention()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
@@ -207,7 +208,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_5: 测试方法必须映射 ADR 子规则")]
     public void ADR_907_2_5_Test_Methods_Must_Map_To_Subrules()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
@@ -270,7 +271,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_6: 失败信息必须包含 ADR 引用")]
     public void ADR_907_2_6_Failure_Messages_Must_Reference_ADR()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
@@ -341,7 +342,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_7: 测试不得包含空弱断言")]
     public void ADR_907_2_7_Tests_Must_Have_Valid_Assertions()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
@@ -401,7 +402,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_8: 测试不得被跳过或条件禁用")]
     public void ADR_907_2_8_Tests_Must_Not_Be_Skipped()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
 
         if (!Directory.Exists(testsDirectory))
@@ -456,24 +457,6 @@ public sealed class ADR_907_2_Architecture_Tests
     }
 
     #region Helper Methods
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, AdrDocsPath)))
-            {
-                return currentDir;
-            }
-
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-
-        return null;
-    }
 
     #endregion
 }

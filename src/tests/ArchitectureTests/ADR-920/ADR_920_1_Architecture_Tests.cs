@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_920;
 
@@ -25,7 +26,7 @@ public sealed class ADR_920_1_Architecture_Tests
     [Fact(DisplayName = "ADR-920_1_1: 示例代码的法律地位")]
     public void ADR_920_1_1_Example_Code_Must_Not_Define_Architecture_Rules()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         
         // 验证 ADR-920 文档存在并包含法律地位定义
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-920-examples-governance-constitution.md");
@@ -54,7 +55,7 @@ public sealed class ADR_920_1_Architecture_Tests
     [Fact(DisplayName = "ADR-920_1_2: 示例文档必须包含免责声明")]
     public void ADR_920_1_2_Example_Documents_Must_Have_Disclaimer()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
 
         // 收集需要检查的示例文档
@@ -130,30 +131,5 @@ public sealed class ADR_920_1_Architecture_Tests
                 "",
                 "参考：docs/adr/governance/ADR-920-examples-governance-constitution.md §ADR-920_1_2"
             })));
-        }
-    }
-
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
+}
 }

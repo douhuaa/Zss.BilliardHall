@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_970;
 
@@ -19,7 +20,7 @@ public sealed class ADR_970_3_Architecture_Tests
     [Fact(DisplayName = "ADR-970_3_1: 测试失败日志必须自动链接到 ADR")]
     public void ADR_970_3_1_Test_Failure_Logs_Must_Link_To_ADR()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
         var content = File.ReadAllText(adr970Path);
@@ -32,7 +33,7 @@ public sealed class ADR_970_3_Architecture_Tests
     [Fact(DisplayName = "ADR-970_3_2: 必须定义关联规则")]
     public void ADR_970_3_2_Association_Rules_Must_Be_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
         var content = File.ReadAllText(adr970Path);
@@ -40,19 +41,5 @@ public sealed class ADR_970_3_Architecture_Tests
         content.Should().Contain("关联规则",
             $"❌ ADR-970_3_2 违规：ADR-970 必须定义关联规则\n\n" +
             $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §3.2");
-    }
-
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
     }
 }

@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_951;
 
@@ -21,7 +22,7 @@ public sealed class ADR_951_1_Architecture_Tests
     [Fact(DisplayName = "ADR-951_1_1: 案例库目录结构必须符合规范")]
     public void ADR_951_1_1_Case_Repository_Must_Have_Valid_Directory_Structure()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var casesDirectory = Path.Combine(repoRoot, "docs/cases");
 
         // 检查案例库目录是否存在
@@ -59,27 +60,6 @@ public sealed class ADR_951_1_Architecture_Tests
         }
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
+    }
     }
 }

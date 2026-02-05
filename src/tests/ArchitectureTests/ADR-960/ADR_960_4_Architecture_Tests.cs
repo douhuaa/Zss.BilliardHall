@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_960;
 
@@ -23,7 +24,7 @@ public sealed class ADR_960_4_Architecture_Tests
     [Fact(DisplayName = "ADR-960_4_1: Onboarding 维护规则必须已定义")]
     public void ADR_960_4_1_Onboarding_Maintenance_Rules_Must_Be_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
         
         File.Exists(adr960Path).Should().BeTrue(
@@ -60,7 +61,7 @@ public sealed class ADR_960_4_Architecture_Tests
     [Fact(DisplayName = "ADR-960_4_2: Onboarding 失效处理机制必须已定义")]
     public void ADR_960_4_2_Onboarding_Deprecation_Mechanism_Must_Be_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
         
         File.Exists(adr960Path).Should().BeTrue(
@@ -88,23 +89,4 @@ public sealed class ADR_960_4_Architecture_Tests
         forbidsOutdatedContent.Should().BeTrue(
             $"❌ ADR-960_4_2 违规：ADR-960 必须明确禁止过时内容长期存在\n\n" +
             $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §4.2");
-    }
-
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

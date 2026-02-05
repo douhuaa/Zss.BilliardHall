@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
@@ -23,7 +24,7 @@ public sealed class DocumentationDecisionLanguageTests
     [Fact(DisplayName = "README/Guide 不得使用裁决性语言")]
     public void README_Must_Not_Use_Decision_Language()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         
         // 裁决性词汇（ADR-008 明确禁止 README 使用）
         var forbiddenWords = new[] { "必须", "禁止", "不允许", "不得", "应当" };
@@ -98,7 +99,6 @@ public sealed class DocumentationDecisionLanguageTests
                 "",
                 "根据 ADR-008 决策 2.2：README/Guide 只能解释'如何使用'，不得使用裁决性语言。",
                 ""
-            }
             .Concat(violations.Take(10)) // 限制输出前10个违规
             .Concat(violations.Count > 10 ? new[] { $"  ... 还有 {violations.Count - 10} 个违规" } : Array.Empty<string>())
             .Concat(new[]
@@ -127,19 +127,5 @@ public sealed class DocumentationDecisionLanguageTests
         var nonQuotedLines = lines.Where(line => !line.TrimStart().StartsWith(">"));
         return string.Join("\n", nonQuotedLines);
     }
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
+}
 }

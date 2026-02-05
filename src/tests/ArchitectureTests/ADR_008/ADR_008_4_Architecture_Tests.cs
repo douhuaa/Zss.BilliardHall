@@ -1,6 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_008;
 
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>
 /// 验证 ADR-008_4：ADR 结构规范（Rule）
@@ -33,7 +34,7 @@ public sealed class ADR_008_4_Architecture_Tests
     public void ADR_008_4_2_ADR_Structure_Decision_Rules()
     {
         // 验证测试文件存在
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testFile = Path.Combine(repoRoot, "src/tests/ArchitectureTests/ADR_008/ADR_008_4_Architecture_Tests.cs");
         
         File.Exists(testFile).Should().BeTrue($"❌ ADR-008_4_2 违规：测试文件不存在\n\n" +
@@ -44,19 +45,5 @@ public sealed class ADR_008_4_Architecture_Tests
         var content = File.ReadAllText(testFile);
         content.Length.Should().BeGreaterThan(100);
         content.Should().Contain("ADR_008_4");
-    }
-
-    private static string? FindRepositoryRoot()
-    {
-        var current = new DirectoryInfo(AppContext.BaseDirectory);
-        while (current != null)
-        {
-            if (Directory.Exists(Path.Combine(current.FullName, "docs", "adr")) || 
-                Directory.Exists(Path.Combine(current.FullName, ".git")))
-                return current.FullName;
-            
-            current = current.Parent;
-        }
-        return null;
     }
 }

@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
@@ -22,7 +23,7 @@ public sealed class AdrStructureTests
     [Fact(DisplayName = "ADR 文档必须包含必需章节")]
     public void ADR_Documents_Must_Have_Required_Sections()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDir = Path.Combine(repoRoot, "docs/adr");
 
         if (!Directory.Exists(adrDir))
@@ -87,7 +88,6 @@ public sealed class AdrStructureTests
                 "  • 级别（宪法层 / 结构层 / 运行层 / 技术层 / 治理层）",
                 "  • 核心决策（Decision）或规则本体（Rule）",
                 ""
-            }
             .Concat(violations)
             .Concat(new[]
             {
@@ -99,21 +99,4 @@ public sealed class AdrStructureTests
                 "",
                 "参考：docs/adr/constitutional/ADR-008-documentation-governance-constitution.md 决策 4.1"
             })));
-        }
-    }
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

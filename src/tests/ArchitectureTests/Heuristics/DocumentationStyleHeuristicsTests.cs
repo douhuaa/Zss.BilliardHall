@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
 using Xunit.Abstractions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Heuristics;
 
@@ -34,7 +35,7 @@ public sealed class DocumentationStyleHeuristicsTests
     [Fact(DisplayName = "Heuristics: README 建议使用描述性语言")]
     public void README_Should_Prefer_Descriptive_Language()
     {
-        var repoRoot = FindRepositoryRoot();
+        var repoRoot = TestEnvironment.RepositoryRoot;
         if (repoRoot == null) return;
 
         var suggestions = new List<string>();
@@ -88,7 +89,7 @@ public sealed class DocumentationStyleHeuristicsTests
     [Fact(DisplayName = "Heuristics: ADR 建议包含示例")]
     public void ADR_Should_Include_Examples()
     {
-        var repoRoot = FindRepositoryRoot();
+        var repoRoot = TestEnvironment.RepositoryRoot;
         if (repoRoot == null) return;
 
         var suggestions = new List<string>();
@@ -126,11 +127,9 @@ public sealed class DocumentationStyleHeuristicsTests
             foreach (var suggestion in suggestions.Take(5))
             {
                 _output.WriteLine(suggestion);
-            }
             if (suggestions.Count > 5)
             {
                 _output.WriteLine($"  ... 还有 {suggestions.Count - 5} 个建议");
-            }
             _output.WriteLine("");
             _output.WriteLine("注意：这是建议，不是强制规则。");
         }
@@ -142,7 +141,7 @@ public sealed class DocumentationStyleHeuristicsTests
     [Fact(DisplayName = "Heuristics: 文档建议保持简洁")]
     public void Documents_Should_Be_Concise()
     {
-        var repoRoot = FindRepositoryRoot();
+        var repoRoot = TestEnvironment.RepositoryRoot;
         if (repoRoot == null) return;
 
         var suggestions = new List<string>();
@@ -184,27 +183,11 @@ public sealed class DocumentationStyleHeuristicsTests
             foreach (var suggestion in suggestions.Take(5))
             {
                 _output.WriteLine(suggestion);
-            }
             _output.WriteLine("");
             _output.WriteLine("注意：这是建议，不是强制规则。");
         }
 
         // ✅ 永远通过 - Heuristics 不应该失败构建
         true.Should().BeTrue();
-    }
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
+}
 }

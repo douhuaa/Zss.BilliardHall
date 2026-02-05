@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -36,7 +37,7 @@ public sealed class ADR_900_Architecture_Tests
     [Fact(DisplayName = "ADR-900_1_1: 每条 ADR 必须有且仅有唯一对应的架构测试类")]
     public void Each_ADR_Must_Have_Exact_And_Unique_Architecture_Test()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根（docs/adr 或 .git）");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
         Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-900_1_1 违规：ADR 文档目录不存在\n\n" +
@@ -98,19 +99,6 @@ public sealed class ADR_900_Architecture_Tests
         if (segments.Length < 2)
             return null;
         return segments[1];
-    }
-
-    private static string? FindRepositoryRoot()
-    {
-        var current = new DirectoryInfo(AppContext.BaseDirectory);
-        while (current != null)
-        {
-            if (Directory.Exists(Path.Combine(current.FullName, "docs", "adr")) || Directory.Exists(Path.Combine(current.FullName, ".git")))
-                return current.FullName;
-
-            current = current.Parent;
-        }
-        return null;
     }
 
     private static IReadOnlyList<string> LoadAdrIds(string adrDirectory)

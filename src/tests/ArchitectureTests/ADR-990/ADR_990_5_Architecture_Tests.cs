@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_990;
 
@@ -18,7 +19,7 @@ public sealed class ADR_990_5_Architecture_Tests
     [Fact(DisplayName = "ADR-990_5_1: 路线图必须公开可访问")]
     public void ADR_990_5_1_Roadmap_Must_Be_Publicly_Accessible()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
         var content = File.ReadAllText(adr990Path);
@@ -26,19 +27,5 @@ public sealed class ADR_990_5_Architecture_Tests
         content.Should().Contain("公开可访问",
             $"❌ ADR-990_5_1 违规：ADR-990 必须要求路线图公开可访问\n\n" +
             $"参考：docs/adr/governance/ADR-990-documentation-evolution-roadmap.md §5.1");
-    }
-
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
     }
 }

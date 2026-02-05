@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_902;
 
@@ -78,7 +79,7 @@ public sealed class ADR_902_1_Architecture_Tests
     [Fact(DisplayName = "ADR-902_1_1: 规则条目必须独立编号")]
     public void ADR_902_1_1_Rules_Must_Have_Independent_Numbering()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
         
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
@@ -128,10 +129,6 @@ public sealed class ADR_902_1_Architecture_Tests
                     {
                         violations.Add($"  • {relativePath} - 规则编号不连续，期望 {i + 1}，实际 {ruleNumbers[i]}");
                         break;
-                    }
-                }
-            }
-        }
 
         if (violations.Any())
         {
@@ -164,7 +161,7 @@ public sealed class ADR_902_1_Architecture_Tests
     public void ADR_902_1_2_ADR_Documents_Must_Follow_Template_Structure()
     {
         // 验证 ADR-902 文档存在
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-902-adr-template-structure-contract.md");
         
         File.Exists(adrFile).Should().BeTrue(
@@ -192,7 +189,7 @@ public sealed class ADR_902_1_Architecture_Tests
     [Fact(DisplayName = "ADR-902_1_3: 标准 Front Matter")]
     public void ADR_902_1_3_ADR_Documents_Must_Have_Standard_FrontMatter()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
         
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
@@ -263,9 +260,6 @@ public sealed class ADR_902_1_Architecture_Tests
                 if (!ValidLevelValues.Contains(level, StringComparer.Ordinal))
                 {
                     violations.Add($"  • {relativePath} - level 值 '{level}' 不合法，必须是: {string.Join(", ", ValidLevelValues)}");
-                }
-            }
-        }
 
         if (violations.Any())
         {
@@ -299,7 +293,7 @@ public sealed class ADR_902_1_Architecture_Tests
     [Fact(DisplayName = "ADR-902_1_4: 包含完整章节集合")]
     public void ADR_902_1_4_ADR_Documents_Must_Have_Complete_Sections()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
         
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
@@ -367,9 +361,6 @@ public sealed class ADR_902_1_Architecture_Tests
                 if (!hasCorrectOrder)
                 {
                     violations.Add($"  • {relativePath} - 章节顺序不正确，应按：{string.Join(" → ", RequiredSections)}");
-                }
-            }
-        }
 
         if (violations.Any())
         {
@@ -394,24 +385,6 @@ public sealed class ADR_902_1_Architecture_Tests
                 "参考：docs/adr/governance/ADR-902-adr-template-structure-contract.md §1.4"
             })));
         }
-    }
-
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
     }
 
     private static string ExtractFrontMatter(string content)
@@ -444,5 +417,14 @@ public sealed class ADR_902_1_Architecture_Tests
     {
         var match = Regex.Match(fileName, @"(ADR-\d{3,4})");
         return match.Success ? match.Groups[1].Value : string.Empty;
-    }
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
 }

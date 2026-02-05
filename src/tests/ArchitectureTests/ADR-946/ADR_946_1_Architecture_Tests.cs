@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_946;
 
@@ -34,7 +35,7 @@ public sealed class ADR_946_1_Architecture_Tests
     [Fact(DisplayName = "ADR-946_1_1: ADR 文件必须有且仅有一个 # 标题")]
     public void ADR_946_1_1_ADR_Must_Have_Exactly_One_H1_Title()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrPath = Path.Combine(repoRoot, AdrDocsPath);
 
         if (!Directory.Exists(adrPath))
@@ -95,7 +96,7 @@ public sealed class ADR_946_1_Architecture_Tests
     [Fact(DisplayName = "ADR-946_1_2: 关键语义块标题必须使用 ## 级别且不能重复")]
     public void ADR_946_1_2_Key_Semantic_Blocks_Must_Use_H2_And_Not_Duplicate()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrPath = Path.Combine(repoRoot, AdrDocsPath);
 
         if (!Directory.Exists(adrPath))
@@ -172,27 +173,6 @@ public sealed class ADR_946_1_Architecture_Tests
             $"以下 ADR 文件违反 ADR-946_1_2（关键语义块标题约束）：\n{string.Join("\n", violations)}");
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
+    }
     }
 }

@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_902;
 
@@ -28,7 +29,7 @@ public sealed class ADR_902_2_Architecture_Tests
     [Fact(DisplayName = "ADR-902_2_1: Decision 严格隔离")]
     public void ADR_902_2_1_Decision_Must_Be_Isolated()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var warnings = new List<string>();
         
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
@@ -67,9 +68,6 @@ public sealed class ADR_902_2_Architecture_Tests
                 {
                     warnings.Add($"  ⚠️ {relativePath} - 非 Decision 章节包含裁决词 '{word}'");
                     break;
-                }
-            }
-        }
 
         // L2 级别：警告但不失败构建
         if (warnings.Any())
@@ -109,7 +107,7 @@ public sealed class ADR_902_2_Architecture_Tests
     [Fact(DisplayName = "ADR-902_2_2: ADR 模板不承担语义裁决职责")]
     public void ADR_902_2_2_Template_Must_Not_Define_Semantics()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-902-adr-template-structure-contract.md");
         
         File.Exists(adrFile).Should().BeTrue($"ADR-902 文档不存在：{adrFile}");
@@ -137,7 +135,7 @@ public sealed class ADR_902_2_Architecture_Tests
     [Fact(DisplayName = "ADR-902_2_3: Relationships 章节仅承担结构接口职责")]
     public void ADR_902_2_3_Relationships_Section_Only_Handles_Structure()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-902-adr-template-structure-contract.md");
         
         File.Exists(adrFile).Should().BeTrue($"ADR-902 文档不存在：{adrFile}");
@@ -155,24 +153,6 @@ public sealed class ADR_902_2_Architecture_Tests
             $"❌ ADR-902_2_3 违规：ADR-902 应提及关系治理由 ADR-940 负责\n\n" +
             $"修复建议：在相关章节中引用 ADR-940（关系治理）\n\n" +
             $"参考：docs/adr/governance/ADR-902-adr-template-structure-contract.md §2.3");
-    }
-
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
     }
 
     private static string ExtractNonDecisionContent(string content)
@@ -194,5 +174,7 @@ public sealed class ADR_902_2_Architecture_Tests
         var lines = content.Split('\n');
         var nonQuotedLines = lines.Where(line => !line.TrimStart().StartsWith(">"));
         return string.Join("\n", nonQuotedLines);
-    }
+}
+}
+}
 }

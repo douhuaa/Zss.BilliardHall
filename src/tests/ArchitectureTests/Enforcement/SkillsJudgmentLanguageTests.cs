@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
@@ -23,7 +24,7 @@ public sealed class SkillsJudgmentLanguageTests
     [Fact(DisplayName = "Skills 不得输出判断性结论")]
     public void Skills_Must_Not_Output_Judgments()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var skillsDir = Path.Combine(repoRoot, ".github/skills");
         
         if (!Directory.Exists(skillsDir)) 
@@ -76,7 +77,6 @@ public sealed class SkillsJudgmentLanguageTests
                 "",
                 "根据 ADR-008 决策 3.2：Skills 只能输出事实，不得输出判断。",
                 ""
-            }
             .Concat(violations)
             .Concat(new[]
             {
@@ -106,19 +106,5 @@ public sealed class SkillsJudgmentLanguageTests
         // 移除 YAML frontmatter (--- ... ---)
         return Regex.Replace(content, @"^---[\s\S]*?---\s*", string.Empty);
     }
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
+}
 }

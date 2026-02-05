@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
@@ -23,7 +24,7 @@ public sealed class DocumentationAuthorityDeclarationTests
     [Fact(DisplayName = "Instructions/Agents 必须声明权威依据")]
     public void Instructions_And_Agents_Must_Declare_Authority_Basis()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
 
         // 检查 Instructions 文件
@@ -101,7 +102,6 @@ public sealed class DocumentationAuthorityDeclarationTests
                 "",
                 "根据 ADR-008 决策 3.1：Instructions/Agents 必须显式声明所服从的 ADR。",
                 ""
-            }
             .Concat(violations)
             .Concat(new[]
             {
@@ -124,19 +124,5 @@ public sealed class DocumentationAuthorityDeclarationTests
             })));
         }
     }
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
+}
 }
