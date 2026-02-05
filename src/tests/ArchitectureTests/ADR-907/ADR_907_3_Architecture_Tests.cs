@@ -57,6 +57,17 @@ public sealed class ADR_907_3_Architecture_Tests
                 @"\.Should\(\)\.BeFalse\s*\(",
                 @"\.Should\(\)\.Be\s*\(",
                 @"\.Should\(\)\.NotBe\s*\(",
+                @"\.Should\(\)\.BeEmpty\s*\(",
+                @"\.Should\(\)\.NotBeEmpty\s*\(",
+                @"\.Should\(\)\.NotBeNull\s*\(",
+                @"\.Should\(\)\.Contain\s*\(",
+                @"\.Should\(\)\.NotContain\s*\(",
+                @"\.Should\(\)\.StartWith\s*\(",
+                @"\.Should\(\)\.BeGreaterThan\s*\(",
+                @"\.Should\(\)\.BeGreaterThanOrEqualTo\s*\(",
+                @"\.Should\(\)\.BeLessThan\s*\(",
+                @"\.Should\(\)\.BeLessThanOrEqualTo\s*\(",
+                @"\.Should\(\)\.NotBeNullOrEmpty\s*\(",
             };
 
             var assertCount = assertPatterns.Sum(pattern => 
@@ -204,7 +215,7 @@ public sealed class ADR_907_3_Architecture_Tests
 
             // 查找所有断言语句及其失败消息
             var assertStatements = Regex.Matches(content, 
-                @"(Assert\.True|Assert\.False|Should\(\)\.BeTrue|Should\(\)\.BeFalse)\s*\([^""]*""([^""]+)""",
+                @"(Assert\.True|Assert\.False|Should\(\)\.BeTrue|Should\(\)\.BeFalse|Should\(\)\.Be|Should\(\)\.NotBe|Should\(\)\.BeEmpty|Should\(\)\.NotBeEmpty|Should\(\)\.NotBeNull|Should\(\)\.Contain|Should\(\)\.NotContain|Should\(\)\.StartWith|Should\(\)\.BeGreaterThan|Should\(\)\.BeGreaterThanOrEqualTo|Should\(\)\.BeLessThan|Should\(\)\.BeLessThanOrEqualTo|Should\(\)\.NotBeNullOrEmpty)\s*\([^""]*""([^""]+)""",
                 RegexOptions.Singleline);
 
             foreach (Match assert in assertStatements)
