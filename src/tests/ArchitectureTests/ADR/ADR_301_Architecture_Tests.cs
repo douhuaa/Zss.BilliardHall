@@ -18,7 +18,7 @@ public sealed class ADR_301_Architecture_Tests
             .ToList();
 
         // 至少应该有架构测试项目
-        testAssemblies.Should().NotBeEmpty($"❌ ADR-301_1_1 违规：集成测试项目不存在\n\n" +
+        (testAssemblies.Count > 0).Should().BeTrue($"❌ ADR-301_1_1 违规: 集成测试项目不存在\n\n" +
             $"问题分析：\n" +
             $"系统必须包含测试项目以确保代码质量和功能正确性\n\n" +
             $"修复建议：\n" +
@@ -33,7 +33,7 @@ public sealed class ADR_301_Architecture_Tests
             .Select(a => a.GetName().Name)
             .ToList();
             
-        invalidNames.Should().BeEmpty($"❌ ADR-301_1_1 违规：测试项目命名不规范\n\n" +
+        (invalidNames.Count == 0).Should().BeTrue($"❌ ADR-301_1_1 违规: 测试项目命名不规范\n\n" +
             $"违规项目：{string.Join(", ", invalidNames)}\n\n" +
             $"问题分析：\n" +
             $"测试项目必须以 'Tests' 后缀结尾以保持命名一致性\n\n" +
@@ -50,7 +50,7 @@ public sealed class ADR_301_Architecture_Tests
         var currentDir = Directory.GetCurrentDirectory();
         var repoRoot = FindRepositoryRoot(currentDir);
         
-        repoRoot.Should().NotBeNull($"❌ ADR-301_1_2 违规：无法找到仓库根目录\n\n" +
+        (repoRoot != null).Should().BeTrue($"❌ ADR-301_1_2 违规: 无法找到仓库根目录\n\n" +
             $"问题分析：\n" +
             $"无法定位包含 .git 或 Directory.Build.props 的仓库根目录\n\n" +
             $"修复建议：\n" +
@@ -60,7 +60,7 @@ public sealed class ADR_301_Architecture_Tests
         
         // 验证 tests 目录存在
         var testsDir = Path.Combine(repoRoot!, "src", "tests");
-        Directory.Exists(testsDir).Should().BeTrue($"❌ ADR-301_1_2 违规：测试目录不存在\n\n" +
+        Directory.Exists(testsDir).Should().BeTrue($"❌ ADR-301_1_2 违规: 测试目录不存在\n\n" +
             $"目录路径：{testsDir}\n\n" +
             $"问题分析：\n" +
             $"项目必须包含 src/tests 目录来组织所有测试项目\n\n" +
@@ -78,7 +78,7 @@ public sealed class ADR_301_Architecture_Tests
         var xunitAssembly = AppDomain.CurrentDomain.GetAssemblies()
             .FirstOrDefault(a => a.GetName().Name?.StartsWith("xunit") == true);
             
-        xunitAssembly.Should().NotBeNull($"❌ ADR-301_1_3 违规：未使用 xUnit 测试框架\n\n" +
+        (xunitAssembly != null).Should().BeTrue($"❌ ADR-301_1_3 违规: 未使用 xUnit 测试框架\n\n" +
             $"问题分析：\n" +
             $"项目必须使用统一的 xUnit 测试框架以保持一致性和可维护性\n\n" +
             $"修复建议：\n" +

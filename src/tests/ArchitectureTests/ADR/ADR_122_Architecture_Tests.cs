@@ -44,7 +44,7 @@ public sealed class ADR_122_Architecture_Tests
         {
             var violationNames = string.Join("\n", violations.Select(t => $"  - {t.FullName}"));
             true.Should().BeFalse(
-                $"❌ ADR-122_1_1 违规：测试类命名不符合规范\n\n" +
+                $"❌ ADR-122_1_1 违规: 测试类命名不符合规范\n\n" +
                 $"违规类型：\n{violationNames}\n\n" +
                 $"问题分析：\n" +
                 $"测试类必须以 Tests 后缀结尾以保持命名一致性和可识别性\n\n" +
@@ -63,7 +63,7 @@ public sealed class ADR_122_Architecture_Tests
             .GetAssemblies()
             .FirstOrDefault(a => a.GetName().Name == "ArchitectureTests");
 
-        archTestAssembly.Should().NotBeNull($"❌ ADR-122_1_2 违规：架构测试项目不存在\n\n" +
+        (archTestAssembly != null).Should().BeTrue($"❌ ADR-122_1_2 违规: 架构测试项目不存在\n\n" +
             $"问题分析：\n" +
             $"架构测试必须在专用的 ArchitectureTests 项目中组织，以与功能测试分离\n\n" +
             $"修复建议：\n" +
@@ -90,7 +90,7 @@ public sealed class ADR_122_Architecture_Tests
         var isValid = assemblyName.EndsWith(".Tests") || 
                      assemblyName == "ArchitectureTests";
 
-        isValid.Should().BeTrue($"❌ ADR-122_1_3 违规：测试项目命名不符合规范\n\n" +
+        isValid.Should().BeTrue($"❌ ADR-122_1_3 违规: 测试项目命名不符合规范\n\n" +
             $"违规项目：{assemblyName}\n\n" +
             $"问题分析：\n" +
             $"测试项目必须遵循统一的命名约定以保持项目结构清晰\n\n" +

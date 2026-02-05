@@ -29,7 +29,7 @@ public sealed class ADR_350_Architecture_Tests
             {
                 var ns = type.Namespace ?? "";
                 
-                ns.StartsWith("Zss.BilliardHall").Should().BeTrue($"❌ ADR-350_1_1 违规：日志类型未在正确的命名空间\n\n" +
+                ns.StartsWith("Zss.BilliardHall").Should().BeTrue($"❌ ADR-350_1_1 违规: 日志类型未在正确的命名空间\n\n" +
                     $"违规类型：{type.FullName}\n" +
                     $"当前命名空间：{ns}\n\n" +
                     $"问题分析：\n" +
@@ -84,7 +84,7 @@ public sealed class ADR_350_Architecture_Tests
 
             // 这些类型应该被标记为不可序列化或有特殊处理
             // 这里做基本验证：不应该有太多公共的敏感类型
-            (sensitiveTypes.Count() < 50).Should().BeTrue($"❌ ADR-350_1_3 违规：发现过多公共敏感类型\n\n" +
+            (sensitiveTypes.Count() < 50).Should().BeTrue($"❌ ADR-350_1_3 违规: 发现过多公共敏感类型\n\n" +
                 $"敏感类型数量：{sensitiveTypes.Count()}\n\n" +
                 $"问题分析：\n" +
                 $"发现过多包含敏感信息（Password、Secret、Token等）的公共类型，可能存在安全风险\n\n" +

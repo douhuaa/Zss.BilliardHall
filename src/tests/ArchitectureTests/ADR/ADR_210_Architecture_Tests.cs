@@ -27,7 +27,7 @@ public sealed class ADR_210_Architecture_Tests
         {
             var hasSchemaVersion = eventType.GetProperty("SchemaVersion") != null;
             
-            hasSchemaVersion.Should().BeTrue($"❌ ADR-210_1_1 违规：事件缺少 SchemaVersion 属性\n\n" +
+            hasSchemaVersion.Should().BeTrue($"❌ ADR-210_1_1 违规: 事件缺少 SchemaVersion 属性\n\n" +
                 $"违规类型：{eventType.FullName}\n\n" +
                 $"问题分析：\n" +
                 $"领域事件必须包含 SchemaVersion 属性以支持版本化和向后兼容\n\n" +

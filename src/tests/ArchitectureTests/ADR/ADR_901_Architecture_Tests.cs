@@ -76,7 +76,7 @@ public sealed class ADR_901_Architecture_Tests
         
         if (violations.Any())
         {
-            var message = "❌ ADR-901_1_1 违规：风险表达必须使用三态语义模型（Constraint / Warning / Notice）\n\n" +
+            var message = "❌ ADR-901_1_1 违规: 风险表达必须使用三态语义模型（Constraint / Warning / Notice）\n\n" +
                          string.Join("\n", violations) +
                          "\n\n修复建议：\n" +
                          "1. 移除所有禁止的语义关键词（Suggestion、Recommendation、Attention等）\n" +
@@ -265,7 +265,7 @@ public sealed class ADR_901_Architecture_Tests
         
         if (violations.Any())
         {
-            var message = "❌ ADR-901_1_4 违规：Notice 必须保持纯信息性\n\n" +
+            var message = "❌ ADR-901_1_4 违规: Notice 必须保持纯信息性\n\n" +
                          string.Join("\n", violations) +
                          "\n\n修复建议：\n" +
                          "1. 从 Notice 块中移除所有强制性关键词（MUST、SHOULD、SHALL、必须、应该、禁止、不得）\n" +
@@ -406,7 +406,7 @@ public sealed class ADR_901_Architecture_Tests
         
         if (violations.Any())
         {
-            var message = "❌ ADR-901_2_3 违规：Constraint/Warning 必须显式声明执行级别\n\n" +
+            var message = "❌ ADR-901_2_3 违规: Constraint/Warning 必须显式声明执行级别\n\n" +
                          string.Join("\n", violations) +
                          "\n\n修复建议：\n" +
                          "1. 为所有 Constraint 块添加执行级别（L1/L2/L3）\n" +

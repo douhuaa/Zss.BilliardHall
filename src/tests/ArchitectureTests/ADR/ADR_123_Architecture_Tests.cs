@@ -26,7 +26,7 @@ public sealed class ADR_123_Architecture_Tests
             var isInDomain = repoInterface.Namespace?.Contains(".Domain.") == true ||
                            repoInterface.Namespace?.EndsWith(".Domain") == true;
 
-            isInDomain.Should().BeTrue($"❌ ADR-123_1_1 违规：Repository 接口不在 Domain 层\n\n" +
+            isInDomain.Should().BeTrue($"❌ ADR-123_1_1 违规: Repository 接口不在 Domain 层\n\n" +
                 $"违规接口：{repoInterface.FullName}\n" +
                 $"当前命名空间：{repoInterface.Namespace}\n\n" +
                 $"问题分析：\n" +
@@ -55,7 +55,7 @@ public sealed class ADR_123_Architecture_Tests
         {
             var startsWithI = repoInterface.Name.StartsWith("I");
             
-            startsWithI.Should().BeTrue($"❌ ADR-123_1_2 违规：Repository 接口命名不符合规范\n\n" +
+            startsWithI.Should().BeTrue($"❌ ADR-123_1_2 违规: Repository 接口命名不符合规范\n\n" +
                 $"违规接口：{repoInterface.FullName}\n" +
                 $"当前名称：{repoInterface.Name}\n\n" +
                 $"问题分析：\n" +

@@ -40,7 +40,7 @@ public sealed class ADR_201_Architecture_Tests
             {
                 var fieldNames = string.Join(", ", staticFields.Select(f => f.Name));
                 true.Should().BeFalse(
-                    $"❌ ADR-201_1_3 违规：Handler 使用静态字段存储状态\n\n" +
+                    $"❌ ADR-201_1_3 违规: Handler 使用静态字段存储状态\n\n" +
                     $"违规类型：{handler.FullName}\n" +
                     $"静态字段：{fieldNames}\n\n" +
                     $"问题分析：\n" +

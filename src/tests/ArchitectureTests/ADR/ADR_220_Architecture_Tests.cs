@@ -23,7 +23,7 @@ public sealed class ADR_220_Architecture_Tests
                 .HaveDependencyOn(dep)
                 .GetResult();
 
-            result.IsSuccessful.Should().BeTrue($"❌ ADR-220_1_1 违规：模块直接依赖具体事件总线实现\n\n" +
+            result.IsSuccessful.Should().BeTrue($"❌ ADR-220_1_1 违规: 模块直接依赖具体事件总线实现\n\n" +
                 $"违规实现：{dep}\n" +
                 $"违规类型：{string.Join(", ", result.FailingTypeNames ?? new List<string>())}\n\n" +
                 $"问题分析：\n" +
