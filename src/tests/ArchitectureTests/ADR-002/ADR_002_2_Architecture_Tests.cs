@@ -97,13 +97,13 @@ public sealed class ADR_002_2_Architecture_Tests
             .GetTypes()
             .ToList();
 
-        var message1 = BuildSimple(
+        var bootstrapperExistenceMessage = BuildSimple(
             ruleId: "ADR-002_2_3",
             summary: "Application 层必须包含 Bootstrapper 入口点",
             currentState: "未找到任何 Bootstrapper 类",
             remediation: "创建 ApplicationBootstrapper 类作为 Application 层的唯一入口，提供 public static void Configure() 方法",
             adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
-        bootstrappers.Should().NotBeEmpty(message1);
+        bootstrappers.Should().NotBeEmpty(bootstrapperExistenceMessage);
 
         var applicationBootstrapper = bootstrappers.FirstOrDefault(t => t.Name == "ApplicationBootstrapper");
         applicationBootstrapper.Should().NotBeNull();
@@ -113,7 +113,7 @@ public sealed class ADR_002_2_Architecture_Tests
             .Where(m => m.Name == "Configure")
             .ToList();
 
-        var message2 = Build(
+        var configureMethodExistenceMessage = Build(
             ruleId: "ADR-002_2_3",
             summary: "ApplicationBootstrapper 必须包含 Configure 方法",
             currentState: "ApplicationBootstrapper 类存在，但缺少 Configure 方法",
@@ -124,7 +124,7 @@ public sealed class ADR_002_2_Architecture_Tests
                 "在此方法中注册所有 Application 层服务和模块"
             },
             adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
-        configureMethods.Should().NotBeEmpty(message2);
+        configureMethods.Should().NotBeEmpty(configureMethodExistenceMessage);
     }
 
     /// <summary>
