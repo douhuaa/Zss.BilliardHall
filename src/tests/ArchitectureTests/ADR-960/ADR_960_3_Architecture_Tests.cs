@@ -1,7 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_960;
 
 /// <summary>
@@ -17,7 +13,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_960;
 public sealed class ADR_960_3_Architecture_Tests
 {
     private const string DocsPath = "docs";
-    
+
     // Onboarding 文档必需的章节
     private static readonly string[] RequiredSections = new[]
     {
@@ -82,7 +78,7 @@ public sealed class ADR_960_3_Architecture_Tests
             // 检查是否有 Fast Path
             var hasFastPath = content.Contains("Fast Path", StringComparison.OrdinalIgnoreCase) ||
                             content.Contains("快速上手", StringComparison.OrdinalIgnoreCase);
-            
+
             if (!hasFastPath)
             {
                 violations.Add($"{relativePath} - 缺少快速上手路径（Fast Path）");

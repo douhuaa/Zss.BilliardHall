@@ -1,8 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_007;
 
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 /// <summary>
 /// 验证 ADR-007_1：Agent 根本定位（Rule）
 /// 验证 ADR-007_1_1：Agent 定位规则
@@ -24,7 +21,7 @@ public sealed class ADR_007_1_Architecture_Tests
     {
         var agentPath = Path.Combine(RepoRoot, _agentFilesPath);
         if (!Directory.Exists(agentPath)) return Array.Empty<string>();
-        
+
         return Directory.GetFiles(agentPath, "*.agent.md", SearchOption.AllDirectories)
             .Where(f => !_systemAgents.Contains(Path.GetFileName(f)))
             .Where(f => !excludeGuardian || !Path.GetFileName(f).Equals("architecture-guardian.agent.md", StringComparison.OrdinalIgnoreCase))
@@ -83,7 +80,7 @@ public sealed class ADR_007_1_Architecture_Tests
             var fileName = Path.GetFileName(file);
 
             // Agent 应声明冲突时以 ADR 为准
-            var hasAuthorityDeclaration = 
+            var hasAuthorityDeclaration =
                 content.Contains("以 ADR", StringComparison.OrdinalIgnoreCase) ||
                 content.Contains("ADR 为准", StringComparison.OrdinalIgnoreCase) ||
                 content.Contains("ADR 正文", StringComparison.OrdinalIgnoreCase);

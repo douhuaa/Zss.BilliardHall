@@ -1,14 +1,9 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-using Zss.BilliardHall.Platform.Exceptions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
 /// ADR-240: Handler 异常约束
 /// 验证异常分类、可重试标记、命名空间约束
-/// 
+///
 /// ADR 映射清单（ADR Mapping Checklist）：
 /// ┌─────────────┬────────────────────────────────────────────────────────┬──────────┐
 /// │ 测试方法     │ 对应 ADR 约束                                          │ ADR 章节 │

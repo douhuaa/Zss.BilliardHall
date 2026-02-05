@@ -1,7 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_980;
 
 /// <summary>
@@ -38,12 +34,12 @@ public sealed class ADR_980_1_Architecture_Tests
             $"参考：docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md §1.1");
 
         var adrContent = File.ReadAllText(adr980Path);
-        
+
         // 提取 ADR-980 的版本号
         var adrVersionMatch = Regex.Match(adrContent, AdrVersionPattern);
         adrVersionMatch.Success.Should().BeTrue(
             $"❌ ADR-980_1_1 违规：ADR-980 缺少版本号字段");
-        
+
         var adrVersion = adrVersionMatch.Groups[1].Value;
         adrVersion.Should().Be("2.0",
             $"❌ ADR-980_1_1 违规：ADR-980 版本号应为 2.0（当前：{adrVersion}）");
@@ -58,7 +54,7 @@ public sealed class ADR_980_1_Architecture_Tests
         {
             var testContent = File.ReadAllText(testSourceFile);
             var testVersionMatch = Regex.Match(testContent, TestVersionPattern);
-            
+
             if (testVersionMatch.Success)
             {
                 var testVersion = testVersionMatch.Groups[1].Value;
@@ -83,7 +79,7 @@ public sealed class ADR_980_1_Architecture_Tests
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
         var content = File.ReadAllText(adr980Path);
-        
+
         // 验证版本号格式描述
         content.Should().Contain("version：X.Y",
             $"❌ ADR-980_1_2 违规：ADR-980 必须定义版本号格式规范\n\n" +
@@ -105,7 +101,7 @@ public sealed class ADR_980_1_Architecture_Tests
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
         var content = File.ReadAllText(adr980Path);
-        
+
         // 验证三位一体存在性规则
         content.Should().Contain("三位一体存在性",
             $"❌ ADR-980_1_6 违规：ADR-980 必须定义三位一体存在性规则");

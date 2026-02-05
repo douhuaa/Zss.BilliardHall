@@ -1,8 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_006;
 
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 /// <summary>
 /// ADR-006_2: 编号格式规则
 /// 验证 ADR-006_2_1：标准编号格式

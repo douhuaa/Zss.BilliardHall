@@ -1,7 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_950;
 
 /// <summary>
@@ -35,7 +31,7 @@ public sealed class ADR_950_3_Architecture_Tests
         }
 
         var guideFiles = Directory.GetFiles(guidesPath, "*.md", SearchOption.AllDirectories);
-        
+
         if (guideFiles.Length == 0)
         {
             Console.WriteLine("ℹ️ ADR-950_3_1: 没有找到 Guide 文档，跳过验证");

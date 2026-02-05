@@ -1,9 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907_A;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907_A;
 
 /// <summary>
 /// ADR-907-A_3: 测试绑定规则

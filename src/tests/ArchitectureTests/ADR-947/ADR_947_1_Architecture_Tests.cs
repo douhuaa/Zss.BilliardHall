@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_947;
 
 /// <summary>
@@ -38,7 +35,7 @@ public sealed class ADR_947_1_Architecture_Tests
 
             // 统计顶级 ## Relationships 章节的数量
             var relationshipSectionCount = lines
-                .Count(line => line.TrimStart().StartsWith("## Relationships") || 
+                .Count(line => line.TrimStart().StartsWith("## Relationships") ||
                                line.TrimStart().StartsWith("## 关系声明"));
 
             if (relationshipSectionCount == 0)

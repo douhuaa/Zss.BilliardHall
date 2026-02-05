@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_951;
 
 /// <summary>
@@ -39,12 +36,12 @@ public sealed class ADR_951_1_Architecture_Tests
 
         // 检查是否有分类子目录
         var subdirectories = FileSystemTestHelper.GetSubdirectories(casesDirectory);
-        
+
         if (subdirectories.Count > 0)
         {
             // 验证每个分类目录都有自己的 README.md
             var missingReadmes = new List<string>();
-            
+
             foreach (var subdir in subdirectories)
             {
                 var subdirReadme = Path.Combine(subdir, "README.md");

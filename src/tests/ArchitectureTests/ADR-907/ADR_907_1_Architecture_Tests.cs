@@ -1,18 +1,14 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 
 /// <summary>
 /// ADR-907_1: ArchitectureTests 的法律地位
 /// 验证 ArchitectureTests 作为 ADR 唯一自动化执法形式的相关规则
-/// 
+///
 /// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
 /// - ADR-907_1_1: 唯一自动化执法形式 → ADR_907_1_1_ArchitectureTests_Are_Sole_Automated_Enforcement
 /// - ADR-907_1_2: 可执法性要求 → ADR_907_1_2_ADRs_Must_Have_Tests_Or_Be_Non_Enforceable
 /// - ADR-907_1_3: 禁止仅文档约束 → ADR_907_1_3_No_Documentation_Only_Rules_Allowed
-/// 
+///
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md
 /// - Prompts: docs/copilot/adr-907.prompts.md
@@ -122,11 +118,11 @@ public sealed class ADR_907_1_Architecture_Tests
             // 旧格式：ADR_XXX_Architecture_Tests.cs（无Rule编号，在迁移期间允许）
             var testFilePattern4Digit = $"ADR_{adrNumber}_*_Architecture_Tests.cs";
             var testFilePattern3Digit = $"ADR_{adrNumber3Digit}_*_Architecture_Tests.cs";
-            
+
             // 也检查旧格式的测试文件（无Rule编号）
             var oldTestFilePattern4Digit = $"ADR_{adrNumber}_Architecture_Tests.cs";
             var oldTestFilePattern3Digit = $"ADR_{adrNumber3Digit}_Architecture_Tests.cs";
-            
+
             var hasTest = Directory.GetFiles(testsDirectory, testFilePattern4Digit, SearchOption.AllDirectories).Any() ||
                          Directory.GetFiles(testsDirectory, testFilePattern3Digit, SearchOption.AllDirectories).Any() ||
                          Directory.GetFiles(testsDirectory, oldTestFilePattern4Digit, SearchOption.AllDirectories).Any() ||

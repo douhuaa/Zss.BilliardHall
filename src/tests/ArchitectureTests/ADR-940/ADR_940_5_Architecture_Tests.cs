@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
@@ -22,9 +19,9 @@ public sealed class ADR_940_5_Architecture_Tests
     [Fact(DisplayName = "ADR-940_5_1: ADR 关系图可以成功生成")]
     public void ADR_940_5_1_Relationship_Map_Can_Be_Generated()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot 
+        var repoRoot = TestEnvironment.RepositoryRoot
             ?? throw new InvalidOperationException("未找到仓库根目录");
-        
+
         var adrPath = Path.Combine(repoRoot, "docs", "adr");
         var outputPath = Path.Combine(Path.GetTempPath(), $"ADR-RELATIONSHIP-MAP-{Guid.NewGuid()}.md");
 

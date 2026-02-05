@@ -1,10 +1,3 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 
 /// <summary>

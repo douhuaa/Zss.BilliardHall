@@ -1,13 +1,9 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
 /// ADR-122: 测试代码组织与命名规范
 /// 验证测试代码的目录结构、命名规范、组织规则
-/// 
+///
 /// ADR 映射清单（ADR Mapping Checklist）：
 /// ┌─────────────┬────────────────────────────────────────────────────────┬──────────┐
 /// │ 测试方法     │ 对应 ADR 约束                                          │ ADR 章节 │
@@ -30,9 +26,9 @@ public sealed class ADR_122_Architecture_Tests
         var testClasses = testAssembly
             .GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract)
-            .Where(t => t.GetMethods().Any(m => 
-                m.GetCustomAttributes(true).Any(a => 
-                    a.GetType().Name == "FactAttribute" || 
+            .Where(t => t.GetMethods().Any(m =>
+                m.GetCustomAttributes(true).Any(a =>
+                    a.GetType().Name == "FactAttribute" ||
                     a.GetType().Name == "TheoryAttribute")))
             .ToList();
 
@@ -78,11 +74,11 @@ public sealed class ADR_122_Architecture_Tests
     public void Test_Projects_Must_Follow_Naming_Convention(Assembly testAssembly)
     {
         var assemblyName = testAssembly.GetName().Name;
-        
+
         if (assemblyName == null)
             return;
 
-        var isValid = assemblyName.EndsWith(".Tests") || 
+        var isValid = assemblyName.EndsWith(".Tests") ||
                      assemblyName == "ArchitectureTests";
 
         isValid.Should().BeTrue($"❌ ADR-122_1_3 违规: 测试项目命名不符合规范\n\n" +

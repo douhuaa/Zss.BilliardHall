@@ -1,8 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_006;
 
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 /// <summary>
 /// ADR-006_3: 前导零规则
 /// 验证 ADR-006_3_1：前导零强制要求

@@ -1,8 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_006;
 
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 /// <summary>
 /// ADR-006_4: 目录归属规则
 /// 验证 ADR-006_4_1：目录层级映射

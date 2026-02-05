@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_950;
 
 /// <summary>
@@ -84,7 +81,7 @@ public sealed class ADR_950_2_Architecture_Tests
         foreach (var adrFile in adrFiles)
         {
             var content = File.ReadAllText(adrFile);
-            
+
             // ADR 必须包含 Decision 章节
             if (!content.Contains("## Decision", StringComparison.OrdinalIgnoreCase))
             {
@@ -119,7 +116,7 @@ public sealed class ADR_950_2_Architecture_Tests
         {
             var content = File.ReadAllText(guideFile);
             var fileName = Path.GetFileName(guideFile);
-            
+
             // Guide 应该包含步骤或 ADR 引用
             var hasSteps = content.Contains("步骤", StringComparison.OrdinalIgnoreCase) ||
                           content.Contains("Step", StringComparison.OrdinalIgnoreCase);

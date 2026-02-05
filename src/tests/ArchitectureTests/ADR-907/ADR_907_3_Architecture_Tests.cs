@@ -1,19 +1,15 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 
 /// <summary>
 /// ADR-907_3: 最小断言语义规范
 /// 验证 ArchitectureTests 的断言要求（原 ADR-904）
-/// 
+///
 /// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
 /// - ADR-907_3_1: 最小断言数量要求 → ADR_907_3_1_Test_Classes_Must_Have_Minimum_Assertions
 /// - ADR-907_3_2: 单一子规则映射 → ADR_907_3_2_Test_Methods_Must_Map_To_Single_Subrule
 /// - ADR-907_3_3: 失败信息可溯源性 → ADR_907_3_3_Failure_Messages_Must_Be_Traceable
 /// - ADR-907_3_4: 禁止形式化断言 → ADR_907_3_4_Formal_Assertions_Are_Prohibited
-/// 
+///
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md
 /// - Prompts: docs/copilot/adr-907.prompts.md
@@ -51,7 +47,7 @@ public sealed class ADR_907_3_Architecture_Tests
             // 使用统一的断言模式定义（支持所有常用的 FluentAssertions API）
             var assertPatterns = AssertionPatternHelper.GetAssertionPatterns();
 
-            var assertCount = assertPatterns.Sum(pattern => 
+            var assertCount = assertPatterns.Sum(pattern =>
                 Regex.Matches(content, pattern).Count);
 
             // 排除形式化断言
@@ -61,7 +57,7 @@ public sealed class ADR_907_3_Architecture_Tests
                 @"Assert\.False\s*\(\s*false\s*[,\)]",
             };
 
-            var formalCount = formalAssertions.Sum(pattern => 
+            var formalCount = formalAssertions.Sum(pattern =>
                 Regex.Matches(content, pattern).Count);
 
             var effectiveAssertCount = assertCount - formalCount;
@@ -130,7 +126,7 @@ public sealed class ADR_907_3_Architecture_Tests
                 // 检查 DisplayName 中是否引用了多个 ADR 子规则
                 // 格式：ADR-907_1_1, ADR-907_1_2 等
                 var subruleMatches = Regex.Matches(displayName, @"ADR-\d{3,4}_\d+_\d+");
-                
+
                 if (subruleMatches.Count > 1)
                 {
                     violations.Add($"  • {fileName}.{methodName} - DisplayName 引用了多个子规则");
@@ -139,7 +135,7 @@ public sealed class ADR_907_3_Architecture_Tests
                 // 检查方法名中是否包含多个子规则引用
                 // 格式：ADR_907_1_1, ADR_907_1_2 等
                 var methodSubrules = Regex.Matches(methodName, @"ADR_\d{3,4}_\d+_\d+");
-                
+
                 if (methodSubrules.Count > 1)
                 {
                     violations.Add($"  • {fileName}.{methodName} - 方法名包含多个子规则引用");
@@ -203,7 +199,7 @@ public sealed class ADR_907_3_Architecture_Tests
             {
                 // 使用辅助方法提取完整消息
                 var fullMessage = AssertionPatternHelper.ExtractFullMessage(assertMatch);
-                
+
                 // 检查失败消息的完整性
                 var hasAdrReference = Regex.IsMatch(fullMessage, $@"ADR-0*{adrNumber}[_\d]*");
                 var hasViolationMarker = fullMessage.Contains("违规") || fullMessage.Contains("violation");

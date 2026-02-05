@@ -1,8 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_007;
 
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 /// <summary>
 /// 验证 ADR-007_2：三态输出规则（Rule）
 /// 验证 ADR-007_2_1：三态标识要求
@@ -24,7 +21,7 @@ public sealed class ADR_007_2_Architecture_Tests
     {
         var agentPath = Path.Combine(RepoRoot, _agentFilesPath);
         if (!Directory.Exists(agentPath)) return Array.Empty<string>();
-        
+
         return Directory.GetFiles(agentPath, "*.agent.md", SearchOption.AllDirectories)
             .Where(f => !_systemAgents.Contains(Path.GetFileName(f)))
             .ToArray();
@@ -44,7 +41,7 @@ public sealed class ADR_007_2_Architecture_Tests
             var fileName = Path.GetFileName(file);
 
             var missingStates = new List<string>();
-            
+
             // 检查是否提及三态输出
             if (!content.Contains("✅", StringComparison.OrdinalIgnoreCase) &&
                 !content.Contains("Allowed", StringComparison.OrdinalIgnoreCase))
@@ -93,7 +90,7 @@ public sealed class ADR_007_2_Architecture_Tests
             var fileName = Path.GetFileName(file);
 
             // 检查是否声明了"默认禁止"原则
-            var hasDefaultForbiddenPrinciple = 
+            var hasDefaultForbiddenPrinciple =
                 content.Contains("默认禁止", StringComparison.OrdinalIgnoreCase) ||
                 content.Contains("假定禁止", StringComparison.OrdinalIgnoreCase) ||
                 (content.Contains("Uncertain", StringComparison.OrdinalIgnoreCase) &&
@@ -128,7 +125,7 @@ public sealed class ADR_007_2_Architecture_Tests
             var fileName = Path.GetFileName(file);
 
             // 检查是否禁止模糊判断
-            var hasFuzzyJudgmentProhibition = 
+            var hasFuzzyJudgmentProhibition =
                 content.Contains("禁止模糊", StringComparison.OrdinalIgnoreCase) ||
                 (content.Contains("应该没问题", StringComparison.OrdinalIgnoreCase) &&
                  content.Contains("❌", StringComparison.OrdinalIgnoreCase)) ||

@@ -1,6 +1,3 @@
-using System.Diagnostics;
-using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>

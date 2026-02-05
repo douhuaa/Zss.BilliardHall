@@ -1,7 +1,3 @@
-using FluentAssertions;
-using System.Text.RegularExpressions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_952;
 
 /// <summary>
@@ -54,8 +50,8 @@ public sealed class ADR_952_2_Architecture_Tests
             var content = File.ReadAllText(standardFile);
 
             // 检查是否明确声明基于的 ADR
-            var hasAdrReference = Regex.IsMatch(content, 
-                @"(基于|Based\s+on)\s*ADR-\d{3,4}", 
+            var hasAdrReference = Regex.IsMatch(content,
+                @"(基于|Based\s+on)\s*ADR-\d{3,4}",
                 RegexOptions.IgnoreCase);
 
             if (!hasAdrReference)

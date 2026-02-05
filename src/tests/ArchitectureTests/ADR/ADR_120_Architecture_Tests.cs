@@ -1,15 +1,9 @@
-﻿using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
-
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
 /// ADR-120: 领域事件命名规范
 /// 验证领域事件命名、命名空间组织、版本演进和模块隔离约束
-/// 
+///
 /// 约束映射（对应 ADR-120 快速参考表）：
 /// ┌──────────────┬────────────────────────────────────────────────────────┬─────────┬────────────────────────────────────────────────────┐
 /// │ 约束编号     │ 描述                                                    │ 层级    │ 测试方法                                            │
@@ -21,7 +15,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 /// │ ADR-120.5    │ 事件不得包含领域实体类型                                  │ L1      │ Events_Should_Not_Contain_Domain_Entities          │
 /// │ ADR-120.6    │ 事件不得包含业务方法                                      │ L1      │ Events_Should_Not_Contain_Business_Methods         │
 /// └──────────────┴────────────────────────────────────────────────────────┴─────────┴────────────────────────────────────────────────────┘
-/// 
+///
 /// 注：ADR-120.7（文件名与类型名一致）已移除，因其耦合仓库物理结构，属于代码组织习惯而非架构约束。
 /// </summary>
 public sealed class ADR_120_Architecture_Tests
@@ -154,7 +148,7 @@ public sealed class ADR_120_Architecture_Tests
                     "   - Zss.BilliardHall.Modules.Orders.Domain.Events (非标准)"
                 },
                 adrReference: "docs/adr/structure/ADR-120-domain-event-naming-convention.md");
-            
+
             isValidNamespace.Should().BeTrue(message);
         }
     }
@@ -219,7 +213,7 @@ public sealed class ADR_120_Architecture_Tests
                     "禁止使用 Processor、Service 等后缀"
                 },
                 adrReference: "docs/adr/structure/ADR-120-domain-event-naming-convention.md");
-            
+
             handlerType.Name.EndsWith("Handler").Should().BeTrue(message);
         }
     }
@@ -297,7 +291,7 @@ public sealed class ADR_120_Architecture_Tests
                                 "事件应该是不可变的数据快照，不包含行为"
                             },
                             adrReference: "docs/adr/structure/ADR-120-domain-event-naming-convention.md");
-                        
+
                         true.Should().BeFalse(message);
                     }
                 }
@@ -356,7 +350,7 @@ public sealed class ADR_120_Architecture_Tests
                         "   - 协调逻辑 → Handler"
                     },
                     adrReference: "docs/adr/structure/ADR-120-domain-event-naming-convention.md");
-                
+
                 true.Should().BeFalse(message);
             }
         }

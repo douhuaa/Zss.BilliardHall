@@ -1,10 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907_A;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907_A;
 
 /// <summary>
 /// ADR-907-A_1: 对齐标准与格式规范

@@ -1,7 +1,3 @@
-using FluentAssertions;
-using System.Text.RegularExpressions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_947;
 
 /// <summary>
@@ -65,8 +61,8 @@ public sealed class ADR_947_2_Architecture_Tests
                 // 检查是否为有效的关系类型标题（粗体）
                 if (trimmedLine.StartsWith("**"))
                 {
-                    var validHeaders = new[] { "**依赖", "**被依赖", "**替代", "**被替代", "**相关", 
-                                              "**Depends On**", "**Depended By**", "**Supersedes**", 
+                    var validHeaders = new[] { "**依赖", "**被依赖", "**替代", "**被替代", "**相关",
+                                              "**Depends On**", "**Depended By**", "**Supersedes**",
                                               "**Superseded By**", "**Related**" };
                     var isValidHeader = validHeaders.Any(h => trimmedLine.StartsWith(h));
                     if (!isValidHeader)
@@ -112,7 +108,7 @@ public sealed class ADR_947_2_Architecture_Tests
         // 必须是行首的 ## Relationships，不匹配代码示例中的内容
         var pattern = @"^##\s+(Relationships|关系声明).*?\n(.*?)(?=\n##\s|\z)";
         var match = Regex.Match(content, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Multiline);
-        
+
         return match.Success ? match.Groups[2].Value : string.Empty;
     }
 }

@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
@@ -19,12 +16,12 @@ public sealed class ADR_940_4_Architecture_Tests
 
     public ADR_940_4_Architecture_Tests()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot 
+        var repoRoot = TestEnvironment.RepositoryRoot
             ?? throw new InvalidOperationException("未找到仓库根目录（无法定位 docs/adr 或 .git）");
-        
+
         var adrPath = Path.Combine(repoRoot, "docs", "adr");
         var repo = new AdrRepository(adrPath);
-        
+
         _adrs = repo.LoadAll().ToDictionary(a => a.Id);
     }
 
@@ -36,13 +33,13 @@ public sealed class ADR_940_4_Architecture_Tests
     public void ADR_940_4_1_Dependencies_Must_Not_Form_Cycles()
     {
         var cycles = DetectCycles();
-        
+
         if (cycles.Count > 0)
         {
-            var violations = cycles.Select(cycle => 
+            var violations = cycles.Select(cycle =>
                 $"❌ 检测到循环依赖：\n   " + string.Join(" → ", cycle) + " → " + cycle[0]
             );
-            
+
             true.Should().BeFalse($"发现 {cycles.Count} 个循环依赖：\n\n" + string.Join("\n\n", violations));
         }
     }

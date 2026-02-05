@@ -1,7 +1,3 @@
-using FluentAssertions;
-using System.Text.RegularExpressions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_955;
 
 /// <summary>
@@ -26,7 +22,7 @@ public sealed class ADR_955_1_Architecture_Tests
     public void ADR_955_1_1_Documents_Must_Have_Required_Metadata()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        
+
         var documentDirectories = new[]
         {
             Path.Combine(repoRoot, "docs/guides"),

@@ -1,7 +1,3 @@
-using FluentAssertions;
-using System.Text.RegularExpressions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_952;
 
 /// <summary>
@@ -59,8 +55,8 @@ public sealed class ADR_952_1_Architecture_Tests
             if (!hasAdrReference)
             {
                 // 检查是否使用了强制性语言
-                var hasMandatoryLanguage = Regex.IsMatch(content, 
-                    @"(必须|禁止|不得|强制|Mandatory|Must|Shall|Forbidden)", 
+                var hasMandatoryLanguage = Regex.IsMatch(content,
+                    @"(必须|禁止|不得|强制|Mandatory|Must|Shall|Forbidden)",
                     RegexOptions.IgnoreCase);
 
                 if (hasMandatoryLanguage)

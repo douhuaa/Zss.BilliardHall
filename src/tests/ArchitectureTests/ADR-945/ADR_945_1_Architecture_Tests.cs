@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_945;
 
 /// <summary>
@@ -38,11 +35,11 @@ public sealed class ADR_945_1_Architecture_Tests
 
         // 验证必要的结构元素
         content.Should().Contain("ADR", "时间线文件应包含 ADR 引用");
-        
+
         // 验证包含时间信息
         var hasTimeInfo = content.Contains("20") && // 年份
                          (content.Contains("-") || content.Contains("/"));  // 日期分隔符
-        
+
         hasTimeInfo.Should().BeTrue("时间线文件应包含日期信息");
     }
 

@@ -1,7 +1,3 @@
-using System.Xml;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_004;
 
 /// <summary>
@@ -195,13 +191,13 @@ public sealed class ADR_004_3_Architecture_Tests
         // 这里主要验证包管理角度的层级约束
 
         var root = TestEnvironment.RepositoryRoot;
-        
+
         // 验证 Host 项目不直接依赖模块包
         var hostDir = Path.Combine(root, "src", "Host");
         if (Directory.Exists(hostDir))
         {
             var hostProjects = Directory.GetFiles(hostDir, "*.csproj", SearchOption.AllDirectories);
-            
+
             foreach (var projectFile in hostProjects)
             {
                 var doc = new XmlDocument();

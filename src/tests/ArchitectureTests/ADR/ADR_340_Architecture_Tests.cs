@@ -1,25 +1,20 @@
-using System.Reflection;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-using NetArchTest.Rules;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
 /// ADR-340: 结构化日志与监控约束
 /// 验证 Platform 层正确引用日志包，Application/Modules 层不直接配置日志
-/// 
+///
 /// 测试-ADR 映射清单：
 /// ├─ ADR-340.1: Platform_Must_Reference_Logging_Packages → Platform 必须引用日志基础设施包
 /// ├─ ADR-340.2: PlatformBootstrapper_Must_Contain_Logging_Configuration → PlatformBootstrapper 必须包含配置代码
 /// ├─ ADR-340.3: （Roslyn Analyzer 待实现）Handler 禁止使用 Console 输出
 /// ├─ ADR-340.4: （Roslyn Analyzer 待实现）日志调用禁止使用字符串插值
 /// └─ ADR-340.5: Modules_Cannot_Reference_Logging_Implementation → Modules 禁止直接引用日志实现
-/// 
+///
 /// 执行能力说明：
 /// - L1 规则（340.1/340.2/340.5）：当前可通过 NetArchTest 和文本检查验证，CI 阻断
 /// - L2 规则（340.3/340.4）：需要 Roslyn Analyzer，当前作为 Review Gate，不参与 CI 阻断
-/// 
+///
 /// 参考文档：
 /// - ADR-340: docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md
 /// - 工程标准: docs/guides/structured-logging-monitoring-standard.md
@@ -58,7 +53,7 @@ public sealed class ADR_340_Architecture_Tests
         };
 
         var missingPackages = requiredPackages.Where(pkg => !content.Contains(pkg)).ToList();
-        
+
         var missingPackagesText = missingPackages.Any()
             ? string.Join("\n", missingPackages.Select(pkg => $"  - {pkg}"))
             : "";
@@ -228,7 +223,7 @@ public sealed class ADR_340_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var configuration = GetBuildConfiguration();
         var applicationDll = Path.Combine(root, "src", "Application", "bin", configuration, "net10.0", "Application.dll");
-        
+
         if (!File.Exists(applicationDll))
         {
             true.Should().BeFalse($"❌ ADR-340_1_5 违规: 未找到 Application.dll，无法验证 Serilog 依赖隔离\n\n" +
@@ -272,7 +267,7 @@ public sealed class ADR_340_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var configuration = GetBuildConfiguration();
         var applicationDll = Path.Combine(root, "src", "Application", "bin", configuration, "net10.0", "Application.dll");
-        
+
         if (!File.Exists(applicationDll))
         {
             true.Should().BeFalse($"❌ ADR-340_1_5 违规: 未找到 Application.dll，无法验证 OpenTelemetry 依赖隔离\n\n" +
@@ -326,7 +321,7 @@ public sealed class ADR_340_Architecture_Tests
         {
             return "Release";
         }
-        
+
         // 默认使用 Debug
         return "Debug";
     }

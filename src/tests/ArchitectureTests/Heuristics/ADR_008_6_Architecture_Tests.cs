@@ -1,8 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Xunit.Abstractions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Heuristics;
 
 /// <summary>
@@ -14,7 +9,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Heuristics;
 ///
 /// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
-/// 
+///
 /// 定位说明：
 /// - 品味建议，非强制规则
 /// - 不失败构建，仅输出警告
@@ -40,7 +35,7 @@ public sealed class ADR_008_6_Architecture_Tests
         if (repoRoot == null) return;
 
         var suggestions = new List<string>();
-        
+
         // 命令式语气词汇（建议改为描述性）
         var imperativePhrases = new[]
         {
@@ -59,7 +54,7 @@ public sealed class ADR_008_6_Architecture_Tests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             foreach (var phrase in imperativePhrases)
             {
                 if (content.Contains(phrase))
@@ -108,11 +103,11 @@ public sealed class ADR_008_6_Architecture_Tests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             // 检查是否包含代码示例
             var hasCodeExample = Regex.IsMatch(content, @"```[\s\S]*?```");
             var hasCheckMark = content.Contains("✅") || content.Contains("❌");
-            
+
             if (!hasCodeExample && !hasCheckMark)
             {
                 suggestions.Add($"  💡 {relativePath} - 建议添加代码示例或对比标记（✅/❌）");
@@ -161,15 +156,15 @@ public sealed class ADR_008_6_Architecture_Tests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             var lineCount = content.Split('\n').Length;
-            
+
             // ADR 建议不超过 500 行
             if (file.Contains("/adr/", StringComparison.OrdinalIgnoreCase) && lineCount > 500)
             {
                 suggestions.Add($"  💡 {relativePath} - ADR 较长 ({lineCount} 行)，建议拆分为多个 ADR");
             }
-            
+
             // README 建议不超过 300 行
             if (Path.GetFileName(file).Equals("README.md", StringComparison.OrdinalIgnoreCase) && lineCount > 300)
             {

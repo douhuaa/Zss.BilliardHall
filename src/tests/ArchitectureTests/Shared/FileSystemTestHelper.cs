@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>
@@ -52,8 +50,8 @@ public static class FileSystemTestHelper
     /// <param name="searchOption">搜索选项，默认为 TopDirectoryOnly</param>
     /// <returns>文件路径列表</returns>
     public static IReadOnlyList<string> GetFilesInDirectory(
-        string directoryPath, 
-        string searchPattern = "*", 
+        string directoryPath,
+        string searchPattern = "*",
         SearchOption searchOption = SearchOption.TopDirectoryOnly)
     {
         if (!Directory.Exists(directoryPath))

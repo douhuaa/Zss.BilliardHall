@@ -1,7 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
 /// <summary>
@@ -14,7 +10,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 /// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
 /// - 来源决策: ADR-008 决策 3.1
-/// 
+///
 /// 执法说明：
 /// - 失败 = CI 阻断
 /// </summary>
@@ -42,13 +38,13 @@ public sealed class ADR_008_3_Architecture_Tests
                 var content = File.ReadAllText(file);
                 var relativePath = Path.GetRelativePath(repoRoot, file);
 
-                var hasAuthorityDeclaration = 
-                    content.Contains("权威声明") || 
+                var hasAuthorityDeclaration =
+                    content.Contains("权威声明") ||
                     content.Contains("权威依据") ||
                     (content.Contains("基于") && content.Contains("ADR")) ||
                     content.Contains("服从") && content.Contains("ADR");
 
-                var hasConflictResolution = 
+                var hasConflictResolution =
                     (content.Contains("冲突") && content.Contains("ADR") && content.Contains("为准")) ||
                     content.Contains("以 ADR 正文为准") ||
                     content.Contains("ADR 正文为唯一");
@@ -78,11 +74,11 @@ public sealed class ADR_008_3_Architecture_Tests
                 var content = File.ReadAllText(file);
                 var relativePath = Path.GetRelativePath(repoRoot, file);
 
-                var hasAuthorityDeclaration = 
-                    content.Contains("权威声明") || 
+                var hasAuthorityDeclaration =
+                    content.Contains("权威声明") ||
                     (content.Contains("ADR") && (content.Contains("唯一裁决") || content.Contains("唯一权威") || content.Contains("正文为准")));
 
-                var declaresAdrBasis = 
+                var declaresAdrBasis =
                     Regex.IsMatch(content, @"ADR[-\s]*\d+", RegexOptions.IgnoreCase);
 
                 if (!hasAuthorityDeclaration)

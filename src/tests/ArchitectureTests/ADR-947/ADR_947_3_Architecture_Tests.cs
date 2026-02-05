@@ -1,7 +1,3 @@
-using FluentAssertions;
-using System.Text.RegularExpressions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_947;
 
 /// <summary>
@@ -105,7 +101,7 @@ public sealed class ADR_947_3_Architecture_Tests
     {
         var pattern = @"##\s*(Relationships|关系声明).*?\n(.*?)(?=\n##\s|\z)";
         var match = Regex.Match(content, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
-        
+
         return match.Success ? match.Groups[2].Value : string.Empty;
     }
 
@@ -113,7 +109,7 @@ public sealed class ADR_947_3_Architecture_Tests
     {
         var pattern = @"ADR-(\d{3,4})";
         var matches = Regex.Matches(content, pattern);
-        
+
         return matches.Select(m => m.Groups[1].Value).Distinct().ToList();
     }
 }

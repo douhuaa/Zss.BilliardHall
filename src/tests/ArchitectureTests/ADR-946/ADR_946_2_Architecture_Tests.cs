@@ -1,7 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_946;
 
 /// <summary>
@@ -17,7 +13,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_946;
 public sealed class ADR_946_2_Architecture_Tests
 {
     private const string AdrDocsPath = "docs/adr";
-    
+
     // 关键语义块标题（在示例/模板中不能直接使用 ## 级别）
     private static readonly string[] KeySemanticHeadings = new[]
     {
@@ -67,7 +63,7 @@ public sealed class ADR_946_2_Architecture_Tests
             {
                 lineNumber++;
                 var trimmed = line.TrimStart();
-                
+
                 // 检测代码块边界
                 if (trimmed.StartsWith("```"))
                 {

@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>

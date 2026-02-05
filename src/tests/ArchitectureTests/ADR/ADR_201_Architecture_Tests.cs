@@ -1,13 +1,9 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
 /// ADR-201: Command Handler 生命周期管理
 /// 验证 Handler 生命周期、依赖注入、资源释放等运行时规则
-/// 
+///
 /// ADR 映射清单（ADR Mapping Checklist）：
 /// ┌─────────────┬────────────────────────────────────────────────────────┬──────────┐
 /// │ 测试方法     │ 对应 ADR 约束                                          │ ADR 章节 │

@@ -1,7 +1,3 @@
-using System.Xml;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_004;
 
 /// <summary>

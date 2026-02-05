@@ -1,13 +1,9 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 
 /// <summary>
 /// ADR-907_2: 命名与组织规范
 /// 验证 ArchitectureTests 的命名和组织规则（原 ADR-903）
-/// 
+///
 /// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
 /// - ADR-907_2_1: 独立测试项目要求 → ADR_907_2_1_ArchitectureTests_Project_Must_Exist
 /// - ADR-907_2_2: ADR 编号目录分组 → ADR_907_2_2_Test_Directory_Must_Be_Organized_By_ADR_Number
@@ -17,7 +13,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 /// - ADR-907_2_6: 失败信息溯源要求 → ADR_907_2_6_Failure_Messages_Must_Reference_ADR
 /// - ADR-907_2_7: 禁止空弱断言 → ADR_907_2_7_Tests_Must_Have_Valid_Assertions
 /// - ADR-907_2_8: 禁止跳过测试 → ADR_907_2_8_Tests_Must_Not_Be_Skipped
-/// 
+///
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md
 /// - Prompts: docs/copilot/adr-907.prompts.md
@@ -70,7 +66,7 @@ public sealed class ADR_907_2_Architecture_Tests
         // 验证至少存在按 ADR 编号组织的目录
         var adrDirectories = Directory.GetDirectories(testsDirectory, "ADR-*", SearchOption.TopDirectoryOnly);
         var hasAdrDirectory = adrDirectories.Length > 0 || Directory.Exists(Path.Combine(testsDirectory, "ADR"));
-        
+
         hasAdrDirectory.Should().BeTrue(
             $"❌ ADR-907_2_2 违规：未找到按 ADR 编号组织的测试目录\n\n" +
             $"当前路径：{testsDirectory}\n" +
@@ -103,7 +99,7 @@ public sealed class ADR_907_2_Architecture_Tests
         foreach (var testFile in testFiles)
         {
             var fileName = Path.GetFileName(testFile);
-            
+
             // 测试类命名必须遵循 ADR_XXXX_Architecture_Tests.cs 格式
             if (!Regex.IsMatch(fileName, @"^ADR_\d{3,4}_Architecture_Tests\.cs$"))
             {
@@ -113,17 +109,17 @@ public sealed class ADR_907_2_Architecture_Tests
 
             // 验证文件内容主要测试单一 ADR
             var content = File.ReadAllText(testFile);
-            
+
             // 提取文件名中的 ADR 编号
             var fileAdrMatch = Regex.Match(fileName, @"ADR_(\d{3,4})_");
             if (!fileAdrMatch.Success)
                 continue;
 
             var fileAdr = fileAdrMatch.Groups[1].Value;
-            
+
             // 查找测试方法的 DisplayName
             var displayNames = Regex.Matches(content, @"DisplayName\s*=\s*""([^""]+)""");
-            
+
             foreach (Match match in displayNames)
             {
                 var displayName = match.Groups[1].Value;
@@ -304,7 +300,7 @@ public sealed class ADR_907_2_Architecture_Tests
             {
                 // 使用辅助方法提取完整消息
                 var fullMessage = AssertionPatternHelper.ExtractFullMessage(assertMatch);
-                
+
                 // 检查完整消息是否包含 ADR 引用
                 // 格式：❌ ADR-XXX 或 ❌ ADR-XXX_Y_Z
                 var hasAdrReference = Regex.IsMatch(fullMessage, $@"ADR-0*{adrNumber}[_\d]*\s+违规");

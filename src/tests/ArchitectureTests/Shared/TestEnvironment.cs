@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>
@@ -8,9 +6,9 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 /// </summary>
 public static class TestEnvironment
 {
-    private static readonly Lazy<string> _repositoryRoot = 
+    private static readonly Lazy<string> _repositoryRoot =
         new(() => FindRepositoryRootCore() ?? throw new InvalidOperationException(
-            "未找到仓库根目录。请确保在解决方案根目录或其子目录中运行测试。"), 
+            "未找到仓库根目录。请确保在解决方案根目录或其子目录中运行测试。"),
             LazyThreadSafetyMode.ExecutionAndPublication);
 
     /// <summary>
@@ -56,22 +54,22 @@ public static class TestEnvironment
     private static string? FindRepositoryRootCore()
     {
         var current = new DirectoryInfo(AppContext.BaseDirectory);
-        
+
         Debug.WriteLine($"[TestEnvironment] 开始查找仓库根目录，起始路径: {current.FullName}");
-        
+
         while (current != null)
         {
             var slnxPath = Path.Combine(current.FullName, "Zss.BilliardHall.slnx");
-            
+
             if (File.Exists(slnxPath))
             {
                 Debug.WriteLine($"[TestEnvironment] 找到仓库根目录: {current.FullName}");
                 return current.FullName;
             }
-            
+
             current = current.Parent;
         }
-        
+
         Debug.WriteLine("[TestEnvironment] 未找到仓库根目录");
         return null;
     }

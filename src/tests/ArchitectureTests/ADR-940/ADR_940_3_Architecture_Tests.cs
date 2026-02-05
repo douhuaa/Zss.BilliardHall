@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
@@ -13,7 +10,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 ///
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-940-adr-relationship-and-traceability.md
-/// 
+///
 /// 实现说明：
 /// - 使用 AdrTestFixture 统一加载 ADR 文档，避免重复代码
 /// - 使用 AdrRelationshipValidator 验证关系，避免代码重复

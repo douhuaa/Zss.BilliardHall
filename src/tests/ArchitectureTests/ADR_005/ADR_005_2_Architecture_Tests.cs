@@ -1,8 +1,4 @@
-﻿using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
 
 /// <summary>
 /// 验证 ADR-005_2_1：Handler 不得持有业务状态

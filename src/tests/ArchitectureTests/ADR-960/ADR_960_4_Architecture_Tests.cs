@@ -1,7 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_960;
 
 /// <summary>
@@ -26,16 +22,16 @@ public sealed class ADR_960_4_Architecture_Tests
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
-        
+
         File.Exists(adr960Path).Should().BeTrue(
             $"❌ ADR-960_4_1 违规：ADR-960 文档不存在");
-        
+
         var content = File.ReadAllText(adr960Path);
-        
+
         // 验证定义了维护规则
         var hasMaintenanceRules = content.Contains("绑定 ADR 演进", StringComparison.OrdinalIgnoreCase) ||
                                  content.Contains("必须评估是否更新", StringComparison.OrdinalIgnoreCase);
-        
+
         hasMaintenanceRules.Should().BeTrue(
             $"❌ ADR-960_4_1 违规：ADR-960 必须定义 Onboarding 维护规则\n\n" +
             $"维护规则应包括：\n" +
@@ -44,11 +40,11 @@ public sealed class ADR_960_4_Architecture_Tests
             $"  3. 当新的核心 Case 出现时\n" +
             $"  4. 至少每半年一次有效性审计\n\n" +
             $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §4.1");
-        
+
         // 验证定义了审计频率
         var hasSemiAnnualAudit = content.Contains("半年", StringComparison.OrdinalIgnoreCase) ||
                                 content.Contains("6 个月", StringComparison.OrdinalIgnoreCase);
-        
+
         hasSemiAnnualAudit.Should().BeTrue(
             $"❌ ADR-960_4_1 违规：ADR-960 必须定义审计频率（至少每半年一次）\n\n" +
             $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §4.1");
@@ -63,16 +59,16 @@ public sealed class ADR_960_4_Architecture_Tests
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
-        
+
         File.Exists(adr960Path).Should().BeTrue(
             $"❌ ADR-960_4_2 违规：ADR-960 文档不存在");
-        
+
         var content = File.ReadAllText(adr960Path);
-        
+
         // 验证定义了失效处理流程
         var hasDeprecationProcess = content.Contains("失效处理", StringComparison.OrdinalIgnoreCase) ||
                                    content.Contains("内容误导", StringComparison.OrdinalIgnoreCase);
-        
+
         hasDeprecationProcess.Should().BeTrue(
             $"❌ ADR-960_4_2 违规：ADR-960 必须定义 Onboarding 失效处理流程\n\n" +
             $"失效处理应包括：\n" +
@@ -80,12 +76,12 @@ public sealed class ADR_960_4_Architecture_Tests
             $"  2. 无法及时修复 → 标记 [可能过时]\n" +
             $"  3. 不允许长期错误但'懒得改'\n\n" +
             $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §4.2");
-        
+
         // 验证禁止过时内容长期存在
         var forbidsOutdatedContent = content.Contains("不允许", StringComparison.OrdinalIgnoreCase) &&
                                     (content.Contains("过时", StringComparison.OrdinalIgnoreCase) ||
                                      content.Contains("废弃", StringComparison.OrdinalIgnoreCase));
-        
+
         forbidsOutdatedContent.Should().BeTrue(
             $"❌ ADR-960_4_2 违规：ADR-960 必须明确禁止过时内容长期存在\n\n" +
             $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §4.2");

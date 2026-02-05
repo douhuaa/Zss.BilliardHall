@@ -1,9 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_900;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_900;
 
 /// <summary>
 /// ADR-900_3: 破例治理机制

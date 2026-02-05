@@ -1,8 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_008;
 
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 /// <summary>
 /// 验证 ADR-008_1：文档分级与裁决权（Rule）
 /// 验证 ADR-008_1_1：文档分级定义
@@ -51,7 +48,7 @@ public sealed class ADR_008_1_Architecture_Tests
             var fileName = Path.GetFileName(file);
 
             // ADR 应该包含 Decision 章节
-            content.Should().Contain("## Decision", 
+            content.Should().Contain("## Decision",
                 $"❌ ADR-008_1_2 违规：{fileName} 缺少 Decision 章节\n\n" +
                 "修复建议：\n" +
                 "1. ADR 文档必须包含 Decision 章节\n" +
@@ -78,12 +75,12 @@ public sealed class ADR_008_1_Architecture_Tests
             var fileName = Path.GetRelativePath(RepoRoot, file);
 
             // 检查是否包含裁决性语言（但没有声明无裁决力）
-            var hasDecisionLanguage = 
+            var hasDecisionLanguage =
                 content.Contains("必须", StringComparison.OrdinalIgnoreCase) ||
                 content.Contains("禁止", StringComparison.OrdinalIgnoreCase) ||
                 content.Contains("不允许", StringComparison.OrdinalIgnoreCase);
 
-            var hasDisclaimerDeclaration = 
+            var hasDisclaimerDeclaration =
                 content.Contains("无裁决力", StringComparison.OrdinalIgnoreCase) ||
                 content.Contains("不具备裁决", StringComparison.OrdinalIgnoreCase);
 

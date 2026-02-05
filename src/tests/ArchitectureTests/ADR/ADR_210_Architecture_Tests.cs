@@ -1,7 +1,3 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
@@ -26,7 +22,7 @@ public sealed class ADR_210_Architecture_Tests
         foreach (var eventType in eventTypes)
         {
             var hasSchemaVersion = eventType.GetProperty("SchemaVersion") != null;
-            
+
             hasSchemaVersion.Should().BeTrue($"❌ ADR-210_1_1 违规: 事件缺少 SchemaVersion 属性\n\n" +
                 $"违规类型：{eventType.FullName}\n\n" +
                 $"问题分析：\n" +

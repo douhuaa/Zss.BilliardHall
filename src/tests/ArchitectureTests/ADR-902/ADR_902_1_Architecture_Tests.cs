@@ -1,19 +1,15 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_902;
 
 /// <summary>
 /// ADR-902_1: ADR 结构完整性
 /// 验证 ADR 文档符合结构完整性要求
-/// 
+///
 /// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
 /// - ADR-902_1_1: 规则条目必须独立编号
-/// - ADR-902_1_2: 统一模板结构  
+/// - ADR-902_1_2: 统一模板结构
 /// - ADR-902_1_3: 标准 Front Matter
 /// - ADR-902_1_4: 包含完整章节集合
-/// 
+///
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-902-adr-template-structure-contract.md
 /// - Prompts: docs/copilot/adr-902.prompts.md
@@ -81,9 +77,9 @@ public sealed class ADR_902_1_Architecture_Tests
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var violations = new List<string>();
-        
+
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
-        
+
         if (!Directory.Exists(adrDirectory))
         {
             true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
@@ -100,21 +96,21 @@ public sealed class ADR_902_1_Architecture_Tests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             // 提取 ADR 编号（如 ADR-902）
             var adrNumber = ExtractAdrNumber(Path.GetFileNameWithoutExtension(file));
             if (string.IsNullOrEmpty(adrNumber))
                 continue;
-            
+
             // 查找 Decision 章节
             var decisionSection = ExtractDecisionSection(content);
             if (string.IsNullOrEmpty(decisionSection))
                 continue;
-            
+
             // 检查规则标题格式：### ADR-XXX_Y：<规则标题>（Rule）
             var rulePattern = $@"^###\s+{Regex.Escape(adrNumber)}_(\d+)：.+（Rule）";
             var ruleMatches = Regex.Matches(decisionSection, rulePattern, RegexOptions.Multiline);
-            
+
             if (ruleMatches.Count > 0)
             {
                 // 验证规则编号连续性
@@ -122,7 +118,7 @@ public sealed class ADR_902_1_Architecture_Tests
                     .Select(m => int.Parse(m.Groups[1].Value))
                     .OrderBy(n => n)
                     .ToList();
-                
+
                 for (int i = 0; i < ruleNumbers.Count; i++)
                 {
                     if (ruleNumbers[i] != i + 1)
@@ -167,18 +163,18 @@ public sealed class ADR_902_1_Architecture_Tests
         // 验证 ADR-902 文档存在
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-902-adr-template-structure-contract.md");
-        
+
         File.Exists(adrFile).Should().BeTrue(
             $"❌ ADR-902_1_2 违规：ADR-902 文档不存在：{adrFile}\n\n" +
             $"修复建议：确保 ADR-902 文档存在以定义模板结构\n\n" +
             $"参考：docs/adr/governance/ADR-902-adr-template-structure-contract.md §1.2");
-        
+
         var content = File.ReadAllText(adrFile);
-        
+
         // 验证核心原则：ADR 必须符合模板
         content.Should().Contain("可被机器和人同时理解的治理工件",
             $"❌ ADR-902_1_2 违规：ADR-902 必须定义核心治理原则");
-        
+
         // 验证模板结构要求
         content.Should().Contain("Front Matter",
             $"❌ ADR-902_1_2 违规：ADR-902 必须定义 Front Matter 要求");
@@ -195,9 +191,9 @@ public sealed class ADR_902_1_Architecture_Tests
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var violations = new List<string>();
-        
+
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
-        
+
         if (!Directory.Exists(adrDirectory))
         {
             true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
@@ -206,7 +202,7 @@ public sealed class ADR_902_1_Architecture_Tests
         // 扫描治理类 ADR 文档（ADR-902 发布后的新标准）
         var governanceDir = Path.Combine(adrDirectory, "governance");
         var adrFiles = new List<string>();
-        
+
         if (Directory.Exists(governanceDir))
         {
             adrFiles.AddRange(Directory
@@ -220,16 +216,16 @@ public sealed class ADR_902_1_Architecture_Tests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             // 提取 Front Matter
             var frontMatter = ExtractFrontMatter(content);
-            
+
             if (string.IsNullOrEmpty(frontMatter))
             {
                 violations.Add($"  • {relativePath} - 缺少 YAML Front Matter");
                 continue;
             }
-            
+
             // 检查必需字段
             var missingFields = new List<string>();
             foreach (var field in RequiredFrontMatterFields)
@@ -239,12 +235,12 @@ public sealed class ADR_902_1_Architecture_Tests
                     missingFields.Add(field);
                 }
             }
-            
+
             if (missingFields.Any())
             {
                 violations.Add($"  • {relativePath} - 缺少字段: {string.Join(", ", missingFields)}");
             }
-            
+
             // 验证 status 字段的值
             var statusMatch = Regex.Match(frontMatter, @"^status:\s*(.+)$", RegexOptions.Multiline);
             if (statusMatch.Success)
@@ -255,7 +251,7 @@ public sealed class ADR_902_1_Architecture_Tests
                     violations.Add($"  • {relativePath} - status 值 '{status}' 不合法，必须是: {string.Join(", ", ValidStatusValues)}");
                 }
             }
-            
+
             // 验证 level 字段的值
             var levelMatch = Regex.Match(frontMatter, @"^level:\s*(.+)$", RegexOptions.Multiline);
             if (levelMatch.Success)
@@ -302,9 +298,9 @@ public sealed class ADR_902_1_Architecture_Tests
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var violations = new List<string>();
-        
+
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
-        
+
         if (!Directory.Exists(adrDirectory))
         {
             true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
@@ -313,7 +309,7 @@ public sealed class ADR_902_1_Architecture_Tests
         // 扫描治理类 ADR 文档
         var governanceDir = Path.Combine(adrDirectory, "governance");
         var adrFiles = new List<string>();
-        
+
         if (Directory.Exists(governanceDir))
         {
             adrFiles.AddRange(Directory
@@ -327,7 +323,7 @@ public sealed class ADR_902_1_Architecture_Tests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             // 检查必需章节
             var missingSections = new List<string>();
             foreach (var section in RequiredSections)
@@ -338,22 +334,22 @@ public sealed class ADR_902_1_Architecture_Tests
                     missingSections.Add(section);
                 }
             }
-            
+
             if (missingSections.Any())
             {
                 violations.Add($"  • {relativePath} - 缺少章节: {string.Join(", ", missingSections)}");
             }
-            
+
             // 验证章节顺序
             var sections = ExtractSections(content);
             var expectedOrder = RequiredSections.ToList();
             var actualOrder = sections.Where(s => expectedOrder.Contains(s, StringComparer.Ordinal)).ToList();
-            
+
             if (actualOrder.Count >= 2)
             {
                 var hasCorrectOrder = true;
                 var lastExpectedIndex = -1;
-                
+
                 foreach (var section in actualOrder)
                 {
                     var expectedIndex = expectedOrder.FindIndex(s => s.Equals(section, StringComparison.Ordinal));
@@ -364,7 +360,7 @@ public sealed class ADR_902_1_Architecture_Tests
                     }
                     lastExpectedIndex = expectedIndex;
                 }
-                
+
                 if (!hasCorrectOrder)
                 {
                     violations.Add($"  • {relativePath} - 章节顺序不正确，应按：{string.Join(" → ", RequiredSections)}");
@@ -410,18 +406,18 @@ public sealed class ADR_902_1_Architecture_Tests
     {
         var sections = new List<string>();
         var matches = Regex.Matches(content, @"^##\s+(\w+)", RegexOptions.Multiline);
-        
+
         foreach (Match match in matches)
         {
             sections.Add(match.Groups[1].Value);
         }
-        
+
         return sections;
     }
 
     private static string ExtractDecisionSection(string content)
     {
-        var match = Regex.Match(content, @"^##\s+Decision.*?\n(.*?)(?=^##\s+|\z)", 
+        var match = Regex.Match(content, @"^##\s+Decision.*?\n(.*?)(?=^##\s+|\z)",
             RegexOptions.Multiline | RegexOptions.Singleline);
         return match.Success ? match.Groups[1].Value : string.Empty;
     }

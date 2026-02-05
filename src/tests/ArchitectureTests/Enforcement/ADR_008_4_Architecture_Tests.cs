@@ -1,7 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
 /// <summary>
@@ -14,7 +10,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 /// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
 /// - 来源决策: ADR-008 决策 2.2、3.3
-/// 
+///
 /// 执法说明：
 /// - 失败 = CI 阻断
 /// - 允许在特定上下文中使用（引用 ADR 时）
@@ -29,10 +25,10 @@ public sealed class ADR_008_4_Architecture_Tests
     public void ADR_008_4_1_README_And_Guides_Must_Not_Use_Decision_Language()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        
+
         // 裁决性词汇（ADR-008 明确禁止 README 使用）
         var forbiddenWords = new[] { "必须", "禁止", "不允许", "不得", "应当" };
-        
+
         // 例外：可以在引用 ADR 的上下文中使用，或在示例标记中使用
         var allowedContextPatterns = new[]
         {
@@ -48,13 +44,13 @@ public sealed class ADR_008_4_Architecture_Tests
         };
 
         var violations = new List<string>();
-        
+
         // 扫描 docs 目录下的 README 和 Guide
         var docsDir = Path.Combine(repoRoot, "docs");
         if (!Directory.Exists(docsDir)) return;
 
         var readmeFiles = Directory.GetFiles(docsDir, "*.md", SearchOption.AllDirectories)
-            .Where(f => Path.GetFileName(f).Equals("README.md", StringComparison.OrdinalIgnoreCase) 
+            .Where(f => Path.GetFileName(f).Equals("README.md", StringComparison.OrdinalIgnoreCase)
                      || f.Contains("guide", StringComparison.OrdinalIgnoreCase)
                      || f.Contains("GUIDE", StringComparison.OrdinalIgnoreCase))
             .Where(f => !f.Contains("/adr/", StringComparison.OrdinalIgnoreCase)) // 排除 ADR 文档
@@ -66,25 +62,25 @@ public sealed class ADR_008_4_Architecture_Tests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             // 移除代码块和引用块
             var contentWithoutCodeBlocks = RemoveCodeBlocks(content);
             var contentWithoutQuotes = RemoveQuotedSections(contentWithoutCodeBlocks);
-            
+
             var lines = contentWithoutQuotes.Split('\n');
-            
+
             for (int i = 0; i < lines.Length; i++)
             {
                 var line = lines[i];
-                
+
                 foreach (var word in forbiddenWords)
                 {
                     if (line.Contains(word))
                     {
                         // 检查是否在允许的上下文中
-                        var isAllowedContext = allowedContextPatterns.Any(pattern => 
+                        var isAllowedContext = allowedContextPatterns.Any(pattern =>
                             Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase));
-                        
+
                         if (!isAllowedContext)
                         {
                             violations.Add($"  • {relativePath}:{i + 1} - 使用裁决词 '{word}'");

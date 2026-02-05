@@ -1,13 +1,9 @@
-using FluentAssertions;
-using Xunit;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests;
 
 /// <summary>
 /// 测试性能监控示例
 /// 演示如何使用 TestPerformanceCollector 监控测试性能
-/// 
+///
 /// 使用方式：
 /// 1. 在测试开始时创建 TestPerformanceTimer
 /// 2. 在测试结束后（通过 using 语句自动完成），性能数据会被记录
@@ -24,7 +20,7 @@ public sealed class TestPerformanceMonitoringExample
 
         // 执行你的测试逻辑
         System.Threading.Thread.Sleep(10); // 模拟测试执行
-        
+
         // 测试结束时，timer.Dispose() 会自动调用，记录执行时间
     }
 
@@ -66,7 +62,7 @@ public sealed class TestPerformanceMonitoringExample
 
         // 获取慢测试（默认阈值 1000ms）
         var slowTests = TestPerformanceCollector.GetSlowTests();
-        
+
         // 验证识别出了慢测试
         slowTests.Count.Should().BeGreaterThanOrEqualTo(2);
         slowTests.Should().Contain(s => s.TestName == "SlowTest1");

@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
 /// <summary>
@@ -13,7 +10,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 /// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
 /// - 来源决策: ADR-008 决策 4.1
-/// 
+///
 /// 执法说明：
 /// - 失败 = CI 阻断
 /// </summary>

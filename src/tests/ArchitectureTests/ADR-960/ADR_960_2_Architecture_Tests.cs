@@ -1,7 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_960;
 
 /// <summary>
@@ -26,24 +22,24 @@ public sealed class ADR_960_2_Architecture_Tests
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
-        
+
         File.Exists(adr960Path).Should().BeTrue(
             $"❌ ADR-960_2_1 违规：ADR-960 文档不存在");
-        
+
         var content = File.ReadAllText(adr960Path);
-        
+
         // 验证定义了内容类型限制表格
         var hasContentTypeTable = content.Contains("| 内容类型", StringComparison.OrdinalIgnoreCase) &&
                                  content.Contains("是否允许出现在 Onboarding", StringComparison.OrdinalIgnoreCase);
-        
+
         hasContentTypeTable.Should().BeTrue(
             $"❌ ADR-960_2_1 违规：ADR-960 必须定义 Onboarding 的内容类型限制表\n\n" +
             $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §2.1");
-        
+
         // 验证表格包含关键内容类型限制
         content.Should().Contain("架构约束定义",
             $"❌ ADR-960_2_1 违规：内容类型表必须包含'架构约束定义'");
-        
+
         content.Should().Contain("示例代码",
             $"❌ ADR-960_2_1 违规：内容类型表必须包含'示例代码'限制");
     }
@@ -57,17 +53,17 @@ public sealed class ADR_960_2_Architecture_Tests
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
-        
+
         File.Exists(adr960Path).Should().BeTrue(
             $"❌ ADR-960_2_2 违规：ADR-960 文档不存在");
-        
+
         var content = File.ReadAllText(adr960Path);
-        
+
         // 验证定义了三个核心问题
         var hasThreeCoreQuestions = content.Contains("我是谁", StringComparison.OrdinalIgnoreCase) &&
                                    content.Contains("我先看什么", StringComparison.OrdinalIgnoreCase) &&
                                    content.Contains("我下一步去哪", StringComparison.OrdinalIgnoreCase);
-        
+
         hasThreeCoreQuestions.Should().BeTrue(
             $"❌ ADR-960_2_2 违规：ADR-960 必须定义 Onboarding 的三个核心问题\n\n" +
             $"核心原则：\n" +

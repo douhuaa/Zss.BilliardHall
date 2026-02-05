@@ -1,7 +1,3 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
@@ -14,7 +10,7 @@ public sealed class ADR_350_Architecture_Tests
     public void Logging_Types_Should_Be_In_Correct_Namespace()
     {
         var assemblies = GetAllProjectAssemblies();
-        
+
         foreach (var assembly in assemblies)
         {
             var loggingTypes = Types.InAssembly(assembly)
@@ -28,7 +24,7 @@ public sealed class ADR_350_Architecture_Tests
             foreach (var type in loggingTypes)
             {
                 var ns = type.Namespace ?? "";
-                
+
                 ns.StartsWith("Zss.BilliardHall").Should().BeTrue($"❌ ADR-350_1_1 违规: 日志类型未在正确的命名空间\n\n" +
                     $"违规类型：{type.FullName}\n" +
                     $"当前命名空间：{ns}\n\n" +
@@ -49,14 +45,14 @@ public sealed class ADR_350_Architecture_Tests
         // 验证是否引用了 Microsoft.Extensions.Logging
         var loggingAssembly = AppDomain.CurrentDomain.GetAssemblies()
             .FirstOrDefault(a => a.GetName().Name == "Microsoft.Extensions.Logging.Abstractions");
-        
+
         // 如果没有直接加载，至少验证项目结构完整性
         if (loggingAssembly == null)
         {
             // 验证至少有基本的日志相关程序集被加载
             var hasLoggingRelated = AppDomain.CurrentDomain.GetAssemblies()
                 .Any(a => a.GetName().Name?.Contains("Logging") == true);
-            
+
             true.Should().BeTrue($"❌ ADR-350_1_2 违规：日志框架引用验证失败\n\n" +
                 $"修复建议：\n" +
                 $"1. 确保项目引用了 Microsoft.Extensions.Logging 包\n" +
@@ -73,7 +69,7 @@ public sealed class ADR_350_Architecture_Tests
     public void Sensitive_Types_Should_Not_Be_Logged()
     {
         var assemblies = GetAllProjectAssemblies();
-        
+
         // 验证没有 Password、Secret 等敏感类型的公共属性
         foreach (var assembly in assemblies)
         {
@@ -105,7 +101,7 @@ public sealed class ADR_350_Architecture_Tests
     {
         return AppDomain.CurrentDomain.GetAssemblies()
             .Where(a => a.GetName().Name?.StartsWith("Zss.BilliardHall") == true ||
-                       a.GetName().Name is "Platform" or "Application" or "Web" or 
+                       a.GetName().Name is "Platform" or "Application" or "Web" or
                        "Members" or "Orders")
             .ToList();
     }

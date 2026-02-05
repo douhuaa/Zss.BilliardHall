@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
@@ -19,12 +16,12 @@ public sealed class ADR_940_2_Architecture_Tests
 
     public ADR_940_2_Architecture_Tests()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot 
+        var repoRoot = TestEnvironment.RepositoryRoot
             ?? throw new InvalidOperationException("未找到仓库根目录（无法定位 docs/adr 或 .git）");
-        
+
         var adrPath = Path.Combine(repoRoot, "docs", "adr");
         var repo = new AdrRepository(adrPath);
-        
+
         _adrs = repo.LoadAll();
     }
 
@@ -59,7 +56,7 @@ public sealed class ADR_940_2_Architecture_Tests
     private static bool HasRelationshipSection(string filePath)
     {
         var content = File.ReadAllText(filePath);
-        
+
         // 支持中英文双语格式
         return content.Contains("## Relationships", StringComparison.OrdinalIgnoreCase) ||
                content.Contains("## 关系声明", StringComparison.OrdinalIgnoreCase);

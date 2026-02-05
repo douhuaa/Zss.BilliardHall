@@ -1,7 +1,3 @@
-using FluentAssertions;
-using System.Text.RegularExpressions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_955;
 
 /// <summary>
@@ -42,10 +38,10 @@ public sealed class ADR_955_2_Architecture_Tests
         foreach (var file in allMarkdownFiles)
         {
             var fileName = Path.GetFileName(file);
-            
+
             // 标题应包含有意义的关键词（不只是编号）
             var titleWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-            var hasKeywords = titleWithoutExtension.Length > 10 && 
+            var hasKeywords = titleWithoutExtension.Length > 10 &&
                              Regex.IsMatch(titleWithoutExtension, @"[a-zA-Z\u4e00-\u9fa5]{3,}");
 
             if (!hasKeywords)

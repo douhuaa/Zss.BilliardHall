@@ -1,7 +1,3 @@
-using FluentAssertions;
-using System.Text.RegularExpressions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_951;
 
 /// <summary>
@@ -59,7 +55,7 @@ public sealed class ADR_951_3_Architecture_Tests
             }
 
             // Core 案例必须包含审核记录
-            var hasReviewRecord = content.Contains("审核") || content.Contains("Review") || 
+            var hasReviewRecord = content.Contains("审核") || content.Contains("Review") ||
                                  content.Contains("reviewer") || content.Contains("审查");
 
             if (!hasReviewRecord)

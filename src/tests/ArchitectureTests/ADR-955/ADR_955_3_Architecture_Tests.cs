@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_955;
 
 /// <summary>
@@ -35,7 +32,7 @@ public sealed class ADR_955_3_Architecture_Tests
 
         // 这是一个长期维护的建议性测试
         Console.WriteLine("⚠️ ADR-955_3_1 提示：文档审计机制应定期执行。");
-        
+
         true.Should().BeTrue("ADR-955_3_1 是定期审计建议");
     }
 

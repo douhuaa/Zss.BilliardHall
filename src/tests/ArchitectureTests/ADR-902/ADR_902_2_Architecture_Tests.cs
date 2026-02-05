@@ -1,18 +1,14 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_902;
 
 /// <summary>
 /// ADR-902_2: 语义职责边界
 /// 验证 ADR 文档的语义职责边界清晰
-/// 
+///
 /// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
 /// - ADR-902_2_1: Decision 严格隔离
 /// - ADR-902_2_2: ADR 模板不承担语义裁决职责
 /// - ADR-902_2_3: Relationships 章节仅承担结构接口职责
-/// 
+///
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-902-adr-template-structure-contract.md
 /// - Prompts: docs/copilot/adr-902.prompts.md
@@ -31,9 +27,9 @@ public sealed class ADR_902_2_Architecture_Tests
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var warnings = new List<string>();
-        
+
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
-        
+
         if (!Directory.Exists(adrDirectory))
         {
             true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
@@ -53,14 +49,14 @@ public sealed class ADR_902_2_Architecture_Tests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             // 提取非 Decision 章节的内容
             var nonDecisionContent = ExtractNonDecisionContent(content);
-            
+
             // 移除代码块和引用块
             var contentWithoutCodeBlocks = RemoveCodeBlocks(nonDecisionContent);
             var contentWithoutQuotes = RemoveQuotedSections(contentWithoutCodeBlocks);
-            
+
             // 检查是否包含裁决性语言
             foreach (var word in decisionWords)
             {
@@ -95,11 +91,11 @@ public sealed class ADR_902_2_Architecture_Tests
                 "",
                 "参考：docs/adr/governance/ADR-902-adr-template-structure-contract.md §2.1"
             }));
-            
+
             Console.WriteLine(warningMessage);
             Console.WriteLine();
         }
-        
+
         // L2 警告：测试总是通过，但已输出警告信息
     }
 
@@ -112,17 +108,17 @@ public sealed class ADR_902_2_Architecture_Tests
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-902-adr-template-structure-contract.md");
-        
+
         File.Exists(adrFile).Should().BeTrue($"ADR-902 文档不存在：{adrFile}");
-        
+
         var content = File.ReadAllText(adrFile);
-        
+
         // 验证 ADR-902 声明不承担语义职责
         content.Should().Contain("ADR 模板不承担语义裁决职责",
             $"❌ ADR-902_2_2 违规：ADR-902 必须声明不承担语义裁决职责\n\n" +
             $"修复建议：在 Decision 章节中明确声明 ADR-902 仅验证结构，不做语义裁决\n\n" +
             $"参考：docs/adr/governance/ADR-902-adr-template-structure-contract.md §2.2");
-        
+
         // 验证提及由其他 ADR 负责语义（如 ADR-901, ADR-905）
         bool mentionsSemanticADRs = content.Contains("ADR-901") || content.Contains("ADR-905");
         mentionsSemanticADRs.Should().BeTrue(
@@ -140,17 +136,17 @@ public sealed class ADR_902_2_Architecture_Tests
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-902-adr-template-structure-contract.md");
-        
+
         File.Exists(adrFile).Should().BeTrue($"ADR-902 文档不存在：{adrFile}");
-        
+
         var content = File.ReadAllText(adrFile);
-        
+
         // 验证 ADR-902 声明 Relationships 章节仅承担结构接口职责
         content.Should().Contain("Relationships 章节仅承担结构接口职责",
             $"❌ ADR-902_2_3 违规：ADR-902 必须声明 Relationships 章节仅承担结构职责\n\n" +
             $"修复建议：在 Decision 章节中明确 Relationships 的职责边界\n\n" +
             $"参考：docs/adr/governance/ADR-902-adr-template-structure-contract.md §2.3");
-        
+
         // 验证提及关系语义由 ADR-940 负责
         content.Should().Contain("ADR-940",
             $"❌ ADR-902_2_3 违规：ADR-902 应提及关系治理由 ADR-940 负责\n\n" +
@@ -164,7 +160,7 @@ public sealed class ADR_902_2_Architecture_Tests
     private static string ExtractNonDecisionContent(string content)
     {
         // 移除 Decision 章节，返回其他内容
-        return Regex.Replace(content, @"^##\s+Decision.*?\n.*?(?=^##\s+|\z)", 
+        return Regex.Replace(content, @"^##\s+Decision.*?\n.*?(?=^##\s+|\z)",
             string.Empty, RegexOptions.Multiline | RegexOptions.Singleline);
     }
 

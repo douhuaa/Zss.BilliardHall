@@ -1,7 +1,3 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
@@ -45,7 +41,7 @@ public sealed class ADR_124_Architecture_Tests
         foreach (var dto in requestDtos)
         {
             var endsWithRequest = dto.Name.EndsWith("Request");
-            
+
             endsWithRequest.Should().BeTrue($"❌ ADR-124_1_2 违规: 请求 DTO 命名不符合规范\n\n" +
                 $"违规类型：{dto.FullName}\n" +
                 $"当前名称：{dto.Name}\n\n" +

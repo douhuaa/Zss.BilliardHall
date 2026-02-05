@@ -1,7 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_950;
 
 /// <summary>
@@ -18,7 +14,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_950;
 public sealed class ADR_950_1_Architecture_Tests
 {
     private const string DocsPath = "docs";
-    
+
     // 裁决性关键词 - 这些词不应该出现在非裁决性文档中作为新规则定义
     private static readonly string[] DecisionKeywords = new[]
     {
@@ -105,11 +101,11 @@ public sealed class ADR_950_1_Architecture_Tests
             foreach (var guideFile in guideFiles)
             {
                 var content = File.ReadAllText(guideFile);
-                
+
                 // Guide 应该引用 ADR
                 var hasAdrReference = Regex.IsMatch(content, @"ADR-\d{3}", RegexOptions.IgnoreCase) ||
                                      content.Contains("相关 ADR", StringComparison.OrdinalIgnoreCase);
-                
+
                 if (!hasAdrReference)
                 {
                     violations.Add($"Guide 文档 '{Path.GetFileName(guideFile)}' 没有引用相关 ADR");
@@ -140,12 +136,12 @@ public sealed class ADR_950_1_Architecture_Tests
     private void CheckNonDecisionDocuments(string path, string docType, List<string> violations)
     {
         var files = Directory.GetFiles(path, "*.md", SearchOption.AllDirectories);
-        
+
         foreach (var file in files)
         {
             var content = File.ReadAllText(file);
             var fileName = Path.GetFileName(file);
-            
+
             // 检查是否包含裁决性语言但没有引用 ADR
             var hasDecisionLanguage = false;
             foreach (var keyword in DecisionKeywords)

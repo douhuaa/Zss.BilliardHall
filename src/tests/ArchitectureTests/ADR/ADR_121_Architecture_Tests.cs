@@ -1,14 +1,9 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
 /// ADR-121: 契约（Contract）与 DTO 命名组织规范
 /// 验证契约/DTO 命名、命名空间组织、版本管理和模块隔离约束
-/// 
+///
 /// 约束映射（对应 ADR-121 快速参考表）：
 /// ┌──────────────┬─────────────────────────────────────────────────────────┬─────────┬───────────────────────────────────────────────────────┐
 /// │ 约束编号     │ 描述                                                     │ 层级    │ 测试方法                                               │
@@ -49,7 +44,7 @@ public sealed class ADR_121_Architecture_Tests
 
         foreach (var contractType in contractTypes)
         {
-            var hasValidSuffix = contractType.Name.EndsWith("Dto") || 
+            var hasValidSuffix = contractType.Name.EndsWith("Dto") ||
                                  contractType.Name.EndsWith("Contract");
 
             var message = BuildWithAnalysis(
@@ -69,7 +64,7 @@ public sealed class ADR_121_Architecture_Tests
                     $"   - {contractType.Name}ListDto"
                 },
                 adrReference: "docs/adr/structure/ADR-121-contract-dto-naming-organization.md");
-            
+
             hasValidSuffix.Should().BeTrue(message);
         }
     }
@@ -106,9 +101,9 @@ public sealed class ADR_121_Architecture_Tests
             {
                 // 检查属性是否有 set 访问器
                 var hasSetter = property.SetMethod != null && property.SetMethod.IsPublic;
-                
+
                 // 检查属性是否是 init-only（C# 9.0+）
-                var isInitOnly = property.SetMethod != null && 
+                var isInitOnly = property.SetMethod != null &&
                                  property.SetMethod.ReturnParameter
                                      .GetRequiredCustomModifiers()
                                      .Any(m => m.Name == "IsExternalInit");
@@ -134,7 +129,7 @@ public sealed class ADR_121_Architecture_Tests
                         $"   public {property.PropertyType.Name} {property.Name} {{ get; }}"
                     },
                     adrReference: "docs/adr/structure/ADR-121-contract-dto-naming-organization.md");
-                
+
                 isImmutable.Should().BeTrue(message);
             }
         }
@@ -214,7 +209,7 @@ public sealed class ADR_121_Architecture_Tests
                         "   - 验证逻辑 → Validator"
                     },
                     adrReference: "docs/adr/structure/ADR-121-contract-dto-naming-organization.md");
-                
+
                 true.Should().BeFalse(message);
             }
         }
@@ -288,10 +283,10 @@ public sealed class ADR_121_Architecture_Tests
         static void CheckDomainType(Type type, Type contractType)
         {
             // 跳过系统类型和接口
-            if (type.IsPrimitive || 
-                type == typeof(string) || 
-                type == typeof(decimal) || 
-                type == typeof(DateTime) || 
+            if (type.IsPrimitive ||
+                type == typeof(string) ||
+                type == typeof(decimal) ||
+                type == typeof(DateTime) ||
                 type == typeof(DateTimeOffset) ||
                 type == typeof(TimeSpan) ||
                 type == typeof(Guid) ||
@@ -332,7 +327,7 @@ public sealed class ADR_121_Architecture_Tests
                             "契约应该是数据快照，不包含领域行为"
                         },
                         adrReference: "docs/adr/structure/ADR-121-contract-dto-naming-organization.md");
-                    
+
                     true.Should().BeFalse(message);
                 }
             }
@@ -381,10 +376,10 @@ public sealed class ADR_121_Architecture_Tests
 
             // 特别检查：如果类型名明确表示是跨模块契约（如 MemberInfoDto、OrderDetailContract），
             // 但不在 Contracts 命名空间，则违规
-            var looksLikePublicContract = dtoType.IsPublic && 
+            var looksLikePublicContract = dtoType.IsPublic &&
                                           !dtoType.IsNested &&
-                                          (dtoType.Name.Contains("Info") || 
-                                           dtoType.Name.Contains("Detail") || 
+                                          (dtoType.Name.Contains("Info") ||
+                                           dtoType.Name.Contains("Detail") ||
                                            dtoType.Name.Contains("Summary") ||
                                            dtoType.Name.EndsWith("Contract"));
 
@@ -405,7 +400,7 @@ public sealed class ADR_121_Architecture_Tests
                         "   但应避免使用 Info/Detail/Summary/Contract 等公共契约命名模式"
                     },
                     adrReference: "docs/adr/structure/ADR-121-contract-dto-naming-organization.md");
-                
+
                 true.Should().BeFalse(message);
             }
         }

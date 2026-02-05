@@ -1,8 +1,4 @@
-﻿using System.IO;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907_A;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907_A;
 
 /// <summary>
 /// ADR-907-A_2: 对齐失败策略
