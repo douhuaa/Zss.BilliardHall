@@ -104,7 +104,7 @@ public sealed class ADR_900_Architecture_Tests
         return Directory
             .GetFiles(adrDirectory, AdrFilePattern, SearchOption.AllDirectories)
             .Select(Path.GetFileNameWithoutExtension)
-            .Where(file => !string.IsNullOrWhiteSpace(file) && System.Text.RegularExpressions.Regex.IsMatch(file!, @"^ADR-\d{4}", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+            .Where(file => !string.IsNullOrWhiteSpace(file) && System.Text.RegularExpressions.Regex.IsMatch(file!, @"^ADR-\d{3,4}", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
             .Select(file => file!)
             .Distinct()
             .ToList();
