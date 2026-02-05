@@ -62,17 +62,29 @@ internal static class AssertionPatternHelper
     /// 用于 ADR-907_2_6 和 ADR-907_3_3 测试：验证失败信息包含 ADR 引用
     /// </summary>
     /// <returns>正则表达式模式字符串</returns>
+    /// <remarks>
+    /// 正则表达式捕获组说明：
+    /// - Group 1: 完整的断言方法调用（Should().{Method} 或 Assert.{Method}）
+    /// - Group 2: FluentAssertions 方法名（BeTrue、BeEmpty 等）
+    /// - Group 3: xUnit 方法名（True、False、Equal 等）
+    /// - Group 4: 断言参数部分（包含消息字符串）- 由 AssertionArgsGroupIndex 常量指定
+    /// </remarks>
     public static string GetAssertionMessagePattern()
     {
-        // 构建断言方法列表
+        // 构建完整的断言方法列表（与 GetAssertionPatterns 保持一致）
+        // 注意：需要手动维护与 GetAssertionPatterns() 的同步
         const string fluentMethods = "BeTrue|BeFalse|BeEmpty|NotBeEmpty|Contain|NotContain|" +
-                                    "BeNull|NotBeNull|NotBeNullOrEmpty|StartWith|EndWith|Be|NotBe";
-        const string xunitMethods = "True|False|Equal|NotEqual|Matches|Fail";
+                                    "BeNull|NotBeNull|NotBeNullOrEmpty|NotBeNullOrWhiteSpace|" +
+                                    "StartWith|EndWith|Match|MatchRegex|Be|NotBe|" +
+                                    "BeGreaterThan|BeLessThan|BeGreaterThanOrEqualTo|BeLessThanOrEqualTo|" +
+                                    "BeOfType|BeAssignableTo";
+        const string xunitMethods = "True|False|Equal|NotEqual|Matches";
         
         // 匹配格式：
         // - Should().{Method}("message") 或 Should().{Method}($"message")
         // - Assert.{Method}(condition, "message") 或 Assert.{Method}(condition, $"message")
         // - 支持多行字符串连接：$"part1" + $"part2"
+        // 注意：Assert.Fail 被排除，因为它的签名不同（直接接受消息，无条件参数）
         return $@"(Should\(\)\.({fluentMethods})|Assert\.({xunitMethods}))\s*\(([^)]*\$?""[^""]+""(?:\s*\+\s*\$?""[^""]+"")*)\s*\)";
     }
 
