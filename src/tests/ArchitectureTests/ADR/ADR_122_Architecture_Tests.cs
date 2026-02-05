@@ -44,11 +44,15 @@ public sealed class ADR_122_Architecture_Tests
         {
             var violationNames = string.Join("\n", violations.Select(t => $"  - {t.FullName}"));
             true.Should().BeFalse(
-                $"❌ ADR-122_1_1 违规: 测试类命名不符合规范\n\n" +
-                $"违规类型:\n{violationNames}\n\n" +
-                $"修复建议:\n" +
-                $"将测试类重命名为 {{ClassName}}Tests 格式\n\n" +
-                $"参考: docs/copilot/adr-122.prompts.md");
+                $"❌ ADR-122_1_1 违规：测试类命名不符合规范\n\n" +
+                $"违规类型：\n{violationNames}\n\n" +
+                $"问题分析：\n" +
+                $"测试类必须以 Tests 后缀结尾以保持命名一致性和可识别性\n\n" +
+                $"修复建议：\n" +
+                $"1. 将测试类重命名为 {{ClassName}}Tests 格式\n" +
+                $"2. 示例：OrderServiceTests, MemberRepositoryTests\n" +
+                $"3. 确保测试类与被测试类型的对应关系清晰\n\n" +
+                $"参考：docs/adr/structure/ADR-122-test-organization-naming.md（§1.1）");
         }
     }
 
@@ -59,8 +63,19 @@ public sealed class ADR_122_Architecture_Tests
             .GetAssemblies()
             .FirstOrDefault(a => a.GetName().Name == "ArchitectureTests");
 
-        archTestAssembly.Should().NotBeNull();
-        true.Should().BeTrue("架构测试项目 ArchitectureTests 存在");
+        archTestAssembly.Should().NotBeNull($"❌ ADR-122_1_2 违规：架构测试项目不存在\n\n" +
+            $"问题分析：\n" +
+            $"架构测试必须在专用的 ArchitectureTests 项目中组织，以与功能测试分离\n\n" +
+            $"修复建议：\n" +
+            $"1. 创建独立的 ArchitectureTests 项目\n" +
+            $"2. 将所有架构测试迁移到该项目\n" +
+            $"3. 使用 NetArchTest 或类似工具验证架构约束\n\n" +
+            $"参考：docs/adr/structure/ADR-122-test-organization-naming.md（§1.2）");
+        true.Should().BeTrue($"✅ ADR-122_1_2：架构测试项目 ArchitectureTests 存在\n\n" +
+            $"验证结果：专用架构测试项目已正确设置\n\n" +
+            $"修复建议：\n" +
+            $"保持架构测试的独立性，不要将其与功能测试混合\n\n" +
+            $"参考：docs/adr/structure/ADR-122-test-organization-naming.md（§1.2）");
     }
 
     [Theory(DisplayName = "ADR-122_1_3: 测试项目必须遵循命名约定")]
@@ -75,11 +90,16 @@ public sealed class ADR_122_Architecture_Tests
         var isValid = assemblyName.EndsWith(".Tests") || 
                      assemblyName == "ArchitectureTests";
 
-        isValid.Should().BeTrue($"❌ ADR-122_1_3 违规: 测试项目命名不符合规范\n\n" +
-            $"违规项目: {assemblyName}\n\n" +
-            $"修复建议:\n" +
-            $"将项目重命名为 {{Module}}.Tests 或 ArchitectureTests\n\n" +
-            $"参考: docs/copilot/adr-122.prompts.md");
+        isValid.Should().BeTrue($"❌ ADR-122_1_3 违规：测试项目命名不符合规范\n\n" +
+            $"违规项目：{assemblyName}\n\n" +
+            $"问题分析：\n" +
+            $"测试项目必须遵循统一的命名约定以保持项目结构清晰\n\n" +
+            $"修复建议：\n" +
+            $"1. 将项目重命名为 {{Module}}.Tests 格式\n" +
+            $"2. 或使用特殊名称 ArchitectureTests 用于架构测试\n" +
+            $"3. 示例：Orders.Tests, Members.Tests, ArchitectureTests\n" +
+            $"4. 确保项目名称与被测试模块对应\n\n" +
+            $"参考：docs/adr/structure/ADR-122-test-organization-naming.md（§1.3）");
     }
 }
 
