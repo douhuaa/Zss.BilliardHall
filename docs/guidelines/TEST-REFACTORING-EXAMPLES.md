@@ -462,6 +462,289 @@ AssertionMessageBuilder.BuildFromArchTestResult(ruleId, summary, failingTypeName
 
 ---
 
+## 重构示例 6：使用 FileContainsAnyKeyword 和 GetMissingKeywords
+
+### 重构前（❌ 不推荐）
+
+```csharp
+[Fact]
+public void ADR_007_2_1_Agent_Responses_Must_Include_Three_State_Indicators()
+{
+    var agentFiles = GetAgentFiles();
+    if (agentFiles.Length == 0) return;
+
+    var violations = new List<string>();
+
+    foreach (var file in agentFiles)
+    {
+        var content = File.ReadAllText(file);
+        var fileName = Path.GetFileName(file);
+
+        var missingStates = new List<string>();
+
+        // 检查是否提及三态输出
+        if (!content.Contains("✅", StringComparison.OrdinalIgnoreCase) &&
+            !content.Contains("Allowed", StringComparison.OrdinalIgnoreCase))
+        {
+            missingStates.Add("✅ Allowed");
+        }
+
+        if (!content.Contains("⚠️", StringComparison.OrdinalIgnoreCase) &&
+            !content.Contains("Blocked", StringComparison.OrdinalIgnoreCase))
+        {
+            missingStates.Add("⚠️ Blocked");
+        }
+
+        if (!content.Contains("❓", StringComparison.OrdinalIgnoreCase) &&
+            !content.Contains("Uncertain", StringComparison.OrdinalIgnoreCase))
+        {
+            missingStates.Add("❓ Uncertain");
+        }
+
+        if (missingStates.Count >= 2)
+        {
+            violations.Add($"  • {fileName} 缺少三态标识: {string.Join(", ", missingStates)}");
+        }
+    }
+    
+    // 手工拼接的错误消息...
+}
+```
+
+**问题**：
+- 重复的 Contains 检查逻辑
+- 硬编码的三态标识
+- 冗长的代码
+
+### 重构后（✅ 推荐）
+
+```csharp
+[Fact(DisplayName = "ADR-007_2_1: Agent 响应必须包含三态标识")]
+public void ADR_007_2_1_Agent_Responses_Must_Include_Three_State_Indicators()
+{
+    var agentFiles = FileSystemTestHelper.GetAgentFiles(
+        includeSystemAgents: false,
+        excludeGuardian: false);
+
+    if (!agentFiles.Any()) return;
+
+    var violations = new List<string>();
+
+    foreach (var file in agentFiles)
+    {
+        var fileName = Path.GetFileName(file);
+        var missingStates = new List<string>();
+
+        // 使用常量检查三态标识
+        foreach (var indicator in TestConstants.ThreeStateIndicators)
+        {
+            var hasIndicator = FileSystemTestHelper.FileContainsAnyKeyword(
+                file,
+                new[] { indicator, indicator.Split(' ')[1] }, // 检查完整形式和简写形式
+                ignoreCase: true);
+
+            if (!hasIndicator)
+            {
+                missingStates.Add(indicator);
+            }
+        }
+
+        if (missingStates.Count >= 2)
+        {
+            violations.Add($"{fileName} 缺少三态标识: {string.Join(", ", missingStates)}");
+        }
+    }
+
+    var message = AssertionMessageBuilder.BuildWithViolations(
+        ruleId: "ADR-007_2_1",
+        summary: "以下 Agent 文件未实现三态输出规范",
+        failingTypes: violations,
+        remediationSteps: new[]
+        {
+            "确保 Agent 响应明确标识 ✅ Allowed、⚠️ Blocked 或 ❓ Uncertain",
+            "在 Agent 配置中定义三态输出规范",
+            "每种判定结果都应使用相应的标识"
+        },
+        adrReference: TestConstants.Adr007Path);
+
+    violations.Should().BeEmpty(message);
+}
+```
+
+**优势**：
+- ✅ 使用 TestConstants.ThreeStateIndicators 常量
+- ✅ 使用 FileContainsAnyKeyword 简化关键词检查
+- ✅ 代码更简洁清晰
+- ✅ 使用 AssertionMessageBuilder 构建标准错误消息
+
+---
+
+## 重构示例 7：使用 FileContainsTable 检测 Markdown 表格
+
+### 重构前（❌ 不推荐）
+
+```csharp
+[Fact]
+public void ADR_960_2_1_Onboarding_Must_Follow_Content_Type_Restrictions()
+{
+    var repoRoot = TestEnvironment.RepositoryRoot;
+    var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
+
+    File.Exists(adr960Path).Should().BeTrue("ADR-960 文档不存在");
+
+    var content = File.ReadAllText(adr960Path);
+
+    // 手工检查表格
+    var hasContentTypeTable = content.Contains("| 内容类型", StringComparison.OrdinalIgnoreCase) &&
+                             content.Contains("是否允许出现在 Onboarding", StringComparison.OrdinalIgnoreCase);
+
+    hasContentTypeTable.Should().BeTrue("必须定义内容类型限制表");
+}
+```
+
+**问题**：
+- 手工检查表格存在性，不够可靠
+- 硬编码的文件路径
+- 简单的断言消息
+
+### 重构后（✅ 推荐）
+
+```csharp
+[Fact(DisplayName = "ADR-960_2_1: Onboarding 必须遵循内容类型限制")]
+public void ADR_960_2_1_Onboarding_Must_Follow_Content_Type_Restrictions()
+{
+    var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
+
+    var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+        ruleId: "ADR-960_2_1",
+        filePath: adr960Path,
+        fileDescription: "ADR-960 文档",
+        remediationSteps: new[]
+        {
+            "创建 ADR-960 文档",
+            "在文档中定义 Onboarding 的内容类型限制表"
+        },
+        adrReference: TestConstants.Adr960Path);
+
+    File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
+
+    // 使用专用方法检测表格
+    var hasContentTypeTable = FileSystemTestHelper.FileContainsTable(
+        adr960Path, 
+        "是否允许出现在 Onboarding");
+
+    var tableMessage = AssertionMessageBuilder.Build(
+        ruleId: "ADR-960_2_1",
+        summary: "ADR-960 必须定义 Onboarding 的内容类型限制表",
+        currentState: "文档中未找到内容类型限制表",
+        remediationSteps: new[]
+        {
+            "在 ADR-960 中添加内容类型限制表格",
+            "表格应包含'内容类型'和'是否允许出现在 Onboarding'列",
+            "明确列出允许和禁止的内容类型"
+        },
+        adrReference: TestConstants.Adr960Path,
+        includeClauseReference: true);
+
+    hasContentTypeTable.Should().BeTrue(tableMessage);
+
+    // 使用 GetMissingKeywords 检查必需的内容类型
+    var missingContentTypes = FileSystemTestHelper.GetMissingKeywords(
+        adr960Path,
+        TestConstants.ProhibitedContentTypesInOnboarding,
+        ignoreCase: true);
+
+    missingContentTypes.Should().BeEmpty();
+}
+```
+
+**优势**：
+- ✅ 使用 FileContainsTable 可靠地检测 Markdown 表格
+- ✅ 使用 GetMissingKeywords 检查缺失的内容类型
+- ✅ 使用常量定义内容类型列表
+- ✅ 完整的错误消息和修复建议
+
+---
+
+## 更新：新增辅助方法（第二版）
+
+### FileSystemTestHelper 新增方法（v2.0）
+
+```csharp
+// 检查文件是否包含所有关键词
+FileSystemTestHelper.FileContainsAllKeywords(filePath, keywords, ignoreCase)
+
+// 检查文件是否包含任一关键词
+FileSystemTestHelper.FileContainsAnyKeyword(filePath, keywords, ignoreCase)
+
+// 获取文件中缺失的关键词列表
+FileSystemTestHelper.GetMissingKeywords(filePath, requiredKeywords, ignoreCase)
+
+// 检查文件是否包含 Markdown 表格
+FileSystemTestHelper.FileContainsTable(filePath, headerPattern)
+```
+
+### TestConstants 新增常量（v2.0）
+
+```csharp
+// 三态输出标识
+TestConstants.ThreeStateIndicators       // ["✅ Allowed", "⚠️ Blocked", "❓ Uncertain"]
+TestConstants.ThreeStateShortForms       // ["Allowed", "Blocked", "Uncertain"]
+TestConstants.ThreeStateEmojis          // ["✅", "⚠️", "❓"]
+
+// 内容类型限制
+TestConstants.ProhibitedContentTypesInOnboarding  // 禁止的内容类型
+TestConstants.AllowedContentTypesInOnboarding     // 允许的内容类型
+
+// Onboarding 核心问题
+TestConstants.OnboardingCoreQuestions    // ["我是谁", "我先看什么", "我下一步去哪"]
+
+// 更多 ADR 路径
+TestConstants.Adr900Path    // ADR-900 架构测试元规则
+TestConstants.Adr901Path    // ADR-901 架构测试反作弊机制
+TestConstants.Adr902Path    // ADR-902 ADR 文档质量规范
+TestConstants.Adr907Path    // ADR-907 ArchitectureTests 执法治理体系
+TestConstants.Adr907APath   // ADR-907-A 对齐执行标准
+```
+
+---
+
+## 重构检查清单（更新版）
+
+在重构测试代码时，请检查以下各项：
+
+### 常量使用
+- [ ] 使用 `TestConstants` 中的 ADR 文档路径常量
+- [ ] 使用 `TestConstants.DecisionKeywords` 替代硬编码的关键词列表
+- [ ] 使用 `TestConstants.KeySemanticHeadings` 替代硬编码的语义块标题
+- [ ] 使用 `TestConstants.ThreeStateIndicators` 等新增常量
+- [ ] 删除测试类中的重复常量定义
+
+### 辅助方法使用
+- [ ] 使用 `FileSystemTestHelper.GetAbsolutePath()` 替代 `Path.Combine(repoRoot, ...)`
+- [ ] 使用 `FileSystemTestHelper.GetAdrFiles()` 替代手动过滤 ADR 文件
+- [ ] 使用 `FileSystemTestHelper.GetAgentFiles()` 替代手动过滤 Agent 文件
+- [ ] 使用 `FileSystemTestHelper.AssertFileExists()` 替代 `File.Exists().Should().BeTrue()`
+- [ ] 使用 `FileSystemTestHelper.ReadFileContent()` 替代 `File.ReadAllText()`
+- [ ] 使用 `FileContainsAnyKeyword()` 简化关键词检查（新增）
+- [ ] 使用 `GetMissingKeywords()` 检查缺失的关键词（新增）
+- [ ] 使用 `FileContainsTable()` 检测 Markdown 表格（新增）
+
+### 断言消息
+- [ ] 使用 `AssertionMessageBuilder` 模板方法构建错误消息
+- [ ] 确保所有错误消息包含必需字段：RuleId、当前状态、修复建议、参考文档
+- [ ] 使用合适的模板方法：BuildFileNotFoundMessage、BuildContentMissingMessage 等
+- [ ] 删除手工拼接的错误消息字符串
+
+### 代码质量
+- [ ] 删除不再需要的本地变量（如 `repoRoot`）
+- [ ] 删除重复的代码逻辑
+- [ ] 删除本地定义的辅助方法（如 GetAgentFiles）
+- [ ] 确保代码简洁、清晰、易于理解
+- [ ] 添加必要的代码注释
+
+---
+
 ## 结语
 
 本文档提供了测试代码重构的实际示例，展示了如何使用新增的常量和辅助方法来简化测试编写。

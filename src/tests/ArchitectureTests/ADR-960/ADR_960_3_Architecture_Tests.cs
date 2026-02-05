@@ -72,8 +72,6 @@ public sealed class ADR_960_3_Architecture_Tests
 
             if (!hasFastPath)
             {
-            if (!hasFastPath)
-            {
                 violations.Add($"{relativePath} - 缺少快速上手路径（Fast Path）");
             }
         }
