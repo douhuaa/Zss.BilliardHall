@@ -166,7 +166,7 @@ public static class TestConstants
     /// <summary>
     /// ADR-902：ADR 文档质量规范文档路径
     /// </summary>
-    public const string Adr902Path = "docs/adr/governance/ADR-902-adr-document-quality-specification.md";
+    public const string Adr902Path = "docs/adr/governance/ADR-902-adr-template-structure-contract.md";
 
     /// <summary>
     /// ADR-905：RuleId 格式标准文档路径
