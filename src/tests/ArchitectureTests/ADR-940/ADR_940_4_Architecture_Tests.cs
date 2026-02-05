@@ -1,42 +1,40 @@
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
-/// ADR-940: ADR 关系与溯源管理
+/// ADR-940_4: ADR 依赖关系循环检测（Rule）
 /// 检测 ADR 依赖关系中的循环依赖
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-940_4_1: ADR 依赖关系不得形成循环
+///
+/// 关联文档：
+/// - ADR: docs/adr/governance/ADR-940-adr-relationship-and-traceability.md
 /// </summary>
-public sealed class AdrCircularDependencyTests
+public sealed class ADR_940_4_Architecture_Tests
 {
     private readonly IReadOnlyDictionary<string, AdrDocument> _adrs;
 
-    public AdrCircularDependencyTests()
+    public ADR_940_4_Architecture_Tests()
     {
-        var repoRoot = FindRepositoryRoot() 
+        var repoRoot = TestEnvironment.RepositoryRoot
             ?? throw new InvalidOperationException("未找到仓库根目录（无法定位 docs/adr 或 .git）");
-        
+
         var adrPath = Path.Combine(repoRoot, "docs", "adr");
         var repo = new AdrRepository(adrPath);
-        
+
         _adrs = repo.LoadAll().ToDictionary(a => a.Id);
     }
 
     /// <summary>
-    /// ADR-940.4: ADR 依赖关系不得形成循环
+    /// ADR-940_4_1: ADR 依赖关系不得形成循环
+    /// 验证 ADR 文档之间的依赖关系不存在循环引用（§ADR-940_4_1）
     /// </summary>
-    [Fact(DisplayName = "ADR-940.4: ADR 依赖关系不得存在循环")]
-    public void ADR_Dependencies_Must_Not_Form_Cycles()
+    [Fact(DisplayName = "ADR-940_4_1: ADR 依赖关系不得存在循环")]
+    public void ADR_940_4_1_Dependencies_Must_Not_Form_Cycles()
     {
         var cycles = DetectCycles();
-        
-        if (cycles.Count > 0)
-        {
-            var violations = cycles.Select(cycle => 
-                $"❌ 检测到循环依赖：\n   " + string.Join(" → ", cycle) + " → " + cycle[0]
-            );
-            
-            true.Should().BeFalse($"发现 {cycles.Count} 个循环依赖：\n\n" + string.Join("\n\n", violations));
-        }
+
+        cycles.Count.Should().Be(0, $"发现 {cycles.Count} 个循环依赖：\n\n" + string.Join("\n\n", cycles.Select(c => string.Join(" → ", c))));
     }
 
     /// <summary>
@@ -105,21 +103,4 @@ public sealed class AdrCircularDependencyTests
     /// <summary>
     /// 查找仓库根目录
     /// </summary>
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                Directory.Exists(Path.Combine(currentDir, ".git")))
-            {
-                return currentDir;
-            }
-            
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        
-        return null;
-    }
 }

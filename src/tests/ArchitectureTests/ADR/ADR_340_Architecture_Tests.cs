@@ -1,25 +1,20 @@
-using System.Reflection;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-using NetArchTest.Rules;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
 /// ADR-340: 结构化日志与监控约束
 /// 验证 Platform 层正确引用日志包，Application/Modules 层不直接配置日志
-/// 
+///
 /// 测试-ADR 映射清单：
 /// ├─ ADR-340.1: Platform_Must_Reference_Logging_Packages → Platform 必须引用日志基础设施包
 /// ├─ ADR-340.2: PlatformBootstrapper_Must_Contain_Logging_Configuration → PlatformBootstrapper 必须包含配置代码
 /// ├─ ADR-340.3: （Roslyn Analyzer 待实现）Handler 禁止使用 Console 输出
 /// ├─ ADR-340.4: （Roslyn Analyzer 待实现）日志调用禁止使用字符串插值
 /// └─ ADR-340.5: Modules_Cannot_Reference_Logging_Implementation → Modules 禁止直接引用日志实现
-/// 
+///
 /// 执行能力说明：
 /// - L1 规则（340.1/340.2/340.5）：当前可通过 NetArchTest 和文本检查验证，CI 阻断
 /// - L2 规则（340.3/340.4）：需要 Roslyn Analyzer，当前作为 Review Gate，不参与 CI 阻断
-/// 
+///
 /// 参考文档：
 /// - ADR-340: docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md
 /// - 工程标准: docs/guides/structured-logging-monitoring-standard.md
@@ -58,7 +53,7 @@ public sealed class ADR_340_Architecture_Tests
         };
 
         var missingPackages = requiredPackages.Where(pkg => !content.Contains(pkg)).ToList();
-        
+
         var missingPackagesText = missingPackages.Any()
             ? string.Join("\n", missingPackages.Select(pkg => $"  - {pkg}"))
             : "";
@@ -106,7 +101,7 @@ public sealed class ADR_340_Architecture_Tests
 
         hasSerilogConfig.Should().BeTrue($"❌ ADR-340_1_2 违规: PlatformBootstrapper 必须包含 Serilog 配置代码。\n\n" +
             $"当前状态: 未发现 Log.Logger 或 LoggerConfiguration\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 在 PlatformBootstrapper.Configure() 中创建 LoggerConfiguration\n" +
             $"2. 配置至少一个 Sink（Console 或 File）\n" +
             $"3. 调用 .CreateLogger() 并赋值给 Log.Logger\n\n" +
@@ -127,7 +122,7 @@ public sealed class ADR_340_Architecture_Tests
 
         hasTracingAndMetrics.Should().BeTrue($"❌ ADR-340_1_2 违规: OpenTelemetry 必须同时配置 Tracing 和 Metrics。\n\n" +
             $"当前状态: 缺少 WithTracing 或 WithMetrics 配置\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 确保同时配置 .WithTracing() 和 .WithMetrics()\n" +
             $"2. 在 WithTracing 中添加 AspNetCore 和 Http 插桩\n" +
             $"3. 在 WithMetrics 中添加 Runtime 插桩\n\n" +
@@ -211,7 +206,7 @@ public sealed class ADR_340_Architecture_Tests
         result.IsSuccessful.Should().BeTrue($"❌ ADR-340_1_5 违规: Modules 层禁止直接引用 OpenTelemetry【配置类】。\n\n" +
             $"违规类型:\n" +
             $"{failingTypesText}\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 移除 Modules 项目中对 OpenTelemetry 配置包的引用\n" +
             $"2. 如需创建自定义 Activity，可使用 System.Diagnostics.ActivitySource\n" +
             $"3. Platform 层负责配置 OpenTelemetry，Modules 层只使用标准 API\n\n" +
@@ -228,10 +223,8 @@ public sealed class ADR_340_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var configuration = GetBuildConfiguration();
         var applicationDll = Path.Combine(root, "src", "Application", "bin", configuration, "net10.0", "Application.dll");
-        
-        if (!File.Exists(applicationDll))
-        {
-            true.Should().BeFalse($"❌ ADR-340_1_5 违规: 未找到 Application.dll，无法验证 Serilog 依赖隔离\n\n" +
+
+        File.Exists(applicationDll).Should().BeTrue($"❌ ADR-340_1_5 违规: 未找到 Application.dll，无法验证 Serilog 依赖隔离\n\n" +
                 $"预期路径: {applicationDll}\n\n" +
                 $"问题分析：\n" +
                 $"测试需要加载 Application 程序集以验证其是否违规引用 Serilog，当前未找到编译输出\n\n" +
@@ -241,7 +234,6 @@ public sealed class ADR_340_Architecture_Tests
                 $"3. 检查构建配置是否为 {configuration}\n" +
                 $"4. 验证项目输出路径是否正确\n\n" +
                 $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.5）");
-        }
 
         var applicationAssembly = Assembly.LoadFrom(applicationDll);
 
@@ -257,7 +249,7 @@ public sealed class ADR_340_Architecture_Tests
         result.IsSuccessful.Should().BeTrue($"❌ ADR-340_1_5 违规: Application 层禁止直接引用 Serilog。\n\n" +
             $"违规类型:\n" +
             $"{failingTypesText}\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 移除 Application 项目中对 Serilog 包的引用\n" +
             $"2. 仅使用 Microsoft.Extensions.Logging.ILogger<T> 接口\n" +
             $"3. 日志配置由 Platform 层的 PlatformBootstrapper 负责\n\n" +
@@ -272,10 +264,8 @@ public sealed class ADR_340_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var configuration = GetBuildConfiguration();
         var applicationDll = Path.Combine(root, "src", "Application", "bin", configuration, "net10.0", "Application.dll");
-        
-        if (!File.Exists(applicationDll))
-        {
-            true.Should().BeFalse($"❌ ADR-340_1_5 违规: 未找到 Application.dll，无法验证 OpenTelemetry 依赖隔离\n\n" +
+
+        File.Exists(applicationDll).Should().BeTrue($"❌ ADR-340_1_5 违规: 未找到 Application.dll，无法验证 OpenTelemetry 依赖隔离\n\n" +
                 $"预期路径: {applicationDll}\n\n" +
                 $"问题分析：\n" +
                 $"测试需要加载 Application 程序集以验证其是否违规引用 OpenTelemetry，当前未找到编译输出\n\n" +
@@ -285,7 +275,6 @@ public sealed class ADR_340_Architecture_Tests
                 $"3. 检查构建配置是否为 {configuration}\n" +
                 $"4. 验证项目输出路径是否正确\n\n" +
                 $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.5）");
-        }
 
         var applicationAssembly = Assembly.LoadFrom(applicationDll);
 
@@ -301,7 +290,7 @@ public sealed class ADR_340_Architecture_Tests
         result.IsSuccessful.Should().BeTrue($"❌ ADR-340_1_5 违规: Application 层禁止直接引用 OpenTelemetry 配置包。\n\n" +
             $"违规类型:\n" +
             $"{failingTypesText}\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 移除 Application 项目中对 OpenTelemetry 配置包的引用\n" +
             $"2. OpenTelemetry 配置由 Platform 层的 PlatformBootstrapper 负责\n\n" +
             $"执行级别: L1（依赖隔离）\n\n" +
@@ -326,7 +315,7 @@ public sealed class ADR_340_Architecture_Tests
         {
             return "Release";
         }
-        
+
         // 默认使用 Debug
         return "Debug";
     }

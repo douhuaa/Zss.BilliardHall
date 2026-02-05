@@ -1,6 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_920;
 
 /// <summary>
@@ -25,8 +22,8 @@ public sealed class ADR_920_1_Architecture_Tests
     [Fact(DisplayName = "ADR-920_1_1: 示例代码的法律地位")]
     public void ADR_920_1_1_Example_Code_Must_Not_Define_Architecture_Rules()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+
         // 验证 ADR-920 文档存在并包含法律地位定义
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-920-examples-governance-constitution.md");
         File.Exists(adrFile).Should().BeTrue($"ADR-920 文档不存在：{adrFile}");
@@ -36,12 +33,12 @@ public sealed class ADR_920_1_Architecture_Tests
         // 验证必需的条款存在
         content.Should().Contain("示例代码的法律地位", "缺少示例代码法律地位定义");
         content.Should().Contain("示例代码是\"认知放大器\"，不是\"架构定义器\"", "缺少核心原则声明");
-        
+
         // 验证示例代码禁止的权力已明确列出
         content.Should().Contain("定义架构规则", "未明确禁止定义架构规则");
         content.Should().Contain("引入 ADR 中未允许的结构或模式", "未明确禁止引入未批准的模式");
         content.Should().Contain("作为架构正确性的证据", "未明确禁止作为架构证据");
-        
+
         // 验证示例代码允许的用途已明确列出
         content.Should().Contain("演示如何使用已有的架构模式", "未明确允许演示用途");
         content.Should().Contain("说明具体的 API 调用方式", "未明确允许API说明用途");
@@ -54,7 +51,7 @@ public sealed class ADR_920_1_Architecture_Tests
     [Fact(DisplayName = "ADR-920_1_2: 示例文档必须包含免责声明")]
     public void ADR_920_1_2_Example_Documents_Must_Have_Disclaimer()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var violations = new List<string>();
 
         // 收集需要检查的示例文档
@@ -106,9 +103,7 @@ public sealed class ADR_920_1_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ ADR-920_1_2 违规：以下示例文档缺少'示例免责声明'",
                 "",
@@ -130,30 +125,6 @@ public sealed class ADR_920_1_Architecture_Tests
                 "",
                 "参考：docs/adr/governance/ADR-920-examples-governance-constitution.md §ADR-920_1_2"
             })));
-        }
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

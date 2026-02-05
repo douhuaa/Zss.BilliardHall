@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_975;
 
 /// <summary>
@@ -23,7 +21,7 @@ public sealed class ADR_975_1_Architecture_Tests
     [Fact(DisplayName = "ADR-975_1_1: 必须定义文档质量指标")]
     public void ADR_975_1_1_Quality_Metrics_Must_Be_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
         File.Exists(adr975Path).Should().BeTrue(
@@ -45,7 +43,7 @@ public sealed class ADR_975_1_Architecture_Tests
     [Fact(DisplayName = "ADR-975_1_2: 必须定义核心质量指标")]
     public void ADR_975_1_2_Core_Metrics_Must_Be_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
         var content = File.ReadAllText(adr975Path);
@@ -60,17 +58,4 @@ public sealed class ADR_975_1_Architecture_Tests
         }
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
-    }
 }

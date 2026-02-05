@@ -1,34 +1,32 @@
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
 /// <summary>
-/// ADR 结构验证 - Enforcement 层测试
+/// ADR-008_2: ADR 文档结构规范（Rule）
+/// 执行 ADR-008 对 ADR 文档结构的约束
 ///
-/// 【定位】：执行 ADR-008 对 ADR 文档结构的约束
-/// 【来源】：ADR-008 决策 4
-/// 【执法】：失败 = CI 阻断
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-008_2_1: ADR 文档必须包含必需章节
 ///
-/// 本测试类检查：
-/// 1. ADR 必须包含必需章节
-/// 2. ADR 结构符合规范
-///
-/// 【关联文档】
+/// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
 /// - 来源决策: ADR-008 决策 4.1
+///
+/// 执法说明：
+/// - 失败 = CI 阻断
 /// </summary>
-public sealed class AdrStructureTests
+public sealed class ADR_008_2_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR 文档必须包含必需章节")]
-    public void ADR_Documents_Must_Have_Required_Sections()
+    /// <summary>
+    /// ADR-008_2_1: ADR 文档必须包含必需章节
+    /// 验证所有 ADR 文档包含状态、级别、核心决策等必需章节（§ADR-008_2_1）
+    /// </summary>
+    [Fact(DisplayName = "ADR-008_2_1: ADR 文档必须包含必需章节")]
+    public void ADR_008_2_1_Documents_Must_Have_Required_Sections()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDir = Path.Combine(repoRoot, "docs/adr");
 
-        if (!Directory.Exists(adrDir))
-        {
-            true.Should().BeFalse($"ADR 目录不存在：{adrDir}");
-        }
+        Directory.Exists(adrDir).Should().BeTrue($"ADR 目录不存在：{adrDir}");
 
         var violations = new List<string>();
 
@@ -76,9 +74,7 @@ public sealed class AdrStructureTests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ Enforcement 违规：以下 ADR 文档缺少必需章节",
                 "",
@@ -99,21 +95,6 @@ public sealed class AdrStructureTests
                 "",
                 "参考：docs/adr/constitutional/ADR-008-documentation-governance-constitution.md 决策 4.1"
             })));
-        }
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

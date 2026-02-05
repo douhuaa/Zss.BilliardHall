@@ -1,8 +1,3 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-using System.Reflection;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 
 /// <summary>
@@ -34,13 +29,18 @@ public sealed class ADR_002_2_Architecture_Tests
             .HaveDependencyOnAny("Zss.BilliardHall.Host", "Zss.BilliardHall.Host.Web", "Zss.BilliardHall.Host.Worker")
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-002_2_1 违规: Application 层不应依赖 Host 层\n\n" +
-        $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
-        $"修复建议:\n" +
-        $"1. 移除 Application 对 Host 的引用\n" +
-        $"2. Application 定义\"系统是什么\"，不应感知运行形态\n" +
-        $"3. 使用抽象替代具体的 Host 类型（如 ICurrentUserProvider 替代 HttpContext）\n\n" +
-        $"参考: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        var message = BuildFromArchTestResult(
+            ruleId: "ADR-002_2_1",
+            summary: "Application 层不应依赖 Host 层",
+            failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+            remediationSteps: new[]
+            {
+                "移除 Application 对 Host 的引用",
+                "Application 定义\"系统是什么\"，不应感知运行形态",
+                "使用抽象替代具体的 Host 类型（如 ICurrentUserProvider 替代 HttpContext）"
+            },
+            adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        result.IsSuccessful.Should().BeTrue(message);
     }
 
     /// <summary>
@@ -60,13 +60,18 @@ public sealed class ADR_002_2_Architecture_Tests
                 .ToArray())
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-002_2_2 违规: Application 层不应依赖任何 Modules\n\n" +
-        $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
-        $"修复建议:\n" +
-        $"1. 移除 Application 对 Modules 的引用\n" +
-        $"2. Application 通过扫描和反射加载模块，而非直接引用\n" +
-        $"3. 使用 ApplicationBootstrapper 自动发现并注册模块\n\n" +
-        $"参考: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        var message = BuildFromArchTestResult(
+            ruleId: "ADR-002_2_2",
+            summary: "Application 层不应依赖任何 Modules",
+            failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+            remediationSteps: new[]
+            {
+                "移除 Application 对 Modules 的引用",
+                "Application 通过扫描和反射加载模块，而非直接引用",
+                "使用 ApplicationBootstrapper 自动发现并注册模块"
+            },
+            adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        result.IsSuccessful.Should().BeTrue(message);
     }
 
     /// <summary>
@@ -86,7 +91,13 @@ public sealed class ADR_002_2_Architecture_Tests
             .GetTypes()
             .ToList();
 
-        bootstrappers.Should().NotBeEmpty($"❌ ADR-002_2_3 违规: Application 层必须包含 Bootstrapper 入口点\n\n" + $"修复建议:\n" + $"1. 创建 ApplicationBootstrapper 类作为 Application 层的唯一入口\n" + $"2. 在 ApplicationBootstrapper 中封装模块扫描和业务装配\n" + $"3. 提供 public static void Configure() 方法\n\n" + $"参考: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        var bootstrapperExistenceMessage = BuildSimple(
+            ruleId: "ADR-002_2_3",
+            summary: "Application 层必须包含 Bootstrapper 入口点",
+            currentState: "未找到任何 Bootstrapper 类",
+            remediation: "创建 ApplicationBootstrapper 类作为 Application 层的唯一入口，提供 public static void Configure() 方法",
+            adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        bootstrappers.Should().NotBeEmpty(bootstrapperExistenceMessage);
 
         var applicationBootstrapper = bootstrappers.FirstOrDefault(t => t.Name == "ApplicationBootstrapper");
         applicationBootstrapper.Should().NotBeNull();
@@ -96,12 +107,18 @@ public sealed class ADR_002_2_Architecture_Tests
             .Where(m => m.Name == "Configure")
             .ToList();
 
-        configureMethods.Should().NotBeEmpty($"❌ ADR-002_2_3 违规: ApplicationBootstrapper 必须包含 Configure 方法\n\n" +
-        $"修复建议:\n" +
-        $"1. 在 ApplicationBootstrapper 中添加 public static void Configure() 方法\n" +
-        $"2. 方法签名应接受 IServiceCollection, IConfiguration\n" +
-        $"3. 在此方法中注册所有 Application 层服务和模块\n\n" +
-        $"参考: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        var configureMethodExistenceMessage = Build(
+            ruleId: "ADR-002_2_3",
+            summary: "ApplicationBootstrapper 必须包含 Configure 方法",
+            currentState: "ApplicationBootstrapper 类存在，但缺少 Configure 方法",
+            remediationSteps: new[]
+            {
+                "在 ApplicationBootstrapper 中添加 public static void Configure() 方法",
+                "方法签名应接受 IServiceCollection, IConfiguration",
+                "在此方法中注册所有 Application 层服务和模块"
+            },
+            adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        configureMethods.Should().NotBeEmpty(configureMethodExistenceMessage);
     }
 
     /// <summary>
@@ -118,12 +135,17 @@ public sealed class ADR_002_2_Architecture_Tests
             .HaveDependencyOn("Microsoft.AspNetCore.Http.HttpContext")
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-002_2_4 违规: Application 层不应使用 HttpContext 等 Host 专属类型\n\n" +
-        $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
-        $"修复建议:\n" +
-        $"1. 移除对 HttpContext 的依赖\n" +
-        $"2. 创建业务抽象（如 ICurrentUserProvider）\n" +
-        $"3. 在 Host 层实现抽象，Application 层只依赖接口\n\n" +
-        $"参考: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        var message = BuildFromArchTestResult(
+            ruleId: "ADR-002_2_4",
+            summary: "Application 层不应使用 HttpContext 等 Host 专属类型",
+            failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+            remediationSteps: new[]
+            {
+                "移除对 HttpContext 的依赖",
+                "创建业务抽象（如 ICurrentUserProvider）",
+                "在 Host 层实现抽象，Application 层只依赖接口"
+            },
+            adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        result.IsSuccessful.Should().BeTrue(message);
     }
 }

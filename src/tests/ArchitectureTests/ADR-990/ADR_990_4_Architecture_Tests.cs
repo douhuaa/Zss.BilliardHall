@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_990;
 
 /// <summary>
@@ -19,7 +17,7 @@ public sealed class ADR_990_4_Architecture_Tests
     [Fact(DisplayName = "ADR-990_4_1: 必须实时追踪项目状态")]
     public void ADR_990_4_1_Project_Status_Must_Be_Tracked()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
         var content = File.ReadAllText(adr990Path);
@@ -32,7 +30,7 @@ public sealed class ADR_990_4_Architecture_Tests
     [Fact(DisplayName = "ADR-990_4_2: 必须定义状态")]
     public void ADR_990_4_2_Status_Definitions_Must_Be_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
         var content = File.ReadAllText(adr990Path);
@@ -46,17 +44,4 @@ public sealed class ADR_990_4_Architecture_Tests
         }
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
-    }
 }

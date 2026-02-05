@@ -1,8 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_006;
 
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 /// <summary>
 /// ADR-006_4: 目录归属规则
 /// 验证 ADR-006_4_1：目录层级映射
@@ -59,7 +56,7 @@ public sealed class ADR_006_4_Architecture_Tests
                         $"- 100~199: structure/ （结构层）\n" +
                         $"- 200~299: runtime/ （运行层）\n" +
                         $"- 300~399: technical/ （技术层）\n\n" +
-                        $"修复建议:\n" +
+                        $"修复建议：\n" +
                         $"1. 将文件移动到正确的目录\n" +
                         $"2. 更新所有交叉引用该 ADR 的文档路径\n" +
                         $"3. 确保测试中的路径引用也随之更新\n\n" +

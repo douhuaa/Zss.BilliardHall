@@ -1,8 +1,3 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-using System.Reflection;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_003;
 
 /// <summary>
@@ -28,15 +23,18 @@ public sealed class ADR_003_2_Architecture_Tests
 
         foreach (var type in types)
         {
-            (type.Namespace?.StartsWith($"{BaseNamespace}.Platform") == true).Should().BeTrue($"❌ ADR-003_2_1 违规: Platform 程序集中的类型应在 {BaseNamespace}.Platform 命名空间下\n\n" +
-            $"违规类型: {type.FullName}\n" +
-            $"当前命名空间: {type.Namespace}\n" +
-            $"期望命名空间前缀: {BaseNamespace}.Platform\n\n" +
-            $"修复建议:\n" +
-            $"1. 确保类型定义在正确的命名空间中\n" +
-            $"2. Platform 层的所有代码都应该在 {BaseNamespace}.Platform 命名空间下\n" +
-            $"3. 如果是子命名空间，应该是 {BaseNamespace}.Platform.* 格式\n\n" +
-            $"参考: docs/copilot/adr-003.prompts.md (场景 2)");
+            (type.Namespace?.StartsWith($"{BaseNamespace}.Platform") == true).Should().BeTrue(
+                Build(
+                    ruleId: "ADR-003_2_1",
+                    summary: $"Platform 程序集中的类型应在 {BaseNamespace}.Platform 命名空间下",
+                    currentState: $"违规类型: {type.FullName}\n当前命名空间: {type.Namespace}\n期望命名空间前缀: {BaseNamespace}.Platform",
+                    remediationSteps: new[]
+                    {
+                        "确保类型定义在正确的命名空间中",
+                        $"Platform 层的所有代码都应该在 {BaseNamespace}.Platform 命名空间下",
+                        $"如果是子命名空间，应该是 {BaseNamespace}.Platform.* 格式"
+                    },
+                    adrReference: "docs/copilot/adr-003.prompts.md (场景 2)"));
         }
     }
 }

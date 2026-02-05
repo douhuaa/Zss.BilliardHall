@@ -1,9 +1,3 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-using System.Reflection;
-using System.Text.RegularExpressions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 
 /// <summary>
@@ -46,13 +40,18 @@ public sealed class ADR_002_3_Architecture_Tests
             .HaveDependencyOnAny(forbidden)
             .GetResult();
 
-        result.IsSuccessful.Should().BeTrue($"❌ ADR-002_3_1 违规: Host {hostAssembly.GetName().Name} 不应依赖任何 Modules\n\n" +
-        $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
-        $"修复建议:\n" +
-        $"1. 移除 Host 对 Modules 的项目引用\n" +
-        $"2. Host 通过 Application 间接引入模块\n" +
-        $"3. 将共享契约移到 Platform/BuildingBlocks\n\n" +
-        $"参考: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        var message = BuildFromArchTestResult(
+            ruleId: "ADR-002_3_1",
+            summary: $"Host {hostAssembly.GetName().Name} 不应依赖任何 Modules",
+            failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+            remediationSteps: new[]
+            {
+                "移除 Host 对 Modules 的项目引用",
+                "Host 通过 Application 间接引入模块",
+                "将共享契约移到 Platform/BuildingBlocks"
+            },
+            adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        result.IsSuccessful.Should().BeTrue(message);
     }
 
     /// <summary>
@@ -104,15 +103,18 @@ public sealed class ADR_002_3_Architecture_Tests
             var refPath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(csprojPath)!, include));
             if (moduleProjFiles.Contains(refPath))
             {
-                true.Should().BeFalse($"❌ ADR-002_3_3 违规: Host 项目不应直接引用 Modules\n\n" +
-                            $"Host 项目: {Path.GetFileName(csprojPath)}\n" +
-                            $"违规引用: {Path.GetFileName(refPath)}\n" +
-                            $"引用路径: {include}\n\n" +
-                            $"修复建议:\n" +
-                            $"1. 从 Host.csproj 中移除对 Module 项目的引用\n" +
-                            $"2. Host 只应引用 Application 和 Platform\n" +
-                            $"3. 将共享契约移到 Platform/BuildingBlocks\n\n" +
-                            $"参考: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+                var message = Build(
+                    ruleId: "ADR-002_3_3",
+                    summary: "Host 项目不应直接引用 Modules",
+                    currentState: $"Host 项目: {Path.GetFileName(csprojPath)}\n违规引用: {Path.GetFileName(refPath)}\n引用路径: {include}",
+                    remediationSteps: new[]
+                    {
+                        "从 Host.csproj 中移除对 Module 项目的引用",
+                        "Host 只应引用 Application 和 Platform",
+                        "将共享契约移到 Platform/BuildingBlocks"
+                    },
+                    adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+                true.Should().BeFalse(message);
             }
         }
     }
@@ -140,14 +142,18 @@ public sealed class ADR_002_3_Architecture_Tests
                     .StartsWith("//")) // 排除注释行
                 .ToList();
 
-            (lines.Count <= 50).Should().BeTrue($"❌ ADR-002_3_4 违规: Program.cs 应保持简洁（≤ 50 行）\n\n" +
-            $"当前行数: {lines.Count}\n" +
-            $"文件路径: {programFile}\n\n" +
-            $"修复建议:\n" +
-            $"1. 将技术配置逻辑移到 PlatformBootstrapper\n" +
-            $"2. 将业务装配逻辑移到 ApplicationBootstrapper\n" +
-            $"3. Program.cs 只保留核心调用（builder.AddPlatform, builder.AddApplication, app.Run）\n\n" +
-            $"参考: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+            var message = Build(
+                ruleId: "ADR-002_3_4",
+                summary: "Program.cs 应保持简洁（≤ 50 行）",
+                currentState: $"当前行数: {lines.Count}\n文件路径: {programFile}",
+                remediationSteps: new[]
+                {
+                    "将技术配置逻辑移到 PlatformBootstrapper",
+                    "将业务装配逻辑移到 ApplicationBootstrapper",
+                    "Program.cs 只保留核心调用（builder.AddPlatform, builder.AddApplication, app.Run）"
+                },
+                adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+            (lines.Count <= 50).Should().BeTrue(message);
         }
     }
 

@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_980;
 
 /// <summary>
@@ -19,7 +17,7 @@ public sealed class ADR_980_3_Architecture_Tests
     [Fact(DisplayName = "ADR-980_3_1: 修改 ADR 时必须遵循变更传播清单")]
     public void ADR_980_3_1_Changes_Must_Follow_Propagation_Checklist()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
         var content = File.ReadAllText(adr980Path);
@@ -32,7 +30,7 @@ public sealed class ADR_980_3_Architecture_Tests
     [Fact(DisplayName = "ADR-980_3_2: 必须定义标准清单")]
     public void ADR_980_3_2_Standard_Checklist_Must_Be_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
         var content = File.ReadAllText(adr980Path);
@@ -42,17 +40,4 @@ public sealed class ADR_980_3_Architecture_Tests
             $"参考：docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md §3.2");
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
-    }
 }

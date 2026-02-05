@@ -1,6 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_960;
 
 /// <summary>
@@ -23,28 +20,59 @@ public sealed class ADR_960_2_Architecture_Tests
     [Fact(DisplayName = "ADR-960_2_1: Onboarding 必须遵循内容类型限制")]
     public void ADR_960_2_1_Onboarding_Must_Follow_Content_Type_Restrictions()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
-        
-        File.Exists(adr960Path).Should().BeTrue(
-            $"❌ ADR-960_2_1 违规：ADR-960 文档不存在");
-        
-        var content = File.ReadAllText(adr960Path);
-        
+        var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
+
+        var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-960_2_1",
+            filePath: adr960Path,
+            fileDescription: "ADR-960 文档",
+            remediationSteps: new[]
+            {
+                "创建 ADR-960 文档",
+                "在文档中定义 Onboarding 的内容类型限制表"
+            },
+            adrReference: TestConstants.Adr960Path);
+
+        File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
+
         // 验证定义了内容类型限制表格
-        var hasContentTypeTable = content.Contains("| 内容类型", StringComparison.OrdinalIgnoreCase) &&
-                                 content.Contains("是否允许出现在 Onboarding", StringComparison.OrdinalIgnoreCase);
-        
-        hasContentTypeTable.Should().BeTrue(
-            $"❌ ADR-960_2_1 违规：ADR-960 必须定义 Onboarding 的内容类型限制表\n\n" +
-            $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §2.1");
-        
+        var hasContentTypeTable = FileSystemTestHelper.FileContainsTable(
+            adr960Path, 
+            "是否允许出现在 Onboarding");
+
+        var tableMessage = AssertionMessageBuilder.Build(
+            ruleId: "ADR-960_2_1",
+            summary: "ADR-960 必须定义 Onboarding 的内容类型限制表",
+            currentState: "文档中未找到内容类型限制表（应包含'是否允许出现在 Onboarding'列）",
+            remediationSteps: new[]
+            {
+                "在 ADR-960 中添加内容类型限制表格",
+                "表格应包含'内容类型'和'是否允许出现在 Onboarding'列",
+                "明确列出允许和禁止的内容类型"
+            },
+            adrReference: TestConstants.Adr960Path,
+            includeClauseReference: true);
+
+        hasContentTypeTable.Should().BeTrue(tableMessage);
+
         // 验证表格包含关键内容类型限制
-        content.Should().Contain("架构约束定义",
-            $"❌ ADR-960_2_1 违规：内容类型表必须包含'架构约束定义'");
-        
-        content.Should().Contain("示例代码",
-            $"❌ ADR-960_2_1 违规：内容类型表必须包含'示例代码'限制");
+        var missingContentTypes = FileSystemTestHelper.GetMissingKeywords(
+            adr960Path,
+            TestConstants.ProhibitedContentTypesInOnboarding,
+            ignoreCase: true);
+
+        var contentTypeMessage = AssertionMessageBuilder.BuildWithViolations(
+            ruleId: "ADR-960_2_1",
+            summary: "内容类型限制表缺少必需的内容类型",
+            failingTypes: missingContentTypes,
+            remediationSteps: new[]
+            {
+                "在内容类型表中添加缺失的内容类型",
+                "确保所有禁止的内容类型都有明确的限制说明"
+            },
+            adrReference: TestConstants.Adr960Path);
+
+        missingContentTypes.Should().BeEmpty(contentTypeMessage);
     }
 
     /// <summary>
@@ -54,43 +82,40 @@ public sealed class ADR_960_2_Architecture_Tests
     [Fact(DisplayName = "ADR-960_2_2: Onboarding 必须遵循三个核心问题原则")]
     public void ADR_960_2_2_Onboarding_Must_Follow_Core_Principles()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
-        
-        File.Exists(adr960Path).Should().BeTrue(
-            $"❌ ADR-960_2_2 违规：ADR-960 文档不存在");
-        
-        var content = File.ReadAllText(adr960Path);
-        
-        // 验证定义了三个核心问题
-        var hasThreeCoreQuestions = content.Contains("我是谁", StringComparison.OrdinalIgnoreCase) &&
-                                   content.Contains("我先看什么", StringComparison.OrdinalIgnoreCase) &&
-                                   content.Contains("我下一步去哪", StringComparison.OrdinalIgnoreCase);
-        
-        hasThreeCoreQuestions.Should().BeTrue(
-            $"❌ ADR-960_2_2 违规：ADR-960 必须定义 Onboarding 的三个核心问题\n\n" +
-            $"核心原则：\n" +
-            $"  1. 我是谁（这个项目是什么）\n" +
-            $"  2. 我先看什么\n" +
-            $"  3. 我下一步去哪\n\n" +
-            $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §2.2");
-    }
+        var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
+        var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-960_2_2",
+            filePath: adr960Path,
+            fileDescription: "ADR-960 文档",
+            remediationSteps: new[]
             {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
+                "创建 ADR-960 文档",
+                "在文档中定义 Onboarding 的三个核心问题"
+            },
+            adrReference: TestConstants.Adr960Path);
+
+        File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
+
+        // 验证定义了三个核心问题
+        var missingQuestions = FileSystemTestHelper.GetMissingKeywords(
+            adr960Path,
+            TestConstants.OnboardingCoreQuestions,
+            ignoreCase: true);
+
+        var message = AssertionMessageBuilder.BuildWithViolations(
+            ruleId: "ADR-960_2_2",
+            summary: "ADR-960 必须定义 Onboarding 的三个核心问题",
+            failingTypes: missingQuestions.Select(q => $"缺少核心问题：{q}"),
+            remediationSteps: new[]
+            {
+                "在 ADR-960 中添加三个核心问题的定义",
+                "核心问题包括：我是谁（这个项目是什么）",
+                "我先看什么（新人应该先阅读哪些文档）",
+                "我下一步去哪（后续学习路径）"
+            },
+            adrReference: TestConstants.Adr960Path);
+
+        missingQuestions.Should().BeEmpty(message);
     }
 }

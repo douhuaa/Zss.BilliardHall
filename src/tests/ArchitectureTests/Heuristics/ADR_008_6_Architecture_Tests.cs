@@ -1,44 +1,41 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-using Xunit.Abstractions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Heuristics;
 
 /// <summary>
-/// 文档风格启发式检查 - Heuristics 层测试
-/// 
-/// 【定位】：品味建议，非强制规则
-/// 【来源】：最佳实践和团队共识
-/// 【执法】：不失败构建，仅输出警告
-/// 
-/// 本测试类检查：
-/// 1. 文档可读性建议
-/// 2. 语言质量建议
-/// 3. 一致性建议
-/// 
-/// 【重要】：这些测试永远不应该 Fail，只输出建议。
-/// 
-/// 【关联文档】
+/// ADR-008_6: 文档风格启发式规范（Rule）
+/// 文档风格品味建议，非强制规则
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-008_6_1: README 建议使用描述性语言
+///
+/// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
-/// - 设计哲学：Heuristics 层不阻断开发流程
+///
+/// 定位说明：
+/// - 品味建议，非强制规则
+/// - 不失败构建，仅输出警告
+/// - 这些测试永远不应该 Fail，只输出建议
 /// </summary>
-public sealed class DocumentationStyleHeuristicsTests
+public sealed class ADR_008_6_Architecture_Tests
 {
     private readonly ITestOutputHelper _output;
 
-    public DocumentationStyleHeuristicsTests(ITestOutputHelper output)
+    public ADR_008_6_Architecture_Tests(ITestOutputHelper output)
     {
         _output = output;
     }
 
-    [Fact(DisplayName = "Heuristics: README 建议使用描述性语言")]
-    public void README_Should_Prefer_Descriptive_Language()
+    /// <summary>
+    /// ADR-008_6_1: README 建议使用描述性语言
+    /// 启发式建议：使用描述性语言而非命令性语言（§ADR-008_6_1）
+    /// </summary>
+    [Fact(DisplayName = "ADR-008_6_1: README 建议使用描述性语言")]
+    public void ADR_008_6_1_README_Should_Prefer_Descriptive_Language()
     {
-        var repoRoot = FindRepositoryRoot();
+        var repoRoot = TestEnvironment.RepositoryRoot;
         if (repoRoot == null) return;
 
         var suggestions = new List<string>();
-        
+
         // 命令式语气词汇（建议改为描述性）
         var imperativePhrases = new[]
         {
@@ -57,7 +54,7 @@ public sealed class DocumentationStyleHeuristicsTests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             foreach (var phrase in imperativePhrases)
             {
                 if (content.Contains(phrase))
@@ -88,7 +85,7 @@ public sealed class DocumentationStyleHeuristicsTests
     [Fact(DisplayName = "Heuristics: ADR 建议包含示例")]
     public void ADR_Should_Include_Examples()
     {
-        var repoRoot = FindRepositoryRoot();
+        var repoRoot = TestEnvironment.RepositoryRoot;
         if (repoRoot == null) return;
 
         var suggestions = new List<string>();
@@ -106,11 +103,11 @@ public sealed class DocumentationStyleHeuristicsTests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             // 检查是否包含代码示例
             var hasCodeExample = Regex.IsMatch(content, @"```[\s\S]*?```");
             var hasCheckMark = content.Contains("✅") || content.Contains("❌");
-            
+
             if (!hasCodeExample && !hasCheckMark)
             {
                 suggestions.Add($"  💡 {relativePath} - 建议添加代码示例或对比标记（✅/❌）");
@@ -142,7 +139,7 @@ public sealed class DocumentationStyleHeuristicsTests
     [Fact(DisplayName = "Heuristics: 文档建议保持简洁")]
     public void Documents_Should_Be_Concise()
     {
-        var repoRoot = FindRepositoryRoot();
+        var repoRoot = TestEnvironment.RepositoryRoot;
         if (repoRoot == null) return;
 
         var suggestions = new List<string>();
@@ -159,15 +156,15 @@ public sealed class DocumentationStyleHeuristicsTests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             var lineCount = content.Split('\n').Length;
-            
+
             // ADR 建议不超过 500 行
             if (file.Contains("/adr/", StringComparison.OrdinalIgnoreCase) && lineCount > 500)
             {
                 suggestions.Add($"  💡 {relativePath} - ADR 较长 ({lineCount} 行)，建议拆分为多个 ADR");
             }
-            
+
             // README 建议不超过 300 行
             if (Path.GetFileName(file).Equals("README.md", StringComparison.OrdinalIgnoreCase) && lineCount > 300)
             {
@@ -193,18 +190,4 @@ public sealed class DocumentationStyleHeuristicsTests
         true.Should().BeTrue();
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

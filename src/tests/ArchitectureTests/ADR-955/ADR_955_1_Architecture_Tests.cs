@@ -1,6 +1,3 @@
-using FluentAssertions;
-using System.Text.RegularExpressions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_955;
 
 /// <summary>
@@ -24,8 +21,8 @@ public sealed class ADR_955_1_Architecture_Tests
     [Fact(DisplayName = "ADR-955_1_1: 文档必须包含必需的元数据")]
     public void ADR_955_1_1_Documents_Must_Have_Required_Metadata()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+
         var documentDirectories = new[]
         {
             Path.Combine(repoRoot, "docs/guides"),
@@ -80,7 +77,7 @@ public sealed class ADR_955_1_Architecture_Tests
     [Fact(DisplayName = "ADR-955_1_2: 文档目录结构必须清晰")]
     public void ADR_955_1_2_Document_Directory_Structure_Must_Be_Clear()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var docsDirectory = Path.Combine(repoRoot, "docs");
 
         Directory.Exists(docsDirectory).Should().BeTrue("docs 目录必须存在");
@@ -101,27 +98,4 @@ public sealed class ADR_955_1_Architecture_Tests
             "至少应该有部分文档目录（adr, guides, faqs, cases, engineering-standards）存在");
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

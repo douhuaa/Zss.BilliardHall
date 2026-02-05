@@ -3,7 +3,7 @@ using Zss.BilliardHall.AdrSemanticParser.Models;
 
 namespace Zss.BilliardHall.AdrSemanticParser.Tests;
 
-public class AdrSerializerTests
+public sealed class AdrSerializerTests
 {
     private readonly AdrSerializer _serializer;
 
@@ -12,7 +12,7 @@ public class AdrSerializerTests
         _serializer = new AdrSerializer();
     }
 
-    [Fact]
+    [Fact(DisplayName = "序列化有效模型返回 JSON")]
     public void Serialize_ValidModel_ReturnsJson()
     {
         // Arrange
@@ -33,7 +33,7 @@ public class AdrSerializerTests
         json.Should().Contain("\"status\": \"Final\"");
     }
 
-    [Fact]
+    [Fact(DisplayName = "序列化包含关系的模型包含所有字段")]
     public void Serialize_WithRelationships_IncludesAllFields()
     {
         // Arrange
@@ -64,7 +64,7 @@ public class AdrSerializerTests
         json.Should().Contain("测试原因");
     }
 
-    [Fact]
+    [Fact(DisplayName = "反序列化有效 JSON 返回模型")]
     public void Deserialize_ValidJson_ReturnsModel()
     {
         // Arrange
@@ -91,7 +91,7 @@ public class AdrSerializerTests
         model.Status.Should().Be("Final");
     }
 
-    [Fact]
+    [Fact(DisplayName = "批量序列化多个模型返回数组")]
     public void SerializeBatch_MultipleModels_ReturnsArray()
     {
         // Arrange
@@ -121,28 +121,28 @@ public class AdrSerializerTests
         json.Should().Contain("ADR-002");
     }
 
-    [Fact]
+    [Fact(DisplayName = "序列化 null 模型抛出异常")]
     public void Serialize_NullModel_ThrowsException()
     {
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() => _serializer.Serialize(null!));
     }
 
-    [Fact]
+    [Fact(DisplayName = "反序列化 null JSON 抛出异常")]
     public void Deserialize_NullJson_ThrowsException()
     {
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() => _serializer.Deserialize(null!));
     }
 
-    [Fact]
+    [Fact(DisplayName = "反序列化空 JSON 抛出异常")]
     public void Deserialize_EmptyJson_ThrowsException()
     {
         // Act & Assert
         Assert.Throws<ArgumentException>(() => _serializer.Deserialize(""));
     }
 
-    [Fact]
+    [Fact(DisplayName = "反序列化无效 JSON 抛出异常")]
     public void Deserialize_InvalidJson_ThrowsException()
     {
         // Arrange
@@ -152,7 +152,7 @@ public class AdrSerializerTests
         Assert.ThrowsAny<Exception>(() => _serializer.Deserialize(invalidJson));
     }
 
-    [Fact]
+    [Fact(DisplayName = "批量序列化空数组返回空数组")]
     public void SerializeBatch_EmptyArray_ReturnsEmptyArray()
     {
         // Arrange
@@ -165,14 +165,14 @@ public class AdrSerializerTests
         json.Should().Be("[]");
     }
 
-    [Fact]
+    [Fact(DisplayName = "批量序列化 null 数组抛出异常")]
     public void SerializeBatch_NullArray_ThrowsException()
     {
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() => _serializer.SerializeBatch(null!));
     }
 
-    [Fact]
+    [Fact(DisplayName = "序列化最小化模型返回有效 JSON")]
     public void Serialize_MinimalModel_ReturnsValidJson()
     {
         // Arrange - 最小化的模型，只有必需字段

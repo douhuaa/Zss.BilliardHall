@@ -1,6 +1,3 @@
-using FluentAssertions;
-using System.Text.RegularExpressions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_947;
 
 /// <summary>
@@ -22,7 +19,7 @@ public sealed class ADR_947_2_Architecture_Tests
     [Fact(DisplayName = "ADR-947_2_1: 关系声明区内容必须仅为列表项")]
     public void ADR_947_2_1_Relationships_Section_Must_Only_Contain_Lists()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, "docs/adr");
 
         var adrFiles = Directory.GetFiles(adrDirectory, "ADR-*.md", SearchOption.AllDirectories);
@@ -64,8 +61,8 @@ public sealed class ADR_947_2_Architecture_Tests
                 // 检查是否为有效的关系类型标题（粗体）
                 if (trimmedLine.StartsWith("**"))
                 {
-                    var validHeaders = new[] { "**依赖", "**被依赖", "**替代", "**被替代", "**相关", 
-                                              "**Depends On**", "**Depended By**", "**Supersedes**", 
+                    var validHeaders = new[] { "**依赖", "**被依赖", "**替代", "**被替代", "**相关",
+                                              "**Depends On**", "**Depended By**", "**Supersedes**",
                                               "**Superseded By**", "**Related**" };
                     var isValidHeader = validHeaders.Any(h => trimmedLine.StartsWith(h));
                     if (!isValidHeader)
@@ -104,27 +101,6 @@ public sealed class ADR_947_2_Architecture_Tests
 
     // ========== 辅助方法 ==========
 
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 
     private static string ExtractRelationshipsSection(string content)
     {
@@ -132,7 +108,7 @@ public sealed class ADR_947_2_Architecture_Tests
         // 必须是行首的 ## Relationships，不匹配代码示例中的内容
         var pattern = @"^##\s+(Relationships|关系声明).*?\n(.*?)(?=\n##\s|\z)";
         var match = Regex.Match(content, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Multiline);
-        
+
         return match.Success ? match.Groups[2].Value : string.Empty;
     }
 }

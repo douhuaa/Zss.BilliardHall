@@ -1,37 +1,38 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
 /// <summary>
-/// Skills 判断性语言检查 - Enforcement 层测试
-/// 
-/// 【定位】：执行 ADR-008 的具体约束
-/// 【来源】：ADR-008 决策 3.2
-/// 【执法】：失败 = CI 阻断
-/// 
-/// 本测试类检查：
-/// 1. Skills 不得输出判断性结论
-/// 2. Skills 只能输出事实
-/// 
-/// 【关联文档】
+/// ADR-008_5: Skills 判断性语言规范（Rule）
+/// 执行 ADR-008 对 Skills 输出语言的约束
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-008_5_1: Skills 不得输出判断性结论
+///
+/// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
 /// - 来源决策: ADR-008 决策 3.2
+///
+/// 执法说明：
+/// - 失败 = CI 阻断
+/// - Skills 只能输出事实，不得输出判断
 /// </summary>
-public sealed class SkillsJudgmentLanguageTests
+public sealed class ADR_008_5_Architecture_Tests
 {
-    [Fact(DisplayName = "Skills 不得输出判断性结论")]
-    public void Skills_Must_Not_Output_Judgments()
+    /// <summary>
+    /// ADR-008_5_1: Skills 不得输出判断性结论
+    /// 验证 Skills 只输出事实，不输出判断性结论（§ADR-008_5_1）
+    /// </summary>
+    [Fact(DisplayName = "ADR-008_5_1: Skills 不得输出判断性结论")]
+    public void ADR_008_5_1_Skills_Must_Not_Output_Judgments()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var skillsDir = Path.Combine(repoRoot, ".github/skills");
-        
-        if (!Directory.Exists(skillsDir)) 
+
+        if (!Directory.Exists(skillsDir))
         {
             // Skills 目录可选，如果不存在则测试通过
             return;
         }
-        
+
         // 判断性词汇（ADR-008 明确禁止 Skills 使用）
         var forbiddenJudgments = new[]
         {
@@ -46,18 +47,18 @@ public sealed class SkillsJudgmentLanguageTests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             // 移除 frontmatter 和代码块
             var contentWithoutFrontmatter = RemoveFrontmatter(content);
             var contentWithoutCodeBlocks = RemoveCodeBlocks(contentWithoutFrontmatter);
-            
+
             // 检查输出结果示例中是否包含判断词
             var outputSectionMatch = Regex.Match(contentWithoutCodeBlocks, @"###?\s*输出结果.*?(?=###|$)", RegexOptions.Singleline | RegexOptions.IgnoreCase);
-            
+
             if (outputSectionMatch.Success)
             {
                 var outputSection = outputSectionMatch.Value;
-                
+
                 foreach (var judgment in forbiddenJudgments)
                 {
                     if (outputSection.Contains(judgment))
@@ -68,9 +69,7 @@ public sealed class SkillsJudgmentLanguageTests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ Enforcement 违规：以下 Skills 输出了判断性结论",
                 "",
@@ -92,7 +91,6 @@ public sealed class SkillsJudgmentLanguageTests
                 "",
                 "参考：docs/adr/constitutional/ADR-008-documentation-governance-constitution.md 决策 3.2"
             })));
-        }
     }
 
     private static string RemoveCodeBlocks(string content)
@@ -107,18 +105,4 @@ public sealed class SkillsJudgmentLanguageTests
         return Regex.Replace(content, @"^---[\s\S]*?---\s*", string.Empty);
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

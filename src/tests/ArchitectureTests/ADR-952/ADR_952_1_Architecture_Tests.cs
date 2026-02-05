@@ -1,6 +1,3 @@
-using FluentAssertions;
-using System.Text.RegularExpressions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_952;
 
 /// <summary>
@@ -25,7 +22,7 @@ public sealed class ADR_952_1_Architecture_Tests
     [Fact(DisplayName = "ADR-952_1_1: 工程标准必须符合三层架构定义")]
     public void ADR_952_1_1_Engineering_Standards_Must_Follow_Three_Layer_Architecture()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var standardsDirectory = Path.Combine(repoRoot, "docs/engineering-standards");
 
         if (!Directory.Exists(standardsDirectory))
@@ -58,8 +55,8 @@ public sealed class ADR_952_1_Architecture_Tests
             if (!hasAdrReference)
             {
                 // 检查是否使用了强制性语言
-                var hasMandatoryLanguage = Regex.IsMatch(content, 
-                    @"(必须|禁止|不得|强制|Mandatory|Must|Shall|Forbidden)", 
+                var hasMandatoryLanguage = Regex.IsMatch(content,
+                    @"(必须|禁止|不得|强制|Mandatory|Must|Shall|Forbidden)",
                     RegexOptions.IgnoreCase);
 
                 if (hasMandatoryLanguage)
@@ -73,27 +70,4 @@ public sealed class ADR_952_1_Architecture_Tests
             $"违反 ADR-952_1_1：以下工程标准文档违反三层架构定义：\n{string.Join("\n", violations)}");
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

@@ -1,33 +1,34 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
 /// <summary>
-/// 文档裁决语言检查 - Enforcement 层测试
-/// 
-/// 【定位】：执行 ADR-008 的具体约束
-/// 【来源】：ADR-008 决策 2.2 和决策 3.3
-/// 【执法】：失败 = CI 阻断
-/// 
-/// 本测试类检查：
-/// 1. README/Guide 不得使用裁决性语言（必须、禁止等）
-/// 2. 允许在特定上下文中使用（引用 ADR 时）
-/// 
-/// 【关联文档】
+/// ADR-008_4: 文档裁决语言规范（Rule）
+/// 执行 ADR-008 对说明级文档语言的约束
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-008_4_1: README/Guide 不得使用裁决性语言
+///
+/// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
 /// - 来源决策: ADR-008 决策 2.2、3.3
+///
+/// 执法说明：
+/// - 失败 = CI 阻断
+/// - 允许在特定上下文中使用（引用 ADR 时）
 /// </summary>
-public sealed class DocumentationDecisionLanguageTests
+public sealed class ADR_008_4_Architecture_Tests
 {
-    [Fact(DisplayName = "README/Guide 不得使用裁决性语言")]
-    public void README_Must_Not_Use_Decision_Language()
+    /// <summary>
+    /// ADR-008_4_1: README/Guide 不得使用裁决性语言
+    /// 验证说明级文档不使用裁决性词汇（除非在引用 ADR 的上下文中）（§ADR-008_4_1）
+    /// </summary>
+    [Fact(DisplayName = "ADR-008_4_1: README/Guide 不得使用裁决性语言")]
+    public void ADR_008_4_1_README_And_Guides_Must_Not_Use_Decision_Language()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+
         // 裁决性词汇（ADR-008 明确禁止 README 使用）
         var forbiddenWords = new[] { "必须", "禁止", "不允许", "不得", "应当" };
-        
+
         // 例外：可以在引用 ADR 的上下文中使用，或在示例标记中使用
         var allowedContextPatterns = new[]
         {
@@ -43,13 +44,13 @@ public sealed class DocumentationDecisionLanguageTests
         };
 
         var violations = new List<string>();
-        
+
         // 扫描 docs 目录下的 README 和 Guide
         var docsDir = Path.Combine(repoRoot, "docs");
         if (!Directory.Exists(docsDir)) return;
 
         var readmeFiles = Directory.GetFiles(docsDir, "*.md", SearchOption.AllDirectories)
-            .Where(f => Path.GetFileName(f).Equals("README.md", StringComparison.OrdinalIgnoreCase) 
+            .Where(f => Path.GetFileName(f).Equals("README.md", StringComparison.OrdinalIgnoreCase)
                      || f.Contains("guide", StringComparison.OrdinalIgnoreCase)
                      || f.Contains("GUIDE", StringComparison.OrdinalIgnoreCase))
             .Where(f => !f.Contains("/adr/", StringComparison.OrdinalIgnoreCase)) // 排除 ADR 文档
@@ -61,25 +62,25 @@ public sealed class DocumentationDecisionLanguageTests
         {
             var content = File.ReadAllText(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
-            
+
             // 移除代码块和引用块
             var contentWithoutCodeBlocks = RemoveCodeBlocks(content);
             var contentWithoutQuotes = RemoveQuotedSections(contentWithoutCodeBlocks);
-            
+
             var lines = contentWithoutQuotes.Split('\n');
-            
+
             for (int i = 0; i < lines.Length; i++)
             {
                 var line = lines[i];
-                
+
                 foreach (var word in forbiddenWords)
                 {
                     if (line.Contains(word))
                     {
                         // 检查是否在允许的上下文中
-                        var isAllowedContext = allowedContextPatterns.Any(pattern => 
+                        var isAllowedContext = allowedContextPatterns.Any(pattern =>
                             Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase));
-                        
+
                         if (!isAllowedContext)
                         {
                             violations.Add($"  • {relativePath}:{i + 1} - 使用裁决词 '{word}'");
@@ -90,9 +91,7 @@ public sealed class DocumentationDecisionLanguageTests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ Enforcement 违规：以下 README/Guide 使用了裁决性语言",
                 "",
@@ -111,7 +110,6 @@ public sealed class DocumentationDecisionLanguageTests
                 "",
                 "参考：docs/adr/constitutional/ADR-008-documentation-governance-constitution.md 决策 3.3"
             })));
-        }
     }
 
     private static string RemoveCodeBlocks(string content)
@@ -128,18 +126,4 @@ public sealed class DocumentationDecisionLanguageTests
         return string.Join("\n", nonQuotedLines);
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

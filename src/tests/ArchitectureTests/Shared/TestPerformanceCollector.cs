@@ -1,6 +1,3 @@
-using System.Collections.Concurrent;
-using System.Diagnostics;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>

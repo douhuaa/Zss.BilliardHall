@@ -20,10 +20,10 @@ superseded_by: ADR-903-906
 >
 > 本 ADR 已被 [ADR-907](../../governance/ADR-907-architecture-tests-enforcement-governance.md) 完全吸收并取代。
 >
-> - 本文件 **不再具备任何裁决力**
-> - **不得** 编写或维护对应 ArchitectureTests
-> - **不得** 被 Analyzer / CI Gate 读取
-> - 仅用于 **历史追溯与设计演进说明**
+> - 本文件不再具备任何裁决力
+> - 不再编写或维护对应 ArchitectureTests
+> - 不被 Analyzer / CI Gate 读取
+> - 仅用于历史追溯与设计演进说明
 
 ---
 

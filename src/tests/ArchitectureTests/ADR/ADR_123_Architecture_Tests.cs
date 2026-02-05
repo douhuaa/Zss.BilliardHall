@@ -1,7 +1,3 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
@@ -54,7 +50,7 @@ public sealed class ADR_123_Architecture_Tests
         foreach (var repoInterface in repositoryInterfaces)
         {
             var startsWithI = repoInterface.Name.StartsWith("I");
-            
+
             startsWithI.Should().BeTrue($"❌ ADR-123_1_2 违规: Repository 接口命名不符合规范\n\n" +
                 $"违规接口：{repoInterface.FullName}\n" +
                 $"当前名称：{repoInterface.Name}\n\n" +

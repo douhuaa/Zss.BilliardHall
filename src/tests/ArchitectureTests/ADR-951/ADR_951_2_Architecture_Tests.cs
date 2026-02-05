@@ -1,6 +1,3 @@
-using FluentAssertions;
-using System.Text.RegularExpressions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_951;
 
 /// <summary>
@@ -24,8 +21,7 @@ public sealed class ADR_951_2_Architecture_Tests
     [Fact(DisplayName = "ADR-951_2_1: 案例文档必须包含所有必需章节")]
     public void ADR_951_2_1_Case_Documents_Must_Have_Required_Sections()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        var casesDirectory = Path.Combine(repoRoot, "docs/cases");
+        var casesDirectory = FileSystemTestHelper.GetAbsolutePath("docs/cases");
 
         if (!Directory.Exists(casesDirectory))
         {
@@ -76,8 +72,19 @@ public sealed class ADR_951_2_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty(
-            $"违反 ADR-951_2_1：以下案例文档缺少必需章节：\n{string.Join("\n", violations)}");
+        var message = AssertionMessageBuilder.BuildWithViolations(
+            ruleId: "ADR-951_2_1",
+            summary: "以下案例文档缺少必需章节",
+            failingTypes: violations,
+            remediationSteps: new[]
+            {
+                "为案例文档添加所有必需的章节",
+                "参考 ADR-951 中定义的案例文档标准结构",
+                "确保包含：元数据、背景、解决方案、代码示例、常见陷阱、相关案例"
+            },
+            adrReference: TestConstants.Adr951Path);
+
+        violations.Should().BeEmpty(message);
     }
 
     /// <summary>
@@ -87,8 +94,7 @@ public sealed class ADR_951_2_Architecture_Tests
     [Fact(DisplayName = "ADR-951_2_2: 案例文档必须标记案例级别")]
     public void ADR_951_2_2_Case_Documents_Must_Have_Case_Level_Marked()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        var casesDirectory = Path.Combine(repoRoot, "docs/cases");
+        var casesDirectory = FileSystemTestHelper.GetAbsolutePath("docs/cases");
 
         if (!Directory.Exists(casesDirectory))
         {
@@ -123,8 +129,19 @@ public sealed class ADR_951_2_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty(
-            $"违反 ADR-951_2_2：以下案例文档未标记案例级别：\n{string.Join("\n", violations)}");
+        var message = AssertionMessageBuilder.BuildWithViolations(
+            ruleId: "ADR-951_2_2",
+            summary: "以下案例文档未标记案例级别",
+            failingTypes: violations,
+            remediationSteps: new[]
+            {
+                "为每个案例文档标记级别（Core 或 Reference）",
+                "Core：核心案例，必须掌握",
+                "Reference：参考案例，作为示范"
+            },
+            adrReference: TestConstants.Adr951Path);
+
+        violations.Should().BeEmpty(message);
     }
 
     /// <summary>
@@ -134,8 +151,7 @@ public sealed class ADR_951_2_Architecture_Tests
     [Fact(DisplayName = "ADR-951_2_3: 代码示例必须包含必要注释和引用")]
     public void ADR_951_2_3_Code_Examples_Must_Have_Comments_And_Imports()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        var casesDirectory = Path.Combine(repoRoot, "docs/cases");
+        var casesDirectory = FileSystemTestHelper.GetAbsolutePath("docs/cases");
 
         if (!Directory.Exists(casesDirectory))
         {
@@ -193,31 +209,19 @@ public sealed class ADR_951_2_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty(
-            $"违反 ADR-951_2_3：以下案例文档的代码示例不符合要求：\n{string.Join("\n", violations)}");
-    }
-
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
+        var message = AssertionMessageBuilder.BuildWithViolations(
+            ruleId: "ADR-951_2_3",
+            summary: "以下案例文档的代码示例不符合要求",
+            failingTypes: violations,
+            remediationSteps: new[]
             {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
+                "为代码示例添加必要的注释说明",
+                "使用 ✅ 标注正确的做法",
+                "使用 ❌ 标注错误的做法",
+                "包含必要的 using/import 语句"
+            },
+            adrReference: TestConstants.Adr951Path);
+
+        violations.Should().BeEmpty(message);
     }
 }

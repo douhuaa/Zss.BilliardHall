@@ -1,8 +1,4 @@
-﻿using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
 
 /// <summary>
 /// 验证 ADR-005_2_1：Handler 不得持有业务状态
@@ -35,7 +31,7 @@ public sealed class ADR_005_2_Architecture_Tests
                 $"可变字段: {string.Join(", ", fields.Select(f => f.Name))}\n\n" +
                 $"问题分析:\n" +
                 $"Handler 包含非 readonly 字段，可能维护长期状态\n\n" +
-                $"修复建议:\n" +
+                $"修复建议：\n" +
                 $"1. 将所有依赖字段标记为 readonly\n" +
                 $"2. 通过构造函数注入依赖，而非在字段中维护状态\n" +
                 $"3. Handler 应该是短生命周期、无状态、可重入的\n\n" +
@@ -86,7 +82,7 @@ public sealed class ADR_005_2_Architecture_Tests
                             $"依赖类型: {param.FullName}\n\n" +
                             $"问题分析:\n" +
                             $"模块间直接注入依赖表示同步调用，违反模块隔离原则\n\n" +
-                            $"修复建议:\n" +
+                            $"修复建议：\n" +
                             $"1. 使用异步事件通信: await _eventBus.Publish(new SomeEvent(...))\n" +
                             $"2. 或通过契约查询: var dto = await _queryBus.Send(new GetSomeData(...))\n" +
                             $"3. 如确需同步调用，必须提交 ADR 破例审批\n\n" +
@@ -148,7 +144,7 @@ public sealed class ADR_005_2_Architecture_Tests
                         $"返回类型: {returnType.FullName}\n\n" +
                         $"问题分析:\n" +
                         $"Handler 不应返回领域实体（Entity/Aggregate/ValueObject）\n\n" +
-                        $"修复建议:\n" +
+                        $"修复建议：\n" +
                         $"1. 创建对应的 DTO 或投影类型\n" +
                         $"2. 在 Handler 中映射领域实体到 DTO\n" +
                         $"3. 返回 DTO 而非领域实体\n\n" +

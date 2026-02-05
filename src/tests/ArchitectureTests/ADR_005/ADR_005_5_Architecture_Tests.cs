@@ -1,8 +1,4 @@
-﻿using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
 
 /// <summary>
 /// 验证 ADR-005_5_1：Command Handler 只执行业务逻辑
@@ -112,7 +108,7 @@ public sealed class ADR_005_5_Architecture_Tests
                     $"违规 Handler: {handler.FullName}\n\n" +
                     $"问题分析:\n" +
                     $"Handler 命名同时包含 Command 和 Query，违反 CQRS 原则\n\n" +
-                    $"修复建议:\n" +
+                    $"修复建议：\n" +
                     $"1. 严格分离为两个 Handler：XxxCommandHandler 和 XxxQueryHandler\n" +
                     $"2. Command Handler：执行写操作，返回 void 或 ID\n" +
                     $"3. Query Handler：执行读操作，返回 DTO\n\n" +

@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_980;
 
 /// <summary>
@@ -19,7 +17,7 @@ public sealed class ADR_980_2_Architecture_Tests
     [Fact(DisplayName = "ADR-980_2_1: CI 必须包含版本同步检测步骤")]
     public void ADR_980_2_1_CI_Must_Include_Version_Sync_Detection()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
         var content = File.ReadAllText(adr980Path);
@@ -32,7 +30,7 @@ public sealed class ADR_980_2_Architecture_Tests
     [Fact(DisplayName = "ADR-980_2_4: 必须定义检测工具")]
     public void ADR_980_2_4_Detection_Tools_Must_Be_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
         var content = File.ReadAllText(adr980Path);
@@ -45,17 +43,4 @@ public sealed class ADR_980_2_Architecture_Tests
             $"❌ ADR-980_2_4 违规：ADR-980 必须定义 CI Workflow");
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
-    }
 }

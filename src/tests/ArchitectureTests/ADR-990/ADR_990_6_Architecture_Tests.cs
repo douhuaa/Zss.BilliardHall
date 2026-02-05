@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_990;
 
 /// <summary>
@@ -18,7 +16,7 @@ public sealed class ADR_990_6_Architecture_Tests
     [Fact(DisplayName = "ADR-990_6_1: 路线图过期视为治理失效")]
     public void ADR_990_6_1_Stale_Roadmap_Is_Governance_Failure()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
         var content = File.ReadAllText(adr990Path);
@@ -31,17 +29,4 @@ public sealed class ADR_990_6_Architecture_Tests
             $"❌ ADR-990_6_1 违规：ADR-990 必须将路线图过期视为治理失效");
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
-    }
 }

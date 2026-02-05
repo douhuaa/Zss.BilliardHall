@@ -1,6 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_946;
 
 /// <summary>
@@ -16,17 +13,6 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_946;
 /// </summary>
 public sealed class ADR_946_1_Architecture_Tests
 {
-    private const string AdrDocsPath = "docs/adr";
-    
-    // 关键语义块标题（必须是 ## 级别且唯一）
-    private static readonly string[] KeySemanticHeadings = new[]
-    {
-        "Relationships",
-        "Decision",
-        "Enforcement",
-        "Glossary"
-    };
-
     /// <summary>
     /// ADR-946_1_1: 标题级别即语义级别
     /// 验证每个 ADR 文件必须且仅有一个 # 标题，语义块使用 ## 级别（§ADR-946_1_1）
@@ -34,20 +20,7 @@ public sealed class ADR_946_1_Architecture_Tests
     [Fact(DisplayName = "ADR-946_1_1: ADR 文件必须有且仅有一个 # 标题")]
     public void ADR_946_1_1_ADR_Must_Have_Exactly_One_H1_Title()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adrPath = Path.Combine(repoRoot, AdrDocsPath);
-
-        if (!Directory.Exists(adrPath))
-        {
-            throw new DirectoryNotFoundException($"ADR 目录不存在: {adrPath}");
-        }
-
-        var adrFiles = Directory.GetFiles(adrPath, "*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("TIMELINE", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("CHECKLIST", StringComparison.OrdinalIgnoreCase))
-            .Where(f => Path.GetFileName(f).StartsWith("ADR-", StringComparison.OrdinalIgnoreCase))
-            .ToList();
+        var adrFiles = FileSystemTestHelper.GetAdrFiles();
 
         var violations = new List<string>();
 
@@ -63,7 +36,7 @@ public sealed class ADR_946_1_Architecture_Tests
             foreach (var line in lines)
             {
                 var trimmed = line.TrimStart();
-                
+
                 // 检测代码块
                 if (trimmed.StartsWith("```"))
                 {
@@ -84,8 +57,19 @@ public sealed class ADR_946_1_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty(
-            $"以下 ADR 文件违反 ADR-946_1_1（标题级别即语义级别）：\n{string.Join("\n", violations)}");
+        var message = AssertionMessageBuilder.BuildFormatViolationMessage(
+            ruleId: "ADR-946_1_1",
+            summary: "以下 ADR 文件违反标题级别即语义级别规则",
+            violations: violations,
+            remediationSteps: new[]
+            {
+                "确保每个 ADR 文件有且仅有一个 # 级别标题（文档标题）",
+                "所有语义块（如 Decision、Relationships）使用 ## 级别",
+                "检查是否有误将语义块标题设置为 # 级别"
+            },
+            adrReference: TestConstants.Adr946Path);
+
+        violations.Should().BeEmpty(message);
     }
 
     /// <summary>
@@ -95,20 +79,7 @@ public sealed class ADR_946_1_Architecture_Tests
     [Fact(DisplayName = "ADR-946_1_2: 关键语义块标题必须使用 ## 级别且不能重复")]
     public void ADR_946_1_2_Key_Semantic_Blocks_Must_Use_H2_And_Not_Duplicate()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adrPath = Path.Combine(repoRoot, AdrDocsPath);
-
-        if (!Directory.Exists(adrPath))
-        {
-            throw new DirectoryNotFoundException($"ADR 目录不存在: {adrPath}");
-        }
-
-        var adrFiles = Directory.GetFiles(adrPath, "*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("TIMELINE", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("CHECKLIST", StringComparison.OrdinalIgnoreCase))
-            .Where(f => Path.GetFileName(f).StartsWith("ADR-", StringComparison.OrdinalIgnoreCase))
-            .ToList();
+        var adrFiles = FileSystemTestHelper.GetAdrFiles();
 
         var violations = new List<string>();
 
@@ -123,7 +94,7 @@ public sealed class ADR_946_1_Architecture_Tests
             foreach (var line in lines)
             {
                 var trimmed = line.TrimStart();
-                
+
                 // 检测代码块
                 if (trimmed.StartsWith("```"))
                 {
@@ -134,7 +105,7 @@ public sealed class ADR_946_1_Architecture_Tests
                 // 只在非代码块中检查语义块标题
                 if (!inCodeBlock)
                 {
-                    foreach (var semanticHeading in KeySemanticHeadings)
+                    foreach (var semanticHeading in TestConstants.KeySemanticHeadings)
                     {
                         // 检查是否是 ## 级别的关键语义块
                         // 使用严格匹配：## <语义块名称>（中文或英文，可能带括号）
@@ -168,31 +139,18 @@ public sealed class ADR_946_1_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty(
-            $"以下 ADR 文件违反 ADR-946_1_2（关键语义块标题约束）：\n{string.Join("\n", violations)}");
-    }
-
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
+        var message = AssertionMessageBuilder.BuildFormatViolationMessage(
+            ruleId: "ADR-946_1_2",
+            summary: "以下 ADR 文件违反关键语义块标题约束",
+            violations: violations,
+            remediationSteps: new[]
             {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
+                "确保关键语义块（Relationships、Decision、Enforcement、Glossary）使用 ## 级别",
+                "确保每个关键语义块在文件中只出现一次",
+                "模板/示例中的语义块应使用 ### 或更低级别，并带有 'Example' 等标识"
+            },
+            adrReference: TestConstants.Adr946Path);
+
+        violations.Should().BeEmpty(message);
     }
 }

@@ -1,7 +1,3 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using System.Reflection;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
@@ -14,7 +10,7 @@ public sealed class ADR_220_Architecture_Tests
     public void Modules_Must_Not_Depend_On_Concrete_EventBus(Assembly moduleAssembly)
     {
         var forbiddenDeps = new[] { "Wolverine", "RabbitMQ", "Kafka" };
-        
+
         foreach (var dep in forbiddenDeps)
         {
             var result = Types

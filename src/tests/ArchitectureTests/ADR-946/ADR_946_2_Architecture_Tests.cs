@@ -1,6 +1,3 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_946;
 
 /// <summary>
@@ -15,8 +12,6 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_946;
 /// </summary>
 public sealed class ADR_946_2_Architecture_Tests
 {
-    private const string AdrDocsPath = "docs/adr";
-    
     // 关键语义块标题（在示例/模板中不能直接使用 ## 级别）
     private static readonly string[] KeySemanticHeadings = new[]
     {
@@ -37,20 +32,7 @@ public sealed class ADR_946_2_Architecture_Tests
     [Fact(DisplayName = "ADR-946_2_1: 模板与示例必须避免解析歧义")]
     public void ADR_946_2_1_Templates_And_Examples_Must_Avoid_Parsing_Ambiguity()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adrPath = Path.Combine(repoRoot, AdrDocsPath);
-
-        if (!Directory.Exists(adrPath))
-        {
-            throw new DirectoryNotFoundException($"ADR 目录不存在: {adrPath}");
-        }
-
-        var adrFiles = Directory.GetFiles(adrPath, "*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("TIMELINE", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("CHECKLIST", StringComparison.OrdinalIgnoreCase))
-            .Where(f => Path.GetFileName(f).StartsWith("ADR-", StringComparison.OrdinalIgnoreCase))
-            .ToList();
+        var adrFiles = FileSystemTestHelper.GetAdrFiles();
 
         var violations = new List<string>();
 
@@ -66,7 +48,7 @@ public sealed class ADR_946_2_Architecture_Tests
             {
                 lineNumber++;
                 var trimmed = line.TrimStart();
-                
+
                 // 检测代码块边界
                 if (trimmed.StartsWith("```"))
                 {
@@ -102,31 +84,19 @@ public sealed class ADR_946_2_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty(
-            $"以下 ADR 文件违反 ADR-946_2_1（模板与示例结构约束）：\n{string.Join("\n", violations)}");
-    }
-
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
+        var message = AssertionMessageBuilder.BuildFormatViolationMessage(
+            ruleId: "ADR-946_2_1",
+            summary: "以下 ADR 文件违反模板与示例结构约束",
+            violations: violations,
+            remediationSteps: new[]
             {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
+                "在模板/示例中使用 ### 级别标题而非 ## 级别",
+                "或将示例内容放入代码块中",
+                "或使用占位符（如 ## [Relationships]）",
+                "避免机器解析时产生歧义"
+            },
+            adrReference: TestConstants.Adr946Path);
+
+        violations.Should().BeEmpty(message);
     }
 }

@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_947;
 
 /// <summary>
@@ -21,7 +19,7 @@ public sealed class ADR_947_1_Architecture_Tests
     [Fact(DisplayName = "ADR-947_1_1: ADR 必须且仅能包含一个顶级关系声明章节")]
     public void ADR_947_1_1_ADR_Must_Have_Unique_Top_Level_Relationships_Section()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, "docs/adr");
 
         // 获取所有 ADR 文档（排除非 ADR 文档）
@@ -37,7 +35,7 @@ public sealed class ADR_947_1_Architecture_Tests
 
             // 统计顶级 ## Relationships 章节的数量
             var relationshipSectionCount = lines
-                .Count(line => line.TrimStart().StartsWith("## Relationships") || 
+                .Count(line => line.TrimStart().StartsWith("## Relationships") ||
                                line.TrimStart().StartsWith("## 关系声明"));
 
             if (relationshipSectionCount == 0)
@@ -54,27 +52,4 @@ public sealed class ADR_947_1_Architecture_Tests
             $"违反 ADR-947_1_1：以下 ADR 文档的 Relationships 章节不符合唯一性要求：\n{string.Join("\n", violations)}");
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

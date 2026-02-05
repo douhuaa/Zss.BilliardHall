@@ -1,6 +1,3 @@
-using FluentAssertions;
-using System.Text.RegularExpressions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_952;
 
 /// <summary>
@@ -25,7 +22,7 @@ public sealed class ADR_952_2_Architecture_Tests
     [Fact(DisplayName = "ADR-952_2_1: 工程标准必须明确声明基于的 ADR")]
     public void ADR_952_2_1_Standards_Must_Declare_Based_ADR()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var standardsDirectory = Path.Combine(repoRoot, "docs/engineering-standards");
 
         if (!Directory.Exists(standardsDirectory))
@@ -53,8 +50,8 @@ public sealed class ADR_952_2_Architecture_Tests
             var content = File.ReadAllText(standardFile);
 
             // 检查是否明确声明基于的 ADR
-            var hasAdrReference = Regex.IsMatch(content, 
-                @"(基于|Based\s+on)\s*ADR-\d{3,4}", 
+            var hasAdrReference = Regex.IsMatch(content,
+                @"(基于|Based\s+on)\s*ADR-\d{3,4}",
                 RegexOptions.IgnoreCase);
 
             if (!hasAdrReference)
@@ -74,7 +71,7 @@ public sealed class ADR_952_2_Architecture_Tests
     [Fact(DisplayName = "ADR-952_2_4: 工程标准文档必须包含必需章节")]
     public void ADR_952_2_4_Standards_Must_Have_Required_Sections()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var standardsDirectory = Path.Combine(repoRoot, "docs/engineering-standards");
 
         if (!Directory.Exists(standardsDirectory))
@@ -129,27 +126,4 @@ public sealed class ADR_952_2_Architecture_Tests
             $"违反 ADR-952_2_4：以下工程标准文档缺少必需章节：\n{string.Join("\n", violations)}");
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

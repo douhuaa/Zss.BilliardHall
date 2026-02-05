@@ -1,8 +1,3 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-using System.Reflection;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_003;
 
 /// <summary>
@@ -30,16 +25,18 @@ public sealed class ADR_003_1_Architecture_Tests
 
             foreach (var type in types)
             {
-                (type.Namespace?.StartsWith(BaseNamespace) == true).Should().BeTrue($"❌ ADR-003_1_1 违规: 所有类型的命名空间都应以 BaseNamespace 开头\n\n" +
-                $"程序集: {assembly.GetName().Name}\n" +
-                $"违规类型: {type.FullName}\n" +
-                $"当前命名空间: {type.Namespace}\n" +
-                $"期望开头: {BaseNamespace}\n\n" +
-                $"修复建议:\n" +
-                $"1. 检查项目的 RootNamespace 是否由 Directory.Build.props 正确推导\n" +
-                $"2. 确保项目目录结构符合规范（Platform/Application/Modules/Host/Tests）\n" +
-                $"3. 删除项目文件中的手动 RootNamespace 设置\n\n" +
-                $"参考: docs/copilot/adr-003.prompts.md (场景 1, 场景 2)");
+                (type.Namespace?.StartsWith(BaseNamespace) == true).Should().BeTrue(
+                    Build(
+                        ruleId: "ADR-003_1_1",
+                        summary: "所有类型的命名空间都应以 BaseNamespace 开头",
+                        currentState: $"程序集: {assembly.GetName().Name}\n违规类型: {type.FullName}\n当前命名空间: {type.Namespace}\n期望开头: {BaseNamespace}",
+                        remediationSteps: new[]
+                        {
+                            "检查项目的 RootNamespace 是否由 Directory.Build.props 正确推导",
+                            "确保项目目录结构符合规范（Platform/Application/Modules/Host/Tests）",
+                            "删除项目文件中的手动 RootNamespace 设置"
+                        },
+                        adrReference: "docs/copilot/adr-003.prompts.md (场景 1, 场景 2)"));
             }
         }
     }

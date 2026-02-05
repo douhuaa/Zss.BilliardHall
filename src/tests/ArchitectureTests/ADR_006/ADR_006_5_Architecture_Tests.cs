@@ -1,12 +1,9 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_006;
 
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 /// <summary>
 /// ADR-006_5: 特殊编号规则
 /// 验证 ADR-006_5_1：元规则编号保护
-/// 
+///
 /// 注意：ADR-006_5_1 为 L3 级别（人工审查），此测试仅作为提示性检查
 /// </summary>
 public sealed class ADR_006_5_Architecture_Tests
@@ -39,7 +36,7 @@ public sealed class ADR_006_5_Architecture_Tests
                     // This is L3 check - just warn, don't fail
                     // Architecture Board should manually review
                     var fileContent = File.ReadAllText(file);
-                    var hasApproval = fileContent.Contains("Architecture Board") && 
+                    var hasApproval = fileContent.Contains("Architecture Board") &&
                                      fileContent.Contains("Approved");
 
                     if (!hasApproval)
@@ -68,7 +65,7 @@ public sealed class ADR_006_5_Architecture_Tests
                 {
                     // This is informational check for ADR-900
                     var fileContent = File.ReadAllText(file);
-                    var isMetaRule = fileContent.Contains("架构测试") || 
+                    var isMetaRule = fileContent.Contains("架构测试") ||
                                     fileContent.Contains("Architecture Test") ||
                                     fileContent.Contains("CI") ||
                                     fileContent.Contains("治理");

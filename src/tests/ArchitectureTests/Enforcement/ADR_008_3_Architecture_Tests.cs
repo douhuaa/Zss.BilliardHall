@@ -1,29 +1,29 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
 /// <summary>
-/// 文档权威声明检查 - Enforcement 层测试
-/// 
-/// 【定位】：执行 ADR-008 的具体约束
-/// 【来源】：ADR-008 决策 3.1
-/// 【执法】：失败 = CI 阻断
-/// 
-/// 本测试类检查：
-/// 1. Instructions/Agents 必须声明权威依据
-/// 2. 必须包含冲突裁决规则
-/// 
-/// 【关联文档】
+/// ADR-008_3: 文档权威声明规范（Rule）
+/// 执行 ADR-008 对治理级文档权威声明的约束
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-008_3_1: Instructions/Agents 必须声明权威依据
+///
+/// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
 /// - 来源决策: ADR-008 决策 3.1
+///
+/// 执法说明：
+/// - 失败 = CI 阻断
 /// </summary>
-public sealed class DocumentationAuthorityDeclarationTests
+public sealed class ADR_008_3_Architecture_Tests
 {
-    [Fact(DisplayName = "Instructions/Agents 必须声明权威依据")]
-    public void Instructions_And_Agents_Must_Declare_Authority_Basis()
+    /// <summary>
+    /// ADR-008_3_1: Instructions/Agents 必须声明权威依据
+    /// 验证治理级文档包含权威声明和冲突裁决规则（§ADR-008_3_1）
+    /// </summary>
+    [Fact(DisplayName = "ADR-008_3_1: Instructions/Agents 必须声明权威依据")]
+    public void ADR_008_3_1_Instructions_And_Agents_Must_Declare_Authority_Basis()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var violations = new List<string>();
 
         // 检查 Instructions 文件
@@ -38,13 +38,13 @@ public sealed class DocumentationAuthorityDeclarationTests
                 var content = File.ReadAllText(file);
                 var relativePath = Path.GetRelativePath(repoRoot, file);
 
-                var hasAuthorityDeclaration = 
-                    content.Contains("权威声明") || 
+                var hasAuthorityDeclaration =
+                    content.Contains("权威声明") ||
                     content.Contains("权威依据") ||
                     (content.Contains("基于") && content.Contains("ADR")) ||
                     content.Contains("服从") && content.Contains("ADR");
 
-                var hasConflictResolution = 
+                var hasConflictResolution =
                     (content.Contains("冲突") && content.Contains("ADR") && content.Contains("为准")) ||
                     content.Contains("以 ADR 正文为准") ||
                     content.Contains("ADR 正文为唯一");
@@ -74,11 +74,11 @@ public sealed class DocumentationAuthorityDeclarationTests
                 var content = File.ReadAllText(file);
                 var relativePath = Path.GetRelativePath(repoRoot, file);
 
-                var hasAuthorityDeclaration = 
-                    content.Contains("权威声明") || 
+                var hasAuthorityDeclaration =
+                    content.Contains("权威声明") ||
                     (content.Contains("ADR") && (content.Contains("唯一裁决") || content.Contains("唯一权威") || content.Contains("正文为准")));
 
-                var declaresAdrBasis = 
+                var declaresAdrBasis =
                     Regex.IsMatch(content, @"ADR[-\s]*\d+", RegexOptions.IgnoreCase);
 
                 if (!hasAuthorityDeclaration)
@@ -93,9 +93,7 @@ public sealed class DocumentationAuthorityDeclarationTests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ Enforcement 违规：以下治理级文档未正确声明权威依据",
                 "",
@@ -122,21 +120,6 @@ public sealed class DocumentationAuthorityDeclarationTests
                 "",
                 "参考：docs/adr/constitutional/ADR-008-documentation-governance-constitution.md 决策 3.1"
             })));
-        }
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

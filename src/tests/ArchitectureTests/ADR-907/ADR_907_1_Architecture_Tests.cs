@@ -1,24 +1,20 @@
-using System.Text.RegularExpressions;
-using FluentAssertions;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 
 /// <summary>
 /// ADR-907_1: ArchitectureTests 的法律地位
 /// 验证 ArchitectureTests 作为 ADR 唯一自动化执法形式的相关规则
-/// 
+///
 /// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
 /// - ADR-907_1_1: 唯一自动化执法形式 → ADR_907_1_1_ArchitectureTests_Are_Sole_Automated_Enforcement
 /// - ADR-907_1_2: 可执法性要求 → ADR_907_1_2_ADRs_Must_Have_Tests_Or_Be_Non_Enforceable
 /// - ADR-907_1_3: 禁止仅文档约束 → ADR_907_1_3_No_Documentation_Only_Rules_Allowed
-/// 
+///
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md
 /// - Prompts: docs/copilot/adr-907.prompts.md
 /// </summary>
 public sealed class ADR_907_1_Architecture_Tests
 {
-    private const string AdrDocsPath = "docs/adr";
     private const string AdrTestsPath = "src/tests/ArchitectureTests";
 
     /// <summary>
@@ -28,40 +24,53 @@ public sealed class ADR_907_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907_1_1: ArchitectureTests 必须是 ADR 的唯一自动化执法形式")]
     public void ADR_907_1_1_ArchitectureTests_Are_Sole_Automated_Enforcement()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
+        var testsDirectory = FileSystemTestHelper.GetAbsolutePath(AdrTestsPath);
 
         // 验证 ArchitectureTests 项目存在
-        Directory.Exists(testsDirectory).Should().BeTrue(
-            $"❌ ADR-907_1_1 违规：ArchitectureTests 目录不存在\n\n" +
-            $"预期路径：{testsDirectory}\n\n" +
-            $"修复建议：\n" +
-            $"  1. 创建独立的 ArchitectureTests 项目\n" +
-            $"  2. ArchitectureTests 是 ADR 的唯一自动化执法形式\n" +
-            $"  3. 所有可执法的架构规则必须通过 ArchitectureTests 验证\n\n" +
-            $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §1.1");
+        var directoryMessage = AssertionMessageBuilder.BuildDirectoryNotFoundMessage(
+            ruleId: "ADR-907_1_1",
+            directoryPath: testsDirectory,
+            directoryDescription: "ArchitectureTests 目录",
+            remediationSteps: new[]
+            {
+                "创建独立的 ArchitectureTests 项目",
+                "ArchitectureTests 是 ADR 的唯一自动化执法形式",
+                "所有可执法的架构规则必须通过 ArchitectureTests 验证"
+            },
+            adrReference: TestConstants.Adr907Path);
+
+        Directory.Exists(testsDirectory).Should().BeTrue(directoryMessage);
 
         // 验证项目文件存在
         var projectFile = Path.Combine(testsDirectory, "ArchitectureTests.csproj");
-        File.Exists(projectFile).Should().BeTrue(
-            $"❌ ADR-907_1_1 违规：ArchitectureTests 项目文件不存在\n\n" +
-            $"预期路径：{projectFile}\n\n" +
-            $"修复建议：\n" +
-            $"  1. 创建 ArchitectureTests.csproj 项目文件\n" +
-            $"  2. 配置为测试项目，引用 xUnit 和 NetArchTest.Rules\n" +
-            $"  3. 确保项目命名格式：<SolutionName>.Tests.Architecture\n\n" +
-            $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §1.1");
+        var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-907_1_1",
+            filePath: projectFile,
+            fileDescription: "ArchitectureTests 项目文件",
+            remediationSteps: new[]
+            {
+                "创建 ArchitectureTests.csproj 项目文件",
+                "配置为测试项目，引用 xUnit 和 NetArchTest.Rules",
+                "确保项目命名格式：<SolutionName>.Tests.Architecture"
+            },
+            adrReference: TestConstants.Adr907Path);
+
+        File.Exists(projectFile).Should().BeTrue(fileMessage);
 
         // 验证测试使用允许的技术（文件系统扫描、Roslyn、Reflection、NetArchTest）
-        // 这是元验证测试，确保测试本身使用合规的技术
         var testFiles = Directory.GetFiles(testsDirectory, "*.cs", SearchOption.AllDirectories);
         testFiles.Should().NotBeEmpty(
-            $"❌ ADR-907_1_1 违规：ArchitectureTests 项目中没有测试文件\n\n" +
-            $"修复建议：\n" +
-            $"  1. 为每个具备裁决力的 ADR 创建对应的架构测试\n" +
-            $"  2. 测试可使用：文件系统扫描、Roslyn、Reflection、NetArchTest\n" +
-            $"  3. 测试文件命名：ADR_<编号>_Architecture_Tests.cs\n\n" +
-            $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §1.1");
+            AssertionMessageBuilder.BuildContentMissingMessage(
+                ruleId: "ADR-907_1_1",
+                filePath: testsDirectory,
+                missingContent: "测试文件",
+                remediationSteps: new[]
+                {
+                    "为每个具备裁决力的 ADR 创建对应的架构测试",
+                    "测试可使用：文件系统扫描、Roslyn、Reflection、NetArchTest",
+                    "测试文件命名：ADR_<编号>_Architecture_Tests.cs"
+                },
+                adrReference: TestConstants.Adr907Path));
     }
 
     /// <summary>
@@ -71,21 +80,12 @@ public sealed class ADR_907_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907_1_2: 具备裁决力的 ADR 必须有测试或声明 Non-Enforceable")]
     public void ADR_907_1_2_ADRs_Must_Have_Tests_Or_Be_Non_Enforceable()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adrDocsDirectory = Path.Combine(repoRoot, AdrDocsPath);
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
+        var adrDocsDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        var testsDirectory = FileSystemTestHelper.GetAbsolutePath(AdrTestsPath);
 
-        if (!Directory.Exists(adrDocsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_1_2 无法执行：ADR 文档目录不存在 {adrDocsDirectory}");
-            return;
-        }
+        Directory.Exists(adrDocsDirectory).Should().BeTrue($"❌ ADR-907_1_2 无法执行：ADR 文档目录不存在 {adrDocsDirectory}");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_1_2 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_1_2 无法执行：测试目录不存在 {testsDirectory}");
 
         // 查找所有 Final 或 Active 状态的 ADR
         var adrFiles = Directory.GetFiles(adrDocsDirectory, "ADR-*.md", SearchOption.AllDirectories);
@@ -121,11 +121,11 @@ public sealed class ADR_907_1_Architecture_Tests
             // 旧格式：ADR_XXX_Architecture_Tests.cs（无Rule编号，在迁移期间允许）
             var testFilePattern4Digit = $"ADR_{adrNumber}_*_Architecture_Tests.cs";
             var testFilePattern3Digit = $"ADR_{adrNumber3Digit}_*_Architecture_Tests.cs";
-            
+
             // 也检查旧格式的测试文件（无Rule编号）
             var oldTestFilePattern4Digit = $"ADR_{adrNumber}_Architecture_Tests.cs";
             var oldTestFilePattern3Digit = $"ADR_{adrNumber3Digit}_Architecture_Tests.cs";
-            
+
             var hasTest = Directory.GetFiles(testsDirectory, testFilePattern4Digit, SearchOption.AllDirectories).Any() ||
                          Directory.GetFiles(testsDirectory, testFilePattern3Digit, SearchOption.AllDirectories).Any() ||
                          Directory.GetFiles(testsDirectory, oldTestFilePattern4Digit, SearchOption.AllDirectories).Any() ||
@@ -137,10 +137,7 @@ public sealed class ADR_907_1_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(
-                $"❌ ADR-907_1_2 违规：以下 ADR 缺少架构测试且未声明 Non-Enforceable\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-907_1_2 违规：以下 ADR 缺少架构测试且未声明 Non-Enforceable\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 为每个 Final/Active ADR 创建对应的架构测试\n" +
@@ -148,7 +145,6 @@ public sealed class ADR_907_1_Architecture_Tests
                 $"  3. 或在 ADR 正文中添加 Non-Enforceable 标记\n" +
                 $"  4. 测试文件命名：ADR_<编号>_Architecture_Tests.cs\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §1.2");
-        }
     }
 
     /// <summary>
@@ -158,14 +154,9 @@ public sealed class ADR_907_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907_1_3: 禁止仅文档约束的架构规则")]
     public void ADR_907_1_3_No_Documentation_Only_Rules_Allowed()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adrDocsDirectory = Path.Combine(repoRoot, AdrDocsPath);
+        var adrDocsDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
-        if (!Directory.Exists(adrDocsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_1_3 无法执行：ADR 文档目录不存在 {adrDocsDirectory}");
-            return;
-        }
+        Directory.Exists(adrDocsDirectory).Should().BeTrue($"❌ ADR-907_1_3 无法执行：ADR 文档目录不存在 {adrDocsDirectory}");
 
         var adrFiles = Directory.GetFiles(adrDocsDirectory, "ADR-*.md", SearchOption.AllDirectories);
         var violations = new List<string>();
@@ -201,10 +192,7 @@ public sealed class ADR_907_1_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(
-                $"❌ ADR-907_1_3 违规：以下 ADR 包含\"仅文档约束\"的禁止声明\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-907_1_3 违规：以下 ADR 包含\"仅文档约束\"的禁止声明\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 移除\"仅文档约束\"、\"不接受执行\"等声明\n" +
@@ -213,28 +201,10 @@ public sealed class ADR_907_1_Architecture_Tests
                 $"     b. 明确声明为 Non-Enforceable\n" +
                 $"  3. 所有架构规则必须可执法或明确声明不可执法\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §1.3");
-        }
     }
 
     #region Helper Methods
 
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, AdrDocsPath)))
-            {
-                return currentDir;
-            }
-
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-
-        return null;
-    }
 
     #endregion
 }

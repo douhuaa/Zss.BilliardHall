@@ -1,8 +1,3 @@
-using NetArchTest.Rules;
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-using System.Reflection;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_003;
 
 /// <summary>
@@ -34,16 +29,18 @@ public sealed class ADR_003_5_Architecture_Tests
         foreach (var type in types)
         {
             var expectedNamespace = $"{BaseNamespace}.Host.{hostName}";
-            (type.Namespace?.StartsWith(expectedNamespace) == true).Should().BeTrue($"❌ ADR-003_5_1 违规: Host 程序集中的类型应在 {BaseNamespace}.Host.{{HostName}} 命名空间下\n\n" +
-            $"Host 名: {hostName}\n" +
-            $"违规类型: {type.FullName}\n" +
-            $"当前命名空间: {type.Namespace}\n" +
-            $"期望命名空间前缀: {expectedNamespace}\n\n" +
-            $"修复建议:\n" +
-            $"1. 确保类型定义在正确的命名空间中\n" +
-            $"2. Host {hostName} 的所有代码都应该在 {expectedNamespace} 命名空间下\n" +
-            $"3. 如果是子命名空间，应该是 {expectedNamespace}.* 格式\n\n" +
-            $"参考: docs/copilot/adr-003.prompts.md (场景 1, 场景 2)");
+            (type.Namespace?.StartsWith(expectedNamespace) == true).Should().BeTrue(
+                Build(
+                    ruleId: "ADR-003_5_1",
+                    summary: $"Host 程序集中的类型应在 {BaseNamespace}.Host.{{HostName}} 命名空间下",
+                    currentState: $"Host 名: {hostName}\n违规类型: {type.FullName}\n当前命名空间: {type.Namespace}\n期望命名空间前缀: {expectedNamespace}",
+                    remediationSteps: new[]
+                    {
+                        "确保类型定义在正确的命名空间中",
+                        $"Host {hostName} 的所有代码都应该在 {expectedNamespace} 命名空间下",
+                        $"如果是子命名空间，应该是 {expectedNamespace}.* 格式"
+                    },
+                    adrReference: "docs/copilot/adr-003.prompts.md (场景 1, 场景 2)"));
         }
     }
 }
