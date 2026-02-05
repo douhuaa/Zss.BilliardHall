@@ -54,13 +54,6 @@ public sealed class ADR_007_1_Architecture_Tests
 
         violations.Should().BeEmpty(message);
     }
-            $"❌ ADR-007_1_1 违规：以下 Agent 文件违反了定位规则\n\n" +
-            string.Join("\n", violations) + "\n\n" +
-            "修复建议：\n" +
-            "1. Agent 应定位为工具，而非决策者\n" +
-            "2. 移除所有声称拥有裁决权的表述\n" +
-            "3. 参考 ADR-007_1_1 Agent 定位规则");
-    }
 
     [Fact(DisplayName = "ADR-007_1_2: Agent 必须声明权威边界")]
     public void ADR_007_1_2_Agent_Must_Declare_Authority_Boundary()
