@@ -50,7 +50,7 @@ public sealed class ADR_003_7_Architecture_Tests
                 $"项目文件: {projectFile}\n" +
                 $"项目名称: {projectName}\n" +
                 $"相对路径: {relativePath}\n\n" +
-                $"修复建议:\n" +
+                $"修复建议：\n" +
                 $"1. 确保 src/ 下的项目使用 '{BaseNamespace}.*' 命名约定\n" +
                 $"2. 或者确保项目的 RootNamespace 设置为 '{BaseNamespace}.*'\n" +
                 $"3. 项目名应该与目录最后一级名称一致\n\n" +

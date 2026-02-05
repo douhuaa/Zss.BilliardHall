@@ -49,7 +49,7 @@ public sealed class ADR_120_Architecture_Tests
             $"违规类型: {eventType.FullName}\n\n" +
             $"问题分析:\n" +
             $"所有领域事件类型必须以 'Event' 后缀结尾，以明确标识其为事件\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 将类型重命名为 {eventType.Name}Event\n" +
             $"2. 确保命名遵循模式: {{AggregateRoot}}{{Action}}Event\n" +
             $"3. 示例：OrderCreatedEvent, MemberUpgradedEvent\n\n" +
@@ -95,7 +95,7 @@ public sealed class ADR_120_Architecture_Tests
                                 $"问题分析:\n" +
                                 $"事件名称必须使用动词过去式，因为事件描述的是已发生的业务事实。\n" +
                                 $"使用现在时或进行时会导致事件与命令混淆，造成概念污染。\n\n" +
-                                $"修复建议:\n" +
+                                $"修复建议：\n" +
                                 $"1. 将动词改为过去式形式：\n" +
                                 $"   - Creating → Created\n" +
                                 $"   - Updating → Updated\n" +
@@ -138,7 +138,7 @@ public sealed class ADR_120_Architecture_Tests
             $"期望命名空间: Zss.BilliardHall.Modules.{{ModuleName}}.Events[.{{SubNamespace}}]\n\n" +
             $"问题分析:\n" +
             $"领域事件必须组织在模块的 Events 命名空间下，以保持清晰的结构\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 将事件移动到正确的命名空间：\n" +
             $"   namespace Zss.BilliardHall.Modules.Orders.Events;\n" +
             $"2. 或使用子命名空间分组：\n" +
@@ -199,7 +199,7 @@ public sealed class ADR_120_Architecture_Tests
             $"违规类型: {handlerType.FullName}\n\n" +
             $"问题分析:\n" +
             $"所有事件处理器必须以 'Handler' 后缀结尾\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 基础模式：{{EventName}}Handler\n" +
             $"   - OrderCreatedEventHandler\n" +
             $"2. 扩展模式（多订阅场景）：{{EventName}}{{Purpose}}Handler\n" +
@@ -273,7 +273,7 @@ public sealed class ADR_120_Architecture_Tests
                                     $"领域实体类型: {actualType.FullName}\n\n" +
                                     $"问题分析:\n" +
                                     $"事件不得包含领域实体（Entity/Aggregate/ValueObject），只能包含原始类型和 DTO\n\n" +
-                                    $"修复建议:\n" +
+                                    $"修复建议：\n" +
                                     $"1. 将领域实体转换为简单 DTO：\n" +
                                     $"   - public record OrderItemDto(string ProductId, int Quantity, decimal Price);\n" +
                                     $"2. 或使用原始类型：\n" +
@@ -328,7 +328,7 @@ public sealed class ADR_120_Architecture_Tests
                             $"业务方法: {string.Join(", ", businessMethods.Select(m => m.Name))}\n\n" +
                             $"问题分析:\n" +
                             $"事件应该是纯数据对象（Data Object），不应包含业务逻辑或判断方法\n\n" +
-                            $"修复建议:\n" +
+                            $"修复建议：\n" +
                             $"1. 移除事件中的所有方法，只保留属性\n" +
                             $"2. 使用 record 类型定义事件（自动不可变）：\n" +
                             $"   - public record OrderCreatedEvent(Guid OrderId, DateTime CreatedAt);\n" +

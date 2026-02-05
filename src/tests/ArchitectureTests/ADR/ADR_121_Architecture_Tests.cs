@@ -56,7 +56,7 @@ public sealed class ADR_121_Architecture_Tests
                 $"问题分析:\n" +
                 $"所有位于 Contracts 命名空间的类型必须以 'Dto' 或 'Contract' 后缀结尾，\n" +
                 $"以明确标识其为数据传输对象（契约）\n\n" +
-                $"修复建议:\n" +
+                $"修复建议：\n" +
                 $"1. 如果是信息摘要，使用 'InfoDto' 或 'SummaryDto' 后缀：\n" +
                 $"   - {contractType.Name}InfoDto\n" +
                 $"   - {contractType.Name}SummaryDto\n" +
@@ -117,7 +117,7 @@ public sealed class ADR_121_Architecture_Tests
                     $"问题分析:\n" +
                     $"契约必须是不可变的，以确保数据传输的安全性和一致性。\n" +
                     $"属性 '{property.Name}' 具有公共 set 访问器，违反了不可变性约束。\n\n" +
-                    $"修复建议:\n" +
+                    $"修复建议：\n" +
                     $"1. 推荐使用 record 类型（自动不可变）：\n" +
                     $"   public record {contractType.Name}(/* 属性 */);\n\n" +
                     $"2. 或使用 init-only 属性：\n" +
@@ -197,7 +197,7 @@ public sealed class ADR_121_Architecture_Tests
                     $"问题分析:\n" +
                     $"契约应该是纯数据对象（Data Object），不应包含业务逻辑或判断方法。\n" +
                     $"检测到的方法可能包含业务逻辑，违反了契约的纯数据约束。\n\n" +
-                    $"修复建议:\n" +
+                    $"修复建议：\n" +
                     $"1. 移除契约中的所有业务方法，只保留属性\n" +
                     $"2. 允许的例外：计算属性（基于现有数据的只读属性）：\n" +
                     $"   public decimal TotalAmount => Items.Sum(i => i.Price); // ✅ 允许\n" +
@@ -313,7 +313,7 @@ public sealed class ADR_121_Architecture_Tests
                         $"问题分析:\n" +
                         $"契约不得包含领域实体（Entity/Aggregate/ValueObject），\n" +
                         $"只能包含原始类型、系统类型和其他契约类型（DTO）。\n\n" +
-                        $"修复建议:\n" +
+                        $"修复建议：\n" +
                         $"1. 将领域实体转换为简单 DTO：\n" +
                         $"   - 创建对应的 DTO：{type.Name}Dto\n" +
                         $"   - 只包含需要传输的属性\n" +
@@ -386,7 +386,7 @@ public sealed class ADR_121_Architecture_Tests
                     $"问题分析:\n" +
                     $"该类型看起来是公共契约（名称包含 Info/Detail/Summary 或以 Contract 结尾），\n" +
                     $"但未位于 Contracts 命名空间下，违反了契约组织规范。\n\n" +
-                    $"修复建议:\n" +
+                    $"修复建议：\n" +
                     $"1. 如果是跨模块契约，移动到 Platform.Contracts：\n" +
                     $"   namespace Zss.BilliardHall.Platform.Contracts.{{ModuleName}};\n" +
                     $"2. 如果是模块内契约，移动到模块的 Contracts 目录：\n" +

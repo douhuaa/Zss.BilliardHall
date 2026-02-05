@@ -38,7 +38,7 @@ public sealed class ADR_006_3_Architecture_Tests
                     $"正确编号: ADR-{number:D3}\n\n" +
                     $"问题分析:\n" +
                     $"编号小于100时必须使用前导零，确保统一的3位格式\n\n" +
-                    $"修复建议:\n" +
+                    $"修复建议：\n" +
                     $"1. 重命名文件为 ADR-{number:D3}-xxx.md\n" +
                     $"2. 更新文件内容中的 ADR 编号引用\n" +
                     $"3. 更新所有交叉引用该 ADR 的文档\n\n" +

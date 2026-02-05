@@ -35,7 +35,7 @@ public sealed class ADR_003_1_Architecture_Tests
                 $"违规类型: {type.FullName}\n" +
                 $"当前命名空间: {type.Namespace}\n" +
                 $"期望开头: {BaseNamespace}\n\n" +
-                $"修复建议:\n" +
+                $"修复建议：\n" +
                 $"1. 检查项目的 RootNamespace 是否由 Directory.Build.props 正确推导\n" +
                 $"2. 确保项目目录结构符合规范（Platform/Application/Modules/Host/Tests）\n" +
                 $"3. 删除项目文件中的手动 RootNamespace 设置\n\n" +

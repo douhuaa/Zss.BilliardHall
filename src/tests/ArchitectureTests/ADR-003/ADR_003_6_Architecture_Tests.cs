@@ -25,7 +25,7 @@ public sealed class ADR_003_6_Architecture_Tests
         File.Exists(directoryBuildPropsPath).Should().BeTrue($"❌ ADR-003_6_1 违规: Directory.Build.props 文件应存在于仓库根目录\n\n" +
         $"期望路径: {directoryBuildPropsPath}\n" +
         $"当前状态: 文件不存在\n\n" +
-        $"修复建议:\n" +
+        $"修复建议：\n" +
         $"1. 在仓库根目录创建 Directory.Build.props 文件\n" +
         $"2. 在文件中定义 BaseNamespace（CompanyNamespace + ProductNamespace）\n" +
         $"3. 参考其他项目的 Directory.Build.props 模板\n\n" +
@@ -51,7 +51,7 @@ public sealed class ADR_003_6_Architecture_Tests
         (content.Contains("CompanyNamespace") || content.Contains("ProductNamespace") || content.Contains("BaseNamespace")).Should().BeTrue($"❌ ADR-003_6_2 违规: Directory.Build.props 应定义 BaseNamespace 相关属性\n\n" +
         $"文件路径: {directoryBuildPropsPath}\n" +
         $"当前状态: 未找到 CompanyNamespace/ProductNamespace/BaseNamespace 定义\n\n" +
-        $"修复建议:\n" +
+        $"修复建议：\n" +
         $"1. 在 Directory.Build.props 中添加 BaseNamespace 定义\n" +
         $"2. 使用以下格式:\n" +
         $"   <CompanyNamespace>Zss</CompanyNamespace>\n" +

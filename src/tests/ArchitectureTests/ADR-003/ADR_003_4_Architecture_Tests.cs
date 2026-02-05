@@ -37,7 +37,7 @@ public sealed class ADR_003_4_Architecture_Tests
             $"违规类型: {type.FullName}\n" +
             $"当前命名空间: {type.Namespace}\n" +
             $"期望命名空间前缀: {BaseNamespace}.Modules.{moduleName}\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 确保类型定义在正确的命名空间中\n" +
             $"2. 模块 {moduleName} 的所有代码都应该在 {BaseNamespace}.Modules.{moduleName} 命名空间下\n" +
             $"3. 如果是子命名空间，应该是 {BaseNamespace}.Modules.{moduleName}.* 格式（如 .Domain, .UseCases）\n\n" +

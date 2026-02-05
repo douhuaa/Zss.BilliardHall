@@ -48,7 +48,7 @@ public sealed class ADR_002_3_Architecture_Tests
 
         result.IsSuccessful.Should().BeTrue($"❌ ADR-002_3_1 违规: Host {hostAssembly.GetName().Name} 不应依赖任何 Modules\n\n" +
         $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
-        $"修复建议:\n" +
+        $"修复建议：\n" +
         $"1. 移除 Host 对 Modules 的项目引用\n" +
         $"2. Host 通过 Application 间接引入模块\n" +
         $"3. 将共享契约移到 Platform/BuildingBlocks\n\n" +
@@ -108,7 +108,7 @@ public sealed class ADR_002_3_Architecture_Tests
                             $"Host 项目: {Path.GetFileName(csprojPath)}\n" +
                             $"违规引用: {Path.GetFileName(refPath)}\n" +
                             $"引用路径: {include}\n\n" +
-                            $"修复建议:\n" +
+                            $"修复建议：\n" +
                             $"1. 从 Host.csproj 中移除对 Module 项目的引用\n" +
                             $"2. Host 只应引用 Application 和 Platform\n" +
                             $"3. 将共享契约移到 Platform/BuildingBlocks\n\n" +
@@ -143,7 +143,7 @@ public sealed class ADR_002_3_Architecture_Tests
             (lines.Count <= 50).Should().BeTrue($"❌ ADR-002_3_4 违规: Program.cs 应保持简洁（≤ 50 行）\n\n" +
             $"当前行数: {lines.Count}\n" +
             $"文件路径: {programFile}\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 将技术配置逻辑移到 PlatformBootstrapper\n" +
             $"2. 将业务装配逻辑移到 ApplicationBootstrapper\n" +
             $"3. Program.cs 只保留核心调用（builder.AddPlatform, builder.AddApplication, app.Run）\n\n" +
