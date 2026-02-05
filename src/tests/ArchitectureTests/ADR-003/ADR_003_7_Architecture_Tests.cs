@@ -2,6 +2,7 @@ using NetArchTest.Rules;
 using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 using System.Reflection;
+using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_003;
 
@@ -46,15 +47,18 @@ public sealed class ADR_003_7_Architecture_Tests
                                   projectName == "ArchitectureAnalyzers" ||  // Level 2 enforcement tool
                                   projectName == "AdrParserCli";  // CLI tool in tools directory
 
-                isValidName.Should().BeTrue($"❌ ADR-003_7_1 违规: 项目命名不符合命名空间约定\n\n" +
-                $"项目文件: {projectFile}\n" +
-                $"项目名称: {projectName}\n" +
-                $"相对路径: {relativePath}\n\n" +
-                $"修复建议：\n" +
-                $"1. 确保 src/ 下的项目使用 '{BaseNamespace}.*' 命名约定\n" +
-                $"2. 或者确保项目的 RootNamespace 设置为 '{BaseNamespace}.*'\n" +
-                $"3. 项目名应该与目录最后一级名称一致\n\n" +
-                $"参考: docs/copilot/adr-003.prompts.md (场景 1, 反模式 4)");
+                isValidName.Should().BeTrue(
+                    Build(
+                        ruleId: "ADR-003_7_1",
+                        summary: "项目命名不符合命名空间约定",
+                        currentState: $"项目文件: {projectFile}\n项目名称: {projectName}\n相对路径: {relativePath}",
+                        remediationSteps: new[]
+                        {
+                            $"确保 src/ 下的项目使用 '{BaseNamespace}.*' 命名约定",
+                            $"或者确保项目的 RootNamespace 设置为 '{BaseNamespace}.*'",
+                            "项目名应该与目录最后一级名称一致"
+                        },
+                        adrReference: "docs/copilot/adr-003.prompts.md (场景 1, 反模式 4)"));
             }
         }
     }

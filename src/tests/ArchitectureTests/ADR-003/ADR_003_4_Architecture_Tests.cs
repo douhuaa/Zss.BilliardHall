@@ -2,6 +2,7 @@ using NetArchTest.Rules;
 using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 using System.Reflection;
+using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_003;
 
@@ -32,16 +33,18 @@ public sealed class ADR_003_4_Architecture_Tests
 
         foreach (var type in types)
         {
-            (type.Namespace?.StartsWith($"{BaseNamespace}.Modules.{moduleName}") == true).Should().BeTrue($"❌ ADR-003_4_1 违规: Module 程序集中的类型应在 {BaseNamespace}.Modules.{{ModuleName}} 命名空间下\n\n" +
-            $"模块名: {moduleName}\n" +
-            $"违规类型: {type.FullName}\n" +
-            $"当前命名空间: {type.Namespace}\n" +
-            $"期望命名空间前缀: {BaseNamespace}.Modules.{moduleName}\n\n" +
-            $"修复建议：\n" +
-            $"1. 确保类型定义在正确的命名空间中\n" +
-            $"2. 模块 {moduleName} 的所有代码都应该在 {BaseNamespace}.Modules.{moduleName} 命名空间下\n" +
-            $"3. 如果是子命名空间，应该是 {BaseNamespace}.Modules.{moduleName}.* 格式（如 .Domain, .UseCases）\n\n" +
-            $"参考: docs/copilot/adr-003.prompts.md (场景 2)");
+            (type.Namespace?.StartsWith($"{BaseNamespace}.Modules.{moduleName}") == true).Should().BeTrue(
+                Build(
+                    ruleId: "ADR-003_4_1",
+                    summary: $"Module 程序集中的类型应在 {BaseNamespace}.Modules.{{ModuleName}} 命名空间下",
+                    currentState: $"模块名: {moduleName}\n违规类型: {type.FullName}\n当前命名空间: {type.Namespace}\n期望命名空间前缀: {BaseNamespace}.Modules.{moduleName}",
+                    remediationSteps: new[]
+                    {
+                        "确保类型定义在正确的命名空间中",
+                        $"模块 {moduleName} 的所有代码都应该在 {BaseNamespace}.Modules.{moduleName} 命名空间下",
+                        $"如果是子命名空间，应该是 {BaseNamespace}.Modules.{moduleName}.* 格式（如 .Domain, .UseCases）"
+                    },
+                    adrReference: "docs/copilot/adr-003.prompts.md (场景 2)"));
         }
     }
 }
