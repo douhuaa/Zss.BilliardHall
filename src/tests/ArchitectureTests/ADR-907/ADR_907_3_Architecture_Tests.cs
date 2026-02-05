@@ -213,9 +213,33 @@ public sealed class ADR_907_3_Architecture_Tests
 
             var adrNumber = fileAdrMatch.Groups[1].Value;
 
+            // 构建断言方法模式（复用 ADR_907_3_1 的模式定义）
+            var assertMethodPatterns = new[]
+            {
+                "Assert\\.True",
+                "Assert\\.False",
+                "Should\\(\\)\\.BeTrue",
+                "Should\\(\\)\\.BeFalse",
+                "Should\\(\\)\\.Be",
+                "Should\\(\\)\\.NotBe",
+                "Should\\(\\)\\.BeEmpty",
+                "Should\\(\\)\\.NotBeEmpty",
+                "Should\\(\\)\\.NotBeNull",
+                "Should\\(\\)\\.Contain",
+                "Should\\(\\)\\.NotContain",
+                "Should\\(\\)\\.StartWith",
+                "Should\\(\\)\\.BeGreaterThan",
+                "Should\\(\\)\\.BeGreaterThanOrEqualTo",
+                "Should\\(\\)\\.BeLessThan",
+                "Should\\(\\)\\.BeLessThanOrEqualTo",
+                "Should\\(\\)\\.NotBeNullOrEmpty",
+            };
+            
+            var assertPatternGroup = string.Join("|", assertMethodPatterns);
+
             // 查找所有断言语句及其失败消息
             var assertStatements = Regex.Matches(content, 
-                @"(Assert\.True|Assert\.False|Should\(\)\.BeTrue|Should\(\)\.BeFalse|Should\(\)\.Be|Should\(\)\.NotBe|Should\(\)\.BeEmpty|Should\(\)\.NotBeEmpty|Should\(\)\.NotBeNull|Should\(\)\.Contain|Should\(\)\.NotContain|Should\(\)\.StartWith|Should\(\)\.BeGreaterThan|Should\(\)\.BeGreaterThanOrEqualTo|Should\(\)\.BeLessThan|Should\(\)\.BeLessThanOrEqualTo|Should\(\)\.NotBeNullOrEmpty)\s*\([^""]*""([^""]+)""",
+                $@"({assertPatternGroup})\s*\([^""]*""([^""]+)""",
                 RegexOptions.Singleline);
 
             foreach (Match assert in assertStatements)
