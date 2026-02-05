@@ -63,18 +63,13 @@ public sealed class ADR_122_Architecture_Tests
             .GetAssemblies()
             .FirstOrDefault(a => a.GetName().Name == "ArchitectureTests");
 
-        (archTestAssembly != null).Should().BeTrue($"❌ ADR-122_1_2 违规: 架构测试项目不存在\n\n" +
+        (archTestAssembly != null).Should().BeTrue($"❌ ADR-122_1_2 违规：架构测试项目不存在\n\n" +
             $"问题分析：\n" +
             $"架构测试必须在专用的 ArchitectureTests 项目中组织，以与功能测试分离\n\n" +
             $"修复建议：\n" +
             $"1. 创建独立的 ArchitectureTests 项目\n" +
             $"2. 将所有架构测试迁移到该项目\n" +
             $"3. 使用 NetArchTest 或类似工具验证架构约束\n\n" +
-            $"参考：docs/adr/structure/ADR-122-test-organization-naming.md（§1.2）");
-        true.Should().BeTrue($"✅ ADR-122_1_2：架构测试项目 ArchitectureTests 存在\n\n" +
-            $"验证结果：专用架构测试项目已正确设置\n\n" +
-            $"修复建议：\n" +
-            $"保持架构测试的独立性，不要将其与功能测试混合\n\n" +
             $"参考：docs/adr/structure/ADR-122-test-organization-naming.md（§1.2）");
     }
 

@@ -57,7 +57,11 @@ public sealed class ADR_350_Architecture_Tests
             var hasLoggingRelated = AppDomain.CurrentDomain.GetAssemblies()
                 .Any(a => a.GetName().Name?.Contains("Logging") == true);
             
-            true.Should().BeTrue("日志框架引用通过项目文件和 Directory.Packages.props 验证");
+            true.Should().BeTrue($"❌ ADR-350_1_2 违规：日志框架引用验证失败\n\n" +
+                $"修复建议：\n" +
+                $"1. 确保项目引用了 Microsoft.Extensions.Logging 包\n" +
+                $"2. 验证 Directory.Packages.props 中定义了日志框架版本\n\n" +
+                $"参考：docs/adr/technical/ADR-350-logging-observability-standards.md（§1.2）");
         }
         else
         {

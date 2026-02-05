@@ -27,16 +27,34 @@ public sealed class ADR_910_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-910-readme-governance-constitution.md");
         
-        File.Exists(adrFile).Should().BeTrue($"ADR-910 文档不存在：{adrFile}");
+        File.Exists(adrFile).Should().BeTrue($"❌ ADR-910_1_1 违规：ADR-910 文档不存在\n\n" +
+            $"文件路径：{adrFile}\n\n" +
+            $"修复建议：确保 ADR-910 文档存在于 docs/adr/governance/ 目录\n\n" +
+            $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.1）");
         
         var content = File.ReadAllText(adrFile);
         
         // 验证必需章节存在
-        content.Should().Contain("README 的定位与权限边界");
-        content.Should().Contain("README 禁用的裁决性语言");
-        content.Should().Contain("README 必须包含的声明");
-        content.Should().Contain("README 与 ADR 的关系");
-        content.Should().Contain("README 的变更治理");
+        content.Should().Contain("README 的定位与权限边界", 
+            $"❌ ADR-910_1_1 违规：ADR-910 缺少必需章节\n\n" +
+            $"修复建议：确保文档包含'README 的定位与权限边界'章节\n\n" +
+            $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.1）");
+        content.Should().Contain("README 禁用的裁决性语言",
+            $"❌ ADR-910_1_1 违规：ADR-910 缺少必需章节\n\n" +
+            $"修复建议：确保文档包含'README 禁用的裁决性语言'章节\n\n" +
+            $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.1）");
+        content.Should().Contain("README 必须包含的声明",
+            $"❌ ADR-910_1_1 违规：ADR-910 缺少必需章节\n\n" +
+            $"修复建议：确保文档包含'README 必须包含的声明'章节\n\n" +
+            $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.1）");
+        content.Should().Contain("README 与 ADR 的关系",
+            $"❌ ADR-910_1_1 违规：ADR-910 缺少必需章节\n\n" +
+            $"修复建议：确保文档包含'README 与 ADR 的关系'章节\n\n" +
+            $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.1）");
+        content.Should().Contain("README 的变更治理",
+            $"❌ ADR-910_1_1 违规：ADR-910 缺少必需章节\n\n" +
+            $"修复建议：确保文档包含'README 的变更治理'章节\n\n" +
+            $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.1）");
     }
 
     [Fact(DisplayName = "ADR-910_1_2: 对应的 Copilot Prompts 文件存在")]
@@ -49,15 +67,26 @@ public sealed class ADR_910_Architecture_Tests
         // 如果文件不存在，给出清晰的待办提示
         if (!File.Exists(promptsFile))
         {
-            true.Should().BeFalse($"⚠️ 待办：ADR-910 Prompts 文件需要创建：{promptsFile}\n" +
-                       "请创建该文件以提供 README 编写的场景化指导。");
+            true.Should().BeFalse($"❌ ADR-910_1_2 违规：ADR-910 Prompts 文件需要创建\n\n" +
+                       $"文件路径：{promptsFile}\n\n" +
+                       $"修复建议：\n" +
+                       $"1. 创建 docs/copilot/adr-910.prompts.md 文件\n" +
+                       $"2. 添加权威声明章节\n" +
+                       $"3. 提供 README 编写的场景化指导\n\n" +
+                       $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.2）");
         }
         
         var content = File.ReadAllText(promptsFile);
         
         // 验证 Prompts 文件包含权威声明
-        content.Should().Contain("权威声明");
-        content.Should().Contain("ADR-910");
+        content.Should().Contain("权威声明",
+            $"❌ ADR-910_1_2 违规：Prompts 文件缺少权威声明\n\n" +
+            $"修复建议：在 Prompts 文件中添加权威声明章节\n\n" +
+            $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.2）");
+        content.Should().Contain("ADR-910",
+            $"❌ ADR-910_1_2 违规：Prompts 文件缺少 ADR-910 引用\n\n" +
+            $"修复建议：在 Prompts 文件中引用 ADR-910\n\n" +
+            $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.2）");
     }
 
     [Fact(DisplayName = "ADR-910_1_3: 核心治理原则已定义")]
@@ -68,13 +97,22 @@ public sealed class ADR_910_Architecture_Tests
         var content = File.ReadAllText(adrFile);
         
         // 验证核心原则：README 无裁决力
-        content.Should().Contain("README 是使用说明，不是架构裁决书");
+        content.Should().Contain("README 是使用说明，不是架构裁决书",
+            $"❌ ADR-910_1_3 违规：ADR-910 缺少核心原则\n\n" +
+            $"修复建议：在 ADR-910 中添加'README 是使用说明，不是架构裁决书'声明\n\n" +
+            $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.3）");
         
         // 验证裁决性语言约束
-        content.Should().Contain("README 禁用的裁决性语言");
+        content.Should().Contain("README 禁用的裁决性语言",
+            $"❌ ADR-910_1_3 违规：ADR-910 缺少裁决性语言禁止规则\n\n" +
+            $"修复建议：在 ADR-910 中添加禁用裁决性语言的章节\n\n" +
+            $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.3）");
         
         // 验证无裁决力声明要求
-        content.Should().Contain("README 必须包含的声明");
+        content.Should().Contain("README 必须包含的声明",
+            $"❌ ADR-910_1_3 违规：ADR-910 缺少声明要求\n\n" +
+            $"修复建议：在 ADR-910 中添加 README 必需声明的章节\n\n" +
+            $"参考：docs/adr/governance/ADR-910-readme-governance-constitution.md（§1.3）");
     }
 
     private static string? FindRepositoryRoot()

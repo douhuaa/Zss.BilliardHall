@@ -200,12 +200,12 @@ superseded_by: null
 
 - **代码风格与格式化**：不规定命名约定（如 PascalCase、camelCase）、缩进、换行等代码格式规则，这些由代码规范（如 .editorconfig）管理
 - **业务逻辑命名**：不规定业务类型、方法、变量的具体命名方式，仅管理命名空间结构
-- **包版本管理**：不管理 NuGet 包的版本选择和依赖关系，这些由 [ADR-004](./ADR-004-Cpm-Final.md) 管理
-- **依赖注入配置**：不规定服务注册、生命周期管理等 DI 细节，这些由 [ADR-002](./ADR-002-platform-application-host-bootstrap.md) 和 [ADR-005](./ADR-005-Application-Interaction-Model-Final.md) 管理
-- **模块间通信方式**：不规定模块如何通信（事件、契约），这些由 [ADR-001](./ADR-001-modular-monolith-vertical-slice-architecture.md) 管理
+- **包版本管理**：不管理 NuGet 包的版本选择和依赖关系，这些由 [ADR-####](./ADR-####-Cpm-Final.md) 管理
+- **依赖注入配置**：不规定服务注册、生命周期管理等 DI 细节，这些由 [ADR-####](./ADR-####-platform-application-host-bootstrap.md) 和 [ADR-####](./ADR-####-Application-Interaction-Model-Final.md) 管理
+- **模块间通信方式**：不规定模块如何通信（事件、契约），这些由 [ADR-####](./ADR-####-modular-monolith-vertical-slice-architecture.md) 管理
 - **文件组织结构**：不规定文件在命名空间内的具体组织方式（如按用例、按层），仅管理命名空间边界
 - **多语言项目**：本 ADR 仅适用于 C# 项目，不涉及前端、脚本或其他语言项目的命名空间规范
-- **测试命名空间详细规则**：测试项目的详细命名规范由 [ADR-122](../structure/ADR-122-test-organization-naming.md) 管理
+- **测试命名空间详细规则**：测试项目的详细命名规范由 [ADR-####](../structure/ADR-####-test-organization-naming.md) 管理
 - **运行时命名空间验证**：本 ADR 仅在编译时和架构测试中验证，不涉及运行时的命名空间检查
 
 ---

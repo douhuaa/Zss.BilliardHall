@@ -43,7 +43,7 @@ public sealed class ADR_220_Architecture_Tests
     public void EventHandlers_Must_Be_Scoped_Or_Transient()
     {
         // 此规则需要在集成测试中验证 DI 容器配置
-        true.Should().BeTrue($"❌ ADR-220_1_2 提示：EventHandler 生命周期验证需在集成测试中检查\n\n" +
+        true.Should().BeTrue($"❌ ADR-220_1_2 违规：EventHandler 生命周期验证需在集成测试中检查\n\n" +
             $"验证内容：\n" +
             $"所有事件处理器（EventHandler）必须注册为 Scoped 或 Transient 生命周期\n\n" +
             $"修复建议：\n" +

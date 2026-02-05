@@ -79,7 +79,7 @@ public sealed class ADR_240_Architecture_Tests
                         $"1. 将异常类改为继承适当的基类\n" +
                         $"2. 例如：public class OrderCancelledException : DomainException\n" +
                         $"3. 确保异常分类符合业务语义\n\n" +
-                        $"参考: docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 1）");
+                        $"参考：docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 1）");
         }
     }
 
@@ -125,7 +125,7 @@ public sealed class ADR_240_Architecture_Tests
                         $"1. 将异常改为继承 InfrastructureException\n" +
                         $"2. 或移除 IRetryable 接口实现\n" +
                         $"3. 重新评估异常的业务语义分类\n\n" +
-                        $"参考: docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 3）");
+                        $"参考：docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 3）");
         }
     }
 
@@ -167,7 +167,7 @@ public sealed class ADR_240_Architecture_Tests
                         $"1. 移除 IRetryable 接口实现\n" +
                         $"2. 如果是暂时性技术故障，应使用 InfrastructureException\n" +
                         $"3. 确保异常分类准确反映失败原因\n\n" +
-                        $"参考: docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 3）");
+                        $"参考：docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 3）");
         }
     }
 
@@ -209,7 +209,7 @@ public sealed class ADR_240_Architecture_Tests
                         $"1. 移除 IRetryable 接口实现\n" +
                         $"2. 客户端应修正输入后重新提交\n" +
                         $"3. 如果是暂时性技术故障，应使用 InfrastructureException\n\n" +
-                        $"参考: docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 3）");
+                        $"参考：docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 3）");
         }
     }
 
@@ -268,7 +268,7 @@ public sealed class ADR_240_Architecture_Tests
                         $"修复建议:\n" +
                         $"1. 将异常类移至对应的 Exceptions 命名空间\n" +
                         $"2. 确保文件夹结构与命名空间一致\n\n" +
-                        $"参考: docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 1）");
+                        $"参考：docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 1）");
         }
     }
 

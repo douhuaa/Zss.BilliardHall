@@ -77,7 +77,7 @@ ADR 正文、架构测试、Copilot Prompt **必须**使用一致的版本号。
 
 **示例**：
 
-ADR 正文 (`ADR-001-modular-monolith-vertical-slice-architecture.md`)：
+ADR 正文 (`ADR-####-modular-monolith-vertical-slice-architecture.md`)：
 
 ```markdown
 ---

@@ -39,7 +39,10 @@ public sealed class ADR_900_Architecture_Tests
         var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根（docs/adr 或 .git）");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
-        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{AdrDocsPath}");
+        Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-900_1_1 违规：ADR 文档目录不存在\n\n" +
+            $"预期路径：{AdrDocsPath}\n\n" +
+            $"修复建议：确保 docs/adr 目录存在\n\n" +
+            $"参考：docs/adr/governance/ADR-900-architecture-tests.md（§1.1）");
 
         var adrIds = LoadAdrIds(adrDirectory)
             .Where(adr => !AdrWithoutTests.Contains(adr)) // 跳过无需测试的 ADR

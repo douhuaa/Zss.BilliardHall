@@ -53,7 +53,7 @@ public sealed class ADR_120_Architecture_Tests
             $"1. 将类型重命名为 {eventType.Name}Event\n" +
             $"2. 确保命名遵循模式: {{AggregateRoot}}{{Action}}Event\n" +
             $"3. 示例：OrderCreatedEvent, MemberUpgradedEvent\n\n" +
-            $"参考: docs/adr/structure/ADR-120-domain-event-naming-convention.md（基本命名规则）");
+            $"参考：docs/adr/structure/ADR-120-domain-event-naming-convention.md（基本命名规则）");
         }
     }
 
@@ -102,7 +102,7 @@ public sealed class ADR_120_Architecture_Tests
                                 $"   - Processing → Processed\n" +
                                 $"2. 或使用明确的过去式动词：\n" +
                                 $"   - Cancelled, Shipped, Paid, Upgraded, Suspended\n\n" +
-                                $"参考: docs/adr/structure/ADR-120-domain-event-naming-convention.md（基本命名规则）");
+                                $"参考：docs/adr/structure/ADR-120-domain-event-naming-convention.md（基本命名规则）");
                 }
             }
         }
@@ -146,7 +146,7 @@ public sealed class ADR_120_Architecture_Tests
             $"3. 禁止的命名空间模式：\n" +
             $"   - Zss.BilliardHall.Events (不在模块内)\n" +
             $"   - Zss.BilliardHall.Modules.Orders.Domain.Events (非标准)\n\n" +
-            $"参考: docs/adr/structure/ADR-120-domain-event-naming-convention.md（命名空间组织规则）");
+            $"参考：docs/adr/structure/ADR-120-domain-event-naming-convention.md（命名空间组织规则）");
         }
     }
 
@@ -206,7 +206,7 @@ public sealed class ADR_120_Architecture_Tests
             $"   - OrderPaidEventAddPointsHandler\n" +
             $"   - OrderPaidEventGenerateInvoiceHandler\n" +
             $"3. 禁止使用 Processor、Service 等后缀\n\n" +
-            $"参考: docs/adr/structure/ADR-120-domain-event-naming-convention.md（事件处理器命名规则）");
+            $"参考：docs/adr/structure/ADR-120-domain-event-naming-convention.md（事件处理器命名规则）");
         }
     }
 
@@ -280,7 +280,7 @@ public sealed class ADR_120_Architecture_Tests
                                     $"   - Guid OrderId（而非 Order 对象）\n" +
                                     $"   - string MemberId（而非 Member 对象）\n" +
                                     $"3. 事件应该是不可变的数据快照，不包含行为\n\n" +
-                                    $"参考: docs/adr/structure/ADR-120-domain-event-naming-convention.md（模块隔离约束）");
+                                    $"参考：docs/adr/structure/ADR-120-domain-event-naming-convention.md（模块隔离约束）");
                     }
                 }
             }
@@ -335,7 +335,7 @@ public sealed class ADR_120_Architecture_Tests
                             $"3. 业务逻辑应该在领域模型或处理器中实现：\n" +
                             $"   - 判断逻辑 → 领域模型方法\n" +
                             $"   - 协调逻辑 → Handler\n\n" +
-                            $"参考: docs/adr/structure/ADR-120-domain-event-naming-convention.md（模块隔离约束）");
+                            $"参考：docs/adr/structure/ADR-120-domain-event-naming-convention.md（模块隔离约束）");
             }
         }
     }

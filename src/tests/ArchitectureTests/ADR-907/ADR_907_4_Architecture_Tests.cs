@@ -311,7 +311,18 @@ public sealed class ADR_907_4_Architecture_Tests
             $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §4.5");
 
         // 验证 ADR-907 测试覆盖了必要的检测能力
+        // ADR-907 测试可能在两个位置：ADR/ 或 ADR-907/
         var testFiles = Directory.GetFiles(testsDirectory, "ADR_907_*_Architecture_Tests.cs");
+        
+        // 如果在 ADR/ 目录下找不到，尝试 ADR-907/ 目录
+        if (testFiles.Length == 0)
+        {
+            var adr907Directory = Path.Combine(repoRoot, AdrTestsPath, "ADR-907");
+            if (Directory.Exists(adr907Directory))
+            {
+                testFiles = Directory.GetFiles(adr907Directory, "ADR_907_*_Architecture_Tests.cs");
+            }
+        }
         
         testFiles.Should().NotBeEmpty(
             $"❌ ADR-907_4_5 违规：ADR-907 没有架构测试\n\n" +

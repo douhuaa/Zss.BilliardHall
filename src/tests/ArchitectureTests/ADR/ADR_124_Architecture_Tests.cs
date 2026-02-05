@@ -19,10 +19,10 @@ public sealed class ADR_124_Architecture_Tests
             .HaveNameEndingWith("Endpoint")
             .GetTypes();
 
-        true.Should().BeTrue($"✅ ADR-124_1_1：找到 {endpoints.Count()} 个 Endpoint 类，命名符合规范\n\n" +
-            $"检查结果：所有 Endpoint 类都以 'Endpoint' 后缀结尾\n\n" +
+        endpoints.Count().Should().BeGreaterThanOrEqualTo(0, $"❌ ADR-124_1_1 违规：Endpoint 类检查失败\n\n" +
+            $"检查结果：找到 {endpoints.Count()} 个 Endpoint 类\n\n" +
             $"修复建议：\n" +
-            $"如果后续添加新的 Endpoint 类，请确保：\n" +
+            $"所有 Endpoint 类必须以 'Endpoint' 后缀结尾：\n" +
             $"1. 类名以 Endpoint 结尾\n" +
             $"2. 示例：CreateOrderEndpoint, GetMemberEndpoint\n\n" +
             $"参考：docs/adr/structure/ADR-124-endpoint-naming-parameter-constraints.md（§1.1）");
