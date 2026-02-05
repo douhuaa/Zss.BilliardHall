@@ -510,6 +510,47 @@ result.IsSuccessful.Should().BeTrue(message);
 
 ---
 
+## 辅助工具使用
+
+为了简化测试编写和提高代码质量，推荐使用 `Shared/` 目录下的辅助工具，避免重复实现常见功能：
+
+### FileSystemTestHelper
+
+提供统一的文件系统操作方法，避免直接使用原生 `File` 和 `Directory` 类：
+
+- **文件存在性断言**：`AssertFileExists(filePath, message)` - 断言文件存在并提供详细错误信息
+- **目录存在性断言**：`AssertDirectoryExists(dirPath, message)` - 断言目录存在
+- **安全读取文件内容**：`ReadFileContent(filePath)` - 安全读取文件内容，自动处理异常
+- **文件内容断言**：`AssertFileContains(filePath, text, message)` - 断言文件包含指定内容
+- **目录文件遍历**：`GetFilesInDirectory(path, pattern, option)` - 获取目录中的文件列表
+- **路径转换**：`GetAbsolutePath(relativePath)`, `GetRelativePath(absolutePath)` - 路径转换工具
+
+**使用示例**：
+```csharp
+// 验证 ADR 文档存在且包含必需内容
+var file = FileSystemTestHelper.GetAbsolutePath("docs/adr/ADR-XXX.md");
+FileSystemTestHelper.AssertFileExists(file, "ADR 文档不存在");
+FileSystemTestHelper.AssertFileContains(file, "## 决策", "应包含决策章节");
+```
+
+**详细说明**：请参考 [Shared/README.md](../src/tests/ArchitectureTests/Shared/README.md)
+
+### TestEnvironment
+
+提供仓库路径常量，避免重复查找：
+
+```csharp
+var repoRoot = TestEnvironment.RepositoryRoot;
+var adrPath = TestEnvironment.AdrPath;
+var modulesPath = TestEnvironment.ModulesPath;
+```
+
+### AssertionMessageBuilder
+
+构建标准化断言消息（已在“使用断言消息模板”中说明）。
+
+---
+
 ## 测试组织原则
 
 ### 按 ADR 编号组织
