@@ -106,7 +106,7 @@ public sealed class ADR_340_Architecture_Tests
 
         hasSerilogConfig.Should().BeTrue($"❌ ADR-340_1_2 违规: PlatformBootstrapper 必须包含 Serilog 配置代码。\n\n" +
             $"当前状态: 未发现 Log.Logger 或 LoggerConfiguration\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 在 PlatformBootstrapper.Configure() 中创建 LoggerConfiguration\n" +
             $"2. 配置至少一个 Sink（Console 或 File）\n" +
             $"3. 调用 .CreateLogger() 并赋值给 Log.Logger\n\n" +
@@ -127,7 +127,7 @@ public sealed class ADR_340_Architecture_Tests
 
         hasTracingAndMetrics.Should().BeTrue($"❌ ADR-340_1_2 违规: OpenTelemetry 必须同时配置 Tracing 和 Metrics。\n\n" +
             $"当前状态: 缺少 WithTracing 或 WithMetrics 配置\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 确保同时配置 .WithTracing() 和 .WithMetrics()\n" +
             $"2. 在 WithTracing 中添加 AspNetCore 和 Http 插桩\n" +
             $"3. 在 WithMetrics 中添加 Runtime 插桩\n\n" +
@@ -211,7 +211,7 @@ public sealed class ADR_340_Architecture_Tests
         result.IsSuccessful.Should().BeTrue($"❌ ADR-340_1_5 违规: Modules 层禁止直接引用 OpenTelemetry【配置类】。\n\n" +
             $"违规类型:\n" +
             $"{failingTypesText}\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 移除 Modules 项目中对 OpenTelemetry 配置包的引用\n" +
             $"2. 如需创建自定义 Activity，可使用 System.Diagnostics.ActivitySource\n" +
             $"3. Platform 层负责配置 OpenTelemetry，Modules 层只使用标准 API\n\n" +
@@ -257,7 +257,7 @@ public sealed class ADR_340_Architecture_Tests
         result.IsSuccessful.Should().BeTrue($"❌ ADR-340_1_5 违规: Application 层禁止直接引用 Serilog。\n\n" +
             $"违规类型:\n" +
             $"{failingTypesText}\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 移除 Application 项目中对 Serilog 包的引用\n" +
             $"2. 仅使用 Microsoft.Extensions.Logging.ILogger<T> 接口\n" +
             $"3. 日志配置由 Platform 层的 PlatformBootstrapper 负责\n\n" +
@@ -301,7 +301,7 @@ public sealed class ADR_340_Architecture_Tests
         result.IsSuccessful.Should().BeTrue($"❌ ADR-340_1_5 违规: Application 层禁止直接引用 OpenTelemetry 配置包。\n\n" +
             $"违规类型:\n" +
             $"{failingTypesText}\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 移除 Application 项目中对 OpenTelemetry 配置包的引用\n" +
             $"2. OpenTelemetry 配置由 Platform 层的 PlatformBootstrapper 负责\n\n" +
             $"执行级别: L1（依赖隔离）\n\n" +

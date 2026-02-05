@@ -2,6 +2,7 @@ using FluentAssertions;
 using NetArchTest.Rules;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 using System.Reflection;
+using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_001;
 
@@ -41,13 +42,12 @@ public sealed class ADR_001_2_Architecture_Tests
             var hasUseCases = ns.Contains(".UseCases.") || ns.Contains(".Features.");
 
             hasUseCases.Should().BeTrue(
-            $"❌ ADR-001_2_1 违规: Handler {handler.FullName} 必须在 UseCases 或 Features 命名空间下。\n" +
-            $"当前命名空间: {ns}\n" +
-            $"修复建议：\n" +
-            $"  1. 将 Handler 移动到对应的 UseCases/<用例名>/ 或 Features/<用例名>/ 目录下\n" +
-            $"  2. 采用垂直切片架构，每个用例包含 Endpoint、Command/Query、Handler\n" +
-            $"  3. 避免创建横向的 Service 层\n" +
-            $"参考：docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md");
+                BuildSimple(
+                    ruleId: "ADR-001_2_1",
+                    summary: $"Handler {handler.FullName} 必须在 UseCases 或 Features 命名空间下",
+                    currentState: $"当前命名空间: {ns}",
+                    remediation: "将 Handler 移动到对应的 UseCases/<用例名>/ 或 Features/<用例名>/ 目录下，采用垂直切片架构，每个用例包含 Endpoint、Command/Query、Handler，避免创建横向的 Service 层",
+                    adrReference: "docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md"));
         }
     }
 
@@ -71,13 +71,17 @@ public sealed class ADR_001_2_Architecture_Tests
                 .GetResult();
 
             result.IsSuccessful.Should().BeTrue(
-            $"❌ ADR-001_2_2 违规: 模块 {moduleAssembly.GetName().Name} 禁止包含名称含 '{word}' 的类型。\n" +
-            $"违规类型: {string.Join(", ", result.FailingTypes?.Select(t => t.FullName) ?? Array.Empty<string>())}。\n" +
-            $"修复建议：\n" +
-            $"  1. 将业务逻辑放入领域模型或 Handler 中\n" +
-            $"  2. 采用垂直切片架构，避免横向抽象层\n" +
-            $"  3. 如需共享技术能力，移至 Platform/BuildingBlocks\n" +
-            $"参考：docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md");
+                BuildFromArchTestResult(
+                    ruleId: "ADR-001_2_2",
+                    summary: $"模块 {moduleAssembly.GetName().Name} 禁止包含名称含 '{word}' 的类型",
+                    failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+                    remediationSteps: new[]
+                    {
+                        "将业务逻辑放入领域模型或 Handler 中",
+                        "采用垂直切片架构，避免横向抽象层",
+                        "如需共享技术能力，移至 Platform/BuildingBlocks"
+                    },
+                    adrReference: "docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md"));
         }
     }
 }

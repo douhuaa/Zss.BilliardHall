@@ -69,7 +69,7 @@ public sealed class ADR_005_3_Architecture_Tests
                             $"依赖类型: {param.FullName}\n\n" +
                             $"问题分析:\n" +
                             $"模块间默认只能异步通信（领域事件/集成事件）\n\n" +
-                            $"修复建议:\n" +
+                            $"修复建议：\n" +
                             $"1. 使用异步事件: await _eventBus.Publish(new SomeEvent(...))\n" +
                             $"2. 如确需同步调用，必须提交 ADR 破例审批\n" +
                             $"3. 通过契约查询而非直接依赖: var dto = await _queryBus.Send(new GetSomeData(...))\n\n" +

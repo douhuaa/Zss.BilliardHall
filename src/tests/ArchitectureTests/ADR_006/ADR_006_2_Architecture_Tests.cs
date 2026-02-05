@@ -37,7 +37,7 @@ public sealed class ADR_006_2_Architecture_Tests
                     $"文件: {file}\n" +
                     $"当前编号: ADR-{numberStr}\n" +
                     $"正确编号: ADR-{number:D3}\n\n" +
-                    $"修复建议:\n" +
+                    $"修复建议：\n" +
                     $"1. 所有 ADR 编号统一使用3位格式（000-999）\n" +
                     $"2. 小于100的编号必须使用前导零\n" +
                     $"   - 宪法层: ADR-001 到 ADR-009\n" +

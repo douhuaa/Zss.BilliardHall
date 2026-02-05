@@ -29,7 +29,7 @@ public sealed class ADR_006_1_Architecture_Tests
             match.Success.Should().BeTrue($"❌ ADR-006_1_1 违规: ADR 文件名必须以 'ADR-数字' 开头\n\n" +
                 $"文件: {file}\n" +
                 $"文件名: {fileName}\n\n" +
-                $"修复建议:\n" +
+                $"修复建议：\n" +
                 $"1. 文件名必须以 ADR-XXX 格式开头（3位数字）\n" +
                 $"2. 所有编号统一使用3位格式（001-999）\n" +
                 $"3. 小于100的编号必须使用前导零（如 ADR-001, ADR-010）\n\n" +
@@ -47,7 +47,7 @@ public sealed class ADR_006_1_Architecture_Tests
                         $"❌ ADR-006_1_1 违规: ADR-{number:D3} 应位于 constitutional/ 目录\n\n" +
                         $"文件: {file}\n" +
                         $"当前目录: {directory}\n\n" +
-                        $"修复建议:\n" +
+                        $"修复建议：\n" +
                         $"宪法层 ADR（001-009）必须位于 docs/adr/constitutional/ 目录\n\n" +
                         $"参考: ADR-006_1_1 - 编号段层级映射");
                 }
@@ -57,7 +57,7 @@ public sealed class ADR_006_1_Architecture_Tests
                         $"❌ ADR-006_1_1 违规: ADR-{number:D3} 应位于 governance/ 目录\n\n" +
                         $"文件: {file}\n" +
                         $"当前目录: {directory}\n\n" +
-                        $"修复建议:\n" +
+                        $"修复建议：\n" +
                         $"治理层 ADR（900-999）必须位于 docs/adr/governance/ 目录\n\n" +
                         $"参考: ADR-006_1_1 - 编号段层级映射");
                 }
@@ -67,7 +67,7 @@ public sealed class ADR_006_1_Architecture_Tests
                         $"❌ ADR-006_1_1 违规: ADR-{number:D3} 应位于 structure/ 目录\n\n" +
                         $"文件: {file}\n" +
                         $"当前目录: {directory}\n\n" +
-                        $"修复建议:\n" +
+                        $"修复建议：\n" +
                         $"结构层 ADR（100-199）必须位于 docs/adr/structure/ 目录\n\n" +
                         $"参考: ADR-006_1_1 - 编号段层级映射");
                 }
@@ -77,7 +77,7 @@ public sealed class ADR_006_1_Architecture_Tests
                         $"❌ ADR-006_1_1 违规: ADR-{number:D3} 应位于 runtime/ 目录\n\n" +
                         $"文件: {file}\n" +
                         $"当前目录: {directory}\n\n" +
-                        $"修复建议:\n" +
+                        $"修复建议：\n" +
                         $"运行层 ADR（200-299）必须位于 docs/adr/runtime/ 目录\n\n" +
                         $"参考: ADR-006_1_1 - 编号段层级映射");
                 }
@@ -87,7 +87,7 @@ public sealed class ADR_006_1_Architecture_Tests
                         $"❌ ADR-006_1_1 违规: ADR-{number:D3} 应位于 technical/ 目录\n\n" +
                         $"文件: {file}\n" +
                         $"当前目录: {directory}\n\n" +
-                        $"修复建议:\n" +
+                        $"修复建议：\n" +
                         $"技术层 ADR（300-399）必须位于 docs/adr/technical/ 目录\n\n" +
                         $"参考: ADR-006_1_1 - 编号段层级映射");
                 }

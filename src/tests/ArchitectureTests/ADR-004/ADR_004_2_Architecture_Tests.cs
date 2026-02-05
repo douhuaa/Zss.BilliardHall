@@ -63,7 +63,7 @@ public sealed class ADR_004_2_Architecture_Tests
         (violations.Count == 0).Should().BeTrue(
             $"❌ ADR-004_2_1 违规: 发现 {violations.Count} 个项目手动指定了包版本，应使用 CPM 统一管理。\n\n" +
             $"违规项目:\n{string.Join("\n", violations)}\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 在 Directory.Packages.props 中定义包版本: <PackageVersion Include=\"包名\" Version=\"版本号\" />\n" +
             $"2. 从项目文件中移除 Version 属性，只保留 <PackageReference Include=\"包名\" />\n" +
             $"3. 运行 dotnet restore 和 dotnet build 验证配置正确\n\n" +
@@ -142,7 +142,7 @@ public sealed class ADR_004_2_Architecture_Tests
         (missingPackages.Count == 0).Should().BeTrue(
             $"❌ ADR-004_2_2 违规: 发现 {missingPackages.Count} 个包在项目中使用但未在 Directory.Packages.props 中定义。\n\n" +
             $"缺失的包: {string.Join(", ", missingPackages)}\n\n" +
-            $"修复建议:\n" +
+            $"修复建议：\n" +
             $"1. 在 Directory.Packages.props 中为每个缺失的包添加版本定义\n" +
             $"2. 使用格式: <PackageVersion Include=\"包名\" Version=\"版本号\" />\n" +
             $"3. 将包添加到合适的分组（使用 Label 属性）\n\n" +

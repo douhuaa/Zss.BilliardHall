@@ -1,5 +1,6 @@
 using NetArchTest.Rules;
 using FluentAssertions;
+using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 
@@ -32,13 +33,18 @@ public sealed class ADR_002_4_Architecture_Tests
             .HaveDependencyOnAny("Zss.BilliardHall.Application", "Zss.BilliardHall.Host")
             .GetResult();
 
-        platformResult.IsSuccessful.Should().BeTrue($"❌ ADR-002_4_1 违规: Platform 不应依赖 Application 或 Host\n\n" +
-        $"违规类型:\n{string.Join("\n", platformResult.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
-        $"修复建议:\n" +
-        $"1. 确保三层依赖方向: Host → Application → Platform\n" +
-        $"2. Platform 是最底层，不依赖任何上层\n" +
-        $"3. 移除违规的依赖引用\n\n" +
-        $"参考: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        var platformMessage = BuildFromArchTestResult(
+            ruleId: "ADR-002_4_1",
+            summary: "Platform 不应依赖 Application 或 Host",
+            failingTypeNames: platformResult.FailingTypes?.Select(t => t.FullName),
+            remediationSteps: new[]
+            {
+                "确保三层依赖方向: Host → Application → Platform",
+                "Platform 是最底层，不依赖任何上层",
+                "移除违规的依赖引用"
+            },
+            adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        platformResult.IsSuccessful.Should().BeTrue(platformMessage);
 
         // Application 不应依赖 Host
         var applicationResult = Types
@@ -47,12 +53,17 @@ public sealed class ADR_002_4_Architecture_Tests
             .HaveDependencyOn("Zss.BilliardHall.Host")
             .GetResult();
 
-        applicationResult.IsSuccessful.Should().BeTrue($"❌ ADR-002_4_1 违规: Application 不应依赖 Host\n\n" +
-        $"违规类型:\n{string.Join("\n", applicationResult.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
-        $"修复建议:\n" +
-        $"1. 确保三层依赖方向: Host → Application → Platform\n" +
-        $"2. Application 不感知运行形态\n" +
-        $"3. 移除对 Host 的依赖\n\n" +
-        $"参考: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        var applicationMessage = BuildFromArchTestResult(
+            ruleId: "ADR-002_4_1",
+            summary: "Application 不应依赖 Host",
+            failingTypeNames: applicationResult.FailingTypes?.Select(t => t.FullName),
+            remediationSteps: new[]
+            {
+                "确保三层依赖方向: Host → Application → Platform",
+                "Application 不感知运行形态",
+                "移除对 Host 的依赖"
+            },
+            adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        applicationResult.IsSuccessful.Should().BeTrue(applicationMessage);
     }
 }
