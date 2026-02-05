@@ -164,8 +164,8 @@ superseded_by: null
 
 ```mermaid
 graph TB
-    ADR0001[ADR-001: 模块化架构] --> ADR0005[ADR-005: 交互模型]
-    ADR0005 --> ADR0201[ADR-201: Handler 生命周期]
+    ADR0001[ADR-####: 模块化架构] --> ADR0005[ADR-####: 交互模型]
+    ADR0005 --> ADR0201[ADR-####: Handler 生命周期]
 
     style ADR0001 fill:#90EE90
     style ADR0005 fill:#87CEEB
