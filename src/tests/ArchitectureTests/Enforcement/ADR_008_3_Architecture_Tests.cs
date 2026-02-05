@@ -5,24 +5,27 @@ using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
 /// <summary>
-/// 文档权威声明检查 - Enforcement 层测试
-/// 
-/// 【定位】：执行 ADR-008 的具体约束
-/// 【来源】：ADR-008 决策 3.1
-/// 【执法】：失败 = CI 阻断
-/// 
-/// 本测试类检查：
-/// 1. Instructions/Agents 必须声明权威依据
-/// 2. 必须包含冲突裁决规则
-/// 
-/// 【关联文档】
+/// ADR-008_3: 文档权威声明规范（Rule）
+/// 执行 ADR-008 对治理级文档权威声明的约束
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-008_3_1: Instructions/Agents 必须声明权威依据
+///
+/// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
 /// - 来源决策: ADR-008 决策 3.1
+/// 
+/// 执法说明：
+/// - 失败 = CI 阻断
 /// </summary>
-public sealed class DocumentationAuthorityDeclarationTests
+public sealed class ADR_008_3_Architecture_Tests
 {
-    [Fact(DisplayName = "Instructions/Agents 必须声明权威依据")]
-    public void Instructions_And_Agents_Must_Declare_Authority_Basis()
+    /// <summary>
+    /// ADR-008_3_1: Instructions/Agents 必须声明权威依据
+    /// 验证治理级文档包含权威声明和冲突裁决规则（§ADR-008_3_1）
+    /// </summary>
+    [Fact(DisplayName = "ADR-008_3_1: Instructions/Agents 必须声明权威依据")]
+    public void ADR_008_3_1_Instructions_And_Agents_Must_Declare_Authority_Basis()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var violations = new List<string>();

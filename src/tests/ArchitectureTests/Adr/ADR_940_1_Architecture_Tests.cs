@@ -5,10 +5,18 @@ using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
-/// ADR 一致性验证：编号、文件名、目录、元数据一致性
-/// 确保 ADR 文档的结构规范性
+/// ADR-940_1: ADR 文档一致性规范（Rule）
+/// 验证 ADR 文档的编号、文件名、目录、元数据一致性
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-940_1_1: 文件名必须使用 3 位编号格式
+/// - ADR-940_1_2: 编号必须与所在目录范围匹配
+/// - ADR-940_1_3: 文档必须包含有效的 Front Matter
+///
+/// 关联文档：
+/// - ADR: docs/adr/governance/ADR-940-adr-relationship-and-traceability.md
 /// </summary>
-public sealed class AdrConsistencyTests
+public sealed class ADR_940_1_Architecture_Tests
 {
     private readonly string _adrRoot;
     private readonly IReadOnlyList<string> _adrFiles;
@@ -20,7 +28,7 @@ public sealed class AdrConsistencyTests
         "README.md"                  // 目录说明
     };
 
-    public AdrConsistencyTests()
+    public ADR_940_1_Architecture_Tests()
     {
         var repoRoot = TestEnvironment.RepositoryRoot
             ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -38,10 +46,11 @@ public sealed class AdrConsistencyTests
     }
 
     /// <summary>
-    /// ADR 文件名必须使用 3 位编号格式（ADR-XXX）
+    /// ADR-940_1_1: 文件名必须使用 3 位编号格式
+    /// 验证所有 ADR 文件名使用 ADR-XXX 格式（§ADR-940_1_1）
     /// </summary>
-    [Fact(DisplayName = "ADR 文件名必须使用 3 位编号格式")]
-    public void ADR_Files_Must_Use_Three_Digit_Numbering()
+    [Fact(DisplayName = "ADR-940_1_1: 文件名必须使用 3 位编号格式")]
+    public void ADR_940_1_1_Files_Must_Use_Three_Digit_Numbering()
     {
         var violations = new List<string>();
         var validPattern = new Regex(@"^ADR-\d{3}[^/\\]*\.md$", RegexOptions.Compiled);
@@ -64,15 +73,16 @@ public sealed class AdrConsistencyTests
     }
 
     /// <summary>
-    /// ADR 编号与所在目录必须匹配
+    /// ADR-940_1_2: 编号必须与所在目录范围匹配
+    /// 验证 ADR 文件放置在正确的分类目录中（§ADR-940_1_2）
     /// constitutional: 0000-0999
     /// structure: 0100-0299
     /// runtime: 0200-0299
     /// technical: 0300-0399
     /// governance: 0000, 0400-0999, 0900+
     /// </summary>
-    [Fact(DisplayName = "ADR 编号必须与所在目录范围匹配")]
-    public void ADR_Number_Must_Match_Directory_Range()
+    [Fact(DisplayName = "ADR-940_1_2: 编号必须与所在目录范围匹配")]
+    public void ADR_940_1_2_Number_Must_Match_Directory_Range()
     {
         var violations = new List<string>();
         var numberPattern = new Regex(@"ADR-(\d{4})", RegexOptions.Compiled);
@@ -105,10 +115,11 @@ public sealed class AdrConsistencyTests
     }
 
     /// <summary>
-    /// ADR 文档必须包含有效的 Front Matter
+    /// ADR-940_1_3: 文档必须包含有效的 Front Matter
+    /// 验证 ADR 文档包含必需的 YAML Front Matter 元数据（§ADR-940_1_3）
     /// </summary>
-    [Fact(DisplayName = "ADR 文档必须包含有效的 Front Matter")]
-    public void ADR_Documents_Must_Have_Valid_FrontMatter()
+    [Fact(DisplayName = "ADR-940_1_3: 文档必须包含有效的 Front Matter")]
+    public void ADR_940_1_3_Documents_Must_Have_Valid_FrontMatter()
     {
         var violations = new List<string>();
 

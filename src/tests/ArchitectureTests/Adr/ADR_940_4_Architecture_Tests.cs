@@ -4,14 +4,20 @@ using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
-/// ADR-940: ADR 关系与溯源管理
+/// ADR-940_4: ADR 依赖关系循环检测（Rule）
 /// 检测 ADR 依赖关系中的循环依赖
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-940_4_1: ADR 依赖关系不得形成循环
+///
+/// 关联文档：
+/// - ADR: docs/adr/governance/ADR-940-adr-relationship-and-traceability.md
 /// </summary>
-public sealed class AdrCircularDependencyTests
+public sealed class ADR_940_4_Architecture_Tests
 {
     private readonly IReadOnlyDictionary<string, AdrDocument> _adrs;
 
-    public AdrCircularDependencyTests()
+    public ADR_940_4_Architecture_Tests()
     {
         var repoRoot = TestEnvironment.RepositoryRoot 
             ?? throw new InvalidOperationException("未找到仓库根目录（无法定位 docs/adr 或 .git）");
@@ -23,10 +29,11 @@ public sealed class AdrCircularDependencyTests
     }
 
     /// <summary>
-    /// ADR-940.4: ADR 依赖关系不得形成循环
+    /// ADR-940_4_1: ADR 依赖关系不得形成循环
+    /// 验证 ADR 文档之间的依赖关系不存在循环引用（§ADR-940_4_1）
     /// </summary>
-    [Fact(DisplayName = "ADR-940.4: ADR 依赖关系不得存在循环")]
-    public void ADR_Dependencies_Must_Not_Form_Cycles()
+    [Fact(DisplayName = "ADR-940_4_1: ADR 依赖关系不得存在循环")]
+    public void ADR_940_4_1_Dependencies_Must_Not_Form_Cycles()
     {
         var cycles = DetectCycles();
         

@@ -6,34 +6,35 @@ using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Heuristics;
 
 /// <summary>
-/// 文档风格启发式检查 - Heuristics 层测试
-/// 
-/// 【定位】：品味建议，非强制规则
-/// 【来源】：最佳实践和团队共识
-/// 【执法】：不失败构建，仅输出警告
-/// 
-/// 本测试类检查：
-/// 1. 文档可读性建议
-/// 2. 语言质量建议
-/// 3. 一致性建议
-/// 
-/// 【重要】：这些测试永远不应该 Fail，只输出建议。
-/// 
-/// 【关联文档】
+/// ADR-008_6: 文档风格启发式规范（Rule）
+/// 文档风格品味建议，非强制规则
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-008_6_1: README 建议使用描述性语言
+///
+/// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
-/// - 设计哲学：Heuristics 层不阻断开发流程
+/// 
+/// 定位说明：
+/// - 品味建议，非强制规则
+/// - 不失败构建，仅输出警告
+/// - 这些测试永远不应该 Fail，只输出建议
 /// </summary>
-public sealed class DocumentationStyleHeuristicsTests
+public sealed class ADR_008_6_Architecture_Tests
 {
     private readonly ITestOutputHelper _output;
 
-    public DocumentationStyleHeuristicsTests(ITestOutputHelper output)
+    public ADR_008_6_Architecture_Tests(ITestOutputHelper output)
     {
         _output = output;
     }
 
-    [Fact(DisplayName = "Heuristics: README 建议使用描述性语言")]
-    public void README_Should_Prefer_Descriptive_Language()
+    /// <summary>
+    /// ADR-008_6_1: README 建议使用描述性语言
+    /// 启发式建议：使用描述性语言而非命令性语言（§ADR-008_6_1）
+    /// </summary>
+    [Fact(DisplayName = "ADR-008_6_1: README 建议使用描述性语言")]
+    public void ADR_008_6_1_README_Should_Prefer_Descriptive_Language()
     {
         var repoRoot = TestEnvironment.RepositoryRoot;
         if (repoRoot == null) return;

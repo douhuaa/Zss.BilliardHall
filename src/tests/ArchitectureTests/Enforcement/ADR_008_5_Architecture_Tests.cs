@@ -5,24 +5,28 @@ using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
 /// <summary>
-/// Skills 判断性语言检查 - Enforcement 层测试
-/// 
-/// 【定位】：执行 ADR-008 的具体约束
-/// 【来源】：ADR-008 决策 3.2
-/// 【执法】：失败 = CI 阻断
-/// 
-/// 本测试类检查：
-/// 1. Skills 不得输出判断性结论
-/// 2. Skills 只能输出事实
-/// 
-/// 【关联文档】
+/// ADR-008_5: Skills 判断性语言规范（Rule）
+/// 执行 ADR-008 对 Skills 输出语言的约束
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-008_5_1: Skills 不得输出判断性结论
+///
+/// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-008-documentation-governance-constitution.md
 /// - 来源决策: ADR-008 决策 3.2
+/// 
+/// 执法说明：
+/// - 失败 = CI 阻断
+/// - Skills 只能输出事实，不得输出判断
 /// </summary>
-public sealed class SkillsJudgmentLanguageTests
+public sealed class ADR_008_5_Architecture_Tests
 {
-    [Fact(DisplayName = "Skills 不得输出判断性结论")]
-    public void Skills_Must_Not_Output_Judgments()
+    /// <summary>
+    /// ADR-008_5_1: Skills 不得输出判断性结论
+    /// 验证 Skills 只输出事实，不输出判断性结论（§ADR-008_5_1）
+    /// </summary>
+    [Fact(DisplayName = "ADR-008_5_1: Skills 不得输出判断性结论")]
+    public void ADR_008_5_1_Skills_Must_Not_Output_Judgments()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var skillsDir = Path.Combine(repoRoot, ".github/skills");
