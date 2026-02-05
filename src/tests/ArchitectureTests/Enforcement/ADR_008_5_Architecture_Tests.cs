@@ -69,9 +69,7 @@ public sealed class ADR_008_5_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ Enforcement 违规：以下 Skills 输出了判断性结论",
                 "",
@@ -93,7 +91,6 @@ public sealed class ADR_008_5_Architecture_Tests
                 "",
                 "参考：docs/adr/constitutional/ADR-008-documentation-governance-constitution.md 决策 3.2"
             })));
-        }
     }
 
     private static string RemoveCodeBlocks(string content)

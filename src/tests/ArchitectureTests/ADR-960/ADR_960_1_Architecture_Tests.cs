@@ -17,12 +17,6 @@ public sealed class ADR_960_1_Architecture_Tests
 {
     private const string DocsPath = "docs";
 
-    // 裁决性关键词 - 这些词不应该出现在 Onboarding 文档中作为新规则定义
-    private static readonly string[] DecisionKeywords = new[]
-    {
-        "必须", "禁止", "不得", "强制", "不允许"
-    };
-
     /// <summary>
     /// ADR-960_1_1: 不是裁决性文档
     /// 验证 Onboarding 文档存在且不包含裁决性语言（§ADR-960_1_1）
@@ -49,7 +43,7 @@ public sealed class ADR_960_1_Architecture_Tests
             var relativePath = FileSystemTestHelper.GetRelativePath(file);
 
             // 检查是否包含裁决性关键词（避免误报，检查上下文）
-            foreach (var keyword in DecisionKeywords)
+            foreach (var keyword in TestConstants.DecisionKeywords)
             {
                 // 匹配裁决性模式：如 "必须遵循"、"禁止使用" 等
                 var pattern = $@"\b{Regex.Escape(keyword)}(?:遵循|使用|实现|修改|删除|创建|定义)";
@@ -81,24 +75,50 @@ public sealed class ADR_960_1_Architecture_Tests
     [Fact(DisplayName = "ADR-960_1_2: Onboarding 不得定义新架构约束")]
     public void ADR_960_1_2_Onboarding_Must_Not_Define_New_Constraints()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-
         // 验证 ADR-960 文档存在以定义此规则
-        var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
+        var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
 
-        File.Exists(adr960Path).Should().BeTrue(
-            $"❌ ADR-960_1_2 违规：ADR-960 文档不存在\n\n" +
-            $"修复建议：确保 ADR-960 存在以定义 Onboarding 文档规范\n\n" +
-            $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §1.2");
+        var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-960_1_2",
+            filePath: adr960Path,
+            fileDescription: "ADR-960 文档",
+            remediationSteps: new[]
+            {
+                "确保 ADR-960 存在以定义 Onboarding 文档规范",
+                "在 ADR-960 中明确 Onboarding 的非裁决性定位"
+            },
+            adrReference: TestConstants.Adr960Path);
+
+        File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
 
         var content = File.ReadAllText(adr960Path);
 
         // 验证 ADR-960 明确定义了 Onboarding 的非裁决性
-        content.Should().Contain("不是裁决性文档",
-            $"❌ ADR-960_1_2 违规：ADR-960 必须明确定义 Onboarding 的非裁决性");
+        var missingNonDecisionContent = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-960_1_2",
+            filePath: adr960Path,
+            missingContent: "不是裁决性文档",
+            remediationSteps: new[]
+            {
+                "在 ADR-960 中添加明确的非裁决性定位声明",
+                "确保 Onboarding 文档的职责定义清晰"
+            },
+            adrReference: TestConstants.Adr960Path);
 
-        content.Should().Contain("不得",
-            $"❌ ADR-960_1_2 违规：ADR-960 必须明确禁止 Onboarding 定义架构约束");
+        content.Should().Contain("不是裁决性文档", missingNonDecisionContent);
+
+        var missingProhibitionContent = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-960_1_2",
+            filePath: adr960Path,
+            missingContent: "不得",
+            remediationSteps: new[]
+            {
+                "在 ADR-960 中明确禁止 Onboarding 定义架构约束",
+                "确保规则表述清晰明确"
+            },
+            adrReference: TestConstants.Adr960Path);
+
+        content.Should().Contain("不得", missingProhibitionContent);
     }
 
     /// <summary>
@@ -108,11 +128,20 @@ public sealed class ADR_960_1_Architecture_Tests
     [Fact(DisplayName = "ADR-960_1_3: Onboarding 唯一职责必须明确定义")]
     public void ADR_960_1_3_Onboarding_Responsibilities_Must_Be_Defined()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
+        var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
 
-        File.Exists(adr960Path).Should().BeTrue(
-            $"❌ ADR-960_1_3 违规：ADR-960 文档不存在");
+        var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-960_1_3",
+            filePath: adr960Path,
+            fileDescription: "ADR-960 文档",
+            remediationSteps: new[]
+            {
+                "创建 ADR-960 文档",
+                "定义 Onboarding 的唯一合法职责"
+            },
+            adrReference: TestConstants.Adr960Path);
+
+        File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
 
         var content = File.ReadAllText(adr960Path);
 
@@ -120,9 +149,20 @@ public sealed class ADR_960_1_Architecture_Tests
         var hasResponsibilityDefinition = content.Contains("唯一合法职责", StringComparison.OrdinalIgnoreCase) ||
                                          content.Contains("告诉你", StringComparison.OrdinalIgnoreCase);
 
-        hasResponsibilityDefinition.Should().BeTrue(
-            $"❌ ADR-960_1_3 违规：ADR-960 必须明确定义 Onboarding 的唯一合法职责\n\n" +
-            $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §1.3");
+        var message = AssertionMessageBuilder.Build(
+            ruleId: "ADR-960_1_3",
+            summary: "ADR-960 必须明确定义 Onboarding 的唯一合法职责",
+            currentState: "文档中未找到职责定义（应包含'唯一合法职责'或'告诉你'等关键词）",
+            remediationSteps: new[]
+            {
+                "在 ADR-960 中添加 Onboarding 的职责定义章节",
+                "明确说明 Onboarding 的唯一合法职责是什么",
+                "确保职责定义清晰、具体、可验证"
+            },
+            adrReference: TestConstants.Adr960Path,
+            includeClauseReference: true);
+
+        hasResponsibilityDefinition.Should().BeTrue(message);
     }
 
     /// <summary>
@@ -132,11 +172,20 @@ public sealed class ADR_960_1_Architecture_Tests
     [Fact(DisplayName = "ADR-960_1_4: Onboarding 权威层级必须明确")]
     public void ADR_960_1_4_Onboarding_Authority_Level_Must_Be_Clear()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
+        var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
 
-        File.Exists(adr960Path).Should().BeTrue(
-            $"❌ ADR-960_1_4 违规：ADR-960 文档不存在");
+        var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-960_1_4",
+            filePath: adr960Path,
+            fileDescription: "ADR-960 文档",
+            remediationSteps: new[]
+            {
+                "创建 ADR-960 文档",
+                "定义 Onboarding 在文档权威层级中的位置"
+            },
+            adrReference: TestConstants.Adr960Path);
+
+        File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
 
         var content = File.ReadAllText(adr960Path);
 
@@ -144,9 +193,19 @@ public sealed class ADR_960_1_Architecture_Tests
         var hasAuthorityHierarchy = content.Contains("权威层级", StringComparison.OrdinalIgnoreCase) ||
                                    content.Contains("ADR（裁决", StringComparison.OrdinalIgnoreCase);
 
-        hasAuthorityHierarchy.Should().BeTrue(
-            $"❌ ADR-960_1_4 违规：ADR-960 必须定义 Onboarding 在权威层级中的位置\n\n" +
-            $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §1.4");
-    }
+        var message = AssertionMessageBuilder.Build(
+            ruleId: "ADR-960_1_4",
+            summary: "ADR-960 必须定义 Onboarding 在权威层级中的位置",
+            currentState: "文档中未找到权威层级定义（应包含'权威层级'或'ADR（裁决'等关键词）",
+            remediationSteps: new[]
+            {
+                "在 ADR-960 中添加权威层级定义章节",
+                "明确说明 Onboarding 文档在权威层级中的位置",
+                "说明当 Onboarding 与 ADR 冲突时的处理原则"
+            },
+            adrReference: TestConstants.Adr960Path,
+            includeClauseReference: true);
 
+        hasAuthorityHierarchy.Should().BeTrue(message);
+    }
 }

@@ -12,8 +12,6 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_960;
 /// </summary>
 public sealed class ADR_960_3_Architecture_Tests
 {
-    private const string DocsPath = "docs";
-
     // Onboarding 文档必需的章节
     private static readonly string[] RequiredSections = new[]
     {
@@ -31,16 +29,14 @@ public sealed class ADR_960_3_Architecture_Tests
     [Fact(DisplayName = "ADR-960_3_1: Onboarding 必须遵循强制结构模板")]
     public void ADR_960_3_1_Onboarding_Must_Follow_Required_Structure()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var docsPath = Path.Combine(repoRoot, DocsPath);
+        var docsPath = FileSystemTestHelper.GetAbsolutePath("docs");
 
-        if (!Directory.Exists(docsPath))
-        {
-            throw new DirectoryNotFoundException($"文档目录不存在: {docsPath}");
-        }
+        FileSystemTestHelper.AssertDirectoryExists(docsPath,
+            $"文档目录不存在: {docsPath}");
 
         // 查找 Onboarding 文档
-        var onboardingFiles = Directory.GetFiles(docsPath, "*onboarding*.md", SearchOption.AllDirectories)
+        var onboardingFiles = FileSystemTestHelper
+            .GetFilesInDirectory(docsPath, "*onboarding*.md", SearchOption.AllDirectories)
             .Where(f => !f.Contains("ADR-960", StringComparison.OrdinalIgnoreCase)) // 排除 ADR-960 本身
             .Where(f => !f.Contains("template", StringComparison.OrdinalIgnoreCase)) // 排除模板
             .ToList();
@@ -55,20 +51,13 @@ public sealed class ADR_960_3_Architecture_Tests
 
         foreach (var file in onboardingFiles)
         {
-            var content = File.ReadAllText(file);
-            var relativePath = Path.GetRelativePath(repoRoot, file);
-            var missingSections = new List<string>();
-
-            // 检查必需章节
-            foreach (var section in RequiredSections)
-            {
-                // 匹配章节标题（二级或三级标题）
-                var sectionPattern = $@"^##\s+.*?{Regex.Escape(section)}";
-                if (!Regex.IsMatch(content, sectionPattern, RegexOptions.Multiline | RegexOptions.IgnoreCase))
-                {
-                    missingSections.Add(section);
-                }
-            }
+            var relativePath = FileSystemTestHelper.GetRelativePath(file);
+            
+            // 使用辅助方法检查缺失的章节
+            var missingSections = FileSystemTestHelper.GetMissingKeywords(
+                file,
+                RequiredSections,
+                ignoreCase: true);
 
             if (missingSections.Any())
             {
@@ -76,8 +65,10 @@ public sealed class ADR_960_3_Architecture_Tests
             }
 
             // 检查是否有 Fast Path
-            var hasFastPath = content.Contains("Fast Path", StringComparison.OrdinalIgnoreCase) ||
-                            content.Contains("快速上手", StringComparison.OrdinalIgnoreCase);
+            var hasFastPath = FileSystemTestHelper.FileContainsAnyKeyword(
+                file,
+                new[] { "Fast Path", "快速上手" },
+                ignoreCase: true);
 
             if (!hasFastPath)
             {
@@ -96,10 +87,9 @@ public sealed class ADR_960_3_Architecture_Tests
             Console.WriteLine("  1. 确保包含所有必需章节");
             Console.WriteLine("  2. 章节顺序应该合理且易于理解");
             Console.WriteLine("  3. 必须包含快速上手路径（Fast Path）");
-            Console.WriteLine("\n参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §3.1");
+            Console.WriteLine($"\n参考：{TestConstants.Adr960Path} §3.1");
         }
 
         // L2 级别，不阻断测试，仅警告
     }
-
 }

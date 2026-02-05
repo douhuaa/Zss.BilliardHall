@@ -25,7 +25,7 @@ public sealed class ADR_946_3_Architecture_Tests
         // 这个测试是一个占位符，用于确保 ADR-946_3_1 规则被记录
         // 实际的解析工具验证应该在解析工具的测试套件中实现
 
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
 
         // 验证仓库根目录存在
         repoRoot.Should().NotBeNullOrEmpty("必须能够找到仓库根目录");
@@ -45,5 +45,4 @@ public sealed class ADR_946_3_Architecture_Tests
         Console.WriteLine("  - 解析工具必须忽略代码块内的内容");
         Console.WriteLine("  - 解析工具必须只解析第一个语义块实例");
     }
-
 }

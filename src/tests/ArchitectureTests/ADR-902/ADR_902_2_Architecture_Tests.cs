@@ -15,7 +15,6 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_902;
 /// </summary>
 public sealed class ADR_902_2_Architecture_Tests
 {
-    private const string AdrDocsPath = "docs/adr";
     private const int MaxAdrFilesToCheckL2 = 20;  // L2 警告级测试
 
     /// <summary>
@@ -28,12 +27,9 @@ public sealed class ADR_902_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var warnings = new List<string>();
 
-        var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
-        if (!Directory.Exists(adrDirectory))
-        {
-            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
-        }
+        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
         // 裁决性语言模式
         var decisionWords = new[] { "必须", "MUST", "禁止", "FORBIDDEN", "不允许", "NOT ALLOWED", "不得", "SHALL NOT" };

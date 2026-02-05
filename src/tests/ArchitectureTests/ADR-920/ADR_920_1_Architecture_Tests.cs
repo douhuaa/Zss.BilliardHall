@@ -103,9 +103,7 @@ public sealed class ADR_920_1_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ ADR-920_1_2 违规：以下示例文档缺少'示例免责声明'",
                 "",
@@ -127,7 +125,6 @@ public sealed class ADR_920_1_Architecture_Tests
                 "",
                 "参考：docs/adr/governance/ADR-920-examples-governance-constitution.md §ADR-920_1_2"
             })));
-        }
     }
 
 }

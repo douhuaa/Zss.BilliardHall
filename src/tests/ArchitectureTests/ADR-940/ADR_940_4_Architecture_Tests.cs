@@ -34,14 +34,7 @@ public sealed class ADR_940_4_Architecture_Tests
     {
         var cycles = DetectCycles();
 
-        if (cycles.Count > 0)
-        {
-            var violations = cycles.Select(cycle =>
-                $"❌ 检测到循环依赖：\n   " + string.Join(" → ", cycle) + " → " + cycle[0]
-            );
-
-            true.Should().BeFalse($"发现 {cycles.Count} 个循环依赖：\n\n" + string.Join("\n\n", violations));
-        }
+        cycles.Count.Should().Be(0, $"发现 {cycles.Count} 个循环依赖：\n\n" + string.Join("\n\n", cycles.Select(c => string.Join(" → ", c))));
     }
 
     /// <summary>

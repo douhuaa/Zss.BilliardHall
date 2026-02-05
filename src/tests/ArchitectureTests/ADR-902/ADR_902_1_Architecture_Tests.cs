@@ -16,7 +16,6 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_902;
 /// </summary>
 public sealed class ADR_902_1_Architecture_Tests
 {
-    private const string AdrDocsPath = "docs/adr";
     private const int MaxAdrFilesToCheckL1 = 50;
 
     // ADR-902 要求的必需 Front Matter 字段
@@ -75,27 +74,26 @@ public sealed class ADR_902_1_Architecture_Tests
     [Fact(DisplayName = "ADR-902_1_1: 规则条目必须独立编号")]
     public void ADR_902_1_1_Rules_Must_Have_Independent_Numbering()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var violations = new List<string>();
 
-        var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
-        if (!Directory.Exists(adrDirectory))
-        {
-            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
-        }
+        FileSystemTestHelper.AssertDirectoryExists(adrDirectory,
+            AssertionMessageBuilder.BuildDirectoryNotFoundMessage(
+                ruleId: "ADR-902_1_1",
+                directoryPath: adrDirectory,
+                directoryDescription: "ADR 文档目录",
+                remediationSteps: new[] { "创建 ADR 文档目录" },
+                adrReference: TestConstants.Adr902Path));
 
         // 扫描所有 ADR 文档
-        var adrFiles = Directory
-            .GetFiles(adrDirectory, "ADR-*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
+        var adrFiles = FileSystemTestHelper.GetAdrFiles()
             .Take(MaxAdrFilesToCheckL1);
 
         foreach (var file in adrFiles)
         {
             var content = File.ReadAllText(file);
-            var relativePath = Path.GetRelativePath(repoRoot, file);
+            var relativePath = Path.GetRelativePath(TestEnvironment.RepositoryRoot!, file);
 
             // 提取 ADR 编号（如 ADR-902）
             var adrNumber = ExtractAdrNumber(Path.GetFileNameWithoutExtension(file));
@@ -132,24 +130,19 @@ public sealed class ADR_902_1_Architecture_Tests
 
         if (violations.Any())
         {
-            true.Should().BeFalse(string.Join("\n", new[]
-            {
-                "❌ ADR-902_1_1 违规：以下 ADR 的规则编号不符合要求",
-                "",
-                "根据 ADR-902_1_1：每条规则必须作为独立三级标题存在，格式为：### ADR-XXX_Y：<规则标题>（Rule）",
-                ""
-            }
-            .Concat(violations)
-            .Concat(new[]
-            {
-                "",
-                "修复建议：",
-                "  1. 每条规则必须是独立的三级标题",
-                "  2. 使用格式：### ADR-XXX_Y：<规则标题>（Rule）",
-                "  3. 规则编号必须连续：ADR-XXX_1, ADR-XXX_2, ...",
-                "",
-                "参考：docs/adr/governance/ADR-902-adr-template-structure-contract.md §1.1"
-            })));
+            var message = AssertionMessageBuilder.BuildWithViolations(
+                ruleId: "ADR-902_1_1",
+                summary: "以下 ADR 的规则编号不符合要求",
+                failingTypes: violations,
+                remediationSteps: new[]
+                {
+                    "每条规则必须是独立的三级标题",
+                    "使用格式：### ADR-XXX_Y：<规则标题>（Rule）",
+                    "规则编号必须连续：ADR-XXX_1, ADR-XXX_2, ..."
+                },
+                adrReference: TestConstants.Adr902Path);
+
+            violations.Should().BeEmpty(message);
         }
     }
 
@@ -161,13 +154,16 @@ public sealed class ADR_902_1_Architecture_Tests
     public void ADR_902_1_2_ADR_Documents_Must_Follow_Template_Structure()
     {
         // 验证 ADR-902 文档存在
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-902-adr-template-structure-contract.md");
+        var adrFile = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr902Path);
 
-        File.Exists(adrFile).Should().BeTrue(
-            $"❌ ADR-902_1_2 违规：ADR-902 文档不存在：{adrFile}\n\n" +
-            $"修复建议：确保 ADR-902 文档存在以定义模板结构\n\n" +
-            $"参考：docs/adr/governance/ADR-902-adr-template-structure-contract.md §1.2");
+        var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-902_1_2",
+            filePath: adrFile,
+            fileDescription: "ADR-902 文档",
+            remediationSteps: new[] { "确保 ADR-902 文档存在以定义模板结构" },
+            adrReference: TestConstants.Adr902Path);
+
+        File.Exists(adrFile).Should().BeTrue(fileMessage);
 
         var content = File.ReadAllText(adrFile);
 
@@ -192,12 +188,9 @@ public sealed class ADR_902_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var violations = new List<string>();
 
-        var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
-        if (!Directory.Exists(adrDirectory))
-        {
-            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
-        }
+        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
         // 扫描治理类 ADR 文档（ADR-902 发布后的新标准）
         var governanceDir = Path.Combine(adrDirectory, "governance");
@@ -264,9 +257,7 @@ public sealed class ADR_902_1_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ ADR-902_1_3 违规：以下 ADR 文档的 Front Matter 不符合标准",
                 "",
@@ -286,7 +277,6 @@ public sealed class ADR_902_1_Architecture_Tests
                 "",
                 "参考：docs/adr/governance/ADR-902-adr-template-structure-contract.md §1.3"
             })));
-        }
     }
 
     /// <summary>
@@ -299,12 +289,9 @@ public sealed class ADR_902_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var violations = new List<string>();
 
-        var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
-        if (!Directory.Exists(adrDirectory))
-        {
-            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
-        }
+        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
         // 扫描治理类 ADR 文档
         var governanceDir = Path.Combine(adrDirectory, "governance");
@@ -368,9 +355,7 @@ public sealed class ADR_902_1_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ ADR-902_1_4 违规：以下 ADR 文档缺少必需章节或章节顺序不正确",
                 "",
@@ -390,7 +375,6 @@ public sealed class ADR_902_1_Architecture_Tests
                 "",
                 "参考：docs/adr/governance/ADR-902-adr-template-structure-contract.md §1.4"
             })));
-        }
     }
 
     // ========== 辅助方法 ==========

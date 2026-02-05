@@ -40,16 +40,13 @@ public sealed class ADR_003_6_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var directoryBuildPropsPath = Path.Combine(root, "Directory.Build.props");
 
-        if (!File.Exists(directoryBuildPropsPath))
-        {
-            true.Should().BeFalse(
+        File.Exists(directoryBuildPropsPath).Should().BeTrue(
                 BuildSimple(
                     ruleId: "ADR-003_6_2",
                     summary: "Directory.Build.props 文件不存在",
                     currentState: $"文件路径: {directoryBuildPropsPath}",
                     remediation: "首先创建 Directory.Build.props 文件（参考 ADR-003_6_1）",
                     adrReference: "docs/copilot/adr-003.prompts.md (场景 1)"));
-        }
 
         var content = File.ReadAllText(directoryBuildPropsPath);
 

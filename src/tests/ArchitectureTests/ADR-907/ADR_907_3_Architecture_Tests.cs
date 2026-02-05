@@ -16,9 +16,6 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 /// </summary>
 public sealed class ADR_907_3_Architecture_Tests
 {
-    private const string AdrDocsPath = "docs/adr";
-    private const string AdrTestsPath = "src/tests/ArchitectureTests";
-
     /// <summary>
     /// ADR-907_3_1: 最小断言数量要求
     /// 验证每个测试类至少包含 1 个有效断言（§3.1）
@@ -27,13 +24,9 @@ public sealed class ADR_907_3_Architecture_Tests
     public void ADR_907_3_1_Test_Classes_Must_Have_Minimum_Assertions()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_3_1 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_3_1 无法执行：测试目录不存在 {testsDirectory}");
 
         var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
         var violations = new List<string>();
@@ -68,10 +61,7 @@ public sealed class ADR_907_3_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(
-                $"❌ ADR-907_3_1 违规：以下测试类缺少有效断言\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-907_3_1 违规：以下测试类缺少有效断言\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 每个测试类必须包含至少 1 个有效断言\n" +
@@ -83,7 +73,6 @@ public sealed class ADR_907_3_Architecture_Tests
                 $"     - Assert.True(true)\n" +
                 $"     - Assert.False(false)\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §3.1");
-        }
     }
 
     /// <summary>
@@ -94,13 +83,9 @@ public sealed class ADR_907_3_Architecture_Tests
     public void ADR_907_3_2_Test_Methods_Must_Map_To_Single_Subrule()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_3_2 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_3_2 无法执行：测试目录不存在 {testsDirectory}");
 
         var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
         var violations = new List<string>();
@@ -143,10 +128,7 @@ public sealed class ADR_907_3_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(
-                $"❌ ADR-907_3_2 违规：以下测试方法违反单一子规则映射\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-907_3_2 违规：以下测试方法违反单一子规则映射\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 每个测试方法只能映射一个 ADR 子规则（Clause）\n" +
@@ -156,7 +138,6 @@ public sealed class ADR_907_3_Architecture_Tests
                 $"  4. DisplayName 格式：ADR-<编号>_<Rule>_<Clause>: <描述>\n" +
                 $"     示例：\"ADR-907_3_2: 测试方法必须映射到单一子规则\"\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §3.2");
-        }
     }
 
     /// <summary>
@@ -167,13 +148,9 @@ public sealed class ADR_907_3_Architecture_Tests
     public void ADR_907_3_3_Failure_Messages_Must_Be_Traceable()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_3_3 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_3_3 无法执行：测试目录不存在 {testsDirectory}");
 
         var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
         var violations = new List<string>();
@@ -264,13 +241,9 @@ public sealed class ADR_907_3_Architecture_Tests
     public void ADR_907_3_4_Formal_Assertions_Are_Prohibited()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_3_4 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_3_4 无法执行：测试目录不存在 {testsDirectory}");
 
         var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
         var violations = new List<string>();
@@ -316,10 +289,7 @@ public sealed class ADR_907_3_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(
-                $"❌ ADR-907_3_4 违规：以下测试包含形式化断言\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-907_3_4 违规：以下测试包含形式化断言\n\n" +
                 $"{string.Join("\n", violations.Distinct())}\n\n" +
                 $"修复建议：\n" +
                 $"  1. 禁止以下形式化断言：\n" +
@@ -334,7 +304,6 @@ public sealed class ADR_907_3_Architecture_Tests
                 $"     ✅ violations.Should().BeEmpty(\"不应有违规\")\n" +
                 $"  4. 测试不应仅验证代码可运行，必须验证架构约束\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §3.4");
-        }
     }
 
     #region Helper Methods

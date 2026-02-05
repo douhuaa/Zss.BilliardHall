@@ -190,9 +190,14 @@ public sealed class ADR_901_2_Architecture_Tests
         // 验证本测试类的输出格式
         var currentType = typeof(ADR_901_2_Architecture_Tests);
         var methods = currentType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-        methods.Should().NotBeEmpty($"❌ ADR-901_2_4 违规：测试类缺少测试方法\n\n" +
-            $"修复建议：ADR-901 测试类应包含验证三态判定模型的测试方法\n\n" +
-            $"参考：docs/adr/governance/ADR-901-semantic-meta-rules.md（§2.4）");
+        var methodsMessage = AssertionMessageBuilder.BuildSimple(
+            "ADR-901_2_4",
+            "测试类缺少测试方法",
+            "测试类中没有测试方法",
+            "ADR-901 测试类应包含验证三态判定模型的测试方法",
+            TestConstants.Adr007Path);
+
+        methods.Should().NotBeEmpty(methodsMessage);
     }
 
     // 辅助方法

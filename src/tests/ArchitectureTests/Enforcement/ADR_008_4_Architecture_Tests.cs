@@ -91,9 +91,7 @@ public sealed class ADR_008_4_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse(string.Join("\n", new[]
+        violations.Should().BeEmpty(string.Join("\n", new[]
             {
                 "❌ Enforcement 违规：以下 README/Guide 使用了裁决性语言",
                 "",
@@ -112,7 +110,6 @@ public sealed class ADR_008_4_Architecture_Tests
                 "",
                 "参考：docs/adr/constitutional/ADR-008-documentation-governance-constitution.md 决策 3.3"
             })));
-        }
     }
 
     private static string RemoveCodeBlocks(string content)

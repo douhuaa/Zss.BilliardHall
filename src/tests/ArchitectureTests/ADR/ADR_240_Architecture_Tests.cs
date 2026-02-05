@@ -61,9 +61,7 @@ public sealed class ADR_240_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse($"❌ ADR-240_1_1 违规: 存在未继承结构化异常基类的自定义异常\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-240_1_1 违规: 存在未继承结构化异常基类的自定义异常\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"自定义异常必须继承自以下三大基类之一：\n" +
@@ -75,7 +73,6 @@ public sealed class ADR_240_Architecture_Tests
                         $"2. 例如：public class OrderCancelledException : DomainException\n" +
                         $"3. 确保异常分类符合业务语义\n\n" +
                         $"参考：docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 1）");
-        }
     }
 
     [Fact(DisplayName = "ADR-240_1_2: 可重试异常必须是基础设施异常")]
@@ -107,9 +104,7 @@ public sealed class ADR_240_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse($"❌ ADR-240_1_2 违规: 可重试异常必须是基础设施异常\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-240_1_2 违规: 可重试异常必须是基础设施异常\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"实现 IRetryable 接口的异常必须继承自 InfrastructureException。\n" +
@@ -121,7 +116,6 @@ public sealed class ADR_240_Architecture_Tests
                         $"2. 或移除 IRetryable 接口实现\n" +
                         $"3. 重新评估异常的业务语义分类\n\n" +
                         $"参考：docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 3）");
-        }
     }
 
     [Fact(DisplayName = "ADR-240_1_3: 领域异常不可标记为可重试")]
@@ -151,9 +145,7 @@ public sealed class ADR_240_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse($"❌ ADR-240_1_3 违规: 领域异常不可标记为可重试\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-240_1_3 违规: 领域异常不可标记为可重试\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"领域异常表示业务规则违反，不会因重试而改变结果。\n" +
@@ -163,7 +155,6 @@ public sealed class ADR_240_Architecture_Tests
                         $"2. 如果是暂时性技术故障，应使用 InfrastructureException\n" +
                         $"3. 确保异常分类准确反映失败原因\n\n" +
                         $"参考：docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 3）");
-        }
     }
 
     [Fact(DisplayName = "ADR-240_1_4: 验证异常不可标记为可重试")]
@@ -193,9 +184,7 @@ public sealed class ADR_240_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse($"❌ ADR-240_1_4 违规: 验证异常不可标记为可重试\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-240_1_4 违规: 验证异常不可标记为可重试\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"验证异常表示输入数据错误，不会因重试而修正。\n" +
@@ -205,7 +194,6 @@ public sealed class ADR_240_Architecture_Tests
                         $"2. 客户端应修正输入后重新提交\n" +
                         $"3. 如果是暂时性技术故障，应使用 InfrastructureException\n\n" +
                         $"参考：docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 3）");
-        }
     }
 
     [Fact(DisplayName = "ADR-240_1_5: 异常类型必须在正确的命名空间")]
@@ -251,9 +239,7 @@ public sealed class ADR_240_Architecture_Tests
             }
         }
 
-        if (violations.Any())
-        {
-            true.Should().BeFalse($"❌ ADR-240_1_5 违规: 异常类型命名空间不符合约定\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-240_1_5 违规: 异常类型命名空间不符合约定\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"异常类型必须组织在 Exceptions 命名空间下，以保持一致性和可发现性。\n\n" +
@@ -264,7 +250,6 @@ public sealed class ADR_240_Architecture_Tests
                         $"1. 将异常类移至对应的 Exceptions 命名空间\n" +
                         $"2. 确保文件夹结构与命名空间一致\n\n" +
                         $"参考：docs/adr/runtime/ADR-240-handler-exception-constraints.md（规则 1）");
-        }
     }
 
     #endregion
