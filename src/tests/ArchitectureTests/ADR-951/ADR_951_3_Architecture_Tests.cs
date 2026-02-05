@@ -1,5 +1,6 @@
 using FluentAssertions;
 using System.Text.RegularExpressions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_951;
 
@@ -23,7 +24,7 @@ public sealed class ADR_951_3_Architecture_Tests
     [Fact(DisplayName = "ADR-951_3_1: Core 案例必须通过完整审核流程")]
     public void ADR_951_3_1_Core_Cases_Must_Pass_Full_Review_Process()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var casesDirectory = Path.Combine(repoRoot, "docs/cases");
 
         if (!Directory.Exists(casesDirectory))
@@ -86,7 +87,7 @@ public sealed class ADR_951_3_Architecture_Tests
     [Fact(DisplayName = "ADR-951_3_2: Reference 案例必须通过基础审核流程")]
     public void ADR_951_3_2_Reference_Cases_Must_Pass_Basic_Review_Process()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var casesDirectory = Path.Combine(repoRoot, "docs/cases");
 
         if (!Directory.Exists(casesDirectory))
@@ -135,27 +136,4 @@ public sealed class ADR_951_3_Architecture_Tests
             $"违反 ADR-951_3_2：以下 Reference 级别案例未满足基础审核要求：\n{string.Join("\n", violations)}");
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_980;
 
@@ -28,7 +29,7 @@ public sealed class ADR_980_1_Architecture_Tests
     [Fact(DisplayName = "ADR-980_1_1: ADR/测试/Prompt 版本号必须一致")]
     public void ADR_980_1_1_Version_Numbers_Must_Match()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
         // 验证 ADR-980 自身存在
@@ -78,7 +79,7 @@ public sealed class ADR_980_1_Architecture_Tests
     [Fact(DisplayName = "ADR-980_1_2: 版本号格式必须为 X.Y")]
     public void ADR_980_1_2_Version_Format_Must_Be_Valid()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
         var content = File.ReadAllText(adr980Path);
@@ -100,7 +101,7 @@ public sealed class ADR_980_1_Architecture_Tests
     [Fact(DisplayName = "ADR-980_1_6: 非 Document-Only ADR 必须有测试或 Prompt")]
     public void ADR_980_1_6_Trinity_Existence_Must_Be_Enforced()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
         var content = File.ReadAllText(adr980Path);
@@ -118,17 +119,4 @@ public sealed class ADR_980_1_Architecture_Tests
             $"参考：docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md §1.6");
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var directory = Directory.GetCurrentDirectory();
-        while (directory != null)
-        {
-            if (Directory.Exists(Path.Combine(directory, ".git")))
-            {
-                return directory;
-            }
-            directory = Directory.GetParent(directory)?.FullName;
-        }
-        return null;
-    }
 }

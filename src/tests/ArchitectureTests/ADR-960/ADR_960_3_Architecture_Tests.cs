@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_960;
 
@@ -34,7 +35,7 @@ public sealed class ADR_960_3_Architecture_Tests
     [Fact(DisplayName = "ADR-960_3_1: Onboarding 必须遵循强制结构模板")]
     public void ADR_960_3_1_Onboarding_Must_Follow_Required_Structure()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var docsPath = Path.Combine(repoRoot, DocsPath);
 
         if (!Directory.Exists(docsPath))
@@ -105,21 +106,4 @@ public sealed class ADR_960_3_Architecture_Tests
         // L2 级别，不阻断测试，仅警告
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

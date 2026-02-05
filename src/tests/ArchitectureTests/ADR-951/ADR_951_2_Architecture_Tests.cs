@@ -1,5 +1,6 @@
 using FluentAssertions;
 using System.Text.RegularExpressions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_951;
 
@@ -24,7 +25,7 @@ public sealed class ADR_951_2_Architecture_Tests
     [Fact(DisplayName = "ADR-951_2_1: 案例文档必须包含所有必需章节")]
     public void ADR_951_2_1_Case_Documents_Must_Have_Required_Sections()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var casesDirectory = Path.Combine(repoRoot, "docs/cases");
 
         if (!Directory.Exists(casesDirectory))
@@ -87,7 +88,7 @@ public sealed class ADR_951_2_Architecture_Tests
     [Fact(DisplayName = "ADR-951_2_2: 案例文档必须标记案例级别")]
     public void ADR_951_2_2_Case_Documents_Must_Have_Case_Level_Marked()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var casesDirectory = Path.Combine(repoRoot, "docs/cases");
 
         if (!Directory.Exists(casesDirectory))
@@ -134,7 +135,7 @@ public sealed class ADR_951_2_Architecture_Tests
     [Fact(DisplayName = "ADR-951_2_3: 代码示例必须包含必要注释和引用")]
     public void ADR_951_2_3_Code_Examples_Must_Have_Comments_And_Imports()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var casesDirectory = Path.Combine(repoRoot, "docs/cases");
 
         if (!Directory.Exists(casesDirectory))
@@ -197,27 +198,4 @@ public sealed class ADR_951_2_Architecture_Tests
             $"违反 ADR-951_2_3：以下案例文档的代码示例不符合要求：\n{string.Join("\n", violations)}");
     }
 
-    // ========== 辅助方法 ==========
-
-    private static string? FindRepositoryRoot()
-    {
-        var envRoot = Environment.GetEnvironmentVariable("REPO_ROOT");
-        if (!string.IsNullOrEmpty(envRoot) && Directory.Exists(envRoot))
-        {
-            return envRoot;
-        }
-
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

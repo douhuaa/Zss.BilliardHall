@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Governance;
 
@@ -22,7 +23,7 @@ public sealed class ADR_008_Governance_Tests
     public void ADR_008_Document_Governance_Constitution_Exists()
     {
         // 验证 ADR-008 文档存在
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/constitutional/ADR-008-documentation-governance-constitution.md");
         
         File.Exists(adrFile).Should().BeTrue($"ADR-008 文档不存在：{adrFile}");
@@ -37,7 +38,7 @@ public sealed class ADR_008_Governance_Tests
     [Fact(DisplayName = "ADR-008.G2: 裁决权唯一归属原则已定义")]
     public void Decision_Authority_Principle_Is_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/constitutional/ADR-008-documentation-governance-constitution.md");
         var content = File.ReadAllText(adrFile);
         
@@ -48,7 +49,7 @@ public sealed class ADR_008_Governance_Tests
     [Fact(DisplayName = "ADR-008.G3: 文档分级体系已定义")]
     public void Document_Hierarchy_Is_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/constitutional/ADR-008-documentation-governance-constitution.md");
         var content = File.ReadAllText(adrFile);
         
@@ -62,7 +63,7 @@ public sealed class ADR_008_Governance_Tests
     [Fact(DisplayName = "ADR-008.G4: 冲突裁决优先级已定义")]
     public void Conflict_Resolution_Priority_Is_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/constitutional/ADR-008-documentation-governance-constitution.md");
         var content = File.ReadAllText(adrFile);
         
@@ -74,7 +75,7 @@ public sealed class ADR_008_Governance_Tests
     [Fact(DisplayName = "ADR-008.G5: 防语义扩权原则已定义")]
     public void Semantic_Privilege_Escalation_Prevention_Is_Defined()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/constitutional/ADR-008-documentation-governance-constitution.md");
         var content = File.ReadAllText(adrFile);
         
@@ -85,7 +86,7 @@ public sealed class ADR_008_Governance_Tests
     [Fact(DisplayName = "ADR-008.G6: Copilot Prompts 文件存在且声明无裁决力")]
     public void ADR_008_Prompts_File_Exists_And_Declares_No_Authority()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var promptsFile = Path.Combine(repoRoot, "docs/copilot/adr-008.prompts.md");
         
         File.Exists(promptsFile).Should().BeTrue($"ADR-008 Prompts 文件不存在：{promptsFile}");
@@ -98,18 +99,4 @@ public sealed class ADR_008_Governance_Tests
         content.Should().Contain("ADR-008");
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 }

@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
@@ -48,7 +49,7 @@ public sealed class ADR_901_Architecture_Tests
     [Fact(DisplayName = "ADR-901_1_1: 风险表达必须使用三态语义模型")]
     public void ADR_901_1_1_Risk_Expressions_Must_Use_Tristate_Semantic_Model()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
         Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_1_1 违规：ADR 文档目录不存在\n\n" +
@@ -96,7 +97,7 @@ public sealed class ADR_901_Architecture_Tests
     [Fact(DisplayName = "ADR-901_1_2: Constraint 必须包含完整的合法性元素")]
     public void ADR_901_1_2_Constraint_Must_Have_Legality_Conditions()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
         Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_1_2 违规：ADR 文档目录不存在\n\n" +
@@ -161,7 +162,7 @@ public sealed class ADR_901_Architecture_Tests
     [Fact(DisplayName = "ADR-901_1_3: Warning 必须明确风险和放行条件")]
     public void ADR_901_1_3_Warning_Must_Have_Clear_Boundaries()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
         Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_1_3 违规：ADR 文档目录不存在\n\n" +
@@ -231,7 +232,7 @@ public sealed class ADR_901_Architecture_Tests
     [Fact(DisplayName = "ADR-901_1_4: Notice 必须保持纯信息性，不得包含隐性规则")]
     public void ADR_901_1_4_Notice_Must_Be_Pure_Informational()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
         Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_1_4 违规：ADR 文档目录不存在\n\n" +
@@ -294,7 +295,7 @@ public sealed class ADR_901_Architecture_Tests
     [Fact(DisplayName = "ADR-901_2_1: 风险表达必须使用统一语义声明块格式")]
     public void ADR_901_2_1_Must_Use_Unified_Semantic_Block_Format()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
         Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_2_1 违规：ADR 文档目录不存在\n\n" +
@@ -368,7 +369,7 @@ public sealed class ADR_901_Architecture_Tests
         // 验证方式：确保其他测试能够识别所有有效的语义块
         // 这里我们验证反向：如果文档中有看起来像约束但格式不对的内容，应该被其他测试捕获
         
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
         Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_2_2 违规：ADR 文档目录不存在\n\n" +
@@ -389,7 +390,7 @@ public sealed class ADR_901_Architecture_Tests
     [Fact(DisplayName = "ADR-901_2_3: Constraint/Warning 必须显式声明执行级别")]
     public void ADR_901_2_3_Must_Explicitly_Declare_Enforcement_Level()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         
         Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_2_3 违规：ADR 文档目录不存在\n\n" +
@@ -471,19 +472,6 @@ public sealed class ADR_901_Architecture_Tests
 
     // 辅助方法
 
-    private static string? FindRepositoryRoot()
-    {
-        var current = new DirectoryInfo(AppContext.BaseDirectory);
-        while (current != null)
-        {
-            if (Directory.Exists(Path.Combine(current.FullName, "docs", "adr")) || 
-                Directory.Exists(Path.Combine(current.FullName, ".git")))
-                return current.FullName;
-            
-            current = current.Parent;
-        }
-        return null;
-    }
 
     /// <summary>
     /// 获取所有活跃（非归档）的 ADR 文件

@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_910;
 
@@ -33,7 +34,7 @@ public sealed class ADR_910_1_Architecture_Tests
     [Fact(DisplayName = "ADR-910_1_1: README 是使用说明不是架构裁决书")]
     public void ADR_910_1_1_README_Must_Be_Usage_Guide_Not_Decision_Document()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var violations = new List<string>();
         
         var docsDirectory = Path.Combine(repoRoot, DocsPath);
@@ -117,7 +118,7 @@ public sealed class ADR_910_1_Architecture_Tests
     [Fact(DisplayName = "ADR-910_1_2: 禁用裁决性语言规则")]
     public void ADR_910_1_2_README_Must_Not_Use_Decision_Language()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var violations = new List<string>();
         
         var docsDirectory = Path.Combine(repoRoot, DocsPath);
@@ -203,7 +204,7 @@ public sealed class ADR_910_1_Architecture_Tests
     [Fact(DisplayName = "ADR-910_1_3: 必须包含无裁决力声明")]
     public void ADR_910_1_3_README_Must_Declare_No_Authority()
     {
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var violations = new List<string>();
         
         var docsDirectory = Path.Combine(repoRoot, DocsPath);
@@ -321,21 +322,6 @@ public sealed class ADR_910_1_Architecture_Tests
 
     // ========== 辅助方法 ==========
 
-    private static string? FindRepositoryRoot()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        while (currentDir != null)
-        {
-            if (Directory.Exists(Path.Combine(currentDir, ".git")) || 
-                Directory.Exists(Path.Combine(currentDir, "docs", "adr")) ||
-                File.Exists(Path.Combine(currentDir, "Zss.BilliardHall.slnx")))
-            {
-                return currentDir;
-            }
-            currentDir = Directory.GetParent(currentDir)?.FullName;
-        }
-        return null;
-    }
 
     private static List<string> FindDecisionWordsWithoutAdrContext(string content)
     {

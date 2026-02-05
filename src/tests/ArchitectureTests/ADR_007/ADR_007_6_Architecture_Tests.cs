@@ -1,6 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_007;
 
 using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>
 /// 验证 ADR-007_6：Agent 变更治理（Rule）
@@ -33,7 +34,7 @@ public sealed class ADR_007_6_Architecture_Tests
     public void ADR_007_6_2_Agent_Change_Decision_Rules()
     {
         // 验证测试文件存在
-        var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var testFile = Path.Combine(repoRoot, "src/tests/ArchitectureTests/ADR_007/ADR_007_6_Architecture_Tests.cs");
         
         File.Exists(testFile).Should().BeTrue($"❌ ADR-007_6_2 违规：测试文件不存在\n\n" +
@@ -46,17 +47,4 @@ public sealed class ADR_007_6_Architecture_Tests
         content.Should().Contain("ADR_007_6");
     }
 
-    private static string? FindRepositoryRoot()
-    {
-        var current = new DirectoryInfo(AppContext.BaseDirectory);
-        while (current != null)
-        {
-            if (Directory.Exists(Path.Combine(current.FullName, "docs", "adr")) || 
-                Directory.Exists(Path.Combine(current.FullName, ".git")))
-                return current.FullName;
-            
-            current = current.Parent;
-        }
-        return null;
-    }
 }
