@@ -4,16 +4,23 @@ using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
-/// ADR 关系图生成测试
-/// 验证关系图可以正常生成
+/// ADR-940_5: ADR 关系图生成规范（Rule）
+/// 验证 ADR 关系图可以正常生成
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-940_5_1: ADR 关系图可以成功生成
+///
+/// 关联文档：
+/// - ADR: docs/adr/governance/ADR-940-adr-relationship-and-traceability.md
 /// </summary>
-public sealed class AdrRelationshipMapGenerationTests
+public sealed class ADR_940_5_Architecture_Tests
 {
     /// <summary>
-    /// 验证可以成功生成 ADR 关系图
+    /// ADR-940_5_1: ADR 关系图可以成功生成
+    /// 验证关系图生成工具可以正常运行并生成有效的关系图文档（§ADR-940_5_1）
     /// </summary>
-    [Fact(DisplayName = "ADR 关系图可以成功生成")]
-    public void ADR_Relationship_Map_Can_Be_Generated()
+    [Fact(DisplayName = "ADR-940_5_1: ADR 关系图可以成功生成")]
+    public void ADR_940_5_1_Relationship_Map_Can_Be_Generated()
     {
         var repoRoot = TestEnvironment.RepositoryRoot 
             ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -47,8 +54,4 @@ public sealed class AdrRelationshipMapGenerationTests
             }
         }
     }
-
-    /// <summary>
-    /// 查找仓库根目录
-    /// </summary>
 }

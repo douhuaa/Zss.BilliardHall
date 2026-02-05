@@ -4,14 +4,20 @@ using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
-/// ADR-940: ADR 关系与溯源管理
+/// ADR-940_2: ADR 关系声明章节规范（Rule）
 /// 验证每个 ADR 文档都包含关系声明章节
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-940_2_1: 所有 ADR 必须包含关系声明章节
+///
+/// 关联文档：
+/// - ADR: docs/adr/governance/ADR-940-adr-relationship-and-traceability.md
 /// </summary>
-public sealed class AdrRelationshipDeclarationTests
+public sealed class ADR_940_2_Architecture_Tests
 {
     private readonly IReadOnlyList<AdrDocument> _adrs;
 
-    public AdrRelationshipDeclarationTests()
+    public ADR_940_2_Architecture_Tests()
     {
         var repoRoot = TestEnvironment.RepositoryRoot 
             ?? throw new InvalidOperationException("未找到仓库根目录（无法定位 docs/adr 或 .git）");
@@ -23,10 +29,11 @@ public sealed class AdrRelationshipDeclarationTests
     }
 
     /// <summary>
-    /// ADR-940.1: 每个 ADR 必须包含关系声明章节
+    /// ADR-940_2_1: 所有 ADR 必须包含关系声明章节
+    /// 验证每个 ADR 文档都包含 Relationships 或关系声明章节（§ADR-940_2_1）
     /// </summary>
-    [Fact(DisplayName = "ADR-940.1: 所有 ADR 必须包含关系声明章节")]
-    public void All_ADRs_Must_Have_Relationship_Section()
+    [Fact(DisplayName = "ADR-940_2_1: 所有 ADR 必须包含关系声明章节")]
+    public void ADR_940_2_1_All_ADRs_Must_Have_Relationship_Section()
     {
         var violations = new List<string>();
 
@@ -57,8 +64,4 @@ public sealed class AdrRelationshipDeclarationTests
         return content.Contains("## Relationships", StringComparison.OrdinalIgnoreCase) ||
                content.Contains("## 关系声明", StringComparison.OrdinalIgnoreCase);
     }
-
-    /// <summary>
-    /// 查找仓库根目录
-    /// </summary>
 }

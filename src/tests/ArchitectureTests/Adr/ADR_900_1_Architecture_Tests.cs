@@ -6,19 +6,27 @@ using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
-/// ADR-架构测试映射验证
-/// 确保每个 ADR 都有对应的架构测试类
+/// ADR-900_1: ADR-架构测试映射规范（Rule）
+/// 验证每个 ADR 都有对应的架构测试类
+///
+/// 测试覆盖映射（严格遵循 ADR-907 v2.0 Rule/Clause 体系）：
+/// - ADR-900_1_1: 核心 ADR 必须有对应的架构测试类
+/// - ADR-900_1_2: 架构测试类必须包含实质性的测试方法
+///
+/// 关联文档：
+/// - ADR: docs/adr/governance/ADR-900-architecture-tests.md
 /// </summary>
-public sealed class AdrTestMappingTests
+public sealed class ADR_900_1_Architecture_Tests
 {
     private const string TestNamespace = "Zss.BilliardHall.Tests.ArchitectureTests.ADR";
     private const string AdrTestPattern = @"ADR_(\d{4})_Architecture_Tests";
 
     /// <summary>
-    /// ADR-900: 每条核心 ADR（0000-0099）必须有对应的架构测试类
+    /// ADR-900_1_1: 核心 ADR 必须有对应的架构测试类
+    /// 验证每条核心 ADR（0000-0099）都有对应的架构测试类（§ADR-900_1_1）
     /// </summary>
-    [Fact(DisplayName = "ADR-900: 每条核心 ADR 必须有对应的架构测试类")]
-    public void ADR_900_Core_ADRs_Must_Have_Architecture_Test_Classes()
+    [Fact(DisplayName = "ADR-900_1_1: 每条核心 ADR 必须有对应的架构测试类")]
+    public void ADR_900_1_1_Core_ADRs_Must_Have_Architecture_Test_Classes()
     {
         var repoRoot = TestEnvironment.RepositoryRoot 
             ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -64,10 +72,11 @@ public sealed class AdrTestMappingTests
     }
 
     /// <summary>
-    /// 架构测试类必须包含实质性的测试方法
+    /// ADR-900_1_2: 架构测试类必须包含实质性的测试方法
+    /// 验证所有架构测试类都包含至少一个测试方法（§ADR-900_1_2）
     /// </summary>
-    [Fact(DisplayName = "架构测试类必须包含实质性的测试方法")]
-    public void ADR_900_Architecture_Test_Classes_Must_Have_Substantial_Test_Methods()
+    [Fact(DisplayName = "ADR-900_1_2: 架构测试类必须包含实质性的测试方法")]
+    public void ADR_900_1_2_Architecture_Test_Classes_Must_Have_Substantial_Test_Methods()
     {
         var testAssembly = Assembly.GetExecutingAssembly();
         var violations = new List<string>();
@@ -96,7 +105,4 @@ public sealed class AdrTestMappingTests
         violations.Should().BeEmpty();
     }
 
-    /// <summary>
-    /// 查找仓库根目录
-    /// </summary>
 }
