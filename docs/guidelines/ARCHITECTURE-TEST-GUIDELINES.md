@@ -1,6 +1,6 @@
 # 架构测试编写指南（Architecture Test Guidelines）
 
-> **文档版本**: 1.0  
+> **文档版本**: 1.1 
 > **最后更新**: 2026-02-05  
 > **文档定位**: 非裁决性指导文档，提供最佳实践建议  
 > **权威依据**: 本文档基于对现有 133+ 测试文件的分析，识别共性问题并提供解决方案
@@ -460,43 +460,53 @@ Assert.Empty(violations);
 
 **正例（✅ 推荐）**：
 ```csharp
-result.IsSuccessful.Should().BeTrue(
-    $"❌ ADR-002_1_1 违规：Platform 层不应依赖 Application 层\n\n" +
-    $"当前状态：{/* 具体违规情况 */}\n\n" +
-    $"修复建议：\n" +
-    $"1. {/* 具体步骤 */}\n\n" +
-    $"参考：docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md §ADR-002_1_1");
-    
-bootstrapper.Should().NotBeNull(
-    $"❌ ADR-XXX_Y_Z 违规：{/* 简短问题描述 */}\n\n" +
-    $"当前状态：{/* 具体违规情况 */}\n\n" +
-    $"修复建议：\n" +
-    $"1. {/* 具体步骤 */}\n\n" +
-    $"参考：{/* ADR 文档路径 */} §ADR-XXX_Y_Z");
-    
-violations.Should().BeEmpty(
-    $"❌ ADR-XXX_Y_Z 违规：{/* 简短问题描述 */}\n\n" +
-    $"当前状态：\n{string.Join("\n", violations)}\n\n" +
-    $"修复建议：\n" +
-    $"1. {/* 具体步骤 */}\n\n" +
-    $"参考：{/* ADR 文档路径 */} §ADR-XXX_Y_Z");
+result.IsSuccessful.Should().BeTrue(...);    
+bootstrapper.Should().NotBeNull(...);    
+violations.Should().BeEmpty(...);
 ```
 
-### 提供详细的错误信息
+### 使用断言消息模板
 
-每个断言都应遵循标准格式（详见"问题 3：不一致的断言消息格式"），包含：
+为了进一步简化断言消息的编写，推荐使用 `AssertionMessageBuilder` 模板系统：
 
-1. **❌ ADR-XXX_Y_Z 违规**：明确的违规标识和简短问题描述
-2. **当前状态**：具体的违规情况说明
-3. **修复建议**：编号列表形式的具体操作步骤（至少 1 个步骤）
-4. **参考**：完整的 ADR 文档路径和章节引用（§ADR-XXX_Y_Z）
+**反例（❌ 不推荐）**：手动拼接字符串
+```csharp
+result.IsSuccessful.Should().BeTrue(
+    $"❌ ADR-002_1_1 违规：Platform 层不应依赖 Application 层\n\n" +
+    $"当前状态：\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+    $"修复建议：\n" +
+    $"1. 移除 Platform 对 Application 的引用\n" +
+    $"2. 将共享的技术抽象提取到 Platform 层\n" +
+    $"3. 确保依赖方向正确: Host → Application → Platform\n\n" +
+    $"参考：docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+```
 
-**重要提醒**：
-- ✅ 所有必需字段都必须包含，不能省略
-- ✅ 修复建议必须使用编号列表，每个步骤应该是可操作的
-- ✅ 参考必须包含完整路径和 § 引用
-- ❌ 不要使用模糊的描述（如"检查代码"、"修复问题"）
-- ❌ 不要省略 ❌ emoji 和 RuleId
+**正例（✅ 推荐）**：使用模板
+```csharp
+using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
+
+var message = BuildFromArchTestResult(
+    ruleId: "ADR-002_1_1",
+    summary: "Platform 层不应依赖 Application 层",
+    failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+    remediationSteps: new[]
+    {
+        "移除 Platform 对 Application 的引用",
+        "将共享的技术抽象提取到 Platform 层",
+        "确保依赖方向正确: Host → Application → Platform"
+    },
+    adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+
+result.IsSuccessful.Should().BeTrue(message);
+```
+
+**优势**：
+- ✅ 代码简洁清晰，减少字符串拼接错误
+- ✅ 格式自动统一，确保一致性
+- ✅ 集中维护，修改一处生效全局
+- ✅ 类型安全，参数明确
+
+**详细使用指南**：请参考 [ASSERTION-MESSAGE-TEMPLATE-USAGE.md](./ASSERTION-MESSAGE-TEMPLATE-USAGE.md)
 
 ---
 
