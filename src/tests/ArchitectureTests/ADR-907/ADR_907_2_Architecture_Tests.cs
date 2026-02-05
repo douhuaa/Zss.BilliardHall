@@ -20,8 +20,6 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 /// </summary>
 public sealed class ADR_907_2_Architecture_Tests
 {
-    private const string AdrDocsPath = "docs/adr";
-    private const string AdrTestsPath = "src/tests/ArchitectureTests";
     private const string AdrTestsProjectPath = "src/tests/ArchitectureTests/ArchitectureTests.csproj";
 
     /// <summary>
@@ -51,8 +49,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_2: 测试目录必须按 ADR 编号分组")]
     public void ADR_907_2_2_Test_Directory_Must_Be_Organized_By_ADR_Number()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
+        var testsDirectory = FileSystemTestHelper.GetAbsolutePath("src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue(
             $"❌ ADR-907_2_2 违规：ArchitectureTests 目录不存在\n\n" +
@@ -85,7 +82,7 @@ public sealed class ADR_907_2_Architecture_Tests
     public void ADR_907_2_3_Test_Classes_Must_Map_To_Single_ADR()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
@@ -160,7 +157,7 @@ public sealed class ADR_907_2_Architecture_Tests
     public void ADR_907_2_4_Test_Class_Names_Must_Follow_Convention()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
@@ -205,7 +202,7 @@ public sealed class ADR_907_2_Architecture_Tests
     public void ADR_907_2_5_Test_Methods_Must_Map_To_Subrules()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
@@ -268,7 +265,7 @@ public sealed class ADR_907_2_Architecture_Tests
     public void ADR_907_2_6_Failure_Messages_Must_Reference_ADR()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
@@ -339,7 +336,7 @@ public sealed class ADR_907_2_Architecture_Tests
     public void ADR_907_2_7_Tests_Must_Have_Valid_Assertions()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
@@ -399,7 +396,7 @@ public sealed class ADR_907_2_Architecture_Tests
     public void ADR_907_2_8_Tests_Must_Not_Be_Skipped()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {

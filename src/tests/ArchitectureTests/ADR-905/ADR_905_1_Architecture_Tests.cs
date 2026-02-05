@@ -17,7 +17,6 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_905;
 /// </summary>
 public sealed class ADR_905_1_Architecture_Tests
 {
-    private const string AdrDocsPath = "docs/adr";
     private const int MaxAdrFilesToCheck = 50;
 
     // 执行级别枚举值
@@ -33,7 +32,7 @@ public sealed class ADR_905_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var warnings = new List<string>();
 
-        var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
         Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
@@ -141,7 +140,7 @@ public sealed class ADR_905_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var warnings = new List<string>();
 
-        var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
         Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 

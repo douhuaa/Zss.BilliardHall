@@ -16,9 +16,6 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 /// </summary>
 public sealed class ADR_907_3_Architecture_Tests
 {
-    private const string AdrDocsPath = "docs/adr";
-    private const string AdrTestsPath = "src/tests/ArchitectureTests";
-
     /// <summary>
     /// ADR-907_3_1: 最小断言数量要求
     /// 验证每个测试类至少包含 1 个有效断言（§3.1）
@@ -27,7 +24,7 @@ public sealed class ADR_907_3_Architecture_Tests
     public void ADR_907_3_1_Test_Classes_Must_Have_Minimum_Assertions()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
@@ -94,7 +91,7 @@ public sealed class ADR_907_3_Architecture_Tests
     public void ADR_907_3_2_Test_Methods_Must_Map_To_Single_Subrule()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
@@ -167,7 +164,7 @@ public sealed class ADR_907_3_Architecture_Tests
     public void ADR_907_3_3_Failure_Messages_Must_Be_Traceable()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
@@ -264,7 +261,7 @@ public sealed class ADR_907_3_Architecture_Tests
     public void ADR_907_3_4_Formal_Assertions_Are_Prohibited()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, AdrTestsPath, "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         if (!Directory.Exists(testsDirectory))
         {
