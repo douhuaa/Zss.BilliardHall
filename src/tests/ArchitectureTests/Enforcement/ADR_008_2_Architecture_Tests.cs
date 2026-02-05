@@ -26,10 +26,7 @@ public sealed class ADR_008_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDir = Path.Combine(repoRoot, "docs/adr");
 
-        if (!Directory.Exists(adrDir))
-        {
-            true.Should().BeFalse($"ADR 目录不存在：{adrDir}");
-        }
+        Directory.Exists(adrDir).Should().BeTrue($"ADR 目录不存在：{adrDir}");
 
         var violations = new List<string>();
 

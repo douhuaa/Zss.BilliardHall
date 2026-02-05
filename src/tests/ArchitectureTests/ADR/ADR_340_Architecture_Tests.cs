@@ -224,9 +224,7 @@ public sealed class ADR_340_Architecture_Tests
         var configuration = GetBuildConfiguration();
         var applicationDll = Path.Combine(root, "src", "Application", "bin", configuration, "net10.0", "Application.dll");
 
-        if (!File.Exists(applicationDll))
-        {
-            true.Should().BeFalse($"❌ ADR-340_1_5 违规: 未找到 Application.dll，无法验证 Serilog 依赖隔离\n\n" +
+        File.Exists(applicationDll).Should().BeTrue($"❌ ADR-340_1_5 违规: 未找到 Application.dll，无法验证 Serilog 依赖隔离\n\n" +
                 $"预期路径: {applicationDll}\n\n" +
                 $"问题分析：\n" +
                 $"测试需要加载 Application 程序集以验证其是否违规引用 Serilog，当前未找到编译输出\n\n" +
@@ -236,7 +234,6 @@ public sealed class ADR_340_Architecture_Tests
                 $"3. 检查构建配置是否为 {configuration}\n" +
                 $"4. 验证项目输出路径是否正确\n\n" +
                 $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.5）");
-        }
 
         var applicationAssembly = Assembly.LoadFrom(applicationDll);
 
@@ -268,9 +265,7 @@ public sealed class ADR_340_Architecture_Tests
         var configuration = GetBuildConfiguration();
         var applicationDll = Path.Combine(root, "src", "Application", "bin", configuration, "net10.0", "Application.dll");
 
-        if (!File.Exists(applicationDll))
-        {
-            true.Should().BeFalse($"❌ ADR-340_1_5 违规: 未找到 Application.dll，无法验证 OpenTelemetry 依赖隔离\n\n" +
+        File.Exists(applicationDll).Should().BeTrue($"❌ ADR-340_1_5 违规: 未找到 Application.dll，无法验证 OpenTelemetry 依赖隔离\n\n" +
                 $"预期路径: {applicationDll}\n\n" +
                 $"问题分析：\n" +
                 $"测试需要加载 Application 程序集以验证其是否违规引用 OpenTelemetry，当前未找到编译输出\n\n" +
@@ -280,7 +275,6 @@ public sealed class ADR_340_Architecture_Tests
                 $"3. 检查构建配置是否为 {configuration}\n" +
                 $"4. 验证项目输出路径是否正确\n\n" +
                 $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.5）");
-        }
 
         var applicationAssembly = Assembly.LoadFrom(applicationDll);
 

@@ -29,10 +29,7 @@ public sealed class ADR_902_2_Architecture_Tests
 
         var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
-        if (!Directory.Exists(adrDirectory))
-        {
-            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
-        }
+        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
         // 裁决性语言模式
         var decisionWords = new[] { "必须", "MUST", "禁止", "FORBIDDEN", "不允许", "NOT ALLOWED", "不得", "SHALL NOT" };

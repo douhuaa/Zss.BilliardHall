@@ -96,11 +96,8 @@ public sealed class ADR_907_4_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_4_2 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_4_2 无法执行：测试目录不存在 {testsDirectory}");
+        if (!Directory.Exists(testsDirectory)) return;
 
         var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
         var violations = new List<string>();

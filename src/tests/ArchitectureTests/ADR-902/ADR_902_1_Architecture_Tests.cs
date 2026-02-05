@@ -190,10 +190,7 @@ public sealed class ADR_902_1_Architecture_Tests
 
         var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
-        if (!Directory.Exists(adrDirectory))
-        {
-            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
-        }
+        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
         // 扫描治理类 ADR 文档（ADR-902 发布后的新标准）
         var governanceDir = Path.Combine(adrDirectory, "governance");
@@ -297,10 +294,7 @@ public sealed class ADR_902_1_Architecture_Tests
 
         var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
-        if (!Directory.Exists(adrDirectory))
-        {
-            true.Should().BeFalse($"未找到 ADR 文档目录：{adrDirectory}");
-        }
+        Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
         // 扫描治理类 ADR 文档
         var governanceDir = Path.Combine(adrDirectory, "governance");
