@@ -58,10 +58,7 @@ public sealed class ADR_005_1_Architecture_Tests
                 .Where(t => !t.Namespace?.StartsWith("System") == true)
                 .ToList();
 
-            if (constructorParams.Count > 5)
-            {
-                true.Should().BeFalse(
-                    $"❌ ADR-005_1_2 违规: Endpoint/Controller 包含过多依赖\n\n" +
+            (constructorParams.Count > 5).Should().BeFalse($"❌ ADR-005_1_2 违规: Endpoint/Controller 包含过多依赖\n\n" +
                     $"违规类型: {endpoint.FullName}\n" +
                     $"构造函数依赖数量: {constructorParams.Count} 个（超过建议的 5 个）\n\n" +
                     $"问题分析:\n" +
@@ -71,7 +68,6 @@ public sealed class ADR_005_1_Architecture_Tests
                     $"2. 将业务逻辑移到 Handler 中实现\n" +
                     $"3. Endpoint 只负责：接收请求 → 映射 Command/Query → 转发给 Handler → 返回响应\n\n" +
                     $"参考: ADR-005_1_2 - Endpoint 仅做请求适配");
-            }
         }
     }
 }

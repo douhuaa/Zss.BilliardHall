@@ -84,11 +84,7 @@ public sealed class ADR_907_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_2_3 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_3 无法执行：测试目录不存在 {testsDirectory}");
 
         var testFiles = Directory.GetFiles(testsDirectory, "*.cs");
         var violations = new List<string>();
@@ -159,11 +155,7 @@ public sealed class ADR_907_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_2_4 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_4 无法执行：测试目录不存在 {testsDirectory}");
 
         var testFiles = Directory.GetFiles(testsDirectory, "*.cs");
         var violations = new List<string>();
@@ -204,11 +196,7 @@ public sealed class ADR_907_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_2_5 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_5 无法执行：测试目录不存在 {testsDirectory}");
 
         var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
         var warnings = new List<string>();
@@ -267,11 +255,7 @@ public sealed class ADR_907_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_2_6 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_6 无法执行：测试目录不存在 {testsDirectory}");
 
         var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
         var violations = new List<string>();
@@ -338,11 +322,7 @@ public sealed class ADR_907_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_2_7 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_7 无法执行：测试目录不存在 {testsDirectory}");
 
         var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
         var violations = new List<string>();
@@ -398,11 +378,7 @@ public sealed class ADR_907_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_2_8 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_8 无法执行：测试目录不存在 {testsDirectory}");
 
         var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
         var violations = new List<string>();

@@ -83,17 +83,9 @@ public sealed class ADR_907_1_Architecture_Tests
         var adrDocsDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
         var testsDirectory = FileSystemTestHelper.GetAbsolutePath(AdrTestsPath);
 
-        if (!Directory.Exists(adrDocsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_1_2 无法执行：ADR 文档目录不存在 {adrDocsDirectory}");
-            return;
-        }
+        Directory.Exists(adrDocsDirectory).Should().BeTrue($"❌ ADR-907_1_2 无法执行：ADR 文档目录不存在 {adrDocsDirectory}");
 
-        if (!Directory.Exists(testsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_1_2 无法执行：测试目录不存在 {testsDirectory}");
-            return;
-        }
+        Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_1_2 无法执行：测试目录不存在 {testsDirectory}");
 
         // 查找所有 Final 或 Active 状态的 ADR
         var adrFiles = Directory.GetFiles(adrDocsDirectory, "ADR-*.md", SearchOption.AllDirectories);
@@ -168,11 +160,7 @@ public sealed class ADR_907_1_Architecture_Tests
     {
         var adrDocsDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
 
-        if (!Directory.Exists(adrDocsDirectory))
-        {
-            true.Should().BeFalse($"❌ ADR-907_1_3 无法执行：ADR 文档目录不存在 {adrDocsDirectory}");
-            return;
-        }
+        Directory.Exists(adrDocsDirectory).Should().BeTrue($"❌ ADR-907_1_3 无法执行：ADR 文档目录不存在 {adrDocsDirectory}");
 
         var adrFiles = Directory.GetFiles(adrDocsDirectory, "ADR-*.md", SearchOption.AllDirectories);
         var violations = new List<string>();
