@@ -18,14 +18,7 @@ public sealed class ADR_301_Architecture_Tests
             .ToList();
 
         // 至少应该有架构测试项目
-        (testAssemblies.Count > 0).Should().BeTrue($"❌ ADR-301_1_1 违规: 集成测试项目不存在\n\n" +
-            $"问题分析：\n" +
-            $"系统必须包含测试项目以确保代码质量和功能正确性\n\n" +
-            $"修复建议：\n" +
-            $"1. 创建至少一个测试项目\n" +
-            $"2. 测试项目命名应以 Tests 结尾\n" +
-            $"3. 示例：ArchitectureTests, IntegrationTests\n\n" +
-            $"参考：docs/adr/technical/ADR-301-integration-test-automation.md（§1.1）");
+        (testAssemblies.Count > 0).Should().BeTrue($"❌ ADR-301_1_1 违规: 集成测试项目不存在\n\n问题分析：\n系统必须包含测试项目以确保代码质量和功能正确性\n\n修复建议：\n1. 创建至少一个测试项目\n2. 测试项目命名应以 Tests 结尾\n3. 示例：ArchitectureTests, IntegrationTests\n\n参考：docs/adr/technical/ADR-301-integration-test-automation.md（§1.1）");
         
         // 验证测试程序集命名符合规范
         var invalidNames = testAssemblies
@@ -33,14 +26,7 @@ public sealed class ADR_301_Architecture_Tests
             .Select(a => a.GetName().Name)
             .ToList();
             
-        (invalidNames.Count == 0).Should().BeTrue($"❌ ADR-301_1_1 违规: 测试项目命名不规范\n\n" +
-            $"违规项目：{string.Join(", ", invalidNames)}\n\n" +
-            $"问题分析：\n" +
-            $"测试项目必须以 'Tests' 后缀结尾以保持命名一致性\n\n" +
-            $"修复建议：\n" +
-            $"1. 将项目重命名为 {{ProjectName}}Tests\n" +
-            $"2. 示例：IntegrationTests, UnitTests, ArchitectureTests\n\n" +
-            $"参考：docs/adr/technical/ADR-301-integration-test-automation.md（§1.1）");
+        (invalidNames.Count == 0).Should().BeTrue($"❌ ADR-301_1_1 违规: 测试项目命名不规范\n\n违规项目：{string.Join(", ", invalidNames)}\n\n问题分析：\n测试项目必须以 'Tests' 后缀结尾以保持命名一致性\n\n修复建议：\n1. 将项目重命名为 {{ProjectName}}Tests\n2. 示例：IntegrationTests, UnitTests, ArchitectureTests\n\n参考：docs/adr/technical/ADR-301-integration-test-automation.md（§1.1）");
     }
 
     [Fact(DisplayName = "ADR-301_1_2: TestContainers 配置文件验证")]
@@ -50,25 +36,11 @@ public sealed class ADR_301_Architecture_Tests
         var currentDir = Directory.GetCurrentDirectory();
         var repoRoot = FindRepositoryRoot(currentDir);
         
-        (repoRoot != null).Should().BeTrue($"❌ ADR-301_1_2 违规: 无法找到仓库根目录\n\n" +
-            $"问题分析：\n" +
-            $"无法定位包含 .git 或 Directory.Build.props 的仓库根目录\n\n" +
-            $"修复建议：\n" +
-            $"1. 确保项目包含 .git 目录或 Directory.Build.props 文件\n" +
-            $"2. 检查测试运行环境的工作目录设置\n\n" +
-            $"参考：docs/adr/technical/ADR-301-integration-test-automation.md（§1.2）");
+        (repoRoot != null).Should().BeTrue($"❌ ADR-301_1_2 违规: 无法找到仓库根目录\n\n问题分析：\n无法定位包含 .git 或 Directory.Build.props 的仓库根目录\n\n修复建议：\n1. 确保项目包含 .git 目录或 Directory.Build.props 文件\n2. 检查测试运行环境的工作目录设置\n\n参考：docs/adr/technical/ADR-301-integration-test-automation.md（§1.2）");
         
         // 验证 tests 目录存在
         var testsDir = Path.Combine(repoRoot!, "src", "tests");
-        Directory.Exists(testsDir).Should().BeTrue($"❌ ADR-301_1_2 违规: 测试目录不存在\n\n" +
-            $"目录路径：{testsDir}\n\n" +
-            $"问题分析：\n" +
-            $"项目必须包含 src/tests 目录来组织所有测试项目\n\n" +
-            $"修复建议：\n" +
-            $"1. 在项目根目录创建 src/tests 目录\n" +
-            $"2. 将测试项目放置在该目录下\n" +
-            $"3. 确保目录结构符合标准布局\n\n" +
-            $"参考：docs/adr/technical/ADR-301-integration-test-automation.md（§1.2）");
+        Directory.Exists(testsDir).Should().BeTrue($"❌ ADR-301_1_2 违规: 测试目录不存在\n\n目录路径：{testsDir}\n\n问题分析：\n项目必须包含 src/tests 目录来组织所有测试项目\n\n修复建议：\n1. 在项目根目录创建 src/tests 目录\n2. 将测试项目放置在该目录下\n3. 确保目录结构符合标准布局\n\n参考：docs/adr/technical/ADR-301-integration-test-automation.md（§1.2）");
     }
     
     [Fact(DisplayName = "ADR-301_1_3: 测试项目应使用统一的测试框架")]
@@ -78,14 +50,7 @@ public sealed class ADR_301_Architecture_Tests
         var xunitAssembly = AppDomain.CurrentDomain.GetAssemblies()
             .FirstOrDefault(a => a.GetName().Name?.StartsWith("xunit") == true);
             
-        (xunitAssembly != null).Should().BeTrue($"❌ ADR-301_1_3 违规: 未使用 xUnit 测试框架\n\n" +
-            $"问题分析：\n" +
-            $"项目必须使用统一的 xUnit 测试框架以保持一致性和可维护性\n\n" +
-            $"修复建议：\n" +
-            $"1. 添加 xUnit NuGet 包：xunit, xunit.runner.visualstudio\n" +
-            $"2. 确保测试项目引用了 xUnit 框架\n" +
-            $"3. 将现有测试迁移到 xUnit 格式\n\n" +
-            $"参考：docs/adr/technical/ADR-301-integration-test-automation.md（§1.3）");
+        (xunitAssembly != null).Should().BeTrue($"❌ ADR-301_1_3 违规: 未使用 xUnit 测试框架\n\n问题分析：\n项目必须使用统一的 xUnit 测试框架以保持一致性和可维护性\n\n修复建议：\n1. 添加 xUnit NuGet 包：xunit, xunit.runner.visualstudio\n2. 确保测试项目引用了 xUnit 框架\n3. 将现有测试迁移到 xUnit 格式\n\n参考：docs/adr/technical/ADR-301-integration-test-automation.md（§1.3）");
     }
 
     private static string? FindRepositoryRoot(string startPath)
