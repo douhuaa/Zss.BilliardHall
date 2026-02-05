@@ -202,20 +202,27 @@ public sealed class ADR_907_3_Architecture_Tests
 
             var adrNumber = fileAdrMatch.Groups[1].Value;
 
-            // 查找所有断言语句及其失败消息
-            var assertStatements = Regex.Matches(content, 
-                @"(Assert\.True|Assert\.False|Should\(\)\.BeTrue|Should\(\)\.BeFalse)\s*\([^""]*""([^""]+)""",
-                RegexOptions.Singleline);
+            // 查找所有断言语句及其完整消息（包括多行字符串连接）
+            // 支持字符串插值 ($"...") 和普通字符串 ("...")
+            // 支持多行字符串连接：.BeTrue($"part1" + $"part2" + ...)
+            
+            var assertPattern = @"(Should\(\)\.(BeTrue|BeFalse)|Assert\.(True|False))\s*\(([^)]*\$?""[^""]+""(?:\s*\+\s*\$?""[^""]+"")*)\s*\)";
+            var assertMatches = Regex.Matches(content, assertPattern, RegexOptions.Singleline);
 
-            foreach (Match assert in assertStatements)
+            foreach (Match assertMatch in assertMatches)
             {
-                var message = assert.Groups[2].Value;
+                // 提取断言参数部分（可能包含多个字符串连接）
+                var assertArgs = assertMatch.Groups[4].Value;
+                
+                // 提取所有字符串字面量（支持 $"..." 和 "..."）
+                var stringLiterals = Regex.Matches(assertArgs, @"\$?""([^""]+)""");
+                var fullMessage = string.Join("", stringLiterals.Cast<Match>().Select(m => m.Groups[1].Value));
                 
                 // 检查失败消息的完整性
-                var hasAdrReference = Regex.IsMatch(message, $@"ADR-0*{adrNumber}[_\d]*");
-                var hasViolationMarker = message.Contains("违规") || message.Contains("violation");
-                var hasFixSuggestion = message.Contains("修复建议") || message.Contains("fix");
-                var hasDocReference = message.Contains("参考：docs/adr") || message.Contains("reference:");
+                var hasAdrReference = Regex.IsMatch(fullMessage, $@"ADR-0*{adrNumber}[_\d]*");
+                var hasViolationMarker = fullMessage.Contains("违规") || fullMessage.Contains("violation");
+                var hasFixSuggestion = fullMessage.Contains("修复建议") || fullMessage.Contains("fix");
+                var hasDocReference = fullMessage.Contains("参考：docs/adr") || fullMessage.Contains("reference:");
 
                 if (!hasAdrReference)
                 {

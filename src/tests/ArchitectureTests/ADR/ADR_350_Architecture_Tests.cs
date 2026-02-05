@@ -29,7 +29,16 @@ public sealed class ADR_350_Architecture_Tests
             {
                 var ns = type.Namespace ?? "";
                 
-                    ns.StartsWith("Zss.BilliardHall").Should().BeTrue($"【ADR-350.1】日志类型 {type.FullName} 必须在 Zss.BilliardHall 命名空间下");
+                ns.StartsWith("Zss.BilliardHall").Should().BeTrue($"❌ ADR-350_1_1 违规: 日志类型未在正确的命名空间\n\n" +
+                    $"违规类型：{type.FullName}\n" +
+                    $"当前命名空间：{ns}\n\n" +
+                    $"问题分析：\n" +
+                    $"所有日志相关类型必须在 Zss.BilliardHall 命名空间下以保持组织一致性\n\n" +
+                    $"修复建议：\n" +
+                    $"1. 将日志类型移动到 Zss.BilliardHall.* 命名空间\n" +
+                    $"2. 遵循标准命名空间结构：Zss.BilliardHall.{{Module}}.Logging\n" +
+                    $"3. 示例：Zss.BilliardHall.Platform.Logging, Zss.BilliardHall.Modules.Orders.Logging\n\n" +
+                    $"参考：docs/adr/technical/ADR-350-logging-observability-standards.md（§1.1）");
             }
         }
     }
@@ -75,7 +84,16 @@ public sealed class ADR_350_Architecture_Tests
 
             // 这些类型应该被标记为不可序列化或有特殊处理
             // 这里做基本验证：不应该有太多公共的敏感类型
-            (sensitiveTypes.Count() < 50).Should().BeTrue($"【ADR-350.3】发现过多公共敏感类型（{sensitiveTypes.Count()}），需人工审查");
+            (sensitiveTypes.Count() < 50).Should().BeTrue($"❌ ADR-350_1_3 违规: 发现过多公共敏感类型\n\n" +
+                $"敏感类型数量：{sensitiveTypes.Count()}\n\n" +
+                $"问题分析：\n" +
+                $"发现过多包含敏感信息（Password、Secret、Token等）的公共类型，可能存在安全风险\n\n" +
+                $"修复建议：\n" +
+                $"1. 审查所有包含敏感信息的类型\n" +
+                $"2. 确保敏感类型不会被意外记录到日志中\n" +
+                $"3. 使用 [JsonIgnore] 或类似属性标记敏感字段\n" +
+                $"4. 考虑使用专门的敏感数据处理机制\n\n" +
+                $"参考：docs/adr/technical/ADR-350-logging-observability-standards.md（§1.3）");
         }
     }
 
