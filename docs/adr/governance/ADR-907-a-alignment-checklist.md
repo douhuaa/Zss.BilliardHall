@@ -2,6 +2,7 @@
 adr: "ADR-907-A-Checklist"
 title: "ADR-907-A 对齐清单"
 description: "ADR-907 v2.0 Rule/Clause 双层编号体系对齐进度追踪"
+type: checklist
 status: Final
 level: Governance
 version: "1.0"
