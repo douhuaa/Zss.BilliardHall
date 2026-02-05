@@ -276,4 +276,103 @@ public static class FileSystemTestHelper
 
         return count;
     }
+
+    /// <summary>
+    /// 检查文件内容是否包含所有指定的关键词
+    /// </summary>
+    /// <param name="filePath">文件路径（绝对路径）</param>
+    /// <param name="keywords">关键词列表</param>
+    /// <param name="ignoreCase">是否忽略大小写，默认为 false</param>
+    /// <returns>如果所有关键词都存在返回 true，否则返回 false</returns>
+    public static bool FileContainsAllKeywords(string filePath, IEnumerable<string> keywords, bool ignoreCase = false)
+    {
+        if (!File.Exists(filePath))
+        {
+            return false;
+        }
+
+        var content = File.ReadAllText(filePath);
+        var comparison = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+
+        return keywords.All(keyword => content.Contains(keyword, comparison));
+    }
+
+    /// <summary>
+    /// 检查文件内容是否包含任一指定的关键词
+    /// </summary>
+    /// <param name="filePath">文件路径（绝对路径）</param>
+    /// <param name="keywords">关键词列表</param>
+    /// <param name="ignoreCase">是否忽略大小写，默认为 false</param>
+    /// <returns>如果任一关键词存在返回 true，否则返回 false</returns>
+    public static bool FileContainsAnyKeyword(string filePath, IEnumerable<string> keywords, bool ignoreCase = false)
+    {
+        if (!File.Exists(filePath))
+        {
+            return false;
+        }
+
+        var content = File.ReadAllText(filePath);
+        var comparison = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+
+        return keywords.Any(keyword => content.Contains(keyword, comparison));
+    }
+
+    /// <summary>
+    /// 获取文件中缺失的关键词列表
+    /// </summary>
+    /// <param name="filePath">文件路径（绝对路径）</param>
+    /// <param name="requiredKeywords">必需的关键词列表</param>
+    /// <param name="ignoreCase">是否忽略大小写，默认为 false</param>
+    /// <returns>缺失的关键词列表</returns>
+    public static IEnumerable<string> GetMissingKeywords(string filePath, IEnumerable<string> requiredKeywords, bool ignoreCase = false)
+    {
+        if (!File.Exists(filePath))
+        {
+            return requiredKeywords;
+        }
+
+        var content = File.ReadAllText(filePath);
+        var comparison = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+
+        return requiredKeywords.Where(keyword => !content.Contains(keyword, comparison));
+    }
+
+    /// <summary>
+    /// 检查文件是否包含表格（Markdown 格式）
+    /// </summary>
+    /// <param name="filePath">文件路径（绝对路径）</param>
+    /// <param name="headerPattern">表格标题行的模式（可选）</param>
+    /// <returns>如果包含表格返回 true，否则返回 false</returns>
+    public static bool FileContainsTable(string filePath, string? headerPattern = null)
+    {
+        if (!File.Exists(filePath))
+        {
+            return false;
+        }
+
+        var content = File.ReadAllText(filePath);
+        var lines = content.Split('\n');
+
+        for (int i = 0; i < lines.Length - 1; i++)
+        {
+            var currentLine = lines[i].Trim();
+            var nextLine = lines[i + 1].Trim();
+
+            // Markdown 表格格式：标题行 + 分隔行
+            if (currentLine.Contains('|') && nextLine.StartsWith("|") && nextLine.Contains("---"))
+            {
+                if (string.IsNullOrEmpty(headerPattern))
+                {
+                    return true;
+                }
+
+                if (currentLine.Contains(headerPattern, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
