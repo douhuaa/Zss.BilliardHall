@@ -1,6 +1,7 @@
 ﻿using NetArchTest.Rules;
 using FluentAssertions;
 using System.Reflection;
+using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
 
@@ -29,17 +30,22 @@ public sealed class ADR_005_2_Architecture_Tests
                 .Where(f => !f.IsInitOnly) // 排除 readonly 字段
                 .ToList();
 
-            (fields.Count == 0).Should().BeTrue(
-                $"❌ ADR-005_2_1 违规: Handler 包含可变字段\n\n" +
-                $"违规 Handler: {handler.FullName}\n" +
-                $"可变字段: {string.Join(", ", fields.Select(f => f.Name))}\n\n" +
-                $"问题分析:\n" +
-                $"Handler 包含非 readonly 字段，可能维护长期状态\n\n" +
-                $"修复建议：\n" +
-                $"1. 将所有依赖字段标记为 readonly\n" +
-                $"2. 通过构造函数注入依赖，而非在字段中维护状态\n" +
-                $"3. Handler 应该是短生命周期、无状态、可重入的\n\n" +
-                $"参考: ADR-005_2_1 - Handler 不得持有业务状态");
+            (fields.Count == 0).Should().BeTrue(Build(
+                ruleId: "ADR-005_2_1",
+                violation: "Handler 包含可变字段",
+                evidence: new[]
+                {
+                    $"违规 Handler: {handler.FullName}",
+                    $"可变字段: {string.Join(", ", fields.Select(f => f.Name))}"
+                },
+                analysis: "Handler 包含非 readonly 字段，可能维护长期状态",
+                remediation: new[]
+                {
+                    "1. 将所有依赖字段标记为 readonly",
+                    "2. 通过构造函数注入依赖，而非在字段中维护状态",
+                    "3. Handler 应该是短生命周期、无状态、可重入的"
+                },
+                reference: "ADR-005_2_1 - Handler 不得持有业务状态"));
         }
     }
 
@@ -78,19 +84,24 @@ public sealed class ADR_005_2_Architecture_Tests
 
                     if (paramModule != null && paramModule != currentModule)
                     {
-                        true.Should().BeFalse(
-                            $"❌ ADR-005_2_2 违规: Handler 注入了其他模块的类型\n\n" +
-                            $"违规 Handler: {handler.FullName}\n" +
-                            $"当前模块: {currentModule}\n" +
-                            $"依赖模块: {paramModule}\n" +
-                            $"依赖类型: {param.FullName}\n\n" +
-                            $"问题分析:\n" +
-                            $"模块间直接注入依赖表示同步调用，违反模块隔离原则\n\n" +
-                            $"修复建议：\n" +
-                            $"1. 使用异步事件通信: await _eventBus.Publish(new SomeEvent(...))\n" +
-                            $"2. 或通过契约查询: var dto = await _queryBus.Send(new GetSomeData(...))\n" +
-                            $"3. 如确需同步调用，必须提交 ADR 破例审批\n\n" +
-                            $"参考: ADR-005_2_2 - Handler 禁止作为跨模块粘合层");
+                        true.Should().BeFalse(Build(
+                            ruleId: "ADR-005_2_2",
+                            violation: "Handler 注入了其他模块的类型",
+                            evidence: new[]
+                            {
+                                $"违规 Handler: {handler.FullName}",
+                                $"当前模块: {currentModule}",
+                                $"依赖模块: {paramModule}",
+                                $"依赖类型: {param.FullName}"
+                            },
+                            analysis: "模块间直接注入依赖表示同步调用，违反模块隔离原则",
+                            remediation: new[]
+                            {
+                                "1. 使用异步事件通信: await _eventBus.Publish(new SomeEvent(...))",
+                                "2. 或通过契约查询: var dto = await _queryBus.Send(new GetSomeData(...))",
+                                "3. 如确需同步调用，必须提交 ADR 破例审批"
+                            },
+                            reference: "ADR-005_2_2 - Handler 禁止作为跨模块粘合层"));
                     }
                 }
             }
@@ -141,18 +152,23 @@ public sealed class ADR_005_2_Architecture_Tests
                      returnType.Name.EndsWith("Aggregate") ||
                      returnType.Name.EndsWith("ValueObject")))
                 {
-                    true.Should().BeFalse(
-                        $"❌ ADR-005_2_3 违规: Handler 返回领域实体\n\n" +
-                        $"违规 Handler: {handler.FullName}\n" +
-                        $"违规方法: {method.Name}\n" +
-                        $"返回类型: {returnType.FullName}\n\n" +
-                        $"问题分析:\n" +
-                        $"Handler 不应返回领域实体（Entity/Aggregate/ValueObject）\n\n" +
-                        $"修复建议：\n" +
-                        $"1. 创建对应的 DTO 或投影类型\n" +
-                        $"2. 在 Handler 中映射领域实体到 DTO\n" +
-                        $"3. 返回 DTO 而非领域实体\n\n" +
-                        $"参考: ADR-005_2_3 - Handler 不允许返回领域实体");
+                    true.Should().BeFalse(Build(
+                        ruleId: "ADR-005_2_3",
+                        violation: "Handler 返回领域实体",
+                        evidence: new[]
+                        {
+                            $"违规 Handler: {handler.FullName}",
+                            $"违规方法: {method.Name}",
+                            $"返回类型: {returnType.FullName}"
+                        },
+                        analysis: "Handler 不应返回领域实体（Entity/Aggregate/ValueObject）",
+                        remediation: new[]
+                        {
+                            "1. 创建对应的 DTO 或投影类型",
+                            "2. 在 Handler 中映射领域实体到 DTO",
+                            "3. 返回 DTO 而非领域实体"
+                        },
+                        reference: "ADR-005_2_3 - Handler 不允许返回领域实体"));
                 }
             }
         }

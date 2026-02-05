@@ -2,6 +2,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_006;
 
 using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 /// <summary>
 /// ADR-006_4: 目录归属规则
@@ -49,21 +50,28 @@ public sealed class ADR_006_4_Architecture_Tests
                                           number is >= 200 and <= 299 && directory == "runtime" ||
                                           number is >= 300 and <= 399 && directory == "technical";
 
-                    isInCorrectRange.Should().BeTrue($"❌ ADR-006_4_1 违规: ADR 文件位于错误的目录\n\n" +
-                        $"文件: {file}\n" +
-                        $"编号: ADR-{number:D3}\n" +
-                        $"当前目录: {directory}/\n\n" +
-                        $"正确目录映射:\n" +
-                        $"- 001~009: constitutional/ （宪法层）\n" +
-                        $"- 000, 900~999: governance/ （治理层）\n" +
-                        $"- 100~199: structure/ （结构层）\n" +
-                        $"- 200~299: runtime/ （运行层）\n" +
-                        $"- 300~399: technical/ （技术层）\n\n" +
-                        $"修复建议：\n" +
-                        $"1. 将文件移动到正确的目录\n" +
-                        $"2. 更新所有交叉引用该 ADR 的文档路径\n" +
-                        $"3. 确保测试中的路径引用也随之更新\n\n" +
-                        $"参考: ADR-006_4_1 - 目录层级映射");
+                    isInCorrectRange.Should().BeTrue(Build(
+                        ruleId: "ADR-006_4_1",
+                        violation: "ADR 文件位于错误的目录",
+                        evidence: new[]
+                        {
+                            $"文件: {file}",
+                            $"编号: ADR-{number:D3}",
+                            $"当前目录: {directory}/"
+                        },
+                        detail: "正确目录映射:\n" +
+                                "- 001~009: constitutional/ （宪法层）\n" +
+                                "- 000, 900~999: governance/ （治理层）\n" +
+                                "- 100~199: structure/ （结构层）\n" +
+                                "- 200~299: runtime/ （运行层）\n" +
+                                "- 300~399: technical/ （技术层）",
+                        remediation: new[]
+                        {
+                            "1. 将文件移动到正确的目录",
+                            "2. 更新所有交叉引用该 ADR 的文档路径",
+                            "3. 确保测试中的路径引用也随之更新"
+                        },
+                        reference: "ADR-006_4_1 - 目录层级映射"));
                 }
             }
         }

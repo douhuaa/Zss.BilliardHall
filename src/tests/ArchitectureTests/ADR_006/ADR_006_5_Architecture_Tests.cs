@@ -2,6 +2,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_006;
 
 using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 /// <summary>
 /// ADR-006_5: 特殊编号规则
@@ -45,21 +46,23 @@ public sealed class ADR_006_5_Architecture_Tests
                     if (!hasApproval)
                     {
                         // Note: This is informational only, requires manual review
-                        true.Should().BeTrue(
-                            $"⚠️ ADR-006_5_1 提示: 使用预留编号需要架构委员会批准\n\n" +
-                            $"文件: {file}\n" +
-                            $"编号: ADR-{number:D3}\n\n" +
-                            $"说明:\n" +
-                            $"ADR-007~009 是预留的元规则编号，需要架构委员会特别批准才能使用\n\n" +
-                            $"特殊编号说明:\n" +
-                            $"- ADR-006: 术语与编号宪法（已使用）\n" +
-                            $"- ADR-007~009: 预留给宪法层元规则\n" +
-                            $"- ADR-900: 架构测试与 CI 治理元规则（已使用）\n\n" +
-                            $"审批要求:\n" +
-                            $"1. 必须在架构委员会会议中讨论\n" +
-                            $"2. 需要全体成员一致同意\n" +
-                            $"3. 必须在 ADR Front Matter 中记录批准信息\n\n" +
-                            $"参考: ADR-006_5_1 - 元规则编号保护");
+                        true.Should().BeTrue(Build(
+                            ruleId: "ADR-006_5_1",
+                            violation: "使用预留编号需要架构委员会批准",
+                            evidence: new[] { $"文件: {file}", $"编号: ADR-{number:D3}" },
+                            analysis: "ADR-007~009 是预留的元规则编号，需要架构委员会特别批准才能使用",
+                            detail: "特殊编号说明:\n" +
+                                    "- ADR-006: 术语与编号宪法（已使用）\n" +
+                                    "- ADR-007~009: 预留给宪法层元规则\n" +
+                                    "- ADR-900: 架构测试与 CI 治理元规则（已使用）",
+                            remediation: new[]
+                            {
+                                "1. 必须在架构委员会会议中讨论",
+                                "2. 需要全体成员一致同意",
+                                "3. 必须在 ADR Front Matter 中记录批准信息"
+                            },
+                            reference: "ADR-006_5_1 - 元规则编号保护",
+                            level: "提示"));
                     }
                 }
 
@@ -73,13 +76,13 @@ public sealed class ADR_006_5_Architecture_Tests
                                     fileContent.Contains("CI") ||
                                     fileContent.Contains("治理");
 
-                    isMetaRule.Should().BeTrue(
-                        $"⚠️ ADR-006_5_1 提示: ADR-900 应只包含元规则内容\n\n" +
-                        $"文件: {file}\n\n" +
-                        $"说明:\n" +
-                        $"ADR-900 是治理层的核心元规则，定义架构测试与 CI 治理体系\n" +
-                        $"不应添加非元机制相关的内容\n\n" +
-                        $"参考: ADR-006_5_1 - 元规则编号保护");
+                    isMetaRule.Should().BeTrue(Build(
+                        ruleId: "ADR-006_5_1",
+                        violation: "ADR-900 应只包含元规则内容",
+                        evidence: new[] { $"文件: {file}" },
+                        analysis: "ADR-900 是治理层的核心元规则，定义架构测试与 CI 治理体系\n不应添加非元机制相关的内容",
+                        reference: "ADR-006_5_1 - 元规则编号保护",
+                        level: "提示"));
                 }
             }
         }

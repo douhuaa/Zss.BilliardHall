@@ -2,6 +2,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_006;
 
 using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
 
 /// <summary>
 /// ADR-006_2: 编号格式规则
@@ -33,21 +34,28 @@ public sealed class ADR_006_2_Architecture_Tests
                 var number = int.Parse(numberStr);
 
                 // All ADR numbers must be exactly 3 digits (000-999)
-                (numberStr.Length == 3).Should().BeTrue($"❌ ADR-006_2_1 违规: ADR 编号必须为3位格式\n\n" +
-                    $"文件: {file}\n" +
-                    $"当前编号: ADR-{numberStr}\n" +
-                    $"正确编号: ADR-{number:D3}\n\n" +
-                    $"修复建议：\n" +
-                    $"1. 所有 ADR 编号统一使用3位格式（000-999）\n" +
-                    $"2. 小于100的编号必须使用前导零\n" +
-                    $"   - 宪法层: ADR-001 到 ADR-009\n" +
-                    $"   - 其他: ADR-010 到 ADR-099\n" +
-                    $"3. 大于等于100的编号自然为3位\n" +
-                    $"   - 结构层: ADR-100 到 ADR-199\n" +
-                    $"   - 运行层: ADR-200 到 ADR-299\n" +
-                    $"   - 技术层: ADR-300 到 ADR-399\n" +
-                    $"   - 治理层: ADR-900 到 ADR-999\n\n" +
-                    $"参考: ADR-006_2_1 - 标准编号格式");
+                (numberStr.Length == 3).Should().BeTrue(Build(
+                    ruleId: "ADR-006_2_1",
+                    violation: "ADR 编号必须为3位格式",
+                    evidence: new[]
+                    {
+                        $"文件: {file}",
+                        $"当前编号: ADR-{numberStr}",
+                        $"正确编号: ADR-{number:D3}"
+                    },
+                    remediation: new[]
+                    {
+                        "1. 所有 ADR 编号统一使用3位格式（000-999）",
+                        "2. 小于100的编号必须使用前导零",
+                        "   - 宪法层: ADR-001 到 ADR-009",
+                        "   - 其他: ADR-010 到 ADR-099",
+                        "3. 大于等于100的编号自然为3位",
+                        "   - 结构层: ADR-100 到 ADR-199",
+                        "   - 运行层: ADR-200 到 ADR-299",
+                        "   - 技术层: ADR-300 到 ADR-399",
+                        "   - 治理层: ADR-900 到 ADR-999"
+                    },
+                    reference: "ADR-006_2_1 - 标准编号格式"));
             }
         }
     }
@@ -78,17 +86,19 @@ public sealed class ADR_006_2_Architecture_Tests
             // Check format: ADR-XXX-descriptive-title.md
             var isValid = System.Text.RegularExpressions.Regex.IsMatch(fileName, @"^ADR-\d+-[a-z0-9-]+\.md$");
 
-            isValid.Should().BeTrue($"❌ ADR-006_2_2 违规: ADR 文件名格式不正确\n\n" +
-                $"文件: {file}\n" +
-                $"文件名: {fileName}\n\n" +
-                $"正确格式: ADR-XXX-descriptive-title.md\n" +
-                $"要求:\n" +
-                $"1. 使用小写字母和连字符\n" +
-                $"2. 不要使用下划线或驼峰命名\n" +
-                $"3. 标题应简洁但具描述性\n\n" +
-                $"说明:\n" +
-                $"历史文件（如 ADR-004-Cpm-Final.md）已被豁免，但新 ADR 必须遵循规范\n\n" +
-                $"参考: ADR-006_2_2 - 文件命名规范");
+            isValid.Should().BeTrue(Build(
+                ruleId: "ADR-006_2_2",
+                violation: "ADR 文件名格式不正确",
+                evidence: new[] { $"文件: {file}", $"文件名: {fileName}" },
+                detail: "正确格式: ADR-XXX-descriptive-title.md",
+                remediation: new[]
+                {
+                    "1. 使用小写字母和连字符",
+                    "2. 不要使用下划线或驼峰命名",
+                    "3. 标题应简洁但具描述性"
+                },
+                analysis: "历史文件（如 ADR-004-Cpm-Final.md）已被豁免，但新 ADR 必须遵循规范",
+                reference: "ADR-006_2_2 - 文件命名规范"));
         }
     }
 
