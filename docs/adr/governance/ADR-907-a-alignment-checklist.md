@@ -168,10 +168,9 @@ status: Living Document
 
 - **Supersedes**: None
 - **Related**: 
-  - ADR-907: ArchitectureTests 执法治理体系
-  - ADR-907-A: ADR-907 对齐执行标准
-- **Depends on**: 
-  - ADR-907-A: ADR-907 对齐执行标准
+  - [ADR-907：ArchitectureTests 执法治理体系](ADR-907-architecture-tests-enforcement-governance.md)
+  - [ADR-907-A：对齐执行标准](adr-907-a-adr-alignment-execution-standard.md)
+- **Depends on**: None（本文档为配套追踪文档，不是正式 ADR）
 
 ---
 

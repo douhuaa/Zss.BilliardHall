@@ -273,12 +273,12 @@ superseded_by: null
 
 - 所有 ArchitectureTests 执法流程  
 - CI / Analyzer 自动裁决规则
-- [ADR-907-A：ADR-907 对齐执行标准](./adr-907-a-adr-alignment-execution-standard.md)
+- [ADR-907-A：对齐执行标准](./adr-907-a-adr-alignment-execution-standard.md)
 
 **Related**：
 
 - [ADR-122：测试代码组织与命名规范](../structure/ADR-122-test-organization-naming.md)
-- [ADR-907-A：ADR-907 对齐执行标准](./adr-907-a-adr-alignment-execution-standard.md)（执行附录）
+- [ADR-907-A：对齐执行标准](./adr-907-a-adr-alignment-execution-standard.md)（执行附录）
 
 **Supersedes**：
 - [ADR-903：ArchitectureTests 命名与组织规范](../archive/governance/ADR-903-architecture-tests-naming-organization.MD)
