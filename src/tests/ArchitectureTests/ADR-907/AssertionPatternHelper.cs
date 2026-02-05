@@ -68,23 +68,33 @@ internal static class AssertionPatternHelper
     /// - Group 2: FluentAssertions 方法名（BeTrue、BeEmpty 等）
     /// - Group 3: xUnit 方法名（True、False、Equal 等）
     /// - Group 4: 断言参数部分（包含消息字符串）- 由 AssertionArgsGroupIndex 常量指定
+    /// 
+    /// 重要维护说明：
+    /// - fluentMethods 和 xunitMethods 必须与 GetAssertionPatterns() 保持同步
+    /// - Assert.Fail 被有意排除，因为其签名不同（直接接受消息，无条件参数）
+    /// - 当前正则对嵌套括号的处理有限制，仅支持简单的断言调用
     /// </remarks>
     public static string GetAssertionMessagePattern()
     {
-        // 构建完整的断言方法列表（与 GetAssertionPatterns 保持一致）
-        // 注意：需要手动维护与 GetAssertionPatterns() 的同步
+        // 构建完整的断言方法列表
+        // ⚠️ 维护要求：与 GetAssertionPatterns() 保持同步（除 Assert.Fail 外）
         const string fluentMethods = "BeTrue|BeFalse|BeEmpty|NotBeEmpty|Contain|NotContain|" +
                                     "BeNull|NotBeNull|NotBeNullOrEmpty|NotBeNullOrWhiteSpace|" +
                                     "StartWith|EndWith|Match|MatchRegex|Be|NotBe|" +
                                     "BeGreaterThan|BeLessThan|BeGreaterThanOrEqualTo|BeLessThanOrEqualTo|" +
                                     "BeOfType|BeAssignableTo";
+        
+        // xUnit 方法列表（不包括 Assert.Fail，因为它的签名是 Fail(string message)）
         const string xunitMethods = "True|False|Equal|NotEqual|Matches";
         
         // 匹配格式：
-        // - Should().{Method}("message") 或 Should().{Method}($"message")
-        // - Assert.{Method}(condition, "message") 或 Assert.{Method}(condition, $"message")
-        // - 支持多行字符串连接：$"part1" + $"part2"
-        // 注意：Assert.Fail 被排除，因为它的签名不同（直接接受消息，无条件参数）
+        // - FluentAssertions: value.Should().{Method}("message")
+        // - xUnit: Assert.{Method}(condition, "message")
+        // - 支持字符串插值和多行连接：$"part1" + $"part2"
+        // 
+        // 已知限制：
+        // - 嵌套括号支持有限（例如：Assert.True(Method(param), "msg") 可能匹配失败）
+        // - 这对大多数架构测试已足够，因为它们通常使用简单的断言调用
         return $@"(Should\(\)\.({fluentMethods})|Assert\.({xunitMethods}))\s*\(([^)]*\$?""[^""]+""(?:\s*\+\s*\$?""[^""]+"")*)\s*\)";
     }
 
