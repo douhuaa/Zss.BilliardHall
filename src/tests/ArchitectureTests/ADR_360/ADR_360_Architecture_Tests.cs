@@ -9,12 +9,9 @@ public sealed class ADR_360_Architecture_Tests
     [Fact(DisplayName = "ADR-360_1_1: GitHub Workflows 配置文件应存在")]
     public void GitHub_Workflows_Configuration_Should_Exist()
     {
-        var currentDir = Directory.GetCurrentDirectory();
-        var repoRoot = FindRepositoryRoot(currentDir);
+        var repoRoot = TestEnvironment.RepositoryRoot;
 
-        (repoRoot != null).Should().BeTrue($"❌ ADR-360_1_1 违规: 无法找到仓库根目录\n\n问题分析：\n无法定位包含 .github 或 Directory.Build.props 的仓库根目录\n\n修复建议：\n1. 确保项目包含 .github 目录或 Directory.Build.props 文件\n2. 检查测试运行环境的工作目录设置\n\n参考：docs/adr/technical/ADR-360-cicd-pipeline-standardization.md（§1.1）");
-
-        var workflowsDir = Path.Combine(repoRoot!, ".github", "workflows");
+        var workflowsDir = Path.Combine(repoRoot, ".github", "workflows");
         Directory.Exists(workflowsDir).Should().BeTrue($"❌ ADR-360_1_1 违规: GitHub Workflows 目录不存在\n\n目录路径：{workflowsDir}\n\n问题分析：\n项目必须包含 .github/workflows 目录来定义 CI/CD 流程\n\n修复建议：\n1. 在项目根目录创建 .github/workflows 目录\n2. 添加至少一个 workflow 配置文件（*.yml 或 *.yaml）\n3. 配置自动化测试、构建和部署流程\n\n参考：docs/adr/technical/ADR-360-cicd-pipeline-standardization.md（§1.1）");
 
         // 验证至少有一个 workflow 文件
@@ -28,12 +25,9 @@ public sealed class ADR_360_Architecture_Tests
     [Fact(DisplayName = "ADR-360_1_2: PR 模板应存在")]
     public void Pull_Request_Template_Should_Exist()
     {
-        var currentDir = Directory.GetCurrentDirectory();
-        var repoRoot = FindRepositoryRoot(currentDir);
+        var repoRoot = TestEnvironment.RepositoryRoot;
 
-        (repoRoot != null).Should().BeTrue($"❌ ADR-360_1_2 违规: 无法找到仓库根目录\n\n问题分析：\n无法定位包含 .github 或 Directory.Build.props 的仓库根目录\n\n修复建议：\n1. 确保项目包含 .github 目录或 Directory.Build.props 文件\n2. 检查测试运行环境的工作目录设置\n\n参考：docs/adr/technical/ADR-360-cicd-pipeline-standardization.md（§1.2）");
-
-        var prTemplate = Path.Combine(repoRoot!, ".github", "PULL_REQUEST_TEMPLATE.md");
+        var prTemplate = Path.Combine(repoRoot, ".github", "PULL_REQUEST_TEMPLATE.md");
         File.Exists(prTemplate).Should().BeTrue($"❌ ADR-360_1_2 违规: PR 模板文件不存在\n\n文件路径：{prTemplate}\n\n问题分析：\n项目必须包含 PR 模板文件以规范 Pull Request 的描述\n\n修复建议：\n1. 在 .github 目录创建 PULL_REQUEST_TEMPLATE.md 文件\n2. 定义 PR 必填字段（目的、变更、测试等）\n3. 参考现有项目的 PR 模板格式\n\n参考：docs/adr/technical/ADR-360-cicd-pipeline-standardization.md（§1.2）");
     }
 
@@ -42,22 +36,7 @@ public sealed class ADR_360_Architecture_Tests
     {
         // 验证架构测试项目可以被发现和执行
         var currentAssembly = typeof(ADR_360_Architecture_Tests).Assembly;
-        (currentAssembly != null).Should().BeTrue($"❌ ADR-360_1_3 违规: 无法获取当前测试程序集\n\n问题分析：\n无法通过反射获取架构测试程序集，可能表示测试环境配置有问题\n\n修复建议：\n1. 检查测试项目配置是否正确\n2. 确保测试项目可以正常编译和加载\n3. 验证测试运行环境的设置\n\n参考：docs/adr/technical/ADR-360-cicd-pipeline-standardization.md（§1.3）");
+        currentAssembly.Should().NotBeNull($"❌ ADR-360_1_3 违规: 无法获取当前测试程序集\n\n问题分析：\n无法通过反射获取架构测试程序集，可能表示测试环境配置有问题\n\n修复建议：\n1. 检查测试项目配置是否正确\n2. 确保测试项目可以正常编译和加载\n3. 验证测试运行环境的设置\n\n参考：docs/adr/technical/ADR-360-cicd-pipeline-standardization.md（§1.3）");
         currentAssembly.GetName().Name.Should().Be("ArchitectureTests", $"❌ ADR-360_1_3 违规: 架构测试程序集名称不正确\n\n当前名称：{currentAssembly.GetName().Name}\n期望名称：ArchitectureTests\n\n问题分析：\n架构测试项目必须命名为 ArchitectureTests 以符合约定\n\n修复建议：\n1. 将测试项目重命名为 ArchitectureTests\n2. 更新项目引用和配置\n3. 确保 CI 脚本使用正确的项目名称\n\n参考：docs/adr/technical/ADR-360-cicd-pipeline-standardization.md（§1.3）");
-    }
-
-    private static string? FindRepositoryRoot(string startPath)
-    {
-        var dir = new DirectoryInfo(startPath);
-        while (dir != null)
-        {
-            if (Directory.Exists(Path.Combine(dir.FullName, ".github")) ||
-                File.Exists(Path.Combine(dir.FullName, "Directory.Build.props")))
-            {
-                return dir.FullName;
-            }
-            dir = dir.Parent;
-        }
-        return null;
     }
 }
