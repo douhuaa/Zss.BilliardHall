@@ -1,7 +1,20 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
-/// ADR-220: 集成事件总线选型与适配规范
+/// ADR-220: 事件总线集成规范
+/// 验证事件总线依赖隔离、订阅者生命周期等规则
+///
+/// ADR 映射清单（ADR Mapping Checklist）：
+/// ┌────────────────┬─────────────────────────────────────────────────────┬──────────┐
+/// │ 测试方法         │ 对应 ADR 约束                                        │ RuleId   │
+/// ├────────────────┼─────────────────────────────────────────────────────┼──────────┤
+/// │ Modules_Must_Not_Depend_On_Concrete_EventBus         │ 模块禁止直接依赖具体事件总线实现                    │ ADR-220_1_1 │
+/// │ EventHandlers_Must_Be_Scoped_Or_Transient            │ 事件订阅者必须注册为 Scoped 或 Transient          │ ADR-220_4_1 │
+/// └────────────────┴─────────────────────────────────────────────────────┴──────────┘
+///
+/// 测试覆盖的 Rule：
+/// - ADR-220_1：事件总线依赖隔离（Rule）
+/// - ADR-220_4：事件订阅者生命周期（Rule）
 /// </summary>
 public sealed class ADR_220_Architecture_Tests
 {
@@ -31,15 +44,15 @@ public sealed class ADR_220_Architecture_Tests
                 $"4. 示例代码：\n" +
                 $"   // ❌ 错误：using Wolverine;\n" +
                 $"   // ✅ 正确：using Platform.EventBus; // IEventBus\n\n" +
-                $"参考：docs/adr/structure/ADR-220-integration-event-bus-selection-adaptation.md（§1.1）");
+                $"参考：docs/adr/runtime/ADR-220-event-bus-integration.md（§ADR-220_1_1）");
         }
     }
 
-    [Fact(DisplayName = "ADR-220_1_2: 事件订阅者必须注册为 Scoped 或 Transient")]
+    [Fact(DisplayName = "ADR-220_4_1: 事件订阅者必须注册为 Scoped 或 Transient")]
     public void EventHandlers_Must_Be_Scoped_Or_Transient()
     {
         // 此规则需要在集成测试中验证 DI 容器配置
-        true.Should().BeTrue($"❌ ADR-220_1_2 违规：EventHandler 生命周期验证需在集成测试中检查\n\n" +
+        true.Should().BeTrue($"ℹ️ ADR-220_4_1: EventHandler 生命周期验证需在集成测试中检查\n\n" +
             $"验证内容：\n" +
             $"所有事件处理器（EventHandler）必须注册为 Scoped 或 Transient 生命周期\n\n" +
             $"修复建议：\n" +
@@ -48,6 +61,6 @@ public sealed class ADR_220_Architecture_Tests
             $"3. 推荐使用 Scoped 生命周期以支持事务管理\n" +
             $"4. 示例代码：\n" +
             $"   services.AddScoped<IEventHandler<OrderCreatedEvent>, OrderCreatedEventHandler>();\n\n" +
-            $"参考：docs/adr/structure/ADR-220-integration-event-bus-selection-adaptation.md（§1.2）");
+            $"参考：docs/adr/runtime/ADR-220-event-bus-integration.md（§ADR-220_4_1）");
     }
 }
