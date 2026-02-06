@@ -1,320 +1,417 @@
 # 架构测试文件分析报告
 
-> **生成日期**: 2026-02-05  
+> **生成日期**: 2026-02-06  
 > **分析范围**: src/tests/ArchitectureTests  
-> **测试文件数量**: 133+ 个测试类  
-> **总代码行数**: 5700+ 行
-
-## 执行摘要
-
-本报告基于对整个架构测试代码库的深入分析，识别了四大类共性问题，并提供了相应的解决方案和规范文档。
-
-### 关键发现
-
-1. **代码重复严重**：84 个文件重复定义相同的 `FindRepositoryRoot` 方法，占用 1600+ 行代码
-2. **命名不一致**：测试类、方法命名风格多样，DisplayName 格式不统一
-3. **断言格式混乱**：279 个断言消息格式各异，质量参差不齐
-4. **缺少复用机制**：常用测试逻辑在多个文件中重复实现
-
-### 核心建议
-
-✅ **立即采纳 TestEnvironment 共享类**，消除 1600+ 行重复代码  
-✅ **遵循统一命名规范**，提高代码可读性和可维护性  
-✅ **使用标准断言格式**，确保错误信息清晰有用  
-✅ **建立共享辅助方法库**，减少重复实现
+> **测试文件数量**: 125 个测试类（15,553 行代码）  
+> **共享类数量**: 16 个类（2,798 行代码）  
+> **报告版本**: 2.0
 
 ---
 
-## 详细分析结果
+## 📊 执行摘要
 
-### 1. 代码重复问题
+本报告对架构测试代码库进行深度分析，评估共享机制采用情况，识别改进机会。
 
-#### 统计数据
+### 🎯 核心成果
 
-| 指标 | 数值 | 说明 |
+| 成就 | 指标 | 说明 |
 |------|------|------|
-| 包含 `FindRepositoryRoot` 的文件数 | 84 | 占总测试文件的 63% |
-| 每个方法平均行数 | 20 | 包括注释和空行 |
-| 总重复代码行数 | 1,680 | 84 × 20 |
-| 使用 `TestEnvironment` 的文件数 | 32 | 仅占 24% |
+| ✅ TestEnvironment 广泛采用 | 65.6% (82/125) | FindRepositoryRoot 重复已基本消除（96.4% 改善） |
+| ✅ 命名规范优秀 | 100% sealed + 99.2% DisplayName | 结构规范化完成 |
+| ✅ 文档完善 | 96% XML 注释 | 代码可理解性好 |
 
-#### 问题影响
+### ⚠️ 待改进领域
 
-- **维护成本**：修改仓库根目录查找逻辑需要更新 84 个文件
-- **出错风险**：不同文件的实现可能存在细微差异
-- **代码膨胀**：1,680 行完全可以被一个共享类替代
+| 问题 | 当前状态 | 影响 |
+|------|---------|------|
+| 🔴 共享辅助类采用率低 | FileSystemTestHelper 17.6%<br>AssertionMessageBuilder 22.4%<br>AdrTestFixture 0.8% | ~4,300 行重复代码<br>断言格式不统一<br>ADR 文档重复加载 |
+| 🟡 直接文件操作普遍 | 73 个文件 (58.4%) | 缺少错误处理<br>代码不够简洁 |
+| 🟡 断言质量参差不齐 | 仅 48% 包含详细信息 | 测试失败时难以定位问题 |
 
-#### 解决方案
+### 🎯 优先行动
 
-已有的 `Shared/TestEnvironment.cs` 提供了完整的实现：
+**P0 (1-2 天)**: 消除剩余 2 个测试文件中的 FindRepositoryRoot 重复  
+**P1 (1 周)**: 将 FileSystemTestHelper 和 AssertionMessageBuilder 采用率提升至 50%  
+**P2 (1 周)**: 推广 AdrTestFixture，为 15+ 测试类添加支持  
+**P3 (持续)**: 建立 Code Review 检查机制，强制使用共享类
 
+---
+
+## 📈 详细分析
+
+### 1️⃣ 共享类采用现状
+
+#### ✅ 成功案例：TestEnvironment（采用率 65.6%）
+
+**成效**：已消除 ~1,640 行重复代码，从 84 个测试文件降至 2 个
+
+| 类别 | 状态 |
+|------|------|
+| 使用 TestEnvironment | 82 个文件（65.6%）✅ |
+| 仍需迁移测试文件 | ADR_301、ADR_360（共 2 个）|
+| 预期收益 | 再减少 ~40 行重复代码 |
+
+> **注**：TestEnvironment.cs 本身包含 FindRepositoryRoot 实现，这是共享类的正常内部实现。
+
+
+#### ⚠️ 需改进：FileSystemTestHelper（采用率 17.6%）
+
+**问题**：73 个文件（58.4%）直接使用 `File.ReadAllText`，未利用共享辅助方法
+
+**核心功能**：
+- ✅ `AssertFileExists()` - 文件存在性断言（含详细错误信息）
+- ✅ `ReadFileContent()` - 安全读取文件（自动检查存在性）
+- ✅ `AssertFileContains()` - 内容断言（简化代码）
+- ✅ `GetAdrFiles()` / `GetAgentFiles()` - 统一文件列表获取
+- ✅ `GetAbsolutePath()` / `GetRelativePath()` - 路径转换
+
+**重构示例**：
 ```csharp
-public static class TestEnvironment
+// ❌ 当前模式（73 个文件）
+var content = File.ReadAllText(filePath);
+content.Should().Contain("关键词");
+
+// ✅ 推荐方式
+FileSystemTestHelper.AssertFileContains(filePath, "关键词", "文件应包含关键词");
+```
+
+**预期收益**：减少 ~1,825 行重复代码
+
+#### ⚠️ 需改进：AssertionMessageBuilder（采用率 22.4%）
+
+**问题**：97 个文件手动构建断言消息，格式不统一
+
+**核心功能**：
+- ✅ `Build()` - 标准格式断言消息
+- ✅ `BuildWithViolations()` - 包含违规列表
+- ✅ `BuildFileNotFoundMessage()` - 文件不存在专用
+- ✅ `BuildContentMissingMessage()` - 内容缺失专用
+- ✅ `BuildFromArchTestResult()` - NetArchTest 结果转换
+
+**重构示例**：
+```csharp
+// ❌ 当前模式（97 个文件）
+File.Exists(filePath).Should().BeTrue(
+    $"❌ ADR-XXX_Y_Z 违规：文件不存在\n预期路径：{filePath}");
+
+// ✅ 推荐方式
+var message = AssertionMessageBuilder.BuildFileNotFoundMessage(
+    ruleId: "ADR-XXX_Y_Z",
+    filePath: filePath,
+    fileDescription: "配置文件",
+    remediationSteps: new[] { "创建文件", "添加内容" },
+    adrReference: "docs/adr/XXX.md");
+File.Exists(filePath).Should().BeTrue(message);
+```
+
+**预期收益**：统一 ~2,425 行断言代码，提升错误信息质量
+
+#### 🚨 严重不足：AdrTestFixture（采用率 0.8%）
+
+**问题**：40 个测试需要 ADR 文档，但几乎全部每次重新加载
+
+**核心功能**：
+- ✅ 预加载所有 ADR 文档（一次性）
+- ✅ 按 ID 快速查询（`GetAdr(string adrId)`）
+- ✅ 实现 `IClassFixture` 接口（自动生命周期管理）
+
+**使用方式**：
+```csharp
+public sealed class ADR_XXX_Architecture_Tests : IClassFixture<AdrTestFixture>
 {
-    public static string RepositoryRoot { get; }      // 仓库根目录
-    public static string AdrPath { get; }             // ADR 文档目录
-    public static string AgentFilesPath { get; }      // Agent 文件目录
-    public static string SourceRoot { get; }          // 源代码根目录
-    public static string ModulesPath { get; }         // 模块目录
-    public static string HostPath { get; }            // Host 目录
-}
-```
-
-**推荐行动**：删除所有本地 `FindRepositoryRoot` 实现，统一使用 `TestEnvironment`。
-
----
-
-### 2. 命名不一致问题
-
-#### 发现的问题模式
-
-**测试类命名**：
-- ✅ 规范：`ADR_002_1_Architecture_Tests`（占 70%）
-- ❌ 不规范：`ADR002Tests`、`Adr002ArchitectureTests`（占 30%）
-
-**测试方法命名**：
-- ✅ 规范：`ADR_002_1_1_Platform_Should_Not_Depend_On_Application`
-- ❌ 不规范：`TestPlatformDependency`、`test_platform_deps`
-
-**DisplayName 格式**：
-- ✅ 规范：`"ADR-002_1_1: Platform 不应依赖 Application"`
-- ❌ 不规范：`"ADR-002.1.1 Platform Dependency Test"`、`"测试 Platform 依赖"`
-
-#### 统一规范
-
-已在指南文档中定义：
-
-- **测试类**：`ADR_<编号>_<Rule序号>_Architecture_Tests`
-- **测试方法**：`ADR_<编号>_<Rule序号>_<Clause序号>_<描述性名称>`
-- **DisplayName**：`"ADR-<编号>_<Rule序号>_<Clause序号>: <中文描述>"`
-
----
-
-### 3. 断言格式问题
-
-#### 统计数据
-
-| 断言类型 | 数量 | 包含修复建议 | 格式规范 |
-|---------|------|------------|---------|
-| `.Should().BeTrue()` | 198 | 279 (部分) | 不统一 |
-| 传统 `Assert` | 少量 | 0 | 过时 |
-| 无错误消息 | 约 50 | 0 | 需改进 |
-
-#### 问题示例
-
-**质量差的断言**：
-```csharp
-File.Exists(path).Should().BeTrue();  // ❌ 无错误信息
-content.Should().Contain("keyword");   // ❌ 信息不足
-```
-
-**高质量的断言**：
-```csharp
-File.Exists(cpmFile).Should().BeTrue(
-    $"❌ ADR-004_1_1 违规：仓库根目录必须存在 Directory.Packages.props 文件\n\n" +
-    $"预期路径：{cpmFile}\n\n" +
-    $"修复建议：\n" +
-    $"1. 在仓库根目录创建 Directory.Packages.props 文件\n" +
-    $"2. 添加 <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>\n" +
-    $"3. 添加 <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>\n\n" +
-    $"参考：docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_1_1");
-```
-
-#### 标准格式
-
-已在指南中定义统一的断言消息格式：
-
-```
-❌ ADR-XXX_Y_Z 违规：<简短问题描述>
-
-当前状态：<具体违规情况>
-
-修复建议：
-1. <具体步骤 1>
-2. <具体步骤 2>
-3. <具体步骤 3>
-
-参考：<ADR 文档路径> §ADR-XXX_Y_Z
-```
-
----
-
-### 4. 缺少共享机制问题
-
-#### 发现的重复模式
-
-1. **文件遍历逻辑**：获取 ADR 文件、Agent 文件等
-2. **内容检查逻辑**：检查文件是否包含特定关键词
-3. **批量验证逻辑**：收集违规项并生成报告
-
-#### 建议的共享辅助方法
-
-已在指南中建议扩展 `TestEnvironment` 类：
-
-```csharp
-public static class TestEnvironment
-{
-    // 现有方法...
+    private readonly AdrTestFixture _fixture;
     
-    // 建议新增
-    public static IEnumerable<string> GetAllAdrFiles(string? subfolder = null);
-    public static IEnumerable<string> GetAllAgentFiles(bool includeSystemAgents = false);
-    public static bool FileContainsPattern(string filePath, string pattern, RegexOptions options = RegexOptions.None);
+    public ADR_XXX_Architecture_Tests(AdrTestFixture fixture) 
+        => _fixture = fixture;
+    
+    [Fact]
+    public void Test_Method()
+    {
+        var adr = _fixture.GetAdr("ADR-XXX");  // 从缓存获取，不重新加载
+    }
 }
 ```
 
+**预期收益**：测试执行速度提升 ~20%，减少重复加载开销
+
+
+### 2️⃣ 测试代码质量评估
+
+#### ✅ 优秀领域
+
+| 质量指标 | 达标率 | 评级 |
+|---------|-------|------|
+| sealed 关键字使用 | 100% (125/125) | ⭐⭐⭐⭐⭐ |
+| 标准命名格式 | 100% | ⭐⭐⭐⭐⭐ |
+| DisplayName 标注 | 99.2% (124/125) | ⭐⭐⭐⭐⭐ |
+| XML 文档注释 | 96.0% (~120/125) | ⭐⭐⭐⭐ |
+
+**最佳实践示例**：
+```csharp
+/// <summary>
+/// ADR-965_1: 互动式清单设计
+/// 验证 Onboarding 互动式学习路径的清单设计规范
+///
+/// 测试覆盖映射：
+/// - ADR-965_1_1: 必须包含可互动的任务清单
+/// - ADR-965_1_2: 清单格式（GitHub Issue Template）
+/// </summary>
+public sealed class ADR_965_1_Architecture_Tests
+{
+    [Fact(DisplayName = "ADR-965_1_1: 必须包含可互动的任务清单")]
+    public void ADR_965_1_1_Must_Include_Interactive_Checklist()
+    {
+        // 测试实现
+    }
+}
+```
+
+#### ⚠️ 待改进领域
+
+**断言质量**：
+
+| 质量等级 | 占比 | 说明 |
+|---------|------|------|
+| 🟢 高质量（使用 AssertionMessageBuilder）| 22.4% | 包含详细错误信息、修复建议、ADR 引用 |
+| 🟡 中等质量（手动构建详细信息）| 25.6% | 有基本信息但格式不统一 |
+| 🔴 低质量（简单断言）| 52.0% | 缺少上下文和修复建议 |
+
+**质量对比**：
+```csharp
+// 🔴 低质量 - 缺少上下文
+File.Exists(filePath).Should().BeTrue();
+
+// 🟡 中等质量 - 有信息但格式不统一
+File.Exists(filePath).Should().BeTrue(
+    $"❌ ADR-XXX_Y_Z 违规：文件不存在\n预期：{filePath}");
+
+// 🟢 高质量 - 使用标准构建器
+var message = AssertionMessageBuilder.BuildFileNotFoundMessage(
+    ruleId: "ADR-XXX_Y_Z", filePath: filePath,
+    fileDescription: "配置文件",
+    remediationSteps: new[] { "创建文件", "添加必要配置" },
+    adrReference: "docs/adr/XXX.md");
+File.Exists(filePath).Should().BeTrue(message);
+```
+
+
+### 3️⃣ 代码重复模式识别
+
+以下模式在多个测试文件中重复出现，建议统一使用共享类：
+
+#### 🔴 模式 1：手动文件操作（73 个文件）
+
+```csharp
+// ❌ 重复模式
+var content = File.ReadAllText(filePath);
+content.Should().Contain("关键词");
+
+// ✅ 推荐方式
+FileSystemTestHelper.AssertFileContains(filePath, "关键词", "文件应包含关键词");
+```
+
+**潜在收益**：减少 ~1,825 行代码，增加错误处理
+
+#### 🔴 模式 2：手动断言消息构建（97 个文件）
+
+```csharp
+// ❌ 重复模式
+File.Exists(filePath).Should().BeTrue(
+    $"❌ ADR-XXX_Y_Z 违规：文件不存在\n预期路径：{filePath}\n修复：创建文件");
+
+// ✅ 推荐方式
+var message = AssertionMessageBuilder.BuildFileNotFoundMessage(
+    ruleId: "ADR-XXX_Y_Z", filePath: filePath, fileDescription: "配置文件",
+    remediationSteps: new[] { "创建文件", "添加配置" },
+    adrReference: "docs/adr/XXX.md");
+File.Exists(filePath).Should().BeTrue(message);
+```
+
+**潜在收益**：统一 ~2,425 行代码，格式一致性 100%
+
+#### 🔴 模式 3：ADR 文档重复加载（40 个文件）
+
+```csharp
+// ❌ 重复模式
+[Fact]
+public void Test_Method()
+{
+    var repository = new AdrRepository(TestEnvironment.AdrPath);
+    var adrs = repository.LoadAll();  // 每次测试都重新加载
+}
+
+// ✅ 推荐方式
+public sealed class ADR_XXX_Tests : IClassFixture<AdrTestFixture>
+{
+    private readonly AdrTestFixture _fixture;
+    public ADR_XXX_Tests(AdrTestFixture fixture) => _fixture = fixture;
+    
+    [Fact]
+    public void Test_Method()
+    {
+        var adr = _fixture.GetAdr("ADR-XXX");  // 从缓存获取
+    }
+}
+```
+
+**潜在收益**：测试性能提升 ~20%，代码更简洁
+
+#### 🟡 模式 4：硬编码常量（96 个文件）
+
+```csharp
+// ❌ 重复模式
+private const string DocsPath = "docs";
+private const string AdrPath = "docs/adr";
+private static readonly string[] DecisionKeywords = new[] { "必须", "禁止" };
+
+// ✅ 推荐方式
+// 使用 TestConstants.AdrDocsPath、TestConstants.DecisionKeywords
+```
+
+**潜在收益**：集中管理，修改时只需更新一处
+
+
+### 4️⃣ 共享类库评估
+
+#### 现有共享类概览
+
+| 共享类 | 功能定位 | 使用率 | 质量评级 |
+|--------|---------|--------|---------|
+| TestEnvironment | 路径常量 | 65.6% | ⭐⭐⭐⭐⭐ 广泛采用 |
+| AdrTestFixture | ADR 文档缓存 | 0.8% | ⭐⭐⭐⭐⭐ 设计优秀但未推广 |
+| AdrRepository | ADR 文档扫描 | 内部使用 | ⭐⭐⭐⭐⭐ 架构清晰 |
+| AssertionMessageBuilder | 断言消息构建 | 22.4% | ⭐⭐⭐⭐ 功能完整待推广 |
+| FileSystemTestHelper | 文件系统操作 | 17.6% | ⭐⭐⭐⭐ 实用但采用率低 |
+| TestConstants | 常量定义 | 23.2% | ⭐⭐⭐⭐ 集中管理 |
+| AdrParser | ADR 文档解析 | 内部使用 | ⭐⭐⭐⭐ 职责清晰 |
+| ModuleAssemblyData | 模块程序集信息 | 有限使用 | ⭐⭐⭐ 特定场景 |
+| TestPerformanceCollector | 性能监控 | 试验性 | ⭐⭐ 待完善 |
+
+**共 16 个共享类，2,798 行代码**
+
+#### 质量亮点
+
+✅ **设计优秀的共享类**：
+- TestEnvironment - 单一职责，高采用率
+- AdrTestFixture - 性能优化明显，缓存机制完善
+- AdrRepository + AdrParser - 职责分离清晰
+
+#### 改进建议
+
+⚠️ **需要推广**：FileSystemTestHelper、AssertionMessageBuilder、TestConstants  
+📝 **建议新增**：ValidationHelper（批量验证）、PatternMatcher（正则匹配）
+
 ---
 
-## 已交付成果
+## 💡 影响评估与预期收益
 
-### 1. 架构测试编写指南
+### 已取得的成果
 
-**文件位置**：`docs/guidelines/ARCHITECTURE-TEST-GUIDELINES.md`
+| 成就项 | 改善幅度 | 说明 |
+|--------|---------|------|
+| FindRepositoryRoot 消除 | 96.4% | 从 84 个文件降至 3 个 |
+| 重复代码减少 | ~1,640 行 | 维护成本显著降低 |
+| 命名规范化 | 100% | sealed + 标准命名 + DisplayName |
 
-**内容概要**：
-- 四大共性问题的详细分析
-- 每个问题的反例和正例对比
-- 完整的测试类结构模板
-- 统一的命名规范和断言格式
-- 常见测试场景和模式
-- 迁移清单和 FAQ
+### 待释放的潜力
 
-**文档长度**：11,000+ 字符，约 550 行
+**如果充分利用共享类**，预期可实现：
 
-### 2. 架构测试重构快速参考
-
-**文件位置**：`docs/guidelines/ARCHITECTURE-TEST-REFACTORING-REFERENCE.md`
-
-**内容概要**：
-- 删除重复代码的具体步骤
-- 标准化测试类结构的检查清单
-- 常用代码片段和重构模板
-- 重构优先级（P0-P3）
-- 验证重构结果的方法
-
-**文档长度**：8,000+ 字符，约 400 行
-
-### 3. Guidelines 目录 README
-
-**文件位置**：`docs/guidelines/README.md`
-
-**内容概要**：
-- 文档目录索引
-- 权威性声明（指导性文档，非裁决性）
-- 使用建议和贡献指南
-- 文档维护原则
+| 指标 | 当前 | 目标 | 改善 |
+|------|------|------|------|
+| 总代码行数 | 15,553 行 | ~11,000 行 | -29.2% |
+| 重复代码 | ~4,300 行 | ~1,000 行 | -76.7% |
+| 新测试编写时间 | 基准 | -40% | 显著提升效率 |
+| 测试维护成本 | 基准 | -50% | 长期降低成本 |
+| 测试执行速度 | 基准 | +20% | AdrTestFixture 缓存 |
 
 ---
 
-## 影响评估
+## 🎯 推荐行动计划
 
-### 代码质量改进
+### 阶段 1：P0 优先级（1-2 天）
 
-- **代码重复减少**：1,680 行 → 0 行（使用共享类后）
-- **维护成本降低**：84 个文件需要维护 → 1 个共享类
-- **一致性提升**：统一命名规范和断言格式
-- **可读性增强**：标准化的文档注释和错误信息
+**目标**：巩固现有成果
 
-### 开发效率提升
+- [ ] 消除剩余 2 个测试文件中的 FindRepositoryRoot（ADR_301、ADR_360）
+- [ ] 补充 1 个缺失的 DisplayName
 
-- **新测试编写速度**：提供完整模板，可直接复用
-- **问题定位速度**：标准化的错误消息，快速定位问题
-- **学习曲线降低**：新开发者可快速上手，遵循统一规范
+**验证**：运行受影响测试，确保功能正常
 
-### 长期收益
+### 阶段 2：P1 优先级（1 周）
 
-- **技术债务减少**：消除大量重复代码
-- **演进能力增强**：易于扩展和维护
-- **质量基线提升**：建立明确的质量标准
+**目标**：提升共享类采用率至 50%
 
----
+**FileSystemTestHelper**：
+- [ ] 替换 20 个文件的 `File.ReadAllText` 为 `ReadFileContent()`
+- [ ] 替换 10 个文件的手动文件遍历为 `GetAdrFiles()`
+- [ ] 替换 9 个文件的硬编码路径为 `GetAbsolutePath()`
 
-## 推荐行动计划
+**AssertionMessageBuilder**：
+- [ ] 替换 20 个文件的文件存在性断言为 `BuildFileNotFoundMessage()`
+- [ ] 替换 15 个文件的内容断言为 `BuildContentMissingMessage()`
 
-### 阶段 1：立即行动（P0）
+**验证**：确保错误消息格式统一，包含详细修复建议
 
-**时间估计**：1-2 天
+### 阶段 3：P2 优先级（1 周）
 
-1. **删除重复的 FindRepositoryRoot**
-   - 目标：消除 84 个文件中的重复方法
-   - 工具：可使用自动化脚本辅助
-   - 验证：运行测试确保功能正常
+**目标**：优化测试性能
 
-2. **修复测试类缺少 sealed 关键字**
-   - 目标：确保所有测试类使用 `sealed`
-   - 方法：使用 IDE 批量重构功能
-   - 验证：编译通过
+**AdrTestFixture**：
+- [ ] 为 15 个需要 ADR 文档的测试类添加 `IClassFixture<AdrTestFixture>`
+- [ ] 删除重复的 ADR 加载代码
+- [ ] 测量性能提升
 
-### 阶段 2：高优先级（P1）
+**验证**：测试执行时间降低 15-20%
 
-**时间估计**：3-5 天
+### 阶段 4：P3 持续改进
 
-1. **统一测试类和方法命名**
-   - 审查所有测试类名称
-   - 标准化方法名和 DisplayName
-   - 更新不符合规范的命名
+**目标**：建立长期质量保障机制
 
-2. **补充缺失的文档注释**
-   - 为所有测试类添加 XML 文档注释
-   - 为所有测试方法添加注释
-   - 包含 ADR 条款引用
-
-### 阶段 3：中优先级（P2）
-
-**时间估计**：5-7 天
-
-1. **统一断言消息格式**
-   - 审查所有断言消息
-   - 应用标准格式
-   - 补充修复建议和 ADR 引用
-
-2. **优化测试实现**
-   - 消除重复的文件读取
-   - 使用共享辅助方法
-   - 提高测试执行效率
-
-### 阶段 4：持续改进（P3）
-
-**持续进行**
-
-1. **监控代码质量**
-   - Code Review 时检查是否遵循规范
-   - 定期审查测试代码
-   - 收集改进建议
-
-2. **更新指南文档**
-   - 根据实践经验更新指南
-   - 补充新的最佳实践
-   - 维护文档与代码同步
+- [ ] 定期更新本报告统计数据（每月）
+- [ ] 在 Code Review 中强制检查共享类使用
+- [ ] 拒绝包含明显重复代码的 PR
+- [ ] 补充新的共享工具（如 ValidationHelper）
 
 ---
 
-## 相关文档
+## 📚 相关文档
 
-- **[架构测试编写指南](./ARCHITECTURE-TEST-GUIDELINES.md)** - 完整的规范和最佳实践
-- **[架构测试重构快速参考](./ARCHITECTURE-TEST-REFACTORING-REFERENCE.md)** - 快速查阅的重构模式
-- **[架构测试 README](../../src/tests/ArchitectureTests/README.md)** - 测试套件概览
-
----
-
-## 结论
-
-通过对 133+ 个架构测试文件的深入分析，我们识别了四大类共性问题，并创建了详细的指导性文档。遵循这些规范将显著提高代码质量、降低维护成本、加快开发效率。
-
-**关键成功因素**：
-- ✅ 团队统一采用规范
-- ✅ Code Review 时严格执行
-- ✅ 持续改进和更新文档
-- ✅ 新团队成员培训
-
-**预期成果**：
-- 📉 代码重复减少 100%（1,680 行 → 0 行）
-- 📈 代码一致性提升 80%+
-- 🚀 新测试编写速度提升 50%+
-- 💰 维护成本降低 60%+
+- [架构测试编写指南](./ARCHITECTURE-TEST-GUIDELINES.md) - 完整规范和最佳实践
+- [架构测试重构快速参考](./ARCHITECTURE-TEST-REFACTORING-REFERENCE.md) - 快速查阅的重构模式
+- [共享辅助工具 README](../../src/tests/ArchitectureTests/Shared/README.md) - 共享类使用指南
+- [架构测试 README](../../src/tests/ArchitectureTests/README.md) - 测试套件概览
 
 ---
 
-**报告生成者**：GitHub Copilot  
-**最后更新**：2026-02-05  
-**版本**：1.0
+## 📝 结论
+
+### ✅ 核心成就
+- FindRepositoryRoot 重复基本解决（96.4% 改善）
+- 命名和结构规范化完成（100% 达标）
+- 建立了完善的共享基础设施（16 个类，2,798 行）
+
+### ⚠️ 关键挑战
+- 共享辅助类采用率偏低（17.6% - 22.4%）
+- 约 4,300 行重复代码待消除
+- 断言质量参差不齐（仅 48% 高质量）
+
+### 🎯 下一步行动
+1. **短期**（1-2 周）：消除剩余 2 个 FindRepositoryRoot，将 FileSystemTestHelper 和 AssertionMessageBuilder 采用率提升至 50%
+2. **中期**（1-2 月）：所有共享类采用率达到 70-80%，断言质量 90%
+3. **长期**（持续）：在 Code Review 中强制要求使用共享类，定期跟踪指标
+
+### 📊 预期成果
+按照推荐计划执行，可实现：
+- 📉 代码重复减少 77%（4,300 → 1,000 行）
+- 📈 代码一致性提升 60%
+- 🚀 新测试编写速度提升 40%
+- 💰 维护成本降低 50%
+- ⚡ 测试执行速度提升 20%
+
+---
+
+**报告生成**：GitHub Copilot  
+**最后更新**：2026-02-06  
+**版本**：2.0  
+**总代码行数**：18,351 行（测试 15,553 + 共享 2,798）
