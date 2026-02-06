@@ -60,17 +60,17 @@ public sealed class ADR_907_2_Architecture_Tests
             $"  3. 每个 ADR 的测试文件放在对应子目录中\n\n" +
             $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.2");
 
-        // 验证至少存在按 ADR 编号组织的目录
-        var adrDirectories = Directory.GetDirectories(testsDirectory, "ADR-*", SearchOption.TopDirectoryOnly);
-        var hasAdrDirectory = adrDirectories.Length > 0 || Directory.Exists(Path.Combine(testsDirectory, "ADR"));
+        // 验证至少存在按 ADR 编号组织的目录（支持 ADR_XXX 格式）
+        var adrDirectories = Directory.GetDirectories(testsDirectory, "ADR_*", SearchOption.TopDirectoryOnly);
+        var hasAdrDirectory = adrDirectories.Length > 0;
 
         hasAdrDirectory.Should().BeTrue(
             $"❌ ADR-907_2_2 违规：未找到按 ADR 编号组织的测试目录\n\n" +
             $"当前路径：{testsDirectory}\n" +
-            $"预期格式：ADR-XXX/ 或 ADR/ADR_XXX_Architecture_Tests.cs\n\n" +
+            $"预期格式：ADR_XXX/\n\n" +
             $"修复建议：\n" +
-            $"  1. 为每个 ADR 创建独立子目录：/ADR-001/, /ADR-907/ 等\n" +
-            $"  2. 或使用集中式 /ADR/ 目录存放所有测试\n\n" +
+            $"  1. 为每个 ADR 创建独立子目录：/ADR_001/, /ADR_907/ 等\n" +
+            $"  2. 使用下划线格式命名：ADR_XXX\n\n" +
             $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.2");
     }
 
@@ -82,50 +82,59 @@ public sealed class ADR_907_2_Architecture_Tests
     public void ADR_907_2_3_Test_Classes_Must_Map_To_Single_ADR()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_3 无法执行：测试目录不存在 {testsDirectory}");
 
-        var testFiles = Directory.GetFiles(testsDirectory, "*.cs");
+        // 获取所有 ADR_XXX 目录中的测试文件
+        var adrDirectories = Directory.GetDirectories(testsDirectory, "ADR_*", SearchOption.TopDirectoryOnly);
         var violations = new List<string>();
 
-        foreach (var testFile in testFiles)
+        foreach (var adrDir in adrDirectories)
         {
-            var fileName = Path.GetFileName(testFile);
-
-            // 测试类命名必须遵循 ADR_XXXX_Architecture_Tests.cs 格式
-            if (!Regex.IsMatch(fileName, @"^ADR_\d{3,4}_Architecture_Tests\.cs$"))
+            var testFiles = Directory.GetFiles(adrDir, "*.cs");
+            foreach (var testFile in testFiles)
             {
-                violations.Add($"  • {fileName} - 命名格式不符合规范");
-                continue;
-            }
+                var fileName = Path.GetFileName(testFile);
 
-            // 验证文件内容主要测试单一 ADR
-            var content = File.ReadAllText(testFile);
-
-            // 提取文件名中的 ADR 编号
-            var fileAdrMatch = Regex.Match(fileName, @"ADR_(\d{3,4})_");
-            if (!fileAdrMatch.Success)
-                continue;
-
-            var fileAdr = fileAdrMatch.Groups[1].Value;
-
-            // 查找测试方法的 DisplayName
-            var displayNames = Regex.Matches(content, @"DisplayName\s*=\s*""([^""]+)""");
-
-            foreach (Match match in displayNames)
-            {
-                var displayName = match.Groups[1].Value;
-                // 检查 DisplayName 是否明确测试其他 ADR（不是依赖引用）
-                var adrMatch = Regex.Match(displayName, @"ADR-(\d{3,4})");
-                if (adrMatch.Success)
+                // 测试类命名必须遵循以下格式之一：
+                // - ADR_XXXX_Architecture_Tests.cs
+                // - ADR_XXXX_N_Architecture_Tests.cs
+                // - ADR_XXXX_X_N_Architecture_Tests.cs (例如 ADR_907_A_1_Architecture_Tests.cs)
+                if (!Regex.IsMatch(fileName, @"^ADR_\d{3,4}(?:_[A-Z])?(?:_\d+)?_Architecture_Tests\.cs$") &&
+                    !fileName.Equals("AssertionPatternHelper.cs")) // 跳过辅助类
                 {
-                    var testAdr = adrMatch.Groups[1].Value.PadLeft(4, '0');
-                    var normalizedFileAdr = fileAdr.PadLeft(4, '0');
-                    if (testAdr != normalizedFileAdr)
+                    violations.Add($"  • {fileName} - 命名格式不符合规范");
+                    continue;
+                }
+
+                // 验证文件内容主要测试单一 ADR
+                var content = File.ReadAllText(testFile);
+
+                // 提取文件名中的 ADR 编号
+                var fileAdrMatch = Regex.Match(fileName, @"ADR_(\d{3,4})");
+                if (!fileAdrMatch.Success)
+                    continue;
+
+                var fileAdr = fileAdrMatch.Groups[1].Value;
+
+                // 查找测试方法的 DisplayName
+                var displayNames = Regex.Matches(content, @"DisplayName\s*=\s*""([^""]+)""");
+
+                foreach (Match match in displayNames)
+                {
+                    var displayName = match.Groups[1].Value;
+                    // 检查 DisplayName 是否明确测试其他 ADR（不是依赖引用）
+                    var adrMatch = Regex.Match(displayName, @"ADR-(\d{3,4})");
+                    if (adrMatch.Success)
                     {
-                        violations.Add($"  • {fileName} - DisplayName 测试了不同的 ADR: ADR-{testAdr}");
-                        break;
+                        var testAdr = adrMatch.Groups[1].Value.PadLeft(4, '0');
+                        var normalizedFileAdr = fileAdr.PadLeft(4, '0');
+                        if (testAdr != normalizedFileAdr)
+                        {
+                            violations.Add($"  • {fileName} - DisplayName 测试了不同的 ADR: ADR-{testAdr}");
+                            break;
+                        }
                     }
                 }
             }
@@ -136,7 +145,7 @@ public sealed class ADR_907_2_Architecture_Tests
                 $"修复建议：\n" +
                 $"  1. 每个测试类只能覆盖一个 ADR\n" +
                 $"  2. 如果需要测试多个 ADR，创建多个测试文件\n" +
-                $"  3. 测试类命名：ADR_<编号>_Architecture_Tests\n" +
+                $"  3. 测试类命名：ADR_<编号>_Architecture_Tests 或 ADR_<编号>_<子编号>_Architecture_Tests\n" +
                 $"  4. 引用依赖的 ADR（如 ADR-900）是允许的\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.3");
     }
@@ -149,30 +158,42 @@ public sealed class ADR_907_2_Architecture_Tests
     public void ADR_907_2_4_Test_Class_Names_Must_Follow_Convention()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_4 无法执行：测试目录不存在 {testsDirectory}");
 
-        var testFiles = Directory.GetFiles(testsDirectory, "*.cs");
+        // 获取所有 ADR_XXX 目录中的测试文件
+        var adrDirectories = Directory.GetDirectories(testsDirectory, "ADR_*", SearchOption.TopDirectoryOnly);
         var violations = new List<string>();
 
-        // 正则表达式：ADR_<3或4位数字>_Architecture_Tests.cs
-        // 推荐使用 4 位（如 ADR_0920），但也接受 3 位（如 ADR_920）
-        var namingPattern = @"^ADR_\d{3,4}_Architecture_Tests\.cs$";
+        // 正则表达式匹配以下格式：
+        // - ADR_<3或4位数字>_Architecture_Tests.cs
+        // - ADR_<3或4位数字>_<子编号>_Architecture_Tests.cs  
+        // - ADR_<3或4位数字>_<字母>_<子编号>_Architecture_Tests.cs
+        // 特殊文件跳过
+        var namingPattern = @"^ADR_\d{3,4}(?:_[A-Z])?(?:_\d+)?_Architecture_Tests\.cs$";
+        var helperFiles = new[] { "AssertionPatternHelper.cs" };
 
-        foreach (var testFile in testFiles)
+        foreach (var adrDir in adrDirectories)
         {
-            var fileName = Path.GetFileName(testFile);
-            if (!Regex.IsMatch(fileName, namingPattern))
+            var testFiles = Directory.GetFiles(adrDir, "*.cs");
+            foreach (var testFile in testFiles)
             {
-                violations.Add($"  • {fileName}");
+                var fileName = Path.GetFileName(testFile);
+                if (helperFiles.Contains(fileName))
+                    continue;
+                    
+                if (!Regex.IsMatch(fileName, namingPattern))
+                {
+                    violations.Add($"  • {Path.GetFileName(adrDir)}/{fileName}");
+                }
             }
         }
 
         violations.Should().BeEmpty($"❌ ADR-907_2_4 违规：以下测试类命名不符合规范\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
                 $"修复建议：\n" +
-                $"  1. 测试类命名格式：ADR_<编号>_Architecture_Tests.cs\n" +
+                $"  1. 测试类命名格式：ADR_<编号>_Architecture_Tests.cs 或 ADR_<编号>_<子编号>_Architecture_Tests.cs\n" +
                 $"  2. 推荐使用 4 位编号：ADR_0920_Architecture_Tests.cs\n" +
                 $"  3. 也接受 3 位编号：ADR_920_Architecture_Tests.cs\n\n" +
                 $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.4");
@@ -186,38 +207,43 @@ public sealed class ADR_907_2_Architecture_Tests
     public void ADR_907_2_5_Test_Methods_Must_Map_To_Subrules()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_5 无法执行：测试目录不存在 {testsDirectory}");
 
-        var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
+        // 获取所有 ADR_XXX 目录中的测试文件
+        var adrDirectories = Directory.GetDirectories(testsDirectory, "ADR_*", SearchOption.TopDirectoryOnly);
         var warnings = new List<string>();
 
-        foreach (var testFile in testFiles)
+        foreach (var adrDir in adrDirectories)
         {
-            var fileName = Path.GetFileName(testFile);
-            var content = File.ReadAllText(testFile);
-
-            // 查找所有测试方法（标记了 [Fact] 或 [Theory]）
-            var factMethods = Regex.Matches(content, @"\[Fact.*?\]\s+public\s+void\s+(\w+)\s*\(");
-            var theoryMethods = Regex.Matches(content, @"\[Theory.*?\]\s+public\s+void\s+(\w+)\s*\(");
-
-            var allMethods = factMethods.Cast<Match>()
-                .Concat(theoryMethods.Cast<Match>())
-                .Select(m => m.Groups[1].Value)
-                .ToList();
-
-            // 检查方法名是否包含 ADR 子规则引用
-            // 推荐格式：ADR_<编号>_<Rule>_<Clause>_<描述> 或在 DisplayName 中引用 ADR-<编号>_<Rule>_<Clause>
-            foreach (var methodName in allMethods)
+            var testFiles = Directory.GetFiles(adrDir, "ADR_*_Architecture_Tests.cs");
+            foreach (var testFile in testFiles)
             {
-                // 检查方法名是否以 ADR_ 开头或在 DisplayName 中引用了 ADR
-                var hasAdrReference = methodName.StartsWith("ADR_") ||
-                                     Regex.IsMatch(content, $@"\[(?:Fact|Theory).*?DisplayName\s*=\s*""[^""]*ADR-\d{{3,4}}[_\d]*[^""]*""[^\n]*\s+public\s+void\s+{Regex.Escape(methodName)}");
+                var fileName = Path.GetFileName(testFile);
+                var content = File.ReadAllText(testFile);
 
-                if (!hasAdrReference)
+                // 查找所有测试方法（标记了 [Fact] 或 [Theory]）
+                var factMethods = Regex.Matches(content, @"\[Fact.*?\]\s+public\s+void\s+(\w+)\s*\(");
+                var theoryMethods = Regex.Matches(content, @"\[Theory.*?\]\s+public\s+void\s+(\w+)\s*\(");
+
+                var allMethods = factMethods.Cast<Match>()
+                    .Concat(theoryMethods.Cast<Match>())
+                    .Select(m => m.Groups[1].Value)
+                    .ToList();
+
+                // 检查方法名是否包含 ADR 子规则引用
+                // 推荐格式：ADR_<编号>_<Rule>_<Clause>_<描述> 或在 DisplayName 中引用 ADR-<编号>_<Rule>_<Clause>
+                foreach (var methodName in allMethods)
                 {
-                    warnings.Add($"  • {fileName}.{methodName} - 方法名或 DisplayName 缺少 ADR 引用");
+                    // 检查方法名是否以 ADR_ 开头或在 DisplayName 中引用了 ADR
+                    var hasAdrReference = methodName.StartsWith("ADR_") ||
+                                         Regex.IsMatch(content, $@"\[(?:Fact|Theory).*?DisplayName\s*=\s*""[^""]*ADR-\d{{3,4}}[_\d]*[^""]*""[^\n]*\s+public\s+void\s+{Regex.Escape(methodName)}");
+
+                    if (!hasAdrReference)
+                    {
+                        warnings.Add($"  • {fileName}.{methodName} - 方法名或 DisplayName 缺少 ADR 引用");
+                    }
                 }
             }
         }
@@ -245,15 +271,19 @@ public sealed class ADR_907_2_Architecture_Tests
     public void ADR_907_2_6_Failure_Messages_Must_Reference_ADR()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_6 无法执行：测试目录不存在 {testsDirectory}");
 
-        var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
+        // 获取所有 ADR_XXX 目录中的测试文件
+        var adrDirectories = Directory.GetDirectories(testsDirectory, "ADR_*", SearchOption.TopDirectoryOnly);
         var violations = new List<string>();
 
-        foreach (var testFile in testFiles)
+        foreach (var adrDir in adrDirectories)
         {
+            var testFiles = Directory.GetFiles(adrDir, "ADR_*_Architecture_Tests.cs");
+            foreach (var testFile in testFiles)
+            {
             var fileName = Path.GetFileName(testFile);
             var content = File.ReadAllText(testFile);
 
@@ -285,6 +315,7 @@ public sealed class ADR_907_2_Architecture_Tests
                 }
             }
         }
+        }
 
         if (violations.Any())
         {
@@ -312,15 +343,19 @@ public sealed class ADR_907_2_Architecture_Tests
     public void ADR_907_2_7_Tests_Must_Have_Valid_Assertions()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_7 无法执行：测试目录不存在 {testsDirectory}");
 
-        var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
+        // 获取所有 ADR_XXX 目录中的测试文件
+        var adrDirectories = Directory.GetDirectories(testsDirectory, "ADR_*", SearchOption.TopDirectoryOnly);
         var violations = new List<string>();
 
-        foreach (var testFile in testFiles)
+        foreach (var adrDir in adrDirectories)
         {
+            var testFiles = Directory.GetFiles(adrDir, "ADR_*_Architecture_Tests.cs");
+            foreach (var testFile in testFiles)
+            {
             var fileName = Path.GetFileName(testFile);
             var content = File.ReadAllText(testFile);
 
@@ -345,6 +380,7 @@ public sealed class ADR_907_2_Architecture_Tests
                 }
             }
         }
+        }
 
         violations.Should().BeEmpty($"❌ ADR-907_2_7 违规：以下测试包含空弱断言\n\n" +
                 $"{string.Join("\n", violations)}\n\n" +
@@ -364,15 +400,19 @@ public sealed class ADR_907_2_Architecture_Tests
     public void ADR_907_2_8_Tests_Must_Not_Be_Skipped()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
+        var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_8 无法执行：测试目录不存在 {testsDirectory}");
 
-        var testFiles = Directory.GetFiles(testsDirectory, "ADR_*_Architecture_Tests.cs");
+        // 获取所有 ADR_XXX 目录中的测试文件
+        var adrDirectories = Directory.GetDirectories(testsDirectory, "ADR_*", SearchOption.TopDirectoryOnly);
         var violations = new List<string>();
 
-        foreach (var testFile in testFiles)
+        foreach (var adrDir in adrDirectories)
         {
+            var testFiles = Directory.GetFiles(adrDir, "ADR_*_Architecture_Tests.cs");
+            foreach (var testFile in testFiles)
+            {
             var fileName = Path.GetFileName(testFile);
             var content = File.ReadAllText(testFile);
 
@@ -395,6 +435,7 @@ public sealed class ADR_907_2_Architecture_Tests
                     break;
                 }
             }
+        }
         }
 
         violations.Should().BeEmpty($"❌ ADR-907_2_8 违规：以下测试被跳过或条件禁用\n\n" +
