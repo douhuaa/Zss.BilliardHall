@@ -21,3 +21,100 @@
       - "ADR database"
     feedback:
       - "Open guardian-false-decision issue for broken links"
+
+  - id: DM-003
+    description: "验证 ADR 标题级别语义约束（ADR-946）"
+    action: "检查 ADR 文档标题结构和语义层级"
+    conditions:
+      - "Push to docs/adr/"
+      - "Pull request with ADR changes"
+    output: "Pass / Fail / Uncertain"
+    rules:
+      - "每个 ADR 必须且仅有一个 # 标题"
+      - "## 级别标题仅用于 Relationships、Decision、Enforcement、Glossary 等语义块"
+      - "模板、示例必须使用 ### 或更低级别标题"
+      - "禁止在代码块中使用语义 ## 标题"
+    tools:
+      - "markdown-parser"
+      - "heading-level-validator"
+    feedback:
+      - "标记标题级别违规"
+      - "提供修复建议"
+      - "引用 ADR-946 具体条款"
+
+  - id: DM-004
+    description: "验证关系声明区结构（ADR-947）"
+    action: "检查 ADR 关系声明区的结构和安全性"
+    conditions:
+      - "Push to docs/adr/"
+      - "Pull request with ADR changes"
+    output: "Pass / Fail / Uncertain"
+    rules:
+      - "每个 ADR 必须且仅有一个 ## Relationships 章节"
+      - "关系声明区仅包含列表项，不包含说明性段落或子章节"
+      - "禁止显式循环声明（A→B 且 B→A）"
+      - "模板示例必须降级为 ### 或更低级别"
+    tools:
+      - "relationship-parser"
+      - "circular-dependency-detector"
+    feedback:
+      - "标记关系声明违规"
+      - "检测循环依赖"
+      - "引用 ADR-947 具体条款"
+
+  - id: DM-005
+    description: "文档更新完整性检查"
+    action: "验证文档变更的完整性"
+    conditions:
+      - "Pull request with documentation changes"
+    output: "Pass / Fail / Uncertain"
+    checklist:
+      基础检查:
+        - "识别受影响的文档"
+        - "更新所有相关文档"
+        - "验证文档中的代码示例可运行"
+        - "检查并修复断裂的链接"
+      内容检查:
+        - "新功能已添加到相关指南"
+        - "重大变更已更新 ADR（如需要）"
+        - "已更新版本号和日期"
+        - "已检查术语一致性"
+      导航检查:
+        - "新文档已添加到 docs/index.md（如适用）"
+        - "相关 README 已更新链接（如适用）"
+        - "交叉引用已双向链接（如适用）"
+      特殊情况:
+        - "如移动/重命名文件，已更新所有引用"
+        - "如废弃功能，已标记相关文档为已废弃"
+        - "如架构变更，已咨询架构师确认文档准确性"
+    tools:
+      - "link-checker"
+      - "cross-reference-validator"
+      - "document-completeness-checker"
+    feedback:
+      - "列出缺失的文档更新项"
+      - "提供文档更新建议"
+      - "生成文档更新检查清单"
+
+  - id: DM-006
+    description: "ADR 文档质量验证（基于 ADR-008）"
+    action: "验证 ADR 文档符合文档治理宪法"
+    conditions:
+      - "Push to docs/adr/"
+      - "Pull request with ADR changes"
+    output: "Pass / Fail / Uncertain"
+    rules:
+      - "ADR 仅使用裁决性语言（必须/禁止/应当/允许）"
+      - "ADR 禁止使用指导性语言（建议/推荐/通常/可能）"
+      - "ADR 包含必需章节：Focus、Glossary、Decision、Enforcement"
+      - "每个可执法条款必须有稳定 RuleId（ADR-XXX_Y_Z 格式）"
+      - "非 ADR 文档不得定义架构规则或裁决冲突"
+    tools:
+      - "language-validator"
+      - "rule-id-checker"
+      - "document-structure-validator"
+    feedback:
+      - "标记语言违规"
+      - "标记缺失章节"
+      - "验证 RuleId 格式"
+      - "引用 ADR-008 具体条款"
