@@ -9,20 +9,25 @@ agent:
   risk_level: "低"
   based_on: ["ADR-007", "ADR-008", "ADR-946", "ADR-947"]
   tools:
+    # 验证工具
     - link-checker
-    - index-updater
     - document-validator
-    - doc-formatter
-    - doc-version-tracker
     - markdown-parser
+    # 结构工具
     - heading-level-validator
     - relationship-parser
     - circular-dependency-detector
-    - cross-reference-validator
-    - document-completeness-checker
+    # 质量工具
     - language-validator
     - rule-id-checker
     - document-structure-validator
+    # 维护工具
+    - index-updater
+    - doc-formatter
+    - cross-reference-validator
+    - document-completeness-checker
+    - doc-version-tracker
+    # 编辑工具（GitHub Copilot 标准工具）
     - edit/editFiles
     - changes
     - codebase
@@ -49,7 +54,7 @@ agent:
   permissions:
     read: ["docs/**", ".github/**", "*.md"]
     write: ["docs/index.md", "docs/**/README.md", "docs/**/*-index.md"]
-    edit: ["docs/**/*.md"]
+    edit: ["docs/index.md", "docs/**/README.md", "docs/**/*-index.md", "docs/guides/**/*.md", "docs/summaries/**/*.md"]
     execute: ["link-checker", "markdown-linter", "document-validator"]
   prohibited:
     - "❌ 不得修改 ADR 约束内容（Decision 章节的裁决规则）"

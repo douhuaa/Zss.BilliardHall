@@ -77,15 +77,46 @@
 - `docs/**/*-index.md`：各类索引文件
 
 ### 编辑权限
-- `docs/**/*.md`：所有文档文件（受禁止行为约束）
+- `docs/index.md`：主索引文件
+- `docs/**/README.md`：各目录 README
+- `docs/**/*-index.md`：各类索引文件
+- `docs/guides/**/*.md`：指南文档
+- `docs/summaries/**/*.md`：总结文档
+
+**注意**：编辑权限不包括 ADR 文档的 Decision 章节和元数据，这些受禁止行为约束保护。
 
 ### 可用工具
-- **验证工具**：link-checker、document-validator、markdown-parser
-- **结构工具**：heading-level-validator、relationship-parser、circular-dependency-detector
-- **质量工具**：language-validator、rule-id-checker、document-structure-validator
-- **维护工具**：index-updater、doc-formatter、cross-reference-validator
-- **编辑工具**：edit/editFiles、changes、codebase、search
-- **执行工具**：runCommands
+
+**验证工具**：
+- `link-checker`：链接有效性检查
+- `document-validator`：文档结构验证
+- `markdown-parser`：Markdown 解析
+
+**结构工具**：
+- `heading-level-validator`：标题层级验证
+- `relationship-parser`：关系声明解析
+- `circular-dependency-detector`：循环依赖检测
+
+**质量工具**：
+- `language-validator`：语言规范验证
+- `rule-id-checker`：RuleId 格式检查
+- `document-structure-validator`：文档结构验证
+
+**维护工具**：
+- `index-updater`：索引更新
+- `doc-formatter`：文档格式化
+- `cross-reference-validator`：交叉引用验证
+- `document-completeness-checker`：文档完整性检查
+- `doc-version-tracker`：文档版本跟踪
+
+**编辑工具**（GitHub Copilot 提供的标准工具）：
+- `edit/editFiles`：文件编辑能力
+- `changes`：变更追踪
+- `codebase`：代码库访问
+- `search`：代码搜索
+- `runCommands`：命令执行
+
+**注意**：编辑工具名称遵循 GitHub Copilot Agent 工具规范，与自定义工具的命名约定（短横线分隔）不同。
 
 ## 输出规范
 - 三态输出：✅ Allowed / ⚠️ Blocked / ❓ Uncertain
