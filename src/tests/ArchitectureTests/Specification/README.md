@@ -288,10 +288,10 @@ var ruleSet = Adr0001RuleSet.RuleSet;
 
 ## 参考文档
 
-- [ADR-900：架构测试与 CI 治理元规则](../../../docs/adr/ADR-900.md)
-- [ADR-905：执行级别分类](../../../docs/adr/ADR-905.md)
-- [ADR-907：ArchitectureTests 执法治理体系](../../../docs/adr/ADR-907.md)
-- [ADR-907-A：RuleId 格式规范](../../../docs/adr/ADR-907-A.md)
+- [ADR-900: 架构测试与 CI 治理元规则](../../../docs/adr/ADR-900.md)
+- [ADR-905: 执行级别分类](../../../docs/adr/ADR-905.md)
+- [ADR-907: ArchitectureTests 执法治理体系](../../../docs/adr/ADR-907.md)
+- [ADR-907-A: RuleId 格式规范](../../../docs/adr/ADR-907-A.md)
 
 ## 常见问题
 

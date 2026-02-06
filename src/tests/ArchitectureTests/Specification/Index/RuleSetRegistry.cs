@@ -187,7 +187,7 @@ public static class RuleSetRegistry
         if (registry.ContainsKey(adrNumber))
         {
             throw new InvalidOperationException(
-                $"规则集 ADR-{adrNumber:D3} 已注册，不能重复注册");
+                $"规则集 ADR-{adrNumber:D3} 已注册, 不能重复注册");
         }
 
         registry.Add(adrNumber, ruleSet);

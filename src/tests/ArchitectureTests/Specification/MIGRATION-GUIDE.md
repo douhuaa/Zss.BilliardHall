@@ -352,5 +352,5 @@ foreach (var adr in expectedAdrs)
 
 如有疑问，请参考：
 - [Specification/README.md](./README.md) - 完整架构说明
-- [ADR-907](../../../docs/adr/ADR-907.md) - 测试组织规范
+- [ADR-907: ArchitectureTests 执法治理体系](../../../docs/adr/ADR-907.md) - 测试组织规范
 - 或提交 Issue 询问
