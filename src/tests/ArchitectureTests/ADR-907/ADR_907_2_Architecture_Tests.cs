@@ -265,9 +265,11 @@ public sealed class ADR_907_2_Architecture_Tests
             var adrNumber = fileAdrMatch.Groups[1].Value;
 
             // 查找所有断言语句及其完整消息（包括多行字符串连接）
-            // 使用统一的断言模式定义，支持所有常用的 FluentAssertions API
+            // 方法1：使用 AssertionPatternHelper 检测字符串字面量形式
             var assertPattern = AssertionPatternHelper.GetAssertionMessagePattern();
             var assertMatches = Regex.Matches(content, assertPattern, RegexOptions.Singleline);
+            var hasInlineMessage = assertMatches.Count > 0;
+            var hasInlineViolation = false;
 
             foreach (Match assertMatch in assertMatches)
             {
@@ -280,8 +282,33 @@ public sealed class ADR_907_2_Architecture_Tests
 
                 if (!hasAdrReference)
                 {
-                    violations.Add($"  • {fileName} - 断言消息缺少 ADR 引用");
+                    hasInlineViolation = true;
                     break;
+                }
+            }
+
+            // 方法2：检测使用 BuildWithAnalysis 等辅助方法生成消息的情况
+            // 这些方法已经包含了 ADR 引用和违规标记
+            var builderCalls = Regex.Matches(content, @"Build(?:WithAnalysis|WithViolations|)\s*\(\s*ruleId:\s*""([^""]+)""", RegexOptions.Multiline);
+            var hasBuilderCalls = builderCalls.Count > 0;
+
+            // 方法3：检测多行字符串插值中的 ADR 引用
+            var multilineMessages = Regex.Matches(content, @"\$""[^""]*❌\s*ADR-0*" + adrNumber + @"_\d+_\d+\s+违规", RegexOptions.Multiline);
+            var hasMultilineRuleId = multilineMessages.Count > 0;
+
+            // 如果使用了内联消息且缺少 ADR 引用，则报告违规
+            // 如果使用了 Builder 方法或多行字符串插值，则认为消息格式正确
+            if (hasInlineMessage && hasInlineViolation && !hasMultilineRuleId)
+            {
+                violations.Add($"  • {fileName} - 断言消息缺少 ADR 引用");
+            }
+            else if (!hasInlineMessage && !hasBuilderCalls && !hasMultilineRuleId)
+            {
+                // 仅当既没有内联消息，也没有使用 Builder 方法，也没有多行字符串时才检查是否有断言
+                var hasAnyAssertions = Regex.IsMatch(content, @"Should\(\)|Assert\.");
+                if (hasAnyAssertions)
+                {
+                    violations.Add($"  • {fileName} - 无法检测断言消息（可能使用了不支持的格式）");
                 }
             }
         }

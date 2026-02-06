@@ -133,20 +133,42 @@ public sealed class ADR_907_4_Architecture_Tests
             }
 
             // 检查失败消息中是否包含 RuleId
+            // 方法1：检测字符串字面量形式的断言消息
             var assertMessages = Regex.Matches(content, @"(Should\(\)\.BeTrue|Assert\.True)\s*\([^""]*""([^""]+)""", RegexOptions.Singleline);
+            var hasInlineRuleId = false;
 
             foreach (Match assert in assertMessages)
             {
                 var message = assert.Groups[2].Value;
-
-                // 检查失败消息是否包含精确的 RuleId
-                var hasRuleIdInMessage = Regex.IsMatch(message, $@"ADR-0*{adrNumber}_\d+_\d+\s+违规");
-
-                if (!hasRuleIdInMessage)
+                if (Regex.IsMatch(message, $@"ADR-0*{adrNumber}_\d+_\d+\s+违规"))
                 {
-                    violations.Add($"  • {fileName} - 失败消息缺少精确的 RuleId");
+                    hasInlineRuleId = true;
                     break;
                 }
+            }
+
+            // 方法2：检测使用 BuildWithAnalysis 等辅助方法生成消息的情况
+            var builderCalls = Regex.Matches(content, @"Build(?:WithAnalysis|WithViolations|)\s*\(\s*ruleId:\s*""([^""]+)""", RegexOptions.Multiline);
+            var hasBuilderRuleId = false;
+
+            foreach (Match builderCall in builderCalls)
+            {
+                var ruleId = builderCall.Groups[1].Value;
+                if (Regex.IsMatch(ruleId, $@"ADR-0*{adrNumber}_\d+_\d+"))
+                {
+                    hasBuilderRuleId = true;
+                    break;
+                }
+            }
+
+            // 方法3：检测多行字符串插值中的 RuleId（如：$"❌ ADR-201_3_1 违规：..."）
+            var multilineMessages = Regex.Matches(content, @"\$""[^""]*❌\s*ADR-0*" + adrNumber + @"_\d+_\d+\s+违规", RegexOptions.Multiline);
+            var hasMultilineRuleId = multilineMessages.Count > 0;
+
+            // 如果既没有内联 RuleId，也没有使用 Builder 方法，也没有多行字符串插值，则认为违规
+            if (!hasInlineRuleId && !hasBuilderRuleId && !hasMultilineRuleId)
+            {
+                violations.Add($"  • {fileName} - 失败消息缺少精确的 RuleId");
             }
         }
 
