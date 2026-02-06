@@ -49,7 +49,7 @@ required_agent: "test-generator"
   "metadata": {
     "timestamp": "2026-01-26T10:30:00Z",
     "testFramework": "xUnit",
-    "projectPath": "tests/Modules.*.Tests"
+    "projectPath": "src/tests/Modules.*.Tests"
   }
 }
 ```
@@ -101,7 +101,7 @@ required_agent: "test-generator"
 ### 运行所有单元测试
 
 ```bash
-dotnet test tests/ \
+dotnet test src/tests/ \
   --filter "Category!=Architecture&Category!=Integration" \
   --logger "console;verbosity=normal"
 ```
@@ -109,14 +109,14 @@ dotnet test tests/ \
 ### 运行特定模块的测试
 
 ```bash
-dotnet test tests/Modules.Orders.Tests/ \
+dotnet test src/tests/Modules.Orders.Tests/ \
   --logger "console;verbosity=normal"
 ```
 
 ### 运行特定用例的测试
 
 ```bash
-dotnet test tests/Modules.Orders.Tests/ \
+dotnet test src/tests/Modules.Orders.Tests/ \
   --filter "FullyQualifiedName~CreateOrderHandlerTests" \
   --logger "console;verbosity=detailed"
 ```
@@ -124,7 +124,7 @@ dotnet test tests/Modules.Orders.Tests/ \
 ### 收集覆盖率
 
 ```bash
-dotnet test tests/ \
+dotnet test src/tests/ \
   --collect:"XPlat Code Coverage" \
   --results-directory ./coverage
 ```
@@ -276,10 +276,42 @@ dotnet test tests/ \
 
 ## 参考资料
 
-- [ADR-122：测试组织规范](../../../docs/adr/structure/ADR-122-testing-organization.md)
-- [测试编写指令](../../instructions/testing.instructions.md)
+- [ADR-122：测试组织规范](../../../docs/adr/structure/ADR-122-test-organization-naming.md)
+- [ARCHITECTURE-TEST-GUIDELINES.md](../../../docs/guidelines/ARCHITECTURE-TEST-GUIDELINES.md) - 架构测试编写指南
+- [测试编写指令](../../instructions/test-generator.instructions.yaml)
+
+---
+
+## 最佳实践
+
+### 测试命名规范
+
+- 测试方法：`MethodName_Scenario_ExpectedResult`
+- 测试类：`{ClassName}Tests`
+- 测试文件：`{ClassName}Tests.cs`
+
+### 测试组织
+
+- 使用 Arrange-Act-Assert (AAA) 模式
+- 每个测试只验证一个行为
+- 使用 FluentAssertions 提高可读性
+- 使用 NSubstitute 创建 Mock 对象
+
+### 持续集成
+
+```bash
+# CI 管道中的单元测试
+dotnet test src/tests/ \
+  --filter "Category!=Architecture&Category!=Integration" \
+  --logger "trx;LogFileName=unit-test-results.trx" \
+  --logger "console;verbosity=normal" \
+  --collect:"XPlat Code Coverage" \
+  --results-directory ./TestResults
+```
 
 ---
 
 **维护者**：架构委员会  
-**状态**：✅ Active
+**状态**：✅ Active  
+**版本**：1.1  
+**最后更新**：2026-02-06

@@ -11,18 +11,41 @@
       - "Codegen Templates"
     feedback:
       - "提交生成测试至测试项目"
+    guidelines:
+      - "测试文件路径：src/tests/ArchitectureTests/"
+      - "命名规范：ADR_XXX_Y_Architecture_Tests.cs"
+      - "严格遵循 ADR-907 v2.0 Rule/Clause 体系"
 
   - id: TG-002
     description: "遵循架构测试编写指南生成测试"
-    action: "在生成测试时严格应用 ARCHITECTURE-TEST-GUIDELINES.md 中的规范"
+    action: "在生成测试时严格应用 docs/guidelines/ARCHITECTURE-TEST-GUIDELINES.md 中的规范"
     conditions:
       - "All Test Generation Tasks"
     output: "Compliant Architecture Tests"
     tools:
-      - "ARCHITECTURE-TEST-GUIDELINES.md"
-      - "Shared/TestEnvironment.cs"
+      - "docs/guidelines/ARCHITECTURE-TEST-GUIDELINES.md"
+      - "src/tests/ArchitectureTests/Shared/TestEnvironment.cs"
+      - "src/tests/ArchitectureTests/Shared/FileSystemTestHelper.cs"
+      - "src/tests/ArchitectureTests/Shared/AssertionMessageBuilder.cs"
     feedback:
       - "确保测试类使用 sealed 关键字"
-      - "避免重复代码，使用 Shared/TestEnvironment.cs"
+      - "避免重复代码，使用 TestEnvironment.RepositoryRoot 替代 FindRepositoryRoot"
+      - "使用 FileSystemTestHelper 统一文件操作"
+      - "使用 AssertionMessageBuilder 构建标准化断言消息"
       - "断言消息包含详细违规描述、当前状态和修复建议"
-      - "文档注释完整，包括 ADR 条款引用"
+      - "文档注释完整，包括 ADR 条款引用（格式：ADR-XXX_Y_Z）"
+    
+  - id: TG-003
+    description: "测试执行命令标准化"
+    action: "使用标准化的 dotnet test 命令格式"
+    conditions:
+      - "Running or Generating Test Commands"
+    output: "Standardized Test Commands"
+    commands:
+      run_all_architecture_tests: "dotnet test src/tests/ArchitectureTests/ --filter \"Category=Architecture\" --logger \"console;verbosity=detailed\""
+      run_specific_adr_tests: "dotnet test src/tests/ArchitectureTests/ --filter \"FullyQualifiedName~ADR_{NUMBER}\" --logger \"console;verbosity=detailed\""
+      run_all_unit_tests: "dotnet test src/tests/ --filter \"Category!=Architecture&Category!=Integration\" --logger \"console;verbosity=normal\""
+    feedback:
+      - "所有测试路径使用 src/tests/ 前缀"
+      - "架构测试使用 Category=Architecture 过滤器"
+      - "单元测试排除 Architecture 和 Integration 分类"
