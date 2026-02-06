@@ -3,9 +3,9 @@ adr: ADR-210
 title: "领域事件版本化与兼容性"
 status: Final
 level: Runtime
-version: "2.0"
+version: "4.0"
 deciders: "Architecture Board"
-date: 2026-01-25
+date: 2026-02-06
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -51,8 +51,19 @@ superseded_by: null
 ## Decision（裁决）
 
 > ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-210 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-210_<Rule>_<Clause>
+> ```
 
-### 破坏性变更必须创建新版本（ADR-210.1）【必须架构测试覆盖】
+---
+
+### ADR-210_1：破坏性变更与版本控制（Rule）
+
+#### ADR-210_1_1 破坏性变更定义
 
 **规则**：
 - 破坏性变更定义：
@@ -76,7 +87,13 @@ superseded_by: null
 - ❌ 版本命名不符合规范
 - ✅ 破坏性变更创建新版本事件
 
-### 事件必须包含 SchemaVersion（ADR-210.2）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-210_2：事件 SchemaVersion 要求（Rule）
+
+#### ADR-210_2_1 SchemaVersion 属性强制要求
 
 **规则**：
 - 所有领域事件必须包含 `SchemaVersion` 属性
@@ -89,7 +106,13 @@ superseded_by: null
 - ❌ 版本号格式不符合 Major.Minor
 - ✅ 事件包含正确格式的 SchemaVersion
 
-### 旧版本保留策略（ADR-210.3）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-210_3：旧版本保留策略（Rule）
+
+#### ADR-210_3_1 旧版本保留周期要求
 
 **规则**：
 - 旧版本事件必须保持至少 2 个大版本周期
@@ -108,7 +131,13 @@ superseded_by: null
 - ❌ 未满 2 个大版本周期删除
 - ✅ 遵循废弃流程并满足保留周期
 
-### 订阅者多版本处理（ADR-210.4）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-210_4：订阅者多版本处理（Rule）
+
+#### ADR-210_4_1 订阅者多版本处理要求
 
 **规则**：
 - 订阅者必须处理所有活跃版本
@@ -122,7 +151,13 @@ superseded_by: null
 - ❌ Handler 对旧版本抛出异常
 - ✅ Handler 处理所有活跃版本
 
-### 事件序列化兼容性（ADR-210.5）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-210_5：事件序列化兼容性（Rule）
+
+#### ADR-210_5_1 序列化向前兼容要求
 
 **规则**：
 - 序列化必须支持向前兼容（新代码读旧数据）
@@ -137,7 +172,13 @@ superseded_by: null
 - ❌ 新字段无默认值导致反序列化失败
 - ✅ 序列化支持向前兼容
 
-### 版本异常容错机制（ADR-210.6）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-210_6：版本异常容错机制（Rule）
+
+#### ADR-210_6_1 版本异常降级处理要求
 
 **规则**：
 - 版本异常必须降级处理，不得中断消费
@@ -164,10 +205,23 @@ superseded_by: null
 
 ## Enforcement（执法模型）
 
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-210 各条款（Clause）的执法方式及执行级别。
 
-### 执行方式
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-210_1_1** | L1 | ArchitectureTests 自动化验证 | §ADR-210_1_1 破坏性变更定义 |
+| **ADR-210_2_1** | L1 | ArchitectureTests 自动化验证 | §ADR-210_2_1 SchemaVersion 属性强制要求 |
+| **ADR-210_3_1** | L1 | ArchitectureTests 自动化验证 | §ADR-210_3_1 旧版本保留周期要求 |
+| **ADR-210_4_1** | L1 | ArchitectureTests 自动化验证 | §ADR-210_4_1 订阅者多版本处理要求 |
+| **ADR-210_5_1** | L1 | ArchitectureTests 自动化验证 | §ADR-210_5_1 序列化向前兼容要求 |
+| **ADR-210_6_1** | L1 | ArchitectureTests 自动化验证 + 运行时监控 | §ADR-210_6_1 版本异常降级处理要求 |
 
-待补充...
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
 
 
 ---
@@ -177,16 +231,26 @@ superseded_by: null
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- 事件存储的具体实现技术（EventStore/SQL/NoSQL）
+- 事件溯源（Event Sourcing）的完整实现
+- 跨系统的集成事件版本管理（由各系统自行决策）
+- 事件的业务语义正确性（由领域模型负责）
+- 事件处理器的具体实现逻辑
+- 事件总线的选型和配置
 
 ---
 
 ## Prohibited（禁止行为）
 
-
 以下行为明确禁止：
 
-- 待补充
+- ❌ 在不创建新版本的情况下修改现有事件结构
+- ❌ 删除事件的 SchemaVersion 属性
+- ❌ 在未满 2 个大版本周期时删除旧版本事件
+- ❌ Event Handler 仅处理最新版本而忽略旧版本
+- ❌ 反序列化时遇到未知字段直接抛出异常
+- ❌ 因版本异常导致整个事件消费者停止运行
+- ❌ 使用非语义化版本号格式（如 v1.0.0.1）
 
 
 ---
@@ -221,7 +285,7 @@ superseded_by: null
 
 ### 相关 ADR
 - [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-120：领域事件命名规范](../structure/ADR-120-event-naming-standard.md)
+- [ADR-120：领域事件命名规范](../structure/ADR-120-domain-event-naming-convention.md)
 - [ADR-220：事件总线集成规范](ADR-220-event-bus-integration.md)
 
 ### 技术资源
@@ -237,7 +301,9 @@ superseded_by: null
 
 ## History（版本历史）
 
-
 | 版本  | 日期         | 变更说明   |
 |-----|------------|--------|
+| 4.0 | 2026-02-06 | 对齐 ADR-907-A v2.0 标准：转换为 Rule/Clause 双层编号体系，补充完整 Enforcement 映射表、Non-Goals 和 Prohibited 章节 |
+| 3.0 | 2026-02-06 | 补充部分 Rule/Clause 结构 |
+| 2.0 | 2026-01-30 | 补充版本异常容错机制 |
 | 1.0 | 2026-01-29 | 初始版本 |
