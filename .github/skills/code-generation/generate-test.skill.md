@@ -36,7 +36,7 @@ required_agent: "test-generator"
   "generated": true,
   "files": [
     {
-      "path": "tests/Modules.Orders.Tests/UseCases/CreateOrder/CreateOrderHandlerTests.cs",
+      "path": "src/tests/Modules.Orders.Tests/UseCases/CreateOrder/CreateOrderHandlerTests.cs",
       "content": "...",
       "scenarios": 5
     }
@@ -279,11 +279,31 @@ public class {ClassName}Tests
 
 ## 参考资料
 
-- [ADR-900：架构测试](../../../docs/adr/constitutional/ADR-900-architecture-testing-ci-governance-constitution.md)
-- [ADR-122：测试组织](../../../docs/adr/structure/ADR-122-testing-organization.md)
-- [测试编写指令](../../instructions/testing.instructions.md)
+- [ADR-900：架构测试](../../../docs/adr/governance/ADR-900-architecture-tests.md)
+- [ADR-122：测试组织](../../../docs/adr/structure/ADR-122-test-organization-naming.md)
+- [ARCHITECTURE-TEST-GUIDELINES.md](../../../docs/guidelines/ARCHITECTURE-TEST-GUIDELINES.md) - 架构测试编写指南
+- [测试编写指令](../../instructions/test-generator.instructions.yaml)
+
+---
+
+## 代码质量检查清单
+
+生成测试后，验证以下各项：
+
+- [ ] 测试类使用 `sealed` 关键字
+- [ ] 使用 `TestEnvironment.RepositoryRoot` 而非 `FindRepositoryRoot()`
+- [ ] 使用 `FileSystemTestHelper` 进行文件操作
+- [ ] 使用 `AssertionMessageBuilder` 构建断言消息
+- [ ] 断言消息包含 ADR 条款引用（格式：ADR-XXX_Y_Z）
+- [ ] 测试方法命名遵循 `Method_Scenario_ExpectedResult` 格式
+- [ ] 使用 Arrange-Act-Assert 模式
+- [ ] 每个测试只验证一个行为
+- [ ] 测试可独立运行（无依赖顺序）
+- [ ] 测试路径使用 `src/tests/` 前缀
 
 ---
 
 **维护者**：架构委员会  
-**状态**：✅ Active
+**状态**：✅ Active  
+**版本**：1.1  
+**最后更新**：2026-02-06
