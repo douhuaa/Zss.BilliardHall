@@ -32,9 +32,13 @@ public sealed class ADR_220_Architecture_Tests
                 .HaveDependencyOn(dep)
                 .GetResult();
 
-            result.IsSuccessful.Should().BeTrue($"❌ ADR-220_1_1 违规: 模块直接依赖具体事件总线实现\n\n" +
+            // 提取违规类型列表（避免在断言消息中使用嵌套括号）
+            var failingTypes = result.FailingTypeNames ?? new List<string>();
+            var failingTypesStr = string.Join(", ", failingTypes);
+
+            var message = $"❌ ADR-220_1_1 违规：模块直接依赖具体事件总线实现\n\n" +
                 $"违规实现：{dep}\n" +
-                $"违规类型：{string.Join(", ", result.FailingTypeNames ?? new List<string>())}\n\n" +
+                $"违规类型：{failingTypesStr}\n\n" +
                 $"问题分析：\n" +
                 $"模块不应直接依赖具体的事件总线实现（Wolverine、RabbitMQ、Kafka等），以保持架构的灵活性\n\n" +
                 $"修复建议：\n" +
@@ -44,7 +48,8 @@ public sealed class ADR_220_Architecture_Tests
                 $"4. 示例代码：\n" +
                 $"   // ❌ 错误：using Wolverine;\n" +
                 $"   // ✅ 正确：using Platform.EventBus; // IEventBus\n\n" +
-                $"参考：docs/adr/runtime/ADR-220-event-bus-integration.md（§ADR-220_1_1）");
+                $"参考：docs/adr/runtime/ADR-220-event-bus-integration.md（§ADR-220_1_1）";
+            result.IsSuccessful.Should().BeTrue(message);
         }
     }
 

@@ -39,8 +39,7 @@ public sealed class ADR_201_Architecture_Tests
             if (staticFields.Any())
             {
                 var fieldNames = string.Join(", ", staticFields.Select(f => f.Name));
-                true.Should().BeFalse(
-                    $"❌ ADR-201_3_1 违规: Handler 使用静态字段存储状态\n\n" +
+                var message = $"❌ ADR-201_3_1 违规：Handler 使用静态字段存储状态\n\n" +
                     $"违规类型：{handler.FullName}\n" +
                     $"静态字段：{fieldNames}\n\n" +
                     $"问题分析：\n" +
@@ -52,7 +51,8 @@ public sealed class ADR_201_Architecture_Tests
                     $"4. 示例：\n" +
                     $"   // ❌ 错误：static Dictionary<string, int> _cache;\n" +
                     $"   // ✅ 正确：private readonly ICacheService _cache;\n\n" +
-                    $"参考：docs/adr/runtime/ADR-201-handler-lifecycle-management.md（§ADR-201_3_1）");
+                    $"参考：docs/adr/runtime/ADR-201-handler-lifecycle-management.md（§ADR-201_3_1）";
+                true.Should().BeFalse(message);
             }
         }
     }
