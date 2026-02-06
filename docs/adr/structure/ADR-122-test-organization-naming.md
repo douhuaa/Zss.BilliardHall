@@ -45,7 +45,9 @@ superseded_by: ADR-####
 
 ## Decision（裁决）
 
-> ⚠️ **本节是唯一裁决来源，其他章节不得产生新规则。**
+> ⚠️ 本节为唯一裁决来源，所有条款具备执行级别。
+
+> 🔒 **统一铁律**：ADR-XXX 中，所有可执法条款必须具备稳定 RuleId，格式为：ADR-XXX_<Rule>_<Clause>
 
 ### ADR-122.1:L1 ArchitectureTests 必须按 ADR 编号分组
 
