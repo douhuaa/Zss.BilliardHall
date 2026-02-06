@@ -128,9 +128,9 @@ public static class FileSystemTestHelper
     /// 使用 AdrFileFilter 统一过滤逻辑（通过 YAML Front Matter 识别真正的 ADR）
     /// </summary>
     /// <param name="subfolder">子文件夹路径（相对于 ADR 根目录），为 null 则搜索整个 ADR 目录</param>
-    /// <param name="excludeReadme">是否排除 README.md 文件，默认为 true（已由 AdrFileFilter 处理）</param>
+    /// <param name="excludeReadme">已废弃：README 文件由 AdrFileFilter 自动排除</param>
     /// <param name="excludeTimeline">是否排除 TIMELINE 文件，默认为 true</param>
-    /// <param name="excludeChecklist">是否排除 CHECKLIST 文件，默认为 true（已由 AdrFileFilter 处理）</param>
+    /// <param name="excludeChecklist">已废弃：CHECKLIST 文件由 AdrFileFilter 自动排除</param>
     /// <returns>ADR 文件路径列表</returns>
     public static IEnumerable<string> GetAdrFiles(
         string? subfolder = null,
