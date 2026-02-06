@@ -76,7 +76,7 @@ public sealed class ADR_004_1_Architecture_Tests
                 "删除所有项目文件中的手动 Version 属性"
             },
             adrReference: "docs/adr/constitutional/ADR-004-Cpm-Final.md");
-        content.Contains("true").Should().BeTrue(trueMessage);
+        content.Contains("<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>").Should().BeTrue(trueMessage);
     }
 
     /// <summary>
