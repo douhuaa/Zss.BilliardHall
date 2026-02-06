@@ -22,9 +22,18 @@ public sealed class ADR_970_3_Architecture_Tests
 
         var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
-        content.Should().Contain("自动链接到",
-            $"❌ ADR-970_3_1 违规：ADR-970 必须定义自动链接到 ADR 的机制\n\n" +
-            $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §3.1");
+        var linkMechanismMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-970_3_1",
+            filePath: adr970Path,
+            missingContent: "自动链接到",
+            remediationSteps: new[]
+            {
+                "在 ADR-970 中定义自动链接到 ADR 的机制",
+                "说明如何从测试失败日志导航到对应 ADR"
+            },
+            adrReference: "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
+        
+        content.Should().Contain("自动链接到", linkMechanismMessage);
     }
 
     [Fact(DisplayName = "ADR-970_3_2: 必须定义关联规则")]
@@ -35,9 +44,18 @@ public sealed class ADR_970_3_Architecture_Tests
 
         var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
-        content.Should().Contain("关联规则",
-            $"❌ ADR-970_3_2 违规：ADR-970 必须定义关联规则\n\n" +
-            $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §3.2");
+        var associationRulesMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-970_3_2",
+            filePath: adr970Path,
+            missingContent: "关联规则",
+            remediationSteps: new[]
+            {
+                "在 ADR-970 中定义关联规则",
+                "明确日志与 ADR 的关联机制"
+            },
+            adrReference: "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
+        
+        content.Should().Contain("关联规则", associationRulesMessage);
     }
 
 }

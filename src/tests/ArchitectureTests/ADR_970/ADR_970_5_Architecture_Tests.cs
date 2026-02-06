@@ -22,9 +22,18 @@ public sealed class ADR_970_5_Architecture_Tests
 
         var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
-        content.Should().Contain("易于访问",
-            $"❌ ADR-970_5_1 违规：ADR-970 必须要求日志易于访问\n\n" +
-            $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §5.1");
+        var accessibilityMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-970_5_1",
+            filePath: adr970Path,
+            missingContent: "易于访问",
+            remediationSteps: new[]
+            {
+                "在 ADR-970 中要求日志易于访问",
+                "定义可访问性要求"
+            },
+            adrReference: "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
+        
+        content.Should().Contain("易于访问", accessibilityMessage);
     }
 
     [Fact(DisplayName = "ADR-970_5_2: 必须定义访问方式")]
@@ -35,9 +44,18 @@ public sealed class ADR_970_5_Architecture_Tests
 
         var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
-        content.Should().Contain("访问方式",
-            $"❌ ADR-970_5_2 违规：ADR-970 必须定义访问方式\n\n" +
-            $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §5.2");
+        var accessMethodsMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-970_5_2",
+            filePath: adr970Path,
+            missingContent: "访问方式",
+            remediationSteps: new[]
+            {
+                "在 ADR-970 中定义访问方式",
+                "说明如何获取和查看日志"
+            },
+            adrReference: "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
+        
+        content.Should().Contain("访问方式", accessMethodsMessage);
     }
 
 }

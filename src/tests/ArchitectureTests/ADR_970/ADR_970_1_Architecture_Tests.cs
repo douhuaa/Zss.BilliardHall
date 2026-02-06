@@ -24,16 +24,34 @@ public sealed class ADR_970_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
-        File.Exists(adr970Path).Should().BeTrue(
-            $"❌ ADR-970_1_1 违规：ADR-970 文档不存在\n\n" +
-            $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §1.1");
+        var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-970_1_1",
+            filePath: adr970Path,
+            fileDescription: "ADR-970 文档",
+            remediationSteps: new[]
+            {
+                "创建 ADR-970 文档",
+                "定义日志标准存储位置规范"
+            },
+            adrReference: "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
+        
+        File.Exists(adr970Path).Should().BeTrue(fileNotFoundMessage);
 
         var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
         // 验证定义了存储结构
-        content.Should().Contain("docs/reports/",
-            $"❌ ADR-970_1_1 违规：ADR-970 必须定义标准日志存储位置\n\n" +
-            $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §1.1");
+        var missingContent = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-970_1_1",
+            filePath: adr970Path,
+            missingContent: "docs/reports/",
+            remediationSteps: new[]
+            {
+                "在 ADR-970 中定义标准日志存储位置",
+                "指定 docs/reports/ 目录结构"
+            },
+            adrReference: "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
+        
+        content.Should().Contain("docs/reports/", missingContent);
     }
 
     /// <summary>
@@ -52,9 +70,18 @@ public sealed class ADR_970_1_Architecture_Tests
         var requiredDirs = new[] { "architecture-tests", "dependencies", "security", "builds", "tests" };
         foreach (var dir in requiredDirs)
         {
-            content.Should().Contain(dir,
-                $"❌ ADR-970_1_2 违规：存储结构必须包含 '{dir}' 目录\n\n" +
-                $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §1.2");
+            var dirMissingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+                ruleId: "ADR-970_1_2",
+                filePath: adr970Path,
+                missingContent: dir,
+                remediationSteps: new[]
+                {
+                    $"在 ADR-970 中添加 '{dir}' 目录定义",
+                    "确保存储结构完整"
+                },
+                adrReference: "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
+            
+            content.Should().Contain(dir, dirMissingMessage);
         }
     }
 
