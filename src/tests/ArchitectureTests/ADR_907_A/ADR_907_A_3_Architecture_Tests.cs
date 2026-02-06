@@ -30,7 +30,7 @@ public sealed class ADR_907_A_3_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr907AFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-907-A-adr-alignment-execution-standard.md");
 
-        var content = File.ReadAllText(adr907AFile);
+        var content = FileSystemTestHelper.ReadFileContent(adr907AFile);
 
         content.Should().Contain("必须在同一 PR 中更新",
             $"❌ ADR-907-A_3_1 违规：ADR-907-A 未要求在同一 PR 中更新测试");
@@ -79,7 +79,7 @@ public sealed class ADR_907_A_3_Architecture_Tests
 
         foreach (var testFile in testFiles)
         {
-            var content = File.ReadAllText(testFile);
+            var content = FileSystemTestHelper.ReadFileContent(testFile);
             var fileName = Path.GetFileName(testFile);
 
             // 检查是否使用新 RuleId 格式
@@ -112,7 +112,7 @@ public sealed class ADR_907_A_3_Architecture_Tests
 
         foreach (var testFile in testFiles)
         {
-            var content = File.ReadAllText(testFile);
+            var content = FileSystemTestHelper.ReadFileContent(testFile);
             var fileName = Path.GetFileName(testFile);
 
             // 检查是否包含旧格式的测试方法名
@@ -134,7 +134,7 @@ public sealed class ADR_907_A_3_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr907AFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-907-A-adr-alignment-execution-standard.md");
 
-        var content = File.ReadAllText(adr907AFile);
+        var content = FileSystemTestHelper.ReadFileContent(adr907AFile);
 
         content.Should().Contain("TODO stub",
             $"❌ ADR-907-A_3_5 违规：ADR-907-A 未定义 Clause 暂时无法测试时的处理方式");
@@ -188,7 +188,7 @@ public sealed class ADR_907_A_3_Architecture_Tests
 
         foreach (var testFile in testFiles)
         {
-            var content = File.ReadAllText(testFile);
+            var content = FileSystemTestHelper.ReadFileContent(testFile);
             var fileName = Path.GetFileName(testFile);
 
             // 检查类注释

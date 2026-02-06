@@ -20,7 +20,7 @@ public sealed class ADR_975_3_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
-        var content = File.ReadAllText(adr975Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
         content.Should().Contain("每月生成",
             $"❌ ADR-975_3_1 违规：ADR-975 必须要求每月生成文档质量报告\n\n" +
@@ -33,7 +33,7 @@ public sealed class ADR_975_3_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
-        var content = File.ReadAllText(adr975Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
         content.Should().Contain("docs/reports/quality",
             $"❌ ADR-975_3_2 违规：ADR-975 必须定义报告位置\n\n" +

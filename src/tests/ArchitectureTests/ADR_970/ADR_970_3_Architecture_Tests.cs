@@ -20,7 +20,7 @@ public sealed class ADR_970_3_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
-        var content = File.ReadAllText(adr970Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
         content.Should().Contain("自动链接到",
             $"❌ ADR-970_3_1 违规：ADR-970 必须定义自动链接到 ADR 的机制\n\n" +
@@ -33,7 +33,7 @@ public sealed class ADR_970_3_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
-        var content = File.ReadAllText(adr970Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
         content.Should().Contain("关联规则",
             $"❌ ADR-970_3_2 违规：ADR-970 必须定义关联规则\n\n" +

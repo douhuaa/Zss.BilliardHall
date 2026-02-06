@@ -20,7 +20,7 @@ public sealed class ADR_980_3_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
-        var content = File.ReadAllText(adr980Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr980Path);
 
         content.Should().Contain("变更传播清单",
             $"❌ ADR-980_3_1 违规：ADR-980 必须定义变更传播清单\n\n" +
@@ -33,7 +33,7 @@ public sealed class ADR_980_3_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
-        var content = File.ReadAllText(adr980Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr980Path);
 
         content.Should().Contain("标记版本变更",
             $"❌ ADR-980_3_2 违规：标准清单必须包含'标记版本变更'步骤\n\n" +

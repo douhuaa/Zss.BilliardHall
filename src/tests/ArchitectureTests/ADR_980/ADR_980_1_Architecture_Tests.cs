@@ -33,7 +33,7 @@ public sealed class ADR_980_1_Architecture_Tests
             $"❌ ADR-980_1_1 违规：ADR-980 文档不存在\n\n" +
             $"参考：docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md §1.1");
 
-        var adrContent = File.ReadAllText(adr980Path);
+        var adrContent = FileSystemTestHelper.ReadFileContent(adr980Path);
 
         // 提取 ADR-980 的版本号
         var adrVersionMatch = Regex.Match(adrContent, AdrVersionPattern);
@@ -52,7 +52,7 @@ public sealed class ADR_980_1_Architecture_Tests
 
         foreach (var testSourceFile in testSourceFiles)
         {
-            var testContent = File.ReadAllText(testSourceFile);
+            var testContent = FileSystemTestHelper.ReadFileContent(testSourceFile);
             var testVersionMatch = Regex.Match(testContent, TestVersionPattern);
 
             if (testVersionMatch.Success)
@@ -78,7 +78,7 @@ public sealed class ADR_980_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
-        var content = File.ReadAllText(adr980Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr980Path);
 
         // 验证版本号格式描述
         content.Should().Contain("version：X.Y",
@@ -100,7 +100,7 @@ public sealed class ADR_980_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
-        var content = File.ReadAllText(adr980Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr980Path);
 
         // 验证三位一体存在性规则
         content.Should().Contain("三位一体存在性",

@@ -20,7 +20,7 @@ public sealed class ADR_980_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
-        var content = File.ReadAllText(adr980Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr980Path);
 
         content.Should().Contain("CI 必须包含版本同步检测",
             $"❌ ADR-980_2_1 违规：ADR-980 必须要求 CI 包含版本同步检测步骤\n\n" +
@@ -33,7 +33,7 @@ public sealed class ADR_980_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
-        var content = File.ReadAllText(adr980Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr980Path);
 
         content.Should().Contain("validate-adr-version-sync.sh",
             $"❌ ADR-980_2_4 违规：ADR-980 必须定义检测工具脚本\n\n" +

@@ -34,7 +34,7 @@ public sealed class ADR_907_A_1_Architecture_Tests
 
         foreach (var adrFile in adrFiles)
         {
-            var content = File.ReadAllText(adrFile);
+            var content = FileSystemTestHelper.ReadFileContent(adrFile);
             var fileName = Path.GetFileName(adrFile);
 
             // 检查是否包含 RuleId 格式声明
@@ -74,7 +74,7 @@ public sealed class ADR_907_A_1_Architecture_Tests
 
         foreach (var adrFile in adrFiles)
         {
-            var content = File.ReadAllText(adrFile);
+            var content = FileSystemTestHelper.ReadFileContent(adrFile);
             var fileName = Path.GetFileName(adrFile);
 
             // 检查 Decision 章节
@@ -116,7 +116,7 @@ public sealed class ADR_907_A_1_Architecture_Tests
 
         foreach (var adrFile in adrFiles)
         {
-            var content = File.ReadAllText(adrFile);
+            var content = FileSystemTestHelper.ReadFileContent(adrFile);
             var fileName = Path.GetFileName(adrFile);
 
             // 检查 Enforcement 章节
@@ -152,7 +152,7 @@ public sealed class ADR_907_A_1_Architecture_Tests
 
         foreach (var adrFile in adrFiles)
         {
-            var content = File.ReadAllText(adrFile);
+            var content = FileSystemTestHelper.ReadFileContent(adrFile);
             var fileName = Path.GetFileName(adrFile);
 
             // 检查 Front Matter
@@ -186,7 +186,7 @@ public sealed class ADR_907_A_1_Architecture_Tests
 
         foreach (var adrFile in adrFiles)
         {
-            var content = File.ReadAllText(adrFile);
+            var content = FileSystemTestHelper.ReadFileContent(adrFile);
             var fileName = Path.GetFileName(adrFile);
 
             // 检查 History 章节

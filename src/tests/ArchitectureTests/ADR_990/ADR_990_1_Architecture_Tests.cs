@@ -28,7 +28,7 @@ public sealed class ADR_990_1_Architecture_Tests
             $"❌ ADR-990_1_1 违规：ADR-990 文档不存在\n\n" +
             $"参考：docs/adr/governance/ADR-990-documentation-evolution-roadmap.md §1.1");
 
-        var content = File.ReadAllText(adr990Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr990Path);
 
         // 验证定义了路线图结构
         content.Should().Contain("标准结构",
@@ -46,7 +46,7 @@ public sealed class ADR_990_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
-        var content = File.ReadAllText(adr990Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr990Path);
 
         // 验证定义了文档位置
         content.Should().Contain("docs/ROADMAP.md",

@@ -28,7 +28,7 @@ public sealed class ADR_975_1_Architecture_Tests
             $"❌ ADR-975_1_1 违规：ADR-975 文档不存在\n\n" +
             $"参考：docs/adr/governance/ADR-975-documentation-quality-monitoring.md §1.1");
 
-        var content = File.ReadAllText(adr975Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
         // 验证定义了质量指标
         content.Should().Contain("质量指标",
@@ -46,7 +46,7 @@ public sealed class ADR_975_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
-        var content = File.ReadAllText(adr975Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
         // 验证包含核心指标
         var requiredMetrics = new[] { "准确性", "完整性", "时效性", "链接有效性" };

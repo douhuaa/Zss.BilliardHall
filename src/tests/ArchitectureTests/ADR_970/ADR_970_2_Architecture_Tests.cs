@@ -20,7 +20,7 @@ public sealed class ADR_970_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
-        var content = File.ReadAllText(adr970Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
         content.Should().Contain("必须使用 JSON 格式",
             $"❌ ADR-970_2_1 违规：ADR-970 必须要求使用 JSON 格式\n\n" +
@@ -33,7 +33,7 @@ public sealed class ADR_970_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
-        var content = File.ReadAllText(adr970Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
         var requiredFields = new[] { "type", "timestamp", "source", "version", "status", "summary", "details" };
         foreach (var field in requiredFields)

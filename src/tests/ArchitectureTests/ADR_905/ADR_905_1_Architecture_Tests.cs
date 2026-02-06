@@ -56,7 +56,7 @@ public sealed class ADR_905_1_Architecture_Tests
 
         foreach (var file in adrFiles)
         {
-            var content = File.ReadAllText(file);
+            var content = FileSystemTestHelper.ReadFileContent(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
 
             // 提取 Enforcement 章节
@@ -148,7 +148,7 @@ public sealed class ADR_905_1_Architecture_Tests
 
         foreach (var file in adrFiles)
         {
-            var content = File.ReadAllText(file);
+            var content = FileSystemTestHelper.ReadFileContent(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
 
             // 提取 ADR 编号
@@ -226,7 +226,7 @@ public sealed class ADR_905_1_Architecture_Tests
 
         File.Exists(adrFile).Should().BeTrue($"ADR-905 文档不存在：{adrFile}");
 
-        var content = File.ReadAllText(adrFile);
+        var content = FileSystemTestHelper.ReadFileContent(adrFile);
 
         // 验证 ADR-905 定义了 L2 规则的特征
         content.Should().Contain("Level 2（L2）",
@@ -259,7 +259,7 @@ public sealed class ADR_905_1_Architecture_Tests
 
         File.Exists(adrFile).Should().BeTrue($"ADR-905 文档不存在：{adrFile}");
 
-        var content = File.ReadAllText(adrFile);
+        var content = FileSystemTestHelper.ReadFileContent(adrFile);
 
         // 验证 ADR-905 定义了 L3 规则的特征
         content.Should().Contain("Level 3（L3）",
@@ -298,7 +298,7 @@ public sealed class ADR_905_1_Architecture_Tests
 
         File.Exists(adrFile).Should().BeTrue($"ADR-905 文档不存在：{adrFile}");
 
-        var content = File.ReadAllText(adrFile);
+        var content = FileSystemTestHelper.ReadFileContent(adrFile);
 
         // 验证 ADR-905 说明了对开发者的意义
         content.Should().Contain("对开发者",
@@ -366,7 +366,7 @@ public sealed class ADR_905_1_Architecture_Tests
                 // 检查文件内容是否包含对应的测试方法
                 foreach (var testFile in testFiles)
                 {
-                    var testContent = File.ReadAllText(testFile);
+                    var testContent = FileSystemTestHelper.ReadFileContent(testFile);
                     var testMethodPattern = ruleId.Replace("-", "_");
                     if (testContent.Contains(testMethodPattern))
                         return true;
@@ -381,7 +381,7 @@ public sealed class ADR_905_1_Architecture_Tests
             var testFile = Path.Combine(testDir2, adrTestFileName);
             if (File.Exists(testFile))
             {
-                var testContent = File.ReadAllText(testFile);
+                var testContent = FileSystemTestHelper.ReadFileContent(testFile);
                 var testMethodPattern = ruleId.Replace("-", "_");
                 return testContent.Contains(testMethodPattern);
             }

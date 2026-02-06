@@ -44,7 +44,7 @@ public sealed class ADR_951_2_Architecture_Tests
         foreach (var caseFile in caseFiles)
         {
             var fileName = Path.GetFileName(caseFile);
-            var content = File.ReadAllText(caseFile);
+            var content = FileSystemTestHelper.ReadFileContent(caseFile);
 
             var requiredSections = new[]
             {
@@ -117,7 +117,7 @@ public sealed class ADR_951_2_Architecture_Tests
         foreach (var caseFile in caseFiles)
         {
             var fileName = Path.GetFileName(caseFile);
-            var content = File.ReadAllText(caseFile);
+            var content = FileSystemTestHelper.ReadFileContent(caseFile);
 
             // 检查是否标记了 Core 或 Reference 级别
             var hasCoreLevel = Regex.IsMatch(content, @"(级别|Level)\s*[:：]\s*Core", RegexOptions.IgnoreCase);
@@ -174,7 +174,7 @@ public sealed class ADR_951_2_Architecture_Tests
         foreach (var caseFile in caseFiles)
         {
             var fileName = Path.GetFileName(caseFile);
-            var content = File.ReadAllText(caseFile);
+            var content = FileSystemTestHelper.ReadFileContent(caseFile);
 
             // 提取代码块
             var codeBlockPattern = @"```[\w]*\n(.*?)\n```";

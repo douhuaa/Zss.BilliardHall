@@ -32,7 +32,7 @@ public sealed class ADR_907_A_2_Architecture_Tests
         File.Exists(adr907AFile).Should().BeTrue(
             $"❌ ADR-907-A_2_1 违规：ADR-907-A 文档不存在");
 
-        var content = File.ReadAllText(adr907AFile);
+        var content = FileSystemTestHelper.ReadFileContent(adr907AFile);
 
         content.Should().Contain("部分对齐",
             $"❌ ADR-907-A_2_1 违规：ADR-907-A 未定义部分对齐概念");
@@ -51,7 +51,7 @@ public sealed class ADR_907_A_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr907AFile = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-907-A-adr-alignment-execution-standard.md");
 
-        var content = File.ReadAllText(adr907AFile);
+        var content = FileSystemTestHelper.ReadFileContent(adr907AFile);
 
         content.Should().Contain("至少生成 Rule 1",
             $"❌ ADR-907-A_2_2 违规：ADR-907-A 未定义部分对齐的最低要求");
@@ -70,7 +70,7 @@ public sealed class ADR_907_A_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr907AFile = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-907-A-adr-alignment-execution-standard.md");
 
-        var content = File.ReadAllText(adr907AFile);
+        var content = FileSystemTestHelper.ReadFileContent(adr907AFile);
 
         content.Should().Contain("Follow-up Issue",
             $"❌ ADR-907-A_2_3 违规：ADR-907-A 未要求创建 Follow-up Issue");
@@ -89,7 +89,7 @@ public sealed class ADR_907_A_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr907AFile = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-907-A-adr-alignment-execution-standard.md");
 
-        var content = File.ReadAllText(adr907AFile);
+        var content = FileSystemTestHelper.ReadFileContent(adr907AFile);
 
         content.Should().Contain("Approved: Partial Alignment",
             $"❌ ADR-907-A_2_4 违规：ADR-907-A 未定义部分对齐的批准流程");
@@ -108,7 +108,7 @@ public sealed class ADR_907_A_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr907AFile = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-907-A-adr-alignment-execution-standard.md");
 
-        var content = File.ReadAllText(adr907AFile);
+        var content = FileSystemTestHelper.ReadFileContent(adr907AFile);
 
         content.Should().Contain("连续 2 次尝试",
             $"❌ ADR-907-A_2_5 违规：ADR-907-A 未定义失败重试次数");
