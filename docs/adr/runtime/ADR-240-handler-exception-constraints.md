@@ -3,9 +3,9 @@ adr: ADR-240
 title: "Handler 异常约束"
 status: Final
 level: Runtime
-version: "3.0"
+version: "4.0"
 deciders: "Architecture Board"
-date: 2026-01-25
+date: 2026-02-06
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -51,8 +51,19 @@ superseded_by: null
 ## Decision（裁决）
 
 > ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-240 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-240_<Rule>_<Clause>
+> ```
 
-### 禁止抛出通用异常（ADR-240.1）【必须架构测试覆盖】
+---
+
+### ADR-240_1：结构化异常要求（Rule）
+
+#### ADR-240_1_1 禁止抛出通用异常
 
 **规则**：
 - Handler 禁止抛出 `System.Exception`
@@ -69,7 +80,13 @@ superseded_by: null
 - ✅ Handler 抛出 ValidationException
 - ✅ Handler 抛出 InfrastructureException 及其子类
 
-### 可重试标记约束（ADR-240.2）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-240_2：可重试标记约束（Rule）
+
+#### ADR-240_2_1 IRetryable 接口使用约束
 
 **规则**：
 - 实现 `IRetryable` 接口的异常必须继承自 `InfrastructureException`
@@ -84,7 +101,13 @@ superseded_by: null
 - ✅ DomainException 不实现 IRetryable
 - ✅ ValidationException 不实现 IRetryable
 
-### 禁止吞噬异常（ADR-240.3）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-240_3：异常传播约束（Rule）
+
+#### ADR-240_3_1 禁止吞噬异常
 
 **规则**：
 - Handler 禁止捕获异常后不重新抛出
@@ -98,7 +121,13 @@ superseded_by: null
 - ✅ `catch (Exception e) { throw; }` - 重新抛出
 - ✅ `catch (DbException e) { throw new InfrastructureException(..., e); }` - 转换后抛出
 
-### 异常命名空间约束（ADR-240.4）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-240_4：异常命名空间约束（Rule）
+
+#### ADR-240_4_1 异常命名空间组织规范
 
 **规则**：
 - 所有自定义异常必须位于 `*.Exceptions` 命名空间
@@ -113,7 +142,13 @@ superseded_by: null
 - ❌ 异常类在其他非 `*.Exceptions` 命名空间
 - ✅ 异常类在 `*.Exceptions` 命名空间
 
-### 跨模块事件异常隔离（ADR-240.5）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-240_5：跨模块事件异常隔离（Rule）
+
+#### ADR-240_5_1 事件异常隔离要求
 
 **规则**：
 - Event Handler 异常禁止同步传播到事件发布者
@@ -132,10 +167,22 @@ superseded_by: null
 
 ## Enforcement（执法模型）
 
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-240 各条款（Clause）的执法方式及执行级别。
 
-### 执行方式
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-240_1_1** | L1 | Roslyn Analyzer + ArchitectureTests | §ADR-240_1_1 禁止抛出通用异常 |
+| **ADR-240_2_1** | L1 | ArchitectureTests 自动化验证 | §ADR-240_2_1 IRetryable 接口使用约束 |
+| **ADR-240_3_1** | L1 | Roslyn Analyzer + 人工审查 | §ADR-240_3_1 禁止吞噬异常 |
+| **ADR-240_4_1** | L1 | ArchitectureTests 自动化验证 | §ADR-240_4_1 异常命名空间组织规范 |
+| **ADR-240_5_1** | L1 | ArchitectureTests 自动化验证 | §ADR-240_5_1 事件异常隔离要求 |
 
-待补充...
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
 
 
 ---
@@ -145,16 +192,25 @@ superseded_by: null
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- 异常处理中间件的具体实现（ASP.NET Core/gRPC）
+- 异常日志记录的格式和存储位置
+- 异常监控和告警的具体实现
+- 用户友好错误消息的翻译和本地化
+- 异常重试策略的具体参数（重试次数、间隔等）
+- 死信队列的具体实现和管理
 
 ---
 
 ## Prohibited（禁止行为）
 
-
 以下行为明确禁止：
 
-- 待补充
+- ❌ Handler 直接抛出 `System.Exception` 或 `ApplicationException`
+- ❌ DomainException 或 ValidationException 实现 IRetryable 接口
+- ❌ 捕获异常后既不重新抛出也不转换（异常吞噬）
+- ❌ 在非 `*.Exceptions` 命名空间定义异常类
+- ❌ Event Handler 异常同步传播到事件发布者
+- ❌ 空的 catch 块（`catch (Exception) { }`）
 
 
 ---
@@ -177,6 +233,7 @@ superseded_by: null
 
 **相关（Related）**：
 - [ADR-201：Handler 生命周期管理](./ADR-201-handler-lifecycle-management.md) - 异常处理是生命周期的一部分
+- [ADR-220：事件总线集成规范](./ADR-220-event-bus-integration.md) - 事件异常隔离相关
 
 ---
 
@@ -203,7 +260,9 @@ superseded_by: null
 
 ## History（版本历史）
 
-
 | 版本  | 日期         | 变更说明   |
 |-----|------------|--------|
+| 4.0 | 2026-02-06 | 对齐 ADR-907-A v2.0 标准：转换为 Rule/Clause 双层编号体系，补充完整 Enforcement 映射表、Non-Goals 和 Prohibited 章节 |
+| 3.0 | 2026-01-25 | 补充跨模块事件异常隔离规则 |
+| 2.0 | 2026-01-23 | 补充可重试标记约束 |
 | 1.0 | 2026-01-29 | 初始版本 |
