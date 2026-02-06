@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_123;
 
 /// <summary>
 /// ADR-123: Repository 接口与分层命名规范

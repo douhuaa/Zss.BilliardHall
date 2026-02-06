@@ -1,4 +1,4 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_120;
 
 /// <summary>
 /// ADR-120: 领域事件命名规范

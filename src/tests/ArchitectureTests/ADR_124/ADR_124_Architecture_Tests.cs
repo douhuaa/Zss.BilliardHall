@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_124;
 
 /// <summary>
 /// ADR-124: Endpoint 命名及参数约束规范

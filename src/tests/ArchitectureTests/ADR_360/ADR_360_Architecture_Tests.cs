@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_360;
 
 /// <summary>
 /// ADR-360: CI/CD Pipeline 流程标准化

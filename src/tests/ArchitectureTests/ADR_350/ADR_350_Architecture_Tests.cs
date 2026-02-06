@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_350;
 
 /// <summary>
 /// ADR-350: 日志与可观测性标签与字段标准

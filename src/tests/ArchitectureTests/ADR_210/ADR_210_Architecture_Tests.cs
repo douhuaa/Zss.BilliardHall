@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_210;
 
 /// <summary>
 /// ADR-210: 领域事件版本化与兼容性
