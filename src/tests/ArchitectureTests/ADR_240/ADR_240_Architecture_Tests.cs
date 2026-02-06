@@ -66,18 +66,19 @@ public sealed class ADR_240_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty($"❌ ADR-240_1_1 违规: 存在未继承结构化异常基类的自定义异常\n\n" +
-                        $"违规类型:\n{string.Join("\n", violations)}\n\n" +
-                        $"问题分析:\n" +
-                        $"自定义异常必须继承自以下三大基类之一：\n" +
-                        $"1. DomainException - 业务规则违反\n" +
-                        $"2. ValidationException - 输入数据验证失败\n" +
-                        $"3. InfrastructureException - 技术依赖失败\n\n" +
-                        $"修复建议：\n" +
-                        $"1. 将异常类改为继承适当的基类\n" +
-                        $"2. 例如：public class OrderCancelledException : DomainException\n" +
-                        $"3. 确保异常分类符合业务语义\n\n" +
-                        $"参考：docs/adr/runtime/ADR-240-handler-exception-constraints.md（§ADR-240_1_1）");
+        var message = AssertionMessageBuilder.BuildWithAnalysis(
+            ruleId: "ADR-240_1_1",
+            summary: "存在未继承结构化异常基类的自定义异常",
+            currentState: $"违规类型:\n{string.Join("\n", violations)}",
+            problemAnalysis: "自定义异常必须继承自以下三大基类之一：\n1. DomainException - 业务规则违反\n2. ValidationException - 输入数据验证失败\n3. InfrastructureException - 技术依赖失败",
+            remediationSteps: new[]
+            {
+                "将异常类改为继承适当的基类",
+                "例如：public class OrderCancelledException : DomainException",
+                "确保异常分类符合业务语义"
+            },
+            adrReference: "docs/adr/runtime/ADR-240-handler-exception-constraints.md");
+        violations.Should().BeEmpty(message);
     }
 
     #endregion
