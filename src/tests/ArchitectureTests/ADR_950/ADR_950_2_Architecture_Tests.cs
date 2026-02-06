@@ -106,7 +106,7 @@ public sealed class ADR_950_2_Architecture_Tests
             return;
         }
 
-        var guideFiles = Directory.GetFiles(guidesPath, "*.md", SearchOption.AllDirectories);
+        var guideFiles = FileSystemTestHelper.GetFilesInDirectory(guidesPath, "*.md", SearchOption.AllDirectories);
         var recommendations = new List<string>();
 
         foreach (var guideFile in guideFiles.Take(10)) // 只检查前10个作为示例

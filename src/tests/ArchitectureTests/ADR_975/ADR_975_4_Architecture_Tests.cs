@@ -17,8 +17,7 @@ public sealed class ADR_975_4_Architecture_Tests
     [Fact(DisplayName = "ADR-975_4_1: 必须定义最低质量阈值")]
     public void ADR_975_4_1_Minimum_Quality_Threshold_Must_Be_Defined()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
+        var adr975Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
@@ -30,8 +29,7 @@ public sealed class ADR_975_4_Architecture_Tests
     [Fact(DisplayName = "ADR-975_4_2: 必须定义硬失败项")]
     public void ADR_975_4_2_Hard_Failure_Items_Must_Be_Defined()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
+        var adr975Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 

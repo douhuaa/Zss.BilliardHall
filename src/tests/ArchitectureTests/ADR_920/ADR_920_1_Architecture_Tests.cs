@@ -22,10 +22,9 @@ public sealed class ADR_920_1_Architecture_Tests
     [Fact(DisplayName = "ADR-920_1_1: 示例代码的法律地位")]
     public void ADR_920_1_1_Example_Code_Must_Not_Define_Architecture_Rules()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
 
         // 验证 ADR-920 文档存在并包含法律地位定义
-        var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-920-examples-governance-constitution.md");
+        var adrFile = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-920-examples-governance-constitution.md");
         File.Exists(adrFile).Should().BeTrue($"ADR-920 文档不存在：{adrFile}");
 
         var content = File.ReadAllText(adrFile);
@@ -62,7 +61,7 @@ public sealed class ADR_920_1_Architecture_Tests
         if (Directory.Exists(examplesDir))
         {
             exampleDocs.AddRange(
-                Directory.GetFiles(examplesDir, "*.md", SearchOption.AllDirectories)
+                FileSystemTestHelper.GetFilesInDirectory(examplesDir, "*.md", SearchOption.AllDirectories)
             );
         }
 
@@ -71,7 +70,7 @@ public sealed class ADR_920_1_Architecture_Tests
         if (Directory.Exists(docsExamplesDir))
         {
             exampleDocs.AddRange(
-                Directory.GetFiles(docsExamplesDir, "*.md", SearchOption.AllDirectories)
+                FileSystemTestHelper.GetFilesInDirectory(docsExamplesDir, "*.md", SearchOption.AllDirectories)
             );
         }
 

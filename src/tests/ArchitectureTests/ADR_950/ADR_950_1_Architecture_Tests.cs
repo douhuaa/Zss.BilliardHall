@@ -97,7 +97,7 @@ public sealed class ADR_950_1_Architecture_Tests
         var guidesPath = Path.Combine(docsPath, "guides");
         if (Directory.Exists(guidesPath))
         {
-            var guideFiles = Directory.GetFiles(guidesPath, "*.md", SearchOption.AllDirectories);
+            var guideFiles = FileSystemTestHelper.GetFilesInDirectory(guidesPath, "*.md", SearchOption.AllDirectories);
             foreach (var guideFile in guideFiles)
             {
                 var content = File.ReadAllText(guideFile);
@@ -135,7 +135,7 @@ public sealed class ADR_950_1_Architecture_Tests
 
     private void CheckNonDecisionDocuments(string path, string docType, List<string> violations)
     {
-        var files = Directory.GetFiles(path, "*.md", SearchOption.AllDirectories);
+        var files = FileSystemTestHelper.GetFilesInDirectory(path, "*.md", SearchOption.AllDirectories);
 
         foreach (var file in files)
         {

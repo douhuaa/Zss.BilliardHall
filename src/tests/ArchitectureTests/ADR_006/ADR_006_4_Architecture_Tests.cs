@@ -10,7 +10,7 @@ public sealed class ADR_006_4_Architecture_Tests
 
     public ADR_006_4_Architecture_Tests()
     {
-        _adrRoot = Path.Combine(TestEnvironment.RepositoryRoot, "docs", "adr");
+        _adrRoot = FileSystemTestHelper.GetAbsolutePath("docs/adr");
     }
 
     [Fact(DisplayName = "ADR-006_4_1: ADR 文件必须位于正确的目录")]

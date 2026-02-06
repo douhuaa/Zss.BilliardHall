@@ -63,7 +63,7 @@ public sealed class ADR_008_1_Architecture_Tests
     public void ADR_008_1_3_Non_ADR_Documents_Must_Not_Define_Architecture_Rules()
     {
         // 检查 README 和 Guide 文档是否包含裁决性语言
-        var readmeFiles = Directory.GetFiles(DocsRoot, "README*.md", SearchOption.AllDirectories)
+        var readmeFiles = FileSystemTestHelper.GetFilesInDirectory(DocsRoot, "README*.md", SearchOption.AllDirectories)
             .Where(f => !f.Contains("node_modules"))
             .Take(5);
 

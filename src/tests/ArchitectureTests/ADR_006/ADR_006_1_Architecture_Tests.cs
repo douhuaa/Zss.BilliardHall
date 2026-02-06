@@ -11,7 +11,7 @@ public sealed class ADR_006_1_Architecture_Tests
 
     public ADR_006_1_Architecture_Tests()
     {
-        _adrRoot = Path.Combine(TestEnvironment.RepositoryRoot, "docs", "adr");
+        _adrRoot = FileSystemTestHelper.GetAbsolutePath("docs/adr");
     }
 
     [Fact(DisplayName = "ADR-006_1_1: 编号段层级映射检查")]

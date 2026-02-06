@@ -59,7 +59,7 @@ public sealed class ADR_907_1_Architecture_Tests
         File.Exists(projectFile).Should().BeTrue(fileMessage);
 
         // 验证测试使用允许的技术（文件系统扫描、Roslyn、Reflection、NetArchTest）
-        var testFiles = Directory.GetFiles(testsDirectory, "*.cs", SearchOption.AllDirectories);
+        var testFiles = FileSystemTestHelper.GetFilesInDirectory(testsDirectory, "*.cs", SearchOption.AllDirectories);
         testFiles.Should().NotBeEmpty(
             AssertionMessageBuilder.BuildContentMissingMessage(
                 ruleId: "ADR-907_1_1",

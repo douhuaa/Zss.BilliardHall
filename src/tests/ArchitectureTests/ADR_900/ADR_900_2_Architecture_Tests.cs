@@ -70,7 +70,7 @@ public sealed class ADR_900_2_Architecture_Tests
         var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory).ToArray();
 
         // 获取所有测试文件
-        var testFiles = Directory.GetFiles(testsDirectory, "*.cs", SearchOption.AllDirectories)
+        var testFiles = FileSystemTestHelper.GetFilesInDirectory(testsDirectory, "*.cs", SearchOption.AllDirectories)
             .Where(f => f.Contains("Architecture_Tests.cs"))
             .ToArray();
 

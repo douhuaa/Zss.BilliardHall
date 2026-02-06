@@ -21,7 +21,7 @@ public sealed class ADR_947_3_Architecture_Tests
     public void ADR_947_3_1_Relationships_Must_Not_Have_Bidirectional_Dependencies()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adrDirectory = Path.Combine(repoRoot, "docs/adr");
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath("docs/adr");
 
         var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory);
 
