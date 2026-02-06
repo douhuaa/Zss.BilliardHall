@@ -25,8 +25,8 @@ public sealed class HostAssemblyData : IEnumerable<object[]>
         if (!Directory.Exists(hostDir))
             return assemblies;
 
-        var configuration = TestConstants.BuildConfiguration;
-        var tfms = TestConstants.SupportedTargetFrameworks;
+        var configuration = TestEnvironment.BuildConfiguration;
+        var tfms = TestEnvironment.SupportedTargetFrameworks;
 
         foreach (var projectDir in Directory.GetDirectories(hostDir))
         {

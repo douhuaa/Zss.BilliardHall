@@ -82,7 +82,7 @@ public sealed class ADR_951_2_Architecture_Tests
                 "参考 ADR-951 中定义的案例文档标准结构",
                 "确保包含：元数据、背景、解决方案、代码示例、常见陷阱、相关案例"
             },
-            adrReference: TestConstants.Adr951Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr951);
 
         violations.Should().BeEmpty(message);
     }
@@ -139,7 +139,7 @@ public sealed class ADR_951_2_Architecture_Tests
                 "Core：核心案例，必须掌握",
                 "Reference：参考案例，作为示范"
             },
-            adrReference: TestConstants.Adr951Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr951);
 
         violations.Should().BeEmpty(message);
     }
@@ -220,7 +220,7 @@ public sealed class ADR_951_2_Architecture_Tests
                 "使用 ❌ 标注错误的做法",
                 "包含必要的 using/import 语句"
             },
-            adrReference: TestConstants.Adr951Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr951);
 
         violations.Should().BeEmpty(message);
     }

@@ -50,7 +50,7 @@ public sealed class ADR_007_1_Architecture_Tests
                 "移除所有声称拥有裁决权的表述",
                 "确保 Agent 配置明确引用 ADR 作为权威来源"
             },
-            adrReference: TestConstants.Adr007Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr007);
 
         violations.Should().BeEmpty(message);
     }
@@ -99,7 +99,7 @@ public sealed class ADR_007_1_Architecture_Tests
                 "明确 Agent 配置不承担宪法责任",
                 "确保 Agent 只是工具，权威在 ADR"
             },
-            adrReference: TestConstants.Adr007Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr007);
 
         violations.Should().BeEmpty(message);
     }
@@ -152,7 +152,7 @@ public sealed class ADR_007_1_Architecture_Tests
                 "Agent 只能引用 ADR 并引导查阅",
                 "不得提供绕过架构约束的建议"
             },
-            adrReference: TestConstants.Adr007Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr007);
 
         violations.Should().BeEmpty(message);
     }

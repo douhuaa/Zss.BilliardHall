@@ -21,7 +21,7 @@ public sealed class ADR_965_1_Architecture_Tests
     [Fact(DisplayName = "ADR-965_1_1: 必须包含可互动的任务清单")]
     public void ADR_965_1_1_Must_Include_Interactive_Checklist()
     {
-        var adr965Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr965Path);
+        var adr965Path = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
             ruleId: "ADR-965_1_1",
@@ -32,7 +32,7 @@ public sealed class ADR_965_1_Architecture_Tests
                 "创建 ADR-965 文档",
                 "在文档中定义可互动的任务清单规范"
             },
-            adrReference: TestConstants.Adr965Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         File.Exists(adr965Path).Should().BeTrue(fileNotFoundMessage);
 
@@ -48,7 +48,7 @@ public sealed class ADR_965_1_Architecture_Tests
                 "在 ADR-965 中添加关于可互动任务清单的说明",
                 "明确说明清单应该支持互动操作"
             },
-            adrReference: TestConstants.Adr965Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         content.Should().Contain("可互动", missingContentMessage);
     }
@@ -60,7 +60,7 @@ public sealed class ADR_965_1_Architecture_Tests
     [Fact(DisplayName = "ADR-965_1_2: 必须使用 GitHub Issue Template")]
     public void ADR_965_1_2_Must_Use_GitHub_Issue_Template()
     {
-        var adr965Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr965Path);
+        var adr965Path = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         var content = FileSystemTestHelper.ReadFileContent(adr965Path);
 
@@ -74,7 +74,7 @@ public sealed class ADR_965_1_Architecture_Tests
                 "在 ADR-965 中添加 GitHub Issue Template 的使用说明",
                 "说明如何创建和使用 Issue Template 来管理学习清单"
             },
-            adrReference: TestConstants.Adr965Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         content.Should().Contain("GitHub Issue Template", templateMessage);
 
@@ -88,7 +88,7 @@ public sealed class ADR_965_1_Architecture_Tests
                 "在 ADR-965 中添加学习周期结构（第 1-4 周）",
                 "为每周定义具体的学习任务清单"
             },
-            adrReference: TestConstants.Adr965Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         content.Should().Contain("第 1 周", weeklyMessage);
     }

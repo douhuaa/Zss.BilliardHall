@@ -25,7 +25,7 @@ public sealed class ADR_007_2_Architecture_Tests
             var missingStates = new List<string>();
 
             // 使用常量检查三态标识
-            foreach (var indicator in TestConstants.ThreeStateIndicators)
+            foreach (var indicator in ArchitectureTestSpecification.Output.States.FullIndicators)
             {
                 var hasIndicator = FileSystemTestHelper.FileContainsAnyKeyword(
                     file,
@@ -54,7 +54,7 @@ public sealed class ADR_007_2_Architecture_Tests
                 "在 Agent 配置中定义三态输出规范",
                 "每种判定结果都应使用相应的标识"
             },
-            adrReference: TestConstants.Adr007Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr007);
 
         violations.Should().BeEmpty(message);
     }
@@ -104,7 +104,7 @@ public sealed class ADR_007_2_Architecture_Tests
                 "使用 Uncertain 状态标识不确定的情况",
                 "引导用户查阅相关 ADR 文档或咨询架构师"
             },
-            adrReference: TestConstants.Adr007Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr007);
 
         violations.Should().BeEmpty(message);
     }
@@ -154,7 +154,7 @@ public sealed class ADR_007_2_Architecture_Tests
                 "必须使用明确的三态标识（✅ Allowed / ⚠️ Blocked / ❓ Uncertain）",
                 "Uncertain 时应引导查阅 ADR 或咨询架构师，而非提供模糊建议"
             },
-            adrReference: TestConstants.Adr007Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr007);
 
         violations.Should().BeEmpty(message);
     }

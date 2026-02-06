@@ -19,7 +19,7 @@ public sealed class ADR_951_1_Architecture_Tests
     [Fact(DisplayName = "ADR-951_1_1: 案例库目录结构必须符合规范")]
     public void ADR_951_1_1_Case_Repository_Must_Have_Valid_Directory_Structure()
     {
-        var casesDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.CasesPath);
+        var casesDirectory = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Cases);
 
         // 检查案例库目录是否存在
         if (!Directory.Exists(casesDirectory))
@@ -42,7 +42,7 @@ public sealed class ADR_951_1_Architecture_Tests
                 "在索引文件中列出所有案例分类",
                 "提供案例的简要说明和链接"
             },
-            adrReference: TestConstants.Adr951Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr951);
         
         FileSystemTestHelper.AssertFileExists(readmePath, readmeMessage);
 
@@ -73,7 +73,7 @@ public sealed class ADR_951_1_Architecture_Tests
                     "在索引文件中列出该分类下的所有案例",
                     "提供分类的简要说明"
                 },
-                adrReference: TestConstants.Adr951Path);
+                adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr951);
 
             missingReadmes.Should().BeEmpty(message);
         }

@@ -87,7 +87,7 @@ public sealed class ADR_960_3_Architecture_Tests
             Console.WriteLine("  1. 确保包含所有必需章节");
             Console.WriteLine("  2. 章节顺序应该合理且易于理解");
             Console.WriteLine("  3. 必须包含快速上手路径（Fast Path）");
-            Console.WriteLine($"\n参考：{TestConstants.Adr960Path} §3.1");
+            Console.WriteLine($"\n参考：{ArchitectureTestSpecification.Adr.KnownDocuments.Adr960} §3.1");
         }
 
         // L2 级别，不阻断测试，仅警告

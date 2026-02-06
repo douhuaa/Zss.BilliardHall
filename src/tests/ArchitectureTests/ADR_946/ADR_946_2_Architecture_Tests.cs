@@ -95,7 +95,7 @@ public sealed class ADR_946_2_Architecture_Tests
                 "或使用占位符（如 ## [Relationships]）",
                 "避免机器解析时产生歧义"
             },
-            adrReference: TestConstants.Adr946Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr946);
 
         violations.Should().BeEmpty(message);
     }

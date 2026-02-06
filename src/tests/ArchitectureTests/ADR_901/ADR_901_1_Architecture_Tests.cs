@@ -43,7 +43,7 @@ public sealed class ADR_901_1_Architecture_Tests
     [Fact(DisplayName = "ADR-901_1_1: 风险表达必须使用三态语义模型")]
     public void ADR_901_1_1_Risk_Expressions_Must_Use_Tristate_Semantic_Model()
     {
-        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Root);
 
         var directoryMessage = AssertionMessageBuilder.BuildDirectoryNotFoundMessage(
             ruleId: "ADR-901_1_1",
@@ -54,7 +54,7 @@ public sealed class ADR_901_1_Architecture_Tests
                 "确保 docs/adr 目录存在",
                 "创建必要的 ADR 文档"
             },
-            adrReference: TestConstants.Adr901Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr901);
 
         Directory.Exists(adrDirectory).Should().BeTrue(directoryMessage);
 
@@ -89,7 +89,7 @@ public sealed class ADR_901_1_Architecture_Tests
                 "将所有风险表达明确归类为 Constraint、Warning 或 Notice 之一",
                 "使用标准的语义声明块格式"
             },
-            adrReference: TestConstants.Adr901Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr901);
 
         violations.Should().BeEmpty(message);
     }
@@ -100,7 +100,7 @@ public sealed class ADR_901_1_Architecture_Tests
     [Fact(DisplayName = "ADR-901_1_2: Constraint 必须包含完整的合法性元素")]
     public void ADR_901_1_2_Constraint_Must_Have_Legality_Conditions()
     {
-        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Root);
         FileSystemTestHelper.AssertDirectoryExists(adrDirectory, $"ADR 文档目录不存在: {adrDirectory}");
 
         var adrFiles = GetActiveAdrFiles(adrDirectory);
@@ -160,7 +160,7 @@ public sealed class ADR_901_1_Architecture_Tests
     [Fact(DisplayName = "ADR-901_1_3: Warning 必须明确风险和放行条件")]
     public void ADR_901_1_3_Warning_Must_Have_Clear_Boundaries()
     {
-        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Root);
         FileSystemTestHelper.AssertDirectoryExists(adrDirectory, $"ADR 文档目录不存在: {adrDirectory}");
 
         var adrFiles = GetActiveAdrFiles(adrDirectory);
@@ -225,7 +225,7 @@ public sealed class ADR_901_1_Architecture_Tests
     [Fact(DisplayName = "ADR-901_1_4: Notice 必须保持纯信息性，不得包含隐性规则")]
     public void ADR_901_1_4_Notice_Must_Be_Pure_Informational()
     {
-        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Root);
         FileSystemTestHelper.AssertDirectoryExists(adrDirectory, $"ADR 文档目录不存在: {adrDirectory}");
 
         var adrFiles = GetActiveAdrFiles(adrDirectory);
@@ -274,7 +274,7 @@ public sealed class ADR_901_1_Architecture_Tests
                 "Notice 只能用于背景说明、设计动机、经验性解释",
                 "如需表达约束，将内容移至 Constraint 或 Warning 块"
             },
-            adrReference: TestConstants.Adr901Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr901);
 
         violations.Should().BeEmpty(message);
     }

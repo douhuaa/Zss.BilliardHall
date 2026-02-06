@@ -43,7 +43,7 @@ public sealed class ADR_960_1_Architecture_Tests
             var relativePath = FileSystemTestHelper.GetRelativePath(file);
 
             // 检查是否包含裁决性关键词（避免误报，检查上下文）
-            foreach (var keyword in TestConstants.DecisionKeywords)
+            foreach (var keyword in ArchitectureTestSpecification.Semantics.DecisionKeywords)
             {
                 // 匹配裁决性模式：如 "必须遵循"、"禁止使用" 等
                 var pattern = $@"\b{Regex.Escape(keyword)}(?:遵循|使用|实现|修改|删除|创建|定义)";
@@ -76,7 +76,7 @@ public sealed class ADR_960_1_Architecture_Tests
     public void ADR_960_1_2_Onboarding_Must_Not_Define_New_Constraints()
     {
         // 验证 ADR-960 文档存在以定义此规则
-        var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
+        var adr960Path = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
             ruleId: "ADR-960_1_2",
@@ -87,7 +87,7 @@ public sealed class ADR_960_1_Architecture_Tests
                 "确保 ADR-960 存在以定义 Onboarding 文档规范",
                 "在 ADR-960 中明确 Onboarding 的非裁决性定位"
             },
-            adrReference: TestConstants.Adr960Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
 
@@ -103,7 +103,7 @@ public sealed class ADR_960_1_Architecture_Tests
                 "在 ADR-960 中添加明确的非裁决性定位声明",
                 "确保 Onboarding 文档的职责定义清晰"
             },
-            adrReference: TestConstants.Adr960Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         content.Should().Contain("不是裁决性文档", missingNonDecisionContent);
 
@@ -116,7 +116,7 @@ public sealed class ADR_960_1_Architecture_Tests
                 "在 ADR-960 中明确禁止 Onboarding 定义架构约束",
                 "确保规则表述清晰明确"
             },
-            adrReference: TestConstants.Adr960Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         content.Should().Contain("不得", missingProhibitionContent);
     }
@@ -128,7 +128,7 @@ public sealed class ADR_960_1_Architecture_Tests
     [Fact(DisplayName = "ADR-960_1_3: Onboarding 唯一职责必须明确定义")]
     public void ADR_960_1_3_Onboarding_Responsibilities_Must_Be_Defined()
     {
-        var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
+        var adr960Path = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
             ruleId: "ADR-960_1_3",
@@ -139,7 +139,7 @@ public sealed class ADR_960_1_Architecture_Tests
                 "创建 ADR-960 文档",
                 "定义 Onboarding 的唯一合法职责"
             },
-            adrReference: TestConstants.Adr960Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
 
@@ -159,7 +159,7 @@ public sealed class ADR_960_1_Architecture_Tests
                 "明确说明 Onboarding 的唯一合法职责是什么",
                 "确保职责定义清晰、具体、可验证"
             },
-            adrReference: TestConstants.Adr960Path,
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960,
             includeClauseReference: true);
 
         hasResponsibilityDefinition.Should().BeTrue(message);
@@ -172,7 +172,7 @@ public sealed class ADR_960_1_Architecture_Tests
     [Fact(DisplayName = "ADR-960_1_4: Onboarding 权威层级必须明确")]
     public void ADR_960_1_4_Onboarding_Authority_Level_Must_Be_Clear()
     {
-        var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
+        var adr960Path = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
             ruleId: "ADR-960_1_4",
@@ -183,7 +183,7 @@ public sealed class ADR_960_1_Architecture_Tests
                 "创建 ADR-960 文档",
                 "定义 Onboarding 在文档权威层级中的位置"
             },
-            adrReference: TestConstants.Adr960Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
 
@@ -203,7 +203,7 @@ public sealed class ADR_960_1_Architecture_Tests
                 "明确说明 Onboarding 文档在权威层级中的位置",
                 "说明当 Onboarding 与 ADR 冲突时的处理原则"
             },
-            adrReference: TestConstants.Adr960Path,
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960,
             includeClauseReference: true);
 
         hasAuthorityHierarchy.Should().BeTrue(message);

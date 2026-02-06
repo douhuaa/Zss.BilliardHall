@@ -77,7 +77,7 @@ public sealed class ADR_902_1_Architecture_Tests
     {
         var violations = new List<string>();
 
-        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Root);
 
         FileSystemTestHelper.AssertDirectoryExists(adrDirectory,
             AssertionMessageBuilder.BuildDirectoryNotFoundMessage(
@@ -85,7 +85,7 @@ public sealed class ADR_902_1_Architecture_Tests
                 directoryPath: adrDirectory,
                 directoryDescription: "ADR 文档目录",
                 remediationSteps: new[] { "创建 ADR 文档目录" },
-                adrReference: TestConstants.Adr902Path));
+                adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr902));
 
         // 扫描所有 ADR 文档
         var adrFiles = FileSystemTestHelper.GetAdrFiles()
@@ -141,7 +141,7 @@ public sealed class ADR_902_1_Architecture_Tests
                     "使用格式：### ADR-XXX_Y：<规则标题>（Rule）",
                     "规则编号必须连续：ADR-XXX_1, ADR-XXX_2, ..."
                 },
-                adrReference: TestConstants.Adr902Path);
+                adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr902);
 
             violations.Should().BeEmpty(message);
         }
@@ -155,14 +155,14 @@ public sealed class ADR_902_1_Architecture_Tests
     public void ADR_902_1_2_ADR_Documents_Must_Follow_Template_Structure()
     {
         // 验证 ADR-902 文档存在
-        var adrFile = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr902Path);
+        var adrFile = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr902);
 
         var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
             ruleId: "ADR-902_1_2",
             filePath: adrFile,
             fileDescription: "ADR-902 文档",
             remediationSteps: new[] { "确保 ADR-902 文档存在以定义模板结构" },
-            adrReference: TestConstants.Adr902Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr902);
 
         File.Exists(adrFile).Should().BeTrue(fileMessage);
 
@@ -189,7 +189,7 @@ public sealed class ADR_902_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
 
-        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Root);
 
         Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
@@ -288,7 +288,7 @@ public sealed class ADR_902_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
 
-        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Root);
 
         Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 

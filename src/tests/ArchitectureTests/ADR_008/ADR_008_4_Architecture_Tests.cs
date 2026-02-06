@@ -16,7 +16,7 @@ public sealed class ADR_008_4_Architecture_Tests
             "测试类不存在",
             "测试类缺失",
             "确保 ADR_008_4_Architecture_Tests 测试类存在",
-            TestConstants.Adr007Path);
+            ArchitectureTestSpecification.Adr.KnownDocuments.Adr007);
         
         testType.Should().NotBeNull(classMessage);
 
@@ -30,7 +30,7 @@ public sealed class ADR_008_4_Architecture_Tests
             "测试类缺少测试方法",
             "测试类中没有测试方法",
             "添加验证 ADR-008_4 相关规则的测试方法",
-            TestConstants.Adr007Path);
+            ArchitectureTestSpecification.Adr.KnownDocuments.Adr007);
 
         methods.Should().NotBeEmpty(methodsMessage);
 

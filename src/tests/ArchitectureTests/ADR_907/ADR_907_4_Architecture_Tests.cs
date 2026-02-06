@@ -175,7 +175,7 @@ public sealed class ADR_907_4_Architecture_Tests
     public void ADR_907_4_3_Enforcement_Levels_Must_Be_Supported()
     {
         var repoRoot = TestEnvironment.RepositoryRoot;
-        var adrFile = Path.Combine(repoRoot, TestConstants.AdrDocsPath, "governance", "ADR-907-architecture-tests-enforcement-governance.md");
+        var adrFile = Path.Combine(repoRoot, ArchitectureTestSpecification.Adr.Paths.Root, "governance", "ADR-907-architecture-tests-enforcement-governance.md");
 
         var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
             ruleId: "ADR-907_4_3",
@@ -239,7 +239,7 @@ public sealed class ADR_907_4_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot;
 
         // 验证 ADR-900 定义了破例机制
-        var adr0000File = Path.Combine(repoRoot, TestConstants.AdrDocsPath, "governance", "ADR-900-architecture-tests.md");
+        var adr0000File = Path.Combine(repoRoot, ArchitectureTestSpecification.Adr.Paths.Root, "governance", "ADR-900-architecture-tests.md");
 
         var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
             ruleId: "ADR-907_4_4",
@@ -276,7 +276,7 @@ public sealed class ADR_907_4_Architecture_Tests
             $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §4.4");
 
         // 验证 ADR-907 说明了 L1 规则的破例限制
-        var adr907File = Path.Combine(repoRoot, TestConstants.AdrDocsPath, "governance", "ADR-907-architecture-tests-enforcement-governance.md");
+        var adr907File = Path.Combine(repoRoot, ArchitectureTestSpecification.Adr.Paths.Root, "governance", "ADR-907-architecture-tests-enforcement-governance.md");
         if (File.Exists(adr907File))
         {
             var adr907Content = FileSystemTestHelper.ReadFileContent(adr907File);
@@ -385,7 +385,7 @@ public sealed class ADR_907_4_Architecture_Tests
     public void ADR_907_4_6_Superseded_ADRs_Must_Be_Handled()
     {
         var repoRoot = TestEnvironment.RepositoryRoot;
-        var adrDocsDirectory = Path.Combine(repoRoot, TestConstants.AdrDocsPath);
+        var adrDocsDirectory = Path.Combine(repoRoot, ArchitectureTestSpecification.Adr.Paths.Root);
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         if (!Directory.Exists(adrDocsDirectory) || !Directory.Exists(testsDirectory))
