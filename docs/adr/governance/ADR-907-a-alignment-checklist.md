@@ -1,10 +1,17 @@
 ---
+adr: "ADR-907-A-Checklist"
 title: "ADR-907-A 对齐清单"
 description: "ADR-907 v2.0 Rule/Clause 双层编号体系对齐进度追踪"
+type: checklist
+status: Final
+level: Governance
 version: "1.0"
 date: 2026-02-03
 maintainer: "Architecture Board"
-status: Living Document
+deciders: "Architecture Board"
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
 ---
 
 # ADR-907-A 对齐清单
@@ -12,6 +19,53 @@ status: Living Document
 > ℹ️ **说明**：本文档为 ADR-907-A 的配套追踪文档，记录所有 ADR 向 Rule/Clause 双层编号体系对齐的进度。
 
 > ⚖️ **权威声明**：本文档为进度追踪用途，**不具备裁决力**。所有对齐标准和规范以 [ADR-907-A](./adr-907-a-adr-alignment-execution-standard.md) 为准。
+
+---
+
+## Focus（聚焦内容）
+
+本文档聚焦于：
+- ADR-907-A 对齐标准的执行进度跟踪
+- 各阶段 ADR 的对齐状态记录
+- 对齐工作的时间线和负责人
+
+## Glossary（术语表）
+
+- **对齐（Alignment）**：将 ADR 从旧格式迁移到 Rule/Clause 双层编号体系
+- **Rule**：ADR 中的主要规则分类
+- **Clause**：Rule 下的具体条款
+
+## Decision（决策内容）
+
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+
+> ⚠️ **重要说明**：本文档是配套追踪文档，不包含架构决策。
+> 
+> 所有对齐标准和规范以 [ADR-907-A](./adr-907-a-adr-alignment-execution-standard.md) 为准。
+
+本文档仅记录对齐执行进度，不做架构决策。
+
+## Enforcement（执法方式）
+
+| 规则编号 | 执行级别 | 执法方式 | 说明 |
+|---------|---------|---------|------|
+| N/A | N/A | 人工追踪 | 本文档为进度追踪，无需自动化执法 |
+
+## Non-Goals（非目标）
+
+本文档**不**包括：
+- ADR 对齐的标准和规范（参见 ADR-907-A）
+- 架构决策和治理规则
+- 执法和验证机制
+
+## Prohibited（禁止事项）
+
+禁止将本文档作为：
+- 架构决策的依据
+- 对齐标准的定义文档
+- 执法规则的来源
+
+所有标准和规范请参考 ADR-907-A。
 
 ---
 
@@ -168,14 +222,21 @@ status: Living Document
 
 - **Supersedes**: None
 - **Related**: 
-  - ADR-907: ArchitectureTests 执法治理体系
-  - ADR-907-A: ADR-907 对齐执行标准
-- **Depends on**: 
-  - ADR-907-A: ADR-907 对齐执行标准
+  - [ADR-907：ArchitectureTests 执法治理体系](ADR-907-architecture-tests-enforcement-governance.md)
+  - [ADR-907-A：对齐执行标准](adr-907-a-adr-alignment-execution-standard.md)
+- **Depends on**: None（本文档为配套追踪文档，不是正式 ADR）
 
 ---
 
-## 变更日志
+## References（非裁决性参考）
+
+- [ADR-907：ArchitectureTests 执法治理体系](./ADR-907-architecture-tests-enforcement-governance.md)
+- [ADR-907-A：对齐执行标准](./adr-907-a-adr-alignment-execution-standard.md)
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md)
+
+---
+
+## History（变更历史）
 
 | 日期 | 变更内容 | 变更人 |
 |------|----------|-------|

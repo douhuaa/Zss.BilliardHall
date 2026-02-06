@@ -41,6 +41,8 @@ superseded_by: null
 
 ## Decision（裁决）
 
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+
 > 🔒 **统一铁律**：  
 > 所有案例库规则必须映射到 Clause，并可通过 ArchitectureTests 或文档扫描自动验证。
 

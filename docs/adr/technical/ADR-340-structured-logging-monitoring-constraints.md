@@ -33,7 +33,12 @@ superseded_by: null
 
 | 术语 | 定义 | 英文对照 |
 |------|------|----------|
-| 待补充 | 待补充 | TBD |
+| 结构化日志 | 使用键值对或结构化格式（如JSON）记录日志，便于机器解析 | Structured Logging |
+| Message Template | Serilog的日志模板格式，使用{Property}占位符 | Message Template |
+| OpenTelemetry | 云原生可观测性框架，标准化指标、日志、追踪 | OpenTelemetry |
+| CorrelationId | 用于关联单个请求所有日志的唯一标识符 | Correlation ID |
+| PascalCase | 首字母大写的驼峰命名法，如UserId | Pascal Case |
+| 敏感信息 | 密码、密钥、个人隐私信息等不应记录的数据 | Sensitive Information |
 
 
 ---

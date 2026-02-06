@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Heuristics;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-008_6: 文档风格启发式规范（Rule）
 /// 文档风格品味建议，非强制规则
@@ -94,10 +96,7 @@ public sealed class ADR_008_6_Architecture_Tests
         var adrDir = Path.Combine(repoRoot, "docs/adr");
         if (!Directory.Exists(adrDir)) return;
 
-        var adrFiles = Directory.GetFiles(adrDir, "ADR-*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
-            .Take(15);
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDir).Take(15);
 
         foreach (var file in adrFiles)
         {

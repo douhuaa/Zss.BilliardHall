@@ -1,4 +1,5 @@
 ﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907_A;
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
 /// ADR-907-A_2: 对齐失败策略

@@ -3,9 +3,9 @@ adr: ADR-220
 title: "事件总线集成规范"
 status: Final
 level: Runtime
-version: "2.0"
+version: "3.0"
 deciders: "Architecture Board"
-date: 2026-01-25
+date: 2026-02-06
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -16,7 +16,7 @@ superseded_by: null
 
 # ADR-220：事件总线集成规范
 
-> ⚖️ **Constraint | L1** - 本 ADR 定义事件总线集成的架构约束，确保模块间通信的松耦合和可靠性。
+> ⚖️ **本 ADR 定义事件总线集成的架构规范，确保模块间通信的松耦合和可靠性。**
 
 **适用范围**：所有模块间事件通信  
 ## Focus（聚焦内容）
@@ -49,7 +49,20 @@ superseded_by: null
 
 ## Decision（裁决）
 
-### 禁止直接依赖具体事件总线（ADR-220.1）【必须架构测试覆盖】
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-220 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-220_<Rule>_<Clause>
+> ```
+
+---
+
+### ADR-220_1：事件总线依赖隔离（Rule）
+
+#### ADR-220_1_1 禁止直接依赖具体事件总线实现
 
 **规则**：
 - 模块代码禁止直接依赖具体事件总线实现
@@ -64,7 +77,13 @@ superseded_by: null
 - ❌ 模块代码直接使用 MassTransit/NServiceBus/Kafka 客户端
 - ✅ 模块仅依赖 `IEventBus` 抽象
 
-### 至少一次传递保证（ADR-220.2）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-220_2：至少一次传递保证（Rule）
+
+#### ADR-220_2_1 事件可靠传递机制要求
 
 **规则**：
 - 事件发布必须保证至少一次传递
@@ -83,7 +102,13 @@ superseded_by: null
 - ❌ 使用 Fire-and-Forget 模式
 - ✅ 实现 Outbox Pattern 或等效机制
 
-### 禁止同步等待事件处理（ADR-220.3）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-220_3：异步通信约束（Rule）
+
+#### ADR-220_3_1 禁止同步等待事件处理
 
 **规则**：
 - 调用方禁止在发布事件后等待事件处理结果
@@ -96,7 +121,13 @@ superseded_by: null
 - ❌ 使用回调机制等待事件完成
 - ✅ 发布事件后立即返回
 
-### 事件订阅者生命周期（ADR-220.4）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-220_4：事件订阅者生命周期（Rule）
+
+#### ADR-220_4_1 订阅者生命周期注册要求
 
 **规则**：
 - 事件订阅者必须注册为 Scoped 或 Transient 生命周期
@@ -110,7 +141,13 @@ superseded_by: null
 - ✅ EventHandler 注册为 Scoped
 - ✅ EventHandler 注册为 Transient
 
-### 跨模块事件数据契约（ADR-220.5）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-220_5：跨模块数据契约约束（Rule）
+
+#### ADR-220_5_1 事件数据契约类型约束
 
 **规则**：
 - 跨模块事件必须仅包含数据契约或原始类型
@@ -135,10 +172,22 @@ superseded_by: null
 
 ## Enforcement（执法模型）
 
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-220 各条款（Clause）的执法方式及执行级别。
 
-### 执行方式
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-220_1_1** | L1 | ArchitectureTests 自动化验证 | §ADR-220_1_1 禁止直接依赖具体事件总线实现 |
+| **ADR-220_2_1** | L1 | ArchitectureTests 自动化验证 + 代码审查 | §ADR-220_2_1 事件可靠传递机制要求 |
+| **ADR-220_3_1** | L1 | ArchitectureTests 自动化验证 | §ADR-220_3_1 禁止同步等待事件处理 |
+| **ADR-220_4_1** | L1 | ArchitectureTests 自动化验证 | §ADR-220_4_1 订阅者生命周期注册要求 |
+| **ADR-220_5_1** | L1 | ArchitectureTests 自动化验证 | §ADR-220_5_1 事件数据契约类型约束 |
 
-待补充...
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
 
 
 ---
@@ -148,16 +197,26 @@ superseded_by: null
 
 本 ADR 明确不涉及以下内容：
 
-- 待补充
+- 事件总线的具体实现选型（Wolverine/MassTransit/NServiceBus）
+- 消息队列的具体配置（Kafka/RabbitMQ/Azure Service Bus）
+- 事件的业务语义和内容结构（由 ADR-120、ADR-210 定义）
+- 事件订阅者的具体业务逻辑实现
+- 事件的性能优化和监控策略
+- 分布式追踪和日志记录的具体实现
 
 ---
 
 ## Prohibited（禁止行为）
 
-
 以下行为明确禁止：
 
-- 待补充
+- ❌ 模块直接引用具体事件总线实现包（如 Wolverine、Kafka 客户端）
+- ❌ 使用 Fire-and-Forget 模式发布事件
+- ❌ 发布事件后同步等待处理结果
+- ❌ 将 EventHandler 注册为 Singleton 生命周期
+- ❌ 在事件中传递领域实体或聚合根
+- ❌ 在事件中传递领域服务引用
+- ❌ 跳过 Outbox Pattern 直接发送事件
 
 
 ---
@@ -181,6 +240,7 @@ superseded_by: null
 
 **相关（Related）**：
 - [ADR-210：事件版本化与兼容性](./ADR-210-event-versioning-compatibility.md) - 事件序列化和版本化
+- [ADR-201：Handler 生命周期管理](./ADR-201-handler-lifecycle-management.md) - 事件订阅者生命周期管理
 
 ---
 
@@ -207,7 +267,8 @@ superseded_by: null
 
 ## History（版本历史）
 
-
 | 版本  | 日期         | 变更说明   |
 |-----|------------|--------|
+| 3.0 | 2026-02-06 | 对齐 ADR-907-A v2.0 标准：转换为 Rule/Clause 双层编号体系，补充完整 Enforcement 映射表、Non-Goals 和 Prohibited 章节 |
+| 2.0 | 2026-01-25 | 补充订阅者生命周期和数据契约约束 |
 | 1.0 | 2026-01-29 | 初始版本 |

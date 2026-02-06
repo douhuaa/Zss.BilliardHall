@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_902;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-902_1: ADR 结构完整性
 /// 验证 ADR 文档符合结构完整性要求
@@ -198,10 +200,8 @@ public sealed class ADR_902_1_Architecture_Tests
 
         if (Directory.Exists(governanceDir))
         {
-            adrFiles.AddRange(Directory
-                .GetFiles(governanceDir, "ADR-*.md", SearchOption.AllDirectories)
-                .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
-                .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
+            adrFiles.AddRange(AdrFileFilter
+                .GetAdrFiles(governanceDir)
                 .Take(MaxAdrFilesToCheckL1));
         }
 
@@ -299,10 +299,8 @@ public sealed class ADR_902_1_Architecture_Tests
 
         if (Directory.Exists(governanceDir))
         {
-            adrFiles.AddRange(Directory
-                .GetFiles(governanceDir, "ADR-*.md", SearchOption.AllDirectories)
-                .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
-                .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
+            adrFiles.AddRange(AdrFileFilter
+                .GetAdrFiles(governanceDir)
                 .Take(MaxAdrFilesToCheckL1));
         }
 

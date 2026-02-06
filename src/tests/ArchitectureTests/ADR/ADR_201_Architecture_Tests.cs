@@ -1,20 +1,24 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR;
 
 /// <summary>
-/// ADR-201: Command Handler 生命周期管理
+/// ADR-201: Handler 生命周期管理
 /// 验证 Handler 生命周期、依赖注入、资源释放等运行时规则
 ///
 /// ADR 映射清单（ADR Mapping Checklist）：
-/// ┌─────────────┬────────────────────────────────────────────────────────┬──────────┐
-/// │ 测试方法     │ 对应 ADR 约束                                          │ ADR 章节 │
-/// ├─────────────┼────────────────────────────────────────────────────────┼──────────┤
-/// │ ADR-201.1   │ Handler 必须注册为 Scoped 生命周期                     │ 规则本体 │
-/// │ ADR-201.3   │ Handler 禁止使用静态字段存储状态                       │ 规则本体 │
-/// └─────────────┴────────────────────────────────────────────────────────┴──────────┘
+/// ┌────────────────┬─────────────────────────────────────────────────────┬──────────┐
+/// │ 测试方法         │ 对应 ADR 约束                                        │ RuleId   │
+/// ├────────────────┼─────────────────────────────────────────────────────┼──────────┤
+/// │ Handlers_Must_Be_Registered_As_Scoped                                 │ Handler 生命周期必须注册为 Scoped                   │ ADR-201_1_1 │
+/// │ Handlers_Must_Not_Have_Static_Fields                                  │ Handler 禁止使用静态字段存储状态                     │ ADR-201_3_1 │
+/// └────────────────┴─────────────────────────────────────────────────────┴──────────┘
+///
+/// 测试覆盖的 Rule：
+/// - ADR-201_1：生命周期与执行上下文匹配（Rule）
+/// - ADR-201_3：静态字段约束（Rule）
 /// </summary>
 public sealed class ADR_201_Architecture_Tests
 {
-    [Theory(DisplayName = "ADR-201_1_3: Handler 禁止使用静态字段存储状态")]
+    [Theory(DisplayName = "ADR-201_3_1: Handler 禁止使用静态字段存储状态")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Handlers_Must_Not_Have_Static_Fields(Assembly moduleAssembly)
     {
@@ -35,8 +39,7 @@ public sealed class ADR_201_Architecture_Tests
             if (staticFields.Any())
             {
                 var fieldNames = string.Join(", ", staticFields.Select(f => f.Name));
-                true.Should().BeFalse(
-                    $"❌ ADR-201_1_3 违规: Handler 使用静态字段存储状态\n\n" +
+                var message = $"❌ ADR-201_3_1 违规：Handler 使用静态字段存储状态\n\n" +
                     $"违规类型：{handler.FullName}\n" +
                     $"静态字段：{fieldNames}\n\n" +
                     $"问题分析：\n" +
@@ -48,7 +51,8 @@ public sealed class ADR_201_Architecture_Tests
                     $"4. 示例：\n" +
                     $"   // ❌ 错误：static Dictionary<string, int> _cache;\n" +
                     $"   // ✅ 正确：private readonly ICacheService _cache;\n\n" +
-                    $"参考：docs/adr/runtime/ADR-201-command-handler-lifecycle-management.md（§1.3）");
+                    $"参考：docs/adr/runtime/ADR-201-handler-lifecycle-management.md（§ADR-201_3_1）";
+                true.Should().BeFalse(message);
             }
         }
     }
@@ -58,7 +62,7 @@ public sealed class ADR_201_Architecture_Tests
     {
         // 注意：此测试需要在集成测试中验证 DI 容器配置
         // 这里仅作为占位符，提醒团队此规则存在
-        true.Should().BeTrue($"ℹ️ ADR-201_1_1 违规: Handler 生命周期验证需在集成测试中检查（此测试为提示性占位符）\n\n" +
+        true.Should().BeTrue($"ℹ️ ADR-201_1_1: Handler 生命周期验证需在集成测试中检查（此测试为提示性占位符）\n\n" +
             $"验证内容：\n" +
             $"所有 Handler 类型必须在 DI 容器中注册为 Scoped 生命周期\n\n" +
             $"验证方法：\n" +
@@ -68,6 +72,6 @@ public sealed class ADR_201_Architecture_Tests
             $"   services.AddScoped<ICommandHandler<CreateOrderCommand>, CreateOrderCommandHandler>();\n\n" +
             $"修复建议：\n" +
             $"在集成测试项目中添加 DI 容器配置验证测试\n\n" +
-            $"参考：docs/adr/runtime/ADR-201-command-handler-lifecycle-management.md（§1.1）");
+            $"参考：docs/adr/runtime/ADR-201-handler-lifecycle-management.md（§ADR-201_1_1）");
     }
 }

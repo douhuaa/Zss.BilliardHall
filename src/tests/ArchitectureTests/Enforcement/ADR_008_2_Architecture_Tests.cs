@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-008_2: ADR 文档结构规范（Rule）
 /// 执行 ADR-008 对 ADR 文档结构的约束
@@ -31,10 +33,7 @@ public sealed class ADR_008_2_Architecture_Tests
         var violations = new List<string>();
 
         // 扫描所有 ADR 文档（递归扫描所有子目录）
-        var adrFiles = Directory.GetFiles(adrDir, "ADR-*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
-            .Take(30); // 限制检查数量，避免性能问题
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDir).Take(30); // 限制检查数量，避免性能问题
 
         foreach (var file in adrFiles)
         {

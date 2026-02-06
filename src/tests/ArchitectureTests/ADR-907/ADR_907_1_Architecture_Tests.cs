@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-907_1: ArchitectureTests 的法律地位
 /// 验证 ArchitectureTests 作为 ADR 唯一自动化执法形式的相关规则
@@ -88,7 +90,7 @@ public sealed class ADR_907_1_Architecture_Tests
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_1_2 无法执行：测试目录不存在 {testsDirectory}");
 
         // 查找所有 Final 或 Active 状态的 ADR
-        var adrFiles = Directory.GetFiles(adrDocsDirectory, "ADR-*.md", SearchOption.AllDirectories);
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDocsDirectory);
         var violations = new List<string>();
 
         foreach (var adrFile in adrFiles)
@@ -158,7 +160,7 @@ public sealed class ADR_907_1_Architecture_Tests
 
         Directory.Exists(adrDocsDirectory).Should().BeTrue($"❌ ADR-907_1_3 无法执行：ADR 文档目录不存在 {adrDocsDirectory}");
 
-        var adrFiles = Directory.GetFiles(adrDocsDirectory, "ADR-*.md", SearchOption.AllDirectories);
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDocsDirectory);
         var violations = new List<string>();
 
         foreach (var adrFile in adrFiles)

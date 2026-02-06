@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_902;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-902_2: 语义职责边界
 /// 验证 ADR 文档的语义职责边界清晰
@@ -35,10 +37,8 @@ public sealed class ADR_902_2_Architecture_Tests
         var decisionWords = new[] { "必须", "MUST", "禁止", "FORBIDDEN", "不允许", "NOT ALLOWED", "不得", "SHALL NOT" };
 
         // 扫描所有 ADR 文档
-        var adrFiles = Directory
-            .GetFiles(adrDirectory, "ADR-*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
+        var adrFiles = AdrFileFilter
+            .GetAdrFiles(adrDirectory)
             .Take(MaxAdrFilesToCheckL2);
 
         foreach (var file in adrFiles)

@@ -17,6 +17,38 @@ public sealed class AdrDocument
     public string FilePath { get; init; } = default!;
 
     /// <summary>
+    /// Front Matter 中的 adr 字段值
+    /// </summary>
+    public string? AdrField { get; init; }
+
+    /// <summary>
+    /// 文档类型（从 Front Matter 的 type 字段或推断）
+    /// 可能的值：adr, checklist, guide, template, etc.
+    /// </summary>
+    public string? Type { get; init; }
+
+    /// <summary>
+    /// ADR 状态（从 Front Matter）
+    /// </summary>
+    public string? Status { get; init; }
+
+    /// <summary>
+    /// 架构层级（从 Front Matter）
+    /// </summary>
+    public string? Level { get; init; }
+
+    /// <summary>
+    /// 是否是正式的 ADR 文档
+    /// 基于 Front Matter 和文件名判断
+    /// </summary>
+    public bool IsAdr { get; init; }
+
+    /// <summary>
+    /// 是否有有效的 Front Matter
+    /// </summary>
+    public bool HasFrontMatter { get; init; }
+
+    /// <summary>
     /// 依赖的 ADR 列表（Depends On）
     /// </summary>
     public HashSet<string> DependsOn { get; } = new();

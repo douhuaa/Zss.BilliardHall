@@ -30,15 +30,7 @@ public sealed class ADR_940_1_Architecture_Tests
             ?? throw new InvalidOperationException("未找到仓库根目录");
 
         _adrRoot = Path.Combine(repoRoot, "docs", "adr");
-        _adrFiles = Directory.GetFiles(_adrRoot, "ADR-*.md", SearchOption.AllDirectories)
-            .Where(f =>
-            {
-                var fileName = Path.GetFileName(f);
-                return !SpecialFiles.Contains(fileName);
-            })
-            .Where(f => !f.Contains("/proposals/", StringComparison.OrdinalIgnoreCase))
-            .Where(f => !f.Contains("\\proposals\\", StringComparison.OrdinalIgnoreCase))
-            .ToList();
+        _adrFiles = AdrFileFilter.GetAdrFiles(_adrRoot).ToList();
     }
 
     /// <summary>

@@ -7,24 +7,143 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 public static class AdrParser
 {
     private static readonly Regex AdrIdPattern = new(@"ADR-\d{3,4}", RegexOptions.Compiled);
+    private static readonly Regex FrontMatterPattern = new(@"^---\s*\r?\n(.*?)\r?\n---\s*\r?\n", 
+        RegexOptions.Singleline | RegexOptions.Compiled);
 
     /// <summary>
-    /// 解析 ADR 文档，提取关系声明
+    /// 解析 ADR 文档，提取关系声明和 Front Matter
     /// </summary>
     public static AdrDocument Parse(string adrId, string filePath)
     {
         var text = File.ReadAllText(filePath);
-        var pipeline = new MarkdownPipelineBuilder().Build();
-        var document = Markdown.Parse(text, pipeline);
+        
+        // 先解析 Front Matter
+        var (hasFrontMatter, adrField, typeField, statusField, levelField) = ParseFrontMatter(text);
+        
+        // 判断是否是正式 ADR
+        var isAdr = DetermineIsAdr(adrField, typeField, filePath, hasFrontMatter);
 
+        // 创建 ADR 文档对象
         var adr = new AdrDocument
         {
             Id = adrId,
-            FilePath = filePath
+            FilePath = filePath,
+            HasFrontMatter = hasFrontMatter,
+            AdrField = adrField,
+            Type = typeField,
+            Status = statusField,
+            Level = levelField,
+            IsAdr = isAdr
         };
 
+        // 解析关系声明
+        var pipeline = new MarkdownPipelineBuilder().Build();
+        var document = Markdown.Parse(text, pipeline);
         ParseRelationships(document, adr);
+        
         return adr;
+    }
+
+    /// <summary>
+    /// 解析 YAML Front Matter
+    /// 提取关键字段：adr, type, status, level
+    /// </summary>
+    private static (bool hasFrontMatter, string? adrField, string? typeField, string? statusField, string? levelField) 
+        ParseFrontMatter(string text)
+    {
+        var match = FrontMatterPattern.Match(text);
+        if (!match.Success)
+        {
+            return (false, null, null, null, null);
+        }
+
+        var frontMatterText = match.Groups[1].Value;
+        
+        // 简单的键值对解析（不依赖 YamlDotNet）
+        var lines = frontMatterText.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        string? adrField = null;
+        string? typeField = null;
+        string? statusField = null;
+        string? levelField = null;
+
+        foreach (var line in lines)
+        {
+            var colonIndex = line.IndexOf(':');
+            if (colonIndex <= 0) continue;
+
+            var key = line.Substring(0, colonIndex).Trim();
+            var value = line.Substring(colonIndex + 1).Trim().Trim('"', '\'');
+
+            switch (key.ToLowerInvariant())
+            {
+                case "adr":
+                    adrField = value;
+                    break;
+                case "type":
+                    typeField = value;
+                    break;
+                case "status":
+                    statusField = value;
+                    break;
+                case "level":
+                    levelField = value;
+                    break;
+            }
+        }
+
+        return (true, adrField, typeField, statusField, levelField);
+    }
+
+    /// <summary>
+    /// 判断是否是正式的 ADR 文档
+    /// 规则：
+    /// 1. Front Matter 中有 adr 字段（如 "ADR-001"）
+    /// 2. type 字段不是 "checklist", "guide", "template"
+    /// 3. 文件名不包含排除关键字
+    /// </summary>
+    private static bool DetermineIsAdr(string? adrField, string? typeField, string filePath, bool hasFrontMatter)
+    {
+        var fileName = Path.GetFileName(filePath);
+
+        // 排除明确标记为非 ADR 的类型
+        if (!string.IsNullOrEmpty(typeField))
+        {
+            var lowerType = typeField.ToLowerInvariant();
+            if (lowerType == "checklist" || lowerType == "guide" || 
+                lowerType == "template" || lowerType == "proposal")
+            {
+                return false;
+            }
+        }
+
+        // 排除文件名包含特定关键字的
+        if (fileName.Contains("README", StringComparison.OrdinalIgnoreCase) ||
+            fileName.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        // 特殊处理 checklist：如果有 adr 字段，仍然算 ADR
+        if (fileName.Contains("checklist", StringComparison.OrdinalIgnoreCase))
+        {
+            return !string.IsNullOrEmpty(adrField);
+        }
+
+        // 如果没有 Front Matter，根据文件名判断
+        if (!hasFrontMatter)
+        {
+            return !fileName.Contains("guide", StringComparison.OrdinalIgnoreCase) &&
+                   !fileName.Contains("proposal", StringComparison.OrdinalIgnoreCase);
+        }
+
+        // 如果有 adr 字段且不为空，认为是正式 ADR
+        if (!string.IsNullOrEmpty(adrField))
+        {
+            return true;
+        }
+
+        // 默认：有 Front Matter 且 type 为 adr 或未指定，认为是 ADR
+        return typeField == null || typeField.Equals("adr", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>

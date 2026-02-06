@@ -1,5 +1,7 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-907_4: Analyzer / CI Gate 映射协议
 /// 验证 ArchitectureTests 与 CI/Analyzer 的集成规则（原 ADR-906）
@@ -379,7 +381,7 @@ public sealed class ADR_907_4_Architecture_Tests
         }
 
         // 查找所有 Superseded 或 Obsolete 的 ADR
-        var adrFiles = Directory.GetFiles(adrDocsDirectory, "ADR-*.md", SearchOption.AllDirectories);
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDocsDirectory);
         var supersededAdrs = new List<string>();
 
         foreach (var adrFile in adrFiles)
