@@ -245,4 +245,131 @@ public sealed class DecisionLanguageTests
         shouldRule.Keywords.Should().Contain("推荐");
         shouldRule.IsBlocking.Should().BeFalse();
     }
+
+    /// <summary>
+    /// 测试否定上下文的识别 - "不应该"、"应该避免" 等不应被识别为裁决语言
+    /// </summary>
+    [Theory(DisplayName = "Parse 应正确识别并排除否定上下文")]
+    [InlineData("不应该使用反射")]
+    [InlineData("应该避免使用反射")]
+    [InlineData("应该不要直接访问数据库")]
+    [InlineData("不必须实现该接口")]
+    [InlineData("不需要额外配置")]
+    public void Parse_Should_Exclude_Negative_Context(string sentence)
+    {
+        // Act
+        var result = ArchitectureTestSpecification.DecisionLanguage.Parse(sentence);
+
+        // Assert - 否定上下文不应识别为裁决语言
+        result.Should().Be(DecisionResult.None,
+            $"否定上下文 '{sentence}' 不应被识别为裁决语言");
+    }
+
+    /// <summary>
+    /// 测试词边界识别 - "需要性" 中的 "需要" 不应被匹配
+    /// </summary>
+    [Theory(DisplayName = "Parse 应正确处理词边界，避免复合词误判")]
+    [InlineData("需要性分析")]
+    [InlineData("可需要性")]
+    [InlineData("禁止者")]
+    public void Parse_Should_Respect_Word_Boundaries(string sentence)
+    {
+        // Act
+        var result = ArchitectureTestSpecification.DecisionLanguage.Parse(sentence);
+
+        // Assert - 复合词中的关键词不应被匹配
+        result.Should().Be(DecisionResult.None,
+            $"复合词 '{sentence}' 中的关键词不应被匹配");
+    }
+
+    /// <summary>
+    /// 测试正向裁决语言在否定上下文测试后仍能正确识别
+    /// </summary>
+    [Theory(DisplayName = "Parse 应正确识别正向裁决语言（非否定上下文）")]
+    [InlineData("应该使用依赖注入", DecisionLevel.Should)]
+    [InlineData("必须实现接口", DecisionLevel.Must)]
+    [InlineData("需要遵循规范", DecisionLevel.Must)]
+    [InlineData("禁止直接调用", DecisionLevel.MustNot)]
+    public void Parse_Should_Still_Recognize_Positive_Decisions(
+        string sentence,
+        DecisionLevel expectedLevel)
+    {
+        // Act
+        var result = ArchitectureTestSpecification.DecisionLanguage.Parse(sentence);
+
+        // Assert
+        result.Level.Should().Be(expectedLevel,
+            $"正向裁决语言 '{sentence}' 应被正确识别");
+        result.IsDecision.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// 测试复杂场景：同一句子中同时包含正向和否定上下文
+    /// </summary>
+    [Fact(DisplayName = "Parse 应处理同一句子中的多个关键词出现")]
+    public void Parse_Should_Handle_Multiple_Keyword_Occurrences()
+    {
+        // Arrange - "应该" 出现两次，第一次是否定上下文，第二次是正向
+        var sentence = "不应该使用反射，但应该使用依赖注入";
+
+        // Act
+        var result = ArchitectureTestSpecification.DecisionLanguage.Parse(sentence);
+
+        // Assert - 应该识别出第二个"应该"
+        result.Level.Should().Be(DecisionLevel.Should,
+            "应该识别句子中非否定上下文的关键词");
+        result.IsDecision.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// 测试边界情况：关键词在句子开头
+    /// </summary>
+    [Theory(DisplayName = "Parse 应正确处理关键词在句子开头的情况")]
+    [InlineData("应该优先考虑性能", DecisionLevel.Should)]
+    [InlineData("必须遵循规范", DecisionLevel.Must)]
+    [InlineData("禁止直接访问", DecisionLevel.MustNot)]
+    public void Parse_Should_Handle_Keywords_At_Start(
+        string sentence,
+        DecisionLevel expectedLevel)
+    {
+        // Act
+        var result = ArchitectureTestSpecification.DecisionLanguage.Parse(sentence);
+
+        // Assert
+        result.Level.Should().Be(expectedLevel);
+    }
+
+    /// <summary>
+    /// 测试边界情况：关键词在句子末尾
+    /// </summary>
+    [Theory(DisplayName = "Parse 应正确处理关键词在句子末尾的情况")]
+    [InlineData("使用依赖注入是必须", DecisionLevel.Must)]
+    [InlineData("这是禁止", DecisionLevel.MustNot)]
+    public void Parse_Should_Handle_Keywords_At_End(
+        string sentence,
+        DecisionLevel expectedLevel)
+    {
+        // Act
+        var result = ArchitectureTestSpecification.DecisionLanguage.Parse(sentence);
+
+        // Assert
+        result.Level.Should().Be(expectedLevel);
+    }
+
+    /// <summary>
+    /// 测试"应该避免"这类典型的误判场景
+    /// </summary>
+    [Theory(DisplayName = "Parse 应正确处理'应该避免'等典型误判场景")]
+    [InlineData("应该避免使用全局变量")]
+    [InlineData("建议避免过度使用继承")]
+    [InlineData("推荐避免循环依赖")]
+    public void Parse_Should_Handle_ShouldAvoid_Pattern(string sentence)
+    {
+        // Act
+        var result = ArchitectureTestSpecification.DecisionLanguage.Parse(sentence);
+
+        // Assert - "应该避免" 应该被识别为否定上下文
+        result.Should().Be(DecisionResult.None,
+            $"'{sentence}' 中的'应该避免'应被识别为否定上下文");
+    }
 }
