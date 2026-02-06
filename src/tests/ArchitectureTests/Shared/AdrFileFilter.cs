@@ -12,6 +12,11 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 /// **使用场景**：
 /// - 用于整个架构测试项目中需要查找和处理 ADR 文档的场景
 /// - 替代直接使用 Directory.GetFiles() 的简单文件名匹配
+/// 
+/// **重构说明**：
+/// - 现在委托给 AdrDocumentClassifier 进行文档分类
+/// - 委托给 FrontMatterParser 进行 Front Matter 解析
+/// - 保持高性能的快速过滤特性
 /// </summary>
 public static class AdrFileFilter
 {
@@ -41,133 +46,21 @@ public static class AdrFileFilter
 
     /// <summary>
     /// 判断文件是否是正式的 ADR 文档
-    /// 优先使用 Front Matter，回退到文件名判断
+    /// 委托给 AdrDocumentClassifier 统一处理
     /// </summary>
     public static bool IsAdrDocument(string filePath)
     {
-        var fileName = Path.GetFileName(filePath);
-
-        // 快速排除明显的非 ADR 文件
-        if (fileName.Equals("README.md", StringComparison.OrdinalIgnoreCase) ||
-            fileName.Contains("TEMPLATE", StringComparison.OrdinalIgnoreCase))
-        {
-            return false;
-        }
-
-        // 排除 proposals 目录
-        if (filePath.Contains("/proposals/", StringComparison.OrdinalIgnoreCase) ||
-            filePath.Contains("\\proposals\\", StringComparison.OrdinalIgnoreCase))
-        {
-            return false;
-        }
-
-        // 检查文件名是否匹配 ADR 模式
+        // 检查文件名是否匹配 ADR 模式（性能优化：提前过滤）
         var fileNameWithoutExt = Path.GetFileNameWithoutExtension(filePath);
         if (!AdrFilePattern.IsMatch(fileNameWithoutExt))
         {
             return false;
         }
 
-        // 尝试从 Front Matter 判断
-        try
-        {
-            var (hasFrontMatter, adrField, typeField) = ParseFrontMatterQuick(filePath);
-            
-            if (hasFrontMatter)
-            {
-                // 排除明确标记为非 ADR 的类型
-                if (!string.IsNullOrEmpty(typeField))
-                {
-                    var lowerType = typeField.ToLowerInvariant();
-                    if (lowerType == "checklist" || lowerType == "guide" || 
-                        lowerType == "template" || lowerType == "proposal")
-                    {
-                        return false;
-                    }
-                }
-
-                // 如果有 adr 字段，认为是正式 ADR
-                if (!string.IsNullOrEmpty(adrField))
-                {
-                    return true;
-                }
-
-                // 有 Front Matter 且 type 为 adr 或未指定
-                return typeField == null || typeField.Equals("adr", StringComparison.OrdinalIgnoreCase);
-            }
-        }
-        catch
-        {
-            // 解析失败，回退到文件名判断
-        }
-
-        // 回退：根据文件名判断（排除常见的非 ADR 关键字）
-        return !fileName.Contains("checklist", StringComparison.OrdinalIgnoreCase) &&
-               !fileName.Contains("guide", StringComparison.OrdinalIgnoreCase);
+        // 委托给统一的文档分类器
+        return AdrDocumentClassifier.IsAdrDocument(filePath);
     }
 
-    /// <summary>
-    /// 快速解析 Front Matter（仅提取关键字段）
-    /// 返回: (hasFrontMatter, adrField, typeField)
-    /// </summary>
-    private static (bool, string?, string?) ParseFrontMatterQuick(string filePath)
-    {
-        // 只读取文件的前几行（Front Matter 通常在开头）
-        const int maxLinesToRead = 50;
-        var lines = File.ReadLines(filePath).Take(maxLinesToRead).ToList();
-
-        if (lines.Count == 0 || !lines[0].Trim().StartsWith("---"))
-        {
-            return (false, null, null);
-        }
-
-        // 查找结束标记
-        var endIndex = -1;
-        for (int i = 1; i < lines.Count; i++)
-        {
-            if (lines[i].Trim() == "---")
-            {
-                endIndex = i;
-                break;
-            }
-        }
-
-        if (endIndex == -1)
-        {
-            return (false, null, null);
-        }
-
-        // 提取 adr 和 type 字段
-        string? adrField = null;
-        string? typeField = null;
-
-        for (int i = 1; i < endIndex; i++)
-        {
-            var line = lines[i];
-            var colonIndex = line.IndexOf(':');
-            if (colonIndex <= 0) continue;
-
-            var key = line.Substring(0, colonIndex).Trim().ToLowerInvariant();
-            var value = line.Substring(colonIndex + 1).Trim().Trim('"', '\'');
-
-            if (key == "adr")
-            {
-                adrField = value;
-            }
-            else if (key == "type")
-            {
-                typeField = value;
-            }
-
-            // 找到两个字段就可以返回了
-            if (adrField != null && typeField != null)
-            {
-                break;
-            }
-        }
-
-        return (true, adrField, typeField);
-    }
 
     /// <summary>
     /// 应用标准的排除过滤器
