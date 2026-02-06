@@ -42,7 +42,7 @@ public sealed class ADR_907_4_Architecture_Tests
             $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §4.1");
 
         // 验证项目配置包含测试框架
-        var projectContent = File.ReadAllText(projectPath);
+        var projectContent = FileSystemTestHelper.ReadFileContent(projectPath);
         var hasTestFramework = projectContent.Contains("xunit") ||
                               projectContent.Contains("NUnit") ||
                               projectContent.Contains("MSTest");
@@ -67,7 +67,7 @@ public sealed class ADR_907_4_Architecture_Tests
 
             foreach (var testFile in testFiles)
             {
-                var content = File.ReadAllText(testFile);
+                var content = FileSystemTestHelper.ReadFileContent(testFile);
                 var hasFactOrTheory = content.Contains("[Fact") || content.Contains("[Theory");
 
                 if (!hasFactOrTheory)
@@ -106,7 +106,7 @@ public sealed class ADR_907_4_Architecture_Tests
         foreach (var testFile in testFiles)
         {
             var fileName = Path.GetFileName(testFile);
-            var content = File.ReadAllText(testFile);
+            var content = FileSystemTestHelper.ReadFileContent(testFile);
 
             // 提取文件中的 ADR 编号
             var fileAdrMatch = Regex.Match(fileName, @"ADR_(\d{3,4})_");
@@ -180,7 +180,7 @@ public sealed class ADR_907_4_Architecture_Tests
             $"  2. 文档必须定义执行级别分类\n\n" +
             $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §4.3");
 
-        var adrContent = File.ReadAllText(adrFile);
+        var adrContent = FileSystemTestHelper.ReadFileContent(adrFile);
 
         // 验证 ADR 定义了执行级别
         var hasEnforcementLevels = adrContent.Contains("L1") && adrContent.Contains("L2");
@@ -240,7 +240,7 @@ public sealed class ADR_907_4_Architecture_Tests
             $"  3. 明确破例流程和审批要求\n\n" +
             $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §4.4");
 
-        var adr0000Content = File.ReadAllText(adr0000File);
+        var adr0000Content = FileSystemTestHelper.ReadFileContent(adr0000File);
 
         // 验证破例机制的关键要素
         var hasExceptionMechanism = adr0000Content.Contains("破例") ||
@@ -264,7 +264,7 @@ public sealed class ADR_907_4_Architecture_Tests
         var adr907File = Path.Combine(repoRoot, TestConstants.AdrDocsPath, "governance", "ADR-907-architecture-tests-enforcement-governance.md");
         if (File.Exists(adr907File))
         {
-            var adr907Content = File.ReadAllText(adr907File);
+            var adr907Content = FileSystemTestHelper.ReadFileContent(adr907File);
 
             // 根据最新的 ADR-907 v2.0，所有规则都是 L1，不再允许破例
             // 检查是否有相关说明
@@ -324,7 +324,7 @@ public sealed class ADR_907_4_Architecture_Tests
             $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §4.5");
 
         // 检查测试是否覆盖了必要的检测能力
-        var allContent = string.Join("\n", testFiles.Select(File.ReadAllText));
+        var allContent = string.Join("\n", testFiles.Select(FileSystemTestHelper.ReadFileContent));
 
         var requiredDetections = new Dictionary<string, string>
         {
@@ -385,7 +385,7 @@ public sealed class ADR_907_4_Architecture_Tests
 
         foreach (var adrFile in adrFiles)
         {
-            var content = File.ReadAllText(adrFile);
+            var content = FileSystemTestHelper.ReadFileContent(adrFile);
             var fileName = Path.GetFileName(adrFile);
 
             // 提取 ADR 编号
@@ -422,7 +422,7 @@ public sealed class ADR_907_4_Architecture_Tests
 
                 if (testFile != null)
                 {
-                    var content = File.ReadAllText(testFile);
+                    var content = FileSystemTestHelper.ReadFileContent(testFile);
 
                     // 检查是否标记为 Obsolete 或包含说明
                     var hasObsoleteMarker = content.Contains("[Obsolete") ||
