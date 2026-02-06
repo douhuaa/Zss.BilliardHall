@@ -10,52 +10,34 @@
 
 ## 测试组织结构
 
-### 三层测试架构（重要变更）
+### 目录结构
 
-从 2026-01-25 开始，架构测试采用三层分级架构：
+从 2026-02-06 开始，架构测试采用统一的扁平目录结构：
 
 ```
 /tests/ArchitectureTests/
-  ├─ Governance/    （宪法层）- 治理原则验证，不可妥协
-  ├─ Enforcement/   （执法层）- 可执行硬约束，失败 = CI 阻断
-  ├─ Heuristics/    （启发层）- 风格建议，永不失败构建
-  └─ ADR/           （传统）- 每个 ADR 对应一个测试类
+  ├─ ADR_001/  - ADR-001 模块化单体与垂直切片架构
+  ├─ ADR_002/  - ADR-002 Platform/Application/Host 三层启动体系
+  ├─ ADR_003/  - ADR-003 命名空间与项目边界规范
+  ├─ ADR_004/  - ADR-004 中央包管理 (CPM) 规范
+  ├─ ADR_005/  - ADR-005 应用内交互模型与执行边界
+  ├─ ...       - 其他 ADR 测试
+  └─ Shared/   - 共享测试辅助代码
 ```
 
-#### 三层设计哲学
+**设计原则：**
 
-&gt; "文档治理 ≠ 纯规则校验"  
-&gt; "把所有检查都塞进一个 xUnit Test，是架构治理失败的早期症状。"
-
-| 层级 | 本质 | 失败策略 | 示例 |
-|------|------|---------|------|
-| **Governance** | 宪法级规则 | ❌ 不允许破例 | 裁决权归属、文档分级定义 |
-| **Enforcement** | 可执行硬约束 | ⚠️ 允许登记破例 | README 禁用词、权威声明要求 |
-| **Heuristics** | 风格/质量启发 | ✅ 永不失败 | 文档长度建议、示例完整性 |
-
-**为什么需要三层？**
-
-- **Governance**: 定义什么是"合法的治理边界"，而不是怎么执行
-- **Enforcement**: 把宪法结论变成可执行规则，机械执行
-- **Heuristics**: 品味和建议，避免"要么放水、要么内耗"
-
-#### 重构案例：ADR-008
-
-ADR-008（文档治理宪法）是第一个完成三层拆分的测试：
-
-- **Governance 层**: `ADR_008_Governance_Tests.cs` - 验证治理边界定义
-- **Enforcement 层**:
-  - `DocumentationDecisionLanguageTests.cs` - README 裁决语言检查
-  - `DocumentationAuthorityDeclarationTests.cs` - Instructions/Agents 权威声明
-  - `SkillsJudgmentLanguageTests.cs` - Skills 判断性语言检查
-  - `AdrStructureTests.cs` - ADR 结构验证
-- **Heuristics 层**: `DocumentationStyleHeuristicsTests.cs` - 风格建议
+- 每个 ADR 拥有独立的目录（格式：`ADR_XXX`）
+- 所有相关测试文件放在对应的 ADR 目录中
+- 目录命名统一使用下划线（`_`）而非连字符（`-`）
+- 不使用三层架构目录（已废弃：Governance/Enforcement/Heuristics）
+- 不使用聚合目录（已废弃：ADR/）
 
 ---
 
-### ADR 目录（核心测试套件）
+### 核心 ADR 测试套件
 
-位于 `ADR/` 子目录下，每个 ADR 文档对应一个测试类：
+每个 ADR 文档对应一个独立目录，目录内包含相关的测试类：
 
 #### ADR-900: 架构测试元规则
 
