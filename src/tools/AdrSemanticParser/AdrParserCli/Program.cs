@@ -115,6 +115,9 @@ static async Task<int> BatchCommand(string[] args)
 
     Console.WriteLine($"📂 扫描目录: {inputDir}");
 
+    // 注意：这里使用简单的文件名过滤，而不是 AdrFileFilter
+    // 因为这是一个独立的 CLI 工具，不应依赖测试项目的基础设施
+    // 过滤逻辑：排除 README、RELATIONSHIP-MAP 和 proposals 目录
     var excludedNames = new[] { "README", "RELATIONSHIP-MAP" };
     var adrFiles = Directory.GetFiles(inputDir, "ADR-*.md", SearchOption.AllDirectories)
         .Where(f =>

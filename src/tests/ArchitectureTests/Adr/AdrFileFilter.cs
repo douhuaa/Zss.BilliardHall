@@ -3,6 +3,18 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 /// <summary>
 /// ADR 文件过滤器
 /// 提供统一的文件过滤逻辑，使用 YAML Front Matter 识别文档类型
+/// 
+/// **最佳实践**：
+/// - 所有测试代码应使用 AdrFileFilter.GetAdrFiles() 而不是 Directory.GetFiles()
+/// - 这确保过滤逻辑统一，通过 YAML Front Matter 精确识别真正的 ADR 文档
+/// - 避免将 TEMPLATE、CHECKLIST、guide、proposal 等非 ADR 文档误认为 ADR
+/// 
+/// **已知使用位置**：
+/// - ADR_900_2_Architecture_Tests.cs
+/// - ADR_901_1_Architecture_Tests.cs
+/// - ADR_901_2_Architecture_Tests.cs
+/// - FileSystemTestHelper.cs
+/// - 其他架构测试...
 /// </summary>
 public static class AdrFileFilter
 {
