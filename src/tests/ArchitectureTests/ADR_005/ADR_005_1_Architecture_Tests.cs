@@ -22,16 +22,19 @@ public sealed class ADR_005_1_Architecture_Tests
             var isQueryHandler = handler.Name.Contains("Query");
             var isEventHandler = handler.Name.Contains("Event");
 
-            (isCommandHandler || isQueryHandler || isEventHandler).Should().BeTrue(
-                $"❌ ADR-005_1_1 违规: Handler 命名不清晰\n\n" +
-                $"违规类型: {handler.FullName}\n\n" +
-                $"问题分析:\n" +
-                $"Handler 命名未明确表达业务意图（Command/Query/Event）\n\n" +
-                $"修复建议：\n" +
-                $"1. 将 Handler 重命名为 *CommandHandler（如 CreateOrderCommandHandler）\n" +
-                $"2. 或重命名为 *QueryHandler（如 GetOrderByIdQueryHandler）\n" +
-                $"3. 或重命名为 *EventHandler（如 OrderCreatedEventHandler）\n\n" +
-                $"参考: ADR-005_1_1 - 每个业务用例必须唯一 Handler");
+            var message = AssertionMessageBuilder.BuildWithAnalysis(
+                ruleId: "ADR-005_1_1",
+                summary: "Handler 命名不清晰",
+                currentState: $"违规类型: {handler.FullName}",
+                problemAnalysis: "Handler 命名未明确表达业务意图（Command/Query/Event）",
+                remediationSteps: new[]
+                {
+                    "将 Handler 重命名为 *CommandHandler（如 CreateOrderCommandHandler）",
+                    "或重命名为 *QueryHandler（如 GetOrderByIdQueryHandler）",
+                    "或重命名为 *EventHandler（如 OrderCreatedEventHandler）"
+                },
+                adrReference: "docs/adr/constitutional/ADR-005-Business-Logic-Layering.md");
+            (isCommandHandler || isQueryHandler || isEventHandler).Should().BeTrue(message);
         }
     }
 
@@ -58,16 +61,19 @@ public sealed class ADR_005_1_Architecture_Tests
                 .Where(t => !t.Namespace?.StartsWith("System") == true)
                 .ToList();
 
-            (constructorParams.Count > 5).Should().BeFalse($"❌ ADR-005_1_2 违规: Endpoint/Controller 包含过多依赖\n\n" +
-                    $"违规类型: {endpoint.FullName}\n" +
-                    $"构造函数依赖数量: {constructorParams.Count} 个（超过建议的 5 个）\n\n" +
-                    $"问题分析:\n" +
-                    $"Endpoint/Controller 注入过多业务依赖，可能包含业务逻辑\n\n" +
-                    $"修复建议：\n" +
-                    $"1. Endpoint 应只注入 IMessageBus 或类似的协调服务\n" +
-                    $"2. 将业务逻辑移到 Handler 中实现\n" +
-                    $"3. Endpoint 只负责：接收请求 → 映射 Command/Query → 转发给 Handler → 返回响应\n\n" +
-                    $"参考: ADR-005_1_2 - Endpoint 仅做请求适配");
+            var message = AssertionMessageBuilder.BuildWithAnalysis(
+                ruleId: "ADR-005_1_2",
+                summary: "Endpoint/Controller 包含过多依赖",
+                currentState: $"违规类型: {endpoint.FullName}\n构造函数依赖数量: {constructorParams.Count} 个（超过建议的 5 个）",
+                problemAnalysis: "Endpoint/Controller 注入过多业务依赖，可能包含业务逻辑",
+                remediationSteps: new[]
+                {
+                    "Endpoint 应只注入 IMessageBus 或类似的协调服务",
+                    "将业务逻辑移到 Handler 中实现",
+                    "Endpoint 只负责：接收请求 → 映射 Command/Query → 转发给 Handler → 返回响应"
+                },
+                adrReference: "docs/adr/constitutional/ADR-005-Business-Logic-Layering.md");
+            (constructorParams.Count > 5).Should().BeFalse(message);
         }
     }
 }
