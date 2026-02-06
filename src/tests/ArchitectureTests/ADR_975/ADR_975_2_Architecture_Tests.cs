@@ -20,7 +20,7 @@ public sealed class ADR_975_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
-        var content = File.ReadAllText(adr975Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
         content.Should().Contain("自动化执行",
             $"❌ ADR-975_2_1 违规：ADR-975 必须要求质量检测自动化执行\n\n" +
@@ -33,7 +33,7 @@ public sealed class ADR_975_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
-        var content = File.ReadAllText(adr975Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
         content.Should().Contain("链接有效性检测",
             $"❌ ADR-975_2_2 违规：ADR-975 必须包含链接有效性检测\n\n" +

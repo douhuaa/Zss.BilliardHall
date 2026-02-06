@@ -54,7 +54,7 @@ public sealed class ADR_007_5_Architecture_Tests
         File.Exists(testFile).Should().BeTrue(message);
 
         // 验证文件包含实质性内容
-        var content = File.ReadAllText(testFile);
+        var content = FileSystemTestHelper.ReadFileContent(testFile);
         content.Length.Should().BeGreaterThan(100);
         content.Should().Contain("ADR_007_5");
     }

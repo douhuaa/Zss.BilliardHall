@@ -20,7 +20,7 @@ public sealed class ADR_975_4_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
-        var content = File.ReadAllText(adr975Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
         content.Should().Contain("≥ 85%",
             $"❌ ADR-975_4_1 违规：ADR-975 必须定义最低质量阈值为 85%\n\n" +
@@ -33,7 +33,7 @@ public sealed class ADR_975_4_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
-        var content = File.ReadAllText(adr975Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
         content.Should().Contain("硬失败项",
             $"❌ ADR-975_4_2 违规：ADR-975 必须定义硬失败项\n\n" +

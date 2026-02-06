@@ -109,7 +109,7 @@ public sealed class ADR_907_2_Architecture_Tests
                 }
 
                 // 验证文件内容主要测试单一 ADR
-                var content = File.ReadAllText(testFile);
+                var content = FileSystemTestHelper.ReadFileContent(testFile);
 
                 // 提取文件名中的 ADR 编号
                 var fileAdrMatch = Regex.Match(fileName, @"ADR_(\d{3,4})");
@@ -221,7 +221,7 @@ public sealed class ADR_907_2_Architecture_Tests
             foreach (var testFile in testFiles)
             {
                 var fileName = Path.GetFileName(testFile);
-                var content = File.ReadAllText(testFile);
+                var content = FileSystemTestHelper.ReadFileContent(testFile);
 
                 // 查找所有测试方法（标记了 [Fact] 或 [Theory]）
                 var factMethods = Regex.Matches(content, @"\[Fact.*?\]\s+public\s+void\s+(\w+)\s*\(");
@@ -285,7 +285,7 @@ public sealed class ADR_907_2_Architecture_Tests
             foreach (var testFile in testFiles)
             {
             var fileName = Path.GetFileName(testFile);
-            var content = File.ReadAllText(testFile);
+            var content = FileSystemTestHelper.ReadFileContent(testFile);
 
             // 提取文件中的 ADR 编号
             var fileAdrMatch = Regex.Match(fileName, @"ADR_(\d{3,4})_");
@@ -357,7 +357,7 @@ public sealed class ADR_907_2_Architecture_Tests
             foreach (var testFile in testFiles)
             {
             var fileName = Path.GetFileName(testFile);
-            var content = File.ReadAllText(testFile);
+            var content = FileSystemTestHelper.ReadFileContent(testFile);
 
             // 检测弱断言或形式化断言
             var weakPatterns = new[]
@@ -414,7 +414,7 @@ public sealed class ADR_907_2_Architecture_Tests
             foreach (var testFile in testFiles)
             {
             var fileName = Path.GetFileName(testFile);
-            var content = File.ReadAllText(testFile);
+            var content = FileSystemTestHelper.ReadFileContent(testFile);
 
             // 检测 Skip 或条件禁用
             var skipPatterns = new[]

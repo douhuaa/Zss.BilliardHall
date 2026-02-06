@@ -124,7 +124,7 @@ public sealed class ADR_007_1_Architecture_Tests
 
         foreach (var file in agentFiles)
         {
-            var content = File.ReadAllText(file);
+            var content = FileSystemTestHelper.ReadFileContent(file);
             var fileName = Path.GetFileName(file);
 
             foreach (var action in forbiddenActions)

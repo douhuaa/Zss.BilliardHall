@@ -20,7 +20,7 @@ public sealed class ADR_970_5_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
-        var content = File.ReadAllText(adr970Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
         content.Should().Contain("易于访问",
             $"❌ ADR-970_5_1 违规：ADR-970 必须要求日志易于访问\n\n" +
@@ -33,7 +33,7 @@ public sealed class ADR_970_5_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
-        var content = File.ReadAllText(adr970Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
         content.Should().Contain("访问方式",
             $"❌ ADR-970_5_2 违规：ADR-970 必须定义访问方式\n\n" +

@@ -34,7 +34,7 @@ public sealed class ADR_907_3_Architecture_Tests
         foreach (var testFile in testFiles)
         {
             var fileName = Path.GetFileName(testFile);
-            var content = File.ReadAllText(testFile);
+            var content = FileSystemTestHelper.ReadFileContent(testFile);
 
             // 统计有效断言数量
             // 使用统一的断言模式定义（支持所有常用的 FluentAssertions API）
@@ -93,7 +93,7 @@ public sealed class ADR_907_3_Architecture_Tests
         foreach (var testFile in testFiles)
         {
             var fileName = Path.GetFileName(testFile);
-            var content = File.ReadAllText(testFile);
+            var content = FileSystemTestHelper.ReadFileContent(testFile);
 
             // 查找所有测试方法
             var factMethods = Regex.Matches(content, @"\[Fact.*?DisplayName\s*=\s*""([^""]+)""[^\]]*\]\s+public\s+void\s+(\w+)");
@@ -158,7 +158,7 @@ public sealed class ADR_907_3_Architecture_Tests
         foreach (var testFile in testFiles)
         {
             var fileName = Path.GetFileName(testFile);
-            var content = File.ReadAllText(testFile);
+            var content = FileSystemTestHelper.ReadFileContent(testFile);
 
             // 提取文件中的 ADR 编号
             var fileAdrMatch = Regex.Match(fileName, @"ADR_(\d{3,4})_");
@@ -251,7 +251,7 @@ public sealed class ADR_907_3_Architecture_Tests
         foreach (var testFile in testFiles)
         {
             var fileName = Path.GetFileName(testFile);
-            var content = File.ReadAllText(testFile);
+            var content = FileSystemTestHelper.ReadFileContent(testFile);
 
             // 检测形式化断言
             var formalPatterns = new Dictionary<string, string>

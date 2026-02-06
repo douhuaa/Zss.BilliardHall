@@ -40,7 +40,7 @@ public sealed class ADR_340_Architecture_Tests
             $"4. 添加必要的包引用（Serilog、OpenTelemetry 等）\n\n" +
             $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.1）");
 
-        var content = File.ReadAllText(platformCsproj);
+        var content = FileSystemTestHelper.ReadFileContent(platformCsproj);
 
         var requiredPackages = new[]
         {
@@ -85,7 +85,7 @@ public sealed class ADR_340_Architecture_Tests
             $"4. 参考工程标准文档中的代码示例\n\n" +
             $"参考：docs/adr/technical/ADR-340-platform-observability-stack.md（§1.2）");
 
-        var content = File.ReadAllText(bootstrapperFile);
+        var content = FileSystemTestHelper.ReadFileContent(bootstrapperFile);
 
         // 检查 Serilog 配置代码
         var hasSerilogUsing = content.Contains("using Serilog") || content.Contains("Serilog.");

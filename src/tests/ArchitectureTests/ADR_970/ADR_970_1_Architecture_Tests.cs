@@ -28,7 +28,7 @@ public sealed class ADR_970_1_Architecture_Tests
             $"❌ ADR-970_1_1 违规：ADR-970 文档不存在\n\n" +
             $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §1.1");
 
-        var content = File.ReadAllText(adr970Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
         // 验证定义了存储结构
         content.Should().Contain("docs/reports/",
@@ -46,7 +46,7 @@ public sealed class ADR_970_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
-        var content = File.ReadAllText(adr970Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
         // 验证包含主要子目录
         var requiredDirs = new[] { "architecture-tests", "dependencies", "security", "builds", "tests" };
