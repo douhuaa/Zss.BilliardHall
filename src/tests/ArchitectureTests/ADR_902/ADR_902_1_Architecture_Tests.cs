@@ -93,7 +93,7 @@ public sealed class ADR_902_1_Architecture_Tests
 
         foreach (var file in adrFiles)
         {
-            var content = File.ReadAllText(file);
+            var content = FileSystemTestHelper.ReadFileContent(file);
             var relativePath = Path.GetRelativePath(TestEnvironment.RepositoryRoot!, file);
 
             // 提取 ADR 编号（如 ADR-902）

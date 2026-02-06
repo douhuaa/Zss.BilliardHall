@@ -25,22 +25,115 @@ public sealed class ADR_920_1_Architecture_Tests
 
         // 验证 ADR-920 文档存在并包含法律地位定义
         var adrFile = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-920-examples-governance-constitution.md");
-        File.Exists(adrFile).Should().BeTrue($"ADR-920 文档不存在：{adrFile}");
+        
+        var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-920_1_1",
+            filePath: adrFile,
+            fileDescription: "ADR-920 示例治理宪法文档",
+            remediationSteps: new[]
+            {
+                "创建 ADR-920 文档",
+                "定义示例代码的法律地位和边界约束"
+            },
+            adrReference: "docs/adr/governance/ADR-920-examples-governance-constitution.md");
 
-        var content = File.ReadAllText(adrFile);
+        File.Exists(adrFile).Should().BeTrue(fileMessage);
+
+        var content = FileSystemTestHelper.ReadFileContent(adrFile);
 
         // 验证必需的条款存在
-        content.Should().Contain("示例代码的法律地位", "缺少示例代码法律地位定义");
-        content.Should().Contain("示例代码是\"认知放大器\"，不是\"架构定义器\"", "缺少核心原则声明");
+        var missingMessage1 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-920_1_1",
+            filePath: adrFile,
+            missingContent: "示例代码的法律地位",
+            remediationSteps: new[]
+            {
+                "在 ADR-920 中添加示例代码法律地位定义",
+                "明确示例代码不具备架构定义权力"
+            },
+            adrReference: "docs/adr/governance/ADR-920-examples-governance-constitution.md");
+
+        content.Should().Contain("示例代码的法律地位", missingMessage1);
+        
+        var missingMessage2 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-920_1_1",
+            filePath: adrFile,
+            missingContent: "示例代码是\"认知放大器\"，不是\"架构定义器\"",
+            remediationSteps: new[]
+            {
+                "在 ADR-920 中添加核心原则声明",
+                "明确示例代码的认知放大器定位"
+            },
+            adrReference: "docs/adr/governance/ADR-920-examples-governance-constitution.md");
+
+        content.Should().Contain("示例代码是\"认知放大器\"，不是\"架构定义器\"", missingMessage2);
 
         // 验证示例代码禁止的权力已明确列出
-        content.Should().Contain("定义架构规则", "未明确禁止定义架构规则");
-        content.Should().Contain("引入 ADR 中未允许的结构或模式", "未明确禁止引入未批准的模式");
-        content.Should().Contain("作为架构正确性的证据", "未明确禁止作为架构证据");
+        var missingMessage3 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-920_1_1",
+            filePath: adrFile,
+            missingContent: "定义架构规则",
+            remediationSteps: new[]
+            {
+                "明确禁止示例代码定义架构规则",
+                "在禁止权力列表中添加此项"
+            },
+            adrReference: "docs/adr/governance/ADR-920-examples-governance-constitution.md");
+
+        content.Should().Contain("定义架构规则", missingMessage3);
+        
+        var missingMessage4 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-920_1_1",
+            filePath: adrFile,
+            missingContent: "引入 ADR 中未允许的结构或模式",
+            remediationSteps: new[]
+            {
+                "明确禁止引入未经 ADR 批准的模式",
+                "在禁止权力列表中添加此项"
+            },
+            adrReference: "docs/adr/governance/ADR-920-examples-governance-constitution.md");
+
+        content.Should().Contain("引入 ADR 中未允许的结构或模式", missingMessage4);
+        
+        var missingMessage5 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-920_1_1",
+            filePath: adrFile,
+            missingContent: "作为架构正确性的证据",
+            remediationSteps: new[]
+            {
+                "明确禁止示例代码作为架构证据",
+                "在禁止权力列表中添加此项"
+            },
+            adrReference: "docs/adr/governance/ADR-920-examples-governance-constitution.md");
+
+        content.Should().Contain("作为架构正确性的证据", missingMessage5);
 
         // 验证示例代码允许的用途已明确列出
-        content.Should().Contain("演示如何使用已有的架构模式", "未明确允许演示用途");
-        content.Should().Contain("说明具体的 API 调用方式", "未明确允许API说明用途");
+        var missingMessage6 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-920_1_1",
+            filePath: adrFile,
+            missingContent: "演示如何使用已有的架构模式",
+            remediationSteps: new[]
+            {
+                "明确允许示例代码演示已有模式",
+                "在允许用途列表中添加此项"
+            },
+            adrReference: "docs/adr/governance/ADR-920-examples-governance-constitution.md");
+
+        content.Should().Contain("演示如何使用已有的架构模式", missingMessage6);
+        
+        var missingMessage7 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-920_1_1",
+            filePath: adrFile,
+            missingContent: "说明具体的 API 调用方式",
+            remediationSteps: new[]
+            {
+                "明确允许示例代码说明 API 用法",
+                "在允许用途列表中添加此项"
+            },
+            adrReference: "docs/adr/governance/ADR-920-examples-governance-constitution.md");
+
+        content.Should().Contain("说明具体的 API 调用方式", missingMessage7);
     }
 
     /// <summary>
@@ -87,7 +180,7 @@ public sealed class ADR_920_1_Architecture_Tests
 
         foreach (var file in exampleDocs.Take(MaxExampleFilesToCheck))
         {
-            var content = File.ReadAllText(file);
+            var content = FileSystemTestHelper.ReadFileContent(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
 
             // 检查前1000个字符（声明应该在开头）

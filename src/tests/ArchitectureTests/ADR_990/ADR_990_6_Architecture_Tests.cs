@@ -19,14 +19,33 @@ public sealed class ADR_990_6_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
-        var content = File.ReadAllText(adr990Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr990Path);
 
-        content.Should().Contain("路线图过期",
-            $"❌ ADR-990_6_1 违规：ADR-990 必须定义路线图过期机制\n\n" +
-            $"参考：docs/adr/governance/ADR-990-documentation-evolution-roadmap.md §6.1");
+        var missingMessage1 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-990_6_1",
+            filePath: adr990Path,
+            missingContent: "路线图过期",
+            remediationSteps: new[]
+            {
+                "在 ADR-990 中定义路线图过期机制",
+                "说明路线图过期的判定标准"
+            },
+            adrReference: "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
-        content.Should().Contain("治理失效",
-            $"❌ ADR-990_6_1 违规：ADR-990 必须将路线图过期视为治理失效");
+        content.Should().Contain("路线图过期", missingMessage1);
+
+        var missingMessage2 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-990_6_1",
+            filePath: adr990Path,
+            missingContent: "治理失效",
+            remediationSteps: new[]
+            {
+                "在 ADR-990 中明确将路线图过期视为治理失效",
+                "定义治理失效后的处理流程"
+            },
+            adrReference: "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
+
+        content.Should().Contain("治理失效", missingMessage2);
     }
 
 }

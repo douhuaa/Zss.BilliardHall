@@ -94,7 +94,7 @@ public sealed class ADR_907_1_Architecture_Tests
 
         foreach (var adrFile in adrFiles)
         {
-            var content = File.ReadAllText(adrFile);
+            var content = FileSystemTestHelper.ReadFileContent(adrFile);
             var fileName = Path.GetFileName(adrFile);
 
             // 提取 ADR 编号
@@ -164,7 +164,7 @@ public sealed class ADR_907_1_Architecture_Tests
 
         foreach (var adrFile in adrFiles)
         {
-            var content = File.ReadAllText(adrFile);
+            var content = FileSystemTestHelper.ReadFileContent(adrFile);
             var fileName = Path.GetFileName(adrFile);
 
             // 检查是否为 Final 或 Active 状态

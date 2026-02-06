@@ -51,7 +51,7 @@ public sealed class ADR_920_3_Architecture_Tests
                 continue;
             }
 
-            var content = File.ReadAllText(readmePath);
+            var content = FileSystemTestHelper.ReadFileContent(readmePath);
 
             // 检查必填字段
             var missingFields = new List<string>();

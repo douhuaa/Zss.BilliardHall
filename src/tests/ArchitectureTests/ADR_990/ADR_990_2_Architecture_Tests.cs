@@ -19,11 +19,20 @@ public sealed class ADR_990_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
-        var content = File.ReadAllText(adr990Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr990Path);
 
-        content.Should().Contain("每季度更新",
-            $"❌ ADR-990_2_1 违规：ADR-990 必须要求每季度更新路线图\n\n" +
-            $"参考：docs/adr/governance/ADR-990-documentation-evolution-roadmap.md §2.1");
+        var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-990_2_1",
+            filePath: adr990Path,
+            missingContent: "每季度更新",
+            remediationSteps: new[]
+            {
+                "在 ADR-990 中添加每季度更新路线图的要求",
+                "明确更新频率和时间节点"
+            },
+            adrReference: "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
+
+        content.Should().Contain("每季度更新", missingMessage);
     }
 
 }

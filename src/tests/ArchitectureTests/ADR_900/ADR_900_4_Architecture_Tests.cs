@@ -25,43 +25,65 @@ public sealed class ADR_900_4_Architecture_Tests
         var adr900File = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-900-architecture-tests.md");
 
         // 验证 ADR-900 文件存在
-        File.Exists(adr900File).Should().BeTrue(
-            $"❌ ADR-900_4_1 违规：ADR-900 文档不存在\n\n" +
-            $"预期路径：{adr900File}\n\n" +
-            $"修复建议：\n" +
-            $"  确保 ADR-900 文档位于正确位置\n\n" +
-            $"参考：docs/adr/governance/ADR-900-architecture-tests.md §4.1");
+        var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-900_4_1",
+            filePath: adr900File,
+            fileDescription: "ADR-900 文档",
+            remediationSteps: new[]
+            {
+                "确保 ADR-900 文档位于正确位置",
+                "创建冲突裁决优先级定义"
+            },
+            adrReference: "docs/adr/governance/ADR-900-architecture-tests.md");
+        
+        File.Exists(adr900File).Should().BeTrue(fileNotFoundMessage);
 
-        var content = File.ReadAllText(adr900File);
+        var content = FileSystemTestHelper.ReadFileContent(adr900File);
 
         // 验证包含优先级顺序定义
-        content.Should().Contain("优先级",
-            $"❌ ADR-900_4_1 违规：ADR-900 未定义冲突裁决优先级\n\n" +
-            $"修复建议：\n" +
-            $"  在 ADR-900 中定义架构规则冲突的裁决优先级顺序：\n" +
-            $"  1. 架构安全与数据一致性\n" +
-            $"  2. 系统稳定性与演进能力\n" +
-            $"  3. 生命周期与资源安全\n" +
-            $"  4. 结构一致性与可维护性\n" +
-            $"  5. 流程与治理便利性\n\n" +
-            $"参考：docs/adr/governance/ADR-900-architecture-tests.md §4.1");
+        var priorityMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-900_4_1",
+            filePath: adr900File,
+            missingContent: "优先级",
+            remediationSteps: new[]
+            {
+                "在 ADR-900 中定义冲突裁决的优先级顺序",
+                "明确优先级：安全 > 稳定性 > 生命周期 > 结构 > 流程"
+            },
+            adrReference: "docs/adr/governance/ADR-900-architecture-tests.md");
+        
+        content.Should().Contain("优先级", priorityMessage);
 
         // 验证包含具体优先级列表
         var priorityItems = new[] { "安全", "稳定性", "生命周期", "结构一致性", "流程" };
         foreach (var item in priorityItems)
         {
-            content.Should().Contain(item,
-                $"❌ ADR-900_4_1 违规：ADR-900 未包含 '{item}' 优先级\n\n" +
-                $"修复建议：\n" +
-                $"  完善优先级顺序定义\n\n" +
-                $"参考：docs/adr/governance/ADR-900-architecture-tests.md §4.1");
+            var itemMissingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+                ruleId: "ADR-900_4_1",
+                filePath: adr900File,
+                missingContent: item,
+                remediationSteps: new[]
+                {
+                    $"在 ADR-900 优先级定义中包含 '{item}' 项",
+                    "完善优先级顺序定义"
+                },
+                adrReference: "docs/adr/governance/ADR-900-architecture-tests.md");
+            
+            content.Should().Contain(item, itemMissingMessage);
         }
 
         // 验证说明了低优先级规则可以被牺牲
-        content.Should().Contain("牺牲",
-            $"❌ ADR-900_4_1 违规：ADR-900 未说明低优先级规则的处理方式\n\n" +
-            $"修复建议：\n" +
-            $"  明确低优先级规则可以被临时牺牲，但必须记录破例\n\n" +
-            $"参考：docs/adr/governance/ADR-900-architecture-tests.md §4.1");
+        var sacrificeMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-900_4_1",
+            filePath: adr900File,
+            missingContent: "牺牲",
+            remediationSteps: new[]
+            {
+                "在 ADR-900 中说明低优先级规则的处理方式",
+                "明确低优先级规则可以被临时牺牲，但必须记录破例"
+            },
+            adrReference: "docs/adr/governance/ADR-900-architecture-tests.md");
+        
+        content.Should().Contain("牺牲", sacrificeMessage);
     }
 }

@@ -22,9 +22,18 @@ public sealed class ADR_970_2_Architecture_Tests
 
         var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
-        content.Should().Contain("必须使用 JSON 格式",
-            $"❌ ADR-970_2_1 违规：ADR-970 必须要求使用 JSON 格式\n\n" +
-            $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §2.1");
+        var jsonFormatMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-970_2_1",
+            filePath: adr970Path,
+            missingContent: "必须使用 JSON 格式",
+            remediationSteps: new[]
+            {
+                "在 ADR-970 中明确要求 JSON 格式",
+                "定义标准的 JSON 架构规范"
+            },
+            adrReference: "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
+        
+        content.Should().Contain("必须使用 JSON 格式", jsonFormatMessage);
     }
 
     [Fact(DisplayName = "ADR-970_2_2: 必须定义标准 JSON 架构")]
@@ -38,9 +47,18 @@ public sealed class ADR_970_2_Architecture_Tests
         var requiredFields = new[] { "type", "timestamp", "source", "version", "status", "summary", "details" };
         foreach (var field in requiredFields)
         {
-            content.Should().Contain($"\"{field}\"",
-                $"❌ ADR-970_2_2 违规：标准 JSON 架构必须包含 '{field}' 字段\n\n" +
-                $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §2.2");
+            var fieldMissingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+                ruleId: "ADR-970_2_2",
+                filePath: adr970Path,
+                missingContent: $"\"{field}\"",
+                remediationSteps: new[]
+                {
+                    $"在 ADR-970 标准 JSON 架构中添加 '{field}' 字段",
+                    "确保所有必需字段都已定义"
+                },
+                adrReference: "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
+            
+            content.Should().Contain($"\"{field}\"", fieldMissingMessage);
         }
     }
 

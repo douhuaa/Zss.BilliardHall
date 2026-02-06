@@ -19,11 +19,20 @@ public sealed class ADR_970_4_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
-        var content = File.ReadAllText(adr970Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr970Path);
 
-        content.Should().Contain("CI 必须自动生成结构化日志",
-            $"❌ ADR-970_4_1 违规：ADR-970 必须要求 CI 自动生成结构化日志\n\n" +
-            $"参考：docs/adr/governance/ADR-970-automation-log-integration-standard.md §4.1");
+        var ciLogGenerationMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-970_4_1",
+            filePath: adr970Path,
+            missingContent: "CI 必须自动生成结构化日志",
+            remediationSteps: new[]
+            {
+                "在 ADR-970 中要求 CI 自动生成结构化日志",
+                "定义 CI 集成的具体要求"
+            },
+            adrReference: "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
+        
+        content.Should().Contain("CI 必须自动生成结构化日志", ciLogGenerationMessage);
     }
 
 }

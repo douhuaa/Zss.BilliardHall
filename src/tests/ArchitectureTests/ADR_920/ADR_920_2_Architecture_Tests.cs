@@ -70,7 +70,7 @@ public sealed class ADR_920_2_Architecture_Tests
 
         foreach (var file in exampleFiles.Take(MaxExampleFilesToCheck))
         {
-            var content = File.ReadAllText(file);
+            var content = FileSystemTestHelper.ReadFileContent(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
             var lines = content.Split('\n');
 

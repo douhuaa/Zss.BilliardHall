@@ -42,7 +42,7 @@ public sealed class ADR_902_2_Architecture_Tests
 
         foreach (var file in adrFiles)
         {
-            var content = File.ReadAllText(file);
+            var content = FileSystemTestHelper.ReadFileContent(file);
             var relativePath = Path.GetRelativePath(repoRoot, file);
 
             // 提取非 Decision 章节的内容

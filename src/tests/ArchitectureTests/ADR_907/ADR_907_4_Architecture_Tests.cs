@@ -32,14 +32,19 @@ public sealed class ADR_907_4_Architecture_Tests
         var projectPath = Path.Combine(repoRoot, AdrTestsProjectPath);
 
         // 验证项目文件存在
-        File.Exists(projectPath).Should().BeTrue(
-            $"❌ ADR-907_4_1 违规：ArchitectureTests 项目文件不存在\n\n" +
-            $"预期路径：{projectPath}\n\n" +
-            $"修复建议：\n" +
-            $"  1. 创建 ArchitectureTests.csproj 项目文件\n" +
-            $"  2. 确保项目类型为测试项目\n" +
-            $"  3. 引用必要的测试框架（xUnit、NUnit 或 MSTest）\n\n" +
-            $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §4.1");
+        var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-907_4_1",
+            filePath: projectPath,
+            fileDescription: "ArchitectureTests 项目文件",
+            remediationSteps: new[]
+            {
+                "创建 ArchitectureTests.csproj 项目文件",
+                "确保项目类型为测试项目",
+                "引用必要的测试框架（xUnit、NUnit 或 MSTest）"
+            },
+            adrReference: "docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md");
+
+        File.Exists(projectPath).Should().BeTrue(fileMessage);
 
         // 验证项目配置包含测试框架
         var projectContent = FileSystemTestHelper.ReadFileContent(projectPath);
@@ -172,13 +177,18 @@ public sealed class ADR_907_4_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, TestConstants.AdrDocsPath, "governance", "ADR-907-architecture-tests-enforcement-governance.md");
 
-        File.Exists(adrFile).Should().BeTrue(
-            $"❌ ADR-907_4_3 违规：ADR-907 文档不存在\n\n" +
-            $"预期路径：{adrFile}\n\n" +
-            $"修复建议：\n" +
-            $"  1. 确保 ADR-907 文档存在\n" +
-            $"  2. 文档必须定义执行级别分类\n\n" +
-            $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §4.3");
+        var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-907_4_3",
+            filePath: adrFile,
+            fileDescription: "ADR-907 架构测试执法治理文档",
+            remediationSteps: new[]
+            {
+                "确保 ADR-907 文档存在",
+                "文档必须定义执行级别分类"
+            },
+            adrReference: "docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md");
+
+        File.Exists(adrFile).Should().BeTrue(fileMessage);
 
         var adrContent = FileSystemTestHelper.ReadFileContent(adrFile);
 
@@ -231,14 +241,19 @@ public sealed class ADR_907_4_Architecture_Tests
         // 验证 ADR-900 定义了破例机制
         var adr0000File = Path.Combine(repoRoot, TestConstants.AdrDocsPath, "governance", "ADR-900-architecture-tests.md");
 
-        File.Exists(adr0000File).Should().BeTrue(
-            $"❌ ADR-907_4_4 违规：ADR-900 文档不存在\n\n" +
-            $"预期路径：{adr0000File}\n\n" +
-            $"修复建议：\n" +
-            $"  1. 创建 ADR-900 架构测试宪法文档\n" +
-            $"  2. 定义破例与偿还机制\n" +
-            $"  3. 明确破例流程和审批要求\n\n" +
-            $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §4.4");
+        var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-907_4_4",
+            filePath: adr0000File,
+            fileDescription: "ADR-900 架构测试宪法文档",
+            remediationSteps: new[]
+            {
+                "创建 ADR-900 架构测试宪法文档",
+                "定义破例与偿还机制",
+                "明确破例流程和审批要求"
+            },
+            adrReference: "docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md");
+
+        File.Exists(adr0000File).Should().BeTrue(fileMessage);
 
         var adr0000Content = FileSystemTestHelper.ReadFileContent(adr0000File);
 

@@ -24,16 +24,34 @@ public sealed class ADR_990_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
-        File.Exists(adr990Path).Should().BeTrue(
-            $"❌ ADR-990_1_1 违规：ADR-990 文档不存在\n\n" +
-            $"参考：docs/adr/governance/ADR-990-documentation-evolution-roadmap.md §1.1");
+        var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-990_1_1",
+            filePath: adr990Path,
+            fileDescription: "ADR-990 文档演进路线图",
+            remediationSteps: new[]
+            {
+                "创建 ADR-990 文档",
+                "定义路线图结构和组织规范"
+            },
+            adrReference: "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
+
+        File.Exists(adr990Path).Should().BeTrue(fileMessage);
 
         var content = FileSystemTestHelper.ReadFileContent(adr990Path);
 
         // 验证定义了路线图结构
-        content.Should().Contain("标准结构",
-            $"❌ ADR-990_1_1 违规：ADR-990 必须定义路线图标准结构\n\n" +
-            $"参考：docs/adr/governance/ADR-990-documentation-evolution-roadmap.md §1.1");
+        var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-990_1_1",
+            filePath: adr990Path,
+            missingContent: "标准结构",
+            remediationSteps: new[]
+            {
+                "在 ADR-990 中定义路线图标准结构",
+                "说明路线图应该如何组织和呈现"
+            },
+            adrReference: "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
+
+        content.Should().Contain("标准结构", missingMessage);
     }
 
     /// <summary>
@@ -49,9 +67,18 @@ public sealed class ADR_990_1_Architecture_Tests
         var content = FileSystemTestHelper.ReadFileContent(adr990Path);
 
         // 验证定义了文档位置
-        content.Should().Contain("docs/ROADMAP.md",
-            $"❌ ADR-990_1_2 违规：ADR-990 必须定义路线图文档位置为 docs/ROADMAP.md\n\n" +
-            $"参考：docs/adr/governance/ADR-990-documentation-evolution-roadmap.md §1.2");
+        var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-990_1_2",
+            filePath: adr990Path,
+            missingContent: "docs/ROADMAP.md",
+            remediationSteps: new[]
+            {
+                "在 ADR-990 中定义路线图文档位置为 docs/ROADMAP.md",
+                "明确路线图文档的存放位置"
+            },
+            adrReference: "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
+
+        content.Should().Contain("docs/ROADMAP.md", missingMessage);
     }
 
 }

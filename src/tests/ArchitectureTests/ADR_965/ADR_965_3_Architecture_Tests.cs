@@ -24,12 +24,21 @@ public sealed class ADR_965_3_Architecture_Tests
     {
         var adr965Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
-        var content = File.ReadAllText(adr965Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr965Path);
 
         // 验证包含进度跟踪机制的说明
-        content.Should().Contain("实时追踪",
-            $"❌ ADR-965_3_1 违规：ADR-965 必须说明实时追踪 Onboarding 进度\n\n" +
-            $"参考：docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md §3.1");
+        var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-965_3_1",
+            filePath: adr965Path,
+            missingContent: "实时追踪",
+            remediationSteps: new[]
+            {
+                "在 ADR-965 中添加实时追踪 Onboarding 进度的说明",
+                "定义进度跟踪机制和实施方法"
+            },
+            adrReference: "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
+
+        content.Should().Contain("实时追踪", missingMessage);
     }
 
     /// <summary>
@@ -41,12 +50,21 @@ public sealed class ADR_965_3_Architecture_Tests
     {
         var adr965Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
-        var content = File.ReadAllText(adr965Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr965Path);
 
         // 验证定义了 GitHub Issue 进度条
-        content.Should().Contain("GitHub Issue 进度条",
-            $"❌ ADR-965_3_2 违规：ADR-965 必须定义 GitHub Issue 进度条机制\n\n" +
-            $"参考：docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md §3.2");
+        var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-965_3_2",
+            filePath: adr965Path,
+            missingContent: "GitHub Issue 进度条",
+            remediationSteps: new[]
+            {
+                "在 ADR-965 中定义 GitHub Issue 进度条机制",
+                "说明如何使用 Issue 进度条追踪学习进度"
+            },
+            adrReference: "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
+
+        content.Should().Contain("GitHub Issue 进度条", missingMessage);
     }
 
     /// <summary>
@@ -58,12 +76,21 @@ public sealed class ADR_965_3_Architecture_Tests
     {
         var adr965Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
-        var content = File.ReadAllText(adr965Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr965Path);
 
         // 验证定义了 Project Board 集成
-        content.Should().Contain("Project Board",
-            $"❌ ADR-965_3_3 违规：ADR-965 必须定义 Project Board 集成\n\n" +
-            $"参考：docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md §3.3");
+        var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-965_3_3",
+            filePath: adr965Path,
+            missingContent: "Project Board",
+            remediationSteps: new[]
+            {
+                "在 ADR-965 中定义 Project Board 集成",
+                "说明如何将 Onboarding 任务整合到 Project Board"
+            },
+            adrReference: "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
+
+        content.Should().Contain("Project Board", missingMessage);
     }
 
 }
