@@ -22,7 +22,6 @@ public sealed class ADR_965_3_Architecture_Tests
     [Fact(DisplayName = "ADR-965_3_1: 必须实时追踪 Onboarding 进度")]
     public void ADR_965_3_1_Must_Track_Progress_Realtime()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr965Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
         var content = File.ReadAllText(adr965Path);
@@ -40,7 +39,6 @@ public sealed class ADR_965_3_Architecture_Tests
     [Fact(DisplayName = "ADR-965_3_2: 必须使用 GitHub Issue 进度条")]
     public void ADR_965_3_2_Must_Use_GitHub_Issue_Progress()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr965Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
         var content = File.ReadAllText(adr965Path);
@@ -58,7 +56,6 @@ public sealed class ADR_965_3_Architecture_Tests
     [Fact(DisplayName = "ADR-965_3_3: 必须集成 Project Board")]
     public void ADR_965_3_3_Must_Integrate_Project_Board()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr965Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
         var content = File.ReadAllText(adr965Path);

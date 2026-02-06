@@ -22,7 +22,6 @@ public sealed class ADR_920_1_Architecture_Tests
     [Fact(DisplayName = "ADR-920_1_1: 示例代码的法律地位")]
     public void ADR_920_1_1_Example_Code_Must_Not_Define_Architecture_Rules()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
 
         // 验证 ADR-920 文档存在并包含法律地位定义
         var adrFile = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-920-examples-governance-constitution.md");
