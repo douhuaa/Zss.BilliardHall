@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>
 /// ADR 仓库 - 负责扫描和加载所有 ADR 文档

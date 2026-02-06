@@ -14,6 +14,5 @@ global using NetArchTest.Rules;
 global using Xunit;
 global using Xunit.Abstractions;
 global using Zss.BilliardHall.Platform.Exceptions;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 global using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;

@@ -1,6 +1,5 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907_A;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907_A;
 
-using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
 /// ADR-907-A_1: 对齐标准与格式规范
