@@ -113,7 +113,7 @@ public sealed class ADR_240_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty($"❌ ADR-240_1_2 违规: 可重试异常必须是基础设施异常\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-240_2_1 违规: 可重试异常必须是基础设施异常\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"实现 IRetryable 接口的异常必须继承自 InfrastructureException。\n" +
@@ -154,7 +154,7 @@ public sealed class ADR_240_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty($"❌ ADR-240_1_3 违规: 领域异常不可标记为可重试\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-240_2_1 违规: 领域异常不可标记为可重试\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"领域异常表示业务规则违反，不会因重试而改变结果。\n" +
@@ -193,7 +193,7 @@ public sealed class ADR_240_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty($"❌ ADR-240_1_4 违规: 验证异常不可标记为可重试\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-240_2_1 违规: 验证异常不可标记为可重试\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"验证异常表示输入数据错误，不会因重试而修正。\n" +
@@ -252,7 +252,7 @@ public sealed class ADR_240_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty($"❌ ADR-240_1_5 违规: 异常类型命名空间不符合约定\n\n" +
+        violations.Should().BeEmpty($"❌ ADR-240_4_1 违规: 异常类型命名空间不符合约定\n\n" +
                         $"违规类型:\n{string.Join("\n", violations)}\n\n" +
                         $"问题分析:\n" +
                         $"异常类型必须组织在 Exceptions 命名空间下，以保持一致性和可发现性。\n\n" +
