@@ -68,9 +68,18 @@ public sealed class ADR_975_1_Architecture_Tests
         var requiredMetrics = new[] { "准确性", "完整性", "时效性", "链接有效性" };
         foreach (var metric in requiredMetrics)
         {
-            content.Should().Contain(metric,
-                $"❌ ADR-975_1_2 违规：核心指标必须包含 '{metric}'\n\n" +
-                $"参考：docs/adr/governance/ADR-975-documentation-quality-monitoring.md §1.2");
+            var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+                ruleId: "ADR-975_1_2",
+                filePath: adr975Path,
+                missingContent: metric,
+                remediationSteps: new[]
+                {
+                    $"在 ADR-975 中添加核心质量指标：{metric}",
+                    "确保包含所有必需的文档质量评估维度"
+                },
+                adrReference: "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
+
+            content.Should().Contain(metric, missingMessage);
         }
     }
 
