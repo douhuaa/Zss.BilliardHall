@@ -1,6 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_950;
 
-using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
 /// ADR-950_2: ADR 与非裁决性文档的分离边界

@@ -1,6 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Heuristics;
 
-using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
 /// ADR-008_6: 文档风格启发式规范（Rule）

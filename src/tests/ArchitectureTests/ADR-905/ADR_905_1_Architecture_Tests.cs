@@ -1,6 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_905;
 
-using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
 /// ADR-905_1: 执行级别分类体系

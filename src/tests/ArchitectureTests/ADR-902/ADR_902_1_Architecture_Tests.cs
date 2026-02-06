@@ -1,6 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_902;
 
-using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
 /// ADR-902_1: ADR 结构完整性

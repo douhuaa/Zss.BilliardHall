@@ -1,6 +1,5 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_900;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_900;
 
-using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
 /// ADR-900_2: 执行级别与测试映射

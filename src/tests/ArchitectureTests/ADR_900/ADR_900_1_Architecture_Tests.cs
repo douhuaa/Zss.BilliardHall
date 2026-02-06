@@ -1,6 +1,5 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_900;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_900;
 
-using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
 /// ADR-900_1: 架构裁决权威性

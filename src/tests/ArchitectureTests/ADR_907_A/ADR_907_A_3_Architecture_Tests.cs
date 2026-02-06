@@ -1,5 +1,4 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907_A;
-using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_907_A;
 
 /// <summary>
 /// ADR-907-A_3: 测试绑定规则

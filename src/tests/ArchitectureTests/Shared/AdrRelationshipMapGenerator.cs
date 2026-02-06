@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>
 /// ADR 关系图生成工具

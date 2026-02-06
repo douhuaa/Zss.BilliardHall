@@ -1,6 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_008;
 
-using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
 /// 验证 ADR-008_1：文档分级与裁决权（Rule）

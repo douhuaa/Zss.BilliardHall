@@ -112,7 +112,7 @@ public sealed class ADR_File_Filter_Usage_Tests
             "",
             "修复建议：",
             "  1. 使用 AdrFileFilter.GetAdrFiles(directory) 替代 Directory.GetFiles",
-            "  2. 添加 using Zss.BilliardHall.Tests.ArchitectureTests.Adr;",
+            "  2. AdrFileFilter 类已通过 GlobalUsings 全局可用",
             "",
             "示例：",
             "  // ❌ 错误",

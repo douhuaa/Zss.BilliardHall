@@ -1,5 +1,4 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_006;
-using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 
 /// <summary>
 /// ADR-006_5: 特殊编号规则
