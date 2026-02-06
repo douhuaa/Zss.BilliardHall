@@ -1,4 +1,4 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_900;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_900;
 
 /// <summary>
 /// ADR-900_3: 破例治理机制
@@ -22,7 +22,7 @@ public sealed class ADR_900_3_Architecture_Tests
     [Fact(DisplayName = "ADR-900_3_1: 架构破例必须满足强制要求")]
     public void ADR_900_3_1_Exception_Requirements_Must_Be_Met()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
 
         // 检查是否存在 arch-violations.md 文件
         var violationsFile = Path.Combine(repoRoot, "arch-violations.md");
@@ -62,7 +62,7 @@ public sealed class ADR_900_3_Architecture_Tests
     [Fact(DisplayName = "ADR-900_3_2: CI 必须自动监控破例状态")]
     public void ADR_900_3_2_CI_Must_Monitor_Exceptions()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
 
         // 检查是否存在 CI 配置文件
         var ciFiles = new[]

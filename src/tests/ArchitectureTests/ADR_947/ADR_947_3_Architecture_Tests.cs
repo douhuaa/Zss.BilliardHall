@@ -20,7 +20,7 @@ public sealed class ADR_947_3_Architecture_Tests
     [Fact(DisplayName = "ADR-947_3_1: 禁止显式循环依赖声明")]
     public void ADR_947_3_1_Relationships_Must_Not_Have_Bidirectional_Dependencies()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = FileSystemTestHelper.GetAbsolutePath("docs/adr");
 
         var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory);

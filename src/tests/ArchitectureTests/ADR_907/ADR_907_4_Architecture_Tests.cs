@@ -28,7 +28,7 @@ public sealed class ADR_907_4_Architecture_Tests
     [Fact(DisplayName = "ADR-907_4_1: 测试必须可被 CI/Analyzer 自动发现")]
     public void ADR_907_4_1_Tests_Must_Be_Discoverable_By_CI()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var projectPath = Path.Combine(repoRoot, AdrTestsProjectPath);
 
         // 验证项目文件存在
@@ -99,7 +99,7 @@ public sealed class ADR_907_4_Architecture_Tests
     [Fact(DisplayName = "ADR-907_4_2: 测试失败必须映射到 RuleId")]
     public void ADR_907_4_2_Test_Failures_Must_Map_To_RuleId()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_4_2 无法执行：测试目录不存在 {testsDirectory}");
@@ -174,7 +174,7 @@ public sealed class ADR_907_4_Architecture_Tests
     [Fact(DisplayName = "ADR-907_4_3: 必须支持 L1/L2 执行级别")]
     public void ADR_907_4_3_Enforcement_Levels_Must_Be_Supported()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrFile = Path.Combine(repoRoot, TestConstants.AdrDocsPath, "governance", "ADR-907-architecture-tests-enforcement-governance.md");
 
         var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
@@ -236,7 +236,7 @@ public sealed class ADR_907_4_Architecture_Tests
     [Fact(DisplayName = "ADR-907_4_4: 破例机制必须被文档化")]
     public void ADR_907_4_4_Exception_Mechanism_Must_Be_Documented()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
 
         // 验证 ADR-900 定义了破例机制
         var adr0000File = Path.Combine(repoRoot, TestConstants.AdrDocsPath, "governance", "ADR-900-architecture-tests.md");
@@ -302,7 +302,7 @@ public sealed class ADR_907_4_Architecture_Tests
     [Fact(DisplayName = "ADR-907_4_5: Analyzer 必须能检测违规")]
     public void ADR_907_4_5_Analyzer_Must_Detect_Violations()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         Directory.Exists(testsDirectory).Should().BeTrue(
@@ -384,7 +384,7 @@ public sealed class ADR_907_4_Architecture_Tests
     [Fact(DisplayName = "ADR-907_4_6: Superseded ADR 的测试必须被处理")]
     public void ADR_907_4_6_Superseded_ADRs_Must_Be_Handled()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDocsDirectory = Path.Combine(repoRoot, TestConstants.AdrDocsPath);
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 

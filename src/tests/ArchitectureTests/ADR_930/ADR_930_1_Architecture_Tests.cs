@@ -26,7 +26,7 @@ public sealed class ADR_930_1_Architecture_Tests
     [Fact(DisplayName = "ADR-930_1_1: PR 模板必须定义必填字段")]
     public void ADR_930_1_1_PR_Template_Must_Define_Required_Fields()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
 
         // 检查 PR 模板是否存在（GitHub 标准位置）
         var prTemplatePaths = new[]
@@ -86,7 +86,7 @@ public sealed class ADR_930_1_Architecture_Tests
     [Fact(DisplayName = "ADR-930_1_2: ADR 文档必须可被自检")]
     public void ADR_930_1_2_ADR_Documents_Must_Be_Self_Checkable()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-930-code-review-compliance.md");
 
         var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
@@ -142,7 +142,7 @@ public sealed class ADR_930_1_Architecture_Tests
     [Fact(DisplayName = "ADR-930_1_3: ArchitectureTests 项目必须存在")]
     public void ADR_930_1_3_ArchitectureTests_Project_Must_Exist()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
 
         // 查找 ArchitectureTests 项目文件
         var testProjectPath = Path.Combine(repoRoot, "src/tests/ArchitectureTests/ArchitectureTests.csproj");
@@ -168,7 +168,7 @@ public sealed class ADR_930_1_Architecture_Tests
     [Fact(DisplayName = "ADR-930_1_4: CODEOWNERS 必须定义审查责任人")]
     public void ADR_930_1_4_CODEOWNERS_Must_Define_Reviewers()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
 
         // 检查 CODEOWNERS 文件
         var codeownersPath = Path.Combine(repoRoot, "CODEOWNERS");
@@ -196,7 +196,7 @@ public sealed class ADR_930_1_Architecture_Tests
     [Fact(DisplayName = "ADR-930_1_5: 破例治理规则必须已定义")]
     public void ADR_930_1_5_Exception_Governance_Must_Be_Defined()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
 
         // 检查 ADR-900（定义破例治理）
         var adr900Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-900-architecture-tests.md");

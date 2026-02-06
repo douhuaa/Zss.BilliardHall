@@ -1,4 +1,4 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_900;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_900;
 
 /// <summary>
 /// ADR-900_4: 冲突裁决优先级
@@ -21,7 +21,7 @@ public sealed class ADR_900_4_Architecture_Tests
     [Fact(DisplayName = "ADR-900_4_1: 必须定义冲突裁决优先级")]
     public void ADR_900_4_1_Conflict_Resolution_Priorities()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr900File = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-900-architecture-tests.md");
 
         // 验证 ADR-900 文件存在

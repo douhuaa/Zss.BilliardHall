@@ -23,7 +23,7 @@ public sealed class ADR_907_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907_3_1: 测试类必须包含至少一个有效断言")]
     public void ADR_907_3_1_Test_Classes_Must_Have_Minimum_Assertions()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_3_1 无法执行：测试目录不存在 {testsDirectory}");
@@ -82,7 +82,7 @@ public sealed class ADR_907_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907_3_2: 测试方法必须映射到单一子规则")]
     public void ADR_907_3_2_Test_Methods_Must_Map_To_Single_Subrule()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_3_2 无法执行：测试目录不存在 {testsDirectory}");
@@ -147,7 +147,7 @@ public sealed class ADR_907_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907_3_3: 失败信息必须可溯源到 ADR")]
     public void ADR_907_3_3_Failure_Messages_Must_Be_Traceable()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_3_3 无法执行：测试目录不存在 {testsDirectory}");
@@ -240,7 +240,7 @@ public sealed class ADR_907_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907_3_4: 禁止形式化断言")]
     public void ADR_907_3_4_Formal_Assertions_Are_Prohibited()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests", "ADR");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_3_4 无法执行：测试目录不存在 {testsDirectory}");

@@ -20,7 +20,7 @@ public sealed class ADR_955_2_Architecture_Tests
     [Fact(DisplayName = "ADR-955_2_1: 文档标题必须包含核心关键词")]
     public void ADR_955_2_1_Document_Titles_Must_Contain_Keywords()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var docsDirectory = Path.Combine(repoRoot, "docs");
 
         if (!Directory.Exists(docsDirectory))

@@ -22,7 +22,7 @@ public sealed class ADR_952_2_Architecture_Tests
     [Fact(DisplayName = "ADR-952_2_1: 工程标准必须明确声明基于的 ADR")]
     public void ADR_952_2_1_Standards_Must_Declare_Based_ADR()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var standardsDirectory = Path.Combine(repoRoot, "docs/engineering-standards");
 
         if (!Directory.Exists(standardsDirectory))
@@ -71,7 +71,7 @@ public sealed class ADR_952_2_Architecture_Tests
     [Fact(DisplayName = "ADR-952_2_4: 工程标准文档必须包含必需章节")]
     public void ADR_952_2_4_Standards_Must_Have_Required_Sections()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var standardsDirectory = Path.Combine(repoRoot, "docs/engineering-standards");
 
         if (!Directory.Exists(standardsDirectory))

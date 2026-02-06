@@ -71,7 +71,7 @@ public sealed class ADR_900_1_Architecture_Tests
     [Fact(DisplayName = "ADR-900_1_2: 架构违规判定必须基于明确标准")]
     public void ADR_900_1_2_Architecture_Violation_Criteria()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
         // 使用 AdrFileFilter 统一过滤 ADR 文件

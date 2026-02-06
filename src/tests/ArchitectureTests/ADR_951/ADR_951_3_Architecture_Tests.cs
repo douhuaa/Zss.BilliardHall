@@ -20,7 +20,7 @@ public sealed class ADR_951_3_Architecture_Tests
     [Fact(DisplayName = "ADR-951_3_1: Core 案例必须通过完整审核流程")]
     public void ADR_951_3_1_Core_Cases_Must_Pass_Full_Review_Process()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var casesDirectory = Path.Combine(repoRoot, "docs/cases");
 
         if (!Directory.Exists(casesDirectory))
@@ -83,7 +83,7 @@ public sealed class ADR_951_3_Architecture_Tests
     [Fact(DisplayName = "ADR-951_3_2: Reference 案例必须通过基础审核流程")]
     public void ADR_951_3_2_Reference_Cases_Must_Pass_Basic_Review_Process()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var casesDirectory = Path.Combine(repoRoot, "docs/cases");
 
         if (!Directory.Exists(casesDirectory))

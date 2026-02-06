@@ -16,7 +16,7 @@ public sealed class ADR_990_5_Architecture_Tests
     [Fact(DisplayName = "ADR-990_5_1: 路线图必须公开可访问")]
     public void ADR_990_5_1_Roadmap_Must_Be_Publicly_Accessible()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr990Path);

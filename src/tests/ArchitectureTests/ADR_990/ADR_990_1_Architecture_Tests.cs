@@ -21,7 +21,7 @@ public sealed class ADR_990_1_Architecture_Tests
     [Fact(DisplayName = "ADR-990_1_1: 路线图必须按标准结构组织")]
     public void ADR_990_1_1_Roadmap_Structure_Must_Be_Defined()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
         var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
@@ -61,7 +61,7 @@ public sealed class ADR_990_1_Architecture_Tests
     [Fact(DisplayName = "ADR-990_1_2: 必须定义路线图文档位置")]
     public void ADR_990_1_2_Document_Location_Must_Be_Defined()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr990Path);

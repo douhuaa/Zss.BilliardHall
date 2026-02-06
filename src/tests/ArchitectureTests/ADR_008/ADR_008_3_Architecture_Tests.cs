@@ -52,7 +52,7 @@ public sealed class ADR_008_3_Architecture_Tests
     public void ADR_008_3_3_README_Must_Declare_No_Authority()
     {
         // 验证测试文件存在
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testFile = Path.Combine(repoRoot, "src/tests/ArchitectureTests/ADR_008/ADR_008_3_Architecture_Tests.cs");
 
         File.Exists(testFile).Should().BeTrue($"❌ ADR-008_3_3 违规：测试文件不存在\n\n" +

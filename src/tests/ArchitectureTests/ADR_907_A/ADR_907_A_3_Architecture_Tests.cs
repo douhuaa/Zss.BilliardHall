@@ -27,7 +27,7 @@ public sealed class ADR_907_A_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_3_1: ADR 变更必须同步测试")]
     public void ADR_907_A_3_1_Test_Sync_Mandatory_On_Changes()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr907AFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-907-A-adr-alignment-execution-standard.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr907AFile);
@@ -46,7 +46,7 @@ public sealed class ADR_907_A_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_3_2: 测试命名必须与 RuleId 一致")]
     public void ADR_907_A_3_2_Test_Naming_Consistency()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
 
         var testFiles = Directory.GetFiles(testsDirectory, "*.cs", SearchOption.AllDirectories)
@@ -70,7 +70,7 @@ public sealed class ADR_907_A_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_3_3: 测试失败信息必须引用新 RuleId")]
     public void ADR_907_A_3_3_Test_Failure_Message_Update()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
 
         var testFiles = Directory.GetFiles(testsDirectory, "*.cs", SearchOption.AllDirectories)
@@ -103,7 +103,7 @@ public sealed class ADR_907_A_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_3_4: 对齐后不允许保留旧编号测试")]
     public void ADR_907_A_3_4_Old_Numbered_Test_Handling()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
 
         var testFiles = Directory.GetFiles(testsDirectory, "*.cs", SearchOption.AllDirectories)
@@ -131,7 +131,7 @@ public sealed class ADR_907_A_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_3_5: 每个 Clause 必须有测试覆盖")]
     public void ADR_907_A_3_5_Test_Coverage_Validation()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr907AFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-907-A-adr-alignment-execution-standard.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr907AFile);
@@ -150,7 +150,7 @@ public sealed class ADR_907_A_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_3_6: 测试目录结构必须符合规范")]
     public void ADR_907_A_3_6_Test_Directory_Structure()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
 
         // 检查 ADR 目录命名
@@ -179,7 +179,7 @@ public sealed class ADR_907_A_3_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_3_7: 测试文件必须有对应关系注释")]
     public void ADR_907_A_3_7_Test_File_Code_Correspondence()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
 
         var testFiles = Directory.GetFiles(testsDirectory, "*.cs", SearchOption.AllDirectories)

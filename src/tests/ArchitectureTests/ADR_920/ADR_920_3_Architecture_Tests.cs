@@ -19,7 +19,7 @@ public sealed class ADR_920_3_Architecture_Tests
     [Fact(DisplayName = "ADR-920_3_1: 示例目录必须有责任人和目的说明")]
     public void ADR_920_3_1_Example_Directories_Must_Have_Owner_And_Purpose()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
 
         // 扫描 examples/ 目录

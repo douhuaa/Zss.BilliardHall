@@ -21,7 +21,7 @@ public sealed class ADR_950_3_Architecture_Tests
     [Fact(DisplayName = "ADR-950_3_1: Guide 文档应包含标准结构元素")]
     public void ADR_950_3_1_Guide_Documents_Should_Contain_Standard_Structure()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var guidesPath = Path.Combine(repoRoot, DocsPath, "guides");
 
         if (!Directory.Exists(guidesPath))

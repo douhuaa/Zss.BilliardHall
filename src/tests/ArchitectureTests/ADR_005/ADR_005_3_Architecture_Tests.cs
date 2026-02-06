@@ -1,4 +1,4 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
 
 /// <summary>
 /// 验证 ADR-005_3_1：模块内允许同步调用

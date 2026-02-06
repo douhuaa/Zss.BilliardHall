@@ -24,7 +24,7 @@ public sealed class ADR_900_2_Architecture_Tests
     [Fact(DisplayName = "ADR-900_2_1: 所有架构规则必须分类到执行级别")]
     public void ADR_900_2_1_Enforcement_Levels_Must_Be_Classified()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
         // 使用 AdrFileFilter 统一过滤 ADR 文件（通过 YAML Front Matter 识别真正的 ADR）
@@ -62,7 +62,7 @@ public sealed class ADR_900_2_Architecture_Tests
     [Fact(DisplayName = "ADR-900_2_2: ADR 条款必须有测试和 CI 映射")]
     public void ADR_900_2_2_ADR_Test_CI_Mapping_Required()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
 

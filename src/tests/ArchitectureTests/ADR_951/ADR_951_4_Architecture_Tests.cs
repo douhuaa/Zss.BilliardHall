@@ -21,7 +21,7 @@ public sealed class ADR_951_4_Architecture_Tests
     [Fact(DisplayName = "ADR-951_4_1: 案例库应有年度审核记录")]
     public void ADR_951_4_1_Case_Repository_Should_Have_Annual_Review_Record()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var casesDirectory = Path.Combine(repoRoot, "docs/cases");
 
         if (!Directory.Exists(casesDirectory))
@@ -63,7 +63,7 @@ public sealed class ADR_951_4_Architecture_Tests
     [Fact(DisplayName = "ADR-951_4_2: 过时案例必须明确标记")]
     public void ADR_951_4_2_Obsolete_Cases_Must_Be_Marked()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var casesDirectory = Path.Combine(repoRoot, "docs/cases");
 
         if (!Directory.Exists(casesDirectory))
@@ -118,7 +118,7 @@ public sealed class ADR_951_4_Architecture_Tests
     [Fact(DisplayName = "ADR-951_4_3: 案例应包含版本或更新记录")]
     public void ADR_951_4_3_Cases_Should_Have_Version_Or_Update_Record()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var casesDirectory = Path.Combine(repoRoot, "docs/cases");
 
         if (!Directory.Exists(casesDirectory))

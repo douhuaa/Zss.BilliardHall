@@ -17,7 +17,7 @@ public sealed class ADR_970_3_Architecture_Tests
     [Fact(DisplayName = "ADR-970_3_1: 测试失败日志必须自动链接到 ADR")]
     public void ADR_970_3_1_Test_Failure_Logs_Must_Link_To_ADR()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr970Path);
@@ -39,7 +39,7 @@ public sealed class ADR_970_3_Architecture_Tests
     [Fact(DisplayName = "ADR-970_3_2: 必须定义关联规则")]
     public void ADR_970_3_2_Association_Rules_Must_Be_Defined()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr970Path);

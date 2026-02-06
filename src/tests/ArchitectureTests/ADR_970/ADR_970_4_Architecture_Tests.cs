@@ -16,7 +16,7 @@ public sealed class ADR_970_4_Architecture_Tests
     [Fact(DisplayName = "ADR-970_4_1: CI 必须自动生成结构化日志")]
     public void ADR_970_4_1_CI_Must_Generate_Structured_Logs()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr970Path);

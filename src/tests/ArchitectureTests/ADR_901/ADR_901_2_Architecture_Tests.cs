@@ -1,4 +1,4 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_901;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_901;
 
 /// <summary>
 /// ADR-901_2: 统一语义声明块与执行级别
@@ -20,7 +20,7 @@ public sealed class ADR_901_2_Architecture_Tests
     [Fact(DisplayName = "ADR-901_2_1: 风险表达必须使用统一语义声明块格式")]
     public void ADR_901_2_1_Must_Use_Unified_Semantic_Block_Format()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
         Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_2_1 违规：ADR 文档目录不存在\n\n" +
@@ -94,7 +94,7 @@ public sealed class ADR_901_2_Architecture_Tests
         // 验证方式：确保其他测试能够识别所有有效的语义块
         // 这里我们验证反向：如果文档中有看起来像约束但格式不对的内容，应该被其他测试捕获
 
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
         Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_2_2 违规：ADR 文档目录不存在\n\n" +
@@ -115,7 +115,7 @@ public sealed class ADR_901_2_Architecture_Tests
     [Fact(DisplayName = "ADR-901_2_3: Constraint/Warning 必须显式声明执行级别")]
     public void ADR_901_2_3_Must_Explicitly_Declare_Enforcement_Level()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
         Directory.Exists(adrDirectory).Should().BeTrue($"❌ ADR-901_2_3 违规：ADR 文档目录不存在\n\n" +

@@ -20,7 +20,7 @@ public sealed class ADR_947_1_Architecture_Tests
     [Fact(DisplayName = "ADR-947_1_1: ADR 必须且仅能包含一个顶级关系声明章节")]
     public void ADR_947_1_1_ADR_Must_Have_Unique_Top_Level_Relationships_Section()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = FileSystemTestHelper.GetAbsolutePath("docs/adr");
 
         // 获取所有 ADR 文档（使用 AdrFileFilter 自动排除非 ADR 文档）

@@ -1,4 +1,4 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_005;
 
 /// <summary>
 /// 验证 ADR-005_1_1：编号格式强制要求

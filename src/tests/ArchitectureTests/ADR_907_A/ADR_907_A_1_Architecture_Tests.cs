@@ -26,7 +26,7 @@ public sealed class ADR_907_A_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_1_1: ADR 编号必须符合 Rule/Clause 格式")]
     public void ADR_907_A_1_1_RuleId_Format_Must_Comply()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
         // 使用 AdrFileFilter 自动排除非 ADR 文档（如 type: tool, checklist 等）
@@ -65,7 +65,7 @@ public sealed class ADR_907_A_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_1_2: Decision 章节必须符合标准结构")]
     public void ADR_907_A_1_2_Decision_Chapter_Structure_Required()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
         var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory)
@@ -107,7 +107,7 @@ public sealed class ADR_907_A_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_1_3: 必须包含完整的 Enforcement 章节")]
     public void ADR_907_A_1_3_Enforcement_Chapter_Mandatory()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
         var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory)
@@ -143,7 +143,7 @@ public sealed class ADR_907_A_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_1_4: 对齐后必须更新 Front Matter")]
     public void ADR_907_A_1_4_Front_Matter_Version_Update()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
         var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory)
@@ -177,7 +177,7 @@ public sealed class ADR_907_A_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_1_5: 对齐必须记录在 History 中")]
     public void ADR_907_A_1_5_History_Chapter_Record()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
         var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory)

@@ -143,7 +143,7 @@ public sealed class ADR_920_1_Architecture_Tests
     [Fact(DisplayName = "ADR-920_1_2: 示例文档必须包含免责声明")]
     public void ADR_920_1_2_Example_Documents_Must_Have_Disclaimer()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
 
         // 收集需要检查的示例文档

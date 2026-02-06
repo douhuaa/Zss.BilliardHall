@@ -24,7 +24,7 @@ public sealed class ADR_910_2_Architecture_Tests
     [Fact(DisplayName = "ADR-910_2_1: README 引用 ADR 的规范")]
     public void ADR_910_2_1_README_Must_Reference_ADR_Properly()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
 
         var docsDirectory = Path.Combine(repoRoot, DocsPath);
@@ -144,7 +144,7 @@ public sealed class ADR_910_2_Architecture_Tests
     [Fact(DisplayName = "ADR-910_2_2: README 的变更治理规则（L2警告）")]
     public void ADR_910_2_2_README_Changes_Must_Follow_Governance()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var warnings = new List<string>();
 
         var docsDirectory = Path.Combine(repoRoot, DocsPath);

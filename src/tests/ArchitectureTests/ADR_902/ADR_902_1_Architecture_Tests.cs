@@ -186,7 +186,7 @@ public sealed class ADR_902_1_Architecture_Tests
     [Fact(DisplayName = "ADR-902_1_3: 标准 Front Matter")]
     public void ADR_902_1_3_ADR_Documents_Must_Have_Standard_FrontMatter()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
 
         var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
@@ -285,7 +285,7 @@ public sealed class ADR_902_1_Architecture_Tests
     [Fact(DisplayName = "ADR-902_1_4: 包含完整章节集合")]
     public void ADR_902_1_4_ADR_Documents_Must_Have_Complete_Sections()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
 
         var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);

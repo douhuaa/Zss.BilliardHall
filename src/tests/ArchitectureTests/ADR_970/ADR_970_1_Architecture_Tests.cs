@@ -21,7 +21,7 @@ public sealed class ADR_970_1_Architecture_Tests
     [Fact(DisplayName = "ADR-970_1_1: 日志必须按类型存储在标准位置")]
     public void ADR_970_1_1_Logs_Must_Be_Stored_In_Standard_Locations()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
         var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
@@ -61,7 +61,7 @@ public sealed class ADR_970_1_Architecture_Tests
     [Fact(DisplayName = "ADR-970_1_2: 必须定义完整的存储结构")]
     public void ADR_970_1_2_Storage_Structure_Must_Be_Defined()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr970Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-970-automation-log-integration-standard.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr970Path);

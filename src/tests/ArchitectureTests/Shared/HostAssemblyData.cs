@@ -1,4 +1,4 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>
 /// Host 程序集数据提供器

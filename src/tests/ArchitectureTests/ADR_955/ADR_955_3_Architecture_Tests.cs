@@ -21,7 +21,7 @@ public sealed class ADR_955_3_Architecture_Tests
     [Fact(DisplayName = "ADR-955_3_1: 文档应有审计记录")]
     public void ADR_955_3_1_Documents_Should_Have_Audit_Records()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var docsDirectory = Path.Combine(repoRoot, "docs");
 
         if (!Directory.Exists(docsDirectory))

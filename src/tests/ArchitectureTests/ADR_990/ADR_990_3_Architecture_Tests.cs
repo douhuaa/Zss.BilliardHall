@@ -16,7 +16,7 @@ public sealed class ADR_990_3_Architecture_Tests
     [Fact(DisplayName = "ADR-990_3_1: 路线图项目必须与 ADR/RFC 关联")]
     public void ADR_990_3_1_Roadmap_Items_Must_Link_To_ADR_Or_RFC()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr990Path);

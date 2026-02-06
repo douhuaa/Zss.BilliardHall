@@ -26,7 +26,7 @@ public sealed class ADR_907_A_2_Architecture_Tests
     public void ADR_907_A_2_1_Partial_Alignment_Conditions()
     {
         // 这个测试主要验证 ADR-907-A 本身定义了部分对齐条件
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr907AFile = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-907-A-adr-alignment-execution-standard.md");
 
         File.Exists(adr907AFile).Should().BeTrue(
@@ -48,7 +48,7 @@ public sealed class ADR_907_A_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_2_2: 部分对齐必须满足最低要求")]
     public void ADR_907_A_2_2_Minimum_Partial_Alignment_Requirements()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr907AFile = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-907-A-adr-alignment-execution-standard.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr907AFile);
@@ -67,7 +67,7 @@ public sealed class ADR_907_A_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_2_3: 部分对齐必须有追踪机制")]
     public void ADR_907_A_2_3_Partial_Alignment_Tracking()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr907AFile = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-907-A-adr-alignment-execution-standard.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr907AFile);
@@ -86,7 +86,7 @@ public sealed class ADR_907_A_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_2_4: 部分对齐合并必须满足准入条件")]
     public void ADR_907_A_2_4_Partial_Alignment_Merge_Criteria()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr907AFile = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-907-A-adr-alignment-execution-standard.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr907AFile);
@@ -105,7 +105,7 @@ public sealed class ADR_907_A_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907-A_2_5: 对齐失败必须有升级路径")]
     public void ADR_907_A_2_5_Alignment_Failure_Escalation()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adr907AFile = Path.Combine(repoRoot, AdrDocsPath, "governance", "ADR-907-A-adr-alignment-execution-standard.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr907AFile);

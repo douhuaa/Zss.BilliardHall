@@ -54,7 +54,7 @@ public sealed class ADR_007_4_Architecture_Tests
     public void ADR_007_4_3_Prompts_Decision_Rules_Validation()
     {
         // 验证测试文件存在
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testFile = Path.Combine(repoRoot, "src/tests/ArchitectureTests/ADR_007/ADR_007_4_Architecture_Tests.cs");
 
         var message = AssertionMessageBuilder.BuildFileNotFoundMessage(

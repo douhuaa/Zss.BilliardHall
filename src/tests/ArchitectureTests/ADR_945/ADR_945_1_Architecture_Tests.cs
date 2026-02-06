@@ -19,7 +19,7 @@ public sealed class ADR_945_1_Architecture_Tests
     [Fact(DisplayName = "ADR-945_1_1: 自动生成 ADR 演进时间线")]
     public void ADR_945_1_1_ADR_Timeline_Must_Be_Generated()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var timelineFile = Path.Combine(repoRoot, "docs/adr/ADR-TIMELINE.md");
 
         // 检查时间线文件是否存在（如果不存在，视为待实现功能）

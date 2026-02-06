@@ -29,7 +29,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_1: ArchitectureTests 项目必须存在")]
     public void ADR_907_2_1_ArchitectureTests_Project_Must_Exist()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var projectPath = Path.Combine(repoRoot, AdrTestsProjectPath);
 
         var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
@@ -86,7 +86,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_3: 测试类必须映射到单一 ADR")]
     public void ADR_907_2_3_Test_Classes_Must_Map_To_Single_ADR()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_3 无法执行：测试目录不存在 {testsDirectory}");
@@ -162,7 +162,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_4: 测试类命名必须遵循规范")]
     public void ADR_907_2_4_Test_Class_Names_Must_Follow_Convention()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_4 无法执行：测试目录不存在 {testsDirectory}");
@@ -211,7 +211,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_5: 测试方法必须映射 ADR 子规则")]
     public void ADR_907_2_5_Test_Methods_Must_Map_To_Subrules()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_5 无法执行：测试目录不存在 {testsDirectory}");
@@ -275,7 +275,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_6: 失败信息必须包含 ADR 引用")]
     public void ADR_907_2_6_Failure_Messages_Must_Reference_ADR()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_6 无法执行：测试目录不存在 {testsDirectory}");
@@ -347,7 +347,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_7: 测试不得包含空弱断言")]
     public void ADR_907_2_7_Tests_Must_Have_Valid_Assertions()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_7 无法执行：测试目录不存在 {testsDirectory}");
@@ -404,7 +404,7 @@ public sealed class ADR_907_2_Architecture_Tests
     [Fact(DisplayName = "ADR-907_2_8: 测试不得被跳过或条件禁用")]
     public void ADR_907_2_8_Tests_Must_Not_Be_Skipped()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var testsDirectory = Path.Combine(repoRoot, "src/tests/ArchitectureTests");
 
         Directory.Exists(testsDirectory).Should().BeTrue($"❌ ADR-907_2_8 无法执行：测试目录不存在 {testsDirectory}");

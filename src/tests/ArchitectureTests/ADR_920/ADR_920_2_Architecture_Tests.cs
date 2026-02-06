@@ -44,7 +44,7 @@ public sealed class ADR_920_2_Architecture_Tests
     [Fact(DisplayName = "ADR-920_2_1: 示例代码不得包含架构违规")]
     public void ADR_920_2_1_Examples_Must_Not_Contain_Architecture_Violations()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var violations = new List<string>();
 
         // 扫描示例文件

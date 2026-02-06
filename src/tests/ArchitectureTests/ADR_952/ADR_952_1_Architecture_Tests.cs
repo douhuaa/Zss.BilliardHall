@@ -22,7 +22,7 @@ public sealed class ADR_952_1_Architecture_Tests
     [Fact(DisplayName = "ADR-952_1_1: 工程标准必须符合三层架构定义")]
     public void ADR_952_1_1_Engineering_Standards_Must_Follow_Three_Layer_Architecture()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var standardsDirectory = Path.Combine(repoRoot, "docs/engineering-standards");
 
         if (!Directory.Exists(standardsDirectory))

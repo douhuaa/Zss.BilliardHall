@@ -25,7 +25,7 @@ public sealed class ADR_902_2_Architecture_Tests
     [Fact(DisplayName = "ADR-902_2_1: Decision 严格隔离")]
     public void ADR_902_2_1_Decision_Must_Be_Isolated()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var warnings = new List<string>();
 
         var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
@@ -101,7 +101,7 @@ public sealed class ADR_902_2_Architecture_Tests
     [Fact(DisplayName = "ADR-902_2_2: ADR 模板不承担语义裁决职责")]
     public void ADR_902_2_2_Template_Must_Not_Define_Semantics()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-902-adr-template-structure-contract.md");
 
         File.Exists(adrFile).Should().BeTrue($"ADR-902 文档不存在：{adrFile}");
@@ -129,7 +129,7 @@ public sealed class ADR_902_2_Architecture_Tests
     [Fact(DisplayName = "ADR-902_2_3: Relationships 章节仅承担结构接口职责")]
     public void ADR_902_2_3_Relationships_Section_Only_Handles_Structure()
     {
-        var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
+        var repoRoot = TestEnvironment.RepositoryRoot;
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-902-adr-template-structure-contract.md");
 
         File.Exists(adrFile).Should().BeTrue($"ADR-902 文档不存在：{adrFile}");
