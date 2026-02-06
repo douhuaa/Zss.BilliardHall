@@ -12,7 +12,7 @@ public sealed class ADR_006_5_Architecture_Tests
 
     public ADR_006_5_Architecture_Tests()
     {
-        _adrRoot = Path.Combine(TestEnvironment.RepositoryRoot, "docs", "adr");
+        _adrRoot = FileSystemTestHelper.GetAbsolutePath("docs/adr");
     }
 
     [Fact(DisplayName = "ADR-006_5_1: 元规则编号保护检查（L3 人工审查）")]

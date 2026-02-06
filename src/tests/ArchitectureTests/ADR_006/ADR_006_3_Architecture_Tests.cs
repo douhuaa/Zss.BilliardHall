@@ -10,7 +10,7 @@ public sealed class ADR_006_3_Architecture_Tests
 
     public ADR_006_3_Architecture_Tests()
     {
-        _adrRoot = Path.Combine(TestEnvironment.RepositoryRoot, "docs", "adr");
+        _adrRoot = FileSystemTestHelper.GetAbsolutePath("docs/adr");
     }
 
     [Fact(DisplayName = "ADR-006_3_1: 所有 ADR 必须使用3位前导零格式")]

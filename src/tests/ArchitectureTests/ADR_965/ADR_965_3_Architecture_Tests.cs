@@ -23,7 +23,7 @@ public sealed class ADR_965_3_Architecture_Tests
     public void ADR_965_3_1_Must_Track_Progress_Realtime()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr965Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
+        var adr965Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
         var content = File.ReadAllText(adr965Path);
 
@@ -41,7 +41,7 @@ public sealed class ADR_965_3_Architecture_Tests
     public void ADR_965_3_2_Must_Use_GitHub_Issue_Progress()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr965Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
+        var adr965Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
         var content = File.ReadAllText(adr965Path);
 
@@ -59,7 +59,7 @@ public sealed class ADR_965_3_Architecture_Tests
     public void ADR_965_3_3_Must_Integrate_Project_Board()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr965Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
+        var adr965Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md");
 
         var content = File.ReadAllText(adr965Path);
 

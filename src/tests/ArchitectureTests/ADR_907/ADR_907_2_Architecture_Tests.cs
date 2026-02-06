@@ -92,7 +92,7 @@ public sealed class ADR_907_2_Architecture_Tests
 
         foreach (var adrDir in adrDirectories)
         {
-            var testFiles = Directory.GetFiles(adrDir, "*.cs");
+            var testFiles = FileSystemTestHelper.GetFilesInDirectory(adrDir, "*.cs", SearchOption.TopDirectoryOnly);
             foreach (var testFile in testFiles)
             {
                 var fileName = Path.GetFileName(testFile);
@@ -176,7 +176,7 @@ public sealed class ADR_907_2_Architecture_Tests
 
         foreach (var adrDir in adrDirectories)
         {
-            var testFiles = Directory.GetFiles(adrDir, "*.cs");
+            var testFiles = FileSystemTestHelper.GetFilesInDirectory(adrDir, "*.cs", SearchOption.TopDirectoryOnly);
             foreach (var testFile in testFiles)
             {
                 var fileName = Path.GetFileName(testFile);
@@ -217,7 +217,7 @@ public sealed class ADR_907_2_Architecture_Tests
 
         foreach (var adrDir in adrDirectories)
         {
-            var testFiles = Directory.GetFiles(adrDir, "ADR_*_Architecture_Tests.cs");
+            var testFiles = FileSystemTestHelper.GetFilesInDirectory(adrDir, "ADR_*_Architecture_Tests.cs", SearchOption.TopDirectoryOnly);
             foreach (var testFile in testFiles)
             {
                 var fileName = Path.GetFileName(testFile);
@@ -281,7 +281,7 @@ public sealed class ADR_907_2_Architecture_Tests
 
         foreach (var adrDir in adrDirectories)
         {
-            var testFiles = Directory.GetFiles(adrDir, "ADR_*_Architecture_Tests.cs");
+            var testFiles = FileSystemTestHelper.GetFilesInDirectory(adrDir, "ADR_*_Architecture_Tests.cs", SearchOption.TopDirectoryOnly);
             foreach (var testFile in testFiles)
             {
             var fileName = Path.GetFileName(testFile);
@@ -353,7 +353,7 @@ public sealed class ADR_907_2_Architecture_Tests
 
         foreach (var adrDir in adrDirectories)
         {
-            var testFiles = Directory.GetFiles(adrDir, "ADR_*_Architecture_Tests.cs");
+            var testFiles = FileSystemTestHelper.GetFilesInDirectory(adrDir, "ADR_*_Architecture_Tests.cs", SearchOption.TopDirectoryOnly);
             foreach (var testFile in testFiles)
             {
             var fileName = Path.GetFileName(testFile);
@@ -410,7 +410,7 @@ public sealed class ADR_907_2_Architecture_Tests
 
         foreach (var adrDir in adrDirectories)
         {
-            var testFiles = Directory.GetFiles(adrDir, "ADR_*_Architecture_Tests.cs");
+            var testFiles = FileSystemTestHelper.GetFilesInDirectory(adrDir, "ADR_*_Architecture_Tests.cs", SearchOption.TopDirectoryOnly);
             foreach (var testFile in testFiles)
             {
             var fileName = Path.GetFileName(testFile);

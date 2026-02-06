@@ -55,7 +55,7 @@ public sealed class ADR_920_2_Architecture_Tests
         if (Directory.Exists(examplesDir))
         {
             exampleFiles.AddRange(
-                Directory.GetFiles(examplesDir, "*.cs", SearchOption.AllDirectories)
+                FileSystemTestHelper.GetFilesInDirectory(examplesDir, "*.cs", SearchOption.AllDirectories)
             );
         }
 
@@ -64,7 +64,7 @@ public sealed class ADR_920_2_Architecture_Tests
         if (Directory.Exists(docsExamplesDir))
         {
             exampleFiles.AddRange(
-                Directory.GetFiles(docsExamplesDir, "*.cs", SearchOption.AllDirectories)
+                FileSystemTestHelper.GetFilesInDirectory(docsExamplesDir, "*.cs", SearchOption.AllDirectories)
             );
         }
 

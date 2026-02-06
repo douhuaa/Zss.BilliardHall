@@ -30,7 +30,7 @@ public sealed class ADR_950_3_Architecture_Tests
             return;
         }
 
-        var guideFiles = Directory.GetFiles(guidesPath, "*.md", SearchOption.AllDirectories);
+        var guideFiles = FileSystemTestHelper.GetFilesInDirectory(guidesPath, "*.md", SearchOption.AllDirectories);
 
         if (guideFiles.Length == 0)
         {

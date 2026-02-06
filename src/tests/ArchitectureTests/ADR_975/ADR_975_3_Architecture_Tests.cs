@@ -18,7 +18,7 @@ public sealed class ADR_975_3_Architecture_Tests
     public void ADR_975_3_1_Monthly_Quality_Report_Must_Be_Generated()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
+        var adr975Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
@@ -31,7 +31,7 @@ public sealed class ADR_975_3_Architecture_Tests
     public void ADR_975_3_2_Report_Location_Must_Be_Defined()
     {
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
-        var adr975Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
+        var adr975Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
         var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
