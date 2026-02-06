@@ -25,17 +25,19 @@ public sealed class ADR_005_2_Architecture_Tests
                 .Where(f => !f.IsInitOnly) // 排除 readonly 字段
                 .ToList();
 
-            (fields.Count == 0).Should().BeTrue(
-                $"❌ ADR-005_2_1 违规: Handler 包含可变字段\n\n" +
-                $"违规 Handler: {handler.FullName}\n" +
-                $"可变字段: {string.Join(", ", fields.Select(f => f.Name))}\n\n" +
-                $"问题分析:\n" +
-                $"Handler 包含非 readonly 字段，可能维护长期状态\n\n" +
-                $"修复建议：\n" +
-                $"1. 将所有依赖字段标记为 readonly\n" +
-                $"2. 通过构造函数注入依赖，而非在字段中维护状态\n" +
-                $"3. Handler 应该是短生命周期、无状态、可重入的\n\n" +
-                $"参考: ADR-005_2_1 - Handler 不得持有业务状态");
+            var message = AssertionMessageBuilder.BuildWithAnalysis(
+                ruleId: "ADR-005_2_1",
+                summary: "Handler 包含可变字段",
+                currentState: $"违规 Handler: {handler.FullName}\n可变字段: {string.Join(", ", fields.Select(f => f.Name))}",
+                problemAnalysis: "Handler 包含非 readonly 字段，可能维护长期状态",
+                remediationSteps: new[]
+                {
+                    "将所有依赖字段标记为 readonly",
+                    "通过构造函数注入依赖，而非在字段中维护状态",
+                    "Handler 应该是短生命周期、无状态、可重入的"
+                },
+                adrReference: "docs/adr/constitutional/ADR-005-Business-Logic-Layering.md");
+            (fields.Count == 0).Should().BeTrue(message);
         }
     }
 
@@ -74,19 +76,19 @@ public sealed class ADR_005_2_Architecture_Tests
 
                     if (paramModule != null && paramModule != currentModule)
                     {
-                        true.Should().BeFalse(
-                            $"❌ ADR-005_2_2 违规: Handler 注入了其他模块的类型\n\n" +
-                            $"违规 Handler: {handler.FullName}\n" +
-                            $"当前模块: {currentModule}\n" +
-                            $"依赖模块: {paramModule}\n" +
-                            $"依赖类型: {param.FullName}\n\n" +
-                            $"问题分析:\n" +
-                            $"模块间直接注入依赖表示同步调用，违反模块隔离原则\n\n" +
-                            $"修复建议：\n" +
-                            $"1. 使用异步事件通信: await _eventBus.Publish(new SomeEvent(...))\n" +
-                            $"2. 或通过契约查询: var dto = await _queryBus.Send(new GetSomeData(...))\n" +
-                            $"3. 如确需同步调用，必须提交 ADR 破例审批\n\n" +
-                            $"参考: ADR-005_2_2 - Handler 禁止作为跨模块粘合层");
+                        var message = AssertionMessageBuilder.BuildWithAnalysis(
+                            ruleId: "ADR-005_2_2",
+                            summary: "Handler 注入了其他模块的类型",
+                            currentState: $"违规 Handler: {handler.FullName}\n当前模块: {currentModule}\n依赖模块: {paramModule}\n依赖类型: {param.FullName}",
+                            problemAnalysis: "模块间直接注入依赖表示同步调用，违反模块隔离原则",
+                            remediationSteps: new[]
+                            {
+                                "使用异步事件通信: await _eventBus.Publish(new SomeEvent(...))",
+                                "或通过契约查询: var dto = await _queryBus.Send(new GetSomeData(...))",
+                                "如确需同步调用，必须提交 ADR 破例审批"
+                            },
+                            adrReference: "docs/adr/constitutional/ADR-005-Business-Logic-Layering.md");
+                        true.Should().BeFalse(message);
                     }
                 }
             }
@@ -137,18 +139,19 @@ public sealed class ADR_005_2_Architecture_Tests
                      returnType.Name.EndsWith("Aggregate") ||
                      returnType.Name.EndsWith("ValueObject")))
                 {
-                    true.Should().BeFalse(
-                        $"❌ ADR-005_2_3 违规: Handler 返回领域实体\n\n" +
-                        $"违规 Handler: {handler.FullName}\n" +
-                        $"违规方法: {method.Name}\n" +
-                        $"返回类型: {returnType.FullName}\n\n" +
-                        $"问题分析:\n" +
-                        $"Handler 不应返回领域实体（Entity/Aggregate/ValueObject）\n\n" +
-                        $"修复建议：\n" +
-                        $"1. 创建对应的 DTO 或投影类型\n" +
-                        $"2. 在 Handler 中映射领域实体到 DTO\n" +
-                        $"3. 返回 DTO 而非领域实体\n\n" +
-                        $"参考: ADR-005_2_3 - Handler 不允许返回领域实体");
+                    var message = AssertionMessageBuilder.BuildWithAnalysis(
+                        ruleId: "ADR-005_2_3",
+                        summary: "Handler 返回领域实体",
+                        currentState: $"违规 Handler: {handler.FullName}\n违规方法: {method.Name}\n返回类型: {returnType.FullName}",
+                        problemAnalysis: "Handler 不应返回领域实体（Entity/Aggregate/ValueObject）",
+                        remediationSteps: new[]
+                        {
+                            "创建对应的 DTO 或投影类型",
+                            "在 Handler 中映射领域实体到 DTO",
+                            "返回 DTO 而非领域实体"
+                        },
+                        adrReference: "docs/adr/constitutional/ADR-005-Business-Logic-Layering.md");
+                    true.Should().BeFalse(message);
                 }
             }
         }

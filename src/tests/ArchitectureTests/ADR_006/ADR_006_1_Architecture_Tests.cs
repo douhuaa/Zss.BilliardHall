@@ -24,14 +24,18 @@ public sealed class ADR_006_1_Architecture_Tests
             var fileName = Path.GetFileName(file);
             var match = System.Text.RegularExpressions.Regex.Match(fileName, @"^ADR-(\d+)");
 
-            match.Success.Should().BeTrue($"❌ ADR-006_1_1 违规: ADR 文件名必须以 'ADR-数字' 开头\n\n" +
-                $"文件: {file}\n" +
-                $"文件名: {fileName}\n\n" +
-                $"修复建议：\n" +
-                $"1. 文件名必须以 ADR-XXX 格式开头（3位数字）\n" +
-                $"2. 所有编号统一使用3位格式（001-999）\n" +
-                $"3. 小于100的编号必须使用前导零（如 ADR-001, ADR-010）\n\n" +
-                $"参考: ADR-006_1_1 - 编号段层级映射");
+            var fileNameMessage = AssertionMessageBuilder.Build(
+                ruleId: "ADR-006_1_1",
+                summary: "ADR 文件名必须以 'ADR-数字' 开头",
+                currentState: $"文件: {file}\n文件名: {fileName}",
+                remediationSteps: new[]
+                {
+                    "文件名必须以 ADR-XXX 格式开头（3位数字）",
+                    "所有编号统一使用3位格式（001-999）",
+                    "小于100的编号必须使用前导零（如 ADR-001, ADR-010）"
+                },
+                adrReference: "docs/adr/governance/ADR-006-adr-numbering-hierarchy.md");
+            match.Success.Should().BeTrue(fileNameMessage);
 
             if (match.Success)
             {
@@ -41,53 +45,68 @@ public sealed class ADR_006_1_Architecture_Tests
                 // Validate numbering ranges
                 if (number is >= 1 and <= 9)
                 {
-                    directory.Should().Be("constitutional",
-                        $"❌ ADR-006_1_1 违规: ADR-{number:D3} 应位于 constitutional/ 目录\n\n" +
-                        $"文件: {file}\n" +
-                        $"当前目录: {directory}\n\n" +
-                        $"修复建议：\n" +
-                        $"宪法层 ADR（001-009）必须位于 docs/adr/constitutional/ 目录\n\n" +
-                        $"参考: ADR-006_1_1 - 编号段层级映射");
+                    var constitutionalMessage = AssertionMessageBuilder.Build(
+                        ruleId: "ADR-006_1_1",
+                        summary: $"ADR-{number:D3} 应位于 constitutional/ 目录",
+                        currentState: $"文件: {file}\n当前目录: {directory}",
+                        remediationSteps: new[]
+                        {
+                            "宪法层 ADR（001-009）必须位于 docs/adr/constitutional/ 目录"
+                        },
+                        adrReference: "docs/adr/governance/ADR-006-adr-numbering-hierarchy.md");
+                    directory.Should().Be("constitutional", constitutionalMessage);
                 }
                 else if (number == 0 || number is >= 900 and <= 999)
                 {
-                    directory.Should().Be("governance",
-                        $"❌ ADR-006_1_1 违规: ADR-{number:D3} 应位于 governance/ 目录\n\n" +
-                        $"文件: {file}\n" +
-                        $"当前目录: {directory}\n\n" +
-                        $"修复建议：\n" +
-                        $"治理层 ADR（900-999）必须位于 docs/adr/governance/ 目录\n\n" +
-                        $"参考: ADR-006_1_1 - 编号段层级映射");
+                    var governanceMessage = AssertionMessageBuilder.Build(
+                        ruleId: "ADR-006_1_1",
+                        summary: $"ADR-{number:D3} 应位于 governance/ 目录",
+                        currentState: $"文件: {file}\n当前目录: {directory}",
+                        remediationSteps: new[]
+                        {
+                            "治理层 ADR（900-999）必须位于 docs/adr/governance/ 目录"
+                        },
+                        adrReference: "docs/adr/governance/ADR-006-adr-numbering-hierarchy.md");
+                    directory.Should().Be("governance", governanceMessage);
                 }
                 else if (number is >= 100 and <= 199)
                 {
-                    directory.Should().Be("structure",
-                        $"❌ ADR-006_1_1 违规: ADR-{number:D3} 应位于 structure/ 目录\n\n" +
-                        $"文件: {file}\n" +
-                        $"当前目录: {directory}\n\n" +
-                        $"修复建议：\n" +
-                        $"结构层 ADR（100-199）必须位于 docs/adr/structure/ 目录\n\n" +
-                        $"参考: ADR-006_1_1 - 编号段层级映射");
+                    var structureMessage = AssertionMessageBuilder.Build(
+                        ruleId: "ADR-006_1_1",
+                        summary: $"ADR-{number:D3} 应位于 structure/ 目录",
+                        currentState: $"文件: {file}\n当前目录: {directory}",
+                        remediationSteps: new[]
+                        {
+                            "结构层 ADR（100-199）必须位于 docs/adr/structure/ 目录"
+                        },
+                        adrReference: "docs/adr/governance/ADR-006-adr-numbering-hierarchy.md");
+                    directory.Should().Be("structure", structureMessage);
                 }
                 else if (number is >= 200 and <= 299)
                 {
-                    directory.Should().Be("runtime",
-                        $"❌ ADR-006_1_1 违规: ADR-{number:D3} 应位于 runtime/ 目录\n\n" +
-                        $"文件: {file}\n" +
-                        $"当前目录: {directory}\n\n" +
-                        $"修复建议：\n" +
-                        $"运行层 ADR（200-299）必须位于 docs/adr/runtime/ 目录\n\n" +
-                        $"参考: ADR-006_1_1 - 编号段层级映射");
+                    var runtimeMessage = AssertionMessageBuilder.Build(
+                        ruleId: "ADR-006_1_1",
+                        summary: $"ADR-{number:D3} 应位于 runtime/ 目录",
+                        currentState: $"文件: {file}\n当前目录: {directory}",
+                        remediationSteps: new[]
+                        {
+                            "运行层 ADR（200-299）必须位于 docs/adr/runtime/ 目录"
+                        },
+                        adrReference: "docs/adr/governance/ADR-006-adr-numbering-hierarchy.md");
+                    directory.Should().Be("runtime", runtimeMessage);
                 }
                 else if (number is >= 300 and <= 399)
                 {
-                    directory.Should().Be("technical",
-                        $"❌ ADR-006_1_1 违规: ADR-{number:D3} 应位于 technical/ 目录\n\n" +
-                        $"文件: {file}\n" +
-                        $"当前目录: {directory}\n\n" +
-                        $"修复建议：\n" +
-                        $"技术层 ADR（300-399）必须位于 docs/adr/technical/ 目录\n\n" +
-                        $"参考: ADR-006_1_1 - 编号段层级映射");
+                    var technicalMessage = AssertionMessageBuilder.Build(
+                        ruleId: "ADR-006_1_1",
+                        summary: $"ADR-{number:D3} 应位于 technical/ 目录",
+                        currentState: $"文件: {file}\n当前目录: {directory}",
+                        remediationSteps: new[]
+                        {
+                            "技术层 ADR（300-399）必须位于 docs/adr/technical/ 目录"
+                        },
+                        adrReference: "docs/adr/governance/ADR-006-adr-numbering-hierarchy.md");
+                    directory.Should().Be("technical", technicalMessage);
                 }
             }
         }

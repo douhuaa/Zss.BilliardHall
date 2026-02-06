@@ -21,9 +21,18 @@ public sealed class ADR_975_4_Architecture_Tests
 
         var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
-        content.Should().Contain("≥ 85%",
-            $"❌ ADR-975_4_1 违规：ADR-975 必须定义最低质量阈值为 85%\n\n" +
-            $"参考：docs/adr/governance/ADR-975-documentation-quality-monitoring.md §4.1");
+        var message = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-975_4_1",
+            filePath: adr975Path,
+            missingContent: "≥ 85%",
+            remediationSteps: new[]
+            {
+                "在 ADR-975 中定义最低质量阈值为 85%",
+                "说明低于阈值时的处理措施",
+                "定义质量评分的计算方法"
+            },
+            adrReference: "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
+        content.Should().Contain("≥ 85%", message);
     }
 
     [Fact(DisplayName = "ADR-975_4_2: 必须定义硬失败项")]
@@ -33,13 +42,32 @@ public sealed class ADR_975_4_Architecture_Tests
 
         var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
-        content.Should().Contain("硬失败项",
-            $"❌ ADR-975_4_2 违规：ADR-975 必须定义硬失败项\n\n" +
-            $"参考：docs/adr/governance/ADR-975-documentation-quality-monitoring.md §4.2");
+        var hardFailureMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-975_4_2",
+            filePath: adr975Path,
+            missingContent: "硬失败项",
+            remediationSteps: new[]
+            {
+                "在 ADR-975 中定义硬失败项清单",
+                "说明硬失败项的处理策略（必须立即修复）",
+                "定义硬失败项的识别标准"
+            },
+            adrReference: "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
+        content.Should().Contain("硬失败项", hardFailureMessage);
 
+        var linkMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-975_4_2",
+            filePath: adr975Path,
+            missingContent: "链接失效",
+            remediationSteps: new[]
+            {
+                "确保硬失败项包含'链接失效'",
+                "说明链接失效的检测机制",
+                "定义链接失效的修复时限"
+            },
+            adrReference: "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
         // 验证包含关键硬失败项
-        content.Should().Contain("链接失效",
-            $"❌ ADR-975_4_2 违规：硬失败项必须包含'链接失效'");
+        content.Should().Contain("链接失效", linkMessage);
     }
 
 }

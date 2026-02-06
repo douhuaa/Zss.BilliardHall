@@ -16,21 +16,32 @@ public sealed class ADR_008_1_Architecture_Tests
     public void ADR_008_1_1_ADR_Documents_Must_Be_In_Adr_Directory()
     {
         var adrPath = Path.Combine(DocsRoot, "adr");
-        Directory.Exists(adrPath).Should().BeTrue(
-            $"❌ ADR-008_1_1 违规：ADR 目录不存在\n\n" +
-            $"预期路径: {adrPath}\n\n" +
-            "修复建议：\n" +
-            "1. 创建 docs/adr 目录\n" +
-            "2. 将所有 ADR 文档放置在该目录下\n" +
-            "3. 参考 ADR-008_1_1 文档分级定义");
+        var dirMessage = AssertionMessageBuilder.BuildDirectoryNotFoundMessage(
+            ruleId: "ADR-008_1_1",
+            directoryPath: adrPath,
+            directoryDescription: "ADR 目录",
+            remediationSteps: new[]
+            {
+                "创建 docs/adr 目录",
+                "将所有 ADR 文档放置在该目录下",
+                "参考 ADR-008_1_1 文档分级定义"
+            },
+            adrReference: "docs/adr/governance/ADR-008-documentation-hierarchy-governance.md");
+        Directory.Exists(adrPath).Should().BeTrue(dirMessage);
 
         var adrFiles = AdrFileFilter.GetAdrFiles(adrPath);
-        adrFiles.Should().NotBeEmpty(
-            $"❌ ADR-008_1_1 违规：未找到任何 ADR 文档\n\n" +
-            "修复建议：\n" +
-            "1. ADR 文档应以 'ADR-' 前缀命名\n" +
-            "2. 确保文档格式为 Markdown (.md)\n" +
-            "3. 参考 ADR-008_1_1 文档分级定义");
+        var fileMessage = AssertionMessageBuilder.Build(
+            ruleId: "ADR-008_1_1",
+            summary: "未找到任何 ADR 文档",
+            currentState: $"在 {adrPath} 目录中未找到符合命名规范的 ADR 文档",
+            remediationSteps: new[]
+            {
+                "ADR 文档应以 'ADR-' 前缀命名",
+                "确保文档格式为 Markdown (.md)",
+                "参考 ADR-008_1_1 文档分级定义"
+            },
+            adrReference: "docs/adr/governance/ADR-008-documentation-hierarchy-governance.md");
+        adrFiles.Should().NotBeEmpty(fileMessage);
     }
 
     [Fact(DisplayName = "ADR-008_1_2: 只有 ADR 具备裁决力")]
@@ -47,13 +58,20 @@ public sealed class ADR_008_1_Architecture_Tests
             var content = File.ReadAllText(file);
             var fileName = Path.GetFileName(file);
 
+            var message = AssertionMessageBuilder.BuildContentMissingMessage(
+                ruleId: "ADR-008_1_2",
+                filePath: file,
+                missingContent: "## Decision",
+                remediationSteps: new[]
+                {
+                    "ADR 文档必须包含 Decision 章节",
+                    "Decision 章节定义具有裁决力的规则",
+                    "参考 ADR-008_1_2 唯一裁决权原则"
+                },
+                adrReference: "docs/adr/governance/ADR-008-documentation-hierarchy-governance.md");
+            
             // ADR 应该包含 Decision 章节
-            content.Should().Contain("## Decision",
-                $"❌ ADR-008_1_2 违规：{fileName} 缺少 Decision 章节\n\n" +
-                "修复建议：\n" +
-                "1. ADR 文档必须包含 Decision 章节\n" +
-                "2. Decision 章节定义具有裁决力的规则\n" +
-                "3. 参考 ADR-008_1_2 唯一裁决权原则");
+            content.Should().Contain("## Decision", message);
         }
 
         true.Should().BeTrue("ADR-008_1_2 验证通过");
@@ -90,12 +108,17 @@ public sealed class ADR_008_1_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty(
-            $"❌ ADR-008_1_3 违规：以下非 ADR 文档违反分级判定规则\n\n" +
-            string.Join("\n", violations) + "\n\n" +
-            "修复建议：\n" +
-            "1. 非 ADR 文档使用裁决性语言时，必须声明'本文档无裁决力'\n" +
-            "2. 或者移除裁决性语言，改为说明性表述\n" +
-            "3. 参考 ADR-008_1_3 文档分级判定规则");
+        var message = AssertionMessageBuilder.BuildWithViolations(
+            ruleId: "ADR-008_1_3",
+            summary: "非 ADR 文档违反分级判定规则",
+            failingTypes: violations,
+            remediationSteps: new[]
+            {
+                "非 ADR 文档使用裁决性语言时，必须声明'本文档无裁决力'",
+                "或者移除裁决性语言，改为说明性表述",
+                "参考 ADR-008_1_3 文档分级判定规则"
+            },
+            adrReference: "docs/adr/governance/ADR-008-documentation-hierarchy-governance.md");
+        violations.Should().BeEmpty(message);
     }
 }

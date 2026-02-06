@@ -24,14 +24,18 @@ public sealed class ADR_004_1_Architecture_Tests
         var root = TestEnvironment.RepositoryRoot;
         var cpmFile = Path.Combine(root, "Directory.Packages.props");
 
-        File.Exists(cpmFile).Should().BeTrue(
-            $"❌ ADR-004_1_1 违规: 仓库根目录必须存在 Directory.Packages.props 文件以启用 Central Package Management (CPM)。\n\n" +
-            $"预期路径: {cpmFile}\n\n" +
-            $"修复建议：\n" +
-            $"1. 在仓库根目录创建 Directory.Packages.props 文件\n" +
-            $"2. 添加 <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>\n" +
-            $"3. 添加 <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>\n\n" +
-            $"参考: docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_1_1");
+        var message = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-004_1_1",
+            filePath: cpmFile,
+            fileDescription: "Directory.Packages.props 文件",
+            remediationSteps: new[]
+            {
+                "在仓库根目录创建 Directory.Packages.props 文件",
+                "添加 <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>",
+                "添加 <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>"
+            },
+            adrReference: "docs/adr/constitutional/ADR-004-Cpm-Final.md");
+        File.Exists(cpmFile).Should().BeTrue(message);
     }
 
     /// <summary>
@@ -48,23 +52,31 @@ public sealed class ADR_004_1_Architecture_Tests
 
         var content = File.ReadAllText(cpmFile);
 
-        content.Contains("ManagePackageVersionsCentrally").Should().BeTrue(
-            $"❌ ADR-004_1_2 违规: Directory.Packages.props 必须包含 ManagePackageVersionsCentrally 设置。\n\n" +
-            $"当前状态: 未找到 ManagePackageVersionsCentrally 配置\n\n" +
-            $"修复建议：\n" +
-            $"1. 在 Directory.Packages.props 中添加 <PropertyGroup> 节点\n" +
-            $"2. 添加 <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>\n" +
-            $"3. 重新构建项目验证配置生效\n\n" +
-            $"参考: docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_1_2");
+        var manageMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-004_1_2",
+            filePath: cpmFile,
+            missingContent: "ManagePackageVersionsCentrally",
+            remediationSteps: new[]
+            {
+                "在 Directory.Packages.props 中添加 <PropertyGroup> 节点",
+                "添加 <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>",
+                "重新构建项目验证配置生效"
+            },
+            adrReference: "docs/adr/constitutional/ADR-004-Cpm-Final.md");
+        content.Contains("ManagePackageVersionsCentrally").Should().BeTrue(manageMessage);
 
-        content.Contains("true").Should().BeTrue(
-            $"❌ ADR-004_1_2 违规: Directory.Packages.props 中的 ManagePackageVersionsCentrally 应该设置为 true。\n\n" +
-            $"当前状态: ManagePackageVersionsCentrally 值不正确\n\n" +
-            $"修复建议：\n" +
-            $"1. 确保 <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>\n" +
-            $"2. 检查拼写和大小写是否正确\n" +
-            $"3. 删除所有项目文件中的手动 Version 属性\n\n" +
-            $"参考: docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_1_2");
+        var trueMessage = AssertionMessageBuilder.Build(
+            ruleId: "ADR-004_1_2",
+            summary: "ManagePackageVersionsCentrally 应该设置为 true",
+            currentState: "ManagePackageVersionsCentrally 值不正确",
+            remediationSteps: new[]
+            {
+                "确保 <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>",
+                "检查拼写和大小写是否正确",
+                "删除所有项目文件中的手动 Version 属性"
+            },
+            adrReference: "docs/adr/constitutional/ADR-004-Cpm-Final.md");
+        content.Contains("<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>").Should().BeTrue(trueMessage);
     }
 
     /// <summary>
@@ -85,14 +97,18 @@ public sealed class ADR_004_1_Architecture_Tests
         // 建议启用但不强制（L2 级别）
         if (content.Contains("CentralPackageTransitivePinningEnabled"))
         {
-            content.Contains("<CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>").Should().BeTrue(
-                $"⚠️ ADR-004_1_3 建议: 建议启用 CentralPackageTransitivePinningEnabled 以固定传递依赖版本。\n\n" +
-                $"当前状态: CentralPackageTransitivePinningEnabled 未设置为 true\n\n" +
-                $"修复建议：\n" +
-                $"1. 在 Directory.Packages.props 中添加 <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>\n" +
-                $"2. 这将确保所有传递依赖使用 CPM 中定义的版本\n" +
-                $"3. 避免间接依赖升级导致的破坏性变更\n\n" +
-                $"参考: docs/adr/constitutional/ADR-004-Cpm-Final.md §ADR-004_1_3");
+            var message = AssertionMessageBuilder.Build(
+                ruleId: "ADR-004_1_3",
+                summary: "建议启用 CentralPackageTransitivePinningEnabled 以固定传递依赖版本",
+                currentState: "CentralPackageTransitivePinningEnabled 未设置为 true",
+                remediationSteps: new[]
+                {
+                    "在 Directory.Packages.props 中添加 <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>",
+                    "这将确保所有传递依赖使用 CPM 中定义的版本",
+                    "避免间接依赖升级导致的破坏性变更"
+                },
+                adrReference: "docs/adr/constitutional/ADR-004-Cpm-Final.md");
+            content.Contains("<CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>").Should().BeTrue(message);
         }
     }
 }

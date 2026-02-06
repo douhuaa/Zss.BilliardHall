@@ -101,31 +101,20 @@ public sealed class ADR_920_2_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty(string.Join("\n", new[]
+        var message = AssertionMessageBuilder.BuildWithViolations(
+            ruleId: "ADR-920_2_1",
+            summary: "以下示例代码包含架构违规",
+            failingTypes: violations.Take(20).ToList(),
+            remediationSteps: new[]
             {
-                "❌ ADR-920_2_1 违规：以下示例代码包含架构违规",
-                "",
-                "根据 ADR-920_2_1：示例代码禁止的架构违规行为。",
-                ""
-            }
-            .Concat(violations.Take(20))
-            .Concat(violations.Count > 20 ? new[] { $"  ... 还有 {violations.Count - 20} 个违规" } : Array.Empty<string>())
-            .Concat(new[]
-            {
-                "",
-                "修复建议：",
-                "  1. 移除跨模块直接引用，使用事件或契约（ADR-001）",
-                "  2. 移除 Service 类，使用垂直切片 Handler（ADR-001）",
-                "  3. 确保 Platform 层不依赖业务层（ADR-002）",
-                "  4. 如果这是错误示例，请明确标记：// ❌ 错误：...",
-                "",
-                "允许的标记方式：",
-                "  ✅ '// ❌ 错误：直接引用其他模块'",
-                "  ✅ '// BAD EXAMPLE: cross-module reference'",
-                "  ✅ '/* 以下是违规示例，仅用于教学 */'",
-                "",
-                "参考：docs/adr/governance/ADR-920-examples-governance-constitution.md §ADR-920_2_1"
-            })));
+                "移除跨模块直接引用，使用事件或契约（ADR-001）",
+                "移除 Service 类，使用垂直切片 Handler（ADR-001）",
+                "确保 Platform 层不依赖业务层（ADR-002）",
+                "如果这是错误示例，请明确标记：// ❌ 错误：...",
+                "允许的标记：'// ❌ 错误：直接引用其他模块'、'// BAD EXAMPLE: cross-module reference'、'/* 以下是违规示例，仅用于教学 */'"
+            },
+            adrReference: "docs/adr/governance/ADR-920-examples-governance-constitution.md");
+        violations.Should().BeEmpty(message);
     }
 
     // ========== 辅助方法 ==========

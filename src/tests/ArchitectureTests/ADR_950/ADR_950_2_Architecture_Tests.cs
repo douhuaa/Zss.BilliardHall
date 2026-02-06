@@ -46,8 +46,18 @@ public sealed class ADR_950_2_Architecture_Tests
         foreach (var dir in expectedDirectories)
         {
             var dirPath = Path.Combine(docsPath, dir);
-            Directory.Exists(dirPath).Should().BeTrue(
-                $"文档目录 '{dir}' 应该存在于 docs/ 下，以维护清晰的文档分离边界");
+            var message = AssertionMessageBuilder.BuildDirectoryNotFoundMessage(
+                ruleId: "ADR-950_2",
+                directoryPath: dirPath,
+                directoryDescription: $"文档目录 '{dir}'",
+                remediationSteps: new[]
+                {
+                    $"在 docs/ 下创建 {dir}/ 目录",
+                    "按照 ADR-950_2 规范组织文档类型",
+                    "确保文档类型与目录结构匹配"
+                },
+                adrReference: "docs/adr/governance/ADR-950-guide-faq-documentation-governance.md");
+            Directory.Exists(dirPath).Should().BeTrue(message);
         }
 
         Console.WriteLine("✓ ADR-950_2: 文档目录结构符合规范");
@@ -86,8 +96,18 @@ public sealed class ADR_950_2_Architecture_Tests
             }
         }
 
-        violations.Should().BeEmpty(
-            $"以下 ADR 文档不符合 ADR-950_2_1 规范：\n{string.Join("\n", violations)}");
+        var message = AssertionMessageBuilder.BuildWithViolations(
+            ruleId: "ADR-950_2_1",
+            summary: "ADR 文档必须包含 Decision 章节",
+            failingTypes: violations,
+            remediationSteps: new[]
+            {
+                "在每个 ADR 文档中添加 '## Decision' 章节",
+                "在 Decision 章节中明确记录架构决策",
+                "参考现有符合规范的 ADR 文档格式"
+            },
+            adrReference: "docs/adr/governance/ADR-950-guide-faq-documentation-governance.md");
+        violations.Should().BeEmpty(message);
     }
 
     /// <summary>
@@ -150,8 +170,31 @@ public sealed class ADR_950_2_Architecture_Tests
         var faqsPath = Path.Combine(docsPath, "faqs");
         var casesPath = Path.Combine(docsPath, "cases");
 
-        Directory.Exists(faqsPath).Should().BeTrue("FAQ 文档应该在 docs/faqs/ 目录下");
-        Directory.Exists(casesPath).Should().BeTrue("Case 文档应该在 docs/cases/ 目录下");
+        var faqMessage = AssertionMessageBuilder.BuildDirectoryNotFoundMessage(
+            ruleId: "ADR-950_2_3",
+            directoryPath: faqsPath,
+            directoryDescription: "FAQ 文档目录",
+            remediationSteps: new[]
+            {
+                "创建 docs/faqs/ 目录",
+                "将 FAQ 文档放置在该目录下",
+                "确保 FAQ 格式符合快速查询需求"
+            },
+            adrReference: "docs/adr/governance/ADR-950-guide-faq-documentation-governance.md");
+        Directory.Exists(faqsPath).Should().BeTrue(faqMessage);
+
+        var caseMessage = AssertionMessageBuilder.BuildDirectoryNotFoundMessage(
+            ruleId: "ADR-950_2_4",
+            directoryPath: casesPath,
+            directoryDescription: "Case 文档目录",
+            remediationSteps: new[]
+            {
+                "创建 docs/cases/ 目录",
+                "将实践案例文档放置在该目录下",
+                "确保案例格式包含最佳实践示例"
+            },
+            adrReference: "docs/adr/governance/ADR-950-guide-faq-documentation-governance.md");
+        Directory.Exists(casesPath).Should().BeTrue(caseMessage);
 
         Console.WriteLine("✓ ADR-950_2_3~2_5: 文档类型目录结构正确");
     }

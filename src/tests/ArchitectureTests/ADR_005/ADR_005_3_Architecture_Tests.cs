@@ -57,19 +57,19 @@ public sealed class ADR_005_3_Architecture_Tests
 
                     if (paramModule != null && paramModule != currentModule)
                     {
-                        true.Should().BeFalse(
-                            $"❌ ADR-005_3_2 违规: 未审批的跨模块同步调用\n\n" +
-                            $"违规 Handler: {handler.FullName}\n" +
-                            $"当前模块: {currentModule}\n" +
-                            $"依赖模块: {paramModule}\n" +
-                            $"依赖类型: {param.FullName}\n\n" +
-                            $"问题分析:\n" +
-                            $"模块间默认只能异步通信（领域事件/集成事件）\n\n" +
-                            $"修复建议：\n" +
-                            $"1. 使用异步事件: await _eventBus.Publish(new SomeEvent(...))\n" +
-                            $"2. 如确需同步调用，必须提交 ADR 破例审批\n" +
-                            $"3. 通过契约查询而非直接依赖: var dto = await _queryBus.Send(new GetSomeData(...))\n\n" +
-                            $"参考: ADR-005_3_2 - 模块间默认异步通信");
+                        var message = AssertionMessageBuilder.BuildWithAnalysis(
+                            ruleId: "ADR-005_3_2",
+                            summary: "未审批的跨模块同步调用",
+                            currentState: $"违规 Handler: {handler.FullName}\n当前模块: {currentModule}\n依赖模块: {paramModule}\n依赖类型: {param.FullName}",
+                            problemAnalysis: "模块间默认只能异步通信（领域事件/集成事件）",
+                            remediationSteps: new[]
+                            {
+                                "使用异步事件: await _eventBus.Publish(new SomeEvent(...))",
+                                "如确需同步调用，必须提交 ADR 破例审批",
+                                "通过契约查询而非直接依赖: var dto = await _queryBus.Send(new GetSomeData(...))"
+                            },
+                            adrReference: "docs/adr/constitutional/ADR-005-Business-Logic-Layering.md");
+                        true.Should().BeFalse(message);
                     }
                 }
             }

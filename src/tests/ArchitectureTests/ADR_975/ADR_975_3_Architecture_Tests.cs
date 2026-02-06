@@ -21,9 +21,18 @@ public sealed class ADR_975_3_Architecture_Tests
 
         var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
-        content.Should().Contain("每月生成",
-            $"❌ ADR-975_3_1 违规：ADR-975 必须要求每月生成文档质量报告\n\n" +
-            $"参考：docs/adr/governance/ADR-975-documentation-quality-monitoring.md §3.1");
+        var message = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-975_3_1",
+            filePath: adr975Path,
+            missingContent: "每月生成",
+            remediationSteps: new[]
+            {
+                "在 ADR-975 中添加每月生成文档质量报告的要求",
+                "说明报告生成的具体时间点（每月第一天）",
+                "定义报告的负责人和审查流程"
+            },
+            adrReference: "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
+        content.Should().Contain("每月生成", message);
     }
 
     [Fact(DisplayName = "ADR-975_3_2: 必须定义报告位置")]
@@ -33,9 +42,18 @@ public sealed class ADR_975_3_Architecture_Tests
 
         var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
-        content.Should().Contain("docs/reports/quality",
-            $"❌ ADR-975_3_2 违规：ADR-975 必须定义报告位置\n\n" +
-            $"参考：docs/adr/governance/ADR-975-documentation-quality-monitoring.md §3.2");
+        var message = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-975_3_2",
+            filePath: adr975Path,
+            missingContent: "docs/reports/quality",
+            remediationSteps: new[]
+            {
+                "在 ADR-975 中定义报告的标准位置为 docs/reports/quality",
+                "说明报告文件的命名格式",
+                "确保报告位置被纳入版本控制"
+            },
+            adrReference: "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
+        content.Should().Contain("docs/reports/quality", message);
     }
 
 }

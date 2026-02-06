@@ -28,34 +28,36 @@ public sealed class ADR_006_3_Architecture_Tests
                 var numberStr = match.Groups[1].Value;
                 var number = int.Parse(numberStr);
 
+                var message = AssertionMessageBuilder.BuildWithAnalysis(
+                    ruleId: "ADR-006_3_1",
+                    summary: "ADR 编号必须使用前导零",
+                    currentState: $"文件: {file}\n当前编号: ADR-{numberStr}\n正确编号: ADR-{number:D3}",
+                    problemAnalysis: "编号小于100时必须使用前导零，确保统一的3位格式",
+                    remediationSteps: new[]
+                    {
+                        $"重命名文件为 ADR-{number:D3}-xxx.md",
+                        "更新文件内容中的 ADR 编号引用",
+                        "更新所有交叉引用该 ADR 的文档",
+                        "编号规范：宪法层 ADR-001到009，结构层100-199，运行层200-299，技术层300-399，治理层900-999"
+                    },
+                    adrReference: "docs/adr/governance/ADR-006-adr-numbering-hierarchy.md");
                 // All ADR numbers must be exactly 3 digits (000-999)
-                (numberStr.Length == 3).Should().BeTrue($"❌ ADR-006_3_1 违规: ADR 编号必须使用前导零\n\n" +
-                    $"文件: {file}\n" +
-                    $"当前编号: ADR-{numberStr}\n" +
-                    $"正确编号: ADR-{number:D3}\n\n" +
-                    $"问题分析:\n" +
-                    $"编号小于100时必须使用前导零，确保统一的3位格式\n\n" +
-                    $"修复建议：\n" +
-                    $"1. 重命名文件为 ADR-{number:D3}-xxx.md\n" +
-                    $"2. 更新文件内容中的 ADR 编号引用\n" +
-                    $"3. 更新所有交叉引用该 ADR 的文档\n\n" +
-                    $"编号规范:\n" +
-                    $"- 宪法层: ADR-001 到 ADR-009\n" +
-                    $"- 结构层: ADR-100 到 ADR-199\n" +
-                    $"- 运行层: ADR-200 到 ADR-299\n" +
-                    $"- 技术层: ADR-300 到 ADR-399\n" +
-                    $"- 治理层: ADR-900 到 ADR-999\n\n" +
-                    $"参考: ADR-006_3_1 - 前导零强制要求");
+                (numberStr.Length == 3).Should().BeTrue(message);
 
                 // Specifically check for numbers < 100
                 if (number < 100)
                 {
-                    numberStr.Should().StartWith("0",
-                        $"❌ ADR-006_3_1 违规: 小于100的 ADR 编号必须使用前导零\n\n" +
-                        $"文件: {file}\n" +
-                        $"当前编号: ADR-{numberStr}\n" +
-                        $"正确编号: ADR-{number:D3}\n\n" +
-                        $"参考: ADR-006_3_1 - 前导零强制要求");
+                    var startMessage = AssertionMessageBuilder.Build(
+                        ruleId: "ADR-006_3_1",
+                        summary: "小于100的 ADR 编号必须使用前导零",
+                        currentState: $"文件: {file}\n当前编号: ADR-{numberStr}\n正确编号: ADR-{number:D3}",
+                        remediationSteps: new[]
+                        {
+                            $"重命名为 ADR-{number:D3}-xxx.md",
+                            "确保编号使用前导零"
+                        },
+                        adrReference: "docs/adr/governance/ADR-006-adr-numbering-hierarchy.md");
+                    numberStr.Should().StartWith("0", startMessage);
                 }
             }
         }
