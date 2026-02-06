@@ -7,6 +7,9 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Performance;
 public sealed class AdrTestFixture_Performance_Tests : IClassFixture<AdrTestFixture>
 {
     private readonly AdrTestFixture _fixture;
+    
+    private const int PerformanceTestIterations = 10;
+    private const double MinimumExpectedImprovement = 50.0; // 最低期望性能提升百分比
 
     public AdrTestFixture_Performance_Tests(AdrTestFixture fixture)
     {
@@ -19,12 +22,11 @@ public sealed class AdrTestFixture_Performance_Tests : IClassFixture<AdrTestFixt
     [Fact(DisplayName = "性能对比：AdrTestFixture 缓存效果")]
     public void Performance_Comparison_AdrTestFixture_Caching()
     {
-        var iterations = 10;
         var directLoadTimes = new List<long>();
         var fixtureLoadTimes = new List<long>();
 
         // 测试直接加载（每次都重新加载）
-        for (int i = 0; i < iterations; i++)
+        for (int i = 0; i < PerformanceTestIterations; i++)
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();
             var repo = new AdrRepository(TestEnvironment.AdrPath);
@@ -34,7 +36,7 @@ public sealed class AdrTestFixture_Performance_Tests : IClassFixture<AdrTestFixt
         }
 
         // 测试使用 Fixture（使用缓存）
-        for (int i = 0; i < iterations; i++)
+        for (int i = 0; i < PerformanceTestIterations; i++)
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();
             var adrs = _fixture.AllAdrs;
@@ -46,6 +48,13 @@ public sealed class AdrTestFixture_Performance_Tests : IClassFixture<AdrTestFixt
         // 计算平均时间
         var avgDirectLoad = directLoadTimes.Average();
         var avgFixtureLoad = fixtureLoadTimes.Average();
+        
+        // 防止除零错误
+        if (avgDirectLoad <= 0)
+        {
+            throw new InvalidOperationException("直接加载时间为零，无法计算性能提升");
+        }
+        
         var improvement = ((avgDirectLoad - avgFixtureLoad) / avgDirectLoad) * 100;
 
         // 输出结果
@@ -55,7 +64,7 @@ public sealed class AdrTestFixture_Performance_Tests : IClassFixture<AdrTestFixt
             AdrTestFixture 性能对比报告
             ============================================
             
-            测试迭代次数: {iterations}
+            测试迭代次数: {PerformanceTestIterations}
             
             直接加载（每次重新加载）:
               平均时间: {avgDirectLoad:F2} ms
@@ -80,9 +89,10 @@ public sealed class AdrTestFixture_Performance_Tests : IClassFixture<AdrTestFixt
         avgFixtureLoad.Should().BeLessThan(avgDirectLoad,
             because: "使用缓存的 Fixture 应该比每次重新加载更快");
 
-        // 验证至少有 50% 的性能提升
-        improvement.Should().BeGreaterThan(50,
-            because: "AdrTestFixture 应该提供显著的性能提升（预期 >50%）");
+        // 验证至少达到最低期望的性能提升
+        // 注意：实际性能提升通常接近 100%，但我们设置较低的阈值以适应不同环境
+        improvement.Should().BeGreaterThan(MinimumExpectedImprovement,
+            because: $"AdrTestFixture 应该提供显著的性能提升（预期 >{MinimumExpectedImprovement}%，实际通常接近 100%）");
     }
 
     /// <summary>
