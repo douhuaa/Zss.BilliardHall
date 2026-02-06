@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>
 /// 架构测试：强制使用 AdrFileFilter 而不是 Directory.GetFiles 查找 ADR 文件

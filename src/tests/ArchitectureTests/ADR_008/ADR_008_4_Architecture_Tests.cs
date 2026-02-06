@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_008;
 
 /// <summary>
 /// ADR-008_4: 文档裁决语言规范（Rule）

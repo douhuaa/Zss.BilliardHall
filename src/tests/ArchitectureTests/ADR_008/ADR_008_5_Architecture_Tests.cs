@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_008;
 
 /// <summary>
 /// ADR-008_5: Skills 判断性语言规范（Rule）

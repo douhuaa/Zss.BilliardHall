@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_008;
 
 /// <summary>
 /// ADR-008_3: 文档权威声明规范（Rule）

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_008;
 
 
 /// <summary>

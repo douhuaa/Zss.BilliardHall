@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Governance;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_008;
 
 /// <summary>
 /// ADR-008_1: 文档治理宪法原则（Rule）

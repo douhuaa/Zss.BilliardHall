@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Heuristics;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_008;
 
 
 /// <summary>

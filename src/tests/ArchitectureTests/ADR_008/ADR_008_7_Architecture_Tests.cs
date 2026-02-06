@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Enforcement;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_008;
 
 /// <summary>
 /// 验证 ADR-008_7：违规处理（Rule）
@@ -41,11 +41,11 @@ public sealed class ADR_008_7_Architecture_Tests
     public void ADR_008_7_2_Violation_Handling_Decision_Rules()
     {
         // 验证测试文件存在
-        var testFile = FileSystemTestHelper.GetAbsolutePath("src/tests/ArchitectureTests/Enforcement/ADR_008_7_Architecture_Tests.cs");
+        var testFile = FileSystemTestHelper.GetAbsolutePath("src/tests/ArchitectureTests/ADR_008/ADR_008_7_Architecture_Tests.cs");
 
         FileSystemTestHelper.AssertFileExists(testFile,
             $"❌ ADR-008_7_2 违规：测试文件不存在\n\n" +
-            $"修复建议：确保测试文件存在于 src/tests/ArchitectureTests/Enforcement/ 目录\n\n" +
+            $"修复建议：确保测试文件存在于 src/tests/ArchitectureTests/ADR_008/ 目录\n\n" +
             $"参考：docs/adr/governance/ADR-008-documentation-governance-constitution.md（§7.2）");
 
         // 验证文件包含实质性内容
