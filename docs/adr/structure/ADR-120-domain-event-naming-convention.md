@@ -3,9 +3,9 @@ adr: ADR-120
 title: "领域事件命名规范"
 status: Final
 level: Structure
-version: "1.2"
+version: "2.2"
 deciders: "Architecture Board"
-date: 2026-01-24
+date: 2026-02-06
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "GitHub Copilot"
@@ -45,8 +45,19 @@ superseded_by: null
 ## Decision（裁决）
 
 > ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-120 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-120_<Rule>_<Clause>
+> ```
 
-### 事件命名规则
+---
+
+### ADR-120_1：事件类型命名规范（Rule）
+
+#### ADR-120_1_1 事件命名模式强制要求
 
 **命名模式**：`{AggregateRoot}{Action}Event[{Version}]`
 
@@ -70,7 +81,7 @@ public record OrderCreateEvent(Guid OrderId);  // 动词原形
 
 ---
 
-### 命名空间组织
+#### ADR-120_1_2 事件命名空间组织规范
 
 **命名空间规则**：`Zss.BilliardHall.Modules.{ModuleName}.Events[.{SubNamespace}]`
 
@@ -91,7 +102,11 @@ src/Modules/{ModuleName}/
 
 ---
 
-### 事件处理器命名
+---
+
+### ADR-120_2：事件处理器命名规范（Rule）
+
+#### ADR-120_2_1 事件处理器命名模式
 
 **命名模式**：
 - 基础：`{EventName}Handler`
@@ -118,7 +133,11 @@ public class OrderPaidEventHandler1 { }  // Purpose 不清晰
 
 ---
 
-### 事件内容约束
+---
+
+### ADR-120_3：事件内容约束（Rule）
+
+#### ADR-120_3_1 事件内容类型约束
 
 **允许**：
 - 原始类型（Guid、int、string、DateTime）
@@ -144,21 +163,38 @@ public record OrderItemDto(string ProductId, int Quantity, decimal Price);
 
 // ❌ 错误
 public record OrderCreatedEvent(Order Order, Member Member);  // 领域实体
-public record OrderCreatedEvent(Guid OrderId)
-{
-    public bool CanBeCancelled() => ...;  // 业务方法
-}
 ```
 
 ---
 
-### 版本演进
+#### ADR-120_3_2 事件行为约束
+
+**禁止在事件中包含业务方法**：
+
+```csharp
+// ❌ 错误
+public record OrderCreatedEvent(Guid OrderId)
+{
+    public bool CanBeCancelled() => ...;  // 业务方法
+}
+
+// ✅ 正确
+public record OrderCreatedEvent(Guid OrderId, DateTime CreatedAt);
+```
+
+---
+
+---
+
+### ADR-120_4：事件版本演进规范（Rule）
+
+#### ADR-120_4_1 版本命名规范
 
 **版本标识**：`V{N}`（N 从 2 开始）
 
 - ❌ 禁止直接修改现有事件
 - ✅ 必须提供转换适配器
-- ⚠️  类型版本 ≠ 序列化兼容性（在 ADR-#### 系列定义）
+- ⚠️  类型版本 ≠ 序列化兼容性（在 ADR-210 系列定义）
 
 **示例**：
 
@@ -186,10 +222,23 @@ public class OrderCreatedEventAdapter
 
 ## Enforcement（执法模型）
 
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-120 各条款（Clause）的执法方式及执行级别。
 
-### 执行方式
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-120_1_1** | L1 | ArchitectureTests 验证事件命名模式 | §ADR-120_1_1 |
+| **ADR-120_1_2** | L1 | ArchitectureTests 验证事件命名空间 | §ADR-120_1_2 |
+| **ADR-120_2_1** | L1 | ArchitectureTests 验证事件处理器命名 | §ADR-120_2_1 |
+| **ADR-120_3_1** | L1 | ArchitectureTests 验证事件内容类型 | §ADR-120_3_1 |
+| **ADR-120_3_2** | L1 | ArchitectureTests 验证事件行为约束 | §ADR-120_3_2 |
+| **ADR-120_4_1** | L1 | ArchitectureTests 验证版本命名规范 | §ADR-120_4_1 |
 
-待补充...
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
 
 
 ---
@@ -252,6 +301,7 @@ public class OrderCreatedEventAdapter
 ## History（版本历史）
 
 
-| 版本  | 日期         | 变更说明   |
-|-----|------------|--------|
-| 1.0 | 2026-01-29 | 初始版本 |
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------|-------|
+| 2.2 | 2026-02-06 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系。将原有规则智能分组为 4 个 Rule、6 个 Clause，并创建完整的 Enforcement 映射表 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |
