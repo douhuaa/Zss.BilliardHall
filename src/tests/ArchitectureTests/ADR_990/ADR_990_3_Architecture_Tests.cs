@@ -19,11 +19,20 @@ public sealed class ADR_990_3_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adr990Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
 
-        var content = File.ReadAllText(adr990Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr990Path);
 
-        content.Should().Contain("与 ADR/RFC 关联",
-            $"❌ ADR-990_3_1 违规：ADR-990 必须要求路线图项目与 ADR/RFC 关联\n\n" +
-            $"参考：docs/adr/governance/ADR-990-documentation-evolution-roadmap.md §3.1");
+        var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-990_3_1",
+            filePath: adr990Path,
+            missingContent: "与 ADR/RFC 关联",
+            remediationSteps: new[]
+            {
+                "在 ADR-990 中要求路线图项目与 ADR/RFC 关联",
+                "说明关联的方式和格式"
+            },
+            adrReference: "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md");
+
+        content.Should().Contain("与 ADR/RFC 关联", missingMessage);
     }
 
 }
