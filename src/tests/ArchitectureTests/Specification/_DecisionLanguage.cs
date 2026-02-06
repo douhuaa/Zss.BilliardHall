@@ -95,24 +95,18 @@ public static partial class ArchitectureTestSpecification
         /// <returns>true 如果关键词在有效上下文中出现</returns>
         private static bool IsKeywordMatch(string sentence, string keyword)
         {
-            // 1. 基本检查：如果不包含关键词，直接返回 false
-            if (!sentence.Contains(keyword))
-            {
-                return false;
-            }
-
-            // 2. 找到关键词的所有位置
+            // 找到关键词的所有位置
             var index = 0;
             while ((index = sentence.IndexOf(keyword, index, StringComparison.Ordinal)) != -1)
             {
-                // 3. 检查词边界
+                // 检查词边界
                 if (!IsWordBoundary(sentence, index, keyword.Length))
                 {
                     index += keyword.Length;
                     continue;
                 }
 
-                // 4. 检查否定上下文
+                // 检查否定上下文
                 if (IsNegativeContext(sentence, index, keyword))
                 {
                     index += keyword.Length;
