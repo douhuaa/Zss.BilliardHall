@@ -67,10 +67,8 @@ public sealed class ADR_900_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
-        // 获取所有 ADR 文件
-        var adrFiles = Directory.GetFiles(adrDirectory, "*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("\\archive\\") && !f.Contains("\\README.md"))
-            .ToArray();
+        // 使用 AdrFileFilter 统一过滤 ADR 文件
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory).ToArray();
 
         // 验证 ADR-900 本身定义了违规判定原则
         var adr900File = adrFiles.FirstOrDefault(f => Path.GetFileName(f).StartsWith("ADR-900"));
