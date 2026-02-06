@@ -103,16 +103,19 @@ public sealed class ADR_005_5_Architecture_Tests
             // Handler 不应同时是 Command 和 Query
             if (isCommandHandler && isQueryHandler)
             {
-                true.Should().BeFalse(
-                    $"❌ ADR-005_5_3 违规: Handler 同时包含 Command 和 Query 语义\n\n" +
-                    $"违规 Handler: {handler.FullName}\n\n" +
-                    $"问题分析:\n" +
-                    $"Handler 命名同时包含 Command 和 Query，违反 CQRS 原则\n\n" +
-                    $"修复建议：\n" +
-                    $"1. 严格分离为两个 Handler：XxxCommandHandler 和 XxxQueryHandler\n" +
-                    $"2. Command Handler：执行写操作，返回 void 或 ID\n" +
-                    $"3. Query Handler：执行读操作，返回 DTO\n\n" +
-                    $"参考: ADR-005_5_3 - Command/Query 必须分离");
+                var message = AssertionMessageBuilder.BuildWithAnalysis(
+                    ruleId: "ADR-005_5_3",
+                    summary: "Handler 同时包含 Command 和 Query 语义",
+                    currentState: $"违规 Handler: {handler.FullName}",
+                    problemAnalysis: "Handler 命名同时包含 Command 和 Query，违反 CQRS 原则",
+                    remediationSteps: new[]
+                    {
+                        "严格分离为两个 Handler：XxxCommandHandler 和 XxxQueryHandler",
+                        "Command Handler：执行写操作，返回 void 或 ID",
+                        "Query Handler：执行读操作，返回 DTO"
+                    },
+                    adrReference: "docs/adr/constitutional/ADR-005-Business-Logic-Layering.md");
+                true.Should().BeFalse(message);
             }
         }
     }
