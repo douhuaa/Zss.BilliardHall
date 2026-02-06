@@ -271,9 +271,9 @@ public record OrderItemDtoV2(
 
 ---
 
-### ADR-121_5：标记接口规范（Rule）
+### ADR-121_4：标记接口规范（Rule）
 
-#### ADR-121_5_1 IContract接口使用规范（可选）
+#### ADR-121_4_1 IContract接口使用规范（可选）
 
 为支持工具和文档生成，契约可实现 `IContract`：
 
@@ -314,7 +314,7 @@ public record MemberInfoDto(Guid MemberId, string UserName) : IContract
 | **ADR-121_4_1** | L1 | ArchitectureTests 验证版本命名规范 | §ADR-121_4_1 |
 | **ADR-121_4_2** | L2 | Code Review 检查版本废弃流程 | §ADR-121_4_2 |
 | **ADR-121_4_3** | L2 | Code Review 检查嵌套DTO版本一致性 | §ADR-121_4_3 |
-| **ADR-121_5_1** | L3 | 文档审查 | §ADR-121_5_1 |
+| **ADR-121_4_1** | L3 | 文档审查 | §ADR-121_4_1 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
