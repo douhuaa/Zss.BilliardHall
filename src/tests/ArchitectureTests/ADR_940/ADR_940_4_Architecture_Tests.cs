@@ -9,20 +9,17 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Adr;
 ///
 /// 关联文档：
 /// - ADR: docs/adr/governance/ADR-940-adr-relationship-and-traceability.md
+///
+/// 实现说明：
+/// - 使用 AdrTestFixture 统一加载 ADR 文档，避免重复代码
 /// </summary>
-public sealed class ADR_940_4_Architecture_Tests
+public sealed class ADR_940_4_Architecture_Tests : IClassFixture<AdrTestFixture>
 {
     private readonly IReadOnlyDictionary<string, AdrDocument> _adrs;
 
-    public ADR_940_4_Architecture_Tests()
+    public ADR_940_4_Architecture_Tests(AdrTestFixture fixture)
     {
-        var repoRoot = TestEnvironment.RepositoryRoot
-            ?? throw new InvalidOperationException("未找到仓库根目录（无法定位 docs/adr 或 .git）");
-
-        var adrPath = Path.Combine(repoRoot, "docs", "adr");
-        var repo = new AdrRepository(adrPath);
-
-        _adrs = repo.LoadAll().ToDictionary(a => a.Id);
+        _adrs = fixture.AllAdrs;
     }
 
     /// <summary>
@@ -99,8 +96,4 @@ public sealed class ADR_940_4_Architecture_Tests
         path.RemoveAt(path.Count - 1);
         recursionStack.Remove(current);
     }
-
-    /// <summary>
-    /// 查找仓库根目录
-    /// </summary>
 }
