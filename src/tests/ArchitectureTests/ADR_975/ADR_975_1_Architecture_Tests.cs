@@ -23,16 +23,34 @@ public sealed class ADR_975_1_Architecture_Tests
     {
         var adr975Path = FileSystemTestHelper.GetAbsolutePath("docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
 
-        File.Exists(adr975Path).Should().BeTrue(
-            $"❌ ADR-975_1_1 违规：ADR-975 文档不存在\n\n" +
-            $"参考：docs/adr/governance/ADR-975-documentation-quality-monitoring.md §1.1");
+        var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-975_1_1",
+            filePath: adr975Path,
+            fileDescription: "ADR-975 文档质量监控文档",
+            remediationSteps: new[]
+            {
+                "创建 ADR-975 文档",
+                "定义文档质量指标和评估标准"
+            },
+            adrReference: "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
+
+        File.Exists(adr975Path).Should().BeTrue(fileMessage);
 
         var content = FileSystemTestHelper.ReadFileContent(adr975Path);
 
         // 验证定义了质量指标
-        content.Should().Contain("质量指标",
-            $"❌ ADR-975_1_1 违规：ADR-975 必须定义质量指标\n\n" +
-            $"参考：docs/adr/governance/ADR-975-documentation-quality-monitoring.md §1.1");
+        var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-975_1_1",
+            filePath: adr975Path,
+            missingContent: "质量指标",
+            remediationSteps: new[]
+            {
+                "在 ADR-975 中定义质量指标",
+                "说明如何量化评估文档质量"
+            },
+            adrReference: "docs/adr/governance/ADR-975-documentation-quality-monitoring.md");
+
+        content.Should().Contain("质量指标", missingMessage);
     }
 
     /// <summary>

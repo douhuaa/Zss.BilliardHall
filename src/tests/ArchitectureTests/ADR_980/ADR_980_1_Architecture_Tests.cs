@@ -29,9 +29,18 @@ public sealed class ADR_980_1_Architecture_Tests
         var adr980Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
         // 验证 ADR-980 自身存在
-        File.Exists(adr980Path).Should().BeTrue(
-            $"❌ ADR-980_1_1 违规：ADR-980 文档不存在\n\n" +
-            $"参考：docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md §1.1");
+        var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-980_1_1",
+            filePath: adr980Path,
+            fileDescription: "ADR-980 ADR生命周期同步文档",
+            remediationSteps: new[]
+            {
+                "创建 ADR-980 文档",
+                "定义版本号一致性规则"
+            },
+            adrReference: "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
+
+        File.Exists(adr980Path).Should().BeTrue(fileMessage);
 
         var adrContent = FileSystemTestHelper.ReadFileContent(adr980Path);
 
@@ -81,13 +90,32 @@ public sealed class ADR_980_1_Architecture_Tests
         var content = FileSystemTestHelper.ReadFileContent(adr980Path);
 
         // 验证版本号格式描述
-        content.Should().Contain("version：X.Y",
-            $"❌ ADR-980_1_2 违规：ADR-980 必须定义版本号格式规范\n\n" +
-            $"参考：docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md §1.2");
+        var missingMessage1 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-980_1_2",
+            filePath: adr980Path,
+            missingContent: "version：X.Y",
+            remediationSteps: new[]
+            {
+                "在 ADR-980 中定义版本号格式规范",
+                "说明版本号必须为 X.Y 格式"
+            },
+            adrReference: "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
+
+        content.Should().Contain("version：X.Y", missingMessage1);
 
         // 验证包含示例
-        content.Should().Contain("version: \"2.0\"",
-            $"❌ ADR-980_1_2 违规：ADR-980 必须包含版本号格式示例");
+        var missingMessage2 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-980_1_2",
+            filePath: adr980Path,
+            missingContent: "version: \"2.0\"",
+            remediationSteps: new[]
+            {
+                "在 ADR-980 中包含版本号格式示例",
+                "使用 version: \"2.0\" 作为示例"
+            },
+            adrReference: "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
+
+        content.Should().Contain("version: \"2.0\"", missingMessage2);
     }
 
     /// <summary>
@@ -103,16 +131,45 @@ public sealed class ADR_980_1_Architecture_Tests
         var content = FileSystemTestHelper.ReadFileContent(adr980Path);
 
         // 验证三位一体存在性规则
-        content.Should().Contain("三位一体存在性",
-            $"❌ ADR-980_1_6 违规：ADR-980 必须定义三位一体存在性规则");
+        var missingMessage1 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-980_1_6",
+            filePath: adr980Path,
+            missingContent: "三位一体存在性",
+            remediationSteps: new[]
+            {
+                "在 ADR-980 中定义三位一体存在性规则",
+                "说明 ADR、测试、Prompt 的关联要求"
+            },
+            adrReference: "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
 
-        content.Should().Contain("Document-Only ADR",
-            $"❌ ADR-980_1_6 违规：ADR-980 必须说明 Document-Only ADR 的豁免条件");
+        content.Should().Contain("三位一体存在性", missingMessage1);
+
+        var missingMessage2 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-980_1_6",
+            filePath: adr980Path,
+            missingContent: "Document-Only ADR",
+            remediationSteps: new[]
+            {
+                "在 ADR-980 中说明 Document-Only ADR 的豁免条件",
+                "明确哪些 ADR 可以不需要测试或 Prompt"
+            },
+            adrReference: "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
+
+        content.Should().Contain("Document-Only ADR", missingMessage2);
 
         // 验证规则内容
-        content.Should().Contain("必须存在至少一个架构测试",
-            $"❌ ADR-980_1_6 违规：ADR-980 必须要求 ADR 具有架构测试或 Prompt\n\n" +
-            $"参考：docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md §1.6");
+        var missingMessage3 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-980_1_6",
+            filePath: adr980Path,
+            missingContent: "必须存在至少一个架构测试",
+            remediationSteps: new[]
+            {
+                "在 ADR-980 中要求 ADR 具有架构测试或 Prompt",
+                "明确非 Document-Only ADR 的强制要求"
+            },
+            adrReference: "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md");
+
+        content.Should().Contain("必须存在至少一个架构测试", missingMessage3);
     }
 
 }

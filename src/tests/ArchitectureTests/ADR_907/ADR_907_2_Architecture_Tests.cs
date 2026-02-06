@@ -32,14 +32,19 @@ public sealed class ADR_907_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var projectPath = Path.Combine(repoRoot, AdrTestsProjectPath);
 
-        File.Exists(projectPath).Should().BeTrue(
-            $"❌ ADR-907_2_1 违规：ArchitectureTests 项目不存在\n\n" +
-            $"预期路径：{projectPath}\n\n" +
-            $"修复建议：\n" +
-            $"  1. 创建独立的 ArchitectureTests 测试项目\n" +
-            $"  2. 项目命名格式：<SolutionName>.Tests.Architecture\n" +
-            $"  3. 确保项目位于 src/tests 目录下\n\n" +
-            $"参考：docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md §2.1");
+        var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-907_2_1",
+            filePath: projectPath,
+            fileDescription: "ArchitectureTests 项目文件",
+            remediationSteps: new[]
+            {
+                "创建独立的 ArchitectureTests 测试项目",
+                "项目命名格式：<SolutionName>.Tests.Architecture",
+                "确保项目位于 src/tests 目录下"
+            },
+            adrReference: "docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md");
+        
+        File.Exists(projectPath).Should().BeTrue(fileNotFoundMessage);
     }
 
     /// <summary>

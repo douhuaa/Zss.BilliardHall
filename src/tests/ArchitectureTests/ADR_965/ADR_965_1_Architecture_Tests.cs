@@ -36,7 +36,7 @@ public sealed class ADR_965_1_Architecture_Tests
 
         File.Exists(adr965Path).Should().BeTrue(fileNotFoundMessage);
 
-        var content = File.ReadAllText(adr965Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr965Path);
 
         // 验证包含互动清单的说明
         var missingContentMessage = AssertionMessageBuilder.BuildContentMissingMessage(
@@ -62,7 +62,7 @@ public sealed class ADR_965_1_Architecture_Tests
     {
         var adr965Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr965Path);
 
-        var content = File.ReadAllText(adr965Path);
+        var content = FileSystemTestHelper.ReadFileContent(adr965Path);
 
         // 验证定义了 GitHub Issue Template 格式
         var templateMessage = AssertionMessageBuilder.BuildContentMissingMessage(

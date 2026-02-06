@@ -53,7 +53,7 @@ public sealed class ADR_930_1_Architecture_Tests
         var existingTemplate = prTemplatePaths.FirstOrDefault(File.Exists);
         if (existingTemplate != null)
         {
-            var content = File.ReadAllText(existingTemplate);
+            var content = FileSystemTestHelper.ReadFileContent(existingTemplate);
 
             // 验证模板包含变更类型提示
             var hasChangeTypeGuidance = content.Contains("变更类型", StringComparison.OrdinalIgnoreCase) ||
@@ -61,10 +61,18 @@ public sealed class ADR_930_1_Architecture_Tests
                                        content.Contains("feat", StringComparison.OrdinalIgnoreCase) ||
                                        content.Contains("fix", StringComparison.OrdinalIgnoreCase);
 
-            hasChangeTypeGuidance.Should().BeTrue(
-                $"❌ ADR-930_1_1 违规：PR 模板缺少变更类型字段\n\n" +
-                $"修复建议：在 PR 模板中添加变更类型选择或说明区域\n\n" +
-                $"参考：docs/adr/governance/ADR-930-code-review-compliance.md §1.1");
+            var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
+                ruleId: "ADR-930_1_1",
+                filePath: existingTemplate,
+                missingContent: "变更类型字段",
+                remediationSteps: new[]
+                {
+                    "在 PR 模板中添加变更类型选择或说明区域",
+                    "包含：feat/fix/docs/refactor/test/chore"
+                },
+                adrReference: "docs/adr/governance/ADR-930-code-review-compliance.md");
+
+            hasChangeTypeGuidance.Should().BeTrue(missingMessage);
         }
     }
 
@@ -81,19 +89,47 @@ public sealed class ADR_930_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrFile = Path.Combine(repoRoot, "docs/adr/governance/ADR-930-code-review-compliance.md");
 
-        File.Exists(adrFile).Should().BeTrue(
-            $"❌ ADR-930_1_2 违规：ADR-930 文档不存在\n\n" +
-            $"修复建议：确保 ADR-930 文档存在以定义自检规则\n\n" +
-            $"参考：docs/adr/governance/ADR-930-code-review-compliance.md §1.2");
+        var fileMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: "ADR-930_1_2",
+            filePath: adrFile,
+            fileDescription: "ADR-930 代码审查合规文档",
+            remediationSteps: new[]
+            {
+                "确保 ADR-930 文档存在以定义自检规则",
+                "文档必须包含 Copilot 自检要求"
+            },
+            adrReference: "docs/adr/governance/ADR-930-code-review-compliance.md");
 
-        var content = File.ReadAllText(adrFile);
+        File.Exists(adrFile).Should().BeTrue(fileMessage);
+
+        var content = FileSystemTestHelper.ReadFileContent(adrFile);
 
         // 验证文档包含自检要求
-        content.Should().Contain("Copilot 自检",
-            $"❌ ADR-930_1_2 违规：ADR-930 必须定义 Copilot 自检要求");
+        var missingMessage1 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-930_1_2",
+            filePath: adrFile,
+            missingContent: "Copilot 自检",
+            remediationSteps: new[]
+            {
+                "在 ADR-930 中定义 Copilot 自检要求",
+                "明确自检流程和检查项"
+            },
+            adrReference: "docs/adr/governance/ADR-930-code-review-compliance.md");
 
-        content.Should().Contain("code_review",
-            $"❌ ADR-930_1_2 违规：ADR-930 必须引用 code_review 工具");
+        content.Should().Contain("Copilot 自检", missingMessage1);
+
+        var missingMessage2 = AssertionMessageBuilder.BuildContentMissingMessage(
+            ruleId: "ADR-930_1_2",
+            filePath: adrFile,
+            missingContent: "code_review",
+            remediationSteps: new[]
+            {
+                "在 ADR-930 中引用 code_review 工具",
+                "说明工具在自检流程中的作用"
+            },
+            adrReference: "docs/adr/governance/ADR-930-code-review-compliance.md");
+
+        content.Should().Contain("code_review", missingMessage2);
     }
 
     /// <summary>
