@@ -32,7 +32,7 @@ public sealed class ADR_950_3_Architecture_Tests
 
         var guideFiles = FileSystemTestHelper.GetFilesInDirectory(guidesPath, "*.md", SearchOption.AllDirectories);
 
-        if (guideFiles.Length == 0)
+        if (guideFiles.Count == 0)
         {
             Console.WriteLine("ℹ️ ADR-950_3_1: 没有找到 Guide 文档，跳过验证");
             return;
