@@ -1,5 +1,7 @@
 ﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_900;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 /// <summary>
 /// ADR-900_2: 执行级别与测试映射
 /// 验证架构规则的执行级别分类和 ADR ↔ 测试映射关系
@@ -26,10 +28,8 @@ public sealed class ADR_900_2_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
 
-        // 获取所有 ADR 文件
-        var adrFiles = Directory.GetFiles(adrDirectory, "*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("\\archive\\") && !f.Contains("\\README.md"))
-            .ToArray();
+        // 使用 AdrFileFilter 统一过滤 ADR 文件（通过 YAML Front Matter 识别真正的 ADR）
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory).ToArray();
 
         foreach (var adrFile in adrFiles)
         {
@@ -67,10 +67,8 @@ public sealed class ADR_900_2_Architecture_Tests
         var adrDirectory = Path.Combine(repoRoot, AdrDocsPath);
         var testsDirectory = Path.Combine(repoRoot, AdrTestsPath);
 
-        // 获取所有 ADR 文件
-        var adrFiles = Directory.GetFiles(adrDirectory, "*.md", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("\\archive\\") && !f.Contains("\\README.md"))
-            .ToArray();
+        // 使用 AdrFileFilter 统一过滤 ADR 文件（通过 YAML Front Matter 识别真正的 ADR）
+        var adrFiles = AdrFileFilter.GetAdrFiles(adrDirectory).ToArray();
 
         // 获取所有测试文件
         var testFiles = Directory.GetFiles(testsDirectory, "*.cs", SearchOption.AllDirectories)

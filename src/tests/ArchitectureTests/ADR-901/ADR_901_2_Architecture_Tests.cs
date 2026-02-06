@@ -204,11 +204,11 @@ public sealed class ADR_901_2_Architecture_Tests
 
     /// <summary>
     /// 获取所有活跃（非归档）的 ADR 文件
+    /// 使用 AdrFileFilter 统一过滤逻辑（通过 YAML Front Matter 识别真正的 ADR）
     /// </summary>
     private static List<string> GetActiveAdrFiles(string adrDirectory)
     {
-        return Directory.GetFiles(adrDirectory, "*.md", SearchOption.AllDirectories)
-            .Where(f => Regex.IsMatch(Path.GetFileName(f), @"^ADR-\d+", RegexOptions.IgnoreCase))
+        return AdrFileFilter.GetAdrFiles(adrDirectory)
             .Where(f => !f.Contains("/archive/", StringComparison.OrdinalIgnoreCase)) // 排除归档的 ADR
             .ToList();
     }

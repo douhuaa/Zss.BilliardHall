@@ -1,3 +1,5 @@
+using Zss.BilliardHall.Tests.ArchitectureTests.Adr;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 
 /// <summary>
@@ -123,11 +125,12 @@ public static class FileSystemTestHelper
 
     /// <summary>
     /// 获取指定目录下所有 ADR 文档文件
+    /// 使用 AdrFileFilter 统一过滤逻辑（通过 YAML Front Matter 识别真正的 ADR）
     /// </summary>
     /// <param name="subfolder">子文件夹路径（相对于 ADR 根目录），为 null 则搜索整个 ADR 目录</param>
-    /// <param name="excludeReadme">是否排除 README.md 文件，默认为 true</param>
+    /// <param name="excludeReadme">是否排除 README.md 文件，默认为 true（已由 AdrFileFilter 处理）</param>
     /// <param name="excludeTimeline">是否排除 TIMELINE 文件，默认为 true</param>
-    /// <param name="excludeChecklist">是否排除 CHECKLIST 文件，默认为 true</param>
+    /// <param name="excludeChecklist">是否排除 CHECKLIST 文件，默认为 true（已由 AdrFileFilter 处理）</param>
     /// <returns>ADR 文件路径列表</returns>
     public static IEnumerable<string> GetAdrFiles(
         string? subfolder = null,
@@ -144,24 +147,17 @@ public static class FileSystemTestHelper
             return Enumerable.Empty<string>();
         }
 
-        var files = Directory.GetFiles(adrPath, "*.md", SearchOption.AllDirectories);
+        // 使用 AdrFileFilter 统一过滤 ADR 文件
+        // AdrFileFilter 已处理：README、TEMPLATE、CHECKLIST、proposals 目录等
+        var files = AdrFileFilter.GetAdrFiles(adrPath);
 
-        if (excludeReadme)
-        {
-            files = files.Where(f => !f.Contains("README", StringComparison.OrdinalIgnoreCase)).ToArray();
-        }
-
+        // 额外的过滤选项（TIMELINE 不在 AdrFileFilter 中处理）
         if (excludeTimeline)
         {
-            files = files.Where(f => !f.Contains("TIMELINE", StringComparison.OrdinalIgnoreCase)).ToArray();
+            files = files.Where(f => !f.Contains("TIMELINE", StringComparison.OrdinalIgnoreCase));
         }
 
-        if (excludeChecklist)
-        {
-            files = files.Where(f => !f.Contains("CHECKLIST", StringComparison.OrdinalIgnoreCase)).ToArray();
-        }
-
-        return files.Where(f => Path.GetFileName(f).StartsWith("ADR-", StringComparison.OrdinalIgnoreCase));
+        return files;
     }
 
     /// <summary>
