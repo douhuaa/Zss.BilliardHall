@@ -269,11 +269,66 @@ dotnet test src/tests/ArchitectureTests/ \
 
 ## 参考资料
 
-- [ADR-900：架构测试与 CI 治理](../../../docs/adr/constitutional/ADR-900-architecture-testing-ci-governance-constitution.md)
+- [ADR-900：架构测试与 CI 治理](../../../docs/adr/governance/ADR-900-architecture-tests.md)
+- [ADR-907：架构测试执法治理体系](../../../docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md)
+- [ARCHITECTURE-TEST-GUIDELINES.md](../../../docs/guidelines/ARCHITECTURE-TEST-GUIDELINES.md) - 架构测试编写指南
 - [架构测试失败诊断](../../../docs/copilot/architecture-test-failures.md)
-- [测试编写指令](../../instructions/testing.instructions.md)
+- [测试编写指令](../../instructions/test-generator.instructions.yaml)
+
+---
+
+## 最佳实践
+
+### 快速诊断失败
+
+当测试失败时，按以下顺序诊断：
+
+1. **查看测试输出**
+   ```bash
+   dotnet test src/tests/ArchitectureTests/ \
+     --filter "FullyQualifiedName~ADR_XXX" \
+     --logger "console;verbosity=detailed"
+   ```
+
+2. **定位具体违规**
+   - 检查断言消息中的文件路径
+   - 查看违规的具体代码行
+   - 理解违反的 ADR 条款
+
+3. **查阅 ADR 正文**
+   - 确认条款要求
+   - 理解设计意图
+   - 寻找合规方案
+
+4. **修复并重新测试**
+   ```bash
+   # 快速反馈循环
+   dotnet test src/tests/ArchitectureTests/ \
+     --filter "FullyQualifiedName~ADR_XXX_Y" \
+     --logger "console;verbosity=minimal"
+   ```
+
+### 性能优化
+
+- **增量测试**：只运行相关的 ADR 测试
+- **并行执行**：默认启用（可用 `--parallel` 控制）
+- **快速失败**：使用 `-- xUnit.StopOnFail=true`
+
+### 持续集成集成
+
+在 CI 管道中使用：
+```bash
+dotnet test src/tests/ArchitectureTests/ \
+  --filter "Category=Architecture" \
+  --logger "trx;LogFileName=architecture-results.trx" \
+  --logger "console;verbosity=normal" \
+  --collect:"XPlat Code Coverage" \
+  --results-directory ./TestResults
+```
 
 ---
 
 **维护者**：架构委员会  
-**状态**：✅ Active
+**状态**：✅ Active  
+**版本**：1.1  
+**最后更新**：2026-02-06
