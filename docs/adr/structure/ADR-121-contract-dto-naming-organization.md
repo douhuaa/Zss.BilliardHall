@@ -236,7 +236,9 @@ public record MemberInfoDto(Guid MemberId, string UserName);
 public record MemberInfoDtoV2(Guid MemberId, string UserName, string Email);
 ```
 
-#### 废弃策略
+---
+
+#### ADR-121_4_2 版本废弃策略
 
 使用 `[Obsolete]` 标记旧版本，采用渐进式流程：
 
