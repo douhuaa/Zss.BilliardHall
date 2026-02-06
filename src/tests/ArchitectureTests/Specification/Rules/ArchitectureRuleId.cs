@@ -84,6 +84,11 @@ public readonly record struct ArchitectureRuleId
     /// <summary>
     /// 实现可比较接口，用于排序
     /// 排序规则：先按 ADR 编号，再按 Rule 编号，最后按 Clause 编号
+    /// 
+    /// 重要说明：
+    /// - Rule (ClauseNumber=null) 会被视为 ClauseNumber=0
+    /// - 这意味着 Rule 总是排在同编号的 Clause 之前
+    /// - 例如：ADR-907.3 (Rule) 排在 ADR-907.3.1 (Clause) 之前
     /// </summary>
     public int CompareTo(ArchitectureRuleId other)
     {

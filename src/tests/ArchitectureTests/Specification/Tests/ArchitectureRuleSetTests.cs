@@ -82,7 +82,7 @@ public sealed class ArchitectureRuleSetTests
         // Act & Assert
         var act = () => ruleSet.AddRule(3, "规则2", RuleSeverity.Technical, RuleScope.Module);
         act.Should().Throw<InvalidOperationException>()
-            .WithMessage("*已存在*");
+            .WithMessage("*ADR-0907.3*已存在*");
     }
 
     [Fact(DisplayName = "不能添加重复的条款")]
@@ -95,7 +95,7 @@ public sealed class ArchitectureRuleSetTests
         // Act & Assert
         var act = () => ruleSet.AddClause(3, 1, "条款2", "执行2");
         act.Should().Throw<InvalidOperationException>()
-            .WithMessage("*已存在*");
+            .WithMessage("*ADR-0907.3.1*已存在*");
     }
 
     [Fact(DisplayName = "HasRule 应该正确检查规则是否存在")]
