@@ -190,12 +190,16 @@ public static partial class ArchitectureTestSpecification
 
             // 检查后面是否跟着否定词
             var keywordEnd = keywordIndex + keyword.Length;
-            var remainingText = keywordEnd < sentence.Length
-                ? sentence.Substring(keywordEnd)
-                : string.Empty;
+            if (keywordEnd >= sentence.Length)
+            {
+                return false;
+            }
 
-            // 检查是否跟着"避免"、"不要"等否定词
-            if (remainingText.StartsWith("避免") || remainingText.StartsWith("不要"))
+            var remainingSpan = sentence.AsSpan(keywordEnd);
+
+            // 检查是否跟着"避免"、"不要"等否定词（使用 Ordinal 比较，避免多余分配）
+            if (remainingSpan.StartsWith("避免".AsSpan(), StringComparison.Ordinal) ||
+                remainingSpan.StartsWith("不要".AsSpan(), StringComparison.Ordinal))
             {
                 return true;
             }
