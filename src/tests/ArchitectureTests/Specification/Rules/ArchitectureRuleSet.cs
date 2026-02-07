@@ -1,3 +1,5 @@
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.DecisionLanguage;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 
 /// <summary>
@@ -41,16 +43,18 @@ public sealed class ArchitectureRuleSet
     /// </summary>
     /// <param name="ruleNumber">规则编号</param>
     /// <param name="summary">规则摘要</param>
+    /// <param name="decision">裁决级别（MUST/MUST_NOT/SHOULD）</param>
     /// <param name="severity">严重程度</param>
     /// <param name="scope">作用域</param>
     public void AddRule(
         int ruleNumber,
         string summary,
+        DecisionLevel decision,
         RuleSeverity severity,
         RuleScope scope)
     {
         var id = ArchitectureRuleId.Rule(AdrNumber, ruleNumber);
-        var definition = new ArchitectureRuleDefinition(id, summary, severity, scope);
+        var definition = new ArchitectureRuleDefinition(id, summary, decision, severity, scope);
         
         definition.Validate();
 
@@ -69,14 +73,16 @@ public sealed class ArchitectureRuleSet
     /// <param name="clauseNumber">条款编号</param>
     /// <param name="condition">条件描述</param>
     /// <param name="enforcement">执行要求</param>
+    /// <param name="executionType">执行类型</param>
     public void AddClause(
         int ruleNumber,
         int clauseNumber,
         string condition,
-        string enforcement)
+        string enforcement,
+        ClauseExecutionType executionType)
     {
         var id = ArchitectureRuleId.Clause(AdrNumber, ruleNumber, clauseNumber);
-        var definition = new ArchitectureClauseDefinition(id, condition, enforcement);
+        var definition = new ArchitectureClauseDefinition(id, condition, enforcement, executionType);
         
         definition.Validate();
 
@@ -143,4 +149,35 @@ public sealed class ArchitectureRuleSet
     /// 获取条款数量
     /// </summary>
     public int ClauseCount => _clauses.Count;
+
+    /// <summary>
+    /// 验证规则集的完整性
+    /// 确保每个 Rule 至少有一个对应的 Clause
+    /// 
+    /// 这是架构治理的关键约束：
+    /// "写了 Rule，但永远没人执行"的假治理是不可接受的
+    /// 每个规则都必须通过至少一个条款来定义如何执行
+    /// </summary>
+    /// <exception cref="InvalidOperationException">当存在没有条款的规则时抛出</exception>
+    public void ValidateCompleteness()
+    {
+        var rulesWithoutClauses = new List<ArchitectureRuleId>();
+
+        foreach (var rule in _rules.Values)
+        {
+            var hasClause = _clauses.Values.Any(c => c.Id.RuleNumber == rule.Id.RuleNumber);
+            if (!hasClause)
+            {
+                rulesWithoutClauses.Add(rule.Id);
+            }
+        }
+
+        if (rulesWithoutClauses.Any())
+        {
+            var ruleList = string.Join(", ", rulesWithoutClauses.Select(r => r.ToString()));
+            throw new InvalidOperationException(
+                $"以下规则没有任何条款，这是不可执行的规则：{ruleList}。" +
+                $"每个规则必须至少有一个条款来定义如何执行。");
+        }
+    }
 }

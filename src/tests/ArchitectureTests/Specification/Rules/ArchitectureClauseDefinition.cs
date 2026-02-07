@@ -9,10 +9,12 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 /// <param name="Id">条款ID（必须是 Clause 级别）</param>
 /// <param name="Condition">条件描述 - 什么情况下触发此条款</param>
 /// <param name="Enforcement">执行要求 - 如何验证和执行此条款</param>
+/// <param name="ExecutionType">执行类型 - 定义条款的验证方式（静态分析/约定检查/运行时等）</param>
 public sealed record ArchitectureClauseDefinition(
     ArchitectureRuleId Id,
     string Condition,
-    string Enforcement
+    string Enforcement,
+    ClauseExecutionType ExecutionType
 )
 {
     /// <summary>
