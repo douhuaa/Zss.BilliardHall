@@ -70,7 +70,7 @@ public static class ArchitectureRulesExample
             var ruleId = "ADR-907.3";
             
             // 907.3 和 907.03 是否等价？
-            var ruleId2 = "ADR-907.03";
+            // var ruleId2 = "ADR-907.03";  // 示例：两者不等价，需使用标准格式
             
             // 测试失败消息需要手工拼接
             var message = $"违反 {ruleId}";

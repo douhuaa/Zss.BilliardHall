@@ -27,7 +27,7 @@ public sealed class DecisionLanguageIntegrationTests
         // Act & Assert
         foreach (var (rule, (expectedLevel, expectedBlocking)) in adrRules)
         {
-            var result = ArchitectureTestSpecification.DecisionLanguage.Parse(rule);
+            var result = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(rule);
 
             result.Level.Should().Be(expectedLevel, $"规则 '{rule}' 的级别应为 {expectedLevel}");
             result.IsBlocking.Should().Be(expectedBlocking, $"规则 '{rule}' 的阻断状态应为 {expectedBlocking}");
@@ -48,7 +48,7 @@ public sealed class DecisionLanguageIntegrationTests
         string expectedBehavior)
     {
         // Act
-        var decision = ArchitectureTestSpecification.DecisionLanguage.Parse(rule);
+        var decision = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(rule);
         string actualBehavior;
 
         if (decision.IsBlocking)
@@ -120,7 +120,7 @@ public sealed class DecisionLanguageIntegrationTests
 
         foreach (var rule in adrRules)
         {
-            var decision = ArchitectureTestSpecification.DecisionLanguage.Parse(rule);
+            var decision = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(rule);
 
             switch (decision.Level)
             {
@@ -163,7 +163,7 @@ public sealed class DecisionLanguageIntegrationTests
         var mixedText = "必须实现接口，同时应该考虑性能";
 
         // Act
-        var result = ArchitectureTestSpecification.DecisionLanguage.Parse(mixedText);
+        var result = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(mixedText);
 
         // Assert - 应该匹配 Must（因为 Must 规则在前）
         result.Level.Should().Be(DecisionLevel.Must,
@@ -183,7 +183,7 @@ public sealed class DecisionLanguageIntegrationTests
     public void Empty_Or_Descriptive_Text_Should_Return_None(string? text)
     {
         // Act
-        var result = ArchitectureTestSpecification.DecisionLanguage.Parse(text!);
+        var result = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(text!);
 
         // Assert
         result.Should().Be(DecisionResult.None);

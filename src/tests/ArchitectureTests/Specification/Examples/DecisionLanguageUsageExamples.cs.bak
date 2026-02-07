@@ -14,15 +14,15 @@ public static class DecisionLanguageUsageExamples
     public static void Example1_BasicParsing()
     {
         // 解析不同级别的裁决语言
-        var mustResult = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision("必须遵循模块边界");
+        var mustResult = ArchitectureTestSpecification.DecisionLanguage.Parse("必须遵循模块边界");
         Console.WriteLine($"Must: Level={mustResult.Level}, IsBlocking={mustResult.IsBlocking}");
         // 输出: Must: Level=Must, IsBlocking=True
 
-        var mustNotResult = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision("禁止跨模块直接调用");
+        var mustNotResult = ArchitectureTestSpecification.DecisionLanguage.Parse("禁止跨模块直接调用");
         Console.WriteLine($"MustNot: Level={mustNotResult.Level}, IsBlocking={mustNotResult.IsBlocking}");
         // 输出: MustNot: Level=MustNot, IsBlocking=True
 
-        var shouldResult = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision("应该优先使用 Handler 模式");
+        var shouldResult = ArchitectureTestSpecification.DecisionLanguage.Parse("应该优先使用 Handler 模式");
         Console.WriteLine($"Should: Level={shouldResult.Level}, IsBlocking={shouldResult.IsBlocking}");
         // 输出: Should: Level=Should, IsBlocking=False
     }
@@ -33,7 +33,7 @@ public static class DecisionLanguageUsageExamples
     public static void Example2_ThreeStateDecision()
     {
         var sentence = "必须实现 IHandler 接口";
-        var decision = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(sentence);
+        var decision = ArchitectureTestSpecification.DecisionLanguage.Parse(sentence);
 
         if (decision.IsBlocking)
         {
@@ -92,7 +92,7 @@ public static class DecisionLanguageUsageExamples
 
         foreach (var rule in adrRules)
         {
-            var decision = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(rule);
+            var decision = ArchitectureTestSpecification.DecisionLanguage.Parse(rule);
 
             if (decision.IsBlocking)
             {
@@ -120,9 +120,9 @@ public static class DecisionLanguageUsageExamples
     public static void Example5_HandlingNone()
     {
         var descriptiveText = "Handler 模式是一种常见的设计模式";
-        var result = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(descriptiveText);
+        var result = ArchitectureTestSpecification.DecisionLanguage.Parse(descriptiveText);
 
-        if (result == DecisionParseResult.None)
+        if (result == DecisionResult.None)
         {
             Console.WriteLine("这是描述性文本，不包含裁决语言");
         }
