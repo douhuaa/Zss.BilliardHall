@@ -27,46 +27,60 @@
 /Specification
 ├── ArchitectureTestSpecification.cs    # 根聚合（统一入口）
 ├── _Adr.cs                              # ADR 规范定义
+├── _Namespaces.cs                       # 命名空间规范
+├── _Semantics.cs                        # 语义规范
+├── _Output.cs                           # 输出规范
+├── _Onboarding.cs                       # Onboarding 规范
 │
-├── /DecisionLanguage                    # 语义宪法层
-│   ├── DecisionLevel.cs                 # 裁决级别（MUST/MUST_NOT/SHOULD）
-│   ├── DecisionRule.cs                  # 裁决规则定义
-│   ├── DecisionResult.cs                # 裁决结果
+├── /Language                            # 语言层（语法和语义定义）
+│   ├── /DecisionLanguage                # 裁决语言模型
+│   │   ├── DecisionLevel.cs             # 裁决级别（MUST/MUST_NOT/SHOULD）
+│   │   ├── DecisionRule.cs              # 裁决规则定义
+│   │   ├── DecisionResult.cs            # 裁决结果（ParseResult、ExecutionResult）
+│   │   └── README.md
+│   └── /RuleIdLanguage                  # 规则 ID 语言
+│       ├── ArchitectureRuleId.cs        # 强类型规则 ID
+│       ├── RuleIdParser.cs              # 规则 ID 解析器
+│       └── README.md
+│
+├── /Rules                               # 规则模型定义
+│   ├── ArchitectureRuleSet.cs           # 规则集基类
+│   ├── ArchitectureRuleDefinition.cs    # 规则定义
+│   ├── ArchitectureClauseDefinition.cs  # 条款定义
+│   ├── IArchitectureRuleSetDefinition.cs # 规则集接口
+│   ├── RuleLevel.cs                     # 规则层级（Rule/Clause）
+│   ├── RuleSeverity.cs                  # 严重程度
+│   ├── RuleScope.cs                     # 作用域
+│   ├── ClauseExecutionType.cs           # 执行类型
+│   ├── ArchitectureRulesExample.cs      # 使用示例
 │   └── README.md
 │
 ├── /RuleSets                            # 规则集定义（按 ADR 拆分）
 │   ├── /ADR001
-│   │   └── Adr0001RuleSet.cs           # ADR-001 的规则集
+│   │   └── Adr001RuleSet.cs             # ADR-001 的规则集
 │   ├── /ADR002
-│   │   └── Adr0002RuleSet.cs           # ADR-002 的规则集
+│   │   └── Adr002RuleSet.cs             # ADR-002 的规则集
 │   ├── /ADR003
-│   │   └── Adr0003RuleSet.cs           # ADR-003 的规则集
+│   │   └── Adr003RuleSet.cs             # ADR-003 的规则集
 │   ├── /ADR120
-│   │   └── Adr0120RuleSet.cs           # ADR-120 的规则集
+│   │   └── Adr120RuleSet.cs             # ADR-120 的规则集
 │   ├── /ADR201
-│   │   └── Adr0201RuleSet.cs           # ADR-201 的规则集
+│   │   └── Adr201RuleSet.cs             # ADR-201 的规则集
 │   ├── /ADR900
-│   │   └── Adr0900RuleSet.cs           # ADR-900 的规则集
+│   │   └── Adr900RuleSet.cs             # ADR-900 的规则集
 │   └── /ADR907
-│       └── Adr0907RuleSet.cs           # ADR-907 的规则集
+│       └── Adr907RuleSet.cs             # ADR-907 的规则集
 │
 ├── /Index                               # 规则集索引层
 │   ├── RuleSetRegistry.cs               # 规则集注册表（统一访问入口）
 │   └── AdrRuleIndex.cs                  # 规则索引（快速查询）
 │
-├── /Rules                               # 规则基础设施
-│   ├── ArchitectureRuleSet.cs           # 规则集基类
-│   ├── ArchitectureRuleDefinition.cs    # 规则定义
-│   ├── ArchitectureClauseDefinition.cs  # 条款定义
-│   ├── ArchitectureRuleId.cs            # 规则ID
-│   ├── RuleSeverity.cs                  # 严重程度
-│   ├── RuleScope.cs                     # 作用域
-│   └── RuleLevel.cs                     # 规则层级
-│
 └── /Tests                               # Specification 自身的测试
-    ├── RuleSetRegistryTests.cs
-    ├── DecisionLanguageTests.cs
-    └── ...
+    ├── ArchitectureRuleIdTests.cs
+    ├── ArchitectureRuleSetTests.cs
+    ├── ArchitectureRulesTests.cs
+    ├── RuleIdParserTests.cs
+    └── RuleSetRegistryTests.cs
 ```
 
 ## 三层架构说明
@@ -86,12 +100,21 @@
 - 与技术细节无关
 - 对齐 ADR-905 执行级别分类
 
+**当前状态**：
+- 已实现类型定义（DecisionLevel、DecisionRule、DecisionParseResult、DecisionExecutionResult）
+- 用于规则定义中的裁决级别声明
+- 未来可扩展自然语言解析功能
+
 **示例**：
 ```csharp
-// 解析自然语言文本中的裁决语义
-var result = ArchitectureTestSpecification.DecisionLanguage.Parse("模块必须物理隔离");
-// result.Level = DecisionLevel.Must
-// result.IsBlocking = true
+// 在规则定义中使用 DecisionLevel
+var rule = new ArchitectureRuleDefinition(
+    Id: ArchitectureRuleId.Rule(907, 3),
+    Summary: "最小断言语义规范",
+    Decision: DecisionLevel.Must,  // 强制性要求
+    Severity: RuleSeverity.Governance,
+    Scope: RuleScope.Test
+);
 ```
 
 ### 第二层：RuleSets（规则定义层）
@@ -227,18 +250,23 @@ var moduleRules = RuleSetRegistry.GetByScope(RuleScope.Module);
 
 1. **Roslyn Analyzer 集成**
    - RuleSet 可直接转换为 Analyzer 规则
-   - DecisionLanguage 可用于分析代码注释
+   - DecisionLevel 映射到 DiagnosticSeverity
+   - ClauseExecutionType.StaticAnalysis 条款转为 Analyzer 规则
 
 2. **Source Generator 集成**
-   - 自动生成测试方法骨架
-   - 自动生成规则文档
+   - 基于 RuleSet 自动生成测试方法骨架
+   - 自动生成规则文档和报告
 
-3. **Copilot Agent 集成**
-   - RuleSet 可作为 Agent 的知识库
-   - DecisionLanguage 可用于指令解析
+3. **自然语言解析**
+   - 从 ADR 文档文本中自动识别 DecisionLevel
+   - 验证规则定义与文档的一致性
 
-4. **规则版本管理**
-   - RuleSetRegistry 可扩展为支持多版本
+4. **Copilot Agent 集成**
+   - RuleSet 作为 Agent 的知识库
+   - DecisionLevel 用于 Agent 决策逻辑
+
+5. **规则版本管理**
+   - RuleSetRegistry 支持多版本并存
    - 支持规则演进和废弃管理
 
 5. **规则验证工具**
