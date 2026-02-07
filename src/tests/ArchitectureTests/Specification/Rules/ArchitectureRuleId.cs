@@ -43,6 +43,16 @@ public readonly record struct ArchitectureRuleId
         ClauseNumber is null ? RuleLevel.Rule : RuleLevel.Clause;
 
     /// <summary>
+    /// 判断是否为 Rule 级别
+    /// </summary>
+    public bool IsRule => ClauseNumber is null;
+
+    /// <summary>
+    /// 判断是否为 Clause 级别
+    /// </summary>
+    public bool IsClause => ClauseNumber is not null;
+
+    /// <summary>
     /// 私有构造函数，确保只能通过工厂方法创建
     /// </summary>
     private ArchitectureRuleId(int adr, int rule, int? clause)
