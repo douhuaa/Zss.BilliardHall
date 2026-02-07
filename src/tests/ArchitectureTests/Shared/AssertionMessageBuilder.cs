@@ -3,21 +3,22 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 /// <summary>
 /// 架构测试断言消息构建器
 /// 提供统一的断言消息格式模板，确保所有架构测试的错误消息保持一致性
-/// 
+///
 /// 标准格式（基于 ARCHITECTURE-TEST-GUIDELINES.md）：
 /// ❌ ADR-XXX_Y_Z 违规：<简短问题描述>
-/// 
+///
 /// 当前状态：<具体违规情况>
-/// 
+///
 /// 修复建议：
 /// 1. <具体步骤 1>
 /// 2. <具体步骤 2>
 /// 3. <具体步骤 3>
-/// 
+///
 /// 参考：<ADR 文档路径> §ADR-XXX_Y_Z
 /// </summary>
 public static class AssertionMessageBuilder
 {
+
     /// <summary>
     /// 构建标准格式的断言消息
     /// </summary>
@@ -37,15 +38,15 @@ public static class AssertionMessageBuilder
         bool includeClauseReference = false)
     {
         var sb = new StringBuilder();
-        
+
         // 1. 违规标题（必需）
         sb.AppendLine($"❌ {ruleId} 违规：{summary}");
         sb.AppendLine();
-        
+
         // 2. 当前状态（必需）
         sb.AppendLine($"当前状态：{currentState}");
         sb.AppendLine();
-        
+
         // 3. 修复建议（必需，使用编号列表）
         sb.AppendLine("修复建议：");
         int stepNumber = 1;
@@ -55,7 +56,7 @@ public static class AssertionMessageBuilder
             stepNumber++;
         }
         sb.AppendLine();
-        
+
         // 4. 参考（必需）
         if (includeClauseReference)
         {
@@ -65,8 +66,29 @@ public static class AssertionMessageBuilder
         {
             sb.Append($"参考：{adrReference}");
         }
-        
+
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// 构建标准格式的断言消息（使用 ArchitectureRuleId）
+    /// </summary>
+    /// <param name="ruleId">规则编号（ArchitectureRuleId 类型）</param>
+    /// <param name="summary">简短问题描述（一句话说明违规内容）</param>
+    /// <param name="currentState">当前状态/违规情况的具体描述</param>
+    /// <param name="remediationSteps">修复建议步骤列表</param>
+    /// <param name="adrReference">ADR 文档路径（相对于仓库根目录）</param>
+    /// <param name="includeClauseReference">是否在参考中包含章节引用（§ADR-XXX_Y_Z）</param>
+    /// <returns>格式化的断言消息</returns>
+    public static string Build(ArchitectureClauseDefinition clause)
+    {
+        return Build(
+            ruleId: clause.Id.ToString(),
+            summary: clause.Enforcement,
+            currentState: "（请描述当前违规情况）",
+            remediationSteps: new[] { "（请提供具体的修复建议步骤）" },
+            adrReference: clause.Enforcement,
+            includeClauseReference: false);
     }
 
     /// <summary>
@@ -78,6 +100,7 @@ public static class AssertionMessageBuilder
     /// <param name="failingTypes">违规类型列表</param>
     /// <param name="remediationSteps">修复建议步骤列表</param>
     /// <param name="adrReference">ADR 文档路径</param>
+    /// <param name="includeClauseReference">是否在参考中包含章节引用</param>
     /// <param name="includeClauseReference">是否在参考中包含章节引用</param>
     /// <returns>格式化的断言消息</returns>
     public static string BuildWithViolations(
@@ -91,7 +114,7 @@ public static class AssertionMessageBuilder
         var violations = failingTypes.Any()
             ? string.Join("\n", failingTypes.Select(t => $"  - {t}"))
             : "（无违规类型详情）";
-            
+
         return Build(
             ruleId,
             summary,
@@ -123,20 +146,20 @@ public static class AssertionMessageBuilder
         bool includeClauseReference = false)
     {
         var sb = new StringBuilder();
-        
+
         // 1. 违规标题（必需）
         sb.AppendLine($"❌ {ruleId} 违规：{summary}");
         sb.AppendLine();
-        
+
         // 2. 当前状态（必需）
         sb.AppendLine($"当前状态：{currentState}");
         sb.AppendLine();
-        
+
         // 3. 问题分析（可选）
         sb.AppendLine($"问题分析：");
         sb.AppendLine(problemAnalysis);
         sb.AppendLine();
-        
+
         // 4. 修复建议（必需）
         sb.AppendLine("修复建议：");
         int stepNumber = 1;
@@ -146,7 +169,7 @@ public static class AssertionMessageBuilder
             stepNumber++;
         }
         sb.AppendLine();
-        
+
         // 5. 参考（必需）
         if (includeClauseReference)
         {
@@ -156,7 +179,7 @@ public static class AssertionMessageBuilder
         {
             sb.Append($"参考：{adrReference}");
         }
-        
+
         return sb.ToString();
     }
 
@@ -205,7 +228,7 @@ public static class AssertionMessageBuilder
         var violations = failingTypeNames?.Where(t => t != null).Select(t => t!)?.Any() == true
             ? failingTypeNames.Where(t => t != null).Select(t => t!)
             : new[] { "（无违规类型详情）" };
-            
+
         return BuildWithViolations(
             ruleId,
             summary,
@@ -232,16 +255,16 @@ public static class AssertionMessageBuilder
         string adrReference)
     {
         var sb = new StringBuilder();
-        
+
         // 1. 违规标题
         sb.AppendLine($"❌ {ruleId} 违规：{fileDescription}不存在");
         sb.AppendLine();
-        
+
         // 2. 当前状态
         sb.AppendLine("当前状态：文件不存在");
         sb.AppendLine($"预期路径：{filePath}");
         sb.AppendLine();
-        
+
         // 3. 修复建议
         sb.AppendLine("修复建议：");
         int stepNumber = 1;
@@ -251,10 +274,10 @@ public static class AssertionMessageBuilder
             stepNumber++;
         }
         sb.AppendLine();
-        
+
         // 4. 参考
         sb.Append($"参考：{adrReference} §{ruleId}");
-        
+
         return sb.ToString();
     }
 
@@ -275,16 +298,16 @@ public static class AssertionMessageBuilder
         string adrReference)
     {
         var sb = new StringBuilder();
-        
+
         // 1. 违规标题
         sb.AppendLine($"❌ {ruleId} 违规：{directoryDescription}不存在");
         sb.AppendLine();
-        
+
         // 2. 当前状态
         sb.AppendLine("当前状态：目录不存在");
         sb.AppendLine($"预期路径：{directoryPath}");
         sb.AppendLine();
-        
+
         // 3. 修复建议
         sb.AppendLine("修复建议：");
         int stepNumber = 1;
@@ -294,10 +317,10 @@ public static class AssertionMessageBuilder
             stepNumber++;
         }
         sb.AppendLine();
-        
+
         // 4. 参考
         sb.Append($"参考：{adrReference} §{ruleId}");
-        
+
         return sb.ToString();
     }
 
@@ -318,17 +341,17 @@ public static class AssertionMessageBuilder
         string adrReference)
     {
         var relativePath = Path.GetRelativePath(TestEnvironment.RepositoryRoot, filePath);
-        
+
         var sb = new StringBuilder();
-        
+
         // 1. 违规标题
         sb.AppendLine($"❌ {ruleId} 违规：文件缺少必需内容");
         sb.AppendLine();
-        
+
         // 2. 当前状态
         sb.AppendLine($"当前状态：{relativePath} 缺少 '{missingContent}'");
         sb.AppendLine();
-        
+
         // 3. 修复建议
         sb.AppendLine("修复建议：");
         int stepNumber = 1;
@@ -338,10 +361,10 @@ public static class AssertionMessageBuilder
             stepNumber++;
         }
         sb.AppendLine();
-        
+
         // 4. 参考
         sb.Append($"参考：{adrReference} §{ruleId}");
-        
+
         return sb.ToString();
     }
 
@@ -369,4 +392,5 @@ public static class AssertionMessageBuilder
             adrReference,
             includeClauseReference: true);
     }
+
 }

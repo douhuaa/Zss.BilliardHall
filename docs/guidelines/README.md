@@ -45,7 +45,7 @@
 
 ### 相关资源
 
-- **[ADR 测试迁移指南](../MIGRATION-ADR-TESTS-TO-RULESETS.md)** - 完整的 RuleSet 迁移文档
+- **[ADR 测试迁移指南](./MIGRATION-ADR-TESTS-TO-RULESETS.md)** - 完整的 RuleSet 迁移文档
 - **[Specification README](../../src/tests/ArchitectureTests/Specification/README.md)** - RuleSet 架构设计
 
 ## 文档说明
