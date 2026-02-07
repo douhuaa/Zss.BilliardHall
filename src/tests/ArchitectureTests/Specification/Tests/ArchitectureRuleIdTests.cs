@@ -32,7 +32,7 @@ public sealed class ArchitectureRuleIdTests
         clauseId.Level.Should().Be(RuleLevel.Clause);
     }
 
-    [Fact(DisplayName = "Rule ToString 应该输出规范格式 ADR-0907.3")]
+    [Fact(DisplayName = "Rule ToString 应该输出规范格式 ADR-907_3")]
     public void Rule_ToString_Should_Output_Standard_Format()
     {
         // Arrange
@@ -42,10 +42,10 @@ public sealed class ArchitectureRuleIdTests
         var result = ruleId.ToString();
 
         // Assert
-        result.Should().Be("ADR-0907.3");
+        result.Should().Be("ADR-907_3");
     }
 
-    [Fact(DisplayName = "Clause ToString 应该输出规范格式 ADR-0907.3.2")]
+    [Fact(DisplayName = "Clause ToString 应该输出规范格式 ADR-907_3_2")]
     public void Clause_ToString_Should_Output_Standard_Format()
     {
         // Arrange
@@ -55,19 +55,19 @@ public sealed class ArchitectureRuleIdTests
         var result = clauseId.ToString();
 
         // Assert
-        result.Should().Be("ADR-0907.3.2");
+        result.Should().Be("ADR-907_3_2");
     }
 
-    [Fact(DisplayName = "ADR 编号应该正确补零到4位")]
-    public void Adr_Number_Should_Be_Padded_To_Four_Digits()
+    [Fact(DisplayName = "ADR 编号应该正确补零到3位")]
+    public void Adr_Number_Should_Be_Padded_To_Three_Digits()
     {
         // Arrange
         var rule1 = ArchitectureRuleId.Rule(1, 1);
         var rule907 = ArchitectureRuleId.Rule(907, 1);
 
         // Act & Assert
-        rule1.ToString().Should().Be("ADR-0001.1");
-        rule907.ToString().Should().Be("ADR-0907.1");
+        rule1.ToString().Should().Be("ADR-001_1");
+        rule907.ToString().Should().Be("ADR-907_1");
     }
 
     [Fact(DisplayName = "CompareTo 应该按 ADR、Rule、Clause 顺序排序")]
@@ -87,11 +87,11 @@ public sealed class ArchitectureRuleIdTests
         var sorted = ids.OrderBy(x => x).ToList();
 
         // Assert
-        sorted[0].ToString().Should().Be("ADR-0900.1");
-        sorted[1].ToString().Should().Be("ADR-0900.1.1");
-        sorted[2].ToString().Should().Be("ADR-0907.1");
-        sorted[3].ToString().Should().Be("ADR-0907.3.1");
-        sorted[4].ToString().Should().Be("ADR-0907.3.2");
+        sorted[0].ToString().Should().Be("ADR-900_1");
+        sorted[1].ToString().Should().Be("ADR-900_1_1");
+        sorted[2].ToString().Should().Be("ADR-907_1");
+        sorted[3].ToString().Should().Be("ADR-907_3_1");
+        sorted[4].ToString().Should().Be("ADR-907_3_2");
     }
 
     [Fact(DisplayName = "相同的 RuleId 应该被视为相等")]

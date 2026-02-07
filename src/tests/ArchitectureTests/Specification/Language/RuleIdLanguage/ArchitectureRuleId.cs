@@ -83,13 +83,13 @@ public readonly record struct ArchitectureRuleId
 
     /// <summary>
     /// 转换为规范的字符串格式
-    /// Rule: ADR-0907.3
-    /// Clause: ADR-0907.3.2
+    /// Rule: ADR-907_3
+    /// Clause: ADR-907_3_2
     /// </summary>
     public override string ToString()
         => ClauseNumber is null
-            ? $"ADR-{AdrNumber:0000}.{RuleNumber}"
-            : $"ADR-{AdrNumber:0000}.{RuleNumber}.{ClauseNumber}";
+            ? $"ADR-{AdrNumber:000}_{RuleNumber}"
+            : $"ADR-{AdrNumber:000}_{RuleNumber}_{ClauseNumber}";
 
     /// <summary>
     /// 实现可比较接口，用于排序

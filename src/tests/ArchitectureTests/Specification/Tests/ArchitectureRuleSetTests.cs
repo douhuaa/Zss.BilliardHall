@@ -44,7 +44,7 @@ public sealed class ArchitectureRuleSetTests
         
         var rule = ruleSet.GetRule(3);
         rule.Should().NotBeNull();
-        rule!.Id.ToString().Should().Be("ADR-0907.3");
+        rule!.Id.ToString().Should().Be("ADR-907_3");
         rule.Summary.Should().Be("最小断言语义规范");
         rule.Decision.Should().Be(DecisionLevel.Must);
         rule.Severity.Should().Be(RuleSeverity.Governance);
@@ -66,7 +66,7 @@ public sealed class ArchitectureRuleSetTests
         
         var clause = ruleSet.GetClause(3, 1);
         clause.Should().NotBeNull();
-        clause!.Id.ToString().Should().Be("ADR-0907.3.1");
+        clause!.Id.ToString().Should().Be("ADR-907_3_1");
         clause.Condition.Should().Be("测试类至少包含1个有效断言");
         clause.Enforcement.Should().Be("通过静态分析验证");
         clause.ExecutionType.Should().Be(ClauseExecutionType.StaticAnalysis);
@@ -82,7 +82,7 @@ public sealed class ArchitectureRuleSetTests
         // Act & Assert
         var act = () => ruleSet.AddRule(3, "规则2", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
         act.Should().Throw<InvalidOperationException>()
-            .WithMessage("*ADR-0907.3*已存在*");
+            .WithMessage("*ADR-907_3*已存在*");
     }
 
     [Fact(DisplayName = "不能添加重复的条款")]
@@ -95,7 +95,7 @@ public sealed class ArchitectureRuleSetTests
         // Act & Assert
         var act = () => ruleSet.AddClause(3, 1, "条款2", "执行2", ClauseExecutionType.StaticAnalysis);
         act.Should().Throw<InvalidOperationException>()
-            .WithMessage("*ADR-0907.3.1*已存在*");
+            .WithMessage("*ADR-907_3_1*已存在*");
     }
 
     [Fact(DisplayName = "HasRule 应该正确检查规则是否存在")]
@@ -194,7 +194,7 @@ public sealed class ArchitectureRuleSetTests
         // Act & Assert
         var act = () => ruleSet.ValidateCompleteness();
         act.Should().Throw<InvalidOperationException>()
-            .WithMessage("*ADR-0907.2*");
+            .WithMessage("*ADR-907_2*");
     }
 
     [Fact(DisplayName = "ValidateCompleteness 应该通过有完整条款的规则集")]
