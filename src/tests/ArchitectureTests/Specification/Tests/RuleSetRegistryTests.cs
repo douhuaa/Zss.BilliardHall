@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
 /// <summary>
 /// RuleSetRegistry 功能测试
@@ -6,45 +6,32 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 /// </summary>
 public sealed class RuleSetRegistryTests
 {
+    // 物化共享 ADR 列表，避免重复延迟枚举与潜在性能问题
+    private static readonly IReadOnlyList<int> AllAdrNumbers = RuleSetRegistry.GetAllAdrNumbers().ToList();
+
     #region Get 方法测试（宽容模式）
 
-    /// <summary>
-    /// 测试 Get(int) 方法能正确获取存在的规则集
-    /// </summary>
     [Theory(DisplayName = "Get(int) 应正确获取存在的规则集")]
-    [InlineData(1)]    // ADR-001
-    [InlineData(2)]    // ADR-002
-    [InlineData(900)]  // ADR-900
-    [InlineData(907)]  // ADR-907
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(900)]
+    [InlineData(907)]
     public void Get_Int_Should_Return_RuleSet_When_Exists(int adrNumber)
     {
-        // Act
         var ruleSet = RuleSetRegistry.Get(adrNumber);
-
-        // Assert
-        ruleSet.Should().NotBeNull();
-        ruleSet!.AdrNumber.Should().Be(adrNumber);
+        AssertRuleSetExists(ruleSet, adrNumber);
     }
 
-    /// <summary>
-    /// 测试 Get(int) 方法对不存在的规则集返回 null
-    /// </summary>
     [Theory(DisplayName = "Get(int) 对不存在的规则集应返回 null")]
     [InlineData(999)]
     [InlineData(9999)]
     [InlineData(-1)]
     public void Get_Int_Should_Return_Null_When_Not_Exists(int adrNumber)
     {
-        // Act
         var ruleSet = RuleSetRegistry.Get(adrNumber);
-
-        // Assert
         ruleSet.Should().BeNull();
     }
 
-    /// <summary>
-    /// 测试 Get(string) 方法支持多种格式
-    /// </summary>
     [Theory(DisplayName = "Get(string) 应支持多种格式")]
     [InlineData("ADR-001", 1)]
     [InlineData("ADR-1", 1)]
@@ -55,17 +42,10 @@ public sealed class RuleSetRegistryTests
     [InlineData("900", 900)]
     public void Get_String_Should_Support_Multiple_Formats(string adrId, int expectedAdrNumber)
     {
-        // Act
         var ruleSet = RuleSetRegistry.Get(adrId);
-
-        // Assert
-        ruleSet.Should().NotBeNull();
-        ruleSet!.AdrNumber.Should().Be(expectedAdrNumber);
+        AssertRuleSetExists(ruleSet, expectedAdrNumber);
     }
 
-    /// <summary>
-    /// 测试 Get(string) 方法对无效输入返回 null
-    /// </summary>
     [Theory(DisplayName = "Get(string) 对无效输入应返回 null")]
     [InlineData(null)]
     [InlineData("")]
@@ -75,10 +55,7 @@ public sealed class RuleSetRegistryTests
     [InlineData("ADR")]
     public void Get_String_Should_Return_Null_For_Invalid_Input(string? adrId)
     {
-        // Act
         var ruleSet = RuleSetRegistry.Get(adrId!);
-
-        // Assert
         ruleSet.Should().BeNull();
     }
 
@@ -86,9 +63,6 @@ public sealed class RuleSetRegistryTests
 
     #region GetStrict 方法测试（严格模式）
 
-    /// <summary>
-    /// 测试 GetStrict(int) 方法能正确获取存在的规则集
-    /// </summary>
     [Theory(DisplayName = "GetStrict(int) 应正确获取存在的规则集")]
     [InlineData(1)]
     [InlineData(2)]
@@ -96,34 +70,20 @@ public sealed class RuleSetRegistryTests
     [InlineData(907)]
     public void GetStrict_Int_Should_Return_RuleSet_When_Exists(int adrNumber)
     {
-        // Act
         var ruleSet = RuleSetRegistry.GetStrict(adrNumber);
-
-        // Assert
-        ruleSet.Should().NotBeNull();
-        ruleSet.AdrNumber.Should().Be(adrNumber);
+        AssertRuleSetExists(ruleSet, adrNumber);
     }
 
-    /// <summary>
-    /// 测试 GetStrict(int) 方法对不存在的规则集抛出异常
-    /// </summary>
     [Theory(DisplayName = "GetStrict(int) 对不存在的规则集应抛出 InvalidOperationException")]
     [InlineData(999)]
     [InlineData(9999)]
     [InlineData(-1)]
     public void GetStrict_Int_Should_Throw_When_Not_Exists(int adrNumber)
     {
-        // Act
         var act = () => RuleSetRegistry.GetStrict(adrNumber);
-
-        // Assert
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage($"*{adrNumber}*");
+        act.Should().Throw<InvalidOperationException>().WithMessage($"*{adrNumber}*");
     }
 
-    /// <summary>
-    /// 测试 GetStrict(string) 方法支持多种格式
-    /// </summary>
     [Theory(DisplayName = "GetStrict(string) 应支持多种格式")]
     [InlineData("ADR-001", 1)]
     [InlineData("ADR-1", 1)]
@@ -133,35 +93,22 @@ public sealed class RuleSetRegistryTests
     [InlineData("ADR-900", 900)]
     public void GetStrict_String_Should_Support_Multiple_Formats(string adrId, int expectedAdrNumber)
     {
-        // Act
         var ruleSet = RuleSetRegistry.GetStrict(adrId);
-
-        // Assert
-        ruleSet.Should().NotBeNull();
-        ruleSet.AdrNumber.Should().Be(expectedAdrNumber);
+        AssertRuleSetExists(ruleSet, expectedAdrNumber);
     }
 
-    /// <summary>
-    /// 测试 GetStrict(string) 方法对空字符串抛出 ArgumentException
-    /// </summary>
     [Theory(DisplayName = "GetStrict(string) 对空字符串应抛出 ArgumentException")]
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     public void GetStrict_String_Should_Throw_ArgumentException_For_Empty_Input(string? adrId)
     {
-        // Act
         var act = () => RuleSetRegistry.GetStrict(adrId!);
-
-        // Assert
         act.Should().Throw<ArgumentException>()
             .WithMessage("*不能为空*")
             .And.ParamName.Should().Be("adrId");
     }
 
-    /// <summary>
-    /// 测试 GetStrict(string) 方法对格式错误抛出 ArgumentException
-    /// </summary>
     [Theory(DisplayName = "GetStrict(string) 对格式错误应抛出 ArgumentException")]
     [InlineData("invalid")]
     [InlineData("ADR-")]
@@ -174,48 +121,30 @@ public sealed class RuleSetRegistryTests
     [InlineData("ADR.001")]  // 错误分隔符 - 应被拒绝
     public void GetStrict_String_Should_Throw_ArgumentException_For_Invalid_Format(string adrId)
     {
-        // Act
         var act = () => RuleSetRegistry.GetStrict(adrId);
-
-        // Assert
         act.Should().Throw<ArgumentException>()
             .WithMessage("*格式*")
             .And.ParamName.Should().Be("adrId");
     }
 
-    /// <summary>
-    /// 测试 GetStrict(string) 方法对不存在的规则集抛出 InvalidOperationException
-    /// </summary>
     [Theory(DisplayName = "GetStrict(string) 对不存在的规则集应抛出 InvalidOperationException")]
     [InlineData("999")]
     [InlineData("ADR-999")]
     public void GetStrict_String_Should_Throw_InvalidOperationException_When_Not_Exists(string adrId)
     {
-        // Act
         var act = () => RuleSetRegistry.GetStrict(adrId);
-
-        // Assert
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage("*不存在*");
+        act.Should().Throw<InvalidOperationException>().WithMessage("*不存在*");
     }
 
-    /// <summary>
-    /// 测试 GetStrict(string) 方法拒绝 4 位数字格式（确保代码与注释一致）
-    /// 这是对 issue 的直接修复验证
-    /// </summary>
     [Theory(DisplayName = "GetStrict(string) 应拒绝 4 位数字格式")]
-    [InlineData("ADR0001")]  // 4位数字，无分隔符
-    [InlineData("0001")]     // 纯 4位数字
-    [InlineData("ADR0120")]  // 4位数字，即使对应实际存在的 ADR
+    [InlineData("ADR0001")]
+    [InlineData("0001")]
+    [InlineData("ADR0120")]
     public void GetStrict_String_Should_Reject_Four_Digit_Format(string adrId)
     {
-        // Act
         var act = () => RuleSetRegistry.GetStrict(adrId);
-
-        // Assert - 验证异常类型、消息内容和参数名
         var exception = act.Should().Throw<ArgumentException>()
             .WithMessage("*无效的 ADR 编号格式*");
-        
         exception.And.Message.Should().Contain("不支持 4 位数字");
         exception.And.ParamName.Should().Be("adrId");
     }
@@ -224,62 +153,33 @@ public sealed class RuleSetRegistryTests
 
     #region 使用场景对比测试
 
-    /// <summary>
-    /// 测试使用场景：探索性查询使用 Get（宽容模式）
-    /// </summary>
     [Fact(DisplayName = "探索性查询应使用 Get（宽容模式）")]
     public void Exploratory_Query_Should_Use_Get()
     {
-        // Arrange - 用户可能输入任何值
         var userInput = "999";
-
-        // Act - 使用 Get，不会抛出异常
         var ruleSet = RuleSetRegistry.Get(userInput);
-
-        // Assert - 可以安全处理 null
+        // 可以安全处理 null，保持行为清晰
         if (ruleSet == null)
-        {
-            // 提示用户规则集不存在
             ruleSet.Should().BeNull();
-        }
         else
-        {
-            // 显示规则集信息
-            ruleSet.Should().NotBeNull();
-        }
+            AssertRuleSetExists(ruleSet, ruleSet.AdrNumber);
     }
 
-    /// <summary>
-    /// 测试使用场景：测试/CI 场景使用 GetStrict（严格模式）
-    /// </summary>
     [Fact(DisplayName = "测试/CI 场景应使用 GetStrict（严格模式）")]
     public void Test_CI_Scenario_Should_Use_GetStrict()
     {
-        // Arrange - 测试代码中硬编码的 RuleId 必须有效
         var ruleId = "ADR-001";
-
-        // Act & Assert - 使用 GetStrict，无效 RuleId 会立即失败
-        var act = () =>
-        {
+        Action act = () => {
             var ruleSet = RuleSetRegistry.GetStrict(ruleId);
-            // 在测试中使用 ruleSet...
-            ruleSet.Should().NotBeNull();
+            AssertRuleSetExists(ruleSet, 1);
         };
-
-        // 如果 RuleId 无效，测试会立即失败，不会静默通过
-        act.Should().NotThrow();
+        act.Should().NotThrow("在测试/CI场景中，GetStrict 应该成功获取已定义的规则集");
     }
 
-    /// <summary>
-    /// 测试异常消息的可读性
-    /// </summary>
-    [Fact(DisplayName = "GetStrict 异常消息应包含可用的 ADR 列表")]
+    [Fact(DisplayName = "GetStrict 异常消息应包含可用的 ADR 编号")]
     public void GetStrict_Exception_Should_Include_Available_ADRs()
     {
-        // Act
-        var act = () => RuleSetRegistry.GetStrict(999);
-
-        // Assert - 异常消息应包含可用的 ADR 编号
+        Action act = () => RuleSetRegistry.GetStrict(999);
         act.Should().Throw<InvalidOperationException>()
             .WithMessage("*可用的 ADR 编号*");
     }
@@ -288,28 +188,19 @@ public sealed class RuleSetRegistryTests
 
     #region 边界情况测试
 
-    /// <summary>
-    /// 测试 Get 和 GetStrict 对同一有效输入返回相同结果
-    /// </summary>
     [Theory(DisplayName = "Get 和 GetStrict 对有效输入应返回相同结果")]
     [InlineData(1)]
     [InlineData(900)]
     [InlineData(907)]
     public void Get_And_GetStrict_Should_Return_Same_Result_For_Valid_Input(int adrNumber)
     {
-        // Act
         var resultFromGet = RuleSetRegistry.Get(adrNumber);
         var resultFromGetStrict = RuleSetRegistry.GetStrict(adrNumber);
-
-        // Assert
-        resultFromGet.Should().NotBeNull();
-        resultFromGetStrict.Should().NotBeNull();
+        AssertRuleSetExists(resultFromGet, adrNumber);
+        AssertRuleSetExists(resultFromGetStrict, adrNumber);
         resultFromGet!.AdrNumber.Should().Be(resultFromGetStrict.AdrNumber);
     }
 
-    /// <summary>
-    /// 测试大小写不敏感
-    /// </summary>
     [Theory(DisplayName = "Get 和 GetStrict 应支持大小写不敏感")]
     [InlineData("adr-001")]
     [InlineData("ADR-001")]
@@ -317,80 +208,68 @@ public sealed class RuleSetRegistryTests
     [InlineData("adr001")]
     public void Get_And_GetStrict_Should_Be_Case_Insensitive(string adrId)
     {
-        // Act
         var resultFromGet = RuleSetRegistry.Get(adrId);
         var resultFromGetStrict = RuleSetRegistry.GetStrict(adrId);
-
-        // Assert
-        resultFromGet.Should().NotBeNull();
-        resultFromGetStrict.Should().NotBeNull();
-        resultFromGet!.AdrNumber.Should().Be(1);
-        resultFromGetStrict.AdrNumber.Should().Be(1);
+        AssertRuleSetExists(resultFromGet, 1);
+        AssertRuleSetExists(resultFromGetStrict, 1);
     }
 
     #endregion
 
     #region 自动发现机制测试
 
-    /// <summary>
-    /// 测试 Registry 自动发现所有实现 IArchitectureRuleSetDefinition 的类
-    /// </summary>
     [Fact(DisplayName = "Registry 应该自动发现所有 RuleSet 定义")]
     public void Registry_Should_Auto_Discover_All_RuleSets()
     {
-        // Act
-        var allAdrNumbers = RuleSetRegistry.GetAllAdrNumbers().ToList();
-
-        // Assert
-        allAdrNumbers.Should().NotBeEmpty("应该至少发现一个 RuleSet");
-        allAdrNumbers.Should().Contain(1, "应该发现 ADR-001");
-        allAdrNumbers.Should().Contain(2, "应该发现 ADR-002");
-        allAdrNumbers.Should().Contain(3, "应该发现 ADR-003");
-        allAdrNumbers.Should().Contain(120, "应该发现 ADR-120");
-        allAdrNumbers.Should().Contain(201, "应该发现 ADR-201");
-        allAdrNumbers.Should().Contain(900, "应该发现 ADR-900");
-        allAdrNumbers.Should().Contain(907, "应该发现 ADR-907");
+        var allAdrNumbers = AllAdrNumbers;
+        allAdrNumbers.Should().NotBeEmpty();
+        new[] { 1, 2, 3, 120, 201, 900, 907 }.ForEach(expected => allAdrNumbers.Should().Contain(expected));
     }
 
-    /// <summary>
-    /// 测试所有自动发现的 RuleSet 都能正确实例化
-    /// </summary>
     [Fact(DisplayName = "所有自动发现的 RuleSet 应该可以正确实例化")]
     public void All_Auto_Discovered_RuleSets_Should_Be_Properly_Instantiated()
     {
-        // Act
         var allRuleSets = RuleSetRegistry.GetAllRuleSets().ToList();
-
-        // Assert
         allRuleSets.Should().NotBeEmpty();
-        allRuleSets.Should().OnlyHaveUniqueItems(rs => rs.AdrNumber, "每个 ADR 编号应该唯一");
-        
+        allRuleSets.Should().OnlyHaveUniqueItems(rs => rs.AdrNumber);
         foreach (var ruleSet in allRuleSets)
         {
             ruleSet.Should().NotBeNull();
-            ruleSet.AdrNumber.Should().BeGreaterThan(0, "ADR 编号必须大于 0");
-            ruleSet.RuleCount.Should().BeGreaterThan(0, $"ADR-{ruleSet.AdrNumber} 应该至少包含一个规则");
+            ruleSet.AdrNumber.Should().BeGreaterThan(0);
+            ruleSet.RuleCount.Should().BeGreaterThan(0, $"ADR-{ruleSet.AdrNumber} 应至少包含一个规则");
         }
     }
 
-    /// <summary>
-    /// 测试 Registry 不包含重复的 ADR 编号
-    /// </summary>
     [Fact(DisplayName = "Registry 不应包含重复的 ADR 编号")]
     public void Registry_Should_Not_Contain_Duplicate_Adr_Numbers()
     {
-        // Act
-        var allAdrNumbers = RuleSetRegistry.GetAllAdrNumbers().ToList();
-
-        // Assert
+        var allAdrNumbers = AllAdrNumbers;
         var duplicates = allAdrNumbers
             .GroupBy(x => x)
             .Where(g => g.Count() > 1)
             .Select(g => g.Key)
             .ToList();
-
-        duplicates.Should().BeEmpty("不应该有重复的 ADR 编号");
+        duplicates.Should().BeEmpty();
     }
 
     #endregion
+
+    #region 辅助方法
+
+    private static void AssertRuleSetExists(ArchitectureRuleSet? ruleSet, int expectedAdr)
+    {
+        ruleSet.Should().NotBeNull();
+        ruleSet!.AdrNumber.Should().Be(expectedAdr);
+    }
+
+    #endregion
+}
+
+static class LinqExtensions
+{
+    // 小工具：在断言序列中逐项断言（语法糖，提升可读性）
+    public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+    {
+        foreach (var item in source) action(item);
+    }
 }

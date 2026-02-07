@@ -6,146 +6,129 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 /// </summary>
 public sealed class ArchitectureRuleSetTests
 {
-    [Fact(DisplayName = "应该能创建规则集并指定 ADR 编号")]
-    public void Should_Create_RuleSet_With_Adr_Number()
-    {
-        // Arrange & Act
-        var ruleSet = new ArchitectureRuleSet(907);
+    private const string AdrFormat = "ADR-{0:000}";
 
-        // Assert
-        ruleSet.AdrNumber.Should().Be(907);
+    [Theory(DisplayName = "应该能创建规则集并指定 ADR 编号")]
+    [InlineData(907)]
+    [InlineData(1)]
+    [InlineData(900)]
+    public void Should_Create_RuleSet_With_Adr_Number(int adrNumber)
+    {
+        var ruleSet = CreateRuleSet(adrNumber);
+
+        ruleSet.AdrNumber.Should().Be(adrNumber);
         ruleSet.RuleCount.Should().Be(0);
         ruleSet.ClauseCount.Should().Be(0);
     }
 
-    [Fact(DisplayName = "创建规则集时 ADR 编号必须大于0")]
-    public void Should_Throw_When_Adr_Number_Is_Zero_Or_Negative()
+    [Theory(DisplayName = "创建规则集时 ADR 编号必须大于0")]
+    [InlineData(0)]
+    [InlineData(-1)]
+    [InlineData(-100)]
+    public void Should_Throw_When_Adr_Number_Is_Zero_Or_Negative(int invalidAdrNumber)
     {
-        // Arrange & Act & Assert
-        var act1 = () => new ArchitectureRuleSet(0);
-        var act2 = () => new ArchitectureRuleSet(-1);
-
-        act1.Should().Throw<ArgumentException>();
-        act2.Should().Throw<ArgumentException>();
+        Action act = () => new ArchitectureRuleSet(invalidAdrNumber);
+        act.Should().Throw<ArgumentException>($"ADR 编号 {invalidAdrNumber} 无效，必须大于 0");
     }
 
     [Fact(DisplayName = "应该能添加规则")]
     public void Should_Add_Rule()
     {
-        // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
+        var ruleSet = CreateRuleSet(907);
 
-        // Act
         ruleSet.AddRule(3, "最小断言语义规范", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
 
-        // Assert
         ruleSet.RuleCount.Should().Be(1);
         ruleSet.Rules.Should().HaveCount(1);
-        
+
         var rule = ruleSet.GetRule(3);
-        rule.Should().NotBeNull();
-        rule!.Id.ToString().Should().Be("ADR-907_3");
-        rule.Summary.Should().Be("最小断言语义规范");
-        rule.Decision.Should().Be(DecisionLevel.Must);
-        rule.Severity.Should().Be(RuleSeverity.Governance);
-        rule.Scope.Should().Be(RuleScope.Test);
+        AssertRuleExists(rule, 907, 3, "最小断言语义规范", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
     }
 
     [Fact(DisplayName = "应该能添加条款")]
     public void Should_Add_Clause()
     {
-        // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
+        var ruleSet = CreateRuleSet(907);
 
-        // Act
         ruleSet.AddClause(3, 1, "测试类至少包含1个有效断言", "通过静态分析验证", ClauseExecutionType.StaticAnalysis);
 
-        // Assert
         ruleSet.ClauseCount.Should().Be(1);
         ruleSet.Clauses.Should().HaveCount(1);
-        
+
         var clause = ruleSet.GetClause(3, 1);
-        clause.Should().NotBeNull();
-        clause!.Id.ToString().Should().Be("ADR-907_3_1");
-        clause.Condition.Should().Be("测试类至少包含1个有效断言");
-        clause.Enforcement.Should().Be("通过静态分析验证");
-        clause.ExecutionType.Should().Be(ClauseExecutionType.StaticAnalysis);
+        AssertClauseExists(clause, 907, 3, 1, "测试类至少包含1个有效断言", "通过静态分析验证", ClauseExecutionType.StaticAnalysis);
     }
 
-    [Fact(DisplayName = "不能添加重复的规则")]
-    public void Should_Not_Add_Duplicate_Rule()
+    [Theory(DisplayName = "不能添加重复的规则")]
+    [InlineData(907, 3)]
+    [InlineData(1, 1)]
+    [InlineData(900, 5)]
+    public void Should_Not_Add_Duplicate_Rule(int adr, int ruleNumber)
     {
-        // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
-        ruleSet.AddRule(3, "规则1", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
+        var ruleSet = CreateRuleSet(adr);
+        ruleSet.AddRule(ruleNumber, "规则1", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
 
-        // Act & Assert
-        var act = () => ruleSet.AddRule(3, "规则2", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
+        Action act = () => ruleSet.AddRule(ruleNumber, "规则2", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
         act.Should().Throw<InvalidOperationException>()
-            .WithMessage("*ADR-907_3*已存在*");
+            .WithMessage($"*{BuildRuleKey(adr, ruleNumber)}*已存在*");
     }
 
-    [Fact(DisplayName = "不能添加重复的条款")]
-    public void Should_Not_Add_Duplicate_Clause()
+    [Theory(DisplayName = "不能添加重复的条款")]
+    [InlineData(907, 3, 1)]
+    [InlineData(1, 1, 1)]
+    [InlineData(900, 5, 2)]
+    public void Should_Not_Add_Duplicate_Clause(int adr, int ruleNumber, int clauseNumber)
     {
-        // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
-        ruleSet.AddClause(3, 1, "条款1", "执行1", ClauseExecutionType.Convention);
+        var ruleSet = CreateRuleSet(adr);
+        ruleSet.AddClause(ruleNumber, clauseNumber, "条款1", "执行1", ClauseExecutionType.Convention);
 
-        // Act & Assert
-        var act = () => ruleSet.AddClause(3, 1, "条款2", "执行2", ClauseExecutionType.StaticAnalysis);
+        Action act = () => ruleSet.AddClause(ruleNumber, clauseNumber, "条款2", "执行2", ClauseExecutionType.StaticAnalysis);
         act.Should().Throw<InvalidOperationException>()
-            .WithMessage("*ADR-907_3_1*已存在*");
+            .WithMessage($"*{BuildClauseKey(adr, ruleNumber, clauseNumber)}*已存在*");
     }
 
-    [Fact(DisplayName = "HasRule 应该正确检查规则是否存在")]
-    public void HasRule_Should_Check_Rule_Existence()
+    [Theory(DisplayName = "HasRule 应该正确检查规则是否存在")]
+    [InlineData(3, true)]
+    [InlineData(4, false)]
+    [InlineData(1, false)]
+    public void HasRule_Should_Check_Rule_Existence(int ruleNumber, bool expected)
     {
-        // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
+        var ruleSet = CreateRuleSet(907);
         ruleSet.AddRule(3, "规则", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
 
-        // Act & Assert
-        ruleSet.HasRule(3).Should().BeTrue();
-        ruleSet.HasRule(4).Should().BeFalse();
+        ruleSet.HasRule(ruleNumber).Should().Be(expected);
     }
 
-    [Fact(DisplayName = "HasClause 应该正确检查条款是否存在")]
-    public void HasClause_Should_Check_Clause_Existence()
+    [Theory(DisplayName = "HasClause 应该正确检查条款是否存在")]
+    [InlineData(3, 1, true)]
+    [InlineData(3, 2, false)]
+    [InlineData(4, 1, false)]
+    public void HasClause_Should_Check_Clause_Existence(int ruleNumber, int clauseNumber, bool expected)
     {
-        // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
+        var ruleSet = CreateRuleSet(907);
         ruleSet.AddClause(3, 1, "条款", "执行", ClauseExecutionType.Convention);
 
-        // Act & Assert
-        ruleSet.HasClause(3, 1).Should().BeTrue();
-        ruleSet.HasClause(3, 2).Should().BeFalse();
-        ruleSet.HasClause(4, 1).Should().BeFalse();
+        ruleSet.HasClause(ruleNumber, clauseNumber).Should().Be(expected);
     }
 
     [Fact(DisplayName = "应该能构建完整的 ADR 规则集")]
     public void Should_Build_Complete_Adr_RuleSet()
     {
-        // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
+        var ruleSet = CreateRuleSet(907);
 
-        // Act - 构建 ADR-907 Rule 3 的规则集
         ruleSet.AddRule(3, "最小断言语义规范", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
         ruleSet.AddClause(3, 1, "测试类至少包含1个有效断言", "静态分析", ClauseExecutionType.StaticAnalysis);
         ruleSet.AddClause(3, 2, "测试方法只能映射一个子规则", "命名检查", ClauseExecutionType.Convention);
         ruleSet.AddClause(3, 3, "失败信息必须可溯源", "消息格式验证", ClauseExecutionType.Convention);
         ruleSet.AddClause(3, 4, "禁止形式化断言", "模式匹配检查", ClauseExecutionType.StaticAnalysis);
 
-        // Assert
         ruleSet.RuleCount.Should().Be(1);
         ruleSet.ClauseCount.Should().Be(4);
-        
-        // 验证规则
+
         var rule = ruleSet.GetRule(3);
         rule.Should().NotBeNull();
         rule!.Id.Level.Should().Be(RuleLevel.Rule);
-        
-        // 验证所有条款
+
         for (int i = 1; i <= 4; i++)
         {
             var clause = ruleSet.GetClause(3, i);
@@ -154,72 +137,99 @@ public sealed class ArchitectureRuleSetTests
         }
     }
 
-    [Fact(DisplayName = "不能添加空摘要的规则")]
-    public void Should_Not_Add_Rule_With_Empty_Summary()
+    [Theory(DisplayName = "不能添加空摘要的规则")]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("\t")]
+    public void Should_Not_Add_Rule_With_Empty_Summary(string emptySummary)
     {
-        // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
-
-        // Act & Assert
-        var act1 = () => ruleSet.AddRule(3, "", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
-        var act2 = () => ruleSet.AddRule(3, "   ", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
-
-        act1.Should().Throw<ArgumentException>();
-        act2.Should().Throw<ArgumentException>();
+        var ruleSet = CreateRuleSet(907);
+        Action act = () => ruleSet.AddRule(3, emptySummary, DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
+        act.Should().Throw<ArgumentException>("规则摘要不能为空或仅包含空白字符");
     }
 
-    [Fact(DisplayName = "不能添加空描述的条款")]
-    public void Should_Not_Add_Clause_With_Empty_Description()
+    [Theory(DisplayName = "不能添加空描述的条款")]
+    [InlineData("", "执行")]
+    [InlineData("   ", "执行")]
+    [InlineData("条件", "")]
+    [InlineData("条件", "   ")]
+    public void Should_Not_Add_Clause_With_Empty_Description(string condition, string enforcement)
     {
-        // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
-
-        // Act & Assert
-        var act1 = () => ruleSet.AddClause(3, 1, "", "执行", ClauseExecutionType.Convention);
-        var act2 = () => ruleSet.AddClause(3, 1, "条件", "", ClauseExecutionType.Convention);
-
-        act1.Should().Throw<ArgumentException>();
-        act2.Should().Throw<ArgumentException>();
+        var ruleSet = CreateRuleSet(907);
+        Action act = () => ruleSet.AddClause(3, 1, condition, enforcement, ClauseExecutionType.Convention);
+        act.Should().Throw<ArgumentException>("条款的 Condition 和 Enforcement 都不能为空或仅包含空白字符");
     }
 
     [Fact(DisplayName = "ValidateCompleteness 应该检测没有条款的规则")]
     public void ValidateCompleteness_Should_Detect_Rules_Without_Clauses()
     {
-        // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
+        var ruleSet = CreateRuleSet(907);
         ruleSet.AddRule(1, "有条款的规则", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
         ruleSet.AddClause(1, 1, "条款1", "执行1", ClauseExecutionType.Convention);
         ruleSet.AddRule(2, "没有条款的规则", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
 
-        // Act & Assert
-        var act = () => ruleSet.ValidateCompleteness();
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage("*ADR-907_2*");
+        Action act = () => ruleSet.ValidateCompleteness();
+        act.Should().Throw<InvalidOperationException>().WithMessage($"*{BuildRuleKey(907, 2)}*");
     }
 
     [Fact(DisplayName = "ValidateCompleteness 应该通过有完整条款的规则集")]
     public void ValidateCompleteness_Should_Pass_Complete_RuleSet()
     {
-        // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
+        var ruleSet = CreateRuleSet(907);
         ruleSet.AddRule(1, "规则1", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
         ruleSet.AddClause(1, 1, "条款1", "执行1", ClauseExecutionType.Convention);
         ruleSet.AddRule(2, "规则2", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
         ruleSet.AddClause(2, 1, "条款2", "执行2", ClauseExecutionType.StaticAnalysis);
 
-        // Act & Assert
-        var act = () => ruleSet.ValidateCompleteness();
-        act.Should().NotThrow();
+        Action act = () => ruleSet.ValidateCompleteness();
+        act.Should().NotThrow("完整的规则集应该通过完整性验证");
     }
 
     [Fact(DisplayName = "ValidateCompleteness 应该通过空规则集")]
     public void ValidateCompleteness_Should_Pass_Empty_RuleSet()
     {
-        // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
-
-        // Act & Assert
-        var act = () => ruleSet.ValidateCompleteness();
-        act.Should().NotThrow();
+        var ruleSet = CreateRuleSet(907);
+        Action act = () => ruleSet.ValidateCompleteness();
+        act.Should().NotThrow("空规则集应该通过完整性验证");
     }
+
+    #region 辅助方法
+
+    private static ArchitectureRuleSet CreateRuleSet(int adrNumber) =>
+        new ArchitectureRuleSet(adrNumber);
+
+    private static void AssertRuleExists(
+        ArchitectureRuleDefinition? rule,
+        int adr, int ruleNum,
+        string summary,
+        DecisionLevel decision,
+        RuleSeverity severity,
+        RuleScope scope)
+    {
+        rule.Should().NotBeNull();
+        rule!.Id.ToString().Should().Be($"{string.Format(AdrFormat, adr)}_{ruleNum}");
+        rule.Summary.Should().Be(summary);
+        rule.Decision.Should().Be(decision);
+        rule.Severity.Should().Be(severity);
+        rule.Scope.Should().Be(scope);
+    }
+
+    private static void AssertClauseExists(
+        ArchitectureClauseDefinition? clause,
+        int adr, int ruleNum, int clauseNum,
+        string condition,
+        string enforcement,
+        ClauseExecutionType executionType)
+    {
+        clause.Should().NotBeNull();
+        clause!.Id.ToString().Should().Be($"{string.Format(AdrFormat, adr)}_{ruleNum}_{clauseNum}");
+        clause.Condition.Should().Be(condition);
+        clause.Enforcement.Should().Be(enforcement);
+        clause.ExecutionType.Should().Be(executionType);
+    }
+
+    private static string BuildRuleKey(int adr, int ruleNumber) => $"{string.Format(AdrFormat, adr)}_{ruleNumber}";
+    private static string BuildClauseKey(int adr, int ruleNumber, int clauseNumber) => $"{string.Format(AdrFormat, adr)}_{ruleNumber}_{clauseNumber}";
+
+    #endregion
 }
