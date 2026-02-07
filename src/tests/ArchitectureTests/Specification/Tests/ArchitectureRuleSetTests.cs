@@ -18,15 +18,17 @@ public sealed class ArchitectureRuleSetTests
         ruleSet.ClauseCount.Should().Be(0);
     }
 
-    [Fact(DisplayName = "创建规则集时 ADR 编号必须大于0")]
-    public void Should_Throw_When_Adr_Number_Is_Zero_Or_Negative()
+    [Theory(DisplayName = "创建规则集时 ADR 编号必须大于0")]
+    [InlineData(0)]
+    [InlineData(-1)]
+    [InlineData(-100)]
+    public void Should_Throw_When_Adr_Number_Is_Zero_Or_Negative(int invalidAdrNumber)
     {
-        // Arrange & Act & Assert
-        var act1 = () => new ArchitectureRuleSet(0);
-        var act2 = () => new ArchitectureRuleSet(-1);
+        // Arrange & Act
+        var act = () => new ArchitectureRuleSet(invalidAdrNumber);
 
-        act1.Should().Throw<ArgumentException>();
-        act2.Should().Throw<ArgumentException>();
+        // Assert
+        act.Should().Throw<ArgumentException>();
     }
 
     [Fact(DisplayName = "应该能添加规则")]
@@ -154,32 +156,37 @@ public sealed class ArchitectureRuleSetTests
         }
     }
 
-    [Fact(DisplayName = "不能添加空摘要的规则")]
-    public void Should_Not_Add_Rule_With_Empty_Summary()
+    [Theory(DisplayName = "不能添加空摘要的规则")]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("\t")]
+    public void Should_Not_Add_Rule_With_Empty_Summary(string emptySummary)
     {
         // Arrange
         var ruleSet = new ArchitectureRuleSet(907);
 
-        // Act & Assert
-        var act1 = () => ruleSet.AddRule(3, "", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
-        var act2 = () => ruleSet.AddRule(3, "   ", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
+        // Act
+        var act = () => ruleSet.AddRule(3, emptySummary, DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
 
-        act1.Should().Throw<ArgumentException>();
-        act2.Should().Throw<ArgumentException>();
+        // Assert
+        act.Should().Throw<ArgumentException>();
     }
 
-    [Fact(DisplayName = "不能添加空描述的条款")]
-    public void Should_Not_Add_Clause_With_Empty_Description()
+    [Theory(DisplayName = "不能添加空描述的条款")]
+    [InlineData("", "执行")]
+    [InlineData("   ", "执行")]
+    [InlineData("条件", "")]
+    [InlineData("条件", "   ")]
+    public void Should_Not_Add_Clause_With_Empty_Description(string condition, string enforcement)
     {
         // Arrange
         var ruleSet = new ArchitectureRuleSet(907);
 
-        // Act & Assert
-        var act1 = () => ruleSet.AddClause(3, 1, "", "执行", ClauseExecutionType.Convention);
-        var act2 = () => ruleSet.AddClause(3, 1, "条件", "", ClauseExecutionType.Convention);
+        // Act
+        var act = () => ruleSet.AddClause(3, 1, condition, enforcement, ClauseExecutionType.Convention);
 
-        act1.Should().Throw<ArgumentException>();
-        act2.Should().Throw<ArgumentException>();
+        // Assert
+        act.Should().Throw<ArgumentException>();
     }
 
     [Fact(DisplayName = "ValidateCompleteness 应该检测没有条款的规则")]
