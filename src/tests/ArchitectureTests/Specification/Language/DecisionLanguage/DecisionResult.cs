@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.DecisionLanguage;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.DecisionLanguage;
 
 /// <summary>
 /// 裁决解析结果

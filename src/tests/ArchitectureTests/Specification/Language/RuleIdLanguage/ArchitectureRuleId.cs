@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.RuleIdLanguage;
 
 /// <summary>
 /// 架构规则ID的强类型表示

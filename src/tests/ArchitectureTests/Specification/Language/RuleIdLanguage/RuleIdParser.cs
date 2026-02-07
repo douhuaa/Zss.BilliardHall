@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.RuleIdLanguage;
 
 /// <summary>
 /// RuleId 语言规范解析器
