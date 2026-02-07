@@ -26,7 +26,6 @@
 ```
 /Specification
 ├── ArchitectureTestSpecification.cs    # 根聚合（统一入口）
-├── _DecisionLanguage.cs                 # DecisionLanguage 聚合
 ├── _Adr.cs                              # ADR 规范定义
 │
 ├── /DecisionLanguage                    # 语义宪法层
