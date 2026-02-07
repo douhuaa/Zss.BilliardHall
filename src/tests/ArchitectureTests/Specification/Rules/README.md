@@ -99,46 +99,86 @@ public enum RuleScope
 }
 ```
 
-### 5. `ArchitectureRuleDefinition`
+### 5. `DecisionLevel`（裁决级别）
 
-规则定义（Rule 级别）。
+定义规则的裁决强度和执行方式，与 ADR-905 对齐。
+
+```csharp
+public enum DecisionLevel
+{
+    Must,     // 必须 - 强制性要求，违反将阻断 CI
+    MustNot,  // 禁止 - 明确禁止，违反将阻断 CI
+    Should    // 应该 - 推荐建议，违反仅产生警告
+}
+```
+
+### 6. `ClauseExecutionType`（执行类型）
+
+定义条款的执行策略，用于确定如何验证和执行规则。
+
+```csharp
+public enum ClauseExecutionType
+{
+    StaticAnalysis,  // 静态分析（通过 Roslyn Analyzer）
+    Convention,      // 约定检查（通过架构测试）
+    Runtime,         // 运行时验证
+    Documentation,   // 文档验证
+    ManualReview     // 手工审查
+}
+```
+
+### 7. `ArchitectureRuleDefinition`
+
+规则定义（Rule 级别），包含裁决语义。
 
 ```csharp
 var rule = new ArchitectureRuleDefinition(
     Id: ArchitectureRuleId.Rule(907, 3),
     Summary: "最小断言语义规范",
+    Decision: DecisionLevel.Must,        // 裁决级别
     Severity: RuleSeverity.Governance,
     Scope: RuleScope.Test
 );
 ```
 
-### 6. `ArchitectureClauseDefinition`
+### 8. `ArchitectureClauseDefinition`
 
-条款定义（Clause 级别）。
+条款定义（Clause 级别），包含执行策略。
 
 ```csharp
 var clause = new ArchitectureClauseDefinition(
     Id: ArchitectureRuleId.Clause(907, 3, 1),
     Condition: "每个测试类至少包含1个有效断言",
-    Enforcement: "通过静态分析验证断言数量"
+    Enforcement: "通过静态分析验证断言数量",
+    ExecutionType: ClauseExecutionType.StaticAnalysis  // 执行类型
 );
 ```
 
-### 7. `ArchitectureRuleSet`
+### 9. `ArchitectureRuleSet`
 
 规则集管理类，将 ADR 转换为可执行规范。
 
 ```csharp
 var ruleSet = new ArchitectureRuleSet(907);
 
-// 添加规则
-ruleSet.AddRule(3, "最小断言语义规范", 
-    RuleSeverity.Governance, RuleScope.Test);
+// 添加规则（包含裁决级别）
+ruleSet.AddRule(
+    ruleNumber: 3,
+    summary: "最小断言语义规范", 
+    decision: DecisionLevel.Must,       // 裁决级别
+    severity: RuleSeverity.Governance,
+    scope: RuleScope.Test);
 
-// 添加条款
-ruleSet.AddClause(3, 1, 
-    "每个测试类至少包含1个有效断言", 
-    "通过静态分析验证");
+// 添加条款（包含执行类型）
+ruleSet.AddClause(
+    ruleNumber: 3,
+    clauseNumber: 1, 
+    condition: "每个测试类至少包含1个有效断言",
+    enforcement: "通过静态分析验证",
+    executionType: ClauseExecutionType.StaticAnalysis);  // 执行类型
+
+// 验证完整性（确保每个规则都有条款）
+ruleSet.ValidateCompleteness();
 
 // 查询
 var rule = ruleSet.GetRule(3);
