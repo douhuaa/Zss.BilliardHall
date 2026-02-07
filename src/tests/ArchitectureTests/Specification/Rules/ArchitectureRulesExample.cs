@@ -63,21 +63,8 @@ public static class ArchitectureRulesExample
     /// </summary>
     public static class UsageInTests
     {
-        // ❌ 旧方式（字符串）
-        public static void OldWay_StringBased()
-        {
-            // 不清楚这是 Rule 还是 Clause
-            var ruleId = "ADR-907.3";
-            
-            // 907.3 和 907.03 是否等价？
-            var ruleId2 = "ADR-907.03";
-            
-            // 测试失败消息需要手工拼接
-            var message = $"违反 {ruleId}";
-        }
-
-        // ✅ 新方式（强类型）
-        public static void NewWay_StronglyTyped()
+        // 使用强类型方式
+        public static void StronglyTyped()
         {
             // 明确是 Rule 级别
             var rule = ArchitectureRuleId.Rule(907, 3);
@@ -135,16 +122,6 @@ public static class ArchitectureRulesExample
     /// </summary>
     public static class AssertionUsage
     {
-        // ❌ 旧方式
-        public static void OldAssertion()
-        {
-            var violations = new List<string>();
-            // ... 收集违规
-            
-            // violations.Should().BeEmpty("违反 ADR-907.3");  // 不清楚是什么
-        }
-
-        // ✅ 新方式
         public static void NewAssertion()
         {
             var ruleId = ArchitectureRuleId.Clause(907, 3, 1);
