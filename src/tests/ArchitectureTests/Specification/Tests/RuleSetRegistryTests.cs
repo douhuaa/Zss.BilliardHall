@@ -214,13 +214,12 @@ public sealed class RuleSetRegistryTests
         // Act
         var act = () => RuleSetRegistry.GetStrict(adrId);
 
-        // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("*无效的 ADR 编号格式*")
-            .And.Message.Should().Contain("不支持 4 位数字");
+        // Assert - 验证异常类型、消息内容和参数名
+        var exception = act.Should().Throw<ArgumentException>()
+            .WithMessage("*无效的 ADR 编号格式*");
         
-        act.Should().Throw<ArgumentException>()
-            .And.ParamName.Should().Be("adrId");
+        exception.And.Message.Should().Contain("不支持 4 位数字");
+        exception.And.ParamName.Should().Be("adrId");
     }
 
     #endregion
