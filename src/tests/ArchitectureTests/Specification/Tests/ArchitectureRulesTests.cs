@@ -1,7 +1,6 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR001;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR120;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR900;

@@ -1,7 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
-
 /// <summary>
 /// ADR 规则索引
 /// 提供从 ADR 编号到规则定义的快速索引能力

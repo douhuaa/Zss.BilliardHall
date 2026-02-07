@@ -16,4 +16,5 @@ global using Xunit.Abstractions;
 global using Zss.BilliardHall.Platform.Exceptions;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification;
+global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 global using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
