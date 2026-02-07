@@ -136,9 +136,9 @@ public sealed class ADR_907_4_Architecture_Tests
         foreach (var c in allClauses)
         {
             // 检查 Clause 是否有明确的执行类型
-            if (c.ExecutionType == ClauseExecutionType.Manual)
+            if (c.ExecutionType == ClauseExecutionType.ManualReview)
             {
-                clausesWithoutEnforcement.Add($"{c.Id} (执行类型为 Manual，应该是自动化的)");
+                clausesWithoutEnforcement.Add($"{c.Id} (执行类型为 ManualReview，应该是自动化的)");
             }
         }
 

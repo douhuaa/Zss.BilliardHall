@@ -33,8 +33,7 @@ public sealed class ADR_907_1_Architecture_Tests
 
         // 验证执行类型应该是静态分析或约定检查
         clause.ExecutionType.Should().BeOneOf(
-            ClauseExecutionType.StaticAnalysis,
-            ClauseExecutionType.Convention,
+            new[] { ClauseExecutionType.StaticAnalysis, ClauseExecutionType.Convention },
             "ADR-907_1_1 应该通过静态分析或约定来执行");
     }
 
