@@ -4,7 +4,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR900
 /// ADR-900：架构测试与 CI 治理元规则
 /// 定义架构测试的权威性、执行级别、CI 阻断等规则
 /// </summary>
-public sealed class Adr0900RuleSet : IArchitectureRuleSetDefinition
+public sealed class Adr900RuleSet : IArchitectureRuleSetDefinition
 {
     /// <summary>
     /// ADR 编号

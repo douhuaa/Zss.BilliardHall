@@ -4,7 +4,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR120
 /// ADR-120：领域事件命名规范
 /// 定义事件命名、命名空间、内容约束等规则
 /// </summary>
-public sealed class Adr0120RuleSet : IArchitectureRuleSetDefinition
+public sealed class Adr120RuleSet : IArchitectureRuleSetDefinition
 {
     /// <summary>
     /// ADR 编号

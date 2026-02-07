@@ -4,7 +4,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR003
 /// ADR-003：命名空间规则
 /// 定义命名空间组织、层次结构等规则
 /// </summary>
-public sealed class Adr0003RuleSet : IArchitectureRuleSetDefinition
+public sealed class Adr003RuleSet : IArchitectureRuleSetDefinition
 {
     /// <summary>
     /// ADR 编号

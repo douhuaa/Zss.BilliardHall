@@ -4,7 +4,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR201
 /// ADR-201：Handler 生命周期管理
 /// 定义 Handler 的创建、执行、释放等规则
 /// </summary>
-public sealed class Adr0201RuleSet : IArchitectureRuleSetDefinition
+public sealed class Adr201RuleSet : IArchitectureRuleSetDefinition
 {
     /// <summary>
     /// ADR 编号

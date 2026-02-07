@@ -4,7 +4,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR001
 /// ADR-001：模块化单体与垂直切片架构
 /// 定义模块物理隔离、依赖方向、通信机制等核心规则
 /// </summary>
-public sealed class Adr0001RuleSet : IArchitectureRuleSetDefinition
+public sealed class Adr001RuleSet : IArchitectureRuleSetDefinition
 {
     /// <summary>
     /// ADR 编号

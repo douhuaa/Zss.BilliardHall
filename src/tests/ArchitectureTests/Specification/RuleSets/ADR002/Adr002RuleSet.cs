@@ -4,7 +4,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR002
 /// ADR-002：Platform/Application/Host 启动引导
 /// 定义应用启动、依赖注入、配置加载等规则
 /// </summary>
-public sealed class Adr0002RuleSet : IArchitectureRuleSetDefinition
+public sealed class Adr002RuleSet : IArchitectureRuleSetDefinition
 {
     /// <summary>
     /// ADR 编号

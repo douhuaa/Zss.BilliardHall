@@ -4,7 +4,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907
 /// ADR-907：ArchitectureTests 执法治理体系
 /// 定义架构测试的命名、组织、断言等规则
 /// </summary>
-public sealed class Adr0907RuleSet : IArchitectureRuleSetDefinition
+public sealed class Adr907RuleSet : IArchitectureRuleSetDefinition
 {
     /// <summary>
     /// ADR 编号
