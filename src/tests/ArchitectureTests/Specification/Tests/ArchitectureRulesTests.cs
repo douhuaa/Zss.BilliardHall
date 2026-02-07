@@ -1,10 +1,15 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0001;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0120;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0900;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0907;
 
 /// <summary>
-/// 验证 ArchitectureRules 规则集定义的正确性
-/// 确保从 ADR 文档迁移的规则集可以正常工作
+/// 验证 RuleSetRegistry 和规则集定义的正确性
+/// 确保从 ADR 文档定义的规则集可以正常工作
 /// </summary>
 public sealed class ArchitectureRulesTests
 {
@@ -12,7 +17,7 @@ public sealed class ArchitectureRulesTests
     public void All_RuleSets_Should_Have_At_Least_One_Rule()
     {
         // Arrange & Act
-        var ruleSets = ArchitectureTestSpecification.ArchitectureRules.GetAllRuleSets().ToList();
+        var ruleSets = RuleSetRegistry.GetAllRuleSets().ToList();
 
         // Assert
         ruleSets.Should().NotBeEmpty("应该至少定义一个 RuleSet");
@@ -24,7 +29,7 @@ public sealed class ArchitectureRulesTests
         }
     }
 
-    [Theory(DisplayName = "GetRuleSet 应该能够通过 ADR 编号获取规则集")]
+    [Theory(DisplayName = "RuleSetRegistry.Get 应该能够通过 ADR 编号获取规则集")]
     [InlineData(1)]
     [InlineData(2)]
     [InlineData(3)]
@@ -32,21 +37,21 @@ public sealed class ArchitectureRulesTests
     [InlineData(201)]
     [InlineData(900)]
     [InlineData(907)]
-    public void GetRuleSet_Should_Return_RuleSet_For_Valid_Adr_Number(int adrNumber)
+    public void RuleSetRegistry_Get_Should_Return_RuleSet_For_Valid_Adr_Number(int adrNumber)
     {
         // Act
-        var ruleSet = ArchitectureTestSpecification.ArchitectureRules.GetRuleSet(adrNumber);
+        var ruleSet = RuleSetRegistry.Get(adrNumber);
 
         // Assert
         ruleSet.Should().NotBeNull($"应该能够获取 ADR-{adrNumber:0000} 的规则集");
         ruleSet!.AdrNumber.Should().Be(adrNumber);
     }
 
-    [Fact(DisplayName = "GetRuleSet 对于未定义的 ADR 应该返回 null")]
-    public void GetRuleSet_Should_Return_Null_For_Undefined_Adr()
+    [Fact(DisplayName = "RuleSetRegistry.Get 对于未定义的 ADR 应该返回 null")]
+    public void RuleSetRegistry_Get_Should_Return_Null_For_Undefined_Adr()
     {
         // Act
-        var ruleSet = ArchitectureTestSpecification.ArchitectureRules.GetRuleSet(999);
+        var ruleSet = RuleSetRegistry.Get(999);
 
         // Assert
         ruleSet.Should().BeNull("未定义的 ADR 应该返回 null");
@@ -56,7 +61,7 @@ public sealed class ArchitectureRulesTests
     public void Adr001_Should_Have_Expected_Rules()
     {
         // Arrange
-        var ruleSet = ArchitectureTestSpecification.ArchitectureRules.Adr001;
+        var ruleSet = Adr0001RuleSet.RuleSet;
 
         // Assert
         ruleSet.AdrNumber.Should().Be(1);
@@ -80,7 +85,7 @@ public sealed class ArchitectureRulesTests
     public void Adr900_Should_Have_Expected_Rules()
     {
         // Arrange
-        var ruleSet = ArchitectureTestSpecification.ArchitectureRules.Adr900;
+        var ruleSet = Adr0900RuleSet.RuleSet;
 
         // Assert
         ruleSet.AdrNumber.Should().Be(900);
@@ -104,7 +109,7 @@ public sealed class ArchitectureRulesTests
     public void Adr907_Should_Have_Expected_Rules()
     {
         // Arrange
-        var ruleSet = ArchitectureTestSpecification.ArchitectureRules.Adr907;
+        var ruleSet = Adr0907RuleSet.RuleSet;
 
         // Assert
         ruleSet.AdrNumber.Should().Be(907);
@@ -127,7 +132,7 @@ public sealed class ArchitectureRulesTests
     public void Adr120_Should_Have_Expected_Rules()
     {
         // Arrange
-        var ruleSet = ArchitectureTestSpecification.ArchitectureRules.Adr120;
+        var ruleSet = Adr0120RuleSet.RuleSet;
 
         // Assert
         ruleSet.AdrNumber.Should().Be(120);
@@ -150,7 +155,7 @@ public sealed class ArchitectureRulesTests
     public void All_RuleSets_Should_Have_More_Clauses_Than_Rules()
     {
         // Arrange & Act
-        var ruleSets = ArchitectureTestSpecification.ArchitectureRules.GetAllRuleSets().ToList();
+        var ruleSets = RuleSetRegistry.GetAllRuleSets().ToList();
 
         // Assert
         foreach (var ruleSet in ruleSets)
@@ -164,7 +169,7 @@ public sealed class ArchitectureRulesTests
     public void All_Rules_Should_Have_Valid_RuleIds()
     {
         // Arrange & Act
-        var ruleSets = ArchitectureTestSpecification.ArchitectureRules.GetAllRuleSets().ToList();
+        var ruleSets = RuleSetRegistry.GetAllRuleSets().ToList();
 
         // Assert
         foreach (var ruleSet in ruleSets)
@@ -187,7 +192,7 @@ public sealed class ArchitectureRulesTests
     public void All_Clauses_Should_Have_Valid_RuleIds()
     {
         // Arrange & Act
-        var ruleSets = ArchitectureTestSpecification.ArchitectureRules.GetAllRuleSets().ToList();
+        var ruleSets = RuleSetRegistry.GetAllRuleSets().ToList();
 
         // Assert
         foreach (var ruleSet in ruleSets)
@@ -213,7 +218,7 @@ public sealed class ArchitectureRulesTests
     public void GetAllAdrNumbers_Should_Return_All_Defined_Adr_Numbers()
     {
         // Act
-        var adrNumbers = ArchitectureTestSpecification.ArchitectureRules.GetAllAdrNumbers().ToList();
+        var adrNumbers = RuleSetRegistry.GetAllAdrNumbers().ToList();
 
         // Assert
         adrNumbers.Should().NotBeEmpty("应该至少定义一个 ADR");
@@ -224,7 +229,7 @@ public sealed class ArchitectureRulesTests
         // 验证每个 ADR 编号都能获取到对应的 RuleSet
         foreach (var adrNumber in adrNumbers)
         {
-            var ruleSet = ArchitectureTestSpecification.ArchitectureRules.GetRuleSet(adrNumber);
+            var ruleSet = RuleSetRegistry.Get(adrNumber);
             ruleSet.Should().NotBeNull($"ADR-{adrNumber:0000} 应该有对应的 RuleSet");
         }
     }
@@ -233,8 +238,8 @@ public sealed class ArchitectureRulesTests
     public void Lazy_Initialization_Should_Work_Correctly()
     {
         // Act
-        var ruleSet1 = ArchitectureTestSpecification.ArchitectureRules.Adr001;
-        var ruleSet2 = ArchitectureTestSpecification.ArchitectureRules.Adr001;
+        var ruleSet1 = Adr0001RuleSet.RuleSet;
+        var ruleSet2 = Adr0001RuleSet.RuleSet;
 
         // Assert
         ruleSet1.Should().BeSameAs(ruleSet2, "多次访问应该返回同一个实例（惰性初始化）");
