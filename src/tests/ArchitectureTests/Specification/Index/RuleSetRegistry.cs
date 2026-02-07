@@ -1,11 +1,3 @@
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR001;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR002;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR003;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR120;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR201;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR900;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 
 /// <summary>
@@ -255,38 +247,14 @@ public static class RuleSetRegistry
 
     private static IReadOnlyDictionary<int, ArchitectureRuleSet> BuildRegistry()
     {
-        var registry = new Dictionary<int, ArchitectureRuleSet>();
-
-        // 注册所有 RuleSet
-        // Constitutional ADRs
-        Register(registry, Adr0001RuleSet.AdrNumber, Adr0001RuleSet.RuleSet);
-        Register(registry, Adr0002RuleSet.AdrNumber, Adr0002RuleSet.RuleSet);
-        Register(registry, Adr0003RuleSet.AdrNumber, Adr0003RuleSet.RuleSet);
-
-        // Structure ADRs
-        Register(registry, Adr0120RuleSet.AdrNumber, Adr0120RuleSet.RuleSet);
-
-        // Runtime ADRs
-        Register(registry, Adr0201RuleSet.AdrNumber, Adr0201RuleSet.RuleSet);
-
-        // Governance ADRs
-        Register(registry, Adr0900RuleSet.AdrNumber, Adr0900RuleSet.RuleSet);
-        Register(registry, Adr0907RuleSet.AdrNumber, Adr0907RuleSet.RuleSet);
-
-        return registry;
-    }
-
-    private static void Register(
-        Dictionary<int, ArchitectureRuleSet> registry,
-        int adrNumber,
-        ArchitectureRuleSet ruleSet)
-    {
-        if (registry.ContainsKey(adrNumber))
-        {
-            throw new InvalidOperationException(
-                $"规则集 ADR-{adrNumber:D3} 已注册, 不能重复注册");
-        }
-
-        registry.Add(adrNumber, ruleSet);
+        // 通过反射自动发现所有实现 IArchitectureRuleSetDefinition 的类
+        return AppDomain.CurrentDomain
+            .GetAssemblies()
+            .SelectMany(a => a.GetTypes())
+            .Where(t => typeof(IArchitectureRuleSetDefinition).IsAssignableFrom(t))
+            .Where(t => !t.IsAbstract && !t.IsInterface)
+            .Select(t => (IArchitectureRuleSetDefinition)Activator.CreateInstance(t)!)
+            .Select(d => d.Define())
+            .ToDictionary(rs => rs.AdrNumber);
     }
 }
