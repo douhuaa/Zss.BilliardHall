@@ -6,6 +6,33 @@
 
 ## 文档清单
 
+### 🆕 新治理体系（v3.0 - 2026-02-07）
+
+- **[架构测试编写指南 v3.0](./ARCHITECTURE-TEST-GUIDELINES.md)** - 架构测试的统一规范和最佳实践
+  - **新增**：RuleSet 和 RuleSetRegistry 使用指南
+  - **新增**：迁移到新治理体系的完整流程
+  - 共性问题的详细分析和解决方案
+  - 反例和正例对比
+  - 完整的测试模板和示例
+  - 迁移清单和常见问题解答
+
+- **[架构测试重构快速参考](./ARCHITECTURE-TEST-REFACTORING-REFERENCE.md)** - 重构模式和代码片段快速查阅
+  - **新增**：迁移到 RuleSetRegistry 的步骤
+  - 删除重复代码的具体步骤
+  - 标准化测试类结构的检查清单
+  - 常用代码片段和重构模板
+  - 重构优先级和验证方法
+
+- **[测试代码重构示例](./TEST-REFACTORING-EXAMPLES.md)** - 实际重构案例集合
+  - **新增**：重构示例 8 - 使用 RuleSetRegistry
+  - 7 个实际重构示例，展示前后对比
+  - 每个示例包含问题分析和改进点
+
+- **[断言消息模板使用指南](./ASSERTION-MESSAGE-TEMPLATE-USAGE.md)** - AssertionMessageBuilder 详细说明
+  - **更新**：展示如何结合 RuleSetRegistry 使用
+  - 标准化的断言消息格式
+  - 多种场景的使用示例
+
 ### 架构测试相关
 
 - **[架构测试分析报告](./ARCHITECTURE-TEST-ANALYSIS-REPORT.md)** - 测试文件深度分析和问题汇总
@@ -14,17 +41,10 @@
   - 影响评估和推荐行动计划
   - 预期收益和成功因素
 
-- **[架构测试编写指南](./ARCHITECTURE-TEST-GUIDELINES.md)** - 架构测试的统一规范和最佳实践
-  - 共性问题的详细分析和解决方案
-  - 反例和正例对比
-  - 完整的测试模板和示例
-  - 迁移清单和常见问题解答
+### 相关资源
 
-- **[架构测试重构快速参考](./ARCHITECTURE-TEST-REFACTORING-REFERENCE.md)** - 重构模式和代码片段快速查阅
-  - 删除重复代码的具体步骤
-  - 标准化测试类结构的检查清单
-  - 常用代码片段和重构模板
-  - 重构优先级和验证方法
+- **[ADR 测试迁移指南](../MIGRATION-ADR-TESTS-TO-RULESETS.md)** - 完整的 RuleSet 迁移文档
+- **[Specification README](../../src/tests/ArchitectureTests/Specification/README.md)** - RuleSet 架构设计
 
 ## 文档说明
 
@@ -80,4 +100,5 @@
 
 ---
 
-最后更新：2026-02-05
+最后更新：2026-02-07  
+版本：1.1 - 新增 RuleSet 治理体系相关内容

@@ -1,8 +1,10 @@
 # 测试代码重构示例
 
-> **文档版本**: 1.0  
-> **最后更新**: 2026-02-05  
+> **文档版本**: 1.1  
+> **最后更新**: 2026-02-07  
 > **文档定位**: 指导文档，提供测试代码重构的实践示例
+>
+> **版本 1.1 更新**：新增重构示例 8 - 使用 RuleSetRegistry（v3.0 新特性）
 
 ## 文档目的
 
@@ -745,14 +747,173 @@ TestConstants.Adr907APath   // ADR-907-A 对齐执行标准
 
 ---
 
+## 重构示例 8：使用 RuleSetRegistry（🆕 v3.0）
+
+> **新增于**: 2026-02-07  
+> **相关文档**: [MIGRATION-ADR-TESTS-TO-RULESETS.md](../MIGRATION-ADR-TESTS-TO-RULESETS.md)
+
+### 重构前（❌ 不推荐 - 硬编码规则信息）
+
+```csharp
+using FluentAssertions;
+using NetArchTest.Rules;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
+
+public sealed class ADR_002_1_Architecture_Tests
+{
+    [Fact(DisplayName = "ADR-002_1_1: Platform 不应依赖 Application")]
+    public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
+    {
+        // ❌ 硬编码规则信息
+        var ruleId = "ADR-002_1_1";
+        var summary = "Platform 层不应依赖 Application 层";
+        
+        var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
+        var result = Types
+            .InAssembly(platformAssembly)
+            .ShouldNot()
+            .HaveDependencyOn("Zss.BilliardHall.Application")
+            .GetResult();
+        
+        // ❌ 手动拼接断言消息
+        var message = 
+            $"❌ {ruleId} 违规：{summary}\n\n" +
+            $"违规类型：\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+            $"修复建议：\n" +
+            $"1. 移除 Platform 对 Application 的引用\n" +
+            $"2. 将共享抽象提取到 Platform 层\n\n" +
+            $"参考：docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md";
+        
+        result.IsSuccessful.Should().BeTrue(message);
+    }
+}
+```
+
+**问题**：
+- RuleId 和规则描述硬编码在测试中
+- 规则信息分散在各个测试文件
+- 修改规则描述需要更新所有测试文件
+- 无法保证规则信息的一致性
+- 不符合新的治理体系（ADR ≠ Test ≠ Specification）
+
+### 重构后（✅ 推荐 - 使用 RuleSetRegistry）
+
+```csharp
+using FluentAssertions;
+using NetArchTest.Rules;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;  // ✅ 添加命名空间
+
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
+
+/// <summary>
+/// ADR-002_1: 依赖方向规则
+///
+/// 测试覆盖映射：
+/// - ADR-002_1_1: Platform 不应依赖 Application
+///
+/// 关联文档：
+/// - ADR: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md
+/// - RuleSet: src/tests/ArchitectureTests/Specification/RuleSets/ADR002/Adr002RuleSet.cs  ✅ 添加 RuleSet 引用
+/// </summary>
+public sealed class ADR_002_1_Architecture_Tests
+{
+    [Fact(DisplayName = "ADR-002_1_1: Platform 不应依赖 Application")]
+    public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
+    {
+        // ✅ 从 RuleSetRegistry 获取规则信息
+        var ruleSet = RuleSetRegistry.GetStrict(2);
+        var clause = ruleSet.GetClause(1, 1);
+        
+        var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
+        var result = Types
+            .InAssembly(platformAssembly)
+            .ShouldNot()
+            .HaveDependencyOn("Zss.BilliardHall.Application")
+            .GetResult();
+        
+        // ✅ 使用 AssertionMessageBuilder + RuleSet 信息
+        var message = AssertionMessageBuilder.BuildFromArchTestResult(
+            ruleId: clause.Id,              // 从 RuleSet 获取，不硬编码
+            summary: clause.Condition,       // 从 RuleSet 获取，不硬编码
+            failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+            remediationSteps: new[]
+            {
+                "移除 Platform 对 Application 的引用",
+                "将共享抽象提取到 Platform 层",
+                "确保依赖方向正确: Host → Application → Platform"
+            },
+            adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        
+        result.IsSuccessful.Should().BeTrue(message);
+    }
+}
+```
+
+**改进点**：
+- ✅ **规则信息集中管理**：从 RuleSet 获取，修改一处即可
+- ✅ **类型安全**：RuleSetRegistry 自动验证 RuleId 正确性
+- ✅ **一致性保证**：所有测试使用相同的规则定义
+- ✅ **多工具复用**：RuleSet 可被测试、Analyzer、文档生成器共享
+- ✅ **符合新治理体系**：ADR → RuleSet → Test 的清晰分层
+
+### 重构步骤总结
+
+1. **添加命名空间**：
+   ```csharp
+   using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
+   ```
+
+2. **获取规则集和条款**：
+   ```csharp
+   var ruleSet = RuleSetRegistry.GetStrict(2);      // 获取 ADR-002 的规则集
+   var clause = ruleSet.GetClause(1, 1);            // 获取 Rule 1, Clause 1
+   ```
+
+3. **使用规则信息**：
+   ```csharp
+   ruleId: clause.Id,          // 替代硬编码的 "ADR-002_1_1"
+   summary: clause.Condition    // 替代硬编码的描述
+   ```
+
+4. **更新类注释**：
+   ```csharp
+   /// - RuleSet: src/tests/ArchitectureTests/Specification/RuleSets/ADR002/Adr002RuleSet.cs
+   ```
+
+### 验证检查清单
+
+使用此清单验证重构完成度：
+
+```
+RuleSetRegistry 迁移检查：
+├─ [ ] 添加 using Specification.Index 命名空间
+├─ [ ] 使用 RuleSetRegistry.GetStrict() 获取规则集
+├─ [ ] 使用 GetClause() 获取条款信息
+├─ [ ] 使用 clause.Id 替代硬编码的 RuleId
+├─ [ ] 使用 clause.Condition 替代硬编码的描述
+├─ [ ] 更新类注释添加 RuleSet 路径
+├─ [ ] 删除本地硬编码的规则信息常量
+└─ [ ] 测试通过，功能正常
+```
+
+---
+
 ## 结语
 
 本文档提供了测试代码重构的实际示例，展示了如何使用新增的常量和辅助方法来简化测试编写。
+
+**版本 1.1 更新**（2026-02-07）：
+- ✅ 新增重构示例 8：使用 RuleSetRegistry
+- ✅ 展示如何迁移到新的治理体系
 
 遵循这些示例将有助于：
 - ✅ 减少代码重复，提高可维护性
 - ✅ 统一测试代码风格和格式
 - ✅ 简化测试编写，提高开发效率
 - ✅ 确保测试质量和一致性
+- ✅ **规则信息集中管理，符合新治理体系**
 
 如有问题或建议，请通过 Issue 或 PR 提出。
