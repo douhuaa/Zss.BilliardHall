@@ -77,30 +77,36 @@ public sealed class ArchitectureRuleSetTests
         clause.ExecutionType.Should().Be(ClauseExecutionType.StaticAnalysis);
     }
 
-    [Fact(DisplayName = "不能添加重复的规则")]
-    public void Should_Not_Add_Duplicate_Rule()
+    [Theory(DisplayName = "不能添加重复的规则")]
+    [InlineData(907, 3)]
+    [InlineData(1, 1)]
+    [InlineData(900, 5)]
+    public void Should_Not_Add_Duplicate_Rule(int adr, int ruleNumber)
     {
         // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
-        ruleSet.AddRule(3, "规则1", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
+        var ruleSet = new ArchitectureRuleSet(adr);
+        ruleSet.AddRule(ruleNumber, "规则1", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
 
         // Act & Assert
-        var act = () => ruleSet.AddRule(3, "规则2", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
+        var act = () => ruleSet.AddRule(ruleNumber, "规则2", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
         act.Should().Throw<InvalidOperationException>()
-            .WithMessage("*ADR-907_3*已存在*");
+            .WithMessage($"*ADR-{adr:000}_{ruleNumber}*已存在*");
     }
 
-    [Fact(DisplayName = "不能添加重复的条款")]
-    public void Should_Not_Add_Duplicate_Clause()
+    [Theory(DisplayName = "不能添加重复的条款")]
+    [InlineData(907, 3, 1)]
+    [InlineData(1, 1, 1)]
+    [InlineData(900, 5, 2)]
+    public void Should_Not_Add_Duplicate_Clause(int adr, int ruleNumber, int clauseNumber)
     {
         // Arrange
-        var ruleSet = new ArchitectureRuleSet(907);
-        ruleSet.AddClause(3, 1, "条款1", "执行1", ClauseExecutionType.Convention);
+        var ruleSet = new ArchitectureRuleSet(adr);
+        ruleSet.AddClause(ruleNumber, clauseNumber, "条款1", "执行1", ClauseExecutionType.Convention);
 
         // Act & Assert
-        var act = () => ruleSet.AddClause(3, 1, "条款2", "执行2", ClauseExecutionType.StaticAnalysis);
+        var act = () => ruleSet.AddClause(ruleNumber, clauseNumber, "条款2", "执行2", ClauseExecutionType.StaticAnalysis);
         act.Should().Throw<InvalidOperationException>()
-            .WithMessage("*ADR-907_3_1*已存在*");
+            .WithMessage($"*ADR-{adr:000}_{ruleNumber}_{clauseNumber}*已存在*");
     }
 
     [Theory(DisplayName = "HasRule 应该正确检查规则是否存在")]
