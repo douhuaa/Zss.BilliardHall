@@ -30,8 +30,8 @@ public sealed class ArchitectureRulesTests
     public void Core_Rules_Should_Match_Specification(int adr, int ruleNum, string summary, RuleSeverity? severity)
     {
         var rule = RuleSetRegistry.GetStrict(adr).GetRule(ruleNum);
-        rule.Should().NotBeNull($"ADR-{adr:0000} Rule {ruleNum} 应存在");
-        rule!.Summary.Should().Be(summary, $"ADR-{adr:0000} Rule {ruleNum} 摘要应为预期值");
+        rule.Should().NotBeNull($"ADR-{adr:000} Rule {ruleNum} 应存在");
+        rule!.Summary.Should().Be(summary, $"ADR-{adr:000} Rule {ruleNum} 摘要应为预期值");
         if (severity.HasValue) rule.Severity.Should().Be(severity.Value);
     }
 
@@ -43,13 +43,13 @@ public sealed class ArchitectureRulesTests
     public void Core_Clauses_Should_Match_Specification(int adr, int ruleNum, int clauseNum, string type, string expected)
     {
         var clause = RuleSetRegistry.GetStrict(adr).GetClause(ruleNum, clauseNum);
-        clause.Should().NotBeNull($"ADR-{adr:0000} Clause {ruleNum}.{clauseNum} 应存在");
+        clause.Should().NotBeNull($"ADR-{adr:000} Clause {ruleNum}.{clauseNum} 应存在");
 
         var content = type.Equals("Condition", StringComparison.OrdinalIgnoreCase)
             ? clause!.Condition
             : clause!.Enforcement;
 
-        content.Should().Contain(expected, $"ADR-{adr:0000} Clause {ruleNum}.{clauseNum} 应包含期望文本");
+        content.Should().Contain(expected, $"ADR-{adr:000} Clause {ruleNum}.{clauseNum} 应包含期望文本");
     }
 
     [Fact(DisplayName = "Registry 应支持常规获取与错误处理")]
@@ -71,34 +71,34 @@ public sealed class ArchitectureRulesTests
 
     #region 辅助方法
 
-    private static void VerifyRuleStructure(dynamic ruleSet, int adrNumber)
+    private static void VerifyRuleStructure(ArchitectureRuleSet ruleSet, int adrNumber)
     {
         // 基本计数检查
-        ((int)ruleSet.RuleCount).Should().BeGreaterThan(0, $"ADR-{adrNumber:0000} 必须包含规则");
+        ruleSet.RuleCount.Should().BeGreaterThan(0, $"ADR-{adrNumber:000} 必须包含规则");
 
         // 逐条检查以便失败定位（每项断言都包含具体 ID）
-        foreach (var rule in ruleSet.Rules)
+        foreach (ArchitectureRuleDefinition rule in ruleSet.Rules)
         {
             var id = rule.Id.ToString();
-            ((RuleLevel)rule.Id.Level).Should().Be(RuleLevel.Rule, $"规则 {id} 的级别应为 Rule");
-            ((int)rule.Id.AdrNumber).Should().Be(adrNumber, $"规则 {id} 的 ADR 应为 ADR-{adrNumber:0000}");
-            ((string)rule.Summary).Should().NotBeNullOrWhiteSpace($"规则 {id} 的摘要不应为空");
+            rule.Id.Level.Should().Be(RuleLevel.Rule, $"规则 {id} 的级别应为 Rule");
+            rule.Id.AdrNumber.Should().Be(adrNumber, $"规则 {id} 的 ADR 应为 ADR-{adrNumber:000}");
+            rule.Summary.Should().NotBeNullOrWhiteSpace($"规则 {id} 的摘要不应为空");
         }
     }
 
-    private static void VerifyClauseStructure(dynamic ruleSet, int adrNumber)
+    private static void VerifyClauseStructure(ArchitectureRuleSet ruleSet, int adrNumber)
     {
-        ((int)ruleSet.ClauseCount).Should().BeGreaterThanOrEqualTo(
-            (int)ruleSet.RuleCount,
-            $"ADR-{adrNumber:0000} 的条款数 ({ruleSet.ClauseCount}) 应至少等于规则数 ({ruleSet.RuleCount})");
+        ruleSet.ClauseCount.Should().BeGreaterThanOrEqualTo(
+            ruleSet.RuleCount,
+            $"ADR-{adrNumber:000} 的条款数 ({ruleSet.ClauseCount}) 应至少等于规则数 ({ruleSet.RuleCount})");
 
-        foreach (var clause in ruleSet.Clauses)
+        foreach (ArchitectureClauseDefinition clause in ruleSet.Clauses)
         {
             var id = clause.Id.ToString();
-            ((RuleLevel)clause.Id.Level).Should().Be(RuleLevel.Clause, $"条款 {id} 的级别应为 Clause");
-            ((int)clause.Id.AdrNumber).Should().Be(adrNumber, $"条款 {id} 的 ADR 应为 ADR-{adrNumber:0000}");
-            ((string)clause.Condition).Should().NotBeNullOrWhiteSpace($"条款 {id} 的 Condition 不应为空");
-            ((string)clause.Enforcement).Should().NotBeNullOrWhiteSpace($"条款 {id} 的 Enforcement 不应为空");
+            clause.Id.Level.Should().Be(RuleLevel.Clause, $"条款 {id} 的级别应为 Clause");
+            clause.Id.AdrNumber.Should().Be(adrNumber, $"条款 {id} 的 ADR 应为 ADR-{adrNumber:000}");
+            clause.Condition.Should().NotBeNullOrWhiteSpace($"条款 {id} 的 Condition 不应为空");
+            clause.Enforcement.Should().NotBeNullOrWhiteSpace($"条款 {id} 的 Enforcement 不应为空");
         }
     }
 

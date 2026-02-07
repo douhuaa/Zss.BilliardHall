@@ -70,7 +70,7 @@ public sealed class ArchitectureRuleSetTests
 
         Action act = () => ruleSet.AddRule(ruleNumber, "规则2", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
         act.Should().Throw<InvalidOperationException>()
-            .WithMessage($"*{string.Format(AdrFormat, adr)}_{ruleNumber}*已存在*");
+            .WithMessage($"*{BuildRuleKey(adr, ruleNumber)}*已存在*");
     }
 
     [Theory(DisplayName = "不能添加重复的条款")]
@@ -84,7 +84,7 @@ public sealed class ArchitectureRuleSetTests
 
         Action act = () => ruleSet.AddClause(ruleNumber, clauseNumber, "条款2", "执行2", ClauseExecutionType.StaticAnalysis);
         act.Should().Throw<InvalidOperationException>()
-            .WithMessage($"*{string.Format(AdrFormat, adr)}_{ruleNumber}_{clauseNumber}*已存在*");
+            .WithMessage($"*{BuildClauseKey(adr, ruleNumber, clauseNumber)}*已存在*");
     }
 
     [Theory(DisplayName = "HasRule 应该正确检查规则是否存在")]
@@ -169,7 +169,7 @@ public sealed class ArchitectureRuleSetTests
         ruleSet.AddRule(2, "没有条款的规则", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
 
         Action act = () => ruleSet.ValidateCompleteness();
-        act.Should().Throw<InvalidOperationException>().WithMessage($"*{string.Format(AdrFormat, 907)}_2*");
+        act.Should().Throw<InvalidOperationException>().WithMessage($"*{BuildRuleKey(907, 2)}*");
     }
 
     [Fact(DisplayName = "ValidateCompleteness 应该通过有完整条款的规则集")]
@@ -227,6 +227,9 @@ public sealed class ArchitectureRuleSetTests
         clause.Enforcement.Should().Be(enforcement);
         clause.ExecutionType.Should().Be(executionType);
     }
+
+    private static string BuildRuleKey(int adr, int ruleNumber) => $"{string.Format(AdrFormat, adr)}_{ruleNumber}";
+    private static string BuildClauseKey(int adr, int ruleNumber, int clauseNumber) => $"{string.Format(AdrFormat, adr)}_{ruleNumber}_{clauseNumber}";
 
     #endregion
 }

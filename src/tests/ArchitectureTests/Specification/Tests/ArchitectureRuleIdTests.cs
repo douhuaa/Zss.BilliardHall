@@ -70,12 +70,17 @@ public sealed class ArchitectureRuleIdTests
         // Act
         var sorted = ids.OrderBy(x => x).ToList();
 
+        var expected = new[]
+        {
+            "ADR-900_1",
+            "ADR-900_1_1",
+            "ADR-907_1",
+            "ADR-907_3_1",
+            "ADR-907_3_2"
+        };
+
         // Assert - 顺序断言明确可读
-        sorted[0].ToString().Should().Be("ADR-900_1");
-        sorted[1].ToString().Should().Be("ADR-900_1_1");
-        sorted[2].ToString().Should().Be("ADR-907_1");
-        sorted[3].ToString().Should().Be("ADR-907_3_1");
-        sorted[4].ToString().Should().Be("ADR-907_3_2");
+        sorted.Select(s => s.ToString()).Should().ContainInOrder(expected);
     }
 
     [Theory(DisplayName = "相同的 RuleId 应该被视为相等")]
