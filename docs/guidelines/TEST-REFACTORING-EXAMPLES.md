@@ -1,8 +1,10 @@
 # 测试代码重构示例
 
-> **文档版本**: 1.0  
-> **最后更新**: 2026-02-05  
+> **文档版本**: 1.2  
+> **最后更新**: 2026-02-07  
 > **文档定位**: 指导文档，提供测试代码重构的实践示例
+>
+> **版本 1.2 更新**：新增重构示例 9 - 使用参数化测试（Theory + InlineData）（v3.0 新特性）
 
 ## 文档目的
 
@@ -745,14 +747,397 @@ TestConstants.Adr907APath   // ADR-907-A 对齐执行标准
 
 ---
 
+## 重构示例 8：使用 RuleSetRegistry（🆕 v3.0）
+
+> **新增于**: 2026-02-07  
+> **相关文档**: [MIGRATION-ADR-TESTS-TO-RULESETS.md](../MIGRATION-ADR-TESTS-TO-RULESETS.md)
+
+### 重构前（❌ 不推荐 - 硬编码规则信息）
+
+```csharp
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
+
+public sealed class ADR_002_1_Architecture_Tests
+{
+    [Fact(DisplayName = "ADR-002_1_1: Platform 不应依赖 Application")]
+    public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
+    {
+        // ❌ 硬编码规则信息
+        var ruleId = "ADR-002_1_1";
+        var summary = "Platform 层不应依赖 Application 层";
+        
+        var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
+        var result = Types
+            .InAssembly(platformAssembly)
+            .ShouldNot()
+            .HaveDependencyOn("Zss.BilliardHall.Application")
+            .GetResult();
+        
+        // ❌ 手动拼接断言消息
+        var message = 
+            $"❌ {ruleId} 违规：{summary}\n\n" +
+            $"违规类型：\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
+            $"修复建议：\n" +
+            $"1. 移除 Platform 对 Application 的引用\n" +
+            $"2. 将共享抽象提取到 Platform 层\n\n" +
+            $"参考：docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md";
+        
+        result.IsSuccessful.Should().BeTrue(message);
+    }
+}
+```
+
+**问题**：
+- RuleId 和规则描述硬编码在测试中
+- 规则信息分散在各个测试文件
+- 修改规则描述需要更新所有测试文件
+- 无法保证规则信息的一致性
+- 不符合新的治理体系（ADR ≠ Test ≠ Specification）
+
+### 重构后（✅ 推荐 - 使用 RuleSetRegistry）
+
+```csharp
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
+
+/// <summary>
+/// ADR-002_1: 依赖方向规则
+///
+/// 测试覆盖映射：
+/// - ADR-002_1_1: Platform 不应依赖 Application
+///
+/// 关联文档：
+/// - ADR: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md
+/// - RuleSet: src/tests/ArchitectureTests/Specification/RuleSets/ADR002/Adr002RuleSet.cs  ✅ 添加 RuleSet 引用
+/// </summary>
+public sealed class ADR_002_1_Architecture_Tests
+{
+    [Fact(DisplayName = "ADR-002_1_1: Platform 不应依赖 Application")]
+    public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
+    {
+        // ✅ 从 RuleSetRegistry 获取规则信息
+        var ruleSet = RuleSetRegistry.GetStrict(2);
+        var clause = ruleSet.GetClause(1, 1);
+        
+        var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
+        var result = Types
+            .InAssembly(platformAssembly)
+            .ShouldNot()
+            .HaveDependencyOn("Zss.BilliardHall.Application")
+            .GetResult();
+        
+        // ✅ 使用 AssertionMessageBuilder + RuleSet 信息
+        var message = AssertionMessageBuilder.BuildFromArchTestResult(
+            ruleId: clause.Id,              // 从 RuleSet 获取，不硬编码
+            summary: clause.Condition,       // 从 RuleSet 获取，不硬编码
+            failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+            remediationSteps: new[]
+            {
+                "移除 Platform 对 Application 的引用",
+                "将共享抽象提取到 Platform 层",
+                "确保依赖方向正确: Host → Application → Platform"
+            },
+            adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        
+        result.IsSuccessful.Should().BeTrue(message);
+    }
+}
+```
+
+**改进点**：
+- ✅ **规则信息集中管理**：从 RuleSet 获取，修改一处即可
+- ✅ **类型安全**：RuleSetRegistry 自动验证 RuleId 正确性
+- ✅ **一致性保证**：所有测试使用相同的规则定义
+- ✅ **多工具复用**：RuleSet 可被测试、Analyzer、文档生成器共享
+- ✅ **符合新治理体系**：ADR → RuleSet → Test 的清晰分层
+
+### 重构步骤总结
+
+1. **验证全局using配置**：
+   > **📌 注意**：命名空间已包含在全局using中（GlobalUsings.cs），无需手动添加。
+
+2. **获取规则集和条款**：
+   ```csharp
+   var ruleSet = RuleSetRegistry.GetStrict(2);      // 获取 ADR-002 的规则集
+   var clause = ruleSet.GetClause(1, 1);            // 获取 Rule 1, Clause 1
+   ```
+
+3. **使用规则信息**：
+   ```csharp
+   ruleId: clause.Id,          // 替代硬编码的 "ADR-002_1_1"
+   summary: clause.Condition    // 替代硬编码的描述
+   ```
+
+4. **更新类注释**：
+   ```csharp
+   /// - RuleSet: src/tests/ArchitectureTests/Specification/RuleSets/ADR002/Adr002RuleSet.cs
+   ```
+
+### 验证检查清单
+
+使用此清单验证重构完成度：
+
+```
+RuleSetRegistry 迁移检查：
+├─ [ ] 验证全局using配置（已包含在 GlobalUsings.cs）
+├─ [ ] 使用 RuleSetRegistry.GetStrict() 获取规则集
+├─ [ ] 使用 GetClause() 获取条款信息
+├─ [ ] 使用 clause.Id 替代硬编码的 RuleId
+├─ [ ] 使用 clause.Condition 替代硬编码的描述
+├─ [ ] 更新类注释添加 RuleSet 路径
+├─ [ ] 删除本地硬编码的规则信息常量
+└─ [ ] 测试通过，功能正常
+```
+
+---
+
+## 重构示例 9：使用参数化测试（Theory + InlineData）（🆕 v3.0）
+
+> **新增于**: 2026-02-07  
+> **相关文档**: [ARCHITECTURE-TEST-GUIDELINES.md](./ARCHITECTURE-TEST-GUIDELINES.md#参数化测试)
+
+### 重构前（❌ 重复代码 - 多个 Fact 测试）
+
+```csharp
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
+
+public sealed class RuleIdParserTests
+{
+    [Fact(DisplayName = "应该解析 ADR-001_1")]
+    public void Should_Parse_ADR_001_1()
+    {
+        // Act
+        var success = RuleIdParser.TryParse("ADR-001_1", out var result);
+        
+        // Assert
+        success.Should().BeTrue();
+        result.AdrNumber.Should().Be(1);
+        result.RuleNumber.Should().Be(1);
+        result.ClauseNumber.Should().BeNull();
+    }
+
+    [Fact(DisplayName = "应该解析 ADR-907_3")]
+    public void Should_Parse_ADR_907_3()
+    {
+        // Act
+        var success = RuleIdParser.TryParse("ADR-907_3", out var result);
+        
+        // Assert
+        success.Should().BeTrue();
+        result.AdrNumber.Should().Be(907);
+        result.RuleNumber.Should().Be(3);
+        result.ClauseNumber.Should().BeNull();
+    }
+
+    [Fact(DisplayName = "应该解析 001_1")]
+    public void Should_Parse_001_1()
+    {
+        // Act
+        var success = RuleIdParser.TryParse("001_1", out var result);
+        
+        // Assert
+        success.Should().BeTrue();
+        result.AdrNumber.Should().Be(1);
+        result.RuleNumber.Should().Be(1);
+        result.ClauseNumber.Should().BeNull();
+    }
+
+    [Fact(DisplayName = "应该解析 907_3")]
+    public void Should_Parse_907_3()
+    {
+        // Act
+        var success = RuleIdParser.TryParse("907_3", out var result);
+        
+        // Assert
+        success.Should().BeTrue();
+        result.AdrNumber.Should().Be(907);
+        result.RuleNumber.Should().Be(3);
+        result.ClauseNumber.Should().BeNull();
+    }
+    
+    // ... 更多重复的测试方法
+}
+```
+
+**问题**：
+- 测试逻辑完全相同，只是输入数据不同
+- 代码重复率高（~80行代码测试4个场景）
+- 添加新测试用例需要复制整个方法
+- 维护成本高，修改逻辑需要改多处
+- 测试报告冗长，难以快速定位问题
+
+### 重构后（✅ 推荐 - 使用 Theory + InlineData）
+
+```csharp
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
+
+public sealed class RuleIdParserTests
+{
+    [Theory(DisplayName = "TryParse 应该正确解析下划线格式的 Rule ID")]
+    [InlineData("ADR-001_1", 1, 1, null)]    // 标准格式
+    [InlineData("ADR-907_3", 907, 3, null)]  // 三位数 ADR
+    [InlineData("001_1", 1, 1, null)]        // 短格式（省略 ADR-）
+    [InlineData("907_3", 907, 3, null)]      // 三位数短格式
+    public void TryParse_Should_Parse_Underscore_Rule_Format(
+        string input,
+        int expectedAdr,
+        int expectedRule,
+        int? expectedClause)
+    {
+        // Act
+        var success = RuleIdParser.TryParse(input, out var result);
+        
+        // Assert
+        success.Should().BeTrue($"应该能够解析：{input}");
+        result.AdrNumber.Should().Be(expectedAdr);
+        result.RuleNumber.Should().Be(expectedRule);
+        result.ClauseNumber.Should().Be(expectedClause);
+    }
+}
+```
+
+**改进点**：
+- ✅ **代码量减少 75%**：从 ~80 行减少到 ~20 行
+- ✅ **更容易添加测试用例**：只需添加一行 InlineData
+- ✅ **测试逻辑集中**：所有断言在一个方法中，易于维护
+- ✅ **测试报告更清晰**：每个数据组合单独显示
+- ✅ **注释说明每个场景**：通过行尾注释解释测试用例意图
+
+### 使用 MemberData 处理复杂数据
+
+对于复杂的测试数据，使用 `[MemberData]`：
+
+**重构前**：
+```csharp
+[Fact]
+public void Should_Reject_Null_Input()
+{
+    var success = RuleIdParser.TryParse(null, out _);
+    success.Should().BeFalse();
+}
+
+[Fact]
+public void Should_Reject_Empty_Input()
+{
+    var success = RuleIdParser.TryParse("", out _);
+    success.Should().BeFalse();
+}
+
+[Fact]
+public void Should_Reject_Whitespace_Input()
+{
+    var success = RuleIdParser.TryParse("   ", out _);
+    success.Should().BeFalse();
+}
+
+// ... 更多无效输入测试
+```
+
+**重构后**：
+```csharp
+// 在类的开头定义测试数据
+public static IEnumerable<object[]> InvalidInputs { get; } = new List<object[]>
+{
+    new object[] { null },
+    new object[] { "" },
+    new object[] { "   " },
+    new object[] { "invalid" },
+    new object[] { "ADR-" },
+    new object[] { "ADR-abc" },
+    new object[] { "abc_123" },
+    new object[] { "001" },          // 缺少 Rule 编号
+    new object[] { "ADR-001" },      // 缺少 Rule 编号
+};
+
+[Theory(DisplayName = "TryParse 应该对无效格式返回 false")]
+[MemberData(nameof(InvalidInputs))]
+public void TryParse_Should_Return_False_For_Invalid_Format(string? input)
+{
+    // Act
+    var success = RuleIdParser.TryParse(input, out _);
+    
+    // Assert
+    success.Should().BeFalse($"不应该解析无效输入：{input ?? "(null)"}");
+}
+```
+
+### 结合 RuleSetRegistry 的参数化测试
+
+```csharp
+[Theory(DisplayName = "RuleSet 应该包含正确的规则信息")]
+[InlineData(1, 1, "模块物理隔离", RuleSeverity.Constitutional)]
+[InlineData(900, 1, "架构裁决权威性", RuleSeverity.Governance)]
+[InlineData(907, 3, "最小断言语义规范", null)]
+[InlineData(120, 1, "事件类型命名规范", null)]
+public void RuleSet_Should_Contain_Correct_Rule_Info(
+    int adrNumber,
+    int ruleNumber,
+    string expectedSummary,
+    RuleSeverity? expectedSeverity)
+{
+    // Arrange - 从 RuleSetRegistry 获取规则集
+    var ruleSet = RuleSetRegistry.GetStrict(adrNumber);
+    
+    // Act
+    var rule = ruleSet.GetRule(ruleNumber);
+    
+    // Assert
+    rule.Summary.Should().Contain(expectedSummary);
+    if (expectedSeverity.HasValue)
+    {
+        rule.Severity.Should().Be(expectedSeverity.Value);
+    }
+}
+```
+
+### 重构步骤总结
+
+1. **识别重复模式**：找出测试逻辑相同的多个 Fact
+2. **提取参数**：识别变化的部分作为方法参数
+3. **改为 Theory**：将 `[Fact]` 改为 `[Theory]`
+4. **添加 InlineData**：为每个测试用例添加一行 InlineData
+5. **添加注释**：在 InlineData 后添加注释说明测试场景
+6. **验证测试**：运行测试确保行为一致
+
+### 验证检查清单
+
+```
+参数化测试迁移检查：
+├─ [ ] 将 [Fact] 改为 [Theory]
+├─ [ ] 添加测试方法参数
+├─ [ ] 为每个测试用例添加 [InlineData]
+├─ [ ] 添加 DisplayName 说明测试意图
+├─ [ ] 为复杂数据考虑使用 [MemberData]
+├─ [ ] 添加行内注释说明每个测试场景
+├─ [ ] 在断言中使用参数提供上下文信息
+├─ [ ] 运行测试确保所有用例通过
+└─ [ ] 验证测试报告清晰可读
+```
+
+### 最佳实践
+
+1. **参数数量适中**：避免超过 5 个参数，过多参数考虑使用对象
+2. **清晰的 DisplayName**：描述测试的整体意图
+3. **行内注释**：在每行 InlineData 后添加注释
+4. **有意义的参数名**：使用描述性的参数名称
+5. **断言包含上下文**：在失败消息中包含输入参数信息
+
+---
+
 ## 结语
 
 本文档提供了测试代码重构的实际示例，展示了如何使用新增的常量和辅助方法来简化测试编写。
+
+**版本 1.2 更新**（2026-02-07）：
+- ✅ 新增重构示例 8：使用 RuleSetRegistry
+- ✅ 新增重构示例 9：使用参数化测试（Theory + InlineData）
+- ✅ 展示如何迁移到新的治理体系
 
 遵循这些示例将有助于：
 - ✅ 减少代码重复，提高可维护性
 - ✅ 统一测试代码风格和格式
 - ✅ 简化测试编写，提高开发效率
 - ✅ 确保测试质量和一致性
+- ✅ **规则信息集中管理，符合新治理体系**
+- ✅ **使用参数化测试减少重复代码**
 
 如有问题或建议，请通过 Issue 或 PR 提出。
