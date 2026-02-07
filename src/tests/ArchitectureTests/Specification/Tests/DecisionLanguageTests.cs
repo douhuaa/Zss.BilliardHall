@@ -372,4 +372,171 @@ public sealed class DecisionLanguageTests
         result.Should().Be(DecisionResult.None,
             $"'{sentence}' 中的'应该避免'应被识别为否定上下文");
     }
+
+    #region 新API测试（DecisionParseResult & DecisionExecutionResult）
+
+    /// <summary>
+    /// 测试新的 ParseToDecision 方法能正确识别 Must 级别
+    /// </summary>
+    [Theory(DisplayName = "ParseToDecision 应正确识别 Must 级别裁决语言")]
+    [InlineData("必须遵循模块边界")]
+    [InlineData("Handler 强制使用统一接口")]
+    [InlineData("需要实现 IHandler 接口")]
+    public void ParseToDecision_Should_Recognize_Must_Level(string sentence)
+    {
+        // Act
+        var result = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(sentence);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Level.Should().Be(DecisionLevel.Must);
+        result.HasDecision.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// 测试新的 ParseToDecision 方法能正确识别 MustNot 级别
+    /// </summary>
+    [Theory(DisplayName = "ParseToDecision 应正确识别 MustNot 级别裁决语言")]
+    [InlineData("禁止跨模块直接调用")]
+    [InlineData("Endpoint 不得包含业务逻辑")]
+    [InlineData("不允许使用反射创建对象")]
+    public void ParseToDecision_Should_Recognize_MustNot_Level(string sentence)
+    {
+        // Act
+        var result = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(sentence);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Level.Should().Be(DecisionLevel.MustNot);
+        result.HasDecision.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// 测试新的 ParseToDecision 方法能正确识别 Should 级别
+    /// </summary>
+    [Theory(DisplayName = "ParseToDecision 应正确识别 Should 级别裁决语言")]
+    [InlineData("应该优先使用 Handler 模式")]
+    [InlineData("建议使用依赖注入")]
+    [InlineData("推荐遵循 CQRS 原则")]
+    public void ParseToDecision_Should_Recognize_Should_Level(string sentence)
+    {
+        // Act
+        var result = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(sentence);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Level.Should().Be(DecisionLevel.Should);
+        result.HasDecision.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// 测试 ParseToDecision 对不包含裁决语言的文本返回 None
+    /// </summary>
+    [Theory(DisplayName = "ParseToDecision 对不包含裁决语言的文本应返回 None")]
+    [InlineData("这是一个描述性文本")]
+    [InlineData("Handler 模式的示例")]
+    [InlineData("")]
+    public void ParseToDecision_Should_Return_None_For_Non_Decision_Text(string sentence)
+    {
+        // Act
+        var result = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(sentence);
+
+        // Assert
+        result.Should().Be(DecisionParseResult.None);
+        result.HasDecision.Should().BeFalse();
+        result.Level.Should().BeNull();
+    }
+
+    /// <summary>
+    /// 测试 ToExecutionResult 方法将解析结果正确转换为执行结果
+    /// </summary>
+    [Theory(DisplayName = "ToExecutionResult 应正确转换解析结果为执行结果")]
+    [InlineData(DecisionLevel.Must, true)]
+    [InlineData(DecisionLevel.MustNot, true)]
+    [InlineData(DecisionLevel.Should, false)]
+    public void ToExecutionResult_Should_Convert_ParseResult_Correctly(
+        DecisionLevel level,
+        bool expectedIsBlocking)
+    {
+        // Arrange
+        var parseResult = new DecisionParseResult(level);
+
+        // Act
+        var executionResult = ArchitectureTestSpecification.DecisionLanguage.ToExecutionResult(parseResult);
+
+        // Assert
+        executionResult.Should().NotBeNull();
+        executionResult!.Level.Should().Be(level);
+        executionResult.IsBlocking.Should().Be(expectedIsBlocking);
+    }
+
+    /// <summary>
+    /// 测试 ToExecutionResult 对 None 解析结果返回 null
+    /// </summary>
+    [Fact(DisplayName = "ToExecutionResult 对 None 解析结果应返回 null")]
+    public void ToExecutionResult_Should_Return_Null_For_None()
+    {
+        // Act
+        var executionResult = ArchitectureTestSpecification.DecisionLanguage.ToExecutionResult(DecisionParseResult.None);
+
+        // Assert
+        executionResult.Should().BeNull();
+    }
+
+    /// <summary>
+    /// 测试完整工作流：解析 → 转换为执行结果
+    /// </summary>
+    [Fact(DisplayName = "完整工作流：ParseToDecision → ToExecutionResult 应正确工作")]
+    public void Full_Workflow_ParseToDecision_ToExecutionResult_Should_Work()
+    {
+        // Arrange
+        var sentence = "必须遵循模块边界";
+
+        // Act
+        var parseResult = ArchitectureTestSpecification.DecisionLanguage.ParseToDecision(sentence);
+        var executionResult = ArchitectureTestSpecification.DecisionLanguage.ToExecutionResult(parseResult);
+
+        // Assert
+        parseResult.Level.Should().Be(DecisionLevel.Must);
+        parseResult.HasDecision.Should().BeTrue();
+
+        executionResult.Should().NotBeNull();
+        executionResult!.Level.Should().Be(DecisionLevel.Must);
+        executionResult.IsBlocking.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// 测试 DecisionParseResult 的相等性比较
+    /// </summary>
+    [Fact(DisplayName = "DecisionParseResult 应支持值相等性比较")]
+    public void DecisionParseResult_Should_Support_Value_Equality()
+    {
+        // Arrange
+        var result1 = new DecisionParseResult(DecisionLevel.Must);
+        var result2 = new DecisionParseResult(DecisionLevel.Must);
+        var result3 = new DecisionParseResult(DecisionLevel.Should);
+
+        // Assert
+        result1.Should().Be(result2);
+        result1.Should().NotBe(result3);
+        result1.Should().NotBe(DecisionParseResult.None);
+    }
+
+    /// <summary>
+    /// 测试 DecisionExecutionResult 的相等性比较
+    /// </summary>
+    [Fact(DisplayName = "DecisionExecutionResult 应支持值相等性比较")]
+    public void DecisionExecutionResult_Should_Support_Value_Equality()
+    {
+        // Arrange
+        var result1 = new DecisionExecutionResult(DecisionLevel.Must, IsBlocking: true);
+        var result2 = new DecisionExecutionResult(DecisionLevel.Must, IsBlocking: true);
+        var result3 = new DecisionExecutionResult(DecisionLevel.Should, IsBlocking: false);
+
+        // Assert
+        result1.Should().Be(result2);
+        result1.Should().NotBe(result3);
+    }
+
+    #endregion
 }
