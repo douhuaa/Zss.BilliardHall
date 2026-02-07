@@ -1,9 +1,34 @@
 # 架构测试编写指南（Architecture Test Guidelines）
 
-> **文档版本**: 2.0  
-> **最后更新**: 2026-02-06  
+> **文档版本**: 3.0  
+> **最后更新**: 2026-02-07  
 > **文档定位**: 非裁决性指导文档，提供最佳实践建议  
-> **权威依据**: 本文档基于对现有 125+ 测试文件的分析，识别共性问题并提供解决方案
+> **权威依据**: 本文档基于 ADR-900、ADR-905、ADR-907 及新的 RuleSet 治理体系
+> 
+> ⚠️ **重要提醒**：
+> - ✅ 本文档是**指导性文档**，提供最佳实践建议
+> - ✅ **权威依据**仍然是 ADR 文档（docs/adr/）
+> - ✅ 如有冲突，以 ADR 正文为准
+
+---
+
+## 🎯 版本 3.0 主要变更
+
+本次更新引入 **架构治理新体系**（PR #330），核心理念：
+
+```
+ADR ≠ Test ≠ Specification（三者物理隔离）
+```
+
+**关键变化**：
+1. ✅ **新增 RuleSet 体系**：规则定义与测试逻辑分离
+2. ✅ **新增 RuleSetRegistry**：统一规则集访问入口
+3. ✅ **测试只能"引用规则"**：不能"定义规则"
+4. ✅ **Rule 是最小裁决单元**：ADR 只是容器
+
+**详细迁移指南**：[MIGRATION-ADR-TESTS-TO-RULESETS.md](../MIGRATION-ADR-TESTS-TO-RULESETS.md)
+
+**Specification 架构文档**：[Specification README](../../src/tests/ArchitectureTests/Specification/README.md)
 
 ---
 
@@ -15,6 +40,7 @@
 
 | 规范类别 | 要求 | 优先级 | 采用率目标 |
 |---------|------|--------|-----------|
+| **RuleSetRegistry** | 从 Registry 获取规则信息 | 🔴 P0 | 100% |
 | **TestEnvironment** | 使用共享路径常量 | 🔴 P0 | 100% |
 | **FileSystemTestHelper** | 使用统一文件操作方法 | 🔴 P1 | 80% |
 | **AssertionMessageBuilder** | 使用标准断言消息 | 🔴 P1 | 80% |
@@ -38,6 +64,82 @@
 - 🔄 **重复代码减少 77%**：从 ~4,300 行降至 ~1,000 行  
 - ⚡ **测试速度提升 20%**：通过 ADR 文档缓存
 - 🛠️ **维护成本降低 50%**：统一格式和工具
+
+---
+
+## 🆕 使用 RuleSet 和 RuleSetRegistry
+
+### 什么是 RuleSet？
+
+**RuleSet** 是规则定义的中心化位置，将 ADR 文档转换为可执行的规范。
+
+**核心理念**：
+```
+ADR（文档） → RuleSet（规范） → Test（验证）
+```
+
+**位置**：`src/tests/ArchitectureTests/Specification/RuleSets/`
+
+**已创建数量**：43 个 RuleSet 定义（覆盖 ADR-001 至 ADR-990）
+
+### RuleSetRegistry 基本用法
+
+**导入命名空间**：
+```csharp
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
+```
+
+**获取规则集**：
+```csharp
+// 方式 1：按编号获取（推荐用于测试）
+var ruleSet = RuleSetRegistry.GetStrict(1);     // 抛异常如果不存在（严格模式）
+var ruleSet = RuleSetRegistry.Get(1);           // 返回 null 如果不存在（宽容模式）
+
+// 方式 2：按字符串获取（支持多种格式）
+var ruleSet = RuleSetRegistry.GetStrict("ADR-001");
+
+// 方式 3：按分类获取
+var constitutional = RuleSetRegistry.GetConstitutionalRuleSets(); // ADR-001 ~ 008
+var governance = RuleSetRegistry.GetGovernanceRuleSets();         // ADR-900 ~ 999
+var runtime = RuleSetRegistry.GetRuntimeRuleSets();               // ADR-201 ~ 240
+```
+
+**获取规则和条款**：
+```csharp
+// 获取规则集
+var ruleSet = RuleSetRegistry.GetStrict(1);
+
+// 获取特定规则
+var rule = ruleSet.GetRule(1);           // 获取 Rule 1
+Console.WriteLine($"规则: {rule.Id} - {rule.Summary}");
+
+// 获取特定条款
+var clause = ruleSet.GetClause(1, 1);    // 获取 Rule 1, Clause 1
+Console.WriteLine($"条款: {clause.Id}");           // "ADR-001_1_1"
+Console.WriteLine($"条件: {clause.Condition}");    // 规则的具体内容
+Console.WriteLine($"执行方式: {clause.Enforcement}"); // 如何执行这个规则
+```
+
+### 宽容模式 vs 严格模式
+
+| 模式 | 方法 | 不存在时行为 | 适用场景 |
+|-----|------|------------|---------|
+| 宽容模式 | `Get()` | 返回 `null` | 探索性查询、条件性测试 |
+| 严格模式 | `GetStrict()` | 抛出异常 | **测试（推荐）、CI、Analyzer** |
+
+**使用建议**：
+- ✅ **测试中使用 `GetStrict()`**：测试中的 RuleId 错误应该立即失败
+- ✅ **探索性查询使用 `Get()`**：需要检查 RuleSet 是否存在时
+
+### 使用 RuleSetRegistry 的优势
+
+| 传统方式 ❌ | RuleSetRegistry 方式 ✅ |
+|-----------|---------------------|
+| 硬编码 RuleId 字符串 | 从 Registry 获取，类型安全 |
+| 手动拼接规则描述 | 使用 `clause.Condition` |
+| 规则信息与测试耦合 | 规则定义集中管理 |
+| 难以批量更新规则信息 | 修改 RuleSet 即可 |
+| 无法验证 RuleId 正确性 | Registry 自动验证 |
 
 ---
 
@@ -148,11 +250,12 @@ public sealed class ADR_XXX_Tests : IClassFixture<AdrTestFixture>
 
 ## 📐 标准测试结构
 
-### 1️⃣ 测试类模板
+### 1️⃣ 测试类模板（使用 RuleSetRegistry）
 
 ```csharp
 using FluentAssertions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_XXX;
 
@@ -166,6 +269,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_XXX;
 ///
 /// 关联文档：
 /// - ADR: docs/adr/<category>/ADR-XXX-<title>.md
+/// - RuleSet: src/tests/ArchitectureTests/Specification/RuleSets/ADRXXX/AdrXxxRuleSet.cs
 /// </summary>
 public sealed class ADR_XXX_Y_Architecture_Tests
 {
@@ -176,14 +280,28 @@ public sealed class ADR_XXX_Y_Architecture_Tests
     [Fact(DisplayName = "ADR-XXX_Y_1: <测试显示名称>")]
     public void ADR_XXX_Y_1_<TestMethodName>()
     {
-        // Arrange
+        // Arrange - 从 RuleSetRegistry 获取规则信息
+        var ruleSet = RuleSetRegistry.GetStrict(XXX);
+        var clause = ruleSet.GetClause(Y, 1);
+        
         var repoRoot = TestEnvironment.RepositoryRoot;
         
         // Act
         var result = /* 执行测试 */;
         
-        // Assert
-        result.Should().BeTrue(/* 使用 AssertionMessageBuilder */);
+        // Assert - 使用规则信息构建断言消息
+        var message = AssertionMessageBuilder.BuildFileNotFoundMessage(
+            ruleId: clause.Id,              // 从 RuleSet 获取
+            filePath: expectedPath,
+            fileDescription: clause.Condition,  // 从 RuleSet 获取
+            remediationSteps: new[]
+            {
+                "步骤 1",
+                "步骤 2"
+            },
+            adrReference: $"docs/adr/<category>/ADR-{XXX}-<title>.md");
+        
+        result.Should().BeTrue(message);
     }
 }
 ```
@@ -235,7 +353,220 @@ public sealed class ADR_XXX_Y_Architecture_Tests
 
 ---
 
+## 🔄 迁移到新治理体系
+
+### 为什么需要迁移？
+
+新的治理体系（PR #330）实现了规则定义与测试逻辑的分离，带来以下好处：
+- ✅ **规则信息集中管理**：修改规则描述只需更新 RuleSet
+- ✅ **类型安全**：RuleSetRegistry 自动验证 RuleId 正确性
+- ✅ **多工具复用**：RuleSet 可被测试、Analyzer、文档生成器等共享
+- ✅ **一致性保证**：所有工具使用相同的规则定义
+
+### 迁移步骤
+
+#### 步骤 1：添加命名空间
+
+```csharp
+// ✅ 在文件开头添加
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
+```
+
+#### 步骤 2：获取规则集和条款
+
+```csharp
+// ❌ 旧方式：硬编码规则信息
+var ruleId = "ADR-002_1_1";
+var summary = "Platform 不应依赖 Application";
+
+// ✅ 新方式：从 RuleSetRegistry 获取
+var ruleSet = RuleSetRegistry.GetStrict(2);
+var clause = ruleSet.GetClause(1, 1);
+var ruleId = clause.Id;        // "ADR-002_1_1"
+var summary = clause.Condition; // 从 RuleSet 定义获取
+```
+
+#### 步骤 3：更新断言消息
+
+```csharp
+// ❌ 旧方式：手动拼接字符串
+var message = 
+    $"❌ ADR-002_1_1 违规：Platform 不应依赖 Application\n\n" +
+    $"违规类型：\n{string.Join("\n", failingTypes)}\n\n" +
+    // ... 更多手动拼接
+
+// ✅ 新方式：结合 RuleSet 和 AssertionMessageBuilder
+var message = AssertionMessageBuilder.BuildFromArchTestResult(
+    ruleId: clause.Id,          // 从 RuleSet 获取
+    summary: clause.Condition,   // 从 RuleSet 获取
+    failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+    remediationSteps: new[]
+    {
+        "移除 Platform 对 Application 的引用",
+        "将共享抽象提取到 Platform 层"
+    },
+    adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+```
+
+#### 步骤 4：更新类注释
+
+```csharp
+/// <summary>
+/// ADR-002_1: 依赖方向规则
+/// ...
+///
+/// 关联文档：
+/// - ADR: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md
+/// - RuleSet: src/tests/ArchitectureTests/Specification/RuleSets/ADR002/Adr002RuleSet.cs  ✅ 添加这行
+/// </summary>
+```
+
+### 迁移检查清单
+
+在迁移测试文件时，请确保完成以下各项：
+
+- [ ] **命名空间**：添加 `using Specification.Index;`
+- [ ] **获取规则集**：使用 `RuleSetRegistry.GetStrict()`
+- [ ] **获取条款**：使用 `ruleSet.GetClause()`
+- [ ] **使用 clause.Id**：替代硬编码的 RuleId
+- [ ] **使用 clause.Condition**：替代硬编码的描述
+- [ ] **更新类注释**：添加 RuleSet 文件路径
+- [ ] **删除硬编码常量**：移除测试类中的规则信息常量
+
+### 完整示例：迁移前后对比
+
+**迁移前 ❌**：
+```csharp
+using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
+
+public sealed class ADR_002_1_Architecture_Tests
+{
+    [Fact(DisplayName = "ADR-002_1_1: Platform 不应依赖 Application")]
+    public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
+    {
+        // 硬编码规则信息
+        var ruleId = "ADR-002_1_1";
+        var summary = "Platform 不应依赖 Application";
+        
+        var result = /* 执行测试 */;
+        
+        // 手动拼接断言消息
+        var message = $"❌ {ruleId} 违规：{summary}\n\n...";
+        result.Should().BeTrue(message);
+    }
+}
+```
+
+**迁移后 ✅**：
+```csharp
+using FluentAssertions;
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;  // ✅ 新增
+
+namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
+
+/// <summary>
+/// ADR-002_1: 依赖方向规则
+///
+/// 关联文档：
+/// - ADR: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md
+/// - RuleSet: src/tests/ArchitectureTests/Specification/RuleSets/ADR002/Adr002RuleSet.cs  ✅ 新增
+/// </summary>
+public sealed class ADR_002_1_Architecture_Tests
+{
+    [Fact(DisplayName = "ADR-002_1_1: Platform 不应依赖 Application")]
+    public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
+    {
+        // ✅ 从 RuleSetRegistry 获取规则信息
+        var ruleSet = RuleSetRegistry.GetStrict(2);
+        var clause = ruleSet.GetClause(1, 1);
+        
+        var result = /* 执行测试 */;
+        
+        // ✅ 使用 AssertionMessageBuilder + RuleSet 信息
+        var message = AssertionMessageBuilder.BuildFromArchTestResult(
+            ruleId: clause.Id,
+            summary: clause.Condition,
+            failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+            remediationSteps: new[] { "..." },
+            adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+        
+        result.Should().BeTrue(message);
+    }
+}
+```
+
+### 兼容性说明
+
+✅ **向后兼容**：旧的测试仍然可以运行  
+⚠️ **建议迁移**：新测试必须使用 RuleSetRegistry  
+🎯 **迁移目标**：100% 测试使用 RuleSetRegistry
+
+### 相关资源
+
+- 📖 [迁移详细指南](../MIGRATION-ADR-TESTS-TO-RULESETS.md) - 完整的迁移过程文档
+- 🏗️ [Specification README](../../src/tests/ArchitectureTests/Specification/README.md) - RuleSet 架构说明
+- 📋 [ADR-907](../adr/governance/ADR-907-architecture-tests-enforcement-governance.md) - 执法治理体系
+
+---
+
 ## 🛠️ 共享工具使用指南
+
+### 0️⃣ RuleSetRegistry（新增 - P0 优先级）
+
+**功能**：规则集统一访问入口
+
+**核心方法**：
+
+| 方法 | 说明 | 使用场景 |
+|------|------|---------|
+| `GetStrict(int)` | 获取规则集（严格模式） | **测试（推荐）** |
+| `Get(int)` | 获取规则集（宽容模式） | 探索性查询 |
+| `GetStrict(string)` | 字符串格式获取（严格） | 支持 "ADR-001" 格式 |
+| `Get(string)` | 字符串格式获取（宽容） | 支持 "ADR-001" 格式 |
+| `Contains(int)` | 检查是否存在 | 条件性测试 |
+| `GetAllAdrNumbers()` | 获取所有编号 | 统计分析 |
+| `GetConstitutionalRuleSets()` | 获取宪法层规则集（ADR-001~008） | 按分类测试 |
+| `GetGovernanceRuleSets()` | 获取治理层规则集（ADR-900~999） | 按分类测试 |
+| `GetRuntimeRuleSets()` | 获取运行时层规则集（ADR-201~240） | 按分类测试 |
+| `GetStructureRuleSets()` | 获取结构层规则集（ADR-120~124） | 按分类测试 |
+| `GetTechnicalRuleSets()` | 获取技术层规则集（ADR-301~360） | 按分类测试 |
+
+**使用示例**：
+```csharp
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
+
+// 在测试中使用（推荐严格模式）
+var ruleSet = RuleSetRegistry.GetStrict(2);
+var clause = ruleSet.GetClause(1, 1);
+
+// 使用规则信息
+Console.WriteLine($"RuleId: {clause.Id}");           // "ADR-002_1_1"
+Console.WriteLine($"条件: {clause.Condition}");      // 规则的具体内容
+Console.WriteLine($"执行: {clause.Enforcement}");    // 如何执行
+
+// 条件性测试（检查规则集是否存在）
+if (RuleSetRegistry.Contains(999))
+{
+    var ruleSet = RuleSetRegistry.GetStrict(999);
+    // 执行测试
+}
+
+// 按分类获取
+var governanceRules = RuleSetRegistry.GetGovernanceRuleSets();
+foreach (var rs in governanceRules)
+{
+    Console.WriteLine($"ADR-{rs.AdrNumber}");
+}
+```
+
+**优势**：
+- ✅ **类型安全**：自动验证 RuleId 正确性
+- ✅ **集中管理**：规则信息统一维护
+- ✅ **多工具复用**：可被测试、Analyzer、CI 共享
 
 ### 1️⃣ TestEnvironment（采用率目标 100%）
 
@@ -335,6 +666,7 @@ public sealed class ADR_XXX_Tests : IClassFixture<AdrTestFixture>
 | [ ] 类命名格式 | `ADR_XXX_Y_Architecture_Tests` | Code Review |
 | [ ] 方法命名格式 | `ADR_XXX_Y_Z_<Description>` | Code Review |
 | [ ] DisplayName 格式 | `"ADR-XXX_Y_Z: <中文描述>"` | 测试运行器 |
+| [ ] **使用 RuleSetRegistry** | **从 Registry 获取规则信息** | **Code Review** |
 
 ### 📝 文档注释（P1 优先级）
 
@@ -343,11 +675,13 @@ public sealed class ADR_XXX_Tests : IClassFixture<AdrTestFixture>
 | [ ] 类 XML 注释 | 包含 Rule 说明、测试映射、关联文档 | 96%+ |
 | [ ] 方法 XML 注释 | 包含 Clause 说明、§ 引用 | 90%+ |
 | [ ] ADR 条款引用 | 使用 `§ADR-XXX_Y_Z` 格式 | 100% |
+| [ ] **RuleSet 路径引用** | **添加 RuleSet 文件路径到类注释** | **100%** |
 
-### 🔧 共享工具使用（P1-P2 优先级）
+### 🔧 共享工具使用（P0-P2 优先级）
 
 | 检查项 | 目标采用率 | 优先级 |
 |--------|-----------|--------|
+| [ ] **使用 RuleSetRegistry** | **100%** | **🔴 P0** |
 | [ ] 使用 TestEnvironment | 100% | 🔴 P0 |
 | [ ] 删除本地 FindRepositoryRoot | 100% | 🔴 P0 |
 | [ ] 使用 FileSystemTestHelper | 80% | 🔴 P1 |
@@ -357,12 +691,14 @@ public sealed class ADR_XXX_Tests : IClassFixture<AdrTestFixture>
 ### 📏 断言质量（P1 优先级）
 
 **必需字段**：
-- [ ] ❌ + RuleId 开头
+- [ ] ❌ + RuleId 开头（使用 `clause.Id`）
 - [ ] 当前状态字段
 - [ ] 修复建议（编号列表）
 - [ ] 参考字段（ADR 路径 + § 引用）
 
 **质量检查**：
+- [ ] 使用 `clause.Id` 作为 RuleId（不硬编码）
+- [ ] 使用 `clause.Condition` 作为规则描述（不硬编码）
 - [ ] RuleId 格式正确（下划线分隔）
 - [ ] 问题描述清晰（一句话）
 - [ ] 当前状态具体（含数据和事实）
@@ -489,11 +825,15 @@ src/tests/ArchitectureTests/
 
 | 文档 | 说明 |
 |------|------|
+| **[ADR 测试迁移到新治理体系指南](../MIGRATION-ADR-TESTS-TO-RULESETS.md)** | **完整的 RuleSet 迁移过程和方法** |
+| **[Specification README](../../src/tests/ArchitectureTests/Specification/README.md)** | **RuleSet 架构设计和使用说明** |
 | [架构测试分析报告](./ARCHITECTURE-TEST-ANALYSIS-REPORT.md) | 详细数据分析和统计 |
 | [架构测试重构快速参考](./ARCHITECTURE-TEST-REFACTORING-REFERENCE.md) | 快速查阅的重构模式 |
 | [断言消息模板使用指南](./ASSERTION-MESSAGE-TEMPLATE-USAGE.md) | AssertionMessageBuilder 详细说明 |
 | [共享辅助工具 README](../../src/tests/ArchitectureTests/Shared/README.md) | 共享类 API 文档 |
 | [架构测试 README](../../src/tests/ArchitectureTests/README.md) | 测试套件概览 |
+| [ADR-900](../adr/governance/ADR-900-architecture-tests.md) | 架构测试与 CI 治理元规则 |
+| [ADR-907](../adr/governance/ADR-907-architecture-tests-enforcement-governance.md) | ArchitectureTests 执法治理体系 |
 
 ---
 
@@ -536,6 +876,7 @@ src/tests/ArchitectureTests/
 
 | 版本 | 日期 | 主要变更 |
 |-----|------|---------|
+| 3.0 | 2026-02-07 | **重大更新**：引入 RuleSet 治理体系，添加 RuleSetRegistry 使用指南，更新所有测试模板和示例 |
 | 2.0 | 2026-02-06 | 重构文档结构：添加执行摘要、使用表格优化、层次化组织、优先级标记 |
 | 1.1 | 2026-02-05 | 添加断言消息标准格式、共享工具说明 |
 | 1.0 | 2026-01-XX | 初始版本，基于 133+ 测试文件分析 |
