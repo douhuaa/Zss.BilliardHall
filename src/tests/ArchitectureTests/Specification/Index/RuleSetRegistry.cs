@@ -1,5 +1,6 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 
+using System.Text.RegularExpressions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0001;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0002;
@@ -23,6 +24,16 @@ public static class RuleSetRegistry
 {
     private static readonly Lazy<IReadOnlyDictionary<int, ArchitectureRuleSet>> LazyRegistry =
         new(BuildRegistry);
+
+    /// <summary>
+    /// ADR 编号格式验证正则表达式
+    /// 匹配格式：
+    /// - "ADR-" 后跟 1-3 位数字（如 ADR-001, ADR-1）
+    /// - "ADR" 后跟 1-3 位数字（如 ADR001, ADR1）
+    /// - 纯 1-3 位数字（如 001, 1）
+    /// 不匹配：ADR0001（4位数字）, ADR.001（错误分隔符）
+    /// </summary>
+    private static readonly Regex AdrPattern = new(@"^(ADR-?)?\d{1,3}$", RegexOptions.IgnoreCase);
 
     /// <summary>
     /// 所有已注册的规则集
@@ -104,10 +115,11 @@ public static class RuleSetRegistry
     /// 支持的格式：
     /// - "ADR-001" 或 "ADR-1"（推荐格式）
     /// - "001" 或 "1"（简化格式）
-    /// - "ADR001"（无分隔符格式）
+    /// - "ADR001"（无分隔符格式，仅限 1-3 位数字）
     /// 
     /// 不支持的格式：
     /// - "ADR0001"（4位数字）
+    /// - "0001"（4位数字）
     /// - "ADR.001"（错误分隔符）
     /// - 其他非标准格式
     /// 
@@ -115,6 +127,7 @@ public static class RuleSetRegistry
     /// - RuleId 是裁决系统的"法律编号"，不是用户输入
     /// - 在测试、CI、Analyzer 场景中，格式错误 = 架构错误
     /// - 显式失败优于静默返回 null
+    /// - 格式验证通过正则表达式严格匹配，确保代码行为与注释一致
     /// </summary>
     /// <param name="adrId">ADR 编号字符串</param>
     /// <returns>规则集</returns>
@@ -129,18 +142,23 @@ public static class RuleSetRegistry
                 nameof(adrId));
         }
 
-        // 支持 "ADR-001" 格式
+        // 使用正则表达式严格验证格式
+        if (!AdrPattern.IsMatch(adrId))
+        {
+            throw new ArgumentException(
+                $"无效的 ADR 编号格式：'{adrId}'。" +
+                $"支持的格式：'ADR-001', 'ADR-1', '001', '1', 'ADR001'（仅 1-3 位数字）。" +
+                $"不支持 4 位数字格式如 'ADR0001' 或 '0001'。",
+                nameof(adrId));
+        }
+
+        // 提取数字部分
         var normalized = adrId.Replace("ADR-", "", StringComparison.OrdinalIgnoreCase)
                                .Replace("ADR", "", StringComparison.OrdinalIgnoreCase)
                                .Trim();
 
-        if (!int.TryParse(normalized, out var adrNumber))
-        {
-            throw new ArgumentException(
-                $"无效的 ADR 编号格式：'{adrId}'。" +
-                $"支持的格式：'ADR-001', 'ADR-1', '001', '1', 'ADR001'。",
-                nameof(adrId));
-        }
+        // 此时 normalized 必定可以解析为 int（因为已通过正则验证）
+        var adrNumber = int.Parse(normalized);
 
         return GetStrict(adrNumber);
     }

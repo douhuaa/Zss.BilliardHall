@@ -170,6 +170,10 @@ public sealed class RuleSetRegistryTests
     [InlineData("ADR")]
     [InlineData("ADR-abc")]
     [InlineData("abc-123")]
+    [InlineData("ADR0001")]  // 4位数字格式 - 应被拒绝
+    [InlineData("0001")]     // 4位数字格式 - 应被拒绝
+    [InlineData("9999")]     // 4位数字格式 - 应被拒绝
+    [InlineData("ADR.001")]  // 错误分隔符 - 应被拒绝
     public void GetStrict_String_Should_Throw_ArgumentException_For_Invalid_Format(string adrId)
     {
         // Act
@@ -187,7 +191,6 @@ public sealed class RuleSetRegistryTests
     [Theory(DisplayName = "GetStrict(string) 对不存在的规则集应抛出 InvalidOperationException")]
     [InlineData("999")]
     [InlineData("ADR-999")]
-    [InlineData("9999")]
     public void GetStrict_String_Should_Throw_InvalidOperationException_When_Not_Exists(string adrId)
     {
         // Act
@@ -196,6 +199,26 @@ public sealed class RuleSetRegistryTests
         // Assert
         act.Should().Throw<InvalidOperationException>()
             .WithMessage("*不存在*");
+    }
+
+    /// <summary>
+    /// 测试 GetStrict(string) 方法拒绝 4 位数字格式（确保代码与注释一致）
+    /// 这是对 issue 的直接修复验证
+    /// </summary>
+    [Theory(DisplayName = "GetStrict(string) 应拒绝 4 位数字格式")]
+    [InlineData("ADR0001")]  // 4位数字，无分隔符
+    [InlineData("0001")]     // 纯 4位数字
+    [InlineData("ADR0120")]  // 4位数字，即使对应实际存在的 ADR
+    public void GetStrict_String_Should_Reject_Four_Digit_Format(string adrId)
+    {
+        // Act
+        var act = () => RuleSetRegistry.GetStrict(adrId);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("*无效的 ADR 编号格式*")
+            .WithMessage("*不支持 4 位数字*")
+            .And.ParamName.Should().Be("adrId");
     }
 
     #endregion
