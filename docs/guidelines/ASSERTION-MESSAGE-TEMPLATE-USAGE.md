@@ -1,12 +1,16 @@
 # 断言消息模板使用指南
 
-> **文档版本**: 1.0  
-> **最后更新**: 2026-02-05  
+> **文档版本**: 1.1  
+> **最后更新**: 2026-02-07  
 > **相关文档**: [ARCHITECTURE-TEST-GUIDELINES.md](./ARCHITECTURE-TEST-GUIDELINES.md)
 
 ## 概述
 
 `AssertionMessageBuilder` 是一个统一的断言消息构建器，位于 `Shared/AssertionMessageBuilder.cs`，提供标准化的断言消息模板。通过使用这个助手类，可以确保所有架构测试的错误消息保持一致性，并且便于维护。
+
+> **🆕 版本 1.1 更新**（2026-02-07）：
+> - 建议结合 **RuleSetRegistry** 使用，从规则集中获取 RuleId 和规则描述
+> - 详见：[MIGRATION-ADR-TESTS-TO-RULESETS.md](../MIGRATION-ADR-TESTS-TO-RULESETS.md)
 
 ## 为什么要使用模板？
 
@@ -28,6 +32,7 @@ result.IsSuccessful.Should().BeTrue(
 - 字符串拼接冗长且容易出错
 - 格式不一致（如冒号使用、空行数量）
 - 维护困难：如果要修改格式，需要修改所有测试
+- **硬编码规则信息**：RuleId 和描述直接写在代码中
 - 可读性差：测试逻辑被大量字符串拼接淹没
 
 ### 使用模板之后的优势
@@ -49,12 +54,36 @@ var message = AssertionMessageBuilder.BuildFromArchTestResult(
 result.IsSuccessful.Should().BeTrue(message);
 ```
 
+```csharp
+// ✅✅ 最佳方式：结合 RuleSetRegistry（v3.0 推荐）
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
+
+// 从 RuleSetRegistry 获取规则信息
+var ruleSet = RuleSetRegistry.GetStrict(2);
+var clause = ruleSet.GetClause(1, 1);
+
+var message = AssertionMessageBuilder.BuildFromArchTestResult(
+    ruleId: clause.Id,              // 从 RuleSet 获取
+    summary: clause.Condition,       // 从 RuleSet 获取
+    failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+    remediationSteps: new[]
+    {
+        "移除 Platform 对 Application 的引用",
+        "将共享的技术抽象提取到 Platform 层",
+        "确保依赖方向正确: Host → Application → Platform"
+    },
+    adrReference: "docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md");
+
+result.IsSuccessful.Should().BeTrue(message);
+```
+
 **优势**：
 - ✅ 代码简洁清晰
 - ✅ 格式自动统一
 - ✅ 集中维护：修改格式只需改一处
 - ✅ 类型安全：参数明确，不易出错
 - ✅ 测试逻辑更清晰
+- ✅ **结合 RuleSetRegistry**：规则信息统一管理，避免硬编码
 
 ---
 
@@ -81,6 +110,10 @@ public static string BuildFromArchTestResult(
 [Fact(DisplayName = "ADR-002_1_1: Platform 不应依赖 Application")]
 public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
 {
+    // ✅ 使用 RuleSetRegistry 获取规则信息（v3.0 推荐）
+    var ruleSet = RuleSetRegistry.GetStrict(2);
+    var clause = ruleSet.GetClause(1, 1);
+    
     var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
     var result = Types
         .InAssembly(platformAssembly)
@@ -89,8 +122,8 @@ public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
         .GetResult();
 
     var message = AssertionMessageBuilder.BuildFromArchTestResult(
-        ruleId: "ADR-002_1_1",
-        summary: "Platform 层不应依赖 Application 层",
+        ruleId: clause.Id,           // 从 RuleSet 获取，不硬编码
+        summary: clause.Condition,    // 从 RuleSet 获取，不硬编码
         failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
         remediationSteps: new[]
         {

@@ -5,10 +5,127 @@
 
 ## 快速链接
 
+- [迁移到 RuleSetRegistry](#迁移到-rulesetregistry)（🆕 v3.0）
 - [删除重复的 FindRepositoryRoot](#删除重复的-findrepositoryroot)
 - [标准化测试类结构](#标准化测试类结构)
 - [统一断言消息格式](#统一断言消息格式)
 - [常用代码片段](#常用代码片段)
+
+---
+
+## 迁移到 RuleSetRegistry
+
+> **🆕 版本 3.0**：新增 RuleSet 治理体系，所有测试应使用 RuleSetRegistry 获取规则信息
+
+### 需要重构的文件识别
+
+查找硬编码 RuleId 的文件：
+
+```bash
+# 查找直接使用字符串 RuleId 的文件
+grep -r '"ADR-[0-9]\{3\}_[0-9]' src/tests/ArchitectureTests --include="*.cs" -l
+
+# 查找手动拼接规则描述的文件  
+grep -r '违规：' src/tests/ArchitectureTests --include="*.cs" -l
+```
+
+### 重构步骤
+
+#### 步骤 1：添加命名空间
+
+```csharp
+// ✅ 在文件开头添加
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
+```
+
+#### 步骤 2：从硬编码到 RuleSetRegistry
+
+**重构前 ❌**：
+```csharp
+public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
+{
+    // 硬编码规则信息
+    var ruleId = "ADR-002_1_1";
+    var summary = "Platform 不应依赖 Application";
+    
+    var result = /* 测试逻辑 */;
+    
+    var message = $"❌ {ruleId} 违规：{summary}\n\n...";
+    result.Should().BeTrue(message);
+}
+```
+
+**重构后 ✅**：
+```csharp
+public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
+{
+    // ✅ 从 RuleSetRegistry 获取规则信息
+    var ruleSet = RuleSetRegistry.GetStrict(2);
+    var clause = ruleSet.GetClause(1, 1);
+    
+    var result = /* 测试逻辑 */;
+    
+    var message = AssertionMessageBuilder.BuildFromArchTestResult(
+        ruleId: clause.Id,          // 从 RuleSet 获取
+        summary: clause.Condition,   // 从 RuleSet 获取
+        failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
+        remediationSteps: new[] { "..." },
+        adrReference: "...");
+    
+    result.Should().BeTrue(message);
+}
+```
+
+#### 步骤 3：更新类注释
+
+**添加 RuleSet 路径引用**：
+```csharp
+/// <summary>
+/// ADR-002_1: 依赖方向规则
+///
+/// 关联文档：
+/// - ADR: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md
+/// - RuleSet: src/tests/ArchitectureTests/Specification/RuleSets/ADR002/Adr002RuleSet.cs  ✅ 添加这行
+/// </summary>
+```
+
+### 重构检查清单
+
+使用此清单验证每个重构的文件：
+
+```
+RuleSetRegistry 迁移检查：
+├─ [ ] 添加 using Specification.Index 命名空间
+├─ [ ] 使用 RuleSetRegistry.GetStrict() 获取规则集
+├─ [ ] 使用 GetClause() 获取条款信息
+├─ [ ] 使用 clause.Id 替代硬编码的 RuleId
+├─ [ ] 使用 clause.Condition 替代硬编码的描述
+├─ [ ] 更新类注释添加 RuleSet 路径
+└─ [ ] 删除本地硬编码的规则信息常量
+```
+
+### 常见模式对照表
+
+| 场景 | 重构前 ❌ | 重构后 ✅ |
+|------|----------|----------|
+| **获取 RuleId** | `var ruleId = "ADR-002_1_1";` | `var ruleId = clause.Id;` |
+| **获取规则描述** | `var summary = "Platform 不应...";` | `var summary = clause.Condition;` |
+| **断言消息** | `$"❌ {ruleId} 违规：{summary}"` | `AssertionMessageBuilder.Build(clause.Id, clause.Condition, ...)` |
+| **类注释** | 只有 ADR 文档路径 | 添加 RuleSet 文件路径 |
+
+### 自动化查找脚本
+
+```bash
+#!/bin/bash
+# 查找需要迁移到 RuleSetRegistry 的文件
+
+echo "查找硬编码 RuleId 的测试文件..."
+grep -r '"ADR-[0-9]\{3\}_[0-9]' src/tests/ArchitectureTests --include="*.cs" -l | \
+  grep -v "Specification/" | \
+  while read file; do
+    echo "需要迁移: $file"
+  done
+```
 
 ---
 
