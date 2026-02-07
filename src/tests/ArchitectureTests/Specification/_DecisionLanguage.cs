@@ -46,7 +46,70 @@ public static partial class ArchitectureTestSpecification
         ];
 
         /// <summary>
-        /// 从自然语言文本中解析裁决语义
+        /// 从自然语言文本中解析裁决语义（新版API）
+        /// 
+        /// 解析规则：
+        /// 1. 按照 Rules 定义的顺序依次匹配
+        /// 2. 使用词边界识别和上下文分析进行精确匹配
+        /// 3. 排除否定上下文（如"应该避免"、"不应该"等）
+        /// 4. 一旦匹配到关键词，立即返回对应的 DecisionParseResult
+        /// 5. 如果未匹配到任何关键词，返回 DecisionParseResult.None
+        /// 
+        /// 设计原则：
+        /// - 未识别 ≠ Must（防止误伤）
+        /// - 默认为非裁决
+        /// - 词边界识别避免误判（如"需要性"不匹配"需要"）
+        /// - 否定上下文排除避免误判（如"应该避免"不匹配"应该"）
+        /// </summary>
+        /// <param name="sentence">要解析的文本</param>
+        /// <returns>解析出的裁决结果</returns>
+        public static DecisionParseResult ParseToDecision(string sentence)
+        {
+            if (string.IsNullOrWhiteSpace(sentence))
+            {
+                return DecisionParseResult.None;
+            }
+
+            foreach (var rule in Rules)
+            {
+                if (rule.Keywords.Any(keyword => IsKeywordMatch(sentence, keyword)))
+                {
+                    return new DecisionParseResult(rule.Level);
+                }
+            }
+
+            return DecisionParseResult.None;
+        }
+
+        /// <summary>
+        /// 将解析结果转换为执行结果
+        /// </summary>
+        /// <param name="parseResult">解析结果</param>
+        /// <returns>执行结果，如果解析结果为 None 则返回 null</returns>
+        public static DecisionExecutionResult? ToExecutionResult(DecisionParseResult parseResult)
+        {
+            if (!parseResult.HasDecision || !parseResult.Level.HasValue)
+            {
+                return null;
+            }
+
+            var level = parseResult.Level.Value;
+            var isBlocking = level switch
+            {
+                DecisionLevel.Must => true,
+                DecisionLevel.MustNot => true,
+                DecisionLevel.Should => false,
+                _ => false
+            };
+
+            return new DecisionExecutionResult(level, isBlocking);
+        }
+
+        /// <summary>
+        /// 从自然语言文本中解析裁决语义（旧版API，兼容性保留）
+        /// 
+        /// ⚠️ 已废弃：此方法将在未来版本中移除
+        /// 请使用：ParseToDecision() 代替
         /// 
         /// 解析规则：
         /// 1. 按照 Rules 定义的顺序依次匹配
@@ -63,6 +126,7 @@ public static partial class ArchitectureTestSpecification
         /// </summary>
         /// <param name="sentence">要解析的文本</param>
         /// <returns>解析出的裁决结果</returns>
+        [Obsolete("请使用 ParseToDecision() 代替。此方法将在未来版本中移除。")]
         public static DecisionResult Parse(string sentence)
         {
             if (string.IsNullOrWhiteSpace(sentence))
