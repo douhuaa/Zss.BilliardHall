@@ -25,8 +25,8 @@ public sealed class Adr122RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 1,
             summary: "测试类命名规则",
             decision: DecisionLevel.Must,
-            severity: RuleSeverity.Structure,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 1,

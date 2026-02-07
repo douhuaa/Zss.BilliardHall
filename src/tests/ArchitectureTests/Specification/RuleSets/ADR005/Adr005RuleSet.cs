@@ -26,7 +26,7 @@ public sealed class Adr005RuleSet : IArchitectureRuleSetDefinition
             summary: "Handler 命名与职责单一",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Type);
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 1,
@@ -48,7 +48,7 @@ public sealed class Adr005RuleSet : IArchitectureRuleSetDefinition
             summary: "Handler 无状态约束",
             decision: DecisionLevel.MustNot,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Type);
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 2,
@@ -121,7 +121,7 @@ public sealed class Adr005RuleSet : IArchitectureRuleSetDefinition
             summary: "CQRS 分离约束",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Type);
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 5,

@@ -26,7 +26,7 @@ public sealed class Adr007RuleSet : IArchitectureRuleSetDefinition
             summary: "Agent 根本定位",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Documentation);
+            scope: RuleScope.Document);
 
         ruleSet.AddClause(
             ruleNumber: 1,
@@ -55,7 +55,7 @@ public sealed class Adr007RuleSet : IArchitectureRuleSetDefinition
             summary: "三态判定规则",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Documentation);
+            scope: RuleScope.Document);
 
         ruleSet.AddClause(
             ruleNumber: 2,
@@ -84,7 +84,7 @@ public sealed class Adr007RuleSet : IArchitectureRuleSetDefinition
             summary: "权限边界约束",
             decision: DecisionLevel.MustNot,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Documentation);
+            scope: RuleScope.Document);
 
         ruleSet.AddClause(
             ruleNumber: 3,
@@ -113,7 +113,7 @@ public sealed class Adr007RuleSet : IArchitectureRuleSetDefinition
             summary: "配置文件声明要求",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Documentation);
+            scope: RuleScope.Document);
 
         ruleSet.AddClause(
             ruleNumber: 4,

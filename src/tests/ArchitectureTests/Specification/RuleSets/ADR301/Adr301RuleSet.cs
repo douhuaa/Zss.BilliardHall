@@ -26,7 +26,7 @@ public sealed class Adr301RuleSet : IArchitectureRuleSetDefinition
             summary: "测试项目组织规范",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Technical,
-            scope: RuleScope.Project);
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 1,

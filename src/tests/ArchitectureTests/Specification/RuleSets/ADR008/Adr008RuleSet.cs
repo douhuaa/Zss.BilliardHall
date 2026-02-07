@@ -26,7 +26,7 @@ public sealed class Adr008RuleSet : IArchitectureRuleSetDefinition
             summary: "文档分级与裁决权",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Documentation);
+            scope: RuleScope.Document);
 
         ruleSet.AddClause(
             ruleNumber: 1,
@@ -55,7 +55,7 @@ public sealed class Adr008RuleSet : IArchitectureRuleSetDefinition
             summary: "ADR 内容约束",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Documentation);
+            scope: RuleScope.Document);
 
         ruleSet.AddClause(
             ruleNumber: 2,
@@ -84,7 +84,7 @@ public sealed class Adr008RuleSet : IArchitectureRuleSetDefinition
             summary: "非 ADR 文档约束",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Documentation);
+            scope: RuleScope.Document);
 
         ruleSet.AddClause(
             ruleNumber: 3,
@@ -113,7 +113,7 @@ public sealed class Adr008RuleSet : IArchitectureRuleSetDefinition
             summary: "ADR 结构要求",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Documentation);
+            scope: RuleScope.Document);
 
         ruleSet.AddClause(
             ruleNumber: 4,

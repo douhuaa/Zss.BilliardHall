@@ -26,7 +26,7 @@ public sealed class Adr350RuleSet : IArchitectureRuleSetDefinition
             summary: "日志类型组织规范",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Technical,
-            scope: RuleScope.Type);
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 1,

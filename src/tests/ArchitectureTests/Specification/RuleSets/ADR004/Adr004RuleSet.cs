@@ -26,7 +26,7 @@ public sealed class Adr004RuleSet : IArchitectureRuleSetDefinition
             summary: "CPM 基础设施约束",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Repository);
+            scope: RuleScope.Solution);
 
         ruleSet.AddClause(
             ruleNumber: 1,
@@ -55,7 +55,7 @@ public sealed class Adr004RuleSet : IArchitectureRuleSetDefinition
             summary: "项目依赖管理约束",
             decision: DecisionLevel.MustNot,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Project);
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 2,
@@ -77,7 +77,7 @@ public sealed class Adr004RuleSet : IArchitectureRuleSetDefinition
             summary: "层级依赖与分组约束",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Repository);
+            scope: RuleScope.Solution);
 
         ruleSet.AddClause(
             ruleNumber: 3,

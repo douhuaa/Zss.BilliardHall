@@ -25,8 +25,8 @@ public sealed class Adr240RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 1,
             summary: "结构化异常要求",
             decision: DecisionLevel.Must,
-            severity: RuleSeverity.Runtime,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 1,
@@ -40,8 +40,8 @@ public sealed class Adr240RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 2,
             summary: "可重试标记约束",
             decision: DecisionLevel.Must,
-            severity: RuleSeverity.Runtime,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 2,
@@ -55,8 +55,8 @@ public sealed class Adr240RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 4,
             summary: "异常命名空间约束",
             decision: DecisionLevel.Must,
-            severity: RuleSeverity.Runtime,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 4,

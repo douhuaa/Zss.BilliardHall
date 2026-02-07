@@ -25,8 +25,8 @@ public sealed class Adr121RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 1,
             summary: "契约命名规则",
             decision: DecisionLevel.Must,
-            severity: RuleSeverity.Structure,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 1,
@@ -40,8 +40,8 @@ public sealed class Adr121RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 2,
             summary: "契约不可变性",
             decision: DecisionLevel.Must,
-            severity: RuleSeverity.Structure,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 2,
@@ -55,8 +55,8 @@ public sealed class Adr121RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 3,
             summary: "契约行为约束",
             decision: DecisionLevel.MustNot,
-            severity: RuleSeverity.Structure,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 3,
@@ -70,8 +70,8 @@ public sealed class Adr121RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 4,
             summary: "契约类型约束",
             decision: DecisionLevel.MustNot,
-            severity: RuleSeverity.Structure,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 4,
@@ -85,8 +85,8 @@ public sealed class Adr121RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 5,
             summary: "契约命名空间约束",
             decision: DecisionLevel.Must,
-            severity: RuleSeverity.Structure,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 5,
@@ -100,8 +100,8 @@ public sealed class Adr121RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 6,
             summary: "契约物理组织",
             decision: DecisionLevel.Should,
-            severity: RuleSeverity.Structure,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 6,

@@ -25,8 +25,8 @@ public sealed class Adr210RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 2,
             summary: "事件 SchemaVersion 要求",
             decision: DecisionLevel.Must,
-            severity: RuleSeverity.Runtime,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 2,

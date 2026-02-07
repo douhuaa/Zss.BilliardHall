@@ -26,7 +26,7 @@ public sealed class Adr360RuleSet : IArchitectureRuleSetDefinition
             summary: "CI/CD 配置规范",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Technical,
-            scope: RuleScope.Repository);
+            scope: RuleScope.Solution);
 
         ruleSet.AddClause(
             ruleNumber: 1,

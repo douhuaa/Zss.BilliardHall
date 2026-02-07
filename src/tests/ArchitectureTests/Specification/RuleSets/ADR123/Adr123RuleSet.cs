@@ -25,8 +25,8 @@ public sealed class Adr123RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 1,
             summary: "Repository 接口分层约束",
             decision: DecisionLevel.Must,
-            severity: RuleSeverity.Structure,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 1,

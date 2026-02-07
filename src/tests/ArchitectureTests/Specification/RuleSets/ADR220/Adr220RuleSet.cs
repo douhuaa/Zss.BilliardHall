@@ -25,7 +25,7 @@ public sealed class Adr220RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 1,
             summary: "事件总线依赖隔离",
             decision: DecisionLevel.MustNot,
-            severity: RuleSeverity.Runtime,
+            severity: RuleSeverity.Technical,
             scope: RuleScope.Module);
 
         ruleSet.AddClause(
@@ -40,8 +40,8 @@ public sealed class Adr220RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 4,
             summary: "事件订阅者生命周期",
             decision: DecisionLevel.Must,
-            severity: RuleSeverity.Runtime,
-            scope: RuleScope.Type);
+            severity: RuleSeverity.Technical,
+            scope: RuleScope.Module);
 
         ruleSet.AddClause(
             ruleNumber: 4,

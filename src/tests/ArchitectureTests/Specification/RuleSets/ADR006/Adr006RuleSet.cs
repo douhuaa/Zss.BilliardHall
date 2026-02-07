@@ -26,7 +26,7 @@ public sealed class Adr006RuleSet : IArchitectureRuleSetDefinition
             summary: "编号分层规则",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Documentation);
+            scope: RuleScope.Document);
 
         ruleSet.AddClause(
             ruleNumber: 1,
@@ -41,7 +41,7 @@ public sealed class Adr006RuleSet : IArchitectureRuleSetDefinition
             summary: "编号格式规则",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Documentation);
+            scope: RuleScope.Document);
 
         ruleSet.AddClause(
             ruleNumber: 2,
@@ -63,7 +63,7 @@ public sealed class Adr006RuleSet : IArchitectureRuleSetDefinition
             summary: "前导零规则",
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Constitutional,
-            scope: RuleScope.Documentation);
+            scope: RuleScope.Document);
 
         ruleSet.AddClause(
             ruleNumber: 3,
