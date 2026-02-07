@@ -29,22 +29,19 @@ public static partial class ArchitectureTestSpecification
             // MUST: 强制性要求，阻断级别
             new DecisionRule(
                 Level: DecisionLevel.Must,
-                Keywords: ["必须", "强制", "需要"],
-                IsBlocking: true
+                Keywords: ["必须", "强制", "需要"]
             ),
 
             // MUST NOT: 明确禁止，阻断级别
             new DecisionRule(
                 Level: DecisionLevel.MustNot,
-                Keywords: ["禁止", "不得", "不允许"],
-                IsBlocking: true
+                Keywords: ["禁止", "不得", "不允许"]
             ),
 
             // SHOULD: 推荐建议，警告级别
             new DecisionRule(
                 Level: DecisionLevel.Should,
-                Keywords: ["应该", "建议", "推荐"],
-                IsBlocking: false
+                Keywords: ["应该", "建议", "推荐"]
             )
         ];
 
