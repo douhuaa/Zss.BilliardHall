@@ -6,6 +6,56 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 /// </summary>
 public sealed class RuleIdParserTests
 {
+    #region 数据源（物化避免延迟枚举）
+
+    public static IEnumerable<object[]> InvalidInputs { get; } = new List<object[]>
+    {
+        new object[] { null },
+        new object[] { "" },
+        new object[] { "   " },
+        new object[] { "invalid" },
+        new object[] { "ADR-" },
+        new object[] { "ADR" },
+        new object[] { "ADR-abc" },
+        new object[] { "abc_123" },
+        new object[] { "001" },
+        new object[] { "ADR-001" },
+    };
+
+    #endregion
+
+    #region 辅助断言
+
+    private static void AssertParsedResult(
+        ArchitectureRuleId result,
+        int expectedAdr,
+        int expectedRule,
+        int? expectedClause,
+        bool expectedIsRule,
+        bool expectedIsClause)
+    {
+        result.AdrNumber.Should().Be(expectedAdr);
+        result.RuleNumber.Should().Be(expectedRule);
+        result.ClauseNumber.Should().Be(expectedClause);
+        result.IsRule.Should().Be(expectedIsRule);
+        result.IsClause.Should().Be(expectedIsClause);
+    }
+
+    private static void AssertTryParseSuccess(
+        string input,
+        int expectedAdr,
+        int expectedRule,
+        int? expectedClause,
+        bool expectedIsRule,
+        bool expectedIsClause)
+    {
+        var success = RuleIdParser.TryParse(input, out var result);
+        success.Should().BeTrue($"TryParse 应成功解析 '{input}'");
+        AssertParsedResult(result, expectedAdr, expectedRule, expectedClause, expectedIsRule, expectedIsClause);
+    }
+
+    #endregion
+
     #region TryParse 测试（宽容模式）
 
     [Theory(DisplayName = "TryParse 应该正确解析下划线格式的 Rule ID")]
@@ -19,16 +69,7 @@ public sealed class RuleIdParserTests
         int expectedRule,
         int? expectedClause)
     {
-        // Act
-        var success = RuleIdParser.TryParse(input, out var result);
-
-        // Assert
-        success.Should().BeTrue();
-        result.AdrNumber.Should().Be(expectedAdr);
-        result.RuleNumber.Should().Be(expectedRule);
-        result.ClauseNumber.Should().Be(expectedClause);
-        result.IsRule.Should().BeTrue();
-        result.IsClause.Should().BeFalse();
+        AssertTryParseSuccess(input, expectedAdr, expectedRule, expectedClause, expectedIsRule: true, expectedIsClause: false);
     }
 
     [Theory(DisplayName = "TryParse 应该正确解析下划线格式的 Clause ID")]
@@ -42,16 +83,7 @@ public sealed class RuleIdParserTests
         int expectedRule,
         int expectedClause)
     {
-        // Act
-        var success = RuleIdParser.TryParse(input, out var result);
-
-        // Assert
-        success.Should().BeTrue();
-        result.AdrNumber.Should().Be(expectedAdr);
-        result.RuleNumber.Should().Be(expectedRule);
-        result.ClauseNumber.Should().Be(expectedClause);
-        result.IsRule.Should().BeFalse();
-        result.IsClause.Should().BeTrue();
+        AssertTryParseSuccess(input, expectedAdr, expectedRule, expectedClause, expectedIsRule: false, expectedIsClause: true);
     }
 
     [Theory(DisplayName = "TryParse 应该正确解析点号格式的 Rule ID（兼容旧格式）")]
@@ -65,15 +97,7 @@ public sealed class RuleIdParserTests
         int expectedRule,
         int? expectedClause)
     {
-        // Act
-        var success = RuleIdParser.TryParse(input, out var result);
-
-        // Assert
-        success.Should().BeTrue();
-        result.AdrNumber.Should().Be(expectedAdr);
-        result.RuleNumber.Should().Be(expectedRule);
-        result.ClauseNumber.Should().Be(expectedClause);
-        result.IsRule.Should().BeTrue();
+        AssertTryParseSuccess(input, expectedAdr, expectedRule, expectedClause, expectedIsRule: true, expectedIsClause: false);
     }
 
     [Theory(DisplayName = "TryParse 应该正确解析点号格式的 Clause ID（兼容旧格式）")]
@@ -87,35 +111,15 @@ public sealed class RuleIdParserTests
         int expectedRule,
         int expectedClause)
     {
-        // Act
-        var success = RuleIdParser.TryParse(input, out var result);
-
-        // Assert
-        success.Should().BeTrue();
-        result.AdrNumber.Should().Be(expectedAdr);
-        result.RuleNumber.Should().Be(expectedRule);
-        result.ClauseNumber.Should().Be(expectedClause);
-        result.IsClause.Should().BeTrue();
+        AssertTryParseSuccess(input, expectedAdr, expectedRule, expectedClause, expectedIsRule: false, expectedIsClause: true);
     }
 
     [Theory(DisplayName = "TryParse 应该对无效格式返回 false")]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("   ")]
-    [InlineData("invalid")]
-    [InlineData("ADR-")]
-    [InlineData("ADR")]
-    [InlineData("ADR-abc")]
-    [InlineData("abc_123")]
-    [InlineData("001")]  // 只有 ADR 编号，缺少 Rule
-    [InlineData("ADR-001")]  // 只有 ADR 编号，缺少 Rule
+    [MemberData(nameof(InvalidInputs))]
     public void TryParse_Should_Return_False_For_Invalid_Format(string? input)
     {
-        // Act
         var success = RuleIdParser.TryParse(input!, out var result);
-
-        // Assert
-        success.Should().BeFalse();
+        success.Should().BeFalse($"TryParse 应该失败解析 '{input ?? "null"}'");
         result.Should().Be(default(ArchitectureRuleId));
     }
 
@@ -126,13 +130,7 @@ public sealed class RuleIdParserTests
     [InlineData("adr001_1")]
     public void TryParse_Should_Be_Case_Insensitive(string input)
     {
-        // Act
-        var success = RuleIdParser.TryParse(input, out var result);
-
-        // Assert
-        success.Should().BeTrue();
-        result.AdrNumber.Should().Be(1);
-        result.RuleNumber.Should().Be(1);
+        AssertTryParseSuccess(input, expectedAdr: 1, expectedRule: 1, expectedClause: null, expectedIsRule: true, expectedIsClause: false);
     }
 
     #endregion
@@ -150,13 +148,8 @@ public sealed class RuleIdParserTests
         int expectedRule,
         int? expectedClause)
     {
-        // Act
         var result = RuleIdParser.ParseStrict(input);
-
-        // Assert
-        result.AdrNumber.Should().Be(expectedAdr);
-        result.RuleNumber.Should().Be(expectedRule);
-        result.ClauseNumber.Should().Be(expectedClause);
+        AssertParsedResult(result, expectedAdr, expectedRule, expectedClause, expectedIsRule: expectedClause is null, expectedIsClause: expectedClause is not null);
     }
 
     [Theory(DisplayName = "ParseStrict 应该对空字符串抛出 ArgumentException")]
@@ -165,28 +158,21 @@ public sealed class RuleIdParserTests
     [InlineData("   ")]
     public void ParseStrict_Should_Throw_For_Empty_Input(string? input)
     {
-        // Act
         var act = () => RuleIdParser.ParseStrict(input!);
-
-        // Assert
         act.Should().Throw<ArgumentException>()
             .WithMessage("*不能为空*")
             .And.ParamName.Should().Be("ruleId");
     }
 
     [Theory(DisplayName = "ParseStrict 应该对无效格式抛出 ArgumentException")]
-    [InlineData("invalid")]
-    [InlineData("ADR-")]
-    [InlineData("ADR")]
-    [InlineData("ADR-abc")]
-    [InlineData("abc_123")]
-    [InlineData("001")]  // 只有 ADR 编号
-    public void ParseStrict_Should_Throw_For_Invalid_Format(string input)
+    [MemberData(nameof(InvalidInputs))]
+    public void ParseStrict_Should_Throw_For_Invalid_Format(string? input)
     {
-        // Act
-        var act = () => RuleIdParser.ParseStrict(input);
+        // 过滤掉空输入用不同的测试来断言
+        if (string.IsNullOrWhiteSpace(input))
+            return;
 
-        // Assert
+        var act = () => RuleIdParser.ParseStrict(input!);
         act.Should().Throw<ArgumentException>()
             .WithMessage("*无效的 RuleId 格式*")
             .And.ParamName.Should().Be("ruleId");
@@ -203,26 +189,14 @@ public sealed class RuleIdParserTests
     [InlineData("907.3.2")]
     public void IsValidRuleId_Should_Return_True_For_Valid_RuleId(string input)
     {
-        // Act
-        var result = RuleIdParser.IsValidRuleId(input);
-
-        // Assert
-        result.Should().BeTrue();
+        RuleIdParser.IsValidRuleId(input).Should().BeTrue();
     }
 
     [Theory(DisplayName = "IsValidRuleId 应该对无效 RuleId 返回 false")]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("invalid")]
-    [InlineData("ADR-")]
-    [InlineData("001")]
+    [MemberData(nameof(InvalidInputs))]
     public void IsValidRuleId_Should_Return_False_For_Invalid_RuleId(string? input)
     {
-        // Act
-        var result = RuleIdParser.IsValidRuleId(input!);
-
-        // Assert
-        result.Should().BeFalse();
+        RuleIdParser.IsValidRuleId(input!).Should().BeFalse();
     }
 
     #endregion
@@ -235,11 +209,9 @@ public sealed class RuleIdParserTests
     [InlineData("907.3.2")]
     public void TryParse_And_ParseStrict_Should_Return_Same_Result(string input)
     {
-        // Act
         var tryParseSuccess = RuleIdParser.TryParse(input, out var tryParseResult);
         var strictResult = RuleIdParser.ParseStrict(input);
 
-        // Assert
         tryParseSuccess.Should().BeTrue();
         tryParseResult.Should().Be(strictResult);
     }
@@ -252,10 +224,7 @@ public sealed class RuleIdParserTests
     public void Parsed_Result_Should_Correctly_Identify_IsRule_And_IsClause(
         string input, bool expectedIsRule, bool expectedIsClause)
     {
-        // Arrange & Act
         var result = RuleIdParser.ParseStrict(input);
-
-        // Assert
         result.IsRule.Should().Be(expectedIsRule);
         result.IsClause.Should().Be(expectedIsClause);
     }
