@@ -33,7 +33,7 @@ public static class RuleSetRegistry
     /// - 纯 1-3 位数字（如 001, 1）
     /// 不匹配：ADR0001（4位数字）, ADR.001（错误分隔符）
     /// </summary>
-    private static readonly Regex AdrPattern = new(@"^(ADR-?)?\d{1,3}$", RegexOptions.IgnoreCase);
+    private static readonly Regex AdrPattern = new(@"^(ADR-?)?\d{1,3}$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     /// <summary>
     /// 所有已注册的规则集
