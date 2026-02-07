@@ -106,10 +106,11 @@ public static partial class ArchitectureTestSpecification
         }
 
         /// <summary>
-        /// 从自然语言文本中解析裁决语义（旧版API，兼容性保留）
+        /// 从自然语言文本中解析裁决语义（Legacy API）
         /// 
-        /// ⚠️ 已废弃：此方法将在未来版本中移除
-        /// 请使用：ParseToDecision() 代替
+        /// ⚠️ Legacy API：此为旧版本兼容方法，保留用于向后兼容
+        /// 
+        /// 新代码请使用：ParseToDecision() 返回 DecisionParseResult
         /// 
         /// 解析规则：
         /// 1. 按照 Rules 定义的顺序依次匹配
@@ -123,10 +124,11 @@ public static partial class ArchitectureTestSpecification
         /// - 默认为非裁决、不可阻断
         /// - 词边界识别避免误判（如"需要性"不匹配"需要"）
         /// - 否定上下文排除避免误判（如"应该避免"不匹配"应该"）
+        /// 
+        /// 迁移路径：使用 ParseToDecision() 代替，计划在 v3.0 移除
         /// </summary>
         /// <param name="sentence">要解析的文本</param>
         /// <returns>解析出的裁决结果</returns>
-        [Obsolete("请使用 ParseToDecision() 代替。此方法将在未来版本中移除。")]
         public static DecisionResult Parse(string sentence)
         {
             if (string.IsNullOrWhiteSpace(sentence))

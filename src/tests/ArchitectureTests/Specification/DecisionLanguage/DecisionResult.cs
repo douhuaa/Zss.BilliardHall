@@ -41,21 +41,26 @@ public sealed record DecisionExecutionResult(
     bool IsBlocking);
 
 /// <summary>
-/// 裁决解析结果（兼容性保留）
+/// 裁决解析结果（向后兼容API）
 /// 
-/// ⚠️ 已废弃：此类型将在未来版本中移除
-/// 请使用：
-/// - DecisionParseResult：用于解析场景
-/// - DecisionExecutionResult：用于执行场景
+/// ⚠️ Legacy API：此为旧版本兼容层
 /// 
-/// 原因：
-/// - 混合了"解析状态"和"业务状态"两种不同层级的概念
-/// - Level == null 是"解析状态"（未识别），不是"业务状态"
-/// - 拆分后更符合单一职责原则
+/// 新代码请使用：
+/// - DecisionParseResult：用于解析场景（纯解析，无执行策略）
+/// - DecisionExecutionResult：用于执行场景（包含阻断策略）
+/// 
+/// 保留原因：
+/// - 维护向后兼容性
+/// - 现有测试依赖此API
+/// - 计划在v3.0版本移除
+/// 
+/// 迁移路径：
+/// 1. 解析场景：使用 DecisionParseResult
+/// 2. 执行场景：先Parse得到Level，再构造ExecutionResult
+/// 3. 测试代码：逐步迁移到新API
 /// </summary>
 /// <param name="Level">解析出的裁决级别</param>
 /// <param name="IsBlocking">是否阻断构建/CI</param>
-[Obsolete("请使用 DecisionParseResult（解析场景）或 DecisionExecutionResult（执行场景）代替。此类型将在未来版本中移除。")]
 public sealed record DecisionResult(
     DecisionLevel? Level,
     bool IsBlocking
