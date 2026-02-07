@@ -83,7 +83,10 @@ public sealed class TestPerformanceMonitoringExample
         TestPerformanceCollector.ExportToJson(outputPath);
 
         // 验证文件已创建
-        File.Exists(outputPath).Should().BeTrue();
+        File.Exists(outputPath).Should().BeTrue(
+            $"性能数据 JSON 文件应该被创建\n" +
+            $"预期路径：{outputPath}\n" +
+            $"如果文件不存在，请检查 TestPerformanceCollector.ExportToJson() 方法的实现");
 
         // 清理
         File.Delete(outputPath);

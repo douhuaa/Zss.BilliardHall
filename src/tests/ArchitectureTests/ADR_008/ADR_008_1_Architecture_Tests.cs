@@ -73,8 +73,6 @@ public sealed class ADR_008_1_Architecture_Tests
             // ADR 应该包含 Decision 章节
             content.Should().Contain("## Decision", message);
         }
-
-        true.Should().BeTrue("ADR-008_1_2 验证通过");
     }
 
     [Fact(DisplayName = "ADR-008_1_3: 非 ADR 文档不得定义架构规则")]
