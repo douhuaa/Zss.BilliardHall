@@ -45,37 +45,6 @@
 
 ---
 
-#### 2. 工作总结 ⭐️
-**文件**：[adr-synchronization-summary.md](adr-synchronization-summary.md)
-
-**内容概要**：
-- Phase 1-2 完成工作总结
-- 核心发现和验证结果
-- 自动化改进建议
-- 下一步行动计划
-
-**适用读者**：所有项目相关人员
-
-**篇幅**：约 300 行
-
----
-
-#### 3. 整改路线图 ⭐️
-**文件**：[adr-synchronization-roadmap.md](adr-synchronization-roadmap.md)
-
-**内容概要**：
-- Mermaid Gantt 图可视化时间线
-- 问题优先级矩阵
-- 每周检查点和成功标准
-- 进度追踪表格
-- 风险管理和资源需求
-
-**适用读者**：项目管理者、团队协调者
-
-**篇幅**：约 400 行
-
----
-
 ### 工具文档
 
 #### 4. 验证工具 README ⭐️
@@ -311,13 +280,10 @@ python3 ./scripts/validate-adr-relationships.py
 ### 对于架构师/项目经理
 
 1. **了解全局**
-   - 阅读：[工作总结](adr-synchronization-summary.md)（15分钟）
-   - 阅读：[整改路线图](adr-synchronization-roadmap.md)（15分钟）
-
-2. **深入分析**
    - 阅读：[详细分析报告](adr-synchronization-analysis-2026-01-29.md)（1小时）
+   - 查看：[ADR 对齐执行计划](../ADR-ALIGNMENT-EXECUTION-PLAN.md)
 
-3. **制定计划**
+2. **制定计划**
    - 确认优先级和时间表
    - 分配资源和责任人
    - 设置检查点
@@ -436,11 +402,11 @@ python3 ./scripts/validate-adr-relationships.py
 # 详细分析
 cat docs/reports/adr-synchronization-analysis-2026-01-29.md
 
-# 工作总结
-cat docs/reports/adr-synchronization-summary.md
+# ADR 对齐执行计划
+cat docs/ADR-ALIGNMENT-EXECUTION-PLAN.md
 
-# 路线图
-cat docs/reports/adr-synchronization-roadmap.md
+# 断言消息迁移最终报告
+cat docs/reports/assertion-message-migration-final-report.md
 ```
 
 ### 统计 ADR

@@ -690,7 +690,7 @@ version: "X.0"    # 主版本号 +1
 ## References（非裁决性参考）
 
 - ADR-907 v2.0（2026-02-02）
-- 原对齐指南文档（docs/ADR-907-ALIGNMENT-GUIDE.md）
+- 原对齐指南文档（已升级为本 ADR）
 - GitHub Issue #241 评审反馈
 
 ---

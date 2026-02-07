@@ -408,8 +408,9 @@ ls docs/adr  # 应显示 ADR 文件
 
 ### 核心文档
 - 📘 [ADR 同步性详细分析报告](adr-synchronization-analysis-2026-01-29.md) - 42 处问题详解
-- 📘 [整改路线图](adr-synchronization-roadmap.md) - Gantt 图和时间表
-- 📘 [工作总结](adr-synchronization-summary.md) - Phase 1-2 成果
+- 📘 [ADR 同步性整改项目索引](ADR-SYNCHRONIZATION-INDEX.md) - 项目总览
+- 📘 [ADR 对齐执行计划](../ADR-ALIGNMENT-EXECUTION-PLAN.md) - 执行计划和路线图
+- 📘 [断言消息迁移最终报告](assertion-message-migration-final-report.md) - 断言迁移结果
 
 ### 相关 ADR
 - 📘 [ADR-902: ADR 标准模板](../adr/governance/ADR-902-adr-template-structure-contract.md)

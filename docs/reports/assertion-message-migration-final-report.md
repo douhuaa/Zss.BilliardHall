@@ -269,7 +269,6 @@ result.IsSuccessful.Should().BeTrue(message);
 - [断言消息模板使用指南](./ASSERTION-MESSAGE-TEMPLATE-USAGE.md)
 - [架构测试编写指南](./ARCHITECTURE-TEST-GUIDELINES.md)
 - [第一阶段重构报告](./assertion-message-refactoring-report.md)
-- [迁移总结报告](./assertion-message-migration-summary.md)
 
 ---
 

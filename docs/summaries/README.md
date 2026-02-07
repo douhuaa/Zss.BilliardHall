@@ -31,7 +31,6 @@
 - [Copilot 治理实施](copilot-governance-implementation.md)
 - [治理层 ADR 改进实施](governance-adr-improvement-implementation.md)
 - [PR 审查失败分析](pr-review-failure-analysis.md)
-- [PR 自检报告](PR-SELF-CHECK-REPORT.md)
 
 ### 文档
 - [文档结构优化](documentation-structure-optimization-summary.md)
@@ -39,13 +38,8 @@
 
 ### PR 记录
 - [PR#126 完成总结](pr126-todo-completion-summary.md)
-- [PR#176 ADR 关系修复](pr176-adr-relationship-fixes-summary.md)
-- [PR#176 继续工作](pr176-continuation-summary.md)
-- [PR#176 工作继续](pr176-continue-work-summary.md)
-- [PR#176 修复路线图](pr176-fix-roadmap.md)
 - [PR#176 最终完成](pr176-final-completion-summary.md)
 - [PR#176 最终总结](pr176-final-summary.md)
-- [PR#176 验证脚本修复](pr176-verification-scripts-fixed.md)
 
 ### 自动化
 - [脚本 JSON 对齐实施](script-json-alignment-implementation.md)

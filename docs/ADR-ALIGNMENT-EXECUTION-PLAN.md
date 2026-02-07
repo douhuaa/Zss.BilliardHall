@@ -212,7 +212,7 @@
   - ✅ 修复ADR-900测试：支持3位和4位数字的ADR编号格式
   - ⚠️ 剩余9个测试失败（文档格式和旧测试系统兼容性问题）
   - ⏸️ 13 个 ADR 待后续阶段对齐
-- **验证报告**：[阶段 5 验证报告](./reports/phase-5-validation-report.md)
+- **执行报告**：[阶段 5 执行总结](./reports/phase-5-execution-summary-2026-02-05.md)
 
 **Agent 职责分工**：
 

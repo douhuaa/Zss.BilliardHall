@@ -306,7 +306,7 @@ primary_enforcement: L2
 ## 参考资料
 
 - [ADR-902：ADR 标准模板与结构契约](../../../docs/adr/governance/ADR-902-adr-template-structure-contract.md)
-- [ADR-907：ADR 对齐执行标准](../../../docs/ADR-907-ALIGNMENT-GUIDE.md)
+- [ADR-907-A：ADR-907 对齐执行标准](../../../docs/adr/governance/adr-907-a-adr-alignment-execution-standard.md)
 - [ADR-008：文档编写与维护宪法](../../../docs/adr/constitutional/ADR-008-documentation-governance-constitution.md)
 - [ADR 模板](../../../docs/templates/adr-template.md)
 

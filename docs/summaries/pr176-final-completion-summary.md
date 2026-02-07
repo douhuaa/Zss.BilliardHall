@@ -247,8 +247,7 @@ C# 分析 → JSON 报告 → Python 修复 → Bash 验证
 
 ## 📚 相关文档
 
-- **详细修复过程**：`docs/summaries/pr176-adr-relationship-fixes-summary.md`
-- **原始continuation总结**：`docs/summaries/pr176-continuation-summary.md`
+- **PR #176 最终总结**：`docs/summaries/pr176-final-summary.md`
 - **ADR-940**：关系与溯源管理宪法
 - **ADR-980**：生命周期一体化同步机制
 - **ADR-006**：术语与编号宪法

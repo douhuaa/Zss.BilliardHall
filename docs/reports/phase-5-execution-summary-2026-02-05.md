@@ -159,7 +159,6 @@
 
 **相关文档**：
 - ADR-ALIGNMENT-EXECUTION-PLAN.md
-- phase-5-validation-report.md
 - test-failures-tracking.md
 
 ---

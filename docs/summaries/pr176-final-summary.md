@@ -258,7 +258,7 @@
 ## 📚 相关文档
 
 - [P0 实施总结](./p0-adr-implementation-summary.md) - 原始 PR #176
-- [PR #176 继续工作总结](./pr176-continuation-summary.md) - 工作过程
+- [PR #176 最终完成总结](./pr176-final-completion-summary.md) - 项目完成详情
 - [ADR-940](../adr/governance/ADR-940-adr-relationship-traceability-management.md) - 关系声明规范
 - [ADR-980](../adr/governance/ADR-980-adr-lifecycle-synchronization.md) - 版本同步规范
 
