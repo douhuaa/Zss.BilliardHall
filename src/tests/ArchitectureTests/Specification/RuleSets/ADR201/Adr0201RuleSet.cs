@@ -1,6 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0201;
-
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR201;
 
 /// <summary>
 /// ADR-201：Handler 生命周期管理

@@ -1,7 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
-
 /// <summary>
 /// ArchitectureRuleSet 的单元测试
 /// 验证规则集管理功能

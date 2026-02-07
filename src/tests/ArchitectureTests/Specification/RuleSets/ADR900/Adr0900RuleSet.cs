@@ -1,6 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0900;
-
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR900;
 
 /// <summary>
 /// ADR-900：架构测试与 CI 治理元规则

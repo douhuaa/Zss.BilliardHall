@@ -1,19 +1,17 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR001;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR002;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR003;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR120;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR201;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR900;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
 
-using System.Text.RegularExpressions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0001;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0002;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0003;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0120;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0201;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0900;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0907;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 
 /// <summary>
 /// 规则集注册表
 /// 架构测试、CLI、CI、Analyzer 的唯一规则集访问入口
-/// 
+///
 /// 设计原则：
 /// 1. 测试禁止直接 new RuleSet()，必须通过 Registry 获取
 /// 2. 提供统一的规则集查询和访问接口
@@ -56,11 +54,11 @@ public static class RuleSetRegistry
 
     /// <summary>
     /// 根据 ADR 编号获取规则集（严格模式）
-    /// 
+    ///
     /// 与 Get() 的区别：
     /// - Get()：宽容模式，不存在时返回 null（适用于探索性查询）
     /// - GetStrict()：严格模式，不存在时抛出异常（适用于测试/CI/Analyzer）
-    /// 
+    ///
     /// 设计原则：
     /// - RuleId 是裁决系统的"法律编号"，不是用户输入
     /// - 在测试、CI、Analyzer 场景中，无效 RuleId = 架构错误
@@ -109,22 +107,22 @@ public static class RuleSetRegistry
 
     /// <summary>
     /// 根据 ADR 编号字符串获取规则集（严格模式）
-    /// 
+    ///
     /// 与 Get() 的区别：
     /// - Get()：宽容模式，格式错误或不存在时返回 null
     /// - GetStrict()：严格模式，格式错误或不存在时抛出异常
-    /// 
+    ///
     /// 支持的格式：
     /// - "ADR-001" 或 "ADR-1"（推荐格式）
     /// - "001" 或 "1"（简化格式）
     /// - "ADR001"（无分隔符格式，仅限 1-3 位数字）
-    /// 
+    ///
     /// 不支持的格式：
     /// - "ADR0001"（4位数字）
     /// - "0001"（4位数字）
     /// - "ADR.001"（错误分隔符）
     /// - 其他非标准格式
-    /// 
+    ///
     /// 设计原则：
     /// - RuleId 是裁决系统的"法律编号"，不是用户输入
     /// - 在测试、CI、Analyzer 场景中，格式错误 = 架构错误

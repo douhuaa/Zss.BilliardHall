@@ -1,6 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0002;
-
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR002;
 
 /// <summary>
 /// ADR-002：Platform/Application/Host 启动引导

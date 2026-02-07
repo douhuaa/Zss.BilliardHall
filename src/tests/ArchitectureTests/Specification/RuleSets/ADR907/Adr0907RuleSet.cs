@@ -1,6 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0907;
-
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
 
 /// <summary>
 /// ADR-907：ArchitectureTests 执法治理体系

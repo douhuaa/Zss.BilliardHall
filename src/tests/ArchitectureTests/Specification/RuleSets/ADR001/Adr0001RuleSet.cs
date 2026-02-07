@@ -1,6 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0001;
-
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR001;
 
 /// <summary>
 /// ADR-001：模块化单体与垂直切片架构

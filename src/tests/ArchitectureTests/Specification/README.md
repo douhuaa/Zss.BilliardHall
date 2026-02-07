@@ -26,8 +26,7 @@
 ```
 /Specification
 ├── ArchitectureTestSpecification.cs    # 根聚合（统一入口）
-├── _ArchitectureRules.cs                # 向后兼容层
-├── _DecisionLanguage.cs                 # DecisionLanguage 聚合
+├── _Adr.cs                              # ADR 规范定义
 │
 ├── /DecisionLanguage                    # 语义宪法层
 │   ├── DecisionLevel.cs                 # 裁决级别（MUST/MUST_NOT/SHOULD）
@@ -36,19 +35,19 @@
 │   └── README.md
 │
 ├── /RuleSets                            # 规则集定义（按 ADR 拆分）
-│   ├── /ADR0001
+│   ├── /ADR001
 │   │   └── Adr0001RuleSet.cs           # ADR-001 的规则集
-│   ├── /ADR0002
+│   ├── /ADR002
 │   │   └── Adr0002RuleSet.cs           # ADR-002 的规则集
-│   ├── /ADR0003
+│   ├── /ADR003
 │   │   └── Adr0003RuleSet.cs           # ADR-003 的规则集
-│   ├── /ADR0120
+│   ├── /ADR120
 │   │   └── Adr0120RuleSet.cs           # ADR-120 的规则集
-│   ├── /ADR0201
+│   ├── /ADR201
 │   │   └── Adr0201RuleSet.cs           # ADR-201 的规则集
-│   ├── /ADR0900
+│   ├── /ADR900
 │   │   └── Adr0900RuleSet.cs           # ADR-900 的规则集
-│   └── /ADR0907
+│   └── /ADR907
 │       └── Adr0907RuleSet.cs           # ADR-907 的规则集
 │
 ├── /Index                               # 规则集索引层
@@ -65,7 +64,7 @@
 │   └── RuleLevel.cs                     # 规则层级
 │
 └── /Tests                               # Specification 自身的测试
-    ├── ArchitectureRulesTests.cs
+    ├── RuleSetRegistryTests.cs
     ├── DecisionLanguageTests.cs
     └── ...
 ```
@@ -113,7 +112,7 @@ var result = ArchitectureTestSpecification.DecisionLanguage.Parse("模块必须�
 
 **示例**：
 ```csharp
-// /RuleSets/ADR0001/Adr0001RuleSet.cs
+// /RuleSets/ADR001/Adr0001RuleSet.cs
 public static class Adr0001RuleSet
 {
     public const int AdrNumber = 1;
@@ -178,8 +177,6 @@ var governance = RuleSetRegistry.GetGovernanceRuleSets();
 
 ### 在架构测试中使用
 
-**✅ 推荐方式（新代码）**：
-
 ```csharp
 [Fact]
 public void ADR_001_1_1_模块按业务能力独立划分()
@@ -197,25 +194,12 @@ public void ADR_001_1_1_模块按业务能力独立划分()
 }
 ```
 
-**⚠️ 兼容方式（旧代码）**：
-
-```csharp
-[Fact]
-public void ADR_001_1_1_模块按业务能力独立划分()
-{
-    // 旧方式仍然可用，但建议迁移
-    var ruleSet = ArchitectureTestSpecification.ArchitectureRules.Adr001;
-    // ...
-}
-```
-
 ### 添加新的 ADR 规则集
 
 1. 在 `/RuleSets/` 下创建新目录：`ADR{编号}/`
 2. 创建规则集文件：`Adr{编号}RuleSet.cs`
 3. 定义规则集类（参考现有 RuleSet）
 4. 在 `RuleSetRegistry.BuildRegistry()` 中注册
-5. （可选）在 `_ArchitectureRules.cs` 中添加向后兼容属性
 
 ### 查询规则集
 
@@ -235,31 +219,6 @@ var constitutional = RuleSetRegistry.GetBySeverity(RuleSeverity.Constitutional);
 
 // 按作用域获取
 var moduleRules = RuleSetRegistry.GetByScope(RuleScope.Module);
-```
-
-## 迁移指南
-
-### 从旧方式迁移到新方式
-
-**旧代码**：
-```csharp
-var ruleSet = new ArchitectureRuleSet(1);
-ruleSet.AddRule(...);
-```
-
-**新代码**：
-```csharp
-// 定义在 /RuleSets/ADR0001/Adr0001RuleSet.cs
-public static class Adr0001RuleSet
-{
-    public static ArchitectureRuleSet RuleSet => LazyRuleSet.Value;
-    // ...
-}
-
-// 使用
-var ruleSet = RuleSetRegistry.Get(1);
-// 或
-var ruleSet = Adr0001RuleSet.RuleSet;
 ```
 
 ## 未来扩展
@@ -288,10 +247,10 @@ var ruleSet = Adr0001RuleSet.RuleSet;
 
 ## 参考文档
 
-- [ADR-900: 架构测试与 CI 治理元规则](../../../docs/adr/ADR-900.md)
-- [ADR-905: 执行级别分类](../../../docs/adr/ADR-905.md)
-- [ADR-907: ArchitectureTests 执法治理体系](../../../docs/adr/ADR-907.md)
-- [ADR-907-A: RuleId 格式规范](../../../docs/adr/ADR-907-A.md)
+- [ADR-900: 架构测试与 CI 治理元规则](../../../docs/adr/governance/ADR-900-architecture-tests.md)
+- [ADR-905: 执行级别分类](../../../docs/adr/governance/ADR-905-enforcement-level-classification.md)
+- [ADR-907: ArchitectureTests 执法治理体系](../../../docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md)
+- [ADR-907-A: RuleId 格式规范](../../../docs/adr/governance/ADR-907-a-alignment-checklist.md)
 
 ## 常见问题
 
@@ -306,10 +265,6 @@ A:
 - 当有 100+ ADR 时，单文件会变得难以维护
 - 独立文件便于代码审查和版本控制
 - 便于并行开发，减少合并冲突
-
-### Q: 旧代码需要立即迁移吗？
-A: 
-不需要。旧 API（`ArchitectureRules.AdrXXX`）会一直保留，保证向后兼容。但建议新代码使用 `RuleSetRegistry`。
 
 ### Q: 如何验证规则集是否正确注册？
 A:
