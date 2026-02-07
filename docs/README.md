@@ -112,14 +112,6 @@ graph LR
   - [ADR-004: 中央包管理与层级依赖规则](adr/ADR-004-Cpm-Final.md)
   - [ADR-005: 应用内交互模型与执行边界](adr/ADR-005-Application-Interaction-Model-Final.md)
 
-### 改进总结
-
-- **[改进总结目录](summaries/README.md)** - 项目改进历程和经验总结（扁平化结构）
-  - 架构改进 - ADR 重组、编号优化
-  - 测试改进 - 架构测试体系升级
-  - 治理改进 - 不符合记录管理、Copilot 治理
-  - 文档改进 - 文档结构优化
-
 ## 模块文档
 
 ### 业务模块

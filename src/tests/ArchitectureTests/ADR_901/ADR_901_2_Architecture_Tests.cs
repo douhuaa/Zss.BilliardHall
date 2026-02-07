@@ -195,7 +195,7 @@ public sealed class ADR_901_2_Architecture_Tests
             "测试类缺少测试方法",
             "测试类中没有测试方法",
             "ADR-901 测试类应包含验证三态判定模型的测试方法",
-            TestConstants.Adr007Path);
+            ArchitectureTestSpecification.Adr.KnownDocuments.Adr007);
 
         methods.Should().NotBeEmpty(methodsMessage);
     }

@@ -137,8 +137,8 @@ public static class FileSystemTestHelper
         bool excludeChecklist = true)
     {
         var adrPath = subfolder != null
-            ? GetAbsolutePath(Path.Combine(TestConstants.AdrDocsPath, subfolder))
-            : GetAbsolutePath(TestConstants.AdrDocsPath);
+            ? GetAbsolutePath(Path.Combine(ArchitectureTestSpecification.Adr.Paths.Root, subfolder))
+            : GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Root);
 
         if (!Directory.Exists(adrPath))
         {
@@ -166,7 +166,7 @@ public static class FileSystemTestHelper
     /// <returns>Agent 文件路径列表</returns>
     public static IEnumerable<string> GetAgentFiles(bool includeSystemAgents = false, bool excludeGuardian = false)
     {
-        var agentPath = GetAbsolutePath(TestConstants.AgentFilesPath);
+        var agentPath = GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.AgentFiles);
 
         if (!Directory.Exists(agentPath))
         {

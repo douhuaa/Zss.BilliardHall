@@ -67,7 +67,7 @@ public sealed class ADR_946_1_Architecture_Tests
                 "所有语义块（如 Decision、Relationships）使用 ## 级别",
                 "检查是否有误将语义块标题设置为 # 级别"
             },
-            adrReference: TestConstants.Adr946Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr946);
 
         violations.Should().BeEmpty(message);
     }
@@ -105,7 +105,7 @@ public sealed class ADR_946_1_Architecture_Tests
                 // 只在非代码块中检查语义块标题
                 if (!inCodeBlock)
                 {
-                    foreach (var semanticHeading in TestConstants.KeySemanticHeadings)
+                    foreach (var semanticHeading in ArchitectureTestSpecification.Semantics.RequiredHeadings)
                     {
                         // 检查是否是 ## 级别的关键语义块
                         // 使用严格匹配：## <语义块名称>（中文或英文，可能带括号）
@@ -149,7 +149,7 @@ public sealed class ADR_946_1_Architecture_Tests
                 "确保每个关键语义块在文件中只出现一次",
                 "模板/示例中的语义块应使用 ### 或更低级别，并带有 'Example' 等标识"
             },
-            adrReference: TestConstants.Adr946Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr946);
 
         violations.Should().BeEmpty(message);
     }

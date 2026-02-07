@@ -48,6 +48,24 @@ public static class TestEnvironment
     public static string HostPath => Path.Combine(SourceRoot, "Host");
 
     /// <summary>
+    /// 获取构建配置（Debug/Release）
+    /// </summary>
+    public static string BuildConfiguration =>
+        Environment.GetEnvironmentVariable("Configuration") ?? "Debug";
+
+    /// <summary>
+    /// 支持的目标框架（按优先级排序）
+    /// </summary>
+    public static readonly string[] SupportedTargetFrameworks =
+    {
+        "net10.0",
+        "net8.0",
+        "net7.0",
+        "net6.0",
+        "net5.0"
+    };
+
+    /// <summary>
     /// 查找仓库根目录的核心逻辑
     /// 通过查找 Zss.BilliardHall.slnx 文件来确定根目录
     /// </summary>

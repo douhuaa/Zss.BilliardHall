@@ -38,7 +38,7 @@ public sealed class ADR_907_1_Architecture_Tests
                 "ArchitectureTests 是 ADR 的唯一自动化执法形式",
                 "所有可执法的架构规则必须通过 ArchitectureTests 验证"
             },
-            adrReference: TestConstants.Adr907Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr907);
 
         Directory.Exists(testsDirectory).Should().BeTrue(directoryMessage);
 
@@ -54,7 +54,7 @@ public sealed class ADR_907_1_Architecture_Tests
                 "配置为测试项目，引用 xUnit 和 NetArchTest.Rules",
                 "确保项目命名格式：<SolutionName>.Tests.Architecture"
             },
-            adrReference: TestConstants.Adr907Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr907);
 
         File.Exists(projectFile).Should().BeTrue(fileMessage);
 
@@ -71,7 +71,7 @@ public sealed class ADR_907_1_Architecture_Tests
                     "测试可使用：文件系统扫描、Roslyn、Reflection、NetArchTest",
                     "测试文件命名：ADR_<编号>_Architecture_Tests.cs"
                 },
-                adrReference: TestConstants.Adr907Path));
+                adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr907));
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public sealed class ADR_907_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907_1_2: 具备裁决力的 ADR 必须有测试或声明 Non-Enforceable")]
     public void ADR_907_1_2_ADRs_Must_Have_Tests_Or_Be_Non_Enforceable()
     {
-        var adrDocsDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        var adrDocsDirectory = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Root);
         var testsDirectory = FileSystemTestHelper.GetAbsolutePath(AdrTestsPath);
 
         Directory.Exists(adrDocsDirectory).Should().BeTrue($"❌ ADR-907_1_2 无法执行：ADR 文档目录不存在 {adrDocsDirectory}");
@@ -155,7 +155,7 @@ public sealed class ADR_907_1_Architecture_Tests
     [Fact(DisplayName = "ADR-907_1_3: 禁止仅文档约束的架构规则")]
     public void ADR_907_1_3_No_Documentation_Only_Rules_Allowed()
     {
-        var adrDocsDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        var adrDocsDirectory = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Root);
 
         Directory.Exists(adrDocsDirectory).Should().BeTrue($"❌ ADR-907_1_3 无法执行：ADR 文档目录不存在 {adrDocsDirectory}");
 

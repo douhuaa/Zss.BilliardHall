@@ -22,7 +22,7 @@ public sealed class ADR_965_2_Architecture_Tests
     [Fact(DisplayName = "ADR-965_2_1: 必须包含可视化学习路径图")]
     public void ADR_965_2_1_Must_Include_Visual_Learning_Path()
     {
-        var adr965Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr965Path);
+        var adr965Path = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         // 验证包含可视化路径图的说明
         var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
@@ -35,7 +35,7 @@ public sealed class ADR_965_2_Architecture_Tests
                 "说明路径图的目的和作用",
                 "提供路径图的创建指南"
             },
-            adrReference: TestConstants.Adr965Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         FileSystemTestHelper.AssertFileContains(adr965Path, "可视化学习路径图", missingMessage);
     }
@@ -47,7 +47,7 @@ public sealed class ADR_965_2_Architecture_Tests
     [Fact(DisplayName = "ADR-965_2_2: 必须定义路径图位置")]
     public void ADR_965_2_2_Path_Location_Must_Be_Defined()
     {
-        var adr965Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr965Path);
+        var adr965Path = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         // 验证定义了路径图位置
         var missingMessage = AssertionMessageBuilder.BuildContentMissingMessage(
@@ -60,7 +60,7 @@ public sealed class ADR_965_2_Architecture_Tests
                 "说明路径图位置选择的原因",
                 "提供路径图访问方式"
             },
-            adrReference: TestConstants.Adr965Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         FileSystemTestHelper.AssertFileContains(adr965Path, "docs/onboarding/README.md", missingMessage);
     }
@@ -72,7 +72,7 @@ public sealed class ADR_965_2_Architecture_Tests
     [Fact(DisplayName = "ADR-965_2_3: 必须使用 Mermaid 格式")]
     public void ADR_965_2_3_Must_Use_Mermaid_Format()
     {
-        var adr965Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr965Path);
+        var adr965Path = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         // 验证定义了 Mermaid 格式
         var missingMermaidMessage = AssertionMessageBuilder.BuildContentMissingMessage(
@@ -85,7 +85,7 @@ public sealed class ADR_965_2_Architecture_Tests
                 "解释选择 Mermaid 的原因",
                 "提供 Mermaid 使用指南"
             },
-            adrReference: TestConstants.Adr965Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         FileSystemTestHelper.AssertFileContains(adr965Path, "Mermaid", missingMermaidMessage);
 
@@ -100,7 +100,7 @@ public sealed class ADR_965_2_Architecture_Tests
                 "提供完整的 Mermaid 代码块",
                 "确保示例清晰易懂"
             },
-            adrReference: TestConstants.Adr965Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr965);
 
         FileSystemTestHelper.AssertFileContains(adr965Path, "```mermaid", missingExampleMessage);
     }

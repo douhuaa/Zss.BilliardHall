@@ -33,7 +33,7 @@ public sealed class ADR_905_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot;
         var warnings = new List<string>();
 
-        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Root);
 
         Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 
@@ -135,7 +135,7 @@ public sealed class ADR_905_1_Architecture_Tests
         var repoRoot = TestEnvironment.RepositoryRoot;
         var warnings = new List<string>();
 
-        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(TestConstants.AdrDocsPath);
+        var adrDirectory = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.Paths.Root);
 
         Directory.Exists(adrDirectory).Should().BeTrue($"未找到 ADR 文档目录：{adrDirectory}");
 

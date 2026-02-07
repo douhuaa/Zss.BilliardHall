@@ -17,7 +17,7 @@ public sealed class ADR_007_4_Architecture_Tests
             "测试类不存在",
             "ADR_007_4_Architecture_Tests 测试类缺失",
             "确保 ADR_007_4_Architecture_Tests 测试类存在",
-            TestConstants.Adr007Path);
+            ArchitectureTestSpecification.Adr.KnownDocuments.Adr007);
         
         testType.Should().NotBeNull(message);
 
@@ -42,7 +42,7 @@ public sealed class ADR_007_4_Architecture_Tests
             "测试类缺少测试方法",
             "测试类中没有测试方法",
             "添加验证 Prompts 与 ADR 维度对比的测试方法",
-            TestConstants.Adr007Path);
+            ArchitectureTestSpecification.Adr.KnownDocuments.Adr007);
 
         methods.Should().NotBeEmpty(message);
 
@@ -62,7 +62,7 @@ public sealed class ADR_007_4_Architecture_Tests
             testFile,
             "测试文件",
             new[] { "确保测试文件存在于 src/tests/ArchitectureTests/ADR_007/ 目录" },
-            TestConstants.Adr007Path);
+            ArchitectureTestSpecification.Adr.KnownDocuments.Adr007);
 
         File.Exists(testFile).Should().BeTrue(message);
 

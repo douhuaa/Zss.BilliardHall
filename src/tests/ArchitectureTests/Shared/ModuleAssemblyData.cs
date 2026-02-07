@@ -35,10 +35,10 @@ public sealed class ModuleAssemblyData : IEnumerable<object[]>
             return assemblies;
 
         // 支持通过环境变量切换配置（CI 可设置为 Release）
-        var configuration = TestConstants.BuildConfiguration;
+        var configuration = TestEnvironment.BuildConfiguration;
 
         // 常见 TFM 列表（优先按此顺序尝试）
-        var tfms = TestConstants.SupportedTargetFrameworks;
+        var tfms = TestEnvironment.SupportedTargetFrameworks;
 
         foreach (var moduleDir in Directory.GetDirectories(modulesDir))
         {

@@ -20,7 +20,7 @@ public sealed class ADR_960_2_Architecture_Tests
     [Fact(DisplayName = "ADR-960_2_1: Onboarding 必须遵循内容类型限制")]
     public void ADR_960_2_1_Onboarding_Must_Follow_Content_Type_Restrictions()
     {
-        var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
+        var adr960Path = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
             ruleId: "ADR-960_2_1",
@@ -31,7 +31,7 @@ public sealed class ADR_960_2_Architecture_Tests
                 "创建 ADR-960 文档",
                 "在文档中定义 Onboarding 的内容类型限制表"
             },
-            adrReference: TestConstants.Adr960Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
 
@@ -50,7 +50,7 @@ public sealed class ADR_960_2_Architecture_Tests
                 "表格应包含'内容类型'和'是否允许出现在 Onboarding'列",
                 "明确列出允许和禁止的内容类型"
             },
-            adrReference: TestConstants.Adr960Path,
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960,
             includeClauseReference: true);
 
         hasContentTypeTable.Should().BeTrue(tableMessage);
@@ -58,7 +58,7 @@ public sealed class ADR_960_2_Architecture_Tests
         // 验证表格包含关键内容类型限制
         var missingContentTypes = FileSystemTestHelper.GetMissingKeywords(
             adr960Path,
-            TestConstants.ProhibitedContentTypesInOnboarding,
+            ArchitectureTestSpecification.Onboarding.ProhibitedContent,
             ignoreCase: true);
 
         var contentTypeMessage = AssertionMessageBuilder.BuildWithViolations(
@@ -70,7 +70,7 @@ public sealed class ADR_960_2_Architecture_Tests
                 "在内容类型表中添加缺失的内容类型",
                 "确保所有禁止的内容类型都有明确的限制说明"
             },
-            adrReference: TestConstants.Adr960Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         missingContentTypes.Should().BeEmpty(contentTypeMessage);
     }
@@ -82,7 +82,7 @@ public sealed class ADR_960_2_Architecture_Tests
     [Fact(DisplayName = "ADR-960_2_2: Onboarding 必须遵循三个核心问题原则")]
     public void ADR_960_2_2_Onboarding_Must_Follow_Core_Principles()
     {
-        var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
+        var adr960Path = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
             ruleId: "ADR-960_2_2",
@@ -93,14 +93,14 @@ public sealed class ADR_960_2_Architecture_Tests
                 "创建 ADR-960 文档",
                 "在文档中定义 Onboarding 的三个核心问题"
             },
-            adrReference: TestConstants.Adr960Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
 
         // 验证定义了三个核心问题
         var missingQuestions = FileSystemTestHelper.GetMissingKeywords(
             adr960Path,
-            TestConstants.OnboardingCoreQuestions,
+            ArchitectureTestSpecification.Onboarding.CoreQuestions,
             ignoreCase: true);
 
         var message = AssertionMessageBuilder.BuildWithViolations(
@@ -114,7 +114,7 @@ public sealed class ADR_960_2_Architecture_Tests
                 "我先看什么（新人应该先阅读哪些文档）",
                 "我下一步去哪（后续学习路径）"
             },
-            adrReference: TestConstants.Adr960Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         missingQuestions.Should().BeEmpty(message);
     }

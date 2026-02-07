@@ -20,7 +20,7 @@ public sealed class ADR_960_4_Architecture_Tests
     [Fact(DisplayName = "ADR-960_4_1: Onboarding 维护规则必须已定义")]
     public void ADR_960_4_1_Onboarding_Maintenance_Rules_Must_Be_Defined()
     {
-        var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
+        var adr960Path = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
             ruleId: "ADR-960_4_1",
@@ -31,7 +31,7 @@ public sealed class ADR_960_4_Architecture_Tests
                 "创建 ADR-960 文档",
                 "在文档中定义 Onboarding 维护规则"
             },
-            adrReference: TestConstants.Adr960Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
 
@@ -58,7 +58,7 @@ public sealed class ADR_960_4_Architecture_Tests
                 "定义维护触发条件：当新的核心 Case 出现时",
                 "定义审计频率：至少每半年一次有效性审计"
             },
-            adrReference: TestConstants.Adr960Path,
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960,
             includeClauseReference: true);
 
         hasMaintenanceRules.Should().BeTrue(maintenanceMessage);
@@ -79,7 +79,7 @@ public sealed class ADR_960_4_Architecture_Tests
                 "明确定义审计频率：至少每半年一次",
                 "说明审计的内容和标准"
             },
-            adrReference: TestConstants.Adr960Path,
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960,
             includeClauseReference: true);
 
         hasSemiAnnualAudit.Should().BeTrue(auditMessage);
@@ -92,7 +92,7 @@ public sealed class ADR_960_4_Architecture_Tests
     [Fact(DisplayName = "ADR-960_4_2: Onboarding 失效处理机制必须已定义")]
     public void ADR_960_4_2_Onboarding_Deprecation_Mechanism_Must_Be_Defined()
     {
-        var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
+        var adr960Path = FileSystemTestHelper.GetAbsolutePath(ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
             ruleId: "ADR-960_4_2",
@@ -103,7 +103,7 @@ public sealed class ADR_960_4_Architecture_Tests
                 "创建 ADR-960 文档",
                 "在文档中定义 Onboarding 失效处理机制"
             },
-            adrReference: TestConstants.Adr960Path);
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960);
 
         File.Exists(adr960Path).Should().BeTrue(fileNotFoundMessage);
 
@@ -130,7 +130,7 @@ public sealed class ADR_960_4_Architecture_Tests
                 "禁止长期错误但'懒得改'的情况",
                 "建立内容审查和反馈机制"
             },
-            adrReference: TestConstants.Adr960Path,
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960,
             includeClauseReference: true);
 
         hasDeprecationProcess.Should().BeTrue(deprecationMessage);
@@ -156,7 +156,7 @@ public sealed class ADR_960_4_Architecture_Tests
                 "定义内容审查和更新的责任人",
                 "建立反馈和报告机制"
             },
-            adrReference: TestConstants.Adr960Path,
+            adrReference: ArchitectureTestSpecification.Adr.KnownDocuments.Adr960,
             includeClauseReference: true);
 
         forbidsOutdatedContent.Should().BeTrue(outdatedMessage);
