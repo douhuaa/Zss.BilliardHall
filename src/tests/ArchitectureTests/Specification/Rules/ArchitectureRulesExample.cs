@@ -1,3 +1,5 @@
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.DecisionLanguage;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 
 /// <summary>
@@ -19,6 +21,7 @@ public static class ArchitectureRulesExample
         ruleSet.AddRule(
             ruleNumber: 3,
             summary: "最小断言语义规范",
+            decision: DecisionLevel.Must,
             severity: RuleSeverity.Governance,
             scope: RuleScope.Test
         );
@@ -28,7 +31,8 @@ public static class ArchitectureRulesExample
             ruleNumber: 3,
             clauseNumber: 1,
             condition: "每个测试类至少包含1个有效断言",
-            enforcement: "通过静态分析验证断言数量"
+            enforcement: "通过静态分析验证断言数量",
+            executionType: ClauseExecutionType.StaticAnalysis
         );
 
         // 添加 Clause 3.2: 单一子规则映射
@@ -36,7 +40,8 @@ public static class ArchitectureRulesExample
             ruleNumber: 3,
             clauseNumber: 2,
             condition: "每个测试方法只能映射一个ADR子规则",
-            enforcement: "通过命名模式检查验证"
+            enforcement: "通过命名模式检查验证",
+            executionType: ClauseExecutionType.Convention
         );
 
         // 添加 Clause 3.3: 失败信息可溯源性
@@ -44,7 +49,8 @@ public static class ArchitectureRulesExample
             ruleNumber: 3,
             clauseNumber: 3,
             condition: "所有断言失败信息必须可反向溯源到ADR",
-            enforcement: "验证失败消息包含ADR引用、违规标记、修复建议和文档引用"
+            enforcement: "验证失败消息包含ADR引用、违规标记、修复建议和文档引用",
+            executionType: ClauseExecutionType.Convention
         );
 
         // 添加 Clause 3.4: 禁止形式化断言
@@ -52,7 +58,8 @@ public static class ArchitectureRulesExample
             ruleNumber: 3,
             clauseNumber: 4,
             condition: "明确禁止Assert.True(true)等形式化断言",
-            enforcement: "通过模式匹配检测形式化断言"
+            enforcement: "通过模式匹配检测形式化断言",
+            executionType: ClauseExecutionType.StaticAnalysis
         );
 
         return ruleSet;

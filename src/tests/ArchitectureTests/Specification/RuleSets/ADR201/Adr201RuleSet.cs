@@ -1,3 +1,5 @@
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.DecisionLanguage;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR201;
 
 /// <summary>
@@ -24,6 +26,7 @@ public sealed class Adr201RuleSet : IArchitectureRuleSetDefinition
         ruleSet.AddRule(
             ruleNumber: 1,
             summary: "Handler 注册规范",
+            decision: DecisionLevel.Must,
             severity: RuleSeverity.Technical,
             scope: RuleScope.Module);
 
@@ -31,13 +34,15 @@ public sealed class Adr201RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 1,
             clauseNumber: 1,
             condition: "Handler 必须通过 DI 容器注册",
-            enforcement: "验证 Handler 类型已注册到 IServiceCollection");
+            enforcement: "验证 Handler 类型已注册到 IServiceCollection",
+            executionType: ClauseExecutionType.Runtime);
 
         ruleSet.AddClause(
             ruleNumber: 1,
             clauseNumber: 2,
             condition: "Handler 生命周期必须为 Scoped",
-            enforcement: "验证 Handler 注册为 ServiceLifetime.Scoped");
+            enforcement: "验证 Handler 注册为 ServiceLifetime.Scoped",
+            executionType: ClauseExecutionType.Runtime);
 
         return ruleSet;
     });

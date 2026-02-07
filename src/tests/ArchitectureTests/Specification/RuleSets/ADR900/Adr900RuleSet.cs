@@ -1,3 +1,5 @@
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.DecisionLanguage;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR900;
 
 /// <summary>
@@ -24,6 +26,7 @@ public sealed class Adr900RuleSet : IArchitectureRuleSetDefinition
         ruleSet.AddRule(
             ruleNumber: 1,
             summary: "架构裁决权威性",
+            decision: DecisionLevel.Must,
             severity: RuleSeverity.Governance,
             scope: RuleScope.Test);
 
@@ -31,18 +34,21 @@ public sealed class Adr900RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 1,
             clauseNumber: 1,
             condition: "ADR 正文是唯一裁决依据",
-            enforcement: "验证 ADR 文档存在且包含唯一裁决源声明");
+            enforcement: "验证 ADR 文档存在且包含唯一裁决源声明",
+            executionType: ClauseExecutionType.Documentation);
 
         ruleSet.AddClause(
             ruleNumber: 1,
             clauseNumber: 2,
             condition: "架构违规的判定原则",
-            enforcement: "测试失败、CI Gate 失败、人工否决或破例过期均构成违规");
+            enforcement: "测试失败、CI Gate 失败、人工否决或破例过期均构成违规",
+            executionType: ClauseExecutionType.ManualReview);
 
         // Rule 2: 执行级别与测试映射
         ruleSet.AddRule(
             ruleNumber: 2,
             summary: "执行级别与测试映射",
+            decision: DecisionLevel.Must,
             severity: RuleSeverity.Governance,
             scope: RuleScope.Test);
 
@@ -50,18 +56,21 @@ public sealed class Adr900RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 2,
             clauseNumber: 1,
             condition: "执行级别分离原则",
-            enforcement: "所有规则必须归类为 L1/L2/L3");
+            enforcement: "所有规则必须归类为 L1/L2/L3",
+            executionType: ClauseExecutionType.Documentation);
 
         ruleSet.AddClause(
             ruleNumber: 2,
             clauseNumber: 2,
             condition: "ADR ↔ 测试 ↔ CI 的一一映射",
-            enforcement: "每个 L1 规则必须有对应的架构测试");
+            enforcement: "每个 L1 规则必须有对应的架构测试",
+            executionType: ClauseExecutionType.Convention);
 
         // Rule 3: 破例治理机制
         ruleSet.AddRule(
             ruleNumber: 3,
             summary: "破例治理机制",
+            decision: DecisionLevel.Must,
             severity: RuleSeverity.Governance,
             scope: RuleScope.Document);
 
@@ -69,18 +78,21 @@ public sealed class Adr900RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 3,
             clauseNumber: 1,
             condition: "破例强制要求",
-            enforcement: "所有破例必须通过 Issue 记录并设置到期时间");
+            enforcement: "所有破例必须通过 Issue 记录并设置到期时间",
+            executionType: ClauseExecutionType.ManualReview);
 
         ruleSet.AddClause(
             ruleNumber: 3,
             clauseNumber: 2,
             condition: "CI 自动监控机制",
-            enforcement: "CI 检查破例是否过期");
+            enforcement: "CI 检查破例是否过期",
+            executionType: ClauseExecutionType.StaticAnalysis);
 
         // Rule 4: 冲突裁决优先级
         ruleSet.AddRule(
             ruleNumber: 4,
             summary: "冲突裁决优先级",
+            decision: DecisionLevel.Must,
             severity: RuleSeverity.Governance,
             scope: RuleScope.Document);
 
@@ -88,7 +100,8 @@ public sealed class Adr900RuleSet : IArchitectureRuleSetDefinition
             ruleNumber: 4,
             clauseNumber: 1,
             condition: "裁决优先级顺序",
-            enforcement: "宪法层 > 治理层 > 技术层，新 ADR > 旧 ADR");
+            enforcement: "宪法层 > 治理层 > 技术层，新 ADR > 旧 ADR",
+            executionType: ClauseExecutionType.Documentation);
 
         return ruleSet;
     });
