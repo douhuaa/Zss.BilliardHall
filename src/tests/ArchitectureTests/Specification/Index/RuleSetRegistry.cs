@@ -2,13 +2,13 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 
 using System.Text.RegularExpressions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0001;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0002;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0003;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0120;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0201;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0900;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0907;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR001;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR002;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR003;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR120;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR201;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR900;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
 
 /// <summary>
 /// 规则集注册表

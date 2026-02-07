@@ -36,19 +36,19 @@
 │   └── README.md
 │
 ├── /RuleSets                            # 规则集定义（按 ADR 拆分）
-│   ├── /ADR0001
+│   ├── /ADR001
 │   │   └── Adr0001RuleSet.cs           # ADR-001 的规则集
-│   ├── /ADR0002
+│   ├── /ADR002
 │   │   └── Adr0002RuleSet.cs           # ADR-002 的规则集
-│   ├── /ADR0003
+│   ├── /ADR003
 │   │   └── Adr0003RuleSet.cs           # ADR-003 的规则集
-│   ├── /ADR0120
+│   ├── /ADR120
 │   │   └── Adr0120RuleSet.cs           # ADR-120 的规则集
-│   ├── /ADR0201
+│   ├── /ADR201
 │   │   └── Adr0201RuleSet.cs           # ADR-201 的规则集
-│   ├── /ADR0900
+│   ├── /ADR900
 │   │   └── Adr0900RuleSet.cs           # ADR-900 的规则集
-│   └── /ADR0907
+│   └── /ADR907
 │       └── Adr0907RuleSet.cs           # ADR-907 的规则集
 │
 ├── /Index                               # 规则集索引层
@@ -113,7 +113,7 @@ var result = ArchitectureTestSpecification.DecisionLanguage.Parse("模块必须�
 
 **示例**：
 ```csharp
-// /RuleSets/ADR0001/Adr0001RuleSet.cs
+// /RuleSets/ADR001/Adr0001RuleSet.cs
 public static class Adr0001RuleSet
 {
     public const int AdrNumber = 1;

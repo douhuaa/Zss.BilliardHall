@@ -2,10 +2,10 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0001;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0120;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0900;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0907;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR001;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR120;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR900;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
 
 /// <summary>
 /// 验证 RuleSetRegistry 和规则集定义的正确性

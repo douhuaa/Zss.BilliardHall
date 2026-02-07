@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0120;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR120;
 
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 
