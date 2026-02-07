@@ -1,5 +1,6 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 
+using System.Text.RegularExpressions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0001;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR0002;
@@ -25,6 +26,18 @@ public static class RuleSetRegistry
         new(BuildRegistry);
 
     /// <summary>
+    /// ADR 编号格式验证正则表达式
+    /// 匹配格式：
+    /// - "ADR-" 后跟 1-3 位数字（如 ADR-001, ADR-1）
+    /// - "ADR" 后跟 1-3 位数字（如 ADR001, ADR1）
+    /// - 纯 1-3 位数字（如 001, 1）
+    /// 不匹配：ADR0001（4位数字）, ADR.001（错误分隔符）
+    /// </summary>
+    private static readonly Regex AdrPattern = new(
+        @"^(ADR-?)?\d{1,3}$",
+        RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+    /// <summary>
     /// 所有已注册的规则集
     /// Key: ADR 编号
     /// Value: 规则集定义
@@ -32,7 +45,7 @@ public static class RuleSetRegistry
     public static IReadOnlyDictionary<int, ArchitectureRuleSet> All => LazyRegistry.Value;
 
     /// <summary>
-    /// 根据 ADR 编号获取规则集
+    /// 根据 ADR 编号获取规则集（宽容模式）
     /// </summary>
     /// <param name="adrNumber">ADR 编号</param>
     /// <returns>规则集，如果不存在则返回 null</returns>
@@ -42,7 +55,35 @@ public static class RuleSetRegistry
     }
 
     /// <summary>
-    /// 根据 ADR 编号字符串获取规则集
+    /// 根据 ADR 编号获取规则集（严格模式）
+    /// 
+    /// 与 Get() 的区别：
+    /// - Get()：宽容模式，不存在时返回 null（适用于探索性查询）
+    /// - GetStrict()：严格模式，不存在时抛出异常（适用于测试/CI/Analyzer）
+    /// 
+    /// 设计原则：
+    /// - RuleId 是裁决系统的"法律编号"，不是用户输入
+    /// - 在测试、CI、Analyzer 场景中，无效 RuleId = 架构错误
+    /// - 显式失败优于静默返回 null
+    /// </summary>
+    /// <param name="adrNumber">ADR 编号</param>
+    /// <returns>规则集</returns>
+    /// <exception cref="InvalidOperationException">当规则集不存在时抛出</exception>
+    public static ArchitectureRuleSet GetStrict(int adrNumber)
+    {
+        if (All.TryGetValue(adrNumber, out var ruleSet))
+        {
+            return ruleSet;
+        }
+
+        throw new InvalidOperationException(
+            $"无效的 ADR 编号：{adrNumber}。" +
+            $"该 ADR 规则集不存在或尚未注册。" +
+            $"可用的 ADR 编号：{string.Join(", ", GetAllAdrNumbers())}");
+    }
+
+    /// <summary>
+    /// 根据 ADR 编号字符串获取规则集（宽容模式）
     /// </summary>
     /// <param name="adrId">ADR 编号字符串，格式如 "ADR-001" 或 "1"</param>
     /// <returns>规则集，如果不存在或格式错误则返回 null</returns>
@@ -64,6 +105,64 @@ public static class RuleSetRegistry
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// 根据 ADR 编号字符串获取规则集（严格模式）
+    /// 
+    /// 与 Get() 的区别：
+    /// - Get()：宽容模式，格式错误或不存在时返回 null
+    /// - GetStrict()：严格模式，格式错误或不存在时抛出异常
+    /// 
+    /// 支持的格式：
+    /// - "ADR-001" 或 "ADR-1"（推荐格式）
+    /// - "001" 或 "1"（简化格式）
+    /// - "ADR001"（无分隔符格式，仅限 1-3 位数字）
+    /// 
+    /// 不支持的格式：
+    /// - "ADR0001"（4位数字）
+    /// - "0001"（4位数字）
+    /// - "ADR.001"（错误分隔符）
+    /// - 其他非标准格式
+    /// 
+    /// 设计原则：
+    /// - RuleId 是裁决系统的"法律编号"，不是用户输入
+    /// - 在测试、CI、Analyzer 场景中，格式错误 = 架构错误
+    /// - 显式失败优于静默返回 null
+    /// - 格式验证通过正则表达式严格匹配，确保代码行为与注释一致
+    /// </summary>
+    /// <param name="adrId">ADR 编号字符串</param>
+    /// <returns>规则集</returns>
+    /// <exception cref="ArgumentException">当 adrId 为空或格式错误时抛出</exception>
+    /// <exception cref="InvalidOperationException">当规则集不存在时抛出</exception>
+    public static ArchitectureRuleSet GetStrict(string adrId)
+    {
+        if (string.IsNullOrWhiteSpace(adrId))
+        {
+            throw new ArgumentException(
+                "ADR 编号不能为空或仅包含空白字符。",
+                nameof(adrId));
+        }
+
+        // 使用正则表达式严格验证格式
+        if (!AdrPattern.IsMatch(adrId))
+        {
+            throw new ArgumentException(
+                $"无效的 ADR 编号格式：'{adrId}'。" +
+                $"支持的格式：'ADR-001', 'ADR-1', '001', '1', 'ADR001'（仅 1-3 位数字）。" +
+                $"不支持 4 位数字格式如 'ADR0001' 或 '0001'。",
+                nameof(adrId));
+        }
+
+        // 提取数字部分
+        var normalized = adrId.Replace("ADR-", "", StringComparison.OrdinalIgnoreCase)
+                               .Replace("ADR", "", StringComparison.OrdinalIgnoreCase)
+                               .Trim();
+
+        // 此时 normalized 必定可以解析为 int（因为已通过正则验证）
+        var adrNumber = int.Parse(normalized);
+
+        return GetStrict(adrNumber);
     }
 
     /// <summary>
