@@ -106,49 +106,6 @@ public static partial class ArchitectureTestSpecification
         }
 
         /// <summary>
-        /// 从自然语言文本中解析裁决语义（旧版API，兼容性保留）
-        /// 
-        /// ⚠️ 已废弃：此方法将在未来版本中移除
-        /// 请使用：ParseToDecision() 代替
-        /// 
-        /// 解析规则：
-        /// 1. 按照 Rules 定义的顺序依次匹配
-        /// 2. 使用词边界识别和上下文分析进行精确匹配
-        /// 3. 排除否定上下文（如"应该避免"、"不应该"等）
-        /// 4. 一旦匹配到关键词，立即返回对应的 DecisionResult
-        /// 5. 如果未匹配到任何关键词，返回 DecisionResult.None
-        /// 
-        /// 设计原则：
-        /// - 未识别 ≠ Must（防止误伤）
-        /// - 默认为非裁决、不可阻断
-        /// - 词边界识别避免误判（如"需要性"不匹配"需要"）
-        /// - 否定上下文排除避免误判（如"应该避免"不匹配"应该"）
-        /// </summary>
-        /// <param name="sentence">要解析的文本</param>
-        /// <returns>解析出的裁决结果</returns>
-        [Obsolete("请使用 ParseToDecision() 代替。此方法将在未来版本中移除。")]
-        public static DecisionResult Parse(string sentence)
-        {
-            if (string.IsNullOrWhiteSpace(sentence))
-            {
-                return DecisionResult.None;
-            }
-
-            foreach (var rule in Rules)
-            {
-                if (rule.Keywords.Any(keyword => IsKeywordMatch(sentence, keyword)))
-                {
-                    return new DecisionResult(
-                        rule.Level,
-                        rule.IsBlocking
-                    );
-                }
-            }
-
-            return DecisionResult.None;
-        }
-
-        /// <summary>
         /// 检查关键词是否在句子中匹配（带词边界和上下文分析）
         /// </summary>
         /// <param name="sentence">要检查的句子</param>
@@ -275,8 +232,11 @@ public static partial class ArchitectureTestSpecification
         /// <returns>true 如果包含阻断级别的裁决语言</returns>
         public static bool IsBlockingDecision(string sentence)
         {
-            var result = Parse(sentence);
-            return result.IsDecision && result.IsBlocking;
+            var result = ParseToDecision(sentence);
+            if (!result.HasDecision) return false;
+            
+            var execution = ToExecutionResult(result);
+            return execution?.IsBlocking ?? false;
         }
 
         /// <summary>
@@ -286,7 +246,7 @@ public static partial class ArchitectureTestSpecification
         /// <returns>true 如果包含任何裁决语言</returns>
         public static bool HasDecisionLanguage(string sentence)
         {
-            return Parse(sentence).IsDecision;
+            return ParseToDecision(sentence).HasDecision;
         }
     }
 }
