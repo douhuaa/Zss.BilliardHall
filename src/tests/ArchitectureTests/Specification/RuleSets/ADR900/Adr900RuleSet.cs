@@ -1,5 +1,3 @@
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.DecisionLanguage;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR900;
 
 /// <summary>

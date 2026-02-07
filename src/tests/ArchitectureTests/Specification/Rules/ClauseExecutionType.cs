@@ -3,7 +3,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 /// <summary>
 /// 条款执行类型
 /// 定义条款的执行策略，用于确定如何验证和执行规则
-/// 
+///
 /// 这是将条款从"纯文本描述"向"可执行规范"演进的关键步骤
 /// 为未来的自动化测试生成和执行策略提供结构化基础
 /// </summary>

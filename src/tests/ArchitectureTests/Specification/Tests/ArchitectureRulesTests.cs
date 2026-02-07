@@ -1,11 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR001;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR120;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR900;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
-
 /// <summary>
 /// 验证 RuleSetRegistry 和规则集定义的正确性
 /// 确保从 ADR 文档定义的规则集可以正常工作

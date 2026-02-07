@@ -1,7 +1,5 @@
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
-
 /// <summary>
 /// RuleSetRegistry 功能测试
 /// 验证规则集注册表的查询和验证行为

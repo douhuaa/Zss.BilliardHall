@@ -1,14 +1,12 @@
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.DecisionLanguage;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 
 /// <summary>
 /// 架构规则集
 /// 把 ADR 变成可执行规范的核心类
-/// 
+///
 /// 每个 ArchitectureRuleSet 对应一个 ADR 文档，
 /// 包含该 ADR 中定义的所有 Rule 和 Clause
-/// 
+///
 /// 用途：
 /// 1. 规则注册和管理
 /// 2. 规则查询和访问
@@ -55,7 +53,7 @@ public sealed class ArchitectureRuleSet
     {
         var id = ArchitectureRuleId.Rule(AdrNumber, ruleNumber);
         var definition = new ArchitectureRuleDefinition(id, summary, decision, severity, scope);
-        
+
         definition.Validate();
 
         if (_rules.ContainsKey(id))
@@ -83,7 +81,7 @@ public sealed class ArchitectureRuleSet
     {
         var id = ArchitectureRuleId.Clause(AdrNumber, ruleNumber, clauseNumber);
         var definition = new ArchitectureClauseDefinition(id, condition, enforcement, executionType);
-        
+
         definition.Validate();
 
         if (_clauses.ContainsKey(id))
@@ -153,7 +151,7 @@ public sealed class ArchitectureRuleSet
     /// <summary>
     /// 验证规则集的完整性
     /// 确保每个 Rule 至少有一个对应的 Clause
-    /// 
+    ///
     /// 这是架构治理的关键约束：
     /// "写了 Rule，但永远没人执行"的假治理是不可接受的
     /// 每个规则都必须通过至少一个条款来定义如何执行

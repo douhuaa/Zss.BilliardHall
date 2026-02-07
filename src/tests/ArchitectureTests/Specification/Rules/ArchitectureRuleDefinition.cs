@@ -1,11 +1,9 @@
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.DecisionLanguage;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 
 /// <summary>
 /// 架构规则定义
 /// 表示一个完整的架构规则（Rule 级别）
-/// 
+///
 /// 规则是"制度存在"的体现，定义了架构约束的目标和范围
 /// </summary>
 /// <param name="Id">规则ID（必须是 Rule 级别）</param>
