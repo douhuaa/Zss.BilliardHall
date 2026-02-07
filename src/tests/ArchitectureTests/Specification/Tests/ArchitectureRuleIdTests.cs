@@ -64,11 +64,15 @@ public sealed class ArchitectureRuleIdTests
     [Fact(DisplayName = "CompareTo 应该按 ADR、Rule、Clause 顺序排序")]
     public void CompareTo_Should_Sort_By_Adr_Rule_Clause()
     {
-        // Arrange
-        var ids = CreateCompareTestIds();
-
-        // Act
-        var sorted = ids.OrderBy(x => x).ToList();
+        // Arrange & Act
+        var sorted = new[]
+        {
+            CreateClauseId(907, 3, 2),
+            CreateRuleId(907, 1),
+            CreateClauseId(907, 3, 1),
+            CreateRuleId(900, 1),
+            CreateClauseId(900, 1, 1),
+        }.OrderBy(x => x).ToList();
 
         var expected = new[]
         {
@@ -134,14 +138,7 @@ public sealed class ArchitectureRuleIdTests
 
     #region Helpers
 
-    private static ArchitectureRuleId[] CreateCompareTestIds() => new[]
-    {
-        CreateClauseId(907, 3, 2),
-        CreateRuleId(907, 1),
-        CreateClauseId(907, 3, 1),
-        CreateRuleId(900, 1),
-        CreateClauseId(900, 1, 1),
-    };
+    // 已移除 CreateCompareTestIds，数据已内联到测试方法中
 
     #endregion
 }
