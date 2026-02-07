@@ -205,7 +205,6 @@ dotnet test src/tests/ArchitectureTests -c Release
   - 日志记录规范
 3. **格式化失败信息**：在 PR 模板中强制 ARCH-VIOLATION 字段
   - 已实现：见 [.github/PULL_REQUEST_TEMPLATE.md](../../.github/PULL_REQUEST_TEMPLATE.md)
-  - 破例记录：见 [docs/summaries/governance/arch-violations.md](../../docs/summaries/governance/arch-violations.md)
 4. **性能测试**：确保架构测试运行时间控制在合理范围内（当前 ~1s）
 5. **覆盖率报告**：生成 ADR 约束覆盖率报告
 
@@ -240,7 +239,6 @@ dotnet test src/tests/ArchitectureTests -c Release
 3. **Level 3 - 人工 Gate**（流程控制）
   - PR 模板强制架构违规声明
   - 架构师 Code Review
-  - 破例记录在 [arch-violations.md](../../docs/summaries/governance/arch-violations.md)
 
 ### 🔍 反作弊规则
 
