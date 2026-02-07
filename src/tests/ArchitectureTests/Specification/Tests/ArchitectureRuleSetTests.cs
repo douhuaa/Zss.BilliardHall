@@ -28,7 +28,7 @@ public sealed class ArchitectureRuleSetTests
     public void Should_Throw_When_Adr_Number_Is_Zero_Or_Negative(int invalidAdrNumber)
     {
         Action act = () => new ArchitectureRuleSet(invalidAdrNumber);
-        act.Should().Throw<ArgumentException>();
+        act.Should().Throw<ArgumentException>($"ADR 编号 {invalidAdrNumber} 无效，必须大于 0");
     }
 
     [Fact(DisplayName = "应该能添加规则")]
@@ -145,7 +145,7 @@ public sealed class ArchitectureRuleSetTests
     {
         var ruleSet = CreateRuleSet(907);
         Action act = () => ruleSet.AddRule(3, emptySummary, DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
-        act.Should().Throw<ArgumentException>();
+        act.Should().Throw<ArgumentException>("规则摘要不能为空或仅包含空白字符");
     }
 
     [Theory(DisplayName = "不能添加空描述的条款")]
@@ -157,7 +157,7 @@ public sealed class ArchitectureRuleSetTests
     {
         var ruleSet = CreateRuleSet(907);
         Action act = () => ruleSet.AddClause(3, 1, condition, enforcement, ClauseExecutionType.Convention);
-        act.Should().Throw<ArgumentException>();
+        act.Should().Throw<ArgumentException>("条款的 Condition 和 Enforcement 都不能为空或仅包含空白字符");
     }
 
     [Fact(DisplayName = "ValidateCompleteness 应该检测没有条款的规则")]
@@ -182,7 +182,7 @@ public sealed class ArchitectureRuleSetTests
         ruleSet.AddClause(2, 1, "条款2", "执行2", ClauseExecutionType.StaticAnalysis);
 
         Action act = () => ruleSet.ValidateCompleteness();
-        act.Should().NotThrow();
+        act.Should().NotThrow("完整的规则集应该通过完整性验证");
     }
 
     [Fact(DisplayName = "ValidateCompleteness 应该通过空规则集")]
@@ -190,7 +190,7 @@ public sealed class ArchitectureRuleSetTests
     {
         var ruleSet = CreateRuleSet(907);
         Action act = () => ruleSet.ValidateCompleteness();
-        act.Should().NotThrow();
+        act.Should().NotThrow("空规则集应该通过完整性验证");
     }
 
     #region 辅助方法

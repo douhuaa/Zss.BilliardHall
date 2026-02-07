@@ -173,7 +173,7 @@ public sealed class RuleSetRegistryTests
             var ruleSet = RuleSetRegistry.GetStrict(ruleId);
             AssertRuleSetExists(ruleSet, 1);
         };
-        act.Should().NotThrow();
+        act.Should().NotThrow("在测试/CI场景中，GetStrict 应该成功获取已定义的规则集");
     }
 
     [Fact(DisplayName = "GetStrict 异常消息应包含可用的 ADR 编号")]
