@@ -4,21 +4,21 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR900
 /// ADR-900：架构测试与 CI 治理元规则
 /// 定义架构测试的权威性、执行级别、CI 阻断等规则
 /// </summary>
-public static class Adr0900RuleSet
+public sealed class Adr900RuleSet : IArchitectureRuleSetDefinition
 {
     /// <summary>
     /// ADR 编号
     /// </summary>
-    public const int AdrNumber = 900;
+    public int AdrNumber => 900;
 
     /// <summary>
-    /// 获取完整的规则集定义
+    /// 定义完整的规则集
     /// </summary>
-    public static ArchitectureRuleSet RuleSet => LazyRuleSet.Value;
+    public ArchitectureRuleSet Define() => LazyRuleSet.Value;
 
     private static readonly Lazy<ArchitectureRuleSet> LazyRuleSet = new(() =>
     {
-        var ruleSet = new ArchitectureRuleSet(AdrNumber);
+        var ruleSet = new ArchitectureRuleSet(900);
 
         // Rule 1: 架构裁决权威性
         ruleSet.AddRule(

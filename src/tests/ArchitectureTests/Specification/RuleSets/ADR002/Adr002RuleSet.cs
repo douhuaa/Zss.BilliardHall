@@ -4,21 +4,21 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR002
 /// ADR-002：Platform/Application/Host 启动引导
 /// 定义应用启动、依赖注入、配置加载等规则
 /// </summary>
-public static class Adr0002RuleSet
+public sealed class Adr002RuleSet : IArchitectureRuleSetDefinition
 {
     /// <summary>
     /// ADR 编号
     /// </summary>
-    public const int AdrNumber = 2;
+    public int AdrNumber => 2;
 
     /// <summary>
-    /// 获取完整的规则集定义
+    /// 定义完整的规则集
     /// </summary>
-    public static ArchitectureRuleSet RuleSet => LazyRuleSet.Value;
+    public ArchitectureRuleSet Define() => LazyRuleSet.Value;
 
     private static readonly Lazy<ArchitectureRuleSet> LazyRuleSet = new(() =>
     {
-        var ruleSet = new ArchitectureRuleSet(AdrNumber);
+        var ruleSet = new ArchitectureRuleSet(2);
 
         // Rule 1: Platform 职责约束
         ruleSet.AddRule(

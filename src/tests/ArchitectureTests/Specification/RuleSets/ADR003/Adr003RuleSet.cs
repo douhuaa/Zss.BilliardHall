@@ -4,21 +4,21 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR003
 /// ADR-003：命名空间规则
 /// 定义命名空间组织、层次结构等规则
 /// </summary>
-public static class Adr0003RuleSet
+public sealed class Adr003RuleSet : IArchitectureRuleSetDefinition
 {
     /// <summary>
     /// ADR 编号
     /// </summary>
-    public const int AdrNumber = 3;
+    public int AdrNumber => 3;
 
     /// <summary>
-    /// 获取完整的规则集定义
+    /// 定义完整的规则集
     /// </summary>
-    public static ArchitectureRuleSet RuleSet => LazyRuleSet.Value;
+    public ArchitectureRuleSet Define() => LazyRuleSet.Value;
 
     private static readonly Lazy<ArchitectureRuleSet> LazyRuleSet = new(() =>
     {
-        var ruleSet = new ArchitectureRuleSet(AdrNumber);
+        var ruleSet = new ArchitectureRuleSet(3);
 
         // Rule 1: 命名空间层次结构
         ruleSet.AddRule(

@@ -60,7 +60,7 @@ public sealed class ArchitectureRulesTests
     public void Adr001_Should_Have_Expected_Rules()
     {
         // Arrange
-        var ruleSet = Adr0001RuleSet.RuleSet;
+        var ruleSet = RuleSetRegistry.GetStrict(1);
 
         // Assert
         ruleSet.AdrNumber.Should().Be(1);
@@ -84,7 +84,7 @@ public sealed class ArchitectureRulesTests
     public void Adr900_Should_Have_Expected_Rules()
     {
         // Arrange
-        var ruleSet = Adr0900RuleSet.RuleSet;
+        var ruleSet = RuleSetRegistry.GetStrict(900);
 
         // Assert
         ruleSet.AdrNumber.Should().Be(900);
@@ -108,7 +108,7 @@ public sealed class ArchitectureRulesTests
     public void Adr907_Should_Have_Expected_Rules()
     {
         // Arrange
-        var ruleSet = Adr0907RuleSet.RuleSet;
+        var ruleSet = RuleSetRegistry.GetStrict(907);
 
         // Assert
         ruleSet.AdrNumber.Should().Be(907);
@@ -131,7 +131,7 @@ public sealed class ArchitectureRulesTests
     public void Adr120_Should_Have_Expected_Rules()
     {
         // Arrange
-        var ruleSet = Adr0120RuleSet.RuleSet;
+        var ruleSet = RuleSetRegistry.GetStrict(120);
 
         // Assert
         ruleSet.AdrNumber.Should().Be(120);
@@ -236,11 +236,11 @@ public sealed class ArchitectureRulesTests
     [Fact(DisplayName = "惰性初始化应该工作正常")]
     public void Lazy_Initialization_Should_Work_Correctly()
     {
-        // Act
-        var ruleSet1 = Adr0001RuleSet.RuleSet;
-        var ruleSet2 = Adr0001RuleSet.RuleSet;
+        // Act - 通过 Registry 多次获取同一个 RuleSet
+        var ruleSet1 = RuleSetRegistry.GetStrict(1);
+        var ruleSet2 = RuleSetRegistry.GetStrict(1);
 
-        // Assert
+        // Assert - Registry 应该返回相同的实例
         ruleSet1.Should().BeSameAs(ruleSet2, "多次访问应该返回同一个实例（惰性初始化）");
     }
 }

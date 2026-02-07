@@ -4,21 +4,21 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR120
 /// ADR-120：领域事件命名规范
 /// 定义事件命名、命名空间、内容约束等规则
 /// </summary>
-public static class Adr0120RuleSet
+public sealed class Adr120RuleSet : IArchitectureRuleSetDefinition
 {
     /// <summary>
     /// ADR 编号
     /// </summary>
-    public const int AdrNumber = 120;
+    public int AdrNumber => 120;
 
     /// <summary>
-    /// 获取完整的规则集定义
+    /// 定义完整的规则集
     /// </summary>
-    public static ArchitectureRuleSet RuleSet => LazyRuleSet.Value;
+    public ArchitectureRuleSet Define() => LazyRuleSet.Value;
 
     private static readonly Lazy<ArchitectureRuleSet> LazyRuleSet = new(() =>
     {
-        var ruleSet = new ArchitectureRuleSet(AdrNumber);
+        var ruleSet = new ArchitectureRuleSet(120);
 
         // Rule 1: 事件类型命名规范
         ruleSet.AddRule(

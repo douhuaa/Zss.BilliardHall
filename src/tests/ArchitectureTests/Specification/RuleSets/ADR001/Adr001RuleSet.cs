@@ -4,21 +4,21 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR001
 /// ADR-001：模块化单体与垂直切片架构
 /// 定义模块物理隔离、依赖方向、通信机制等核心规则
 /// </summary>
-public static class Adr0001RuleSet
+public sealed class Adr001RuleSet : IArchitectureRuleSetDefinition
 {
     /// <summary>
     /// ADR 编号
     /// </summary>
-    public const int AdrNumber = 1;
+    public int AdrNumber => 1;
 
     /// <summary>
-    /// 获取完整的规则集定义
+    /// 定义完整的规则集
     /// </summary>
-    public static ArchitectureRuleSet RuleSet => LazyRuleSet.Value;
+    public ArchitectureRuleSet Define() => LazyRuleSet.Value;
 
     private static readonly Lazy<ArchitectureRuleSet> LazyRuleSet = new(() =>
     {
-        var ruleSet = new ArchitectureRuleSet(AdrNumber);
+        var ruleSet = new ArchitectureRuleSet(1);
 
         // Rule 1: 模块物理隔离
         ruleSet.AddRule(

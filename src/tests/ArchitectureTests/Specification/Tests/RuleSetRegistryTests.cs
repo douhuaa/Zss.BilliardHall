@@ -331,4 +331,68 @@ public sealed class RuleSetRegistryTests
     }
 
     #endregion
+
+    #region 自动发现机制测试
+
+    /// <summary>
+    /// 测试 Registry 自动发现所有实现 IArchitectureRuleSetDefinition 的类
+    /// </summary>
+    [Fact(DisplayName = "Registry 应该自动发现所有 RuleSet 定义")]
+    public void Registry_Should_Auto_Discover_All_RuleSets()
+    {
+        // Act
+        var allAdrNumbers = RuleSetRegistry.GetAllAdrNumbers().ToList();
+
+        // Assert
+        allAdrNumbers.Should().NotBeEmpty("应该至少发现一个 RuleSet");
+        allAdrNumbers.Should().Contain(1, "应该发现 ADR-001");
+        allAdrNumbers.Should().Contain(2, "应该发现 ADR-002");
+        allAdrNumbers.Should().Contain(3, "应该发现 ADR-003");
+        allAdrNumbers.Should().Contain(120, "应该发现 ADR-120");
+        allAdrNumbers.Should().Contain(201, "应该发现 ADR-201");
+        allAdrNumbers.Should().Contain(900, "应该发现 ADR-900");
+        allAdrNumbers.Should().Contain(907, "应该发现 ADR-907");
+    }
+
+    /// <summary>
+    /// 测试所有自动发现的 RuleSet 都能正确实例化
+    /// </summary>
+    [Fact(DisplayName = "所有自动发现的 RuleSet 应该可以正确实例化")]
+    public void All_Auto_Discovered_RuleSets_Should_Be_Properly_Instantiated()
+    {
+        // Act
+        var allRuleSets = RuleSetRegistry.GetAllRuleSets().ToList();
+
+        // Assert
+        allRuleSets.Should().NotBeEmpty();
+        allRuleSets.Should().OnlyHaveUniqueItems(rs => rs.AdrNumber, "每个 ADR 编号应该唯一");
+        
+        foreach (var ruleSet in allRuleSets)
+        {
+            ruleSet.Should().NotBeNull();
+            ruleSet.AdrNumber.Should().BeGreaterThan(0, "ADR 编号必须大于 0");
+            ruleSet.RuleCount.Should().BeGreaterThan(0, $"ADR-{ruleSet.AdrNumber} 应该至少包含一个规则");
+        }
+    }
+
+    /// <summary>
+    /// 测试 Registry 不包含重复的 ADR 编号
+    /// </summary>
+    [Fact(DisplayName = "Registry 不应包含重复的 ADR 编号")]
+    public void Registry_Should_Not_Contain_Duplicate_Adr_Numbers()
+    {
+        // Act
+        var allAdrNumbers = RuleSetRegistry.GetAllAdrNumbers().ToList();
+
+        // Assert
+        var duplicates = allAdrNumbers
+            .GroupBy(x => x)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key)
+            .ToList();
+
+        duplicates.Should().BeEmpty("不应该有重复的 ADR 编号");
+    }
+
+    #endregion
 }
