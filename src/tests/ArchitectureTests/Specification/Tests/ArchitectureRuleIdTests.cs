@@ -32,42 +32,26 @@ public sealed class ArchitectureRuleIdTests
         clauseId.Level.Should().Be(RuleLevel.Clause);
     }
 
-    [Fact(DisplayName = "Rule ToString 应该输出规范格式 ADR-907_3")]
-    public void Rule_ToString_Should_Output_Standard_Format()
+    [Theory(DisplayName = "ToString 应该按规范格式输出")]
+    [InlineData(907, 3, null, "ADR-907_3")]
+    [InlineData(907, 3, 2, "ADR-907_3_2")]
+    [InlineData(1, 1, null, "ADR-001_1")]
+    [InlineData(907, 1, null, "ADR-907_1")]
+    [InlineData(900, 1, null, "ADR-900_1")]
+    [InlineData(900, 1, 1, "ADR-900_1_1")]
+    [InlineData(907, 3, 1, "ADR-907_3_1")]
+    public void ToString_Should_Format_Correctly(int adr, int rule, int? clause, string expected)
     {
-        // Arrange
-        var ruleId = ArchitectureRuleId.Rule(907, 3);
+        // Arrange: 创建 ArchitectureRuleId 对象
+        var ruleId = clause.HasValue
+            ? ArchitectureRuleId.Clause(adr, rule, clause.Value)
+            : ArchitectureRuleId.Rule(adr, rule);
 
-        // Act
+        // Act: 调用 ToString
         var result = ruleId.ToString();
 
-        // Assert
-        result.Should().Be("ADR-907_3");
-    }
-
-    [Fact(DisplayName = "Clause ToString 应该输出规范格式 ADR-907_3_2")]
-    public void Clause_ToString_Should_Output_Standard_Format()
-    {
-        // Arrange
-        var clauseId = ArchitectureRuleId.Clause(907, 3, 2);
-
-        // Act
-        var result = clauseId.ToString();
-
-        // Assert
-        result.Should().Be("ADR-907_3_2");
-    }
-
-    [Fact(DisplayName = "ADR 编号应该正确补零到3位")]
-    public void Adr_Number_Should_Be_Padded_To_Three_Digits()
-    {
-        // Arrange
-        var rule1 = ArchitectureRuleId.Rule(1, 1);
-        var rule907 = ArchitectureRuleId.Rule(907, 1);
-
-        // Act & Assert
-        rule1.ToString().Should().Be("ADR-001_1");
-        rule907.ToString().Should().Be("ADR-907_1");
+        // Assert: 验证格式
+        result.Should().Be(expected);
     }
 
     [Fact(DisplayName = "CompareTo 应该按 ADR、Rule、Clause 顺序排序")]
