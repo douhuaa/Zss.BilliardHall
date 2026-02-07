@@ -536,10 +536,6 @@ var member = _memberRepository.GetById(memberId);
 - [validate-governance-compliance.sh](/scripts/validate-governance-compliance.sh)
 - [governance-health-report-template.md](/docs/templates/governance-health-report-template.md)
 
-### 实施总结
-
-- [治理层 ADR 改进实施总结](/docs/summaries/governance-adr-improvement-implementation.md)
-
 ---
 
 **维护**：架构委员会  
