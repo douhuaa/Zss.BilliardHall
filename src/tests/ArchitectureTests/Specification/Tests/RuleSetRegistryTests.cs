@@ -217,7 +217,9 @@ public sealed class RuleSetRegistryTests
         // Assert
         act.Should().Throw<ArgumentException>()
             .WithMessage("*无效的 ADR 编号格式*")
-            .WithMessage("*不支持 4 位数字*")
+            .And.Message.Should().Contain("不支持 4 位数字");
+        
+        act.Should().Throw<ArgumentException>()
             .And.ParamName.Should().Be("adrId");
     }
 
