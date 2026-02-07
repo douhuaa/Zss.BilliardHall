@@ -20,7 +20,7 @@
 ./scripts/validate-adr-consistency.sh --format json
 
 # JSON 格式保存到文件
-./scripts/validate-adr-consistency.sh --format json --output docs/reports/architecture-tests/adr-consistency.json
+./scripts/validate-adr-consistency.sh --format json --output adr-consistency.json
 ```
 
 ### JSON 输出格式
@@ -123,7 +123,7 @@
 ./scripts/validate-three-way-mapping.sh
 
 # JSON 模式
-./scripts/validate-three-way-mapping.sh --format json --output docs/reports/architecture-tests/three-way-mapping.json
+./scripts/validate-three-way-mapping.sh --format json --output three-way-mapping.json
 ```
 
 **输出**：

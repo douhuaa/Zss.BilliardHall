@@ -68,13 +68,13 @@ Orders 模块直接调用 Members 模块的 `IMemberRepository`
 // ARCH-EXCEPTION: ADR-001.2 - 临时跨模块同步调用
 // 到期版本: v2.5.0
 // 负责人: @developer-name
-// 参见: docs/summaries/arch-violations.md ARCH-XXX
+// 参见: docs/governance/arch-violations.md ARCH-XXX
 private readonly IMemberRepository _memberRepository;
 ```
 
 #### 步骤 4：更新破例记录表
 
-在 `docs/summaries/arch-violations.md` 中添加记录：
+在 `docs/governance/arch-violations.md` 中添加记录：
 
 ```markdown
 | ID       | ADR       | 规则      | 违规位置                  | 原因       | 到期版本 | 负责人    | 偿还计划         | 审批人    | 状态    |
@@ -97,7 +97,7 @@ private readonly IMemberRepository _memberRepository;
 - 超过 2 次必须强制偿还
 
 **参考**：
-- [arch-violations.md](/docs/summaries/arch-violations.md) - 查看当前破例
+- [arch-violations.md](/docs/governance/arch-violations.md) - 查看当前破例
 - [ADR-900.Y](/docs/adr/governance/ADR-900-architecture-tests.md#adr-900y破例必须绑定偿还计划与到期监控)
 
 ---
@@ -319,7 +319,7 @@ grep "Passed!" architecture-test-results.txt
 **破例数据**：
 ```bash
 # 统计活跃破例
-grep "🚧 Active" docs/summaries/arch-violations.md | wc -l
+grep "🚧 Active" docs/governance/arch-violations.md | wc -l
 
 # 统计已归还破例（本季度）
 # 手动查看 arch-violations.md 的"已归还破例"区
@@ -535,10 +535,6 @@ var member = _memberRepository.GetById(memberId);
 - [arch-violations-scanner.yml](/.github/workflows/arch-violations-scanner.yml)
 - [validate-governance-compliance.sh](/scripts/validate-governance-compliance.sh)
 - [governance-health-report-template.md](/docs/templates/governance-health-report-template.md)
-
-### 实施总结
-
-- [治理层 ADR 改进实施总结](/docs/summaries/governance-adr-improvement-implementation.md)
 
 ---
 

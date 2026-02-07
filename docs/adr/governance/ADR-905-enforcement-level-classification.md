@@ -173,7 +173,7 @@ enforceable: false
 1. **PR 提交时**：开发者在 PR 模板中声明是否存在架构破例
 2. **CI 检查**：如果 ArchitectureTests 失败但 PR 声明"无违规" → 自动拒绝
 3. **架构审查**：如果 PR 声明"有破例" → 架构师审查并决定是否批准
-4. **记录归档**：所有破例必须记录在 `docs/summaries/arch-violations.md` 中
+4. **记录归档**：所有破例必须记录在 `docs/governance/arch-violations.md` 中
 
 **判定**：
 - ✅ L3 规则破例必须经过人工审批

@@ -349,7 +349,7 @@
 ### C. 相关资源
 
 - [治理层 ADR](../adr/governance/README.md)
-- [arch-violations.md](../summaries/arch-violations.md)
+- [arch-violations.md](../governance/arch-violations.md)
 - [架构治理系统](../ARCHITECTURE-GOVERNANCE-SYSTEM.md)
 
 ---

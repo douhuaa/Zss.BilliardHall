@@ -1,6 +1,0 @@
-# 忽略所有报告文件，保留目录结构
-*.json
-!.gitkeep
-
-# 保留 latest.json 符号链接（可选）
-# !latest.json

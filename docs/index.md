@@ -67,7 +67,6 @@
 | 🧪 **运行测试**       | [架构测试指南](#-架构测试) → [CI/CD 指南](guides/ci-cd-integration-guide.md)                               |
 | ❌ **处理测试失败**      | [测试失败诊断](#-测试失败诊断) → [Copilot 诊断](copilot/architecture-test-failures.md)    |
 | 🤖 **使用 Copilot** | [Copilot 角色定位](copilot/README.md) → [Prompts 库](copilot/)                   |
-| 🔍 **查看改进历史**     | [改进总结](summaries/README.md)                                                 |
 | 📝 **提交 PR**      | [PR 模板](../.github/PULL_REQUEST_TEMPLATE.md) → [Copilot 评审](#-copilot-参与评审) |
 
 ### 角色-任务-文档映射表
@@ -78,7 +77,7 @@
 | **开发者**    | 修复 bug   | [测试指南](guides/testing-framework-guide.md), [架构测试失败诊断](copilot/architecture-test-failures.md)                                               | [CI/CD 指南](guides/ci-cd-integration-guide.md)                                                                                                                                              |
 | **开发者**    | 提交 PR    | [PR 模板](../.github/PULL_REQUEST_TEMPLATE.md), [文档维护指南](engineering-standards/documentation-maintenance-standard.md)                                      | [Copilot 评审](copilot/pr-review-pipeline.md)                                                                                                                             |
 | **架构师**    | 制定架构决策   | [ADR-900](adr/governance/ADR-900-architecture-tests.md), [宪法层说明](adr/constitutional/README.md)                                 | [架构指南](guides/architecture-design-guide.md)                                                                                                                                           |
-| **架构师**    | 架构评审     | [ADR 目录](adr/README.md), [架构测试](../src/tests/ArchitectureTests/README.md)                                                 | [违规记录](summaries/arch-violations.md)                                                                                                                                    |
+| **架构师**    | 架构评审     | [ADR 目录](adr/README.md), [架构测试](../src/tests/ArchitectureTests/README.md)                                                 | [ADR 治理](adr/governance/README.md)                                                                                                                                    |
 | **QA/测试**  | 编写测试     | [测试指南](guides/testing-framework-guide.md), [.github/instructions/testing.instructions.md](../.github/instructions/testing.instructions.md) | [架构测试 README](../src/tests/ArchitectureTests/README.md)                                                                                                                 |
 | **QA/测试**  | 调查测试失败   | [架构测试失败诊断](copilot/architecture-test-failures.md), [测试指南-故障处理](guides/testing-framework-guide.md#-测试失败处理流程)                                | [Copilot Prompts](copilot/)                                                                                                                                             |
 | **DevOps** | 配置 CI/CD | [CI/CD 指南](guides/ci-cd-integration-guide.md), [架构自动化验证](guides/architecture-verification-guide.md)                                            | [GitHub Actions](../.github/workflows/)                                                                                                                                 |
@@ -432,31 +431,6 @@ graph TB
 | 后端开发         | 全部宪法层 + ADR-900           | 各细化层（按需）             |
 | DevOps / SRE | ADR-900, 0002, 0004, 0900 | ADR-001, 0003, 0005 |
 | 架构师          | 全部                         | -                    |
-
----
-
-## 🏗️ 架构治理
-
-### 改进总结
-
-- 📁 **[改进总结目录](summaries/README.md)** - 项目改进历程（扁平化结构，所有文件位于同一目录）
-
-#### 架构改进
-
-- [ADR 重组总结](summaries/adr-restructure-summary.md) - ADR 体系重组
-- [ADR 编号优化总结](summaries/adr-numbering-optimization-summary.md) - 编号体系优化
-
-#### 测试改进
-
-- [架构测试体系改进总结](summaries/architecture-tests-improvement-summary.md) - 测试体系升级
-
-#### 治理改进
-
-- [架构违规记录表](summaries/arch-violations.md) - 破例管理
-
-### Copilot 治理实施
-
-- [Copilot 治理实施总结](summaries/copilot-governance-implementation.md) - Copilot 驱动架构治理
 
 ---
 

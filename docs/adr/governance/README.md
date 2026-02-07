@@ -97,7 +97,7 @@
 - ✅ **强制归还**：超过 2 次延期须强制偿还
 
 **参考**：
-- [arch-violations.md](/docs/summaries/arch-violations.md) - 破例记录表
+- [arch-violations.md](/docs/governance/arch-violations.md) - 破例记录表
 - [ADR-900.Y](/docs/adr/governance/ADR-900-architecture-tests.md#adr-900y破例须绑定偿还计划与到期监控) - 破例管理机制
 
 ### PR 与代码审查强制要求（ADR-930）
@@ -181,7 +181,7 @@
 | ADR-907              | ArchitectureTests 执法治理体系 | [查看](ADR-907-architecture-tests-enforcement-governance.md) |
 | ADR-907-A            | ADR-907 对齐执行标准（官方执行附录） | [查看](adr-907-a-adr-alignment-execution-standard.md) |
 | ADR-930              | PR 和代码审查流程     | [查看](ADR-930-code-review-compliance.md)      |
-| arch-violations.md   | 破例记录表           | [查看](/docs/summaries/arch-violations.md)     |
+| arch-violations.md   | 破例记录表           | [查看](/docs/governance/arch-violations.md)     |
 
 ### 治理工具
 

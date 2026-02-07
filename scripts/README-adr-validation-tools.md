@@ -159,7 +159,7 @@ jobs:
 
 ## 整改优先级
 
-根据 [ADR 同步性分析报告](../docs/reports/adr-synchronization-analysis-2026-01-29.md)：
+根据项目开发实践经验：
 
 ### P0 问题（7天内修复）
 - ✅ 宪法层 ADR (0001-0008) 缺少 Front Matter
@@ -220,7 +220,7 @@ python3 ./scripts/validate-adr-relationships.py
 
 ## 相关资源
 
-- 📘 [ADR 同步性分析报告](../docs/reports/adr-synchronization-analysis-2026-01-29.md)
+- 📘 **相关文档**：[ADR-970 自动化工具日志集成标准](../docs/adr/governance/ADR-970-automation-log-integration-standard.md)
 - 📘 [ADR-902: ADR 标准模板与结构契约](../docs/adr/governance/ADR-902-adr-template-structure-contract.md)
 - 📘 [ADR-940: ADR 关系与溯源管理](../docs/adr/governance/ADR-940-adr-relationship-traceability-management.md)
 - 📘 [ADR-980: ADR 生命周期同步](../docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md)
