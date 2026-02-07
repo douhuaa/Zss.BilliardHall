@@ -5,14 +5,14 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.RuleId
 /// 
 /// 这是整个治理体系的最小不可再分单元。
 /// 通过类型系统消除以下不确定性：
-/// 1. ADR-907.3 到底是 Rule 还是 Clause？
-/// 2. 907.3 和 907.03 是否等价？
-/// 3. 907.3 是否真的存在？
+/// 1. ADR-907_3 到底是 Rule 还是 Clause？
+/// 2. 907_3 和 907_03 是否等价？
+/// 3. 907_3 是否真的存在？
 /// 
 /// 特性：
 /// - 不可变结构体（record struct）
 /// - 类型安全的构造
-/// - 规范的字符串格式（ADR-0907.3 或 ADR-0907.3.2）
+/// - 规范的字符串格式（ADR-907_3 或 ADR-907_3_2）
 /// - 可比较、可排序
 /// - 可用于测试失败信息
 /// - 可映射到文档路径
@@ -98,7 +98,7 @@ public readonly record struct ArchitectureRuleId
     /// 重要说明：
     /// - Rule (ClauseNumber=null) 会被视为 ClauseNumber=0
     /// - 这意味着 Rule 总是排在同编号的 Clause 之前
-    /// - 例如：ADR-907.3 (Rule) 排在 ADR-907.3.1 (Clause) 之前
+    /// - 例如：ADR-907_3 (Rule) 排在 ADR-907_3_1 (Clause) 之前
     /// </summary>
     public int CompareTo(ArchitectureRuleId other)
     {
