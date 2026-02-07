@@ -6,29 +6,35 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 /// </summary>
 public sealed class ArchitectureRuleIdTests
 {
-    [Fact(DisplayName = "Rule 工厂方法应该创建正确的 Rule 级别ID")]
-    public void Rule_Factory_Should_Create_Rule_Level_Id()
+    [Theory(DisplayName = "Rule 工厂方法应该创建正确的 Rule 级别ID")]
+    [InlineData(907, 3)]
+    [InlineData(1, 1)]
+    [InlineData(900, 2)]
+    public void Rule_Factory_Should_Create_Rule_Level_Id(int adr, int rule)
     {
         // Arrange & Act
-        var ruleId = ArchitectureRuleId.Rule(907, 3);
+        var ruleId = ArchitectureRuleId.Rule(adr, rule);
 
         // Assert
-        ruleId.AdrNumber.Should().Be(907);
-        ruleId.RuleNumber.Should().Be(3);
+        ruleId.AdrNumber.Should().Be(adr);
+        ruleId.RuleNumber.Should().Be(rule);
         ruleId.ClauseNumber.Should().BeNull();
         ruleId.Level.Should().Be(RuleLevel.Rule);
     }
 
-    [Fact(DisplayName = "Clause 工厂方法应该创建正确的 Clause 级别ID")]
-    public void Clause_Factory_Should_Create_Clause_Level_Id()
+    [Theory(DisplayName = "Clause 工厂方法应该创建正确的 Clause 级别ID")]
+    [InlineData(907, 3, 2)]
+    [InlineData(1, 1, 1)]
+    [InlineData(900, 2, 5)]
+    public void Clause_Factory_Should_Create_Clause_Level_Id(int adr, int rule, int clause)
     {
         // Arrange & Act
-        var clauseId = ArchitectureRuleId.Clause(907, 3, 2);
+        var clauseId = ArchitectureRuleId.Clause(adr, rule, clause);
 
         // Assert
-        clauseId.AdrNumber.Should().Be(907);
-        clauseId.RuleNumber.Should().Be(3);
-        clauseId.ClauseNumber.Should().Be(2);
+        clauseId.AdrNumber.Should().Be(adr);
+        clauseId.RuleNumber.Should().Be(rule);
+        clauseId.ClauseNumber.Should().Be(clause);
         clauseId.Level.Should().Be(RuleLevel.Clause);
     }
 
@@ -78,16 +84,23 @@ public sealed class ArchitectureRuleIdTests
         sorted[4].ToString().Should().Be("ADR-907_3_2");
     }
 
-    [Fact(DisplayName = "相同的 RuleId 应该被视为相等")]
-    public void Same_RuleIds_Should_Be_Equal()
+    [Theory(DisplayName = "相同的 RuleId 应该被视为相等")]
+    [InlineData(907, 3, null)]
+    [InlineData(1, 1, null)]
+    [InlineData(900, 2, 3)]
+    public void Same_RuleIds_Should_Be_Equal(int adr, int rule, int? clause)
     {
         // Arrange
-        var rule1 = ArchitectureRuleId.Rule(907, 3);
-        var rule2 = ArchitectureRuleId.Rule(907, 3);
+        var ruleId1 = clause.HasValue 
+            ? ArchitectureRuleId.Clause(adr, rule, clause.Value)
+            : ArchitectureRuleId.Rule(adr, rule);
+        var ruleId2 = clause.HasValue 
+            ? ArchitectureRuleId.Clause(adr, rule, clause.Value)
+            : ArchitectureRuleId.Rule(adr, rule);
 
         // Act & Assert
-        rule1.Should().Be(rule2);
-        (rule1 == rule2).Should().BeTrue();
+        ruleId1.Should().Be(ruleId2);
+        (ruleId1 == ruleId2).Should().BeTrue();
     }
 
     [Fact(DisplayName = "不同的 RuleId 应该不相等")]
@@ -103,12 +116,15 @@ public sealed class ArchitectureRuleIdTests
         rule1.Should().NotBe(clause1);
     }
 
-    [Fact(DisplayName = "Rule 和同编号的 Clause 排序时 Rule 应该在前")]
-    public void Rule_Should_Come_Before_Clause_In_Sorting()
+    [Theory(DisplayName = "Rule 和同编号的 Clause 排序时 Rule 应该在前")]
+    [InlineData(907, 3, 1)]
+    [InlineData(1, 1, 1)]
+    [InlineData(900, 5, 2)]
+    public void Rule_Should_Come_Before_Clause_In_Sorting(int adr, int ruleNum, int clauseNum)
     {
         // Arrange
-        var rule = ArchitectureRuleId.Rule(907, 3);
-        var clause = ArchitectureRuleId.Clause(907, 3, 1);
+        var rule = ArchitectureRuleId.Rule(adr, ruleNum);
+        var clause = ArchitectureRuleId.Clause(adr, ruleNum, clauseNum);
 
         // Act
         var comparison = rule.CompareTo(clause);

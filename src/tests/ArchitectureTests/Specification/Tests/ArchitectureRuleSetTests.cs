@@ -6,14 +6,17 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 /// </summary>
 public sealed class ArchitectureRuleSetTests
 {
-    [Fact(DisplayName = "应该能创建规则集并指定 ADR 编号")]
-    public void Should_Create_RuleSet_With_Adr_Number()
+    [Theory(DisplayName = "应该能创建规则集并指定 ADR 编号")]
+    [InlineData(907)]
+    [InlineData(1)]
+    [InlineData(900)]
+    public void Should_Create_RuleSet_With_Adr_Number(int adrNumber)
     {
         // Arrange & Act
-        var ruleSet = new ArchitectureRuleSet(907);
+        var ruleSet = new ArchitectureRuleSet(adrNumber);
 
         // Assert
-        ruleSet.AdrNumber.Should().Be(907);
+        ruleSet.AdrNumber.Should().Be(adrNumber);
         ruleSet.RuleCount.Should().Be(0);
         ruleSet.ClauseCount.Should().Be(0);
     }
@@ -100,29 +103,32 @@ public sealed class ArchitectureRuleSetTests
             .WithMessage("*ADR-907_3_1*已存在*");
     }
 
-    [Fact(DisplayName = "HasRule 应该正确检查规则是否存在")]
-    public void HasRule_Should_Check_Rule_Existence()
+    [Theory(DisplayName = "HasRule 应该正确检查规则是否存在")]
+    [InlineData(3, true)]
+    [InlineData(4, false)]
+    [InlineData(1, false)]
+    public void HasRule_Should_Check_Rule_Existence(int ruleNumber, bool expected)
     {
         // Arrange
         var ruleSet = new ArchitectureRuleSet(907);
         ruleSet.AddRule(3, "规则", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
 
         // Act & Assert
-        ruleSet.HasRule(3).Should().BeTrue();
-        ruleSet.HasRule(4).Should().BeFalse();
+        ruleSet.HasRule(ruleNumber).Should().Be(expected);
     }
 
-    [Fact(DisplayName = "HasClause 应该正确检查条款是否存在")]
-    public void HasClause_Should_Check_Clause_Existence()
+    [Theory(DisplayName = "HasClause 应该正确检查条款是否存在")]
+    [InlineData(3, 1, true)]
+    [InlineData(3, 2, false)]
+    [InlineData(4, 1, false)]
+    public void HasClause_Should_Check_Clause_Existence(int ruleNumber, int clauseNumber, bool expected)
     {
         // Arrange
         var ruleSet = new ArchitectureRuleSet(907);
         ruleSet.AddClause(3, 1, "条款", "执行", ClauseExecutionType.Convention);
 
         // Act & Assert
-        ruleSet.HasClause(3, 1).Should().BeTrue();
-        ruleSet.HasClause(3, 2).Should().BeFalse();
-        ruleSet.HasClause(4, 1).Should().BeFalse();
+        ruleSet.HasClause(ruleNumber, clauseNumber).Should().Be(expected);
     }
 
     [Fact(DisplayName = "应该能构建完整的 ADR 规则集")]

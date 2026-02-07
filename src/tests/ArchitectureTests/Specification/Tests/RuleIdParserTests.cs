@@ -229,12 +229,12 @@ public sealed class RuleIdParserTests
 
     #region 边界情况测试
 
-    [Fact(DisplayName = "TryParse 和 ParseStrict 对同一有效输入应返回相同结果")]
-    public void TryParse_And_ParseStrict_Should_Return_Same_Result()
+    [Theory(DisplayName = "TryParse 和 ParseStrict 对同一有效输入应返回相同结果")]
+    [InlineData("ADR-907_3_2")]
+    [InlineData("ADR-001_1")]
+    [InlineData("907.3.2")]
+    public void TryParse_And_ParseStrict_Should_Return_Same_Result(string input)
     {
-        // Arrange
-        var input = "ADR-907_3_2";
-
         // Act
         var tryParseSuccess = RuleIdParser.TryParse(input, out var tryParseResult);
         var strictResult = RuleIdParser.ParseStrict(input);
@@ -244,19 +244,20 @@ public sealed class RuleIdParserTests
         tryParseResult.Should().Be(strictResult);
     }
 
-    [Fact(DisplayName = "解析结果应该能正确识别 IsRule 和 IsClause")]
-    public void Parsed_Result_Should_Correctly_Identify_IsRule_And_IsClause()
+    [Theory(DisplayName = "解析结果应该能正确识别 IsRule 和 IsClause")]
+    [InlineData("ADR-001_1", true, false)]
+    [InlineData("ADR-001_1_1", false, true)]
+    [InlineData("907_3", true, false)]
+    [InlineData("907_3_2", false, true)]
+    public void Parsed_Result_Should_Correctly_Identify_IsRule_And_IsClause(
+        string input, bool expectedIsRule, bool expectedIsClause)
     {
         // Arrange & Act
-        var ruleResult = RuleIdParser.ParseStrict("ADR-001_1");
-        var clauseResult = RuleIdParser.ParseStrict("ADR-001_1_1");
+        var result = RuleIdParser.ParseStrict(input);
 
         // Assert
-        ruleResult.IsRule.Should().BeTrue();
-        ruleResult.IsClause.Should().BeFalse();
-
-        clauseResult.IsRule.Should().BeFalse();
-        clauseResult.IsClause.Should().BeTrue();
+        result.IsRule.Should().Be(expectedIsRule);
+        result.IsClause.Should().Be(expectedIsClause);
     }
 
     #endregion
