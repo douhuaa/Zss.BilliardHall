@@ -31,12 +31,9 @@ grep -r '违规：' src/tests/ArchitectureTests --include="*.cs" -l
 
 ### 重构步骤
 
-#### 步骤 1：添加命名空间
+#### 步骤 1：验证全局using配置
 
-```csharp
-// ✅ 在文件开头添加
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
-```
+> **📌 注意**：ArchitectureTests项目已配置全局using（在`GlobalUsings.cs`中），无需在测试文件中添加using语句。
 
 #### 步骤 2：从硬编码到 RuleSetRegistry
 
@@ -95,7 +92,7 @@ public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
 
 ```
 RuleSetRegistry 迁移检查：
-├─ [ ] 添加 using Specification.Index 命名空间
+├─ [ ] 验证全局using配置（已包含在 GlobalUsings.cs）
 ├─ [ ] 使用 RuleSetRegistry.GetStrict() 获取规则集
 ├─ [ ] 使用 GetClause() 获取条款信息
 ├─ [ ] 使用 clause.Id 替代硬编码的 RuleId
@@ -147,10 +144,7 @@ grep -r "private static string? FindRepositoryRoot" src/tests/ArchitectureTests 
 
 对于每个包含 `FindRepositoryRoot` 的文件：
 
-1. **添加 using 语句**（如果还没有）：
-```csharp
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-```
+1. **验证全局using**（已配置在GlobalUsings.cs中，无需手动添加）
 
 2. **删除整个 FindRepositoryRoot 方法**：
 ```csharp
@@ -161,7 +155,7 @@ private static string? FindRepositoryRoot()
 }
 ```
 
-3. **替换所有调用**：
+2. **替换所有调用**：
 ```csharp
 // 旧代码
 var repoRoot = FindRepositoryRoot() ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -207,8 +201,7 @@ Write-Host "`n总计: $($files.Count) 个文件需要重构"
 │  └─ [ ] 包含 ADR 文档路径
 │
 ├─ [ ] Using 语句
-│  ├─ [ ] using FluentAssertions;
-│  └─ [ ] using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+│  └─ [ ] 验证全局using（已配置在GlobalUsings.cs，无需手动添加）
 │
 └─ [ ] 测试方法
    ├─ [ ] 方法名格式: ADR_XXX_Y_Z_<描述>
@@ -240,9 +233,6 @@ public class ADR_960_Tests  // ❌ 缺少 sealed
 #### After（已重构）
 
 ```csharp
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_960;
 
 /// <summary>
@@ -350,8 +340,6 @@ violations.Should().BeEmpty(
 
 ```csharp
 // ✅ 推荐
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 var repoRoot = TestEnvironment.RepositoryRoot;
 var adrPath = TestEnvironment.AdrPath;
 var agentPath = TestEnvironment.AgentFilesPath;

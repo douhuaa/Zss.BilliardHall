@@ -56,8 +56,6 @@ result.IsSuccessful.Should().BeTrue(message);
 
 ```csharp
 // ✅✅ 最佳方式：结合 RuleSetRegistry（v3.0 推荐）
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
-
 // 从 RuleSetRegistry 获取规则信息
 var ruleSet = RuleSetRegistry.GetStrict(2);
 var clause = ruleSet.GetClause(1, 1);

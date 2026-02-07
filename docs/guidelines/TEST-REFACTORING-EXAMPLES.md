@@ -755,10 +755,6 @@ TestConstants.Adr907APath   // ADR-907-A 对齐执行标准
 ### 重构前（❌ 不推荐 - 硬编码规则信息）
 
 ```csharp
-using FluentAssertions;
-using NetArchTest.Rules;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 
 public sealed class ADR_002_1_Architecture_Tests
@@ -801,11 +797,6 @@ public sealed class ADR_002_1_Architecture_Tests
 ### 重构后（✅ 推荐 - 使用 RuleSetRegistry）
 
 ```csharp
-using FluentAssertions;
-using NetArchTest.Rules;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;  // ✅ 添加命名空间
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 
 /// <summary>
@@ -861,10 +852,8 @@ public sealed class ADR_002_1_Architecture_Tests
 
 ### 重构步骤总结
 
-1. **添加命名空间**：
-   ```csharp
-   using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
-   ```
+1. **验证全局using配置**：
+   > **📌 注意**：命名空间已包含在全局using中（GlobalUsings.cs），无需手动添加。
 
 2. **获取规则集和条款**：
    ```csharp
@@ -889,7 +878,7 @@ public sealed class ADR_002_1_Architecture_Tests
 
 ```
 RuleSetRegistry 迁移检查：
-├─ [ ] 添加 using Specification.Index 命名空间
+├─ [ ] 验证全局using配置（已包含在 GlobalUsings.cs）
 ├─ [ ] 使用 RuleSetRegistry.GetStrict() 获取规则集
 ├─ [ ] 使用 GetClause() 获取条款信息
 ├─ [ ] 使用 clause.Id 替代硬编码的 RuleId

@@ -84,10 +84,7 @@ ADR（文档） → RuleSet（规范） → Test（验证）
 
 ### RuleSetRegistry 基本用法
 
-**导入命名空间**：
-```csharp
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
-```
+> **📌 注意**：`RuleSetRegistry` 相关的命名空间已包含在全局using中（`GlobalUsings.cs`），无需在测试文件中重复导入。
 
 **获取规则集**：
 ```csharp
@@ -163,7 +160,6 @@ Console.WriteLine($"执行方式: {clause.Enforcement}"); // 如何执行这个�
 private static string? FindRepositoryRoot() { /* 20+ 行代码 */ }
 
 // ✅ 推荐（标准方式）
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 var repoRoot = TestEnvironment.RepositoryRoot;
 ```
 
@@ -253,10 +249,6 @@ public sealed class ADR_XXX_Tests : IClassFixture<AdrTestFixture>
 ### 1️⃣ 测试类模板（使用 RuleSetRegistry）
 
 ```csharp
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_XXX;
 
 /// <summary>
@@ -365,12 +357,9 @@ public sealed class ADR_XXX_Y_Architecture_Tests
 
 ### 迁移步骤
 
-#### 步骤 1：添加命名空间
+#### 步骤 1：验证全局using
 
-```csharp
-// ✅ 在文件开头添加
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
-```
+> **📌 注意**：ArchitectureTests项目已配置全局using（在`GlobalUsings.cs`中），包含了所有必要的命名空间，无需在测试文件中重复添加using语句。
 
 #### 步骤 2：获取规则集和条款
 
@@ -425,7 +414,7 @@ var message = AssertionMessageBuilder.BuildFromArchTestResult(
 
 在迁移测试文件时，请确保完成以下各项：
 
-- [ ] **命名空间**：添加 `using Specification.Index;`
+- [ ] **验证全局using**：确认GlobalUsings.cs已包含必要的命名空间
 - [ ] **获取规则集**：使用 `RuleSetRegistry.GetStrict()`
 - [ ] **获取条款**：使用 `ruleSet.GetClause()`
 - [ ] **使用 clause.Id**：替代硬编码的 RuleId
@@ -437,9 +426,6 @@ var message = AssertionMessageBuilder.BuildFromArchTestResult(
 
 **迁移前 ❌**：
 ```csharp
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 
 public sealed class ADR_002_1_Architecture_Tests
@@ -462,10 +448,6 @@ public sealed class ADR_002_1_Architecture_Tests
 
 **迁移后 ✅**：
 ```csharp
-using FluentAssertions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;  // ✅ 新增
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 
 /// <summary>
@@ -537,8 +519,6 @@ public sealed class ADR_002_1_Architecture_Tests
 
 **使用示例**：
 ```csharp
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
-
 // 在测试中使用（推荐严格模式）
 var ruleSet = RuleSetRegistry.GetStrict(2);
 var clause = ruleSet.GetClause(1, 1);
@@ -581,8 +561,6 @@ foreach (var rs in governanceRules)
 
 **使用方式**：
 ```csharp
-using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-
 var repoRoot = TestEnvironment.RepositoryRoot;
 var adrPath = TestEnvironment.AdrPath;
 ```
@@ -620,8 +598,6 @@ var adrPath = TestEnvironment.AdrPath;
 
 **使用示例**：
 ```csharp
-using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
-
 var message = BuildFileNotFoundMessage(
     ruleId: "ADR-XXX_Y_Z",
     filePath: filePath,
