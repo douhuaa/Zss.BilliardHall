@@ -103,17 +103,25 @@ public sealed class ArchitectureRuleIdTests
         (ruleId1 == ruleId2).Should().BeTrue();
     }
 
-    [Fact(DisplayName = "不同的 RuleId 应该不相等")]
-    public void Different_RuleIds_Should_Not_Be_Equal()
+    [Theory(DisplayName = "不同的 RuleId 应该不相等")]
+    [InlineData(907, 3, null, 907, 4, null)]  // 不同的 Rule number
+    [InlineData(907, 3, null, 907, 3, 1)]     // Rule vs Clause
+    [InlineData(1, 1, null, 2, 1, null)]      // 不同的 ADR
+    [InlineData(907, 3, 1, 907, 3, 2)]        // 不同的 Clause number
+    public void Different_RuleIds_Should_Not_Be_Equal(
+        int adr1, int rule1, int? clause1,
+        int adr2, int rule2, int? clause2)
     {
         // Arrange
-        var rule1 = ArchitectureRuleId.Rule(907, 3);
-        var rule2 = ArchitectureRuleId.Rule(907, 4);
-        var clause1 = ArchitectureRuleId.Clause(907, 3, 1);
+        var ruleId1 = clause1.HasValue
+            ? ArchitectureRuleId.Clause(adr1, rule1, clause1.Value)
+            : ArchitectureRuleId.Rule(adr1, rule1);
+        var ruleId2 = clause2.HasValue
+            ? ArchitectureRuleId.Clause(adr2, rule2, clause2.Value)
+            : ArchitectureRuleId.Rule(adr2, rule2);
 
         // Act & Assert
-        rule1.Should().NotBe(rule2);
-        rule1.Should().NotBe(clause1);
+        ruleId1.Should().NotBe(ruleId2);
     }
 
     [Theory(DisplayName = "Rule 和同编号的 Clause 排序时 Rule 应该在前")]
