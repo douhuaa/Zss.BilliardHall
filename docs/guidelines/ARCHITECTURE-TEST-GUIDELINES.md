@@ -41,6 +41,7 @@ ADR ≠ Test ≠ Specification（三者物理隔离）
 | 规范类别 | 要求 | 优先级 | 采用率目标 |
 |---------|------|--------|-----------|
 | **RuleSetRegistry** | 从 Registry 获取规则信息 | 🔴 P0 | 100% |
+| **参数化测试** | 使用 Theory + InlineData 减少重复 | 🔴 P1 | 80% |
 | **TestEnvironment** | 使用共享路径常量 | 🔴 P0 | 100% |
 | **FileSystemTestHelper** | 使用统一文件操作方法 | 🔴 P1 | 80% |
 | **AssertionMessageBuilder** | 使用标准断言消息 | 🔴 P1 | 80% |
@@ -342,6 +343,210 @@ public sealed class ADR_XXX_Y_Architecture_Tests
 | 🟢 高质量 | 22.4% | 使用 AssertionMessageBuilder，包含所有必需字段 |
 | 🟡 中等质量 | 25.6% | 手动构建但有基本信息 |
 | 🔴 低质量 | 52.0% | 缺少上下文和修复建议 |
+
+---
+
+## 🧪 参数化测试（Theory 和 InlineData）
+
+### 什么是参数化测试？
+
+参数化测试允许使用不同的输入数据多次运行同一个测试方法，避免编写重复的测试代码。xUnit 提供了 `[Theory]` 和 `[InlineData]` 属性来支持参数化测试。
+
+### 何时使用参数化测试？
+
+**✅ 适合使用的场景**：
+- 测试逻辑相同，只是输入和预期输出不同
+- 需要测试多种边界条件
+- 验证规则解析器、格式化器等纯函数
+
+**❌ 不适合使用的场景**：
+- 测试逻辑完全不同
+- 需要不同的 Arrange 或 Assert 步骤
+- 测试之间有依赖关系
+
+### 基本用法
+
+#### 1️⃣ 简单的参数化测试
+
+```csharp
+[Theory(DisplayName = "RuleId 解析器应该正确解析下划线格式")]
+[InlineData("ADR-001_1", 1, 1, null)]
+[InlineData("ADR-907_3", 907, 3, null)]
+[InlineData("001_1", 1, 1, null)]
+[InlineData("907_3", 907, 3, null)]
+public void TryParse_Should_Parse_Underscore_Rule_Format(
+    string input,
+    int expectedAdr,
+    int expectedRule,
+    int? expectedClause)
+{
+    // Arrange & Act
+    var success = RuleIdParser.TryParse(input, out var result);
+    
+    // Assert
+    success.Should().BeTrue($"应该能够解析：{input}");
+    result.AdrNumber.Should().Be(expectedAdr);
+    result.RuleNumber.Should().Be(expectedRule);
+    result.ClauseNumber.Should().Be(expectedClause);
+}
+```
+
+**说明**：
+- 使用 `[Theory]` 替代 `[Fact]`
+- 每个 `[InlineData]` 提供一组测试参数
+- 测试方法接收参数，参数顺序必须与 InlineData 一致
+
+#### 2️⃣ 使用 MemberData 处理复杂数据
+
+对于复杂的测试数据或需要对象实例的场景，使用 `[MemberData]`：
+
+```csharp
+public static IEnumerable<object[]> InvalidInputs { get; } = new List<object[]>
+{
+    new object[] { null },
+    new object[] { "" },
+    new object[] { "   " },
+    new object[] { "invalid" },
+    new object[] { "ADR-" },
+    new object[] { "ADR-abc" },
+};
+
+[Theory(DisplayName = "TryParse 应该对无效格式返回 false")]
+[MemberData(nameof(InvalidInputs))]
+public void TryParse_Should_Return_False_For_Invalid_Format(string? input)
+{
+    // Act
+    var success = RuleIdParser.TryParse(input, out _);
+    
+    // Assert
+    success.Should().BeFalse($"不应该解析无效输入：{input ?? "(null)"}");
+}
+```
+
+### 最佳实践
+
+#### 1. 使用清晰的 DisplayName
+
+```csharp
+// ✅ 好的 DisplayName
+[Theory(DisplayName = "RuleSet 应该正确返回指定的规则")]
+[InlineData(1, 1, "模块物理隔离")]
+[InlineData(900, 1, "架构裁决权威性")]
+
+// ❌ 不好的 DisplayName
+[Theory(DisplayName = "测试规则")]
+```
+
+#### 2. 参数命名要有意义
+
+```csharp
+// ✅ 好的参数命名
+public void Should_Get_Rule_By_Number(
+    int adrNumber,
+    int ruleNumber,
+    string expectedSummary)
+
+// ❌ 不好的参数命名
+public void Should_Get_Rule_By_Number(int a, int b, string c)
+```
+
+#### 3. 每组测试数据添加注释
+
+```csharp
+[Theory(DisplayName = "应该支持多种 RuleId 格式")]
+[InlineData("ADR-001_1", 1, 1, null)]      // 标准格式
+[InlineData("001_1", 1, 1, null)]          // 短格式（省略 ADR-）
+[InlineData("ADR-001.1", 1, 1, null)]      // 旧格式（兼容性）
+```
+
+#### 4. 结合 RuleSetRegistry 使用
+
+```csharp
+[Theory(DisplayName = "RuleSet 应该包含正确的规则信息")]
+[InlineData(1, 1, "模块物理隔离", RuleSeverity.Constitutional)]
+[InlineData(900, 1, "架构裁决权威性", RuleSeverity.Governance)]
+[InlineData(907, 3, "最小断言语义规范", null)]
+public void RuleSet_Should_Contain_Correct_Rule_Info(
+    int adrNumber,
+    int ruleNumber,
+    string expectedSummary,
+    RuleSeverity? expectedSeverity)
+{
+    // Arrange
+    var ruleSet = RuleSetRegistry.GetStrict(adrNumber);
+    
+    // Act
+    var rule = ruleSet.GetRule(ruleNumber);
+    
+    // Assert
+    rule.Summary.Should().Contain(expectedSummary);
+    if (expectedSeverity.HasValue)
+    {
+        rule.Severity.Should().Be(expectedSeverity.Value);
+    }
+}
+```
+
+### 从多个 [Fact] 迁移到 [Theory]
+
+**重构前（❌ 重复代码）**：
+
+```csharp
+[Fact(DisplayName = "应该解析 ADR-001_1")]
+public void Should_Parse_ADR_001_1()
+{
+    var success = RuleIdParser.TryParse("ADR-001_1", out var result);
+    success.Should().BeTrue();
+    result.AdrNumber.Should().Be(1);
+    result.RuleNumber.Should().Be(1);
+}
+
+[Fact(DisplayName = "应该解析 ADR-907_3")]
+public void Should_Parse_ADR_907_3()
+{
+    var success = RuleIdParser.TryParse("ADR-907_3", out var result);
+    success.Should().BeTrue();
+    result.AdrNumber.Should().Be(907);
+    result.RuleNumber.Should().Be(3);
+}
+
+// ... 更多重复的测试
+```
+
+**重构后（✅ 参数化测试）**：
+
+```csharp
+[Theory(DisplayName = "应该正确解析 RuleId")]
+[InlineData("ADR-001_1", 1, 1)]
+[InlineData("ADR-907_3", 907, 3)]
+[InlineData("ADR-120_2", 120, 2)]
+[InlineData("ADR-950_1", 950, 1)]
+public void Should_Parse_RuleId_Correctly(
+    string input,
+    int expectedAdr,
+    int expectedRule)
+{
+    // Act
+    var success = RuleIdParser.TryParse(input, out var result);
+    
+    // Assert
+    success.Should().BeTrue($"应该能够解析：{input}");
+    result.AdrNumber.Should().Be(expectedAdr);
+    result.RuleNumber.Should().Be(expectedRule);
+}
+```
+
+**优势**：
+- ✅ 减少代码重复（从 ~50 行减少到 ~20 行）
+- ✅ 更容易添加新的测试用例
+- ✅ 测试报告更清晰（显示每个数据组合）
+- ✅ 维护成本更低
+
+### 注意事项
+
+1. **避免过多参数**：如果参数超过 5 个，考虑使用对象或 MemberData
+2. **保持测试独立**：每个测试应该独立运行，不依赖其他测试
+3. **避免复杂逻辑**：参数化测试应该保持简单，复杂逻辑应拆分为多个测试
 
 ---
 

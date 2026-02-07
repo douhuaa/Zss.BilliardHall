@@ -10,6 +10,7 @@
 
 - **[架构测试编写指南 v3.0](./ARCHITECTURE-TEST-GUIDELINES.md)** - 架构测试的统一规范和最佳实践
   - **新增**：RuleSet 和 RuleSetRegistry 使用指南
+  - **新增**：参数化测试（Theory + InlineData）使用指南
   - **新增**：迁移到新治理体系的完整流程
   - 共性问题的详细分析和解决方案
   - 反例和正例对比
@@ -23,9 +24,10 @@
   - 常用代码片段和重构模板
   - 重构优先级和验证方法
 
-- **[测试代码重构示例](./TEST-REFACTORING-EXAMPLES.md)** - 实际重构案例集合
+- **[测试代码重构示例 v1.2](./TEST-REFACTORING-EXAMPLES.md)** - 实际重构案例集合
   - **新增**：重构示例 8 - 使用 RuleSetRegistry
-  - 7 个实际重构示例，展示前后对比
+  - **新增**：重构示例 9 - 使用参数化测试（Theory + InlineData）
+  - 9 个实际重构示例，展示前后对比
   - 每个示例包含问题分析和改进点
 
 - **[断言消息模板使用指南](./ASSERTION-MESSAGE-TEMPLATE-USAGE.md)** - AssertionMessageBuilder 详细说明
@@ -101,4 +103,4 @@
 ---
 
 最后更新：2026-02-07  
-版本：1.1 - 新增 RuleSet 治理体系相关内容
+版本：1.2 - 新增参数化测试指南和示例
