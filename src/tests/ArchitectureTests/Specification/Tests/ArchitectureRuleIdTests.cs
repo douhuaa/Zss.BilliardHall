@@ -269,7 +269,7 @@ public sealed class ArchitectureRuleIdParsingInvariants_Tests
     {
         Action act = () => ArchitectureRuleId.Parse(input);
 
-        act.Should().Throw<FormatException>();
+        act.Should().Throw<ArgumentException>();
     }
 }
 

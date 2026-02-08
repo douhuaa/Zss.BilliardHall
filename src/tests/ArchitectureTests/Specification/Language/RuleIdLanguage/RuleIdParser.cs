@@ -84,6 +84,12 @@ public static class RuleIdParser
         var underscoreParts = normalized.Split('_');
         if (underscoreParts.Length >= 2)
         {
+            // 拒绝空部分（如 "907__3" 或 "907_3_"）
+            if (underscoreParts.Any(part => string.IsNullOrWhiteSpace(part)))
+            {
+                return false;
+            }
+
             if (int.TryParse(underscoreParts[0], out var adr) &&
                 int.TryParse(underscoreParts[1], out var rule))
             {
@@ -93,9 +99,13 @@ public static class RuleIdParser
                     result = ArchitectureRuleId.Clause(adr, rule, clause);
                     return true;
                 }
-
-                result = ArchitectureRuleId.Rule(adr, rule);
-                return true;
+                
+                // 只有正好2个部分时才返回 Rule
+                if (underscoreParts.Length == 2)
+                {
+                    result = ArchitectureRuleId.Rule(adr, rule);
+                    return true;
+                }
             }
         }
 
@@ -103,6 +113,12 @@ public static class RuleIdParser
         var dotParts = normalized.Split('.');
         if (dotParts.Length >= 2)
         {
+            // 拒绝空部分
+            if (dotParts.Any(part => string.IsNullOrWhiteSpace(part)))
+            {
+                return false;
+            }
+
             if (int.TryParse(dotParts[0], out var adr) &&
                 int.TryParse(dotParts[1], out var rule))
             {
@@ -113,8 +129,12 @@ public static class RuleIdParser
                     return true;
                 }
 
-                result = ArchitectureRuleId.Rule(adr, rule);
-                return true;
+                // 只有正好2个部分时才返回 Rule
+                if (dotParts.Length == 2)
+                {
+                    result = ArchitectureRuleId.Rule(adr, rule);
+                    return true;
+                }
             }
         }
 
