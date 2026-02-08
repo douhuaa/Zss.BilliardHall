@@ -4,7 +4,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 /// 验证 RuleSetRegistry 和规则集定义的正确性
 /// 确保从 ADR 文档定义的规则集可以正常工作
 /// </summary>
-public sealed class ArchitectureRulesTests
+public sealed class ArchitectureRules_Tests
 {
     // 物化 MemberData：所有已定义的 ADR 编号（避免延迟枚举问题）
     public static IEnumerable<object[]> AllAdrNumbers =>

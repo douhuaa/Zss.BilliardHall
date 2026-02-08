@@ -4,7 +4,7 @@
 /// RuleSetRegistry 功能测试
 /// 验证规则集注册表的查询和验证行为
 /// </summary>
-public sealed class RuleSetRegistryTests
+public sealed class RuleSetRegistry_Tests
 {
     // 物化共享 ADR 列表，避免重复延迟枚举与潜在性能问题
     private static readonly IReadOnlyList<int> AllAdrNumbers = RuleSetRegistry.GetAllAdrNumbers().ToList();
