@@ -82,6 +82,24 @@ public readonly record struct ArchitectureRuleId
         => new(adr, rule, clause);
 
     /// <summary>
+    /// 从字符串解析规则ID（领域语言入口）
+    /// 
+    /// 支持的格式：
+    /// - "ADR-907_3" → Rule 级别
+    /// - "ADR-907_3_2" → Clause 级别
+    /// - "ADR-907.3" → Rule 级别（兼容旧格式）
+    /// - "ADR-907.3.2" → Clause 级别（兼容旧格式）
+    /// 
+    /// 这是测试和领域逻辑中使用规则ID的推荐方式，
+    /// 避免直接使用构造函数导致测试被实现细节污染。
+    /// </summary>
+    /// <param name="ruleId">RuleId 字符串</param>
+    /// <returns>ArchitectureRuleId 对象</returns>
+    /// <exception cref="ArgumentException">当格式错误时抛出</exception>
+    public static ArchitectureRuleId Parse(string ruleId)
+        => RuleIdParser.ParseStrict(ruleId);
+
+    /// <summary>
     /// 转换为规范的字符串格式
     /// Rule: ADR-907_3
     /// Clause: ADR-907_3_2

@@ -4,7 +4,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 /// RuleIdParser 的单元测试
 /// 验证 RuleId 字符串解析的核心功能
 /// </summary>
-public sealed class RuleIdParserTests
+public sealed class RuleIdParser_Tests
 {
     #region 数据源（物化避免延迟枚举）
 
