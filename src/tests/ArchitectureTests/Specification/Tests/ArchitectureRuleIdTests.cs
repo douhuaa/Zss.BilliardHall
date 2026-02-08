@@ -162,3 +162,115 @@ public sealed class ArchitectureRuleIdTests
         ruleId1.Should().NotBe(ruleId2);
     }
 }
+
+public sealed class ArchitectureRuleIdIdentityInvariants_Tests
+{
+    [Theory(DisplayName = "不变量：RuleId 表示 ADR 下的规则级别")]
+    [InlineData(907, 3)]
+    [InlineData(1, 1)]
+    [InlineData(900, 2)]
+    public void RuleId_Should_Always_Be_Rule_Level(int adr, int rule)
+    {
+        var id = ArchitectureRuleId.Rule(adr, rule);
+
+        id.Level.Should().Be(RuleLevel.Rule);
+        id.ClauseNumber.Should().BeNull();
+    }
+
+    [Theory(DisplayName = "不变量：ClauseId 表示 ADR 下的子规则级别")]
+    [InlineData(907, 3, 1)]
+    [InlineData(1, 1, 1)]
+    [InlineData(900, 2, 5)]
+    public void ClauseId_Should_Always_Be_Clause_Level(int adr, int rule, int clause)
+    {
+        var id = ArchitectureRuleId.Clause(adr, rule, clause);
+
+        id.Level.Should().Be(RuleLevel.Clause);
+        id.ClauseNumber.Should().Be(clause);
+    }
+}
+
+public sealed class ArchitectureRuleIdRepresentationInvariants_Tests
+{
+    [Theory(DisplayName = "不变量：RuleId 的字符串表示是稳定规范格式")]
+    [InlineData(907, 3, "ADR-907_3")]
+    [InlineData(1, 1, "ADR-001_1")]
+    [InlineData(900, 2, "ADR-900_2")]
+    public void RuleId_ToString_Should_Follow_Spec(int adr, int rule, string expected)
+    {
+        var id = ArchitectureRuleId.Rule(adr, rule);
+
+        id.ToString().Should().Be(expected);
+    }
+
+    [Theory(DisplayName = "不变量：ClauseId 的字符串表示是稳定规范格式")]
+    [InlineData(907, 3, 1, "ADR-907_3_1")]
+    [InlineData(900, 1, 1, "ADR-900_1_1")]
+    public void ClauseId_ToString_Should_Follow_Spec(int adr, int rule, int clause, string expected)
+    {
+        var id = ArchitectureRuleId.Clause(adr, rule, clause);
+
+        id.ToString().Should().Be(expected);
+    }
+}
+
+public sealed class ArchitectureRuleIdOrderingInvariants_Tests
+{
+    [Theory(DisplayName = "不变量：排序顺序为 ADR → Rule → Clause")]
+    [InlineData(
+    new[] { "ADR-907_3_2", "ADR-907_1", "ADR-907_3_1", "ADR-900_1", "ADR-900_1_1" },
+    new[] { "ADR-900_1", "ADR-900_1_1", "ADR-907_1", "ADR-907_3_1", "ADR-907_3_2" }
+    )]
+    public void RuleIds_Should_Sort_By_Adr_Then_Rule_Then_Clause(
+        string[] input,
+        string[] expected)
+    {
+        var ids = input.Select(ArchitectureRuleId.Parse);
+
+        ids.OrderBy(x => x)
+            .Select(x => x.ToString())
+            .Should()
+            .Equal(expected);
+    }
+
+    [Theory(DisplayName = "不变量：同编号下 Rule 永远排在 Clause 之前")]
+    [InlineData(907, 3, 1)]
+    [InlineData(1, 1, 1)]
+    public void Rule_Should_Always_Come_Before_Its_Clause(int adr, int rule, int clause)
+    {
+        var ruleId = ArchitectureRuleId.Rule(adr, rule);
+        var clauseId = ArchitectureRuleId.Clause(adr, rule, clause);
+
+        ruleId.CompareTo(clauseId).Should().BeLessThan(0);
+    }
+}
+
+public sealed class ArchitectureRuleIdParsingInvariants_Tests
+{
+    [Theory(DisplayName = "不变量：合法字符串必须可被解析")]
+    [InlineData("ADR-907_3")]
+    [InlineData("ADR-907_3_1")]
+    [InlineData("907_3")]
+    [InlineData("907_3_1")]
+    public void Parse_Should_Accept_Valid_Formats(string input)
+    {
+        var id = ArchitectureRuleId.Parse(input);
+
+        id.Should().NotBeNull();
+    }
+
+    [Theory(DisplayName = "不变量：非法格式必须被拒绝")]
+    [InlineData("ADR-")]
+    [InlineData("ADR-907")]
+    [InlineData("ADR-907__3")]
+    [InlineData("ADR-907_3_")]
+    [InlineData("ADR--3")]
+    public void Parse_Should_Reject_Invalid_Formats(string input)
+    {
+        Action act = () => ArchitectureRuleId.Parse(input);
+
+        act.Should().Throw<FormatException>();
+    }
+}
+
+
