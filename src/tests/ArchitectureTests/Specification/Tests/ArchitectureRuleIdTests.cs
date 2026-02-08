@@ -18,11 +18,9 @@ public sealed class ArchitectureRuleIdTests
         // Act
         var ruleId = CreateRuleId(adr, rule);
 
-        // Assert
-        ruleId.AdrNumber.Should().Be(adr);
-        ruleId.RuleNumber.Should().Be(rule);
-        ruleId.ClauseNumber.Should().BeNull();
-        ruleId.Level.Should().Be(RuleLevel.Rule);
+        // Assert - 验证契约而非实现细节
+        ruleId.Level.Should().Be(RuleLevel.Rule, "Rule 工厂必须产生 Rule 级别的ID");
+        ruleId.ToString().Should().Be($"ADR-{adr:D3}_{rule}", "ToString 是公开契约");
     }
 
     [Theory(DisplayName = "Clause 工厂方法应该创建正确的 Clause 级别ID")]
@@ -34,11 +32,9 @@ public sealed class ArchitectureRuleIdTests
         // Act
         var clauseId = CreateClauseId(adr, rule, clause);
 
-        // Assert
-        clauseId.AdrNumber.Should().Be(adr);
-        clauseId.RuleNumber.Should().Be(rule);
-        clauseId.ClauseNumber.Should().Be(clause);
-        clauseId.Level.Should().Be(RuleLevel.Clause);
+        // Assert - 验证契约而非实现细节
+        clauseId.Level.Should().Be(RuleLevel.Clause, "Clause 工厂必须产生 Clause 级别的ID");
+        clauseId.ToString().Should().Be($"ADR-{adr:D3}_{rule}_{clause}", "ToString 是公开契约");
     }
 
     [Theory(DisplayName = "ToString 应该按规范格式输出")]
@@ -62,29 +58,48 @@ public sealed class ArchitectureRuleIdTests
     }
 
     [Theory(DisplayName = "Parse 应该正确解析规则ID字符串")]
-    [InlineData("ADR-907_3", 907, 3, null)]
-    [InlineData("ADR-907_3_2", 907, 3, 2)]
-    [InlineData("ADR-900_1", 900, 1, null)]
-    [InlineData("ADR-900_1_1", 900, 1, 1)]
-    [InlineData("907_3", 907, 3, null)]
-    [InlineData("907_3_2", 907, 3, 2)]
-    public void Parse_Should_Parse_RuleId_String_Correctly(string input, int expectedAdr, int expectedRule, int? expectedClause)
+    [InlineData("ADR-907_3", RuleLevel.Rule, "ADR-907_3")]
+    [InlineData("ADR-907_3_2", RuleLevel.Clause, "ADR-907_3_2")]
+    [InlineData("ADR-900_1", RuleLevel.Rule, "ADR-900_1")]
+    [InlineData("ADR-900_1_1", RuleLevel.Clause, "ADR-900_1_1")]
+    [InlineData("907_3", RuleLevel.Rule, "ADR-907_3")]
+    [InlineData("907_3_2", RuleLevel.Clause, "ADR-907_3_2")]
+    public void Parse_Should_Parse_RuleId_String_Correctly(string input, RuleLevel expectedLevel, string expectedToString)
     {
         // Act
         var ruleId = ArchitectureRuleId.Parse(input);
 
-        // Assert
-        ruleId.AdrNumber.Should().Be(expectedAdr);
-        ruleId.RuleNumber.Should().Be(expectedRule);
-        ruleId.ClauseNumber.Should().Be(expectedClause);
+        // Assert - 验证契约而非实现细节
+        ruleId.Level.Should().Be(expectedLevel, "Level 是类型级别契约");
+        ruleId.ToString().Should().Be(expectedToString, "ToString 是序列化契约");
     }
 
-    [Theory(DisplayName = "CompareTo 应该按 ADR、Rule、Clause 顺序排序")]
+    [Theory(DisplayName = "Parse 应该拒绝非法格式（宪法级防护）")]
+    [InlineData("ADR-", "空 RuleId")]
+    [InlineData("ADR-907", "缺少 Rule 编号")]
+    [InlineData("ADR--3", "双横线")]
+    [InlineData("ADR-907__3", "双下划线")]
+    [InlineData("", "空字符串")]
+    [InlineData("   ", "空白字符")]
+    [InlineData("ADR-abc_3", "非数字 ADR")]
+    [InlineData("ADR-907_xyz", "非数字 Rule")]
+    public void Parse_Should_Reject_Invalid_Format(string input, string reason)
+    {
+        // Act
+        Action act = () => ArchitectureRuleId.Parse(input);
+
+        // Assert - 这是宪法级防护：拒绝污染规则体系
+        act.Should().Throw<ArgumentException>(
+            $"非法格式必须被拒绝：{reason}")
+            .WithMessage("*RuleId*");
+    }
+
+    [Theory(DisplayName = "排序契约：ADR → Rule → Clause（宪法级不变量）")]
     [InlineData(
         new[] { "ADR-907_3_2", "ADR-907_1", "ADR-907_3_1", "ADR-900_1", "ADR-900_1_1" },
         new[] { "ADR-900_1", "ADR-900_1_1", "ADR-907_1", "ADR-907_3_1", "ADR-907_3_2" }
     )]
-    public void CompareTo_Should_Sort_By_Adr_Rule_Clause(
+    public void Sorting_Contract_Adr_Then_Rule_Then_Clause(
         string[] input,
         string[] expected)
     {
@@ -94,8 +109,25 @@ public sealed class ArchitectureRuleIdTests
         // Act
         var sorted = ids.OrderBy(x => x).Select(x => x.ToString()).ToArray();
 
-        // Assert
-        sorted.Should().Equal(expected);
+        // Assert - 这是体系基础，不可修改
+        sorted.Should().Equal(expected, "排序优先级：ADR → Rule → Clause 是不可破坏的契约");
+    }
+
+    [Theory(DisplayName = "排序契约：Rule 必须排在同编号 Clause 之前")]
+    [InlineData(907, 3, 1)]
+    [InlineData(1, 1, 1)]
+    [InlineData(900, 5, 2)]
+    public void Sorting_Contract_Rule_Before_Clause(int adr, int ruleNum, int clauseNum)
+    {
+        // Arrange
+        var rule = CreateRuleId(adr, ruleNum);
+        var clause = CreateClauseId(adr, ruleNum, clauseNum);
+
+        // Act
+        var comparison = rule.CompareTo(clause);
+
+        // Assert - Rule 优先级高于 Clause 是不可破坏的契约
+        comparison.Should().BeLessThan(0, "Rule 必须排在同编号的 Clause 之前（如 ADR-907_3 < ADR-907_3_1）");
     }
 
     [Theory(DisplayName = "相同的 RuleId 应该被视为相等")]
@@ -128,22 +160,5 @@ public sealed class ArchitectureRuleIdTests
 
         // Assert
         ruleId1.Should().NotBe(ruleId2);
-    }
-
-    [Theory(DisplayName = "Rule 和同编号的 Clause 排序时 Rule 应该在前")]
-    [InlineData(907, 3, 1)]
-    [InlineData(1, 1, 1)]
-    [InlineData(900, 5, 2)]
-    public void Rule_Should_Come_Before_Clause_In_Sorting(int adr, int ruleNum, int clauseNum)
-    {
-        // Arrange
-        var rule = CreateRuleId(adr, ruleNum);
-        var clause = CreateClauseId(adr, ruleNum, clauseNum);
-
-        // Act
-        var comparison = rule.CompareTo(clause);
-
-        // Assert
-        comparison.Should().BeLessThan(0, "Rule 应该排在 Clause 之前");
     }
 }
