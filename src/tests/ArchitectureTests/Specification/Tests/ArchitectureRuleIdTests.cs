@@ -61,26 +61,41 @@ public sealed class ArchitectureRuleIdTests
         result.Should().Be(expected);
     }
 
-    [Fact(DisplayName = "CompareTo 应该按 ADR、Rule、Clause 顺序排序")]
-    public void CompareTo_Should_Sort_By_Adr_Rule_Clause()
+    [Theory(DisplayName = "Parse 应该正确解析规则ID字符串")]
+    [InlineData("ADR-907_3", 907, 3, null)]
+    [InlineData("ADR-907_3_2", 907, 3, 2)]
+    [InlineData("ADR-900_1", 900, 1, null)]
+    [InlineData("ADR-900_1_1", 900, 1, 1)]
+    [InlineData("907_3", 907, 3, null)]
+    [InlineData("907_3_2", 907, 3, 2)]
+    public void Parse_Should_Parse_RuleId_String_Correctly(string input, int expectedAdr, int expectedRule, int? expectedClause)
+    {
+        // Act
+        var ruleId = ArchitectureRuleId.Parse(input);
+
+        // Assert
+        ruleId.AdrNumber.Should().Be(expectedAdr);
+        ruleId.RuleNumber.Should().Be(expectedRule);
+        ruleId.ClauseNumber.Should().Be(expectedClause);
+    }
+
+    [Theory(DisplayName = "CompareTo 应该按 ADR、Rule、Clause 顺序排序")]
+    [InlineData(
+        new[] { "ADR-907_3_2", "ADR-907_1", "ADR-907_3_1", "ADR-900_1", "ADR-900_1_1" },
+        new[] { "ADR-900_1", "ADR-900_1_1", "ADR-907_1", "ADR-907_3_1", "ADR-907_3_2" }
+    )]
+    public void CompareTo_Should_Sort_By_Adr_Rule_Clause(
+        string[] input,
+        string[] expected)
     {
         // Arrange
-        var ids = CreateCompareTestIds();
+        var ids = input.Select(ArchitectureRuleId.Parse).ToArray();
 
         // Act
-        var sorted = ids.OrderBy(x => x).ToList();
+        var sorted = ids.OrderBy(x => x).Select(x => x.ToString()).ToArray();
 
-        var expected = new[]
-        {
-            "ADR-900_1",
-            "ADR-900_1_1",
-            "ADR-907_1",
-            "ADR-907_3_1",
-            "ADR-907_3_2"
-        };
-
-        // Assert - 顺序断言明确可读
-        sorted.Select(s => s.ToString()).Should().ContainInOrder(expected);
+        // Assert
+        sorted.Should().Equal(expected);
     }
 
     [Theory(DisplayName = "相同的 RuleId 应该被视为相等")]
@@ -131,17 +146,4 @@ public sealed class ArchitectureRuleIdTests
         // Assert
         comparison.Should().BeLessThan(0, "Rule 应该排在 Clause 之前");
     }
-
-    #region Helpers
-
-    private static ArchitectureRuleId[] CreateCompareTestIds() => new[]
-    {
-        CreateClauseId(907, 3, 2),
-        CreateRuleId(907, 1),
-        CreateClauseId(907, 3, 1),
-        CreateRuleId(900, 1),
-        CreateClauseId(900, 1, 1),
-    };
-
-    #endregion
 }
