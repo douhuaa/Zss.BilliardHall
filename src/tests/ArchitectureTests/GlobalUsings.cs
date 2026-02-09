@@ -20,4 +20,12 @@ global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.DecisionLanguage;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.RuleIdLanguage;
-global using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.AssertionMessageBuilder;
+
+// 工具类子命名空间（2026-02-09 结构化重构）
+global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
+global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.FileSystem;
+global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Assemblies;
+global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing;
+
+global using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing.AssertionMessageBuilder;
+

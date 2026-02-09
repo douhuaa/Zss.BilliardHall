@@ -2,11 +2,45 @@
 
 本目录包含用于架构测试的共享辅助类和工具。
 
-> **重要更新（2026-02-09）**：FileSystemTestHelper 已重构为三个专用类，提升单一职责原则遵循度和性能。详见 [重构总结](REFACTORING_SUMMARY.md)。
+> **重要更新（2026-02-09）**：
+> - FileSystemTestHelper 已重构为三个专用类，提升单一职责原则遵循度和性能。详见 [重构总结](REFACTORING_SUMMARY.md)。
+> - 工具类已按功能分组到子目录中，提升组织性和可维护性。
 
 ---
 
-## 📋 工具类概览
+## 📁 目录结构
+
+```
+Shared/
+├── Adr/           # ADR 相关工具（11个）
+├── FileSystem/    # 文件系统操作（4个）
+├── Assemblies/    # 程序集加载（3个）
+├── Testing/       # 测试辅助（5个）
+├── README.md      # 本文档
+└── REFACTORING_SUMMARY.md  # 重构总结
+```
+
+---
+
+## 📋 工具类概览（按功能分组）
+
+### 🗂️ ADR 相关工具（Adr/）
+
+| 工具类 | 职责 | 状态 |
+|--------|------|------|
+| **AdrCategoryClassifier** | ADR 分类器 | ✅ 使用中 |
+| **AdrDocument** | ADR 文档模型 | ✅ 使用中 |
+| **AdrDocumentClassifier** | 文档分类 | ✅ 使用中 |
+| **AdrFileFilter** | 文件过滤 | ✅ 使用中 |
+| **AdrMarkdownBuilder** | Markdown 构建 | ✅ 使用中 |
+| **AdrParser** | 文档解析 | ✅ 使用中 |
+| **AdrRelationshipMapGenerator** | 关系图生成 | ✅ 使用中 |
+| **AdrRelationshipValidator** | 关系验证 | ✅ 使用中 |
+| **AdrRepository** | ADR 仓库 | ✅ 使用中 |
+| **AdrTestFixture** | ADR 测试固件 | ✅ 使用中 |
+| **FrontMatterParser** | Front Matter 解析 | ✅ 使用中 |
+
+### 📁 文件系统操作（FileSystem/）
 
 | 工具类 | 职责 | 主要方法数 | 状态 |
 |--------|------|-----------|------|
@@ -14,15 +48,46 @@
 | **FileContentAnalyzer** | 内容分析（关键词、模式、表格） | 8 | ✅ 推荐使用 |
 | **FileSearchHelper** | 文件搜索和路径操作 | 7 | ✅ 推荐使用 |
 | **FileSystemTestHelper** | 向后兼容桥接 | 16 | ⚠️ 已废弃 |
-| **AssemblyLoaderBase** | 程序集加载基类 | 4 | ✅ 内部使用 |
-| **ModuleAssemblyData** | 模块程序集数据 | - | ✅ 使用中 |
-| **HostAssemblyData** | Host 程序集数据 | - | ✅ 使用中 |
-| **TestEnvironment** | 环境路径常量 | - | ✅ 使用中 |
-| **AssertionMessageBuilder** | 断言消息构建 | 7 | ✅ 使用中 |
-| **NetArchTestHelper** | NetArchTest 封装 | 5 | ✅ 使用中 |
-| **AdrMarkdownBuilder** | ADR 文档构建 | 10+ | ✅ 使用中 |
-| **AdrParser** | ADR 文档解析 | - | ✅ 使用中 |
-| **AdrTestFixture** | ADR 测试固件 | - | ✅ 使用中 |
+
+### 🔧 程序集加载（Assemblies/）
+
+| 工具类 | 职责 | 状态 |
+|--------|------|------|
+| **AssemblyLoaderBase** | 程序集加载基类 | ✅ 内部使用 |
+| **ModuleAssemblyData** | 模块程序集数据 | ✅ 使用中 |
+| **HostAssemblyData** | Host 程序集数据 | ✅ 使用中 |
+
+### 🧪 测试辅助（Testing/）
+
+| 工具类 | 职责 | 状态 |
+|--------|------|------|
+| **AssertionMessageBuilder** | 断言消息构建 | ✅ 使用中 |
+| **NetArchTestHelper** | NetArchTest 封装 | ✅ 使用中 |
+| **TestEnvironment** | 环境路径常量 | ✅ 使用中 |
+| **TestConstants** | 测试常量 | ✅ 使用中 |
+| **TestPerformanceCollector** | 性能收集 | ✅ 使用中 |
+
+---
+
+## 🎯 使用指南
+
+### 引用工具类
+
+所有工具类通过 global using 自动引入，无需显式 using 语句：
+
+```csharp
+// ✅ 无需添加 using 语句，直接使用
+FileAssertionHelper.AssertFileExists(path, message);
+AdrCategoryClassifier.GetCategory("ADR-001");
+NetArchTestHelper.AssertNamespaceConvention(assembly, ...);
+```
+
+### 按功能查找工具类
+
+- **处理 ADR 文档？** → 查看 `Adr/` 目录
+- **文件操作？** → 查看 `FileSystem/` 目录  
+- **程序集加载？** → 查看 `Assemblies/` 目录
+- **测试辅助？** → 查看 `Testing/` 目录
 
 ---
 
