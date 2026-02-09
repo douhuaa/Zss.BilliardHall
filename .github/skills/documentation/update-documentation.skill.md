@@ -5,6 +5,10 @@ version: "1.0"
 risk_level: "低"
 category: "文档生成"
 required_agent: "documentation-maintainer"
+dependencies:
+  - "verify-documentation-structure"  # 前置：验证文档结构完整
+post_execution:
+  - "validate-links"  # 建议：验证所有链接有效性
 ---
 
 # Update Documentation Skill

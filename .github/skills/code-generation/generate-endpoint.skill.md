@@ -5,6 +5,11 @@ version: "1.0"
 risk_level: "高"
 category: "代码生成"
 required_agent: "architecture-guardian"
+dependencies:
+  - "verify-module-structure"  # 前置：验证模块结构存在
+  - "generate-handler"  # 可选：如果 Handler 不存在可能需要先生成
+post_execution:
+  - "run-architecture-tests"  # 建议：生成后运行架构测试验证
 ---
 
 # Generate Endpoint Skill

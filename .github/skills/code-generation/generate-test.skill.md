@@ -5,6 +5,10 @@ version: "1.0"
 risk_level: "中"
 category: "代码生成"
 required_agent: "test-generator"
+dependencies:
+  - "verify-test-framework"  # 前置：验证测试框架可用
+post_execution:
+  - "run-unit-tests"  # 建议：运行新生成的测试
 ---
 
 # Generate Test Skill
