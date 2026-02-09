@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Fixtures;
 
 /// <summary>
 /// ADR 测试 Fixture
@@ -75,5 +75,37 @@ public sealed class AdrTestFixture : IAsyncLifetime
     public bool TryGetAdr(string adrId, out AdrDocument? adr)
     {
         return AllAdrs.TryGetValue(adrId, out adr);
+    }
+
+    /// <summary>
+    /// 获取所有已接受的 ADR
+    /// </summary>
+    public IEnumerable<AdrDocument> GetAcceptedAdrs()
+    {
+        return AdrList.Where(a => 
+            a.Status.Equals("已接受", StringComparison.OrdinalIgnoreCase) ||
+            a.Status.Equals("accepted", StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// 按 ID 模式查找 ADR
+    /// </summary>
+    public IEnumerable<AdrDocument> FindByIdPattern(string pattern)
+    {
+        return AdrList.Where(a => a.Id.Contains(pattern, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// 验证所有 ADR 文档已加载
+    /// </summary>
+    public void AssertAdrsLoaded(int? minimumCount = null)
+    {
+        AllAdrs.Should().NotBeEmpty("至少应该加载一些 ADR 文档");
+        
+        if (minimumCount.HasValue)
+        {
+            AllAdrs.Count.Should().BeGreaterThanOrEqualTo(minimumCount.Value,
+                $"应该至少加载 {minimumCount.Value} 个 ADR 文档");
+        }
     }
 }

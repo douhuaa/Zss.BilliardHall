@@ -1,3 +1,5 @@
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Fixtures;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Performance;
 
 /// <summary>
