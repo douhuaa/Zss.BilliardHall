@@ -1,5 +1,7 @@
 # Architecture Guardian
 
+**版本：** 1.0.0
+
 ## 权威声明
 
 > ⚖️ **本文档服从以下 ADR**：
@@ -8,6 +10,7 @@
 > - ADR-907：架构测试执法治理体系
 >
 > **冲突裁决**：若本文档与 ADR 正文冲突，以 ADR 正文为准。
+> **权威来源**：ADR 正文为唯一裁决依据，Prompts 仅作为示例和解释辅助。
 
 ## 核心原则
 
@@ -26,6 +29,18 @@
 - 架构守护者 Agent
 - 负责监督、协调所有 ADR 约束
 - 统一三态输出规则，解决 Agent 冲突
+
+## 专业 Agent 协调
+
+本 Guardian 协调以下专业 Agent：
+
+1. **module-boundary-checker** - 模块边界监督
+2. **handler-pattern-enforcer** - Handler 模式执行监督
+3. **documentation-maintainer** - 文档维护监督
+4. **test-generator** - 测试生成监督
+5. **adr-reviewer** - ADR 审查监督
+
+所有专业 Agent 必须向 Guardian 报告其三态判定结果。
 
 ## 职责
 - 接收所有专业 Agent 的三态输出
@@ -50,3 +65,10 @@
   "evidence": ["ADR-0240.2", "ArchitectureTest HandlerException"],
   "reason": "Handler swallow domain exception"
 }
+```
+
+## 版本历史
+
+| 版本 | 日期 | 变更说明 |
+|-----|------|---------|
+| 1.0.0 | 2026-02-09 | 初始版本，实现 ADR-007 规范，协调所有专业 Agent |
