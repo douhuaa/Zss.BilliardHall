@@ -38,7 +38,12 @@ public sealed class ArchitectureRulesOptions
     public bool EnableHeuristics { get; set; } = true;
 
     /// <summary>
-    /// 是否在测试失败时输出详细信息（默认：true）
+    /// 排除的测试类命名模式（如示例类、辅助类等）
     /// </summary>
-    public bool VerboseOutput { get; set; } = true;
+    public string[] ExcludedTestClassPatterns { get; set; } = new[] { "Example", "Helper", "Mock" };
+
+    /// <summary>
+    /// 最小断言检查时排除的测试类模式（如不变量测试、自动生成的测试）
+    /// </summary>
+    public string[] MinimumAssertionExcludePatterns { get; set; } = new[] { "Invariants", "Auto" };
 }

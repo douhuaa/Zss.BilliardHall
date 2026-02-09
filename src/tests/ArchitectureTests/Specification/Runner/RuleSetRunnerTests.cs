@@ -65,8 +65,7 @@ public sealed class RuleSetRunnerTests
         // Heuristics 层规则：仅警告，不阻断
         if (rule.Layer == RuleLayer.Heuristics)
         {
-            Assert.True(true); // 总是通过
-            
+            // Heuristics 规则总是通过测试，只输出警告信息
             if (result.Warnings is { Length: > 0 })
             {
                 _output.WriteLine($"⚠ 警告信息:");

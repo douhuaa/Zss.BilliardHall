@@ -24,14 +24,13 @@ public static class AntiCheatRuleset
             assemblies =>
             {
                 // 查找所有架构测试类（命名以 _Architecture_Tests 或 _Tests 结尾的类）
-                // 但排除不变量测试类（Invariants_Tests），这些类通常只有少量但高质量的测试
+                // 但排除配置的特殊模式（如不变量测试、自动生成的测试）
                 var testTypes = assemblies
                     .SelectMany(a => a.GetTypes())
                     .Where(t => t.IsClass && 
                                (t.Name.EndsWith("_Architecture_Tests") || 
                                 t.Name.EndsWith("_Tests")) &&
-                               !t.Name.Contains("Invariants") && // 排除不变量测试
-                               !t.Name.Contains("Auto") && // 排除自动生成的测试
+                               !opt.MinimumAssertionExcludePatterns.Any(pattern => t.Name.Contains(pattern)) &&
                                t.Namespace?.Contains("ArchitectureTests") == true)
                     .ToArray();
 
@@ -59,8 +58,11 @@ public static class AntiCheatRuleset
             SeverityLevel.L1,
             assemblies =>
             {
-                // 这是一个启发式检查，实际实现需要源代码分析
-                // 这里提供一个基于反射的简化版本
+                // TODO: 实现完整的无意义断言检测
+                // 当前版本：基于反射的简化检查
+                // 完整实现需要：IL 分析或 Roslyn 语法树分析
+                // 参考：https://github.com/xunit/xunit/issues/1234 (示例链接)
+                
                 var testMethods = assemblies
                     .SelectMany(a => a.GetTypes())
                     .Where(t => t.Namespace?.Contains("ArchitectureTests") == true)
@@ -69,9 +71,8 @@ public static class AntiCheatRuleset
                         .Any(attr => attr.GetType().Name is "FactAttribute" or "TheoryAttribute"))
                     .ToArray();
 
-                // 实际检查需要通过 IL 或源码分析
-                // 这里仅作为占位符，返回成功
-                return RuleResult.Ok($"检查了 {testMethods.Length} 个测试方法");
+                // 当前版本仅计数，实际检测需要源码或 IL 分析
+                return RuleResult.Ok($"检查了 {testMethods.Length} 个测试方法（完整实现待开发）");
             });
 
         yield return new RuleDefinition(

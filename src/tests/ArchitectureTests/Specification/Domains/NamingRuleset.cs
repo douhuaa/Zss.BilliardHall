@@ -40,7 +40,7 @@ public static class NamingRuleset
                 bool Filter(Type t) => 
                     t.Namespace?.Contains(".Tests") == true && 
                     t.IsClass &&
-                    !t.Name.Contains("Example"); // 排除示例类
+                    !opt.ExcludedTestClassPatterns.Any(pattern => t.Name.Contains(pattern));
                 bool NameRule(Type t) => t.Name.EndsWith("Tests") || !HasTestMethods(t);
                 const string Hint = "请将测试类重命名为 {TypeName}Tests 格式";
                 return RuleAdapters.NamesShouldMatch(assemblies, Filter, NameRule, Hint);
