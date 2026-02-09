@@ -3,9 +3,15 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 /// <summary>
 /// ADR Markdown 文档构建器
 /// 用于在测试中创建符合规范的 ADR 文档内容，避免硬编码的测试数据
+/// 
+/// 重构说明（2026-02-09）：
+/// - 统一方法命名为 With 前缀（提升 API 一致性）
+/// - 添加 ADR 编号格式验证
 /// </summary>
 public sealed class AdrMarkdownBuilder
 {
+    private static readonly Regex AdrIdPattern = new(@"^ADR-\d{3,4}$", RegexOptions.Compiled);
+    
     private string _id = "ADR-001";
     private string _title = "测试 ADR 文档";
     private string _status = "Final";
@@ -22,8 +28,20 @@ public sealed class AdrMarkdownBuilder
     /// <summary>
     /// 设置 ADR 编号
     /// </summary>
+    /// <param name="id">ADR 编号（格式：ADR-XXX 或 ADR-XXXX）</param>
+    /// <exception cref="ArgumentException">当 ADR 编号格式不正确时抛出</exception>
     public AdrMarkdownBuilder WithId(string id)
     {
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            throw new ArgumentException("ADR 编号不能为空", nameof(id));
+        }
+
+        if (!AdrIdPattern.IsMatch(id))
+        {
+            throw new ArgumentException($"无效的 ADR 编号格式: {id}。期望格式：ADR-XXX 或 ADR-XXXX", nameof(id));
+        }
+
         _id = id;
         return this;
     }
@@ -56,48 +74,103 @@ public sealed class AdrMarkdownBuilder
     }
 
     /// <summary>
-    /// 添加依赖关系
+    /// 添加依赖关系（统一方法名）
     /// </summary>
-    public AdrMarkdownBuilder DependsOn(params string[] adrIds)
+    /// <param name="adrIds">依赖的 ADR 编号列表</param>
+    public AdrMarkdownBuilder WithDependsOn(params string[] adrIds)
     {
         _dependsOn.AddRange(adrIds);
         return this;
     }
 
     /// <summary>
-    /// 添加被依赖关系
+    /// 添加依赖关系（向后兼容方法）
     /// </summary>
-    public AdrMarkdownBuilder DependedBy(params string[] adrIds)
+    /// <param name="adrIds">依赖的 ADR 编号列表</param>
+    [Obsolete("使用 WithDependsOn 代替以保持命名一致性", false)]
+    public AdrMarkdownBuilder DependsOn(params string[] adrIds)
+    {
+        return WithDependsOn(adrIds);
+    }
+
+    /// <summary>
+    /// 添加被依赖关系（统一方法名）
+    /// </summary>
+    /// <param name="adrIds">被依赖的 ADR 编号列表</param>
+    public AdrMarkdownBuilder WithDependedBy(params string[] adrIds)
     {
         _dependedBy.AddRange(adrIds);
         return this;
     }
 
     /// <summary>
-    /// 添加替代关系
+    /// 添加被依赖关系（向后兼容方法）
     /// </summary>
-    public AdrMarkdownBuilder Supersedes(params string[] adrIds)
+    /// <param name="adrIds">被依赖的 ADR 编号列表</param>
+    [Obsolete("使用 WithDependedBy 代替以保持命名一致性", false)]
+    public AdrMarkdownBuilder DependedBy(params string[] adrIds)
+    {
+        return WithDependedBy(adrIds);
+    }
+
+    /// <summary>
+    /// 添加替代关系（统一方法名）
+    /// </summary>
+    /// <param name="adrIds">替代的 ADR 编号列表</param>
+    public AdrMarkdownBuilder WithSupersedes(params string[] adrIds)
     {
         _supersedes.AddRange(adrIds);
         return this;
     }
 
     /// <summary>
-    /// 添加被替代关系
+    /// 添加替代关系（向后兼容方法）
     /// </summary>
-    public AdrMarkdownBuilder SupersededBy(params string[] adrIds)
+    /// <param name="adrIds">替代的 ADR 编号列表</param>
+    [Obsolete("使用 WithSupersedes 代替以保持命名一致性", false)]
+    public AdrMarkdownBuilder Supersedes(params string[] adrIds)
+    {
+        return WithSupersedes(adrIds);
+    }
+
+    /// <summary>
+    /// 添加被替代关系（统一方法名）
+    /// </summary>
+    /// <param name="adrIds">被替代的 ADR 编号列表</param>
+    public AdrMarkdownBuilder WithSupersededBy(params string[] adrIds)
     {
         _supersededBy.AddRange(adrIds);
         return this;
     }
 
     /// <summary>
-    /// 添加相关关系
+    /// 添加被替代关系（向后兼容方法）
     /// </summary>
-    public AdrMarkdownBuilder RelatedTo(params string[] adrIds)
+    /// <param name="adrIds">被替代的 ADR 编号列表</param>
+    [Obsolete("使用 WithSupersededBy 代替以保持命名一致性", false)]
+    public AdrMarkdownBuilder SupersededBy(params string[] adrIds)
+    {
+        return WithSupersededBy(adrIds);
+    }
+
+    /// <summary>
+    /// 添加相关关系（统一方法名）
+    /// </summary>
+    /// <param name="adrIds">相关的 ADR 编号列表</param>
+    public AdrMarkdownBuilder WithRelatedTo(params string[] adrIds)
     {
         _related.AddRange(adrIds);
         return this;
+    }
+
+    /// <summary>
+    /// 添加相关关系（向后兼容方法）
+    /// </summary>
+    /// <param name="adrIds">相关的 ADR 编号列表</param>
+    [Obsolete("使用 WithRelatedTo 代替以保持命名一致性", false)]
+    public AdrMarkdownBuilder RelatedTo(params string[] adrIds)
+    {
+        return WithRelatedTo(adrIds);
     }
 
     /// <summary>
