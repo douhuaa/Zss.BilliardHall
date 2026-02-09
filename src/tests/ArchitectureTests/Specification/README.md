@@ -4,6 +4,8 @@
 
 本目录包含架构测试的规范定义，是整个架构治理体系的核心。通过将 ADR 文档转换为可执行的规范，实现"把 ADR 变成可执行规范"的目标。
 
+> 💡 **新增**：[集中化规则集系统](./CENTRALIZED_RULES.md) - 提供统一的规则编号（RS-###）和领域化组织的架构规则。与现有系统并存，易于使用和扩展。
+
 ## 设计原则
 
 ### 三条铁律
@@ -26,11 +28,28 @@
 ```
 /Specification
 ├── ArchitectureTestSpecification.cs    # 根聚合（统一入口）
+├── CENTRALIZED_RULES.md                 # 🆕 集中化规则集系统文档
 ├── _Adr.cs                              # ADR 规范定义
 ├── _Namespaces.cs                       # 命名空间规范
 ├── _Semantics.cs                        # 语义规范
 ├── _Output.cs                           # 输出规范
 ├── _Onboarding.cs                       # Onboarding 规范
+│
+├── /Common                              # 🆕 集中化规则集：通用基础设施
+│   ├── RuleModel.cs                     # 规则模型（RuleLayer, RuleId, RuleDefinition等）
+│   ├── RuleAdapters.NetArch.cs          # NetArchTest 适配器
+│   └── ArchitectureRulesOptions.cs      # 配置选项
+│
+├── /Domains                             # 🆕 集中化规则集：领域规则集
+│   ├── NamingRuleset.cs                 # 命名规范（RS-001 ~ RS-003）
+│   ├── DomainEventRuleset.cs            # 领域事件（RS-010 ~ RS-013）
+│   ├── RepositoryRuleset.cs             # 仓储模式（RS-020 ~ RS-023）
+│   └── AntiCheatRuleset.cs              # 反作弊（RS-030 ~ RS-032）
+│
+├── /Runner                              # 🆕 集中化规则集：执行器
+│   ├── CentralizedRuleSetRegistry.cs    # 规则集注册表
+│   ├── RuleSetRunnerTests.cs            # Theory 驱动的测试执行器
+│   └── README.md                        # 详细使用文档
 │
 ├── /Language                            # 语言层（语法和语义定义）
 │   ├── /DecisionLanguage                # 裁决语言模型
@@ -275,6 +294,7 @@ var moduleRules = RuleSetRegistry.GetByScope(RuleScope.Module);
 
 ## 参考文档
 
+- [集中化规则集系统](./CENTRALIZED_RULES.md) - 🆕 统一规则编号和领域化组织
 - [ADR-900: 架构测试与 CI 治理元规则](../../../docs/adr/governance/ADR-900-architecture-tests.md)
 - [ADR-905: 执行级别分类](../../../docs/adr/governance/ADR-905-enforcement-level-classification.md)
 - [ADR-907: ArchitectureTests 执法治理体系](../../../docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md)
