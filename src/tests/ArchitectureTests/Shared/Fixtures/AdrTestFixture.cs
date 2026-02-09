@@ -1,3 +1,5 @@
+using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Extensions;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Fixtures;
 
 /// <summary>
@@ -82,9 +84,7 @@ public sealed class AdrTestFixture : IAsyncLifetime
     /// </summary>
     public IEnumerable<AdrDocument> GetAcceptedAdrs()
     {
-        return AdrList.Where(a => 
-            a.Status.Equals("已接受", StringComparison.OrdinalIgnoreCase) ||
-            a.Status.Equals("accepted", StringComparison.OrdinalIgnoreCase));
+        return AdrList.Accepted(); // 使用扩展方法避免重复代码
     }
 
     /// <summary>

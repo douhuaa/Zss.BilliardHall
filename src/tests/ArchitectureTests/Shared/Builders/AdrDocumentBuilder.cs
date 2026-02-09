@@ -7,7 +7,9 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Builders;
 /// </summary>
 public class AdrDocumentBuilder
 {
-    private string _id = $"ADR-{Random.Shared.Next(100, 999):D3}";
+    private static int _idCounter = 100; // 使用计数器而非随机数，确保测试可重复性
+    
+    private string _id = $"ADR-{Interlocked.Increment(ref _idCounter):D3}";
     private string _filePath = "/test/adr/ADR-XXX.md";
     private string? _adrField;
     private string? _type = "adr";
