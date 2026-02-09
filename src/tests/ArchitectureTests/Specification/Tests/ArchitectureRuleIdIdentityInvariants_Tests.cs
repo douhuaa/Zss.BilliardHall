@@ -1,5 +1,15 @@
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests.Infrastructure;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
+/// <summary>
+/// ArchitectureRuleId 身份不变量测试
+/// 验证 RuleId 和 ClauseId 的级别标识是否正确
+/// 
+/// 核心不变量：
+/// - RuleId 永远是 Rule 级别（ClauseNumber == null）
+/// - ClauseId 永远是 Clause 级别（ClauseNumber != null）
+/// </summary>
 public sealed class ArchitectureRuleIdIdentityInvariants_Tests
 {
     [Theory(DisplayName = "不变量：RuleId 表示 ADR 下的规则级别")]
@@ -10,8 +20,7 @@ public sealed class ArchitectureRuleIdIdentityInvariants_Tests
     {
         var id = ArchitectureRuleId.Rule(adr, rule);
 
-        id.Level.Should().Be(RuleLevel.Rule);
-        id.ClauseNumber.Should().BeNull();
+        RuleIdAssertions.AssertIsRule(id, context: $"RuleId({adr}, {rule})");
     }
 
     [Theory(DisplayName = "不变量：ClauseId 表示 ADR 下的子规则级别")]
@@ -22,7 +31,6 @@ public sealed class ArchitectureRuleIdIdentityInvariants_Tests
     {
         var id = ArchitectureRuleId.Clause(adr, rule, clause);
 
-        id.Level.Should().Be(RuleLevel.Clause);
-        id.ClauseNumber.Should().Be(clause);
+        RuleIdAssertions.AssertIsClause(id, context: $"ClauseId({adr}, {rule}, {clause})");
     }
 }

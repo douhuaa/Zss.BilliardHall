@@ -1,10 +1,16 @@
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests.Infrastructure;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
 /// <summary>
 /// ArchitectureRuleSet 不变量清单测试（整合完整版）
 /// 验证规则集管理的核心契约，包括创建、添加、完整性和执行类型
+/// 
+/// 重构说明：
+/// - 使用 RuleSetValidator 辅助类简化验证逻辑
+/// - 保持清晰的测试分组和命名
+/// - 添加更详细的断言消息
 /// </summary>
 public sealed class ArchitectureRuleSetInvariants_Tests
 {
@@ -59,8 +65,11 @@ public sealed class ArchitectureRuleSetInvariants_Tests
     public void Rule_Summary_Should_Not_Be_Empty()
     {
         var ruleSet = new ArchitectureRuleSet(907);
-        Action act = () => ruleSet.AddRule(1, "", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
-        act.Should().Throw<ArgumentException>();
+        
+        var act = () => ruleSet.AddRule(1, "", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
+        
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("*摘要不能为空*", "规则摘要是必填项");
     }
 
     [Fact(DisplayName = "不变量：条款条件和执行不能为空")]
@@ -69,11 +78,14 @@ public sealed class ArchitectureRuleSetInvariants_Tests
         var ruleSet = new ArchitectureRuleSet(907);
         ruleSet.AddRule(1, "规则摘要", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
 
-        Action act1 = () => ruleSet.AddClause(1, 1, "", "执行", ClauseExecutionType.Convention);
-        Action act2 = () => ruleSet.AddClause(1, 1, "条件", "", ClauseExecutionType.Convention);
+        var actEmptyCondition = () => ruleSet.AddClause(1, 1, "", "执行", ClauseExecutionType.Convention);
+        var actEmptyEnforcement = () => ruleSet.AddClause(1, 2, "条件", "", ClauseExecutionType.Convention);
 
-        act1.Should().Throw<ArgumentException>();
-        act2.Should().Throw<ArgumentException>();
+        actEmptyCondition.Should().Throw<ArgumentException>()
+            .WithMessage("*条件*不能为空*", "条款条件是必填项");
+        
+        actEmptyEnforcement.Should().Throw<ArgumentException>()
+            .WithMessage("*执行*不能为空*", "条款执行是必填项");
     }
 
     [Fact(DisplayName = "不变量：不能添加重复规则或条款")]
@@ -83,11 +95,14 @@ public sealed class ArchitectureRuleSetInvariants_Tests
         ruleSet.AddRule(1, "规则摘要", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
         ruleSet.AddClause(1, 1, "条件", "执行", ClauseExecutionType.Convention);
 
-        Action actRule = () => ruleSet.AddRule(1, "重复规则", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
-        Action actClause = () => ruleSet.AddClause(1, 1, "重复条件", "重复执行", ClauseExecutionType.StaticAnalysis);
+        var actDuplicateRule = () => ruleSet.AddRule(1, "重复规则", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
+        var actDuplicateClause = () => ruleSet.AddClause(1, 1, "重复条件", "重复执行", ClauseExecutionType.StaticAnalysis);
 
-        actRule.Should().Throw<InvalidOperationException>();
-        actClause.Should().Throw<InvalidOperationException>();
+        actDuplicateRule.Should().Throw<InvalidOperationException>()
+            .WithMessage("*已存在*", "不允许重复添加相同编号的规则");
+        
+        actDuplicateClause.Should().Throw<InvalidOperationException>()
+            .WithMessage("*已存在*", "不允许重复添加相同编号的条款");
     }
 
     #endregion
@@ -101,8 +116,10 @@ public sealed class ArchitectureRuleSetInvariants_Tests
         ruleSet.AddRule(1, "规则1", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
         ruleSet.AddRule(2, "规则2-无条款", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
 
-        Action act = () => ruleSet.ValidateCompleteness();
-        act.Should().Throw<InvalidOperationException>();
+        var act = () => ruleSet.ValidateCompleteness();
+        
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("*没有任何条款*", "完整性验证应检测到缺失的条款");
     }
 
     [Fact(DisplayName = "不变量：ValidateCompleteness 不抛异常对于完整规则集")]
@@ -115,8 +132,9 @@ public sealed class ArchitectureRuleSetInvariants_Tests
         ruleSet.AddRule(2, "规则2", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
         ruleSet.AddClause(2, 1, "条件2", "执行2", ClauseExecutionType.StaticAnalysis);
 
-        Action act = () => ruleSet.ValidateCompleteness();
-        act.Should().NotThrow();
+        var act = () => ruleSet.ValidateCompleteness();
+        
+        act.Should().NotThrow("完整的规则集不应抛出异常");
     }
 
     #endregion
@@ -130,13 +148,8 @@ public sealed class ArchitectureRuleSetInvariants_Tests
         ruleSet.AddRule(1, "规则摘要", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
         ruleSet.AddClause(1, 1, "条件", "执行", ClauseExecutionType.Convention);
 
-        foreach (var clause in ruleSet.Clauses)
-        {
-            var parentRule = ruleSet.GetRule(clause.Id.RuleNumber);
-            parentRule.Should().NotBeNull("每个条款必须有对应的父规则");
-            clause.Id.RuleNumber.Should().Be(parentRule!.Id.RuleNumber, "条款的 RuleNumber 必须与其所属规则匹配");
-            clause.Id.AdrNumber.Should().Be(parentRule!.Id.AdrNumber, "条款的 AdrNumber 必须与其所属规则匹配");
-        }
+        // 使用验证器进行一致性检查
+        RuleSetValidator.ValidateClauseToRuleBinding(ruleSet);
     }
 
     [Fact(DisplayName = "不变量：所有条款 ExecutionType 必须被支持")]
@@ -170,22 +183,8 @@ public sealed class ArchitectureRuleSetInvariants_Tests
         ruleSet.AddRule(2, "规则2", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
         ruleSet.AddClause(2, 1, "条件3", "执行3", ClauseExecutionType.StaticAnalysis);
 
-        ruleSet.RuleCount.Should().Be(ruleSet.Rules.Count);
-        ruleSet.ClauseCount.Should().Be(ruleSet.Clauses.Count);
-
-        foreach (var rule in ruleSet.Rules)
-        {
-            var ruleClauses = ruleSet.Clauses.Where(c => c.Id.RuleNumber == rule.Id.RuleNumber);
-            ruleClauses.Should().NotBeEmpty("完整规则集中的每条规则必须至少有一个条款");
-        }
-
-        foreach (var clause in ruleSet.Clauses)
-        {
-            var parentRule = ruleSet.GetRule(clause.Id.RuleNumber);
-            parentRule.Should().NotBeNull();
-            clause.Id.RuleNumber.Should().Be(parentRule!.Id.RuleNumber);
-            clause.Id.AdrNumber.Should().Be(parentRule!.Id.AdrNumber);
-        }
+        // 使用验证器进行完整验证
+        RuleSetValidator.ValidateFull(ruleSet, expectedAdrNumber: 907);
     }
 
     #endregion
