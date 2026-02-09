@@ -3,9 +3,9 @@ adr: ADR-907-A
 title: "ADR-907 对齐执行标准"
 status: Final
 level: Governance
-version: "1.1"
+version: "1.2"
 deciders: "Architecture Board"
-date: 2026-02-03
+date: 2026-02-04
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "Architecture Board"
@@ -317,7 +317,97 @@ ADR-907（主体） > ADR-907-A（本标准） > 各具体 ADR > 指南文档 > 
 
 - TODO stub 必须在 30 天内实现或升级为 Follow-up Issue
 
----
+#### ADR-907-A_3_6 测试目录结构规范
+
+所有 ArchitectureTests 必须按照以下目录结构组织：
+
+```
+src/tests/
+├── ArchitectureTests/
+│   ├── ADR_XXX/
+│   │   ├── ADR_<编号>_<Rule>_Architecture_Tests.cs
+│   │   ├── ADR_<编号>_<Rule>_<Clause>_ArchitectureTests.cs
+│   │   └── fixtures/  # 测试用例和配置文件
+│   ├── ADR_YYY/
+│   │   └── ...
+│   └── Shared/  # 所有 ADR 共享的基础设施
+│       ├── ArchitectureTestBase.cs
+│       ├── AssertionExtensions.cs
+│       └── TestFixtures/
+
+└── IntegrationTests/
+    ├── ... 其他集成测试
+```
+
+**强制规范**：
+
+1. **Rule 层次组织**：
+   - 每个 ADR 单独一个文件夹 `ADR_<编号>`
+   - 文件夹名称格式必须为 `ADR_<编号>`，其中 `<编号>` 使用连字符分隔（如 `ADR_907_A`）
+   - 每个 ADR 文件夹内应包含该 ADR 所有 Rule 的测试文件
+
+2. **测试文件命名**：
+   - 测试类文件名格式：`ADR_<编号>_<Rule>_Architecture_Tests.cs`
+   - 示例：`ADR_907_A_1_Architecture_Tests.cs`
+   - 文件内可包含该 Rule 的多个 Clause 的测试方法
+
+3. **Shared 文件夹职责**：
+   - 放置所有 ADR 共享的基类、辅助方法、常用 Fixture
+   - 示例文件：
+     - `ArchitectureTestBase.cs` - 所有 ArchitectureTests 的基类
+     - `AssertionExtensions.cs` - 通用断言扩展方法
+     - `TestFixtures/` - 项目、程序集、命名空间等测试数据
+     - `Helpers/` - 公共辅助工具类
+
+4. **迁移要求**（从旧结构到新结构）：
+   - 旧测试文件（非 L1 执法的测试）应迁移到对应 ADR 的文件夹中
+   - 旧的 Shared 目录应合并到新的 `Shared/` 文件夹
+   - 迁移完成后删除旧的目录结构
+   - 在 PR 中清晰描述迁移范围
+
+5. **禁止行为**：
+   - ❌ 混合不同 ADR 的测试类在同一文件
+   - ❌ 测试文件放在非规范的目录位置
+   - ❌ 使用不符合编号规范的文件夹名称
+   - ❌ 删除 Shared 文件夹内的公共基础设施而不进行替换
+
+#### ADR-907-A_3_7 测试文件与代码文件对应关系
+
+测试文件与被测试对象的对应关系应该清晰可追踪：
+
+1. **关联注释**：
+   - 每个测试类顶部必须包含对应的 RuleId 注释
+   - 示例：
+     ```csharp
+     /// <summary>
+     /// 验证 ADR-907-A_1_1：编号格式强制要求
+     /// 验证 ADR-907-A_1_2：Decision 章节结构要求
+     /// </summary>
+     public class ADR_907_A_1_Architecture_Tests : ArchitectureTestBase
+     {
+         // ...
+     }
+     ```
+
+2. **测试方法关联**：
+   - 每个测试方法必须清晰指向对应的 Clause
+   - 方法名中包含 RuleId，注释中引用原文位置
+   - 示例：
+     ```csharp
+     /// <summary>
+     /// 验证 ADR-907-A_1_1 编号格式强制要求
+     /// 参考 Decision 章节 §ADR-907-A_1_1
+     /// </summary>
+     [Fact]
+     public void ADR_907_A_1_1_编号格式必须符合规范()
+     {
+         // 测试实现
+     }
+     ```
+
+3. **跨文件引用**：
+   - 如果某个 Clause 的测试分散在多个文件，必须在每个文件中注明其他文件位置
+   - 使用统一的交叉引用格式：`参见 ADR_XXX_Y_Z_Architecture_Tests.cs`
 
 ## Enforcement（执法模型）
 
@@ -342,6 +432,8 @@ ADR-907（主体） > ADR-907-A（本标准） > 各具体 ADR > 指南文档 > 
 | **ADR-907-A_3_3** | L1 | ArchitectureTests 验证测试失败信息引用新 RuleId | §ADR-907-A_3_3 |
 | **ADR-907-A_3_4** | L1 | ArchitectureTests 检测旧编号测试残留 | §ADR-907-A_3_4 |
 | **ADR-907-A_3_5** | L2 | CI 警告：Clause 无对应测试或存在 TODO stub 超期 | §ADR-907-A_3_5 |
+| **ADR-907-A_3_6** | L1 | CI 检查测试目录结构是否符合规范 | §ADR-907-A_3_6 |
+| **ADR-907-A_3_7** | L1 | ArchitectureTests 验证测试文件与代码的对应关系注释 | §ADR-907-A_3_7 |
 
 ### 执行级别说明
 
@@ -469,20 +561,24 @@ version: "X.0"    # 主版本号 +1
    - 每个原规则转换为 Clause
    - 使用新的编号格式
 
-4. **更新或创建 Enforcement 章节**
+4. **整理md格式**
+   - 确保markdown格式规范
+   - 检查列表、标题、代码块、分隔线等
+
+5. **更新或创建 Enforcement 章节**
    - 创建 Enforcement 表格
    - 列出所有 RuleId
    - 标明执行级别
 
-5. **更新 History 章节**
+6. **更新 History 章节**
    - 添加新版本记录
 
-6. **同步更新 ArchitectureTests**
+7. **同步更新 ArchitectureTests**
    - 更新测试类名
    - 更新测试方法名
    - 更新失败信息
 
-7. **提交变更**
+8. **提交变更**
    ```
    使用 report_progress 提交
    ```
@@ -603,5 +699,6 @@ version: "X.0"    # 主版本号 +1
 
 | 版本 | 日期 | 变更说明 | 修订人 |
 |------|------|----------|-------|
+| 1.2 | 2026-02-04 | 在 ADR-907-A_3 下新增 ADR-907-A_3_6（测试目录结构规范）和 ADR-907-A_3_7（测试文件与代码对应关系），规范 ArchitectureTests 的目录结构和文件组织方式 | Architecture Board |
 | 1.1 | 2026-02-03 | 将"待对齐的 ADR 清单"章节提取到独立文件 `adr-907-a-alignment-checklist.md`，便于独立追踪和更新 | Architecture Board |
 | 1.0 | 2026-02-02 | 初始版本：将对齐指南升级为正式 ADR，新增 Authority、Alignment Failure Policy、Test Coupling Rules 三个核心章节 | Architecture Board |

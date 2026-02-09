@@ -1,6 +1,6 @@
 # 运行层 ADR
 
-> ⚠️ **无裁决力声明**：本文档无架构裁决权，所有决策以 ADR 正文为准。
+> ⚠️ 本文档不具备裁决力。所有架构决策以对应 ADR 正文为准。
 
 ## 目录说明
 
@@ -8,7 +8,10 @@
 
 ## ADR
 
-- [ADR-0200：领域事件与集成事件](ADR-0200-domain-integration-events.md)
+- [ADR-201：Handler 生命周期管理](ADR-201-handler-lifecycle-management.md)
+- [ADR-210：事件版本与兼容性](ADR-210-event-versioning-compatibility.md)
+- [ADR-220：事件总线集成](ADR-220-event-bus-integration.md)
+- [ADR-240：Handler 异常约束](ADR-240-handler-exception-constraints.md)
 
 ## 链接
 

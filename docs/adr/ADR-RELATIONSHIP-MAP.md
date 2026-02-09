@@ -1,3 +1,18 @@
+---
+adr: ADR-RELATIONSHIP-MAP
+title: "ADR 关系图"
+type: tool
+status: Active
+level: Tool
+version: "1.0"
+deciders: "Auto-generated"
+date: 2026-01-26
+maintainer: "scripts/generate-adr-relationship-map.sh"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+---
+
 # ADR 关系图（ADR Relationship Map）
 
 > ⚠️ **无裁决力声明**：本文档为自动生成的可视化工具，不具备架构裁决权。所有架构决策以 ADR 正文为准。
@@ -8,7 +23,41 @@
 
 > 🤖 **本文件由 `scripts/generate-adr-relationship-map.sh` 自动生成**  
 > 📅 **生成时间**：$(date '+%Y-%m-%d %H:%M:%S')  
-> 🎯 **依据**：ADR-940 - ADR 关系与溯源管理宪法
+> 🎯 **依据**：ADR-940 - ADR 关系与溯源管理治理规范
+
+---
+
+## Decision
+
+> ⚖️ **本节为唯一裁决来源，所有条款具备执行级别。**
+
+### ADR-RELATIONSHIP-MAP_1：可视化工具定位（Rule）
+
+#### ADR-RELATIONSHIP-MAP_1_1：仅作为辅助工具
+
+**决策**：本文档作为自动生成的可视化工具，不定义架构规则，仅提供 ADR 关系的可视化展示。所有架构决策以各 ADR 正文为准。
+
+**理由**：
+- 关系图是从 ADR 正文自动提取的
+- 避免在多个地方维护相同的架构决策
+- 保持单一真相来源原则
+
+**影响**：
+- 本文档的内容随 ADR 正文变化而更新
+- 不应将此文档作为架构决策的依据
+
+---
+
+## Enforcement（执法方式）
+
+| 规则编号 | 执行级别 | 执法方式 | 说明 |
+|---------|---------|---------|------|
+| ADR-RELATIONSHIP-MAP_1_1 | N/A | 人工审查 | 本文档为工具，无需自动化执法 |
+
+**说明**：
+- 本文档为自动生成的可视化工具
+- 不包含需要执法的架构规则
+- 内容的正确性由生成脚本保证
 
 ---
 
@@ -19,7 +68,7 @@
 - 发现循环依赖
 - 追溯架构决策的演进路径
 
-**注意**：本文档不是决策文档，而是从 ADR 正文中提取的关系可视化。权威信息请参考各 ADR 正文。
+> ℹ️ **Notice**: 本文档不是决策文档，而是从 ADR 正文中提取的关系可视化。权威信息请参考各 ADR 正文。
 
 ---
 
@@ -35,26 +84,26 @@ graph TB
     classDef runtime fill:#FFA07A
     classDef technical fill:#DDA0DD
 
-    ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_0000
-    ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_0006
-    ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_0002
-    ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_0003
-    ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_0005
-    ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_120
-    ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_121
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_0001
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_0002
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_0003
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_0004
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_0005
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_970
-    ADR_0000_ARCHITECTURE_TESTS --> ADR_980
-    ADR_940_ADR_RELATIONSHIP_TRACEABILITY_MANAGEMENT --> ADR_0008
+    ADR_001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_900
+    ADR_001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_006
+    ADR_001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_002
+    ADR_001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_003
+    ADR_001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_005
+    ADR_001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_120
+    ADR_001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE --> ADR_121
+    ADR_900_ARCHITECTURE_TESTS --> ADR_001
+    ADR_900_ARCHITECTURE_TESTS --> ADR_002
+    ADR_900_ARCHITECTURE_TESTS --> ADR_003
+    ADR_900_ARCHITECTURE_TESTS --> ADR_004
+    ADR_900_ARCHITECTURE_TESTS --> ADR_005
+    ADR_900_ARCHITECTURE_TESTS --> ADR_970
+    ADR_900_ARCHITECTURE_TESTS --> ADR_980
+    ADR_940_ADR_RELATIONSHIP_TRACEABILITY_MANAGEMENT --> ADR_008
     ADR_940_ADR_RELATIONSHIP_TRACEABILITY_MANAGEMENT --> ADR_0900
     ADR_940_ADR_RELATIONSHIP_TRACEABILITY_MANAGEMENT --> ADR_980
     ADR_945_ADR_TIMELINE_EVOLUTION_VIEW --> ADR_940
     ADR_945_ADR_TIMELINE_EVOLUTION_VIEW --> ADR_980
-    ADR_950_GUIDE_FAQ_DOCUMENTATION_GOVERNANCE --> ADR_0008
+    ADR_950_GUIDE_FAQ_DOCUMENTATION_GOVERNANCE --> ADR_008
     ADR_950_GUIDE_FAQ_DOCUMENTATION_GOVERNANCE --> ADR_951
     ADR_950_GUIDE_FAQ_DOCUMENTATION_GOVERNANCE --> ADR_952
     ADR_950_GUIDE_FAQ_DOCUMENTATION_GOVERNANCE --> ADR_960
@@ -62,34 +111,34 @@ graph TB
     ADR_951_CASE_REPOSITORY_MANAGEMENT --> ADR_920
     ADR_952_ENGINEERING_STANDARD_ADR_BOUNDARY --> ADR_950
     ADR_952_ENGINEERING_STANDARD_ADR_BOUNDARY --> ADR_0900
-    ADR_955_DOCUMENTATION_SEARCH_DISCOVERABILITY --> ADR_0008
+    ADR_955_DOCUMENTATION_SEARCH_DISCOVERABILITY --> ADR_008
     ADR_955_DOCUMENTATION_SEARCH_DISCOVERABILITY --> ADR_940
-    ADR_960_ONBOARDING_DOCUMENTATION_GOVERNANCE --> ADR_0008
+    ADR_960_ONBOARDING_DOCUMENTATION_GOVERNANCE --> ADR_008
     ADR_960_ONBOARDING_DOCUMENTATION_GOVERNANCE --> ADR_950
-    ADR_965_ONBOARDING_INTERACTIVE_LEARNING_PATH --> ADR_0008
+    ADR_965_ONBOARDING_INTERACTIVE_LEARNING_PATH --> ADR_008
     ADR_965_ONBOARDING_INTERACTIVE_LEARNING_PATH --> ADR_960
-    ADR_970_AUTOMATION_LOG_INTEGRATION_STANDARD --> ADR_0000
-    ADR_970_AUTOMATION_LOG_INTEGRATION_STANDARD --> ADR_0008
-    ADR_975_DOCUMENTATION_QUALITY_MONITORING --> ADR_0008
-    ADR_980_ADR_LIFECYCLE_SYNCHRONIZATION --> ADR_0000
+    ADR_970_AUTOMATION_LOG_INTEGRATION_STANDARD --> ADR_900
+    ADR_970_AUTOMATION_LOG_INTEGRATION_STANDARD --> ADR_008
+    ADR_975_DOCUMENTATION_QUALITY_MONITORING --> ADR_008
+    ADR_980_ADR_LIFECYCLE_SYNCHRONIZATION --> ADR_900
     ADR_980_ADR_LIFECYCLE_SYNCHRONIZATION --> ADR_0900
-    ADR_990_DOCUMENTATION_EVOLUTION_ROADMAP --> ADR_0008
+    ADR_990_DOCUMENTATION_EVOLUTION_ROADMAP --> ADR_008
     ADR_990_DOCUMENTATION_EVOLUTION_ROADMAP --> ADR_0900
-    ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE -.替代.-> ADR_0004
-    ADR_0001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE -.替代.-> ADR_0008
-    ADR_0000_ARCHITECTURE_TESTS -.替代.-> ADR_0006
-    ADR_0000_ARCHITECTURE_TESTS -.替代.-> ADR_0008
-    ADR_940_ADR_RELATIONSHIP_TRACEABILITY_MANAGEMENT -.替代.-> ADR_0006
+    ADR_001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE -.替代.-> ADR_004
+    ADR_001_MODULAR_MONOLITH_VERTICAL_SLICE_ARCHITECTURE -.替代.-> ADR_008
+    ADR_900_ARCHITECTURE_TESTS -.替代.-> ADR_006
+    ADR_900_ARCHITECTURE_TESTS -.替代.-> ADR_008
+    ADR_940_ADR_RELATIONSHIP_TRACEABILITY_MANAGEMENT -.替代.-> ADR_006
     ADR_945_ADR_TIMELINE_EVOLUTION_VIEW -.替代.-> ADR_980
     ADR_950_GUIDE_FAQ_DOCUMENTATION_GOVERNANCE -.替代.-> ADR_910
     ADR_951_CASE_REPOSITORY_MANAGEMENT -.替代.-> ADR_920
-    ADR_952_ENGINEERING_STANDARD_ADR_BOUNDARY -.替代.-> ADR_0008
+    ADR_952_ENGINEERING_STANDARD_ADR_BOUNDARY -.替代.-> ADR_008
     ADR_955_DOCUMENTATION_SEARCH_DISCOVERABILITY -.替代.-> ADR_975
     ADR_960_ONBOARDING_DOCUMENTATION_GOVERNANCE -.替代.-> ADR_965
     ADR_970_AUTOMATION_LOG_INTEGRATION_STANDARD -.替代.-> ADR_940
     ADR_970_AUTOMATION_LOG_INTEGRATION_STANDARD -.替代.-> ADR_980
     ADR_975_DOCUMENTATION_QUALITY_MONITORING -.替代.-> ADR_955
-    ADR_980_ADR_LIFECYCLE_SYNCHRONIZATION -.替代.-> ADR_0008
+    ADR_980_ADR_LIFECYCLE_SYNCHRONIZATION -.替代.-> ADR_008
     ADR_980_ADR_LIFECYCLE_SYNCHRONIZATION -.替代.-> ADR_940
     ADR_990_DOCUMENTATION_EVOLUTION_ROADMAP -.替代.-> ADR_940
     ADR_990_DOCUMENTATION_EVOLUTION_ROADMAP -.替代.-> ADR_980
@@ -110,41 +159,41 @@ graph TB
 
 ---
 
-#### ADR-0001：模块化单体与垂直切片架构
+#### ADR-001：模块化单体与垂直切片架构
 
 **状态**：✅ Final（裁决型ADR）  
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 测试执行机制
-- [ADR-0006：术语与编号宪法](./ADR-0006-terminology-numbering-constitution.md) - 术语定义标准
-- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 基于模块隔离规则
-- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 基于模块边界定义
-- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 基于模块通信约束
+- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - 测试执行机制
+- [ADR-006：术语与编号宪法](./ADR-006-terminology-numbering-constitution.md) - 术语定义标准
+- [ADR-002：平台、应用与主机启动器架构](./ADR-002-platform-application-host-bootstrap.md) - 基于模块隔离规则
+- [ADR-003：命名空间与项目结构规范](./ADR-003-namespace-rules.md) - 基于模块边界定义
+- [ADR-005：应用内交互模型与执行边界](./ADR-005-Application-Interaction-Model-Final.md) - 基于模块通信约束
 - [ADR-120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 基于模块通信机制
 - [ADR-121：契约 DTO 命名与组织](../structure/ADR-121-contract-dto-naming-organization.md) - 基于模块通信机制
 
 **被依赖（Depended By）**：
-- [ADR-0002：平台、应用与主机启动器架构](./ADR-0002-platform-application-host-bootstrap.md) - 基于模块隔离规则
-- [ADR-0003：命名空间与项目结构规范](./ADR-0003-namespace-rules.md) - 基于模块边界定义
-- [ADR-0005：应用内交互模型与执行边界](./ADR-0005-Application-Interaction-Model-Final.md) - 基于模块通信约束
+- [ADR-002：平台、应用与主机启动器架构](./ADR-002-platform-application-host-bootstrap.md) - 基于模块隔离规则
+- [ADR-003：命名空间与项目结构规范](./ADR-003-namespace-rules.md) - 基于模块边界定义
+- [ADR-005：应用内交互模型与执行边界](./ADR-005-Application-Interaction-Model-Final.md) - 基于模块通信约束
 - [ADR-120：领域事件命名约定](../structure/ADR-120-domain-event-naming-convention.md) - 基于模块通信机制
 - [ADR-121：契约 DTO 命名与组织](../structure/ADR-121-contract-dto-naming-organization.md) - 基于模块通信机制
 
 **替代（Supersedes）**：
-- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 依赖管理补充
-- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - 文档治理
+- [ADR-004：中央包管理与层级依赖规则](./ADR-004-Cpm-Final.md) - 依赖管理补充
+- [ADR-008：文档编写与维护宪法](./ADR-008-documentation-governance-constitution.md) - 文档治理
 
 **被替代（Superseded By）**：
-- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 依赖管理补充
-- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - 文档治理
+- [ADR-004：中央包管理与层级依赖规则](./ADR-004-Cpm-Final.md) - 依赖管理补充
+- [ADR-008：文档编写与维护宪法](./ADR-008-documentation-governance-constitution.md) - 文档治理
 
 **相关（Related）**：
-- [ADR-0004：中央包管理与层级依赖规则](./ADR-0004-Cpm-Final.md) - 依赖管理补充
-- [ADR-0008：文档编写与维护宪法](./ADR-0008-documentation-governance-constitution.md) - 文档治理
+- [ADR-004：中央包管理与层级依赖规则](./ADR-004-Cpm-Final.md) - 依赖管理补充
+- [ADR-008：文档编写与维护宪法](./ADR-008-documentation-governance-constitution.md) - 文档治理
 
 ---
 
-#### ADR-0002：Platform / Application / Host 三层启动体系
+#### ADR-002：Platform / Application / Host 三层启动体系
 
 **状态**：✅ Final（裁决型ADR）  
 
@@ -152,7 +201,7 @@ graph TB
 
 ---
 
-#### ADR-0003：命名空间与项目边界规范
+#### ADR-003：命名空间与项目边界规范
 
 **状态**：✅ Final（裁决型ADR）  
 
@@ -160,7 +209,7 @@ graph TB
 
 ---
 
-#### ADR-0004：中央包管理（CPM）规范
+#### ADR-004：中央包管理（CPM）规范
 
 **状态**：✅ Final（裁决型ADR）  
 
@@ -168,7 +217,7 @@ graph TB
 
 ---
 
-#### ADR-0005：应用内交互模型极简判裁版
+#### ADR-005：应用内交互模型极简判裁版
 
 **状态**：✅ Final（仅保留裁决性规则，无“建议/经验”）  
 
@@ -184,7 +233,7 @@ graph TB
 
 ---
 
-#### ADR-0006：术语与编号宪法
+#### ADR-006：术语与编号宪法
 
 **状态**：✅ Final（裁决型ADR）  
 
@@ -192,7 +241,7 @@ graph TB
 
 ---
 
-#### ADR-0007：Agent 行为与权限宪法
+#### ADR-007：Agent 行为与权限宪法
 
 **状态**：✅ Final（裁决型ADR）  
 
@@ -200,7 +249,7 @@ graph TB
 
 ---
 
-#### ADR-0008：文档编写与维护宪法
+#### ADR-008：文档编写与维护宪法
 
 **状态**：✅ Final（裁决型ADR）  
 
@@ -208,39 +257,39 @@ graph TB
 
 ---
 
-#### ADR-0000：架构测试与 CI 治理宪法
+#### ADR-900：架构测试与 CI 治理元规则
 
 **状态**：✅ Final（不可随意修改）  
 
 **依赖（Depends On）**：
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 其测试执行基于本 ADR
-- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 其测试执行基于本 ADR
-- [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 其测试执行基于本 ADR
-- [ADR-0004：中央包管理与层级依赖规则](../constitutional/ADR-0004-Cpm-Final.md) - 其测试执行基于本 ADR
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 其测试执行基于本 ADR
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 其测试执行基于本 ADR
+- [ADR-002：平台、应用与主机启动器架构](../constitutional/ADR-002-platform-application-host-bootstrap.md) - 其测试执行基于本 ADR
+- [ADR-003：命名空间与项目结构规范](../constitutional/ADR-003-namespace-rules.md) - 其测试执行基于本 ADR
+- [ADR-004：中央包管理与层级依赖规则](../constitutional/ADR-004-Cpm-Final.md) - 其测试执行基于本 ADR
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - 其测试执行基于本 ADR
 - [ADR-970：自动化工具日志集成标准](./ADR-970-automation-log-integration-standard.md) - 测试报告标准基于本 ADR
 - [ADR-980：ADR 生命周期一体化同步机制](./ADR-980-adr-lifecycle-synchronization.md) - CI 检测机制基于本 ADR
 
 **被依赖（Depended By）**：
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 其测试执行基于本 ADR
-- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 其测试执行基于本 ADR
-- [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 其测试执行基于本 ADR
-- [ADR-0004：中央包管理与层级依赖规则](../constitutional/ADR-0004-Cpm-Final.md) - 其测试执行基于本 ADR
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 其测试执行基于本 ADR
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 其测试执行基于本 ADR
+- [ADR-002：平台、应用与主机启动器架构](../constitutional/ADR-002-platform-application-host-bootstrap.md) - 其测试执行基于本 ADR
+- [ADR-003：命名空间与项目结构规范](../constitutional/ADR-003-namespace-rules.md) - 其测试执行基于本 ADR
+- [ADR-004：中央包管理与层级依赖规则](../constitutional/ADR-004-Cpm-Final.md) - 其测试执行基于本 ADR
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - 其测试执行基于本 ADR
 - [ADR-970：自动化工具日志集成标准](./ADR-970-automation-log-integration-standard.md) - 测试报告标准基于本 ADR
 - [ADR-980：ADR 生命周期一体化同步机制](./ADR-980-adr-lifecycle-synchronization.md) - CI 检测机制基于本 ADR
 
 **替代（Supersedes）**：
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - ADR 编号规范
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档治理
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - ADR 编号规范
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - ADR 文档治理
 
 **被替代（Superseded By）**：
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - ADR 编号规范
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档治理
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - ADR 编号规范
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - ADR 文档治理
 
 **相关（Related）**：
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - ADR 编号规范
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - ADR 文档治理
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - ADR 编号规范
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - ADR 文档治理
 
 ---
 
@@ -252,7 +301,7 @@ graph TB
 
 ---
 
-#### ADR-910：README 编写与维护宪法
+#### ADR-910：README 编写与维护治理规范
 
 **状态**：✅ Final（裁决型ADR）  
 
@@ -260,7 +309,7 @@ graph TB
 
 ---
 
-#### ADR-920：示例代码治理宪法
+#### ADR-920：示例代码治理规范
 
 **状态**：✅ Final（裁决型ADR）  
 
@@ -276,27 +325,27 @@ graph TB
 
 ---
 
-#### ADR-940：ADR 关系与溯源管理宪法
+#### ADR-940：ADR 关系与溯源管理治理规范
 
 **状态**：✅ Accepted（已采纳）  
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于文档规范
-- [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md) - 集成到 ADR 流程
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于文档规范
+- [ADR-900：ADR 新增与修订流程](ADR-900-architecture-tests.md) - 集成到 ADR 流程
 - [ADR-980：ADR 生命周期一体化同步机制](ADR-980-adr-lifecycle-synchronization-mechanism.md) - 需要关系图更新
 
 **被依赖（Depended By）**：
 - [ADR-980：ADR 生命周期一体化同步机制](ADR-980-adr-lifecycle-synchronization-mechanism.md) - 需要关系图更新
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
 
 **替代（Supersedes）**：
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
 
 **被替代（Superseded By）**：
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
 
 **相关（Related）**：
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - 涉及 ADR 编号规范
 
 ---
 
@@ -305,7 +354,7 @@ graph TB
 **状态**：✅ Accepted（已采纳）  
 
 **依赖（Depends On）**：
-- [ADR-940：ADR 关系与溯源管理宪法](ADR-940-adr-relationship-traceability-management.md) - 基于关系图数据
+- [ADR-940：ADR 关系与溯源管理治理规范](ADR-940-adr-relationship-traceability-management.md) - 基于关系图数据
 - [ADR-980：ADR 生命周期一体化同步机制](ADR-980-adr-lifecycle-synchronization-mechanism.md) - 版本追踪相关
 
 **被依赖（Depended By）**：
@@ -322,30 +371,30 @@ graph TB
 
 ---
 
-#### ADR-950：指南与 FAQ 文档治理宪法
+#### ADR-950：指南与 FAQ 文档治理规范
 
 **状态**：✅ Accepted（已采纳）  
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基础文档规范
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基础文档规范
 - [ADR-951：案例库管理规范](ADR-951-case-repository-management.md) - Case 类型细化
 - [ADR-952：工程标准与 ADR 分离边界](ADR-952-engineering-standard-adr-boundary.md) - Standard 类型细化
-- [ADR-960：Onboarding 文档治理宪法](ADR-960-onboarding-documentation-governance.md) - Onboarding 文档规范
+- [ADR-960：Onboarding 文档治理规范](ADR-960-onboarding-documentation-governance.md) - Onboarding 文档规范
 
 **被依赖（Depended By）**：
 - [ADR-951：案例库管理规范](ADR-951-case-repository-management.md) - Case 类型细化
 - [ADR-952：工程标准与 ADR 分离边界](ADR-952-engineering-standard-adr-boundary.md) - Standard 类型细化
-- [ADR-960：Onboarding 文档治理宪法](ADR-960-onboarding-documentation-governance.md) - Onboarding 文档规范
-- [ADR-910：README 编写与维护宪法](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
+- [ADR-960：Onboarding 文档治理规范](ADR-960-onboarding-documentation-governance.md) - Onboarding 文档规范
+- [ADR-910：README 编写与维护治理规范](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
 
 **替代（Supersedes）**：
-- [ADR-910：README 编写与维护宪法](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
+- [ADR-910：README 编写与维护治理规范](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
 
 **被替代（Superseded By）**：
-- [ADR-910：README 编写与维护宪法](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
+- [ADR-910：README 编写与维护治理规范](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
 
 **相关（Related）**：
-- [ADR-910：README 编写与维护宪法](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
+- [ADR-910：README 编写与维护治理规范](ADR-910-readme-governance-constitution.md) - README 是另一类非裁决性文档
 
 ---
 
@@ -354,20 +403,20 @@ graph TB
 **状态**：✅ Accepted（已采纳）  
 
 **依赖（Depends On）**：
-- [ADR-950：指南与 FAQ 文档治理宪法](ADR-950-guide-faq-documentation-governance.md) - 基于 Case 类型定义
-- [ADR-920：示例代码治理宪法](ADR-920-examples-governance-constitution.md) - 示例代码规范
+- [ADR-950：指南与 FAQ 文档治理规范](ADR-950-guide-faq-documentation-governance.md) - 基于 Case 类型定义
+- [ADR-920：示例代码治理规范](ADR-920-examples-governance-constitution.md) - 示例代码规范
 
 **被依赖（Depended By）**：
-- [ADR-920：示例代码治理宪法](ADR-920-examples-governance-constitution.md) - 示例代码规范
+- [ADR-920：示例代码治理规范](ADR-920-examples-governance-constitution.md) - 示例代码规范
 
 **替代（Supersedes）**：
-- [ADR-920：示例代码治理宪法](ADR-920-examples-governance-constitution.md) - 示例代码规范
+- [ADR-920：示例代码治理规范](ADR-920-examples-governance-constitution.md) - 示例代码规范
 
 **被替代（Superseded By）**：
-- [ADR-920：示例代码治理宪法](ADR-920-examples-governance-constitution.md) - 示例代码规范
+- [ADR-920：示例代码治理规范](ADR-920-examples-governance-constitution.md) - 示例代码规范
 
 **相关（Related）**：
-- [ADR-920：示例代码治理宪法](ADR-920-examples-governance-constitution.md) - 示例代码规范
+- [ADR-920：示例代码治理规范](ADR-920-examples-governance-constitution.md) - 示例代码规范
 
 ---
 
@@ -376,20 +425,20 @@ graph TB
 **状态**：✅ Accepted（已采纳）  
 
 **依赖（Depends On）**：
-- [ADR-950：指南与 FAQ 文档治理宪法](ADR-950-guide-faq-documentation-governance.md) - 基于 Standard 类型定义
-- [ADR-900：ADR 新增与修订流程](ADR-900-adr-process.md) - Standard 提升为 ADR 流程
+- [ADR-950：指南与 FAQ 文档治理规范](ADR-950-guide-faq-documentation-governance.md) - 基于 Standard 类型定义
+- [ADR-900：ADR 新增与修订流程](ADR-900-architecture-tests.md) - Standard 提升为 ADR 流程
 
 **被依赖（Depended By）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档分级
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档分级
 
 **替代（Supersedes）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档分级
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档分级
 
 **被替代（Superseded By）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档分级
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档分级
 
 **相关（Related）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档分级
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档分级
 
 ---
 
@@ -398,8 +447,8 @@ graph TB
 **状态**：✅ Accepted  
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档组织
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 基于其关系声明
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档组织
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 基于其关系声明
 
 **被依赖（Depended By）**：
 - [ADR-975：文档质量指标与监控](../governance/ADR-975-documentation-quality-monitoring.md) - 质量监控包含可发现性
@@ -415,13 +464,13 @@ graph TB
 
 ---
 
-#### ADR-960：Onboarding 文档治理宪法
+#### ADR-960：Onboarding 文档治理规范
 
 **状态**：✅ Accepted  
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档分级和编写标准
-- [ADR-950：指南与 FAQ 文档治理宪法](../governance/ADR-950-guide-faq-documentation-governance.md) - 基于其文档类型定义
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档分级和编写标准
+- [ADR-950：指南与 FAQ 文档治理规范](../governance/ADR-950-guide-faq-documentation-governance.md) - 基于其文档类型定义
 
 **被依赖（Depended By）**：
 - [ADR-965：Onboarding 互动式学习路径](../governance/ADR-965-onboarding-interactive-learning-path.md) - 互动式体验增强
@@ -442,8 +491,8 @@ graph TB
 **状态**：✅ Accepted  
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档标准
-- [ADR-960：Onboarding 文档治理宪法](../governance/ADR-960-onboarding-documentation-governance.md) - 基于其 Onboarding 结构
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档标准
+- [ADR-960：Onboarding 文档治理规范](../governance/ADR-960-onboarding-documentation-governance.md) - 基于其 Onboarding 结构
 
 **被依赖（Depended By）**：
 - 无
@@ -464,22 +513,22 @@ graph TB
 **状态**：✅ Accepted  
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 测试机制
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档组织
+- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - 基于其 CI 测试机制
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档组织
 
 **被依赖（Depended By）**：
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 日志与 ADR 关联
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 日志与 ADR 关联
 
 **替代（Supersedes）**：
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 日志与 ADR 关联
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 日志与 ADR 关联
 - [ADR-980：ADR 生命周期一体化同步机制](../governance/ADR-980-adr-lifecycle-synchronization.md) - 版本同步检测
 
 **被替代（Superseded By）**：
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 日志与 ADR 关联
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 日志与 ADR 关联
 - [ADR-980：ADR 生命周期一体化同步机制](../governance/ADR-980-adr-lifecycle-synchronization.md) - 版本同步检测
 
 **相关（Related）**：
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 日志与 ADR 关联
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 日志与 ADR 关联
 - [ADR-980：ADR 生命周期一体化同步机制](../governance/ADR-980-adr-lifecycle-synchronization.md) - 版本同步检测
 
 ---
@@ -489,7 +538,7 @@ graph TB
 **状态**：✅ Accepted  
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档标准
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档标准
 
 **被依赖（Depended By）**：
 - [ADR-955：文档搜索与可发现性优化](../governance/ADR-955-documentation-search-discoverability.md) - 可查找性是质量指标之一
@@ -505,28 +554,28 @@ graph TB
 
 ---
 
-#### ADR-980：ADR 生命周期一体化同步机制宪法
+#### ADR-980：ADR 生命周期一体化同步机制治理规范
 
 **状态**：✅ Accepted  
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](../governance/ADR-0000-architecture-tests.md) - 基于其 CI 检测机制
-- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - 基于其"三位一体交付"要求
+- [ADR-900：架构测试与 CI 治理元规则](../governance/ADR-900-architecture-tests.md) - 基于其 CI 检测机制
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-architecture-tests.md) - 基于其"三位一体交付"要求
 
 **被依赖（Depended By）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档版本管理
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档版本管理
 
 **替代（Supersedes）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档版本管理
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系图更新
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档版本管理
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系图更新
 
 **被替代（Superseded By）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档版本管理
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系图更新
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档版本管理
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系图更新
 
 **相关（Related）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档版本管理
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系图更新
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档版本管理
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 关系图更新
 
 ---
 
@@ -535,22 +584,22 @@ graph TB
 **状态**：✅ Accepted  
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档管理标准
-- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-adr-process.md) - 基于其 RFC 流程
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档管理标准
+- [ADR-900：ADR 新增与修订流程](../governance/ADR-900-architecture-tests.md) - 基于其 RFC 流程
 
 **被依赖（Depended By）**：
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 路线图项目关联 ADR
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 路线图项目关联 ADR
 
 **替代（Supersedes）**：
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 路线图项目关联 ADR
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 路线图项目关联 ADR
 - [ADR-980：ADR 生命周期一体化同步机制](../governance/ADR-980-adr-lifecycle-synchronization.md) - 状态同步
 
 **被替代（Superseded By）**：
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 路线图项目关联 ADR
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 路线图项目关联 ADR
 - [ADR-980：ADR 生命周期一体化同步机制](../governance/ADR-980-adr-lifecycle-synchronization.md) - 状态同步
 
 **相关（Related）**：
-- [ADR-940：ADR 关系与溯源管理宪法](../governance/ADR-940-adr-relationship-traceability-management.md) - 路线图项目关联 ADR
+- [ADR-940：ADR 关系与溯源管理治理规范](../governance/ADR-940-adr-relationship-traceability-management.md) - 路线图项目关联 ADR
 - [ADR-980：ADR 生命周期一体化同步机制](../governance/ADR-980-adr-lifecycle-synchronization.md) - 状态同步
 
 ---
@@ -669,8 +718,33 @@ graph TB
 - **替代关系数**：18
 - **相关关系数**：18
 
----
-
 **生成时间**：2026-01-26 14:20:07  
 **维护**：架构委员会  
 **状态**：🤖 自动生成
+
+---
+
+## Relationships（关系声明）
+
+**Depends On**：
+- [ADR-940：ADR 关系与溯源管理治理规范](./governance/ADR-940-adr-relationship-traceability-management.md) - 本文档基于 ADR-940 的关系映射规范生成
+
+**Depended By**：
+- 所有 ADR 文档 - 作为关系声明的集中视图
+
+**Supersedes**：
+- 无
+
+**Superseded By**：
+- 无
+
+**Related**：
+- 无
+
+---
+
+## History（变更历史）
+
+| 版本 | 日期 | 变更说明 | 修订人 |
+|------|------|----------|-------|
+| 1.0 | 2026-01-26 | 初始版本：自动生成的 ADR 关系图 | Auto-generated script |

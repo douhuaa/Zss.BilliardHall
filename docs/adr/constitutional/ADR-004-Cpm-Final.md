@@ -4,8 +4,8 @@ title: "中央包管理（CPM）规范"
 status: Final
 level: Constitutional
 deciders: "Architecture Board"
-date: 2026-01-29
-version: "2.0"
+date: 2026-02-04
+version: "3.0"
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "Architecture Board"
@@ -31,8 +31,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -45,63 +43,143 @@ superseded_by: null
 
 ---
 
----
-
 ## Decision（裁决）
 
-### 包集中管理与防御（ADR-004.1, 0004.2, 0004.3, 0004.9）
-
-**规则**：
-- 必须启用 CPM
-- Directory.Packages.props 必须存在
-- 禁止项目文件手动指定 Version
-- 禁止私自覆盖中央包版本
-
-**判定**：
-- ❌ 未启用 CPM
-- ❌ 缺少 Directory.Packages.props
-- ❌ 项目文件包含 Version 属性
-- ❌ 项目覆盖中央包版本
-- ✅ 所有包版本集中管理
-
-### 层级依赖规则（ADR-004.4, 0004.8）
-
-**规则**：
-- Platform：仅技术底座包（Logging、OpenTelemetry、基础异常处理）
-- Application：装配与 Pipeline 包（Wolverine、Marten）
-- Modules：业务依赖、DTO、协议、契约
-- Host：仅调用 Bootstrapper，不依赖业务包
-- Tests：被测模块 + Platform/Application
-
-**判定**：
-- ❌ Platform 依赖业务包
-- ❌ 层级依赖不符合规范
-- ✅ 所有层级依赖正确
-
-### 包分组与统一（ADR-004.5, 0004.6, 0004.7）
-
-**规则**：
-- Directory.Packages.props 必须包含包分组
-- 所有测试项目使用相同测试框架版本
-- 所有使用的包必须集中声明
-
-**判定**：
-- ❌ Directory.Packages.props 缺少分组
-- ❌ 测试框架版本不一致
-- ❌ 存在未声明的包依赖
-- ✅ 包分组完整、版本统一
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-004 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-004_<Rule>_<Clause>
+> ```
 
 ---
+
+### ADR-004_1：CPM 基础设施约束（Rule）
+
+#### ADR-004_1_1 Directory.Packages.props 必须存在
+
+- 仓库根目录必须包含 Directory.Packages.props 文件
+- 该文件是启用 Central Package Management (CPM) 的基础
+
+**判定**：
+- ❌ 仓库根目录缺少 Directory.Packages.props 文件
+- ✅ Directory.Packages.props 文件存在
+
+#### ADR-004_1_2 CPM 必须启用
+
+- Directory.Packages.props 必须包含 `<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>`
+- 启用 CPM 确保所有包版本集中管理
+
+**判定**：
+- ❌ 未设置 ManagePackageVersionsCentrally
+- ❌ ManagePackageVersionsCentrally 设置为 false
+- ✅ ManagePackageVersionsCentrally 设置为 true
+
+#### ADR-004_1_3 传递依赖固定建议启用
+
+- 建议启用 `<CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>`
+- 固定传递依赖版本，避免间接依赖升级导致的破坏性变更
+- 此条款为建议性质，不作为强制要求
+
+**判定**：
+- ⚠️ 未启用传递依赖固定（建议启用）
+- ✅ 已启用传递依赖固定
+
+---
+
+### ADR-004_2：项目依赖管理约束（Rule）
+
+#### ADR-004_2_1 项目文件禁止手动指定包版本
+
+- 项目文件（.csproj）中的 PackageReference 不得包含 Version 属性
+- 所有包版本必须在 Directory.Packages.props 中定义
+- 禁止使用 VersionOverride 覆盖中央包版本
+
+**判定**：
+- ❌ 项目文件中存在 `<PackageReference Include="..." Version="..." />`
+- ❌ 项目文件中存在 `<PackageReference Update="..." VersionOverride="..." />`
+- ✅ 所有项目文件不包含包版本信息
+
+#### ADR-004_2_2 所有使用的包必须在 CPM 中定义
+
+- Directory.Packages.props 必须定义所有项目引用的包
+- 不允许存在未在 CPM 中声明的包引用
+
+**判定**：
+- ❌ 项目引用的包未在 Directory.Packages.props 中定义
+- ✅ 所有包引用都在 CPM 中有定义
+
+---
+
+### ADR-004_3：层级依赖与分组约束（Rule）
+
+#### ADR-004_3_1 包应按功能分组
+
+- Directory.Packages.props 中应使用 `<ItemGroup Label="分组名称">` 对包进行逻辑分组
+- 常见分组包括：Logging、Testing、Wolverine Framework、Marten、Aspire 等
+- 此条款为建议性质，有助于快速定位和管理相关包
+
+**判定**：
+- ⚠️ 未使用 Label 属性进行包分组（建议使用）
+- ✅ 已使用 Label 属性进行包分组
+
+#### ADR-004_3_2 Platform 项目不引用业务包
+
+- Platform 层项目只能引用技术基础包（如 Serilog、OpenTelemetry、HealthChecks）
+- 禁止引用业务相关的 NuGet 包（如 FluentValidation、MediatR）
+- Platform 层定位为技术底座，不包含业务逻辑
+
+**判定**：
+- ❌ Platform 项目引用了业务包
+- ✅ Platform 项目仅引用技术基础包
+
+#### ADR-004_3_3 测试框架版本统一
+
+- 所有测试项目必须使用相同版本的测试框架（xUnit、NUnit 或 MSTest）
+- 相关测试包（如 Microsoft.NET.Test.Sdk、FluentAssertions）版本必须一致
+
+**判定**：
+- ❌ 测试框架存在多个版本
+- ✅ 所有测试项目使用统一的测试框架版本
+
+#### ADR-004_3_4 层级依赖规则
+
+- **Platform**：仅技术底座包（Logging、OpenTelemetry、基础异常处理）
+- **Application**：装配与 Pipeline 包（Wolverine、Marten）
+- **Modules**：业务依赖、DTO、协议、契约
+- **Host**：仅调用 Bootstrapper，不依赖业务包
+- **Tests**：被测模块 + Platform/Application
+
+**判定**：
+- ❌ 层级依赖不符合规范
+- ✅ 所有层级依赖符合约束
 
 ---
 
 ## Enforcement（执法模型）
 
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_004_Architecture_Tests.cs` 强制验证。
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-004 各条款（Clause）的执法方式及执行级别。
+>
+> 所有规则通过 `src/tests/ArchitectureTests/ADR-004/ADR_004_X_Architecture_Tests.cs` 强制验证。
+
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-004_1_1** | L1 | ArchitectureTests 验证 Directory.Packages.props 文件存在性 | §ADR-004_1_1 |
+| **ADR-004_1_2** | L1 | ArchitectureTests 验证 ManagePackageVersionsCentrally 设置 | §ADR-004_1_2 |
+| **ADR-004_1_3** | L2 | ArchitectureTests 建议性检查，不阻断构建 | §ADR-004_1_3 |
+| **ADR-004_2_1** | L1 | ArchitectureTests 扫描所有 .csproj 文件，检查 PackageReference 的 Version 属性 | §ADR-004_2_1 |
+| **ADR-004_2_2** | L1 | ArchitectureTests 对比项目引用与 CPM 定义，检测未声明的包 | §ADR-004_2_2 |
+| **ADR-004_3_1** | L2 | ArchitectureTests 建议性检查，验证 Label 属性使用情况 | §ADR-004_3_1 |
+| **ADR-004_3_2** | L1 | ArchitectureTests 验证 Platform 项目的包引用类型 | §ADR-004_3_2 |
+| **ADR-004_3_3** | L1 | ArchitectureTests 验证测试框架包的版本一致性 | §ADR-004_3_3 |
+| **ADR-004_3_4** | L1 | ArchitectureTests 验证各层级的依赖规则 | §ADR-004_3_4 |
 
 **有一项违规视为架构违规，CI 自动阻断。**
 
----
 ---
 
 ## Non-Goals（明确不管什么）
@@ -151,9 +229,6 @@ superseded_by: null
 - ❌ **添加测试排除项**：禁止通过 `[Fact(Skip = "...")]` 或条件编译跳过包管理测试
 - ❌ **修改测试阈值**：禁止修改测试中的层级依赖规则（如允许 Platform 依赖更多包）
 
-
----
-
 ---
 
 ## Relationships（关系声明）
@@ -173,9 +248,8 @@ superseded_by: null
 - 无
 
 **相关（Related）**：
-- 无
 
----
+- 无
 
 ---
 
@@ -196,16 +270,12 @@ superseded_by: null
 - [ADR-002：平台、应用与主机启动器架构](./ADR-002-platform-application-host-bootstrap.md) - 了解层级职责划分
 - [ADR-003：命名空间与项目结构规范](./ADR-003-namespace-rules.md) - 了解项目组织结构
 
-
----
-
 ---
 
 ## History（版本历史）
 
 | 版本  | 日期         | 变更说明                                         |
 |-----|------------|----------------------------------------------|
+| 3.0 | 2026-02-04 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系。重构 Decision 章节为 3 个 Rule（Rule 1: CPM 基础设施约束，Rule 2: 项目依赖管理约束，Rule 3: 层级依赖与分组约束），共 9 个 Clause。更新 Enforcement 表格，架构测试将拆分为多个文件。 |
 | 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 |
 | 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
-
----

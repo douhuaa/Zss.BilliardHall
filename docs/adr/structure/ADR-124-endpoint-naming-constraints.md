@@ -1,16 +1,25 @@
-# ADR-124：Endpoint 命名及参数约束规范
-
-> ⚖️ **本 ADR 定义 HTTP Endpoint 命名、职责边界和单一调用约束的唯一裁决规则。**
-
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：结构层  
-**影响范围**：所有 HTTP Endpoint  
-**生效时间**：待审批通过后
-
+---
+adr: ADR-124
+title: "Endpoint 命名及参数约束规范"
+status: Final
+level: Structure
+version: "3.0"
+deciders: "Architecture Board"
+date: 2026-02-03
+maintainer: "Architecture Board"
+primary_enforcement: L1
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
 ---
 
-## 聚焦内容（Focus）
+
+# ADR-124：Endpoint 命名及参数约束规范
+
+> ⚖️ **Constraint | L1** - 本 ADR 定义 HTTP Endpoint 命名、职责边界和单一调用约束的唯一裁决规则。
+
+**影响范围**：所有 HTTP Endpoint  
+## Focus（聚焦内容）
 
 - Endpoint 类命名必须遵循 {UseCase}Endpoint 模式
 - Request/Response DTO 命名规范
@@ -20,9 +29,11 @@
 
 ---
 
-## 术语表（Glossary）
+---
 
-| 术语         | 定义                            | 英文对照                |
+## Glossary（术语表）
+
+| 术语 | 定义 | 英文对照 |
 |------------|-------------------------------|------------------------|
 | Endpoint   | HTTP/gRPC 等协议的入口点，仅做请求适配      | Endpoint               |
 | Request DTO | 请求数据传输对象，用于接收客户端请求          | Request DTO            |
@@ -33,9 +44,24 @@
 
 ---
 
-## 决策（Decision）
+---
 
-### ADR-124.1：Endpoint 类命名必须遵循 {UseCase}Endpoint 模式
+## Decision（裁决）
+
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-124 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-124_<Rule>_<Clause>
+> ```
+
+---
+
+### ADR-124_1：Endpoint 命名规范（Rule）
+
+#### ADR-124_1_1 Endpoint 类命名必须遵循 {UseCase}Endpoint 模式
 
 **规则**：
 - Endpoint 类名**必须**为用例名 + `Endpoint` 后缀
@@ -49,7 +75,7 @@
 - ❌ `CreateOrderController`（非 Endpoint 后缀）
 - ❌ `CreateOrderApi`（非标准后缀）
 
-### ADR-124.2：请求 DTO 命名必须遵循 {UseCase}Request 模式
+#### ADR-124_1_2 请求 DTO 命名必须遵循 {UseCase}Request 模式
 
 **规则**：
 - 请求 DTO 名称**必须**为用例名 + `Request` 后缀
@@ -63,7 +89,7 @@
 - ❌ `OrderRequest`（缺少用例动词）
 - ❌ `CreateOrderInput`（非标准后缀）
 
-### ADR-124.3：响应 DTO 命名必须遵循 {UseCase}Response 模式
+#### ADR-124_1_3 响应 DTO 命名必须遵循 {UseCase}Response 模式
 
 **规则**：
 - 响应 DTO 名称**必须**为用例名 + `Response` 后缀
@@ -77,7 +103,11 @@
 - ❌ `OrderDto`（不明确用途）
 - ❌ `CreateOrderResult`（非标准后缀）
 
-### ADR-124.4：Endpoint 禁止包含业务逻辑
+---
+
+### ADR-124_2：Endpoint 职责边界（Rule）
+
+#### ADR-124_2_1 Endpoint 禁止包含业务逻辑
 
 **规则**：
 - Endpoint **禁止**包含任何业务逻辑
@@ -122,7 +152,7 @@ var total = request.Items.Sum(i => i.Price * i.Quantity);
 var order = await _dbContext.Orders.FindAsync(id);
 ```
 
-### ADR-124.5：一个 Endpoint 只能调用一个 Command 或 Query
+#### ADR-124_2_2 一个 Endpoint 只能调用一个 Command 或 Query
 
 **规则**：
 - 每个 Endpoint 方法**必须**只调用一个 Command 或一个 Query
@@ -168,77 +198,60 @@ builder.MapPost("/orders/fulfill", async (request, bus) =>
 
 ---
 
-## 快速参考表
+---
 
-| 约束编号       | 约束描述                   | 测试方式       | 测试用例                                      | 必须遵守 |
-|------------|------------------------|------------|--------------------------------------------|------|
-| ADR-124.1  | Endpoint 类命名规范        | L1 - 自动化测试 | Endpoints_Must_Follow_Naming_Convention      | ✅    |
-| ADR-124.2  | Request DTO 命名规范      | L1 - 自动化测试 | Request_DTOs_Must_End_With_Request           | ✅    |
-| ADR-124.3  | Response DTO 命名规范     | L1 - 自动化测试 | Response_DTOs_Must_End_With_Response         | ✅    |
-| ADR-124.4  | Endpoint 禁止包含业务逻辑    | L2 - Code Review + Roslyn | Endpoints_Must_Not_Contain_Business_Logic  | ✅    |
-| ADR-124.5  | 一个 Endpoint 只能调用一个操作 | L2 - Code Review | Endpoints_Must_Call_Single_Operation       | ✅    |
+## Enforcement（执法模型）
 
-> **级别说明**：L1=静态自动化（脚本检查），L2=语义半自动或人工审查
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-124 各条款（Clause）的执法方式及执行级别。
+>
+> 所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_124_Architecture_Tests.cs` 强制验证。
+
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-124_1_1** | L1 | ArchitectureTests 验证 Endpoint 类命名模式 | §ADR-124_1_1 |
+| **ADR-124_1_2** | L1 | ArchitectureTests 验证 Request DTO 命名 | §ADR-124_1_2 |
+| **ADR-124_1_3** | L1 | ArchitectureTests 验证 Response DTO 命名 | §ADR-124_1_3 |
+| **ADR-124_2_1** | L2 | Code Review + Roslyn Analyzer 检测业务逻辑 | §ADR-124_2_1 |
+| **ADR-124_2_2** | L2 | Code Review 检查单一调用约束 | §ADR-124_2_2 |
+
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
+
+**有一项 L1 违规视为架构违规，CI 自动阻断。**
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## Prohibited（禁止行为）
 
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_124_Architecture_Tests.cs` 强制验证：
 
-- Endpoint 类命名是否符合 `{UseCase}Endpoint` 模式
-- Request DTO 命名是否以 `Request` 结尾
-- Response DTO 命名是否以 `Response` 结尾
+以下行为明确禁止：
 
-**L2 测试**：
-- 通过 Code Review 检查 Endpoint 是否包含业务逻辑
-- 通过 Code Review 检查 Endpoint 是否只调用一个 Command/Query
-- 建议使用 Roslyn Analyzer 检测业务逻辑特征
+- 待补充
 
-**有一项违规视为架构违规，CI 自动阻断。**
 
 ---
 
-## 检查清单
-
-- [ ] Endpoint 类名是否遵循 {UseCase}Endpoint 模式？
-- [ ] Request DTO 是否以 Request 结尾？
-- [ ] Response DTO 是否以 Response 结尾？
-- [ ] Endpoint 是否只做 HTTP 映射，无业务逻辑？
-- [ ] Endpoint 是否只调用一个 Command 或 Query？
-- [ ] 复杂流程是否使用 Saga/Workflow？
-
 ---
 
-## 破例与归还（Exception）
-
-> **破例不是逃避，而是债务。**
-
-### 允许破例的前提
-
-破例**仅在以下情况允许**：
-
-1. **遗留 API 兼容**：保持向后兼容性
-2. **框架约束**：第三方框架强制要求
-3. **批量操作端点**：合理的批量处理场景
-
-### 破例要求（不可省略）
-
-每个破例**必须**：
-
-- 记录在 `docs/summaries/arch-violations.md`
-- 说明兼容性或技术原因
-- 提供迁移计划（如适用）
-- 指定失效日期（不超过 3 个月）
-
----
-
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - Endpoint 约束基于 Handler 模式
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - Endpoint 约束基于 Handler 模式
 - [ADR-121：契约 DTO 命名与组织](./ADR-121-contract-dto-naming-organization.md) - Endpoint 使用契约遵循命名规范
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - Endpoint 命名遵循术语规范
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - Endpoint 命名遵循术语规范
 
 **被依赖（Depended By）**：
 - 无
@@ -254,20 +267,22 @@ builder.MapPost("/orders/fulfill", async (request, bus) =>
 
 ---
 
-## 版本历史
+---
 
-| 版本  | 日期         | 变更说明       | 修订人 |
-|-----|------------|------------|-----|
-| 2.0 | 2026-01-26 | 裁决型重构，添加决策章节 | GitHub Copilot |
-| 1.0 | 2026-01-24 | 初始版本       | GitHub Copilot |
+## References（非裁决性参考）
+
+
+- 待补充
+
 
 ---
 
-## 附注
+---
 
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
+## History（版本历史）
 
-非裁决性参考（详细示例、Endpoint 实现最佳实践、REST API 设计）请查阅：
-- `docs/copilot/adr-0124.prompts.md`
-- [REST API Guidelines](https://restfulapi.net/)
-- [Microsoft REST API Guidelines](https://github.com/microsoft/api-guidelines)
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------|-------|
+| 3.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
+| 2.0 | 2026-01-26 | 更新版本 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |

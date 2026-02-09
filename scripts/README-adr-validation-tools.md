@@ -10,9 +10,9 @@
 
 **检查项**：
 - ✅ Front Matter 完整性（ADR-902 要求）
-- ✅ 术语表格式（ADR-0006 标准）
+- ✅ 术语表格式（ADR-006 标准）
 - ✅ 版本号格式（ADR-980 要求）
-- ✅ 快速参考表（ADR-0006 推荐）
+- ✅ 快速参考表（ADR-006 推荐）
 
 **使用方法**：
 ```bash
@@ -27,7 +27,7 @@
 检查 1: Front Matter 完整性
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-❌ ADR-0001-modular-monolith-vertical-slice-architecture.md 缺少 Front Matter
+❌ ADR-001-modular-monolith-vertical-slice-architecture.md 缺少 Front Matter
 ...
 ```
 
@@ -54,8 +54,8 @@ python3 ./scripts/validate-adr-relationships.py
 🔍 开始 ADR 关系一致性验证...
 
 扫描 ADR 文件...
-  • 已解析 ADR-0001
-  • 已解析 ADR-0002
+  • 已解析 ADR-001
+  • 已解析 ADR-002
 ...
 
 ✅ 成功解析 46 个 ADR
@@ -65,7 +65,7 @@ python3 ./scripts/validate-adr-relationships.py
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 发现 1 个关系不一致问题：
-  ❌ ADR-0001 声明依赖 ADR-0002，但 ADR-0002 未声明被 ADR-0001 依赖
+  ❌ ADR-001 声明依赖 ADR-002，但 ADR-002 未声明被 ADR-001 依赖
 ```
 
 ---
@@ -101,8 +101,8 @@ python3 ./scripts/validate-adr-relationships.py
 ⚠️  发现 2 个术语在多个 ADR 中定义：
 
 术语 '模块化单体' 在以下 ADR 中定义：
-  • ADR-0001-modular-monolith-vertical-slice-architecture.md
-  • ADR-0006-terminology-numbering-constitution.md
+  • ADR-001-modular-monolith-vertical-slice-architecture.md
+  • ADR-006-terminology-numbering-constitution.md
 ```
 
 ---
@@ -159,7 +159,7 @@ jobs:
 
 ## 整改优先级
 
-根据 [ADR 同步性分析报告](../docs/reports/adr-synchronization-analysis-2026-01-29.md)：
+根据项目开发实践经验：
 
 ### P0 问题（7天内修复）
 - ✅ 宪法层 ADR (0001-0008) 缺少 Front Matter
@@ -220,7 +220,7 @@ python3 ./scripts/validate-adr-relationships.py
 
 ## 相关资源
 
-- 📘 [ADR 同步性分析报告](../docs/reports/adr-synchronization-analysis-2026-01-29.md)
+- 📘 **相关文档**：[ADR-970 自动化工具日志集成标准](../docs/adr/governance/ADR-970-automation-log-integration-standard.md)
 - 📘 [ADR-902: ADR 标准模板与结构契约](../docs/adr/governance/ADR-902-adr-template-structure-contract.md)
 - 📘 [ADR-940: ADR 关系与溯源管理](../docs/adr/governance/ADR-940-adr-relationship-traceability-management.md)
 - 📘 [ADR-980: ADR 生命周期同步](../docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md)

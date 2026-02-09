@@ -1,7 +1,7 @@
 ---
 name: "Generate ADR"
-description: "生成符合规范的 ADR 文档"
-version: "1.0"
+description: "生成符合 ADR-902 和 ADR-907 规范的 ADR 文档"
+version: "1.01
 risk_level: "高"
 category: "文档生成"
 required_agent: "adr-reviewer"
@@ -11,7 +11,7 @@ required_agent: "adr-reviewer"
 
 **类别**：文档生成  
 **风险等级**：高  
-**版本**：1.0
+**版本**：3.0
 
 ---
 
@@ -19,14 +19,14 @@ required_agent: "adr-reviewer"
 
 ### 用途
 
-根据 ADR-0900 规范生成标准化的 ADR 文档模板，确保结构完整、格式正确。
+根据 ADR-902 标准模板与结构契约生成标准化的 ADR 文档模板，并对齐 ADR-907 Rule/Clause 双层编号体系。
 
 ### 输入参数
 
 - `adrNumber`：字符串，ADR 编号（如 "0001"）
 - `title`：字符串，ADR 标题
-- `level`：字符串枚举，"宪法" / "结构" / "运行" / "技术" / "治理"
-- `category`：字符串，类别（如 "constitutional", "structure"）
+- `level`：字符串枚举，"Constitutional" / "Governance" / "Structure" / "Runtime" / "Technical"
+- `category`：字符串，类别（如 "constitutional", "governance"）
 - `relatedAdrs`：字符串数组，相关 ADR 列表
 
 ### 输出结果
@@ -36,27 +36,26 @@ required_agent: "adr-reviewer"
   "generated": true,
   "files": [
     {
-      "path": "docs/adr/constitutional/ADR-0001-modular-monolith.md",
+      "path": "docs/adr/constitutional/ADR-001-modular-monolith.md",
       "content": "...",
       "type": "ADR"
     }
   ],
   "summary": {
     "adrNumber": "0001",
-    "level": "宪法",
+    "level": "Constitutional",
     "sectionsIncluded": [
-      "元数据",
-      "本章聚焦内容",
-      "决策",
-      "理由",
-      "影响",
-      "相关 ADR"
+      "Focus",
+      "Glossary",
+      "Decision",
+      "Enforcement",
+      "Non-Goals",
+      "Prohibited",
+      "Relationships",
+      "References",
+      "History"
     ]
-  },
-  "reminders": [
-    "需要补充对应的架构测试",
-    "需要创建 Copilot Prompts"
-  ]
+  }
 }
 ```
 
@@ -69,6 +68,7 @@ required_agent: "adr-reviewer"
 - [ ] ADR 编号未被使用
 - [ ] 类别目录存在
 - [ ] 标题符合命名规范
+- [ ] 符合 ADR-902 结构合规性
 
 ### 必须的 Agent 授权
 
@@ -80,131 +80,159 @@ required_agent: "adr-reviewer"
 ## 执行步骤
 
 1. **验证输入参数**
-  - 检查 ADR 编号唯一性
-  - 验证级别有效
-  - 验证类别目录存在
+   - 检查 ADR 编号唯一性
+   - 验证级别有效（映射到 ADR-902 枚举）
+   - 验证类别目录存在
 
 2. **生成文件名**
-  - 格式：`ADR-{Number}-{kebab-case-title}.md`
-  - 确定目标路径
+   - 格式：`ADR-{Number}-{kebab-case-title}.md`
+   - 确定目标路径
 
 3. **生成文档内容**
-  - 使用标准模板
-  - 填充元数据
-  - 添加必需章节
-  - 插入占位符
+   - 使用 ADR-902 标准模板
+   - 填充 Front Matter（符合 ADR-902_1_3）
+   - 添加所有必需章节（ADR-902_1_4）
+   - 插入 Rule/Clause 结构占位符（ADR-907）
+   - 插入占位符
 
 4. **创建文件**
-  - 写入目标路径
-  - 设置文件权限
+   - 写入目标路径
+   - 设置文件权限
 
-5. **生成提醒**
-  - 需要补充架构测试
-  - 需要创建 Prompts
-  - 需要更新索引
-
-6. **记录日志**
+5. **记录日志**
 
 ---
 
 ## ADR 文档模板
 
 ```markdown
-# ADR-{Number}：{Title}
+---
+adr: ADR-{Number}
+title: "{Title}"
+status: Draft
+level: {Level}
+deciders: "Architecture Board"
+date: {Date}
+version: "1.0"
+maintainer: "Architecture Board"
+reviewer: "Architecture Board"
+supersedes: null
+superseded_by: null
+primary_enforcement: L2
+---
 
-**状态**：🚧 草稿  
-**级别**：{Level}  
-**日期**：{Date}  
-**作者**：{Author}
+# ADR-{Number}：{Title}
 
 ---
 
-## 本章聚焦内容
+## Focus（聚焦内容）
 
 <!-- 简述本 ADR 关注的问题域和决策范围 -->
 
 ---
 
-## 决策
+## Glossary（术语表）
 
-### 核心约束
-
-<!-- 【必须架构测试覆盖】标注需要测试的约束 -->
-
-#### ✅ 允许的行为
-
-<!-- 列出明确允许的模式和实践 -->
-
-#### ❌ 禁止的行为
-
-<!-- 列出明确禁止的模式和实践 -->
-
-### 正确模式
-
-```csharp
-// ✅ 正确示例
-```
-
-### 错误模式
-
-```csharp
-// ❌ 错误示例
-```
+| 术语 | 定义 | 英文对照 |
+|------|------|----------|
+| <!-- 添加术语 --> | <!-- 定义 --> | <!-- English Term --> |
 
 ---
 
-## 理由
+## Decision（裁决）
 
-### 为什么做这个决策
-
-<!-- 解释决策背景和动机 -->
-
-### 考虑的替代方案
-
-<!-- 列出考虑过但未采纳的方案 -->
-
-### 选择的理由
-
-<!-- 解释为什么选择当前方案 -->
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-{Number} 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-{Number}_<Rule>_<Clause>
+> ```
 
 ---
 
-## 影响
+### ADR-{Number}_1：<Rule名称>（Rule）
 
-### 对现有代码的影响
+#### ADR-{Number}_1_1 <Clause标题>
+<!-- 规则内容 -->
 
-<!-- 描述对现有代码的影响 -->
-
-### 对开发流程的影响
-
-<!-- 描述对开发流程的影响 -->
-
-### 风险和缓解措施
-
-<!-- 识别风险并提供缓解措施 -->
+#### ADR-{Number}_1_2 <Clause标题>
+<!-- 规则内容 -->
 
 ---
 
-## 相关 ADR
+### ADR-{Number}_2：<Rule名称>（Rule）
 
-<!-- 列出相关 ADR 及其关系 -->
-
-- [ADR-XXXX：相关标题](./ADR-XXXX-related.md) - 关系说明
-
----
-
-## 版本历史
-
-| 版本 | 日期 | 变更说明 |
-|-----|------|---------|
-| 1.0 | {Date} | 初始版本 |
+#### ADR-{Number}_2_1 <Clause标题>
+<!-- 规则内容 -->
 
 ---
 
-**维护者**：{Maintainer}  
-**审核人**：{Reviewer}  
-**状态**：🚧 草稿
-```
+## Enforcement（执法模型）
+
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-{Number} 各条款（Clause）的执法方式及执行级别。
+
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-{Number}_1_1** | L1 | <!-- 执法方式 --> | §ADR-{Number}_1_1 |
+| **ADR-{Number}_1_2** | L1 | <!-- 执法方式 --> | §ADR-{Number}_1_2 |
+| **ADR-{Number}_2_1** | L2 | <!-- 执法方式 --> | §ADR-{Number}_2_1 |
+
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
+
+### 执行时机
+
+- **CI 阶段**：结构违规直接阻断
+- **PR Review**：L2 违规需人工裁定
+- **审计阶段**：历史 ADR 结构一致性检查
+
+---
+
+## Non-Goals（明确不管什么）
+
+<!-- 列出本 ADR 明确不涉及的内容 -->
+
+---
+
+## Prohibited（禁止行为）
+
+<!-- 列出明确禁止的行为或模式 -->
+
+---
+
+## Relationships（关系声明）
+
+**Depends On**：
+
+- <!-- 依赖的 ADR -->
+
+**Depended By**：
+
+- <!-- 被依赖的 ADR -->
+
+**Related**：
+
+- <!-- 相关的 ADR -->
+
+---
+
+## References（非裁决性参考）
+
+<!-- 非裁决性参考资料 -->
+
+---
+
+## History（版本历史）
+
+| 版本 | 日期 | 变更说明 | 修订人 |
+|------|------|----------|--------|
+| 1.0 | {Date} | 初始版本 | Architecture Board |
 
 ---
 
@@ -213,16 +241,18 @@ required_agent: "adr-reviewer"
 ### ADR 结构检查
 
 - [ ] 文件名符合规范
-- [ ] 包含所有必需章节
+- [ ] 包含所有 ADR-902 必需章节（Focus, Glossary, Decision, Enforcement, Non-Goals, Prohibited, Relationships, References, History）
+- [ ] Front Matter 符合 ADR-902_1_3 规范
+- [ ] Decision 章节使用 ADR-907 Rule/Clause 双层编号体系
 - [ ] 使用简体中文
-- [ ] 包含代码示例
+- [ ] 包含代码示例（如果适用）
 - [ ] 标注测试覆盖要求
 
 ### 元数据检查
 
-- [ ] 状态标签正确
-- [ ] 级别正确
-- [ ] 日期格式正确
+- [ ] status: Draft | Accepted | Final | Superseded
+- [ ] level: Constitutional | Governance | Structure | Runtime | Technical
+- [ ] 日期格式正确 (YYYY-MM-DD)
 - [ ] 作者信息完整
 
 ---
@@ -252,21 +282,6 @@ required_agent: "adr-reviewer"
 
 ---
 
-## 生成后清单
-
-生成 ADR 后必须完成：
-
-- [ ] 补充决策内容
-- [ ] 添加代码示例
-- [ ] 标注【必须架构测试覆盖】
-- [ ] 创建对应的架构测试
-- [ ] 创建 Copilot Prompts
-- [ ] 更新 docs/adr/README.md
-- [ ] 更新类别 README
-- [ ] 提交 PR 审查
-
----
-
 ## 使用示例
 
 ### 示例 1：生成宪法级 ADR
@@ -276,26 +291,27 @@ required_agent: "adr-reviewer"
 {
   "adrNumber": "0010",
   "title": "Event Sourcing Pattern",
-  "level": "宪法",
+  "level": "Constitutional",
   "category": "constitutional",
-  "relatedAdrs": ["ADR-0005", "ADR-0001"]
+  "relatedAdrs": ["ADR-005", "ADR-001"]
 }
 ```
 
 **输出**：
-- 生成 `docs/adr/constitutional/ADR-0010-event-sourcing-pattern.md`
-- 包含标准结构
-- 提醒补充测试和 Prompts
+- 生成 `docs/adr/constitutional/ADR-010-event-sourcing-pattern.md`
+- 包含 ADR-902 标准结构和 ADR-907 Rule/Clause 体系
 
 ---
 
 ## 参考资料
 
-- [ADR-0900：ADR 流程](../../../docs/adr/governance/ADR-0900-adr-workflow-final.md)
-- [ADR-0008：文档编写规范](../../../docs/adr/constitutional/ADR-0008-documentation-writing-maintenance-constitution.md)
+- [ADR-902：ADR 标准模板与结构契约](../../../docs/adr/governance/ADR-902-adr-template-structure-contract.md)
+- [ADR-907：ADR 对齐执行标准](../../../docs/ADR-907-ALIGNMENT-GUIDE.md)
+- [ADR-008：文档编写与维护宪法](../../../docs/adr/constitutional/ADR-008-documentation-governance-constitution.md)
 - [ADR 模板](../../../docs/templates/adr-template.md)
 
 ---
 
-**维护者**：架构委员会  
+**维护者**：Architecture Board  
+**最后更新**：2026-02-03  
 **状态**：✅ Active

@@ -1,16 +1,24 @@
-# ADR-910：README 编写与维护宪法
-
-> ⚖️ **本 ADR 是所有 README 文档的唯一裁决源，定义 README 的边界、约束与执法机制。**
-
-**状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：治理层 / 架构元规则  
-**适用范围**：所有 README 文档（仓库根目录、模块、工具、文档目录）  
-**生效时间**：即刻
-
+---
+adr: ADR-910
+title: "README 编写与维护治理规范"
+status: Final
+level: Governance
+version: "2.0"
+deciders: "Architecture Board"
+date: 2026-02-03
+maintainer: "Architecture Board"
+primary_enforcement: L1
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
 ---
 
-## 聚焦内容（Focus）
+# ADR-910：README 编写与维护治理规范
+
+> ⚖️ **Constraint | L1** - 本 ADR 是所有 README 文档的治理规范，定义 README 的边界、约束与执法机制。
+
+**状态**：✅ Final（裁决型ADR）  
+## Focus（聚焦内容）
 
 - README 的定位与权限边界
 - README 禁用的语言与表达
@@ -20,9 +28,9 @@
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
-| 术语         | 定义                                              | 英文对照                      |
+| 术语 | 定义 | 英文对照 |
 |------------|------------------------------------------------|---------------------------|
 | README     | 说明性文档，解释"如何使用"，无架构裁决力                         | README Document           |
 | 裁决性语言      | 定义规则、做出判断的词汇，如"必须"、"禁止"、"不允许"                | Decision Language         |
@@ -32,9 +40,22 @@
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
-### README 是使用说明，不是架构裁决书（ADR-910.1）
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-910 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-910_<Rule>_<Clause>
+> ```
+
+---
+
+### ADR-910_1：README 的定位与权限边界（Rule）
+
+#### ADR-910_1_1 README 是使用说明不是架构裁决书
 
 **规则**：
 
@@ -48,22 +69,23 @@ README **仅允许**：
 README **禁止**：
 - ❌ 定义架构规则
 - ❌ 做出架构判断
-- ❌ 使用裁决性语言（见 ADR-910.2）
+- ❌ 使用裁决性语言（见 ADR-910_1_2）
 - ❌ 替代 ADR 解释架构约束
 - ❌ 引入新的术语定义
 
 **核心原则**：
+> README 是使用说明，不是架构裁决书。  
 > README 回答：怎么用、怎么做、示例是什么  
 > README 不回答：是否允许、为什么、如何裁决
 
 **判定**：
 - ❌ README 定义"模块必须隔离"
 - ❌ README 做出"这个设计符合架构"的判断
-- ✅ README 链接到 ADR-0001 并说明如何遵守
+- ✅ README 链接到 ADR-#### 并说明如何遵守
 
 ---
 
-### README 禁用的裁决性语言（ADR-910.2）
+#### ADR-910_1_2 禁用裁决性语言规则
 
 **规则**：
 
@@ -78,21 +100,21 @@ README **禁止**使用以下裁决性词汇：
 | 违规    | 做出合规性判断             | "不符合 ADR-XXXX" |
 
 **允许使用的上下文**：
-1. 明确引用 ADR：`"根据 ADR-0001，模块必须隔离"`
+1. 明确引用 ADR：`"根据 ADR-####，模块必须隔离"`
 2. 代码示例标记：`// ✅ 正确 // ❌ 错误`
-3. 对比表格：`| 操作 | 是否允许 | 依据 | ... | 禁止 | ADR-0001 |`
+3. 对比表格：`| 操作 | 是否允许 | 依据 | ... | 禁止 | ADR-#### |`
 
 **核心原则**：
 > README 禁用的裁决性语言必须有 ADR 引用支撑。
 
 **判定**：
 - ❌ "模块必须使用事件通信"（无 ADR 引用）
-- ✅ "根据 ADR-0001，模块必须使用事件通信"
+- ✅ "根据 ADR-####，模块必须使用事件通信"
 - ✅ 代码块中的 `// ✅ 正确` 标记
 
 ---
 
-### README 必须包含的声明（ADR-910.3）
+#### ADR-910_1_3 必须包含无裁决力声明
 
 **规则**：
 
@@ -119,7 +141,9 @@ README **禁止**使用以下裁决性词汇：
 
 ---
 
-### README 与 ADR 的关系（ADR-910.4）
+### ADR-910_2：README 与 ADR 的关系治理（Rule）
+
+#### ADR-910_2_1 README 引用 ADR 的规范
 
 **规则**：
 
@@ -127,8 +151,8 @@ README 引用 ADR 必须遵循：
 
 **允许**：
 ```markdown
-✅ "根据 ADR-0001，模块使用事件通信。详见 [ADR-0001](链接)"
-✅ "参考 ADR-0005 了解 Handler 模式"
+✅ "根据 ADR-001，模块使用事件通信。详见 [ADR-001](链接)"
+✅ "参考 ADR-005 了解 Handler 模式"
 ```
 
 **禁止**：
@@ -149,7 +173,7 @@ README 引用 ADR 必须遵循：
 
 ---
 
-### README 的变更治理（ADR-910.5）
+#### ADR-910_2_2 README 的变更治理规则
 
 **规则**：
 
@@ -170,77 +194,86 @@ README 引用 ADR 必须遵循：
 
 ---
 
-## 快速参考表
+## Enforcement（执法模型）
 
-| 约束编号       | 约束描述                | 测试方式             | 必须遵守 |
-|------------|---------------------|------------------|------|
-| ADR-910.1  | README 只允许解释使用，禁止定义架构规则 | L3 - Code Review | ✅    |
-| ADR-910.2  | README 禁止使用裁决性语言（除非引用 ADR） | L2 - CI 脚本检查 | ✅    |
-| ADR-910.3  | README 必须包含无裁决力声明    | L2 - CI 脚本检查 | ✅    |
-| ADR-910.4  | README 引用 ADR 必须明确源头  | L3 - Code Review | ✅    |
-| ADR-910.5  | README 冲突时必须修正 README | L3 - Code Review | ✅    |
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-910 各条款（Clause）的执法方式及执行级别。
 
----
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-910_1_1** | L1 | ArchitectureTests 验证 README 功能边界 | §ADR-910_1_1 |
+| **ADR-910_1_2** | L1 | ArchitectureTests 检测裁决性语言 | §ADR-910_1_2 |
+| **ADR-910_1_3** | L1 | ArchitectureTests 验证无裁决力声明存在 | §ADR-910_1_3 |
+| **ADR-910_2_1** | L1 | ArchitectureTests 验证 ADR 引用规范性 | §ADR-910_2_1 |
+| **ADR-910_2_2** | L2 | Code Review 人工审查变更合规性 | §ADR-910_2_2 |
 
-## 必测/必拦架构测试（Enforcement）
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构委员会人工裁决
 
-所有规则通过以下方式强制验证：
+### 执行方式说明
 
-- **架构测试**：`src/tests/ArchitectureTests/ADR/ADR_0910_Architecture_Tests.cs`
-  - `README_Must_Not_Use_Decision_Language` - 检测裁决性语言
-  - `README_Must_Declare_No_Authority` - 检查无裁决力声明
+- **架构测试**：`src/tests/ArchitectureTests/ADR/ADR_910_1_Architecture_Tests.cs` 和 `ADR_910_2_Architecture_Tests.cs`
+  - Rule 1 测试方法：
+    - `ADR_910_1_1_README_Must_Be_Usage_Guide_Not_Decision_Document`
+    - `ADR_910_1_2_README_Must_Not_Use_Decision_Language`
+    - `ADR_910_1_3_README_Must_Declare_No_Authority`
+  - Rule 2 测试方法：
+    - `ADR_910_2_1_README_Must_Reference_ADR_Properly`
+    - `ADR_910_2_2_README_Changes_Must_Follow_Governance`（可为 L2 警告）
 
 - **CI 脚本**：自动扫描所有 README 文档
 - **Code Review**：人工审查 README 是否越界
 
-**有一项违规视为架构违规，CI 自动阻断。**
+**有一项 L1 违规视为架构违规，CI 自动阻断。**
 
 ---
 
-## 破例与归还（Exception）
+## Non-Goals（明确不管什么）
 
-### 允许破例的前提
+本 ADR 明确不涉及以下内容：
 
-README 规则的破例**仅在以下情况允许**：
-- 临时性迁移文档（标注 `[DRAFT]` 或 `[迁移中]`）
-- 历史遗留 README 的过渡期（不超过 1 个月）
-- 第三方生成的 README
-
-### 破例要求
-
-每个破例**必须**：
-- 记录在 `ARCH-VIOLATIONS.md` 的"README 治理破例"章节
-- 指明破例的具体文件和原因
-- 指定失效日期（不超过 1 个月）
-- 给出归还计划
+- **README 的视觉设计和排版**：不涉及字体、颜色、图标等视觉元素的设计规范
+- **README 的长度限制**：不规定 README 文档的最大或最小字数要求
+- **README 的多语言版本**：不涉及多语言 README 的创建和维护流程
+- **README 的自动化生成工具**：不规定使用特定的文档生成或模板工具
+- **README 中的代码示例风格**：不约束代码示例的具体编写风格和格式
+- **README 的更新频率**：不规定 README 必须多久更新一次
+- **README 在不同平台的适配**：不涉及 GitHub、GitLab、Bitbucket 等平台的特殊格式要求
+- **README 的SEO优化**：不涉及搜索引擎优化、关键词布局等营销相关内容
 
 ---
 
-## 变更政策（Change Policy）
+## Prohibited（禁止行为）
 
-- **ADR-910**（治理层）
-  - 修改需 Tech Lead 审批
-  - 需要全量 README 回归检查
-  - 需要更新对应的架构测试
+
+以下行为明确禁止：
+
+### 越权行为
+- ❌ **禁止 README 使用裁决性语言**：不得使用"必须"、"禁止"、"不允许"等定义规则的词汇
+- ❌ **禁止 README 定义架构约束**：不得在 README 中引入新的架构规则或限制
+- ❌ **禁止 README 覆盖 ADR 规则**：不得与 ADR 冲突或试图修改 ADR 定义的规则
+
+### 内容质量违规
+- ❌ **禁止 README 缺少权威声明**：必须明确声明"若与 ADR 冲突，以 ADR 为准"
+- ❌ **禁止 README 引用不存在的 ADR**：所有 ADR 引用必须指向真实存在的文件
+- ❌ **禁止 README 使用模糊的相对路径**：ADR 引用必须使用清晰的相对或绝对路径
+
+### 维护违规
+- ❌ **禁止 README 与实际代码严重不符**：示例代码必须能实际运行或明确标注为伪代码
+- ❌ **禁止 README 包含过期信息而不标注**：过期内容必须移除或明确标记为已废弃
+- ❌ **禁止 README 复制粘贴 ADR 内容**：应该引用 ADR 而不是复制其内容
 
 ---
 
-## 明确不管什么（Non-Goals）
-
-本 ADR **不负责**：
-- README 的写作风格和美学
-- README 的长度限制
-- README 的多语言版本
-- README 的格式工具选择
-
----
-
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - README 治理基于测试和 CI 机制
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - README 术语使用遵循统一规范
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - README 约束是文档治理的细化
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - README 治理基于测试和 CI 机制
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - README 术语使用遵循统一规范
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - README 约束是文档治理的细化
 
 **被依赖（Depended By）**：
 - 无（README 约束是终端规则，不被其他 ADR 依赖）
@@ -256,19 +289,26 @@ README 规则的破例**仅在以下情况允许**：
 
 ---
 
-## 版本历史
+## References（非裁决性参考）
 
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 2.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 1.0 | 2026-01-25 | 初版，从 ADR-0008 中独立 README 治理 |
+**相关外部资源**：
+- [Make a README](https://www.makeareadme.com/) - README 编写指南和最佳实践
+- [Awesome README](https://github.com/matiassingers/awesome-readme) - 优秀 README 示例集合
+- [GitHub's Guide to README](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes) - GitHub 官方 README 指南
+
+**相关内部文档**：
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档分级与权限划分
+- [ADR-920：示例代码治理规范](./ADR-920-examples-governance-constitution.md) - README 中代码示例的约束
+- [ADR-950：Guide/FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md) - 与 Guide 文档的边界
+- [ADR-960：入职文档治理](./ADR-960-onboarding-documentation-governance.md) - 入职文档与 README 的关系
 
 ---
 
-## 附注
+## History（版本历史）
 
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
 
-非裁决性参考（详细示例、场景说明）请查阅：
-- [ADR-0910 Copilot Prompts](../../copilot/adr-0910.prompts.md)
-
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------| ------------------ |
+| 2.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
+| 1.1 | 2026-01-30 | 内容更新 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |

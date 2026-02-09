@@ -1,42 +1,58 @@
-# ADR-920：示例代码治理宪法
+---
+adr: ADR-920
+title: "示例代码治理规范"
+status: Final
+level: Governance
+version: "2.1"
+deciders: "Architecture Board"
+date: 2026-02-03
+maintainer: "Architecture Board"
+primary_enforcement: L1
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
 
-> ⚖️ **本 ADR 是所有示例代码（Examples）的唯一裁决源，定义示例的边界、约束与执法机制。**
+# ADR-920：示例代码治理规范
 
-**状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：治理层 / 架构元规则  
-**适用范围**：所有示例代码（examples/、docs/examples/、README 代码块、ADR 代码示例）  
-**生效时间**：即刻
+> ⚖️ **Constraint | L1** - 本 ADR 是所有示例代码（Examples）的治理规范，定义示例的边界、约束与执法机制。
+
+## Focus（聚焦内容）
+
+- 示例代码必须与实际模块、API 保持一致
+- 不允许示例代码引入未批准的架构模式或依赖
+- 需要包含执行和测试约束
+- 违规处理与 Agent 执行映射
 
 ---
 
-## 聚焦内容（Focus）
+## Glossary（术语表）
 
-- 示例代码的定位与权限边界
-- 示例代码禁止的架构违规行为
-- 示例/测试/PoC 的明确区分
-- 分级执法标准（L1/L2/L3）
-- 示例作者责任制
-
----
-
-## 术语表（Glossary）
-
-| 术语         | 定义                                              | 英文对照                      |
-|------------|------------------------------------------------|---------------------------|
-| 示例代码       | 用于演示用法的代码片段，无架构裁决力                         | Example Code              |
-| 免责声明       | 示例必须在开头声明无架构权威，仅用于说明用法                   | Disclaimer                |
-| 架构违规       | 示例中违反 ADR 规则的代码                              | Architecture Violation    |
-| 教学性简化      | 为便于理解而简化流程，但不违反架构规则                        | Educational Simplification|
-| 规则简化       | 为便于演示而违反架构约束，**绝对禁止**                      | Rule Simplification (Forbidden) |
-| 测试代码       | 用于验证功能的代码，可在受控条件下违规                        | Test Code                 |
-| PoC/Spike  | 概念验证代码，允许违规，但**不可进入主干**                   | Proof of Concept / Spike  |
+| 术语 | 定义 | 英文对照 |
+|------|------|-----------|
+| 示例代码 | README 或文档中用于说明功能的代码片段 | Example Code |
+| 可执行性 | 示例代码可以被正确编译或运行 | Executable |
+| 偏离 | 示例代码与真实 API/模块行为不符 | Deviation |
+| 标记 | ✅/❌ 或注释说明正确性 | Marking |
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
-### 示例代码的法律地位（ADR-920.1）
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-920 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-920_<Rule>_<Clause>
+> ```
+
+---
+
+### ADR-920_1：示例代码权限边界（Rule）
+
+#### ADR-920_1_1 示例代码的法律地位
 
 **规则**：
 
@@ -66,7 +82,7 @@
 
 ---
 
-### 示例代码必须包含的免责声明（ADR-920.2）
+#### ADR-920_1_2 示例代码必须包含的免责声明
 
 **规则**：
 
@@ -110,13 +126,15 @@
 
 ---
 
-### 示例代码禁止的架构违规行为（ADR-920.3）
+### ADR-920_2：示例代码架构约束（Rule）
+
+#### ADR-920_2_1 示例代码禁止的架构违规行为
 
 **规则**：
 
 示例代码**禁止**包含以下"示例代码禁止的架构违规行为"：
 
-#### 3.1 跨模块直接引用（ADR-0001）
+##### ADR-920_2_1_a 跨模块直接引用（ADR-####）
 ```csharp
 // ❌ 禁止
 using Zss.BilliardHall.Modules.Members.Domain;
@@ -126,7 +144,7 @@ await _eventBus.Publish(new OrderCreated(orderId));
 var memberDto = await _queryBus.Send(new GetMemberById(memberId));
 ```
 
-#### 3.2 违反 Handler 模式（ADR-0005）
+##### ADR-920_2_1_b 违反 Handler 模式（ADR-####）
 ```csharp
 // ❌ 禁止：Command Handler 返回业务数据
 public async Task<OrderDto> Handle(CreateOrder command)
@@ -135,7 +153,7 @@ public async Task<OrderDto> Handle(CreateOrder command)
 public async Task<Guid> Handle(CreateOrder command)
 ```
 
-#### 3.3 创建横向 Service 层（ADR-0001）
+##### ADR-920_2_1_c 创建横向 Service 层（ADR-####）
 ```csharp
 // ❌ 禁止
 public class OrderService { }
@@ -165,7 +183,9 @@ public class CreateOrderHandler { }
 
 ---
 
-### 示例 vs 测试 vs PoC（ADR-920.4）
+### ADR-920_3：示例类型边界管理（Rule）
+
+#### ADR-920_3_1 示例 vs 测试 vs PoC
 
 **规则**：
 
@@ -182,119 +202,38 @@ public class CreateOrderHandler { }
 - README 必须标注 `⚠️ NOT FOR REUSE - PoC Only`
 - Copilot 必须在配置中忽略此目录
 
-**Copilot 防污染规则**：
-```markdown
-# .github/copilot-instructions.md
-## 忽略目录
-以下目录的代码**不应**作为学习源：
-- `.poc/` - 概念验证代码，允许违规
-- `.experimental/` - 实验性代码，允许违规
-```
+---
 
-**核心原则**：
-> 示例 ≠ 测试 ≠ PoC，三者不可混淆。  
-> 示例必须合规，PoC 允许违规但不可进主干。
+## Enforcement（执法模型）
 
-**判定**：
-- ❌ PoC 代码进入主干
-- ❌ 示例目录包含违规代码
-- ✅ PoC 在特殊目录且有防污染配置
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-920 各条款（Clause）的执法方式及执行级别。
+
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-920_1_1** | L2 | 人工审查：示例是否引入未经 ADR 允许的模式 | §ADR-920_1_1 |
+| **ADR-920_1_2** | L1 | ArchitectureTests 验证示例文档/代码包含免责声明 | §ADR-920_1_2 |
+| **ADR-920_2_1** | L1 | ArchitectureTests 验证示例不包含架构违规 | §ADR-920_2_1 |
+| **ADR-920_3_1** | L1 | ArchitectureTests 验证示例、测试、PoC 边界与存放位置 | §ADR-920_3_1 |
+
+### 执行级别说明
+
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
 
 ---
 
-### 示例代码的自动化执法（分级处理）（ADR-920.5）
-
-**规则**：
-
-| 级别 | 违规类型               | 执行方式  | 是否阻断 CI | 说明                  |
-| -- | ------------------ | ----- | ------- | ------------------- |
-| L1 | 结构违规（跨模块引用、Service） | 架构测试  | ✅ 阻断    | 根本性架构破坏，必须修复        |
-| L2 | 模式偏差（Handler 返回类型）  | 架构测试  | ⚠️ 警告   | 架构模式不符，建议修复但不阻断     |
-| L3 | 风格/教学简化（省略异常处理）    | Code Review | ❌ 忽略    | 允许教学简化，不强制与生产代码一致   |
-
-**L1 违规（必须阻断）**：
-- ❌ 跨模块直接引用（ADR-0001）
-- ❌ 创建横向 Service 层（ADR-0001）
-- ❌ Platform 依赖业务层（ADR-0002）
-- ❌ 共享领域模型（ADR-0001）
-
-**L2 违规（警告，不阻断）**：
-- ⚠️ Command Handler 返回类型不正确（ADR-0005）
-- ⚠️ 命名不符合约定（ADR-0003）
-
-**L3 简化（允许）**：
-- ✅ 省略异常处理
-- ✅ 省略详细日志
-- ✅ 省略性能优化
-
-**核心原则**：
-> 示例允许简化流程，但不允许简化规则。  
-> 同规则、不同严重级别：结构违规 = 阻断，模式偏差 = 警告，教学简化 = 允许。
-
-**判定**：
-- ❌ L1 违规未修复
-- ⚠️ L2 违规未说明
-- ✅ L3 简化在允许范围内
-
----
-
-### 示例作者责任制（ADR-920.6）
-
-**规则**：
-
-每个示例目录**必须**有明确的责任人和目的说明：
-
-```markdown
-# 示例名称
-
-⚠️ **示例免责声明**  
-本示例代码仅用于说明用法，不代表架构最佳实践或完整实现。
-
-**维护信息**：
-- **作者**：@username
-- **目的**：教学 / 演示 / Onboarding
-- **创建日期**：YYYY-MM-DD
-- **适用 ADR**：ADR-0001, ADR-0005
-```
-
-**必填字段**：
-- ✅ `Author` - 责任人（GitHub 用户名）
-- ✅ `Purpose` - 目的（教学/演示/Onboarding）
-- ✅ `Created` - 创建日期
-- ✅ `ADRs` - 适用的 ADR 列表
-
-**核心原则**：
-> 没有责任人 = 没人维护 = 示例腐化。
-
-**判定**：
-- ❌ 缺失必填字段
-- ❌ 示例目录无 README
-- ✅ 完整的维护信息
-
----
-
-## 快速参考表
-
-| 约束编号       | 约束描述                | 测试方式             | 必须遵守 |
-|------------|---------------------|------------------|------|
-| ADR-920.1  | 示例代码无架构裁决力，必须遵守 ADR | L3 - Code Review | ✅    |
-| ADR-920.2  | 示例必须包含免责声明          | L2 - CI 脚本检查 | ✅    |
-| ADR-920.3  | 示例禁止 L1 结构违规        | L1 - 架构测试  | ✅    |
-| ADR-920.4  | 示例/测试/PoC 必须明确区分    | L2 - CI 检查  | ✅    |
-| ADR-920.5  | 示例执行分级测试（L1/L2/L3）  | L1/L2 - 架构测试 | ✅    |
-| ADR-920.6  | 示例目录必须有责任人和目的说明     | L2 - CI 检查  | ✅    |
-
----
-
-## 必测/必拦架构测试（Enforcement）
+## 测试实现参考
 
 所有规则通过以下方式强制验证：
 
-- **架构测试**：`src/tests/ArchitectureTests/ADR/ADR_0920_Architecture_Tests.cs`
-  - `Examples_Should_Not_Reference_Other_Modules` - L1 阻断
-  - `Example_Documents_Must_Have_Disclaimer` - L1 阻断
-  - `README_CSharp_Code_Examples_Should_Not_Violate_Architecture` - L2 警告
-  - `Example_Directories_Must_Have_Owner_And_Purpose` - L1 阻断
+- **架构测试**：`src/tests/ArchitectureTests/ADR/ADR_920_Architecture_Tests.cs`
+  - `ADR_920_1_2_Example_Documents_Must_Have_Disclaimer` - L1 阻断
+  - `ADR_920_2_1_Examples_Should_Not_Reference_Other_Modules` - L1 阻断
+  - `ADR_920_2_1_README_CSharp_Code_Examples_Should_Not_Violate_Architecture` - L2 警告
+  - `ADR_920_3_1_Example_Directories_Must_Have_Owner_And_Purpose` - L1 阻断
 
 - **CI 脚本**：扫描示例目录和文档
 - **Code Review**：检查示例是否引入未经 ADR 允许的模式
@@ -302,53 +241,53 @@ public class CreateOrderHandler { }
 **有一项 L1 违规视为架构违规，CI 自动阻断。**
 
 ---
+---
 
-## 破例与归还（Exception）
+## Non-Goals（明确不管什么）
 
-### 允许破例的前提
+本 ADR 明确不涉及以下内容：
 
-示例代码规则的破例**仅在以下情况允许**：
-- 临时性迁移示例（标注 `[DRAFT]` 或 `[迁移中]`）
-- 历史遗留示例的过渡期（不超过 1 个月）
-- 教学用的"反面教材"（必须明确标注 `// ❌ 错误示例`）
-
-### 破例要求
-
-每个破例**必须**：
-- 记录在 `ARCH-VIOLATIONS.md` 的"示例治理破例"章节
-- 指明破例的具体示例文件和原因
-- 指定失效日期（不超过 1 个月）
-- 给出归还计划
+- **示例代码的编程风格**：不规定示例代码的缩进、命名等代码风格细节
+- **示例代码的测试覆盖率**：不要求示例代码必须有单元测试或达到特定覆盖率
+- **示例代码的性能优化**：不要求示例必须是最优化或最高效的实现
+- **示例代码的完整性**：不要求示例必须是可独立运行的完整应用（允许代码片段）
+- **示例代码的版本维护**：不建立示例代码随主代码库同步更新的强制机制
+- **示例文档的格式和排版**：不规定示例文档的视觉呈现和排版细节
+- **示例代码的语言选择**：不限制示例只能使用特定编程语言（只要不违反架构）
+- **示例代码的复杂度**：不规定示例的复杂度级别（入门/中级/高级）
 
 ---
 
-## 变更政策（Change Policy）
+## Prohibited（禁止行为）
 
-- **ADR-920**（治理层）
-  - 修改需 Tech Lead 审批
-  - 需要全量示例回归检查
-  - 需要更新对应的架构测试
+
+以下行为明确禁止：
+
+### 示例质量违规
+- ❌ **禁止示例代码违反架构约束**：示例必须完全遵守所有 ADR 定义的架构规则
+- ❌ **禁止示例代码缺少免责声明**：所有示例必须明确标注"仅供参考，不保证生产可用"
+- ❌ **禁止示例代码引用其他模块**：示例代码必须自包含，不得依赖其他业务模块
+
+### 示例边界违规
+- ❌ **禁止将实际业务代码标记为示例**：示例只能是教学用途，不能是生产代码的别名
+- ❌ **禁止示例目录包含生产依赖**：示例不得被生产代码引用或依赖
+- ❌ **禁止示例代码进入发布包**：构建和发布流程必须排除示例目录
+
+### 示例维护违规
+- ❌ **禁止示例代码过时未更新**：与当前架构规则冲突的示例必须更新或删除
+- ❌ **禁止示例缺少所有者信息**：每个示例必须标明创建者和维护联系方式
+- ❌ **禁止 Copilot 从示例学习不良模式**：必须配置 Copilot 忽略示例目录以防污染
 
 ---
 
-## 明确不管什么（Non-Goals）
-
-本 ADR **不负责**：
-- 示例代码的写作风格和美学
-- 示例代码的注释详细程度
-- 示例代码的性能优化
-- 示例代码的完整性
-
----
-
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - 示例治理基于测试和 CI 机制
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md) - 示例必须遵守模块隔离规则
-- [ADR-0002：平台、应用与主机启动器架构](../constitutional/ADR-0002-platform-application-host-bootstrap.md) - 示例必须遵守层级依赖规则
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 示例必须遵守 Handler 模式
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 示例治理是文档治理的一部分
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 示例治理基于测试和 CI 机制
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 示例必须遵守模块隔离规则
+- [ADR-002：平台、应用与主机启动器架构](../constitutional/ADR-002-platform-application-host-bootstrap.md) - 示例必须遵守层级依赖规则
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - 示例必须遵守 Handler 模式
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 示例治理是文档治理的一部分
 
 **被依赖（Depended By）**：
 - [ADR-951：案例库管理](./ADR-951-case-repository-management.md) - 案例管理参考示例治理规则
@@ -364,19 +303,24 @@ public class CreateOrderHandler { }
 
 ---
 
-## 版本历史
+## References（非裁决性参考）
 
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 2.0 | 2026-01-26 | 裁决型重构，移除冗余 |
-| 1.0 | 2026-01-25 | 初版，定义示例代码治理规则 |
+**相关外部资源**：
+- [Example Code Best Practices](https://google.github.io/styleguide/docguide/best_practices.html) - Google 文档风格指南中的示例代码部分
+- [Microsoft Docs Contributor Guide](https://learn.microsoft.com/en-us/contribute/code-in-docs) - 微软文档中代码示例的编写规范
+- [The Twelve-Factor App](https://12factor.net/) - 示例应用的架构原则参考
+
+**相关内部文档**：
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 示例必须遵守的核心架构
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 示例的测试和验证机制
+- [ADR-910：README 编写与维护治理规范](./ADR-910-readme-governance-constitution.md) - README 中的示例规范
+- [ADR-950：Guide/FAQ 文档治理](./ADR-950-guide-faq-documentation-governance.md) - Guide 文档中的示例规范
 
 ---
 
-## 附注
+## History（版本历史）
 
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
-
-非裁决性参考（详细示例、场景说明）请查阅：
-- [ADR-0920 Copilot Prompts](../../copilot/adr-0920.prompts.md)
-
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------|-------|
+| 2.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |

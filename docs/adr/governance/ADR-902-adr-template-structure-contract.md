@@ -148,7 +148,7 @@ superseded_by: ADR-xxx | null
 
 - 不定义 Warning / Constraint / Notice。
 - 不定义规则执行级别（L1/L2/L3）。
-- 语义裁决由 ADR-901 与 ADR-905 执行。
+- 语义裁决由 ADR-#### 与 ADR-#### 执行。
 
 ---
 

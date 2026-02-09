@@ -1,444 +1,267 @@
-# ADR-960：Onboarding 文档治理宪法
+---
+adr: ADR-960
+title: "Onboarding 文档治理规范"
+status: Accepted
+level: Governance
+deciders: "Architecture Board"
+date: 2026-02-03
+version: "2.0"
+maintainer: "架构委员会"
+primary_enforcement: L1
+reviewer: "@douhuaa"
+supersedes: null
+superseded_by: null
+---
 
-> ⚖️ **本 ADR 是所有 Onboarding 文档（新人入职文档）的唯一治理标准，定义其结构、审计和反馈机制。**
+# ADR-960：Onboarding 文档治理规范
+
+> ⚖️ **本 ADR 定义新成员（开发者 / Reviewer / Maintainer）进入项目时所使用的 Onboarding 文档的权威边界、结构标准与维护规则，确保“快速上手但不产生新裁决”。**
 
 **状态**：✅ Accepted  
-**版本**：1.0
-**级别**：文档专项治理 / 治理层  
-**适用范围**：所有 Onboarding 相关文档  
-**生效时间**：即刻
+
+## Focus（聚焦内容）
+
+- Onboarding 文档的权威定位  
+- Onboarding 与 ADR / Guide / FAQ 的分离边界  
+- Onboarding 文档的强制结构  
+- 维护与失效治理机制  
 
 ---
 
-## 聚焦内容（Focus）
-
-- Onboarding 文档层级结构
-- 周期性审计机制
-- 新人反馈收集标准化
-- 成功标准定义
-- 责任人制度
-
----
-
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------|------|----------|
-| Onboarding | 新人入职培训文档体系 | Onboarding |
-| 快速上手 | 15 分钟极速体验，L1 级别 | Quick Start |
-| 学习路径 | 按周组织的渐进式学习计划 | Learning Path |
-| 成功标准 | 定义何时算"入门完成" | Success Criteria |
-| 周期性审计 | 定期检查文档准确性 | Periodic Audit |
-| 新人反馈 | 新成员对文档的评价和建议 | Onboarding Feedback |
+| Onboarding | 帮助新成员理解项目和规则的引导文档 | Onboarding |
+| 新成员 | 首次参与该仓库的开发者或维护者 | New Contributor |
+| 权威边界 | 文档是否具备裁决力的明确界限 | Authority Boundary |
+| 快速路径 | 最短可用的上手流程 | Fast Path |
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
-### Onboarding 文档层级结构（ADR-960.1）
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-960 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-960_<Rule>_<Clause>
+> ```
 
-**规则**：
+---
 
-Onboarding 文档 **必须**按以下层级组织：
+### ADR-960_1：Onboarding 文档的权威定位（Rule）
 
-**文档层级**：
+#### ADR-960_1_1 不是裁决性文档
+- Onboarding 文档 **不是裁决性文档**
+
+#### ADR-960_1_2 不得定义架构约束
+- Onboarding 文档 **不得**：
+  - 定义架构约束
+  - 引入“必须 / 禁止”级别的新规则
+  - 覆盖或修改任何 ADR 裁决
+
+#### ADR-960_1_3 唯一合法职责
+- Onboarding 的唯一合法职责：
+  - **告诉你“先看什么、怎么走、不踩雷”**
+
+#### ADR-960_1_4 权威层级
+- **权威层级**：
 ```
-docs/
-├── QUICK-START.md              # L1: 15 分钟极速上手
-│                               # 目标：运行第一个测试
-│
-├── onboarding/
-│   ├── README.md               # 入门导航（路线图）
-│   │
-│   ├── week-1-foundation.md    # L2: 第 1 周 - 基础理解
-│   │                           # 目标：理解架构、熟悉工具
-│   │
-│   ├── week-2-development.md   # L3: 第 2 周 - 开发实践
-│   │                           # 目标：创建第一个用例
-│   │
-│   ├── week-3-architecture.md  # L4: 第 3 周 - 架构深入
-│   │                           # 目标：理解核心 ADR
-│   │
-│   └── week-4-contribution.md  # L5: 第 4 周 - 独立贡献
-│                               # 目标：独立提交 PR
-│
-└── onboarding/
-    └── feedback-template.md    # 新人反馈表模板
+ADR（裁决，最高权威）
+↓ 被引用
+Guide / FAQ / Standard（解释与细化）
+↓ 被串联
+Onboarding（导航与入口，不得裁决）
 ```
-
-**各层级内容要求**：
-
-| 层级 | 名称 | 时长 | 核心目标 | 必须包含 |
-|------|------|------|----------|---------|
-| L1 | QUICK-START.md | 15 分钟 | 运行第一个测试 | 环境搭建、运行测试、验证成功 |
-| L2 | week-1-foundation.md | 1 周 | 基础理解 | 架构概览、工具链、关键术语 |
-| L3 | week-2-development.md | 1 周 | 开发实践 | 创建用例、测试编写、提交规范 |
-| L4 | week-3-architecture.md | 1 周 | 架构深入 | 核心 ADR、设计模式、约束理解 |
-| L5 | week-4-contribution.md | 1 周 | 独立贡献 | 独立 PR、代码审查、架构讨论 |
-
-**核心原则**：
-> 渐进式学习，清晰里程碑，可验证进度。
 
 **判定**：
-- ❌ 所有内容堆在一个文档中
-- ❌ 缺少明确的时间目标
-- ✅ 按层级组织，每层有明确目标
+- ❌ Onboarding 中出现“模块必须隔离”等裁决性表述
+- ❌ Onboarding 直接替代 ADR 解释规则
+- ✅ Onboarding 仅引用并指路 ADR / Guide
 
 ---
 
-### 周期性审计机制（ADR-960.2）
+### ADR-960_2：Onboarding 与其他文档的分离边界（Rule）
 
-**规则**：
+#### ADR-960_2_1 内容类型限制
+- | 内容类型 | 是否允许出现在 Onboarding |
+  |---------|---------------------------|
+  | 架构约束定义 | ❌ 禁止 |
+  | ADR 裁决内容 | ❌ 禁止 |
+  | 操作步骤摘要 | ✅ 允许（不得完整展开） |
+  | 文档导航与顺序 | ✅ 允许 |
+  | 常见新手误区 | ✅ 允许 |
+  | 示例代码 | ❌ 禁止（必须跳转 Case / Example） |
 
-Onboarding 文档 **必须**每月进行准确性审计。
+#### ADR-960_2_2 核心原则
+- **核心原则**：
+  > Onboarding 只解决三个问题：  
+  > 1️⃣ 我是谁（这个项目是什么）  
+  > 2️⃣ 我先看什么  
+  > 3️⃣ 我下一步去哪  
 
-**审计清单**：
+**判定**：
+- ❌ Onboarding 包含完整操作教程
+- ❌ Onboarding 内嵌大段代码
+- ✅ Onboarding 只做导航与摘要
+
+---
+
+### ADR-960_3：Onboarding 文档的强制结构（Rule）
+
+#### ADR-960_3_1 强制结构模板
+- 所有 Onboarding 文档 **必须**遵循以下结构：
+
 ```markdown
-## Onboarding 文档月度审计清单
+# Onboarding：项目名称
 
-审计日期：YYYY-MM-DD
-审计人：[姓名]
+## 你正在进入什么系统
+- 项目定位
+- 架构风格一句话说明
 
-### QUICK-START.md
-- [ ] 环境搭建步骤准确（工具版本、命令）
-- [ ] 代码示例可运行
-- [ ] 链接有效
-- [ ] 预计时长准确（15 分钟内）
+## 快速上手路径（Fast Path）
+1. 必读 ADR（链接）
+2. 必读 Guide（链接）
+3. 推荐 Case（链接）
 
-### week-1-foundation.md
-- [ ] 架构图与实际代码一致
-- [ ] 关键 ADR 链接有效
-- [ ] 工具链描述准确
-- [ ] 术语表完整
+## 新成员高频踩雷区
+- ❌ 常见错误 1（指向 ADR）
+- ❌ 常见错误 2（指向 Case）
 
-### week-2-development.md
-- [ ] 用例创建步骤准确
-- [ ] 测试示例可运行
-- [ ] 提交规范与实际一致
-- [ ] 代码示例符合最新 ADR
+## 常用入口
+- ADR 索引
+- Case 索引
+- 工程标准索引
 
-### week-3-architecture.md
-- [ ] ADR 列表完整
-- [ ] 设计模式示例准确
-- [ ] 约束描述与测试一致
-
-### week-4-contribution.md
-- [ ] PR 流程描述准确
-- [ ] 代码审查指南有效
-- [ ] 链接到最新的贡献指南
-
-### 发现的问题
-[列出需要修复的问题]
-
-### 修复计划
-[列出修复 Issue 和责任人]
+## 不在这里解决的问题
+- 架构裁决 → ADR
+- 操作细节 → Guide
+- 示例代码 → Case
 ```
 
-**审计频率**：
-- **每月**：常规审计
-- **ADR 重大变更后**：立即审计
-- **新人反馈后**：按需审计
-
-**审计责任人**：
-- 由 `CODEOWNERS` 指定
-- 轮换制：每月不同成员负责
-
-**核心原则**：
-> 持续准确，及时更新。
-
 **判定**：
-- ❌ Onboarding 文档与实际代码脱节
-- ❌ 从未审计过文档准确性
-- ✅ 每月审计并记录
+
+* ❌ 缺失 Fast Path
+* ❌ 未明确“这里不管什么”
+* ✅ 结构完整、导航清晰
 
 ---
 
-### 新人反馈收集机制（ADR-960.3）
+### ADR-960_4：Onboarding 文档维护与失效治理（Rule）
 
-**规则**：
+#### ADR-960_4_1 绑定 ADR 演进
+- Onboarding 文档 **必须绑定 ADR 演进**
+- 当发生以下事件时，**必须评估是否更新 Onboarding**：
+  - 新 ADR 被采纳
+  - ADR 结构发生重大调整
+  - 新的核心 Case 出现
+- 至少 **每半年一次** 进行有效性审计
 
-新成员完成 Onboarding 后 **必须**填写反馈表。
-
-**反馈表标准结构**：
-```markdown
-# Onboarding 反馈表
-
-**姓名**：[可选]  
-**完成日期**：YYYY-MM-DD  
-**Onboarding 总时长**：[实际花费时间]
-
-## L1: QUICK-START.md
-
-**准确性**（1-5 分）：[ ]  
-**清晰度**（1-5 分）：[ ]  
-**实际耗时**：[ ] 分钟
-
-**遇到的障碍**：
-[描述]
-
-**改进建议**：
-[建议]
-
-## L2: week-1-foundation.md
-
-**准确性**（1-5 分）：[ ]  
-**清晰度**（1-5 分）：[ ]  
-**实际耗时**：[ ] 天
-
-**遇到的障碍**：
-[描述]
-
-**改进建议**：
-[建议]
-
-## L3: week-2-development.md
-
-（同上格式）
-
-## L4: week-3-architecture.md
-
-（同上格式）
-
-## L5: week-4-contribution.md
-
-（同上格式）
-
-## 总体评价
-
-**最有帮助的部分**：
-[描述]
-
-**最需要改进的部分**：
-[描述]
-
-**缺失的内容**：
-[列出]
-
-**其他建议**：
-[自由描述]
-```
-
-**反馈处理流程**：
-1. 新人完成 Onboarding 后创建 Issue（使用反馈表模板）
-2. 标签：`onboarding-feedback`
-3. 负责人：Onboarding 文档 CODEOWNERS
-4. 评估：每月汇总反馈，识别模式
-5. 改进：创建改进 Issue，排入优先级
-6. 跟踪：关闭反馈 Issue，关联改进 Issue
-
-**核心原则**：
-> 听取新人声音，持续改进。
+#### ADR-960_4_2 失效处理
+- **失效处理**：
+  - 发现内容误导 → 立即修复
+  - 无法及时修复 → 标记 `[可能过时]`
+  - 不允许长期错误但“懒得改”
 
 **判定**：
-- ❌ 新人完成 Onboarding 但无反馈机制
-- ❌ 收集反馈但不处理
-- ✅ 系统化收集并改进
+
+* ❌ Onboarding 引用已废弃 ADR
+* ❌ 超过 6 个月无人维护
+* ✅ 与当前 ADR 体系一致
 
 ---
 
-### 成功标准定义（ADR-960.4）
+## Enforcement（执法模型）
 
-**规则**：
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-960 各条款（Clause）的执法方式及执行级别。
 
-Onboarding **必须**定义明确的完成标准。
-
-**完成标准清单**：
-```markdown
-## Onboarding 完成标准
-
-新成员完成以下所有项目即视为"Onboarding 完成"：
-
-### 技术能力
-- [ ] 独立搭建开发环境
-- [ ] 运行所有架构测试并通过
-- [ ] 创建一个新用例（包含 Handler、Endpoint、测试）
-- [ ] 提交至少 1 个 PR 并合并
-
-### 架构理解
-- [ ] 理解模块化单体架构（ADR-0001）
-- [ ] 理解 CQRS 和 Handler 模式（ADR-0005）
-- [ ] 理解测试与 ADR 的关系（ADR-0000）
-- [ ] 能够解释垂直切片架构
-
-### 流程熟悉
-- [ ] 熟悉 Git 工作流和提交规范
-- [ ] 熟悉 PR 流程和代码审查
-- [ ] 熟悉 CI/CD 流程
-- [ ] 熟悉 ADR 查阅和引用
-
-### 工具掌握
-- [ ] 熟练使用 IDE 和调试工具
-- [ ] 熟悉测试运行和调试
-- [ ] 熟悉 CLI 工具（如 dotnet、git）
-
-### 团队协作
-- [ ] 参加至少 1 次架构讨论
-- [ ] 参加至少 2 次代码审查
-- [ ] 填写 Onboarding 反馈表
-```
-
-**验证方式**：
-- 技术能力：提交的 PR 和代码质量
-- 架构理解：与 Mentor 的讨论或书面问答
-- 流程熟悉：实际操作记录
-- 工具掌握：实际使用情况
-- 团队协作：参与记录
-
-**时间目标**：
-- **理想**：4 周内完成
-- **可接受**：6 周内完成
-- **需要关注**：超过 6 周
-
-**核心原则**：
-> 明确标准，可验证完成。
-
-**判定**：
-- ❌ 不知道何时算"入门完成"
-- ❌ 标准过于主观或模糊
-- ✅ 明确、可验证的完成标准
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-960_1_1** | L1 | 文档扫描裁决性用语 | §ADR-960_1_1 |
+| **ADR-960_1_2** | L1 | 文档扫描裁决性用语 | §ADR-960_1_2 |
+| **ADR-960_1_3** | L1 | 文档扫描裁决性用语 | §ADR-960_1_3 |
+| **ADR-960_1_4** | L1 | 文档扫描裁决性用语 | §ADR-960_1_4 |
+| **ADR-960_2_1** | L1 | 示例/代码存在性检查 | §ADR-960_2_1 |
+| **ADR-960_2_2** | L1 | 示例/代码存在性检查 | §ADR-960_2_2 |
+| **ADR-960_3_1** | L1 | 结构完整性检查 | §ADR-960_3_1 |
+| **ADR-960_4_1** | L1 | ADR 变更触发校验 | §ADR-960_4_1 |
+| **ADR-960_4_2** | L1 | ADR 变更触发校验 | §ADR-960_4_2 |
 
 ---
 
-### 责任人制度（ADR-960.5）
+## Non-Goals（明确不管什么）
 
-**规则**：
-
-Onboarding 文档 **必须**指定明确的责任人。
-
-**CODEOWNERS 配置**：
-```
-# Onboarding 文档
-/docs/QUICK-START.md @tech-lead @onboarding-champion
-/docs/onboarding/ @tech-lead @onboarding-champion
-```
-
-**责任人职责**：
-1. **内容准确性**：确保文档与实际代码一致
-2. **月度审计**：执行月度审计清单
-3. **反馈处理**：评估新人反馈并排优先级
-4. **改进主导**：主导 Onboarding 文档改进
-5. **新人支持**：回答新人 Onboarding 相关问题
-
-**Onboarding Champion 角色**：
-- **选拔**：团队推选，任期 6 个月
-- **职责**：专注 Onboarding 体验改进
-- **交接**：任期结束时更新文档并交接
-
-**核心原则**：
-> 明确责任，持续改进。
-
-**判定**：
-- ❌ Onboarding 文档无人负责
-- ❌ 责任不清晰
-- ✅ 明确指定责任人并履职
+* 不负责教学深度
+* 不负责代码正确性
+* 不替代 README / Guide / Case
+* 不解决资深成员的问题
 
 ---
 
-## 关系声明（Relationships）
+## Prohibited（禁止行为）
+
+* 在 Onboarding 中定义新规则
+* 将 Onboarding 作为 ADR 的“简化版”
+* 把 Onboarding 当 Wiki 堆内容
+
+---
+
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档分级和编写标准
-- [ADR-950：指南与 FAQ 文档治理宪法](../governance/ADR-950-guide-faq-documentation-governance.md) - 基于其文档类型定义
+
+* [ADR-950：指南与 FAQ 文档治理规范](ADR-950-guide-faq-documentation-governance.md)
+* [ADR-951：案例库管理规范](ADR-951-case-repository-management.md)
+* [ADR-955：文档搜索与可发现性优化](ADR-955-document-search-discoverability.md)
 
 **被依赖（Depended By）**：
-- [ADR-965：Onboarding 互动式学习路径](../governance/ADR-965-onboarding-interactive-learning-path.md)
 
-**替代（Supersedes）**：
-- 无
+* 新成员流程
+* 项目 README 入口
 
-**被替代（Superseded By）**：
-- 无
+**替代 / 被替代**：无
 
 **相关（Related）**：
-- [ADR-965：Onboarding 互动式学习路径](../governance/ADR-965-onboarding-interactive-learning-path.md) - 互动式体验增强
+
+* [ADR-910：README 编写与维护治理规范](ADR-910-readme-governance-constitution.md)
 
 ---
 
-## 执法模型（Enforcement）
+## References（非裁决性参考）
 
-| 规则编号 | 执行级别 | 测试/手段 | 说明 |
-|---------|---------|----------|------|
-| ADR-960.1 | L2 | Code Review | 人工审查文档结构 |
-| ADR-960.2 | L2 | 月度审计 Issue | 追踪审计完成度 |
-| ADR-960.3 | L2 | Issue Template | 标准化反馈收集 |
-| ADR-960.4 | L2 | Mentor 验证 | 人工评估完成度 |
-| ADR-960.5 | L1 | CODEOWNERS | GitHub 自动通知 |
+### 模板
 
----
+* [Onboarding 模板](../../templates/onboarding-template.md)
 
-## 破例与归还（Exception）
+### 相关文档
 
-### 允许破例的前提
-
-破例 **仅在以下情况允许**：
-- 团队规模过小（<3 人）无法支持月度审计
-- 新项目初期（<6 个月）Onboarding 流程尚未稳定
-- 特殊时期（如大规模重构）暂停审计
-
-### 破例要求
-
-每个破例 **必须**：
-- 记录在 Issue 中，说明原因和预期恢复时间
-- 标记 `onboarding-audit-suspended` 标签
-- 指定恢复审计的触发条件
-- 架构委员会批准
-
-**未记录的破例 = 未授权治理违规。**
+* [新成员快速路径示例](../../guides/onboarding-fast-path-example.md)
 
 ---
 
-## 变更政策（Change Policy）
+## History（版本历史）
 
-### 变更规则
-
-本 ADR 属于 **治理层文档专项规则**：
-- 修改需 Tech Lead + Onboarding Champion 同意
-- 需通知所有新近完成 Onboarding 的成员
-- 需更新相关模板和清单
-
-### 失效与替代
-
-- 本 ADR 一旦被替代，**必须**更新所有 Onboarding 文档
-- 不允许"隐性废弃"
+| 版本  | 日期         | 变更说明 |
+| --- | ---------- | ---- |
+| 2.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | 架构委员会 |
+| 1.0 | 2026-02-03 | 初始版本 |
 
 ---
 
-## 明确不管什么（Non-Goals）
+### 直说一句（强观点）
 
-本 ADR **不负责**：
-- 技术培训内容的具体设计（由团队决定）
-- Onboarding 文档的写作风格（由 ADR-0008 规范）
-- 新人绩效评估标准
-- 团队文化建设
-- 非技术性的入职流程（HR 流程等）
+- **没有 ADR-960，你的文档体系一定会“对新人不友好，对老人更痛苦”**
+- Onboarding 一旦不被治理，必然退化成：  
+  👉 规则副本  
+  👉 过时说明  
+  👉 架构污染源  
 
----
+下一步我非常建议你做的是：
 
-## 非裁决性参考（References）
-
-### 相关 ADR
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-950：指南与 FAQ 文档治理宪法](../governance/ADR-950-guide-faq-documentation-governance.md)
-
-### 实施工具
-- `docs/onboarding/feedback-template.md` - 反馈表模板
-- `.github/CODEOWNERS` - 责任人配置
-- Issue Template：`onboarding-feedback`
-
-### 背景材料
-- [ADR-Documentation-Governance-Gap-Analysis.md](../proposals/ADR-Documentation-Governance-Gap-Analysis.md) - 原始提案
-
----
-
-## 版本历史（Version History）
-
-| 版本 | 日期 | 变更说明 | 作者 |
-|------|------|----------|------|
-| 1.0 | 2026-01-26 | 初版：定义 Onboarding 文档治理机制 | GitHub Copilot |
-
----
-
-**维护**：Tech Lead & Onboarding Champion  
-**审核**：待定  
-**状态**：✅ Accepted
-**版本**：1.0
+👉 **ADR-960 × ADR-955 → 自动生成“新成员入口页”**  
+👉 并把它挂到 README 的唯一入口

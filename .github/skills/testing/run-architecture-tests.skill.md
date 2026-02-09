@@ -41,9 +41,9 @@ required_agent: "test-generator"
   },
   "failures": [
     {
-      "test": "ADR_0001_Modules_Should_Not_Reference_Other_Modules",
-      "adr": "ADR-0001",
-      "message": "模块 Orders 直接引用了模块 Members（ADR-0001）",
+      "test": "ADR_001_Modules_Should_Not_Reference_Other_Modules",
+      "adr": "ADR-001",
+      "message": "模块 Orders 直接引用了模块 Members（ADR-001）",
       "violations": [
         {
           "file": "UseCases/CreateOrder/CreateOrderHandler.cs",
@@ -118,7 +118,7 @@ dotnet test src/tests/ArchitectureTests/ \
 
 ```bash
 dotnet test src/tests/ArchitectureTests/ \
-  --filter "FullyQualifiedName~ADR_0001" \
+  --filter "FullyQualifiedName~ADR_001" \
   --logger "console;verbosity=detailed"
 ```
 
@@ -140,12 +140,12 @@ dotnet test src/tests/ArchitectureTests/ \
 当测试失败时，提取 ADR 编号并关联到具体条款：
 
 ```
-测试：ADR_0001_Modules_Should_Not_Reference_Other_Modules
+测试：ADR_001_Modules_Should_Not_Reference_Other_Modules
 失败：模块 Orders 引用了 Members
 
-关联 ADR：ADR-0001.2.1
+关联 ADR：ADR-001.2.1
 约束：模块间禁止直接引用
-参考：docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md
+参考：docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md
 ```
 
 ### 提供修复建议
@@ -159,7 +159,7 @@ dotnet test src/tests/ArchitectureTests/ \
 2. 使用契约查询（只读）
 3. 使用原始类型（ID）
 
-参考：docs/copilot/adr-0001.prompts.md
+参考：docs/copilot/adr-001.prompts.md
 ```
 
 ---
@@ -180,8 +180,8 @@ dotnet test src/tests/ArchitectureTests/ \
 
 === 失败详情 ===
 
-❌ ADR_0001_Modules_Should_Not_Reference_Other_Modules
-   违反: ADR-0001.2.1 - 模块间禁止直接引用
+❌ ADR_001_Modules_Should_Not_Reference_Other_Modules
+   违反: ADR-001.2.1 - 模块间禁止直接引用
    位置: Orders/UseCases/CreateOrder/CreateOrderHandler.cs:15
    内容: using Zss.BilliardHall.Modules.Members.Domain
    
@@ -191,7 +191,7 @@ dotnet test src/tests/ArchitectureTests/ \
    - 契约查询（同步，只读）
    - 原始类型（传递 ID）
    
-   参考: docs/copilot/adr-0001.prompts.md
+   参考: docs/copilot/adr-001.prompts.md
 
 ---
 
@@ -247,7 +247,7 @@ dotnet test src/tests/ArchitectureTests/ \
 ```
 
 **输出**：
-- 只运行 ADR-0001 相关测试
+- 只运行 ADR-001 相关测试
 - 简洁输出
 - 仅显示失败
 
@@ -269,11 +269,66 @@ dotnet test src/tests/ArchitectureTests/ \
 
 ## 参考资料
 
-- [ADR-0000：架构测试与 CI 治理](../../../docs/adr/constitutional/ADR-0000-architecture-testing-ci-governance-constitution.md)
+- [ADR-900：架构测试与 CI 治理](../../../docs/adr/governance/ADR-900-architecture-tests.md)
+- [ADR-907：架构测试执法治理体系](../../../docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md)
+- [ARCHITECTURE-TEST-GUIDELINES.md](../../../docs/guidelines/ARCHITECTURE-TEST-GUIDELINES.md) - 架构测试编写指南
 - [架构测试失败诊断](../../../docs/copilot/architecture-test-failures.md)
-- [测试编写指令](../../instructions/testing.instructions.md)
+- [测试编写指令](../../instructions/test-generator.instructions.yaml)
+
+---
+
+## 最佳实践
+
+### 快速诊断失败
+
+当测试失败时，按以下顺序诊断：
+
+1. **查看测试输出**
+   ```bash
+   dotnet test src/tests/ArchitectureTests/ \
+     --filter "FullyQualifiedName~ADR_XXX" \
+     --logger "console;verbosity=detailed"
+   ```
+
+2. **定位具体违规**
+   - 检查断言消息中的文件路径
+   - 查看违规的具体代码行
+   - 理解违反的 ADR 条款
+
+3. **查阅 ADR 正文**
+   - 确认条款要求
+   - 理解设计意图
+   - 寻找合规方案
+
+4. **修复并重新测试**
+   ```bash
+   # 快速反馈循环
+   dotnet test src/tests/ArchitectureTests/ \
+     --filter "FullyQualifiedName~ADR_XXX_Y" \
+     --logger "console;verbosity=minimal"
+   ```
+
+### 性能优化
+
+- **增量测试**：只运行相关的 ADR 测试
+- **并行执行**：默认启用（可用 `--parallel` 控制）
+- **快速失败**：使用 `-- xUnit.StopOnFail=true`
+
+### 持续集成集成
+
+在 CI 管道中使用：
+```bash
+dotnet test src/tests/ArchitectureTests/ \
+  --filter "Category=Architecture" \
+  --logger "trx;LogFileName=architecture-results.trx" \
+  --logger "console;verbosity=normal" \
+  --collect:"XPlat Code Coverage" \
+  --results-directory ./TestResults
+```
 
 ---
 
 **维护者**：架构委员会  
-**状态**：✅ Active
+**状态**：✅ Active  
+**版本**：1.1  
+**最后更新**：2026-02-06

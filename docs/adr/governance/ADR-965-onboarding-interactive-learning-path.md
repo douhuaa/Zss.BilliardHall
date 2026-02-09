@@ -1,16 +1,23 @@
+---
+adr: ADR-965
+title: "Onboarding 互动式学习路径"
+status: Accepted
+level: Governance
+deciders: "Tech Lead & Onboarding Champion"
+date: 2026-02-03
+version: "2.0"
+maintainer: "Tech Lead & Onboarding Champion"
+primary_enforcement: L1
+reviewer: "待定"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-965：Onboarding 互动式学习路径
 
 > ⚖️ **本 ADR 是 Onboarding 互动式学习体验的标准，定义互动清单、可视化路径和进度跟踪机制。**
 
-**状态**：✅ Accepted  
-**版本**：1.0
-**级别**：体验优化 / 治理层  
-**适用范围**：Onboarding 文档的互动式增强  
-**生效时间**：即刻
-
----
-
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - 互动式清单设计
 - 学习路径可视化
@@ -20,7 +27,7 @@
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |------|------|----------|
@@ -33,16 +40,25 @@
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
-### 互动式清单设计（ADR-965.1）
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-965 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-965_<Rule>_<Clause>
+> ```
 
-**规则**：
+---
 
+### ADR-965_1：互动式清单设计（Rule）
+
+#### ADR-965_1_1 必须包含可互动的任务清单
 Onboarding 文档 **必须**包含可互动的任务清单。
 
-**清单格式**：
-
+#### ADR-965_1_2 清单格式
 使用 GitHub Issue Template 创建个人 Onboarding Issue：
 
 ```markdown
@@ -74,8 +90,8 @@ assignees: ''
 **完成时间**：_____
 
 ### 架构理解
-- [ ] 阅读 [ADR-0001：模块化单体架构](...)
-- [ ] 阅读 [ADR-0005：应用内交互模型](...)
+- [ ] 阅读 [ADR-001：模块化单体架构](...)
+- [ ] 阅读 [ADR-005：应用内交互模型](...)
 - [ ] 观看架构概览视频（如有）
 - [ ] 与 Mentor 讨论架构概念
 
@@ -201,13 +217,8 @@ assignees: ''
 - [ ] 🎯 Feature Complete - 完成第一个功能
 - [ ] 📚 Documentation Reader - 阅读所有核心 ADR
 - [ ] 🎓 Onboarding Complete - 完成 Onboarding
-```
 
-**Issue Template 位置**：
-```
-.github/ISSUE_TEMPLATE/onboarding-checklist.md
-```
-
+#### ADR-965_1_3 使用流程
 **使用流程**：
 1. 新成员加入时，创建 Onboarding Issue
 2. 分配给新成员和 Mentor
@@ -215,6 +226,7 @@ assignees: ''
 4. Mentor 定期检查进度
 5. 完成后关闭 Issue
 
+#### ADR-965_1_4 核心原则
 **核心原则**：
 > 可见进度，互动参与，持续激励。
 
@@ -225,23 +237,19 @@ assignees: ''
 
 ---
 
-### 学习路径可视化（ADR-965.2）
+### ADR-965_2：学习路径可视化（Rule）
 
-**规则**：
-
+#### ADR-965_2_1 必须包含可视化学习路径图
 Onboarding 文档 **必须**包含可视化学习路径图。
 
+#### ADR-965_2_2 路径图位置
 **路径图位置**：
-```
-docs/onboarding/README.md
-```
+`docs/onboarding/README.md`
 
+#### ADR-965_2_3 可视化格式
 **可视化格式**：
 
 使用 Mermaid 图表：
-
-```markdown
-# Onboarding 学习路径
 
 ```mermaid
 graph TD
@@ -294,8 +302,8 @@ graph TD
     style Complete fill:#FFD700
     style Certified fill:#FF69B4
 ```
-```
 
+#### ADR-965_2_4 里程碑可视化
 **里程碑可视化**：
 
 ```mermaid
@@ -327,32 +335,35 @@ gantt
 
 ---
 
-### 进度跟踪机制（ADR-965.3）
+### ADR-965_3：进度跟踪机制（Rule）
 
-**规则**：
-
+#### ADR-965_3_1 必须实时追踪 Onboarding 进度
 **必须**实时追踪 Onboarding 进度。
 
+#### ADR-965_3_2 GitHub Issue 进度条
 **追踪方式**：
 
-1. **GitHub Issue 进度条**：
-   - Issue 中的复选框自动生成进度条
-   - GitHub 原生支持
+**GitHub Issue 进度条**：
+- Issue 中的复选框自动生成进度条
+- GitHub 原生支持
 
-2. **Project Board 集成**：
-   ```
-   Onboarding Pipeline
-   ├─ To Do（待完成）
-   ├─ In Progress（进行中）
-   ├─ Review（审查中）
-   └─ Done（已完成）
-   ```
+#### ADR-965_3_3 Project Board 集成
+**Project Board 集成**：
+```
+Onboarding Pipeline
+├─ To Do（待完成）
+├─ In Progress（进行中）
+├─ Review（审查中）
+└─ Done（已完成）
+```
 
-3. **自动化通知**：
-   - 完成每周时自动评论祝贺
-   - 卡住超过 3 天自动通知 Mentor
-   - 完成 Onboarding 时自动庆祝
+#### ADR-965_3_4 自动化通知
+**自动化通知**：
+- 完成每周时自动评论祝贺
+- 卡住超过 3 天自动通知 Mentor
+- 完成 Onboarding 时自动庆祝
 
+#### ADR-965_3_5 进度仪表板
 **GitHub Actions 示例**：
 ```yaml
 name: Onboarding Progress Tracker
@@ -398,184 +409,64 @@ jobs:
 ```
 
 **进度仪表板**（可选）：
-```
-docs/onboarding/dashboard.md
-```
+`docs/onboarding/dashboard.md`
 
 内容：
-```markdown
-# Onboarding 仪表板
-
-## 当前进行中
-
-| 成员 | 开始日期 | 当前周 | 进度 | Mentor | 状态 |
-|------|---------|-------|------|--------|------|
-| Alice | 2026-01-20 | Week 3 | 65% | @bob | ✅ 正常 |
-| Charlie | 2026-01-15 | Week 4 | 85% | @david | ✅ 正常 |
-
-## 历史记录
-
-| 成员 | 开始日期 | 完成日期 | 总耗时 | Mentor | 评分 |
-|------|---------|---------|--------|--------|------|
-| Eve | 2026-01-01 | 2026-01-29 | 28 天 | @frank | ⭐⭐⭐⭐⭐ |
-```
-
-**核心原则**：
-> 实时可见，自动通知，持续激励。
-
-**判定**：
-- ❌ 不知道新人进度如何
-- ❌ 需手动询问进度
-- ✅ 自动追踪和通知
+待补充...
 
 ---
 
-### Issue Template 集成（ADR-965.4）
+## Enforcement（执法模型）
 
-**规则**：
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-965 各条款（Clause）的执法方式及执行级别。
 
-**必须**提供标准化的 Issue Template。
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-965_1_1** | L1 | 文档扫描互动清单存在性 | §ADR-965_1_1 |
+| **ADR-965_1_2** | L1 | 文档扫描 Issue Template 格式 | §ADR-965_1_2 |
+| **ADR-965_1_3** | L1 | 文档扫描使用流程 | §ADR-965_1_3 |
+| **ADR-965_1_4** | L1 | 文档扫描核心原则 | §ADR-965_1_4 |
+| **ADR-965_2_1** | L1 | 文档扫描可视化路径图存在性 | §ADR-965_2_1 |
+| **ADR-965_2_2** | L1 | 文档扫描路径图位置 | §ADR-965_2_2 |
+| **ADR-965_2_3** | L1 | 文档扫描 Mermaid 格式 | §ADR-965_2_3 |
+| **ADR-965_2_4** | L1 | 文档扫描里程碑可视化 | §ADR-965_2_4 |
+| **ADR-965_3_1** | L1 | 文档扫描进度跟踪机制 | §ADR-965_3_1 |
+| **ADR-965_3_2** | L1 | 文档扫描 GitHub Issue 进度条 | §ADR-965_3_2 |
+| **ADR-965_3_3** | L1 | 文档扫描 Project Board 集成 | §ADR-965_3_3 |
+| **ADR-965_3_4** | L1 | 文档扫描自动化通知 | §ADR-965_3_4 |
+| **ADR-965_3_5** | L2 | 文档扫描进度仪表板（可选） | §ADR-965_3_5 |
 
-**Template 文件**：
-```
-.github/ISSUE_TEMPLATE/onboarding-checklist.md
-```
-
-（内容见 ADR-965.1）
-
-**配置文件**：
-```yaml
-# .github/ISSUE_TEMPLATE/config.yml
-blank_issues_enabled: false
-contact_links:
-  - name: 📚 Documentation
-    url: https://github.com/owner/repo/blob/main/docs/README.md
-    about: 查阅文档
-  - name: 💬 Discussions
-    url: https://github.com/owner/repo/discussions
-    about: 讨论和提问
-```
-
-**使用指南**：
-```
-docs/onboarding/HOW-TO-START.md
-```
-
-内容：
-```markdown
-# 如何开始 Onboarding
-
-## 第 1 步：创建你的 Onboarding Issue
-
-1. 点击 [创建 Issue](https://github.com/owner/repo/issues/new/choose)
-2. 选择"Onboarding Checklist"模板
-3. 填写你的名字和 Mentor
-4. 提交 Issue
-
-## 第 2 步：开始勾选任务
-
-- 完成每个任务后勾选复选框
-- 记录完成时间
-- 在笔记区记录问题和心得
-
-## 第 3 步：定期同步
-
-- 每周与 Mentor 同步进度
-- 遇到困难及时在 Issue 中评论求助
-- 查看自动生成的进度百分比
-
-## 第 4 步：完成并反馈
-
-- 勾选所有任务
-- 填写反馈表
-- Mentor 确认后关闭 Issue
-```
-
-**核心原则**：
-> 标准化流程，降低启动成本。
-
-**判定**：
-- ❌ 新人不知道如何开始
-- ❌ 每个人 Onboarding 方式不一样
-- ✅ 标准化 Template，统一流程
+### 执行方式
 
 ---
 
-### 成就系统（可选）（ADR-965.5）
+## Non-Goals（明确不管什么）
 
-**规则**：
+本 ADR 明确不涉及以下内容：
 
-**可以**引入成就徽章系统以增强激励。
-
-**成就定义**：
-
-| 徽章 | 名称 | 解锁条件 | 图标 |
-|------|------|---------|------|
-| 🚀 | First Commit | 第一次提交代码 | 🚀 |
-| ✅ | Test Master | 所有测试通过 | ✅ |
-| 🏗️ | Architecture Aware | 理解核心 ADR | 🏗️ |
-| 🔧 | Handler Creator | 创建第一个 Handler | 🔧 |
-| 👥 | Code Reviewer | 审查第一个 PR | 👥 |
-| 🎯 | Feature Complete | 完成第一个功能 | 🎯 |
-| 📚 | Documentation Reader | 阅读所有核心 ADR | 📚 |
-| 🎓 | Onboarding Complete | 完成 Onboarding | 🎓 |
-
-**徽章显示**：
-
-在 Onboarding Issue 中自动更新：
-```markdown
-## 🏆 成就解锁
-
-- [x] 🚀 First Commit - 2026-01-28
-- [x] ✅ Test Master - 2026-01-29
-- [ ] 🏗️ Architecture Aware
-- ...
-```
-
-**自动化检测**（可选）：
-- 监测 Git 提交 → 解锁 First Commit
-- 监测 CI 通过 → 解锁 Test Master
-- 监测 PR 合并 → 解锁 Feature Complete
-
-**排行榜**（可选）：
-```
-docs/onboarding/leaderboard.md
-```
-
-内容：
-```markdown
-# Onboarding 排行榜
-
-## 最快完成
-
-| 排名 | 成员 | 耗时 | 日期 |
-|------|------|------|------|
-| 🥇 | Alice | 22 天 | 2026-01 |
-| 🥈 | Bob | 25 天 | 2026-01 |
-| 🥉 | Charlie | 27 天 | 2025-12 |
-
-## 最多徽章
-
-| 成员 | 徽章数 | 特殊成就 |
-|------|--------|---------|
-| Alice | 8/8 | 🌟 完美通关 |
-| Bob | 7/8 | - |
-```
-
-**核心原则**：
-> 游戏化学习，提升参与感（可选）。
-
-**判定**：
-- ⚠️ 可选特性
-- ✅ 如实施，必须自动化
+- 待补充
 
 ---
 
-## 关系声明（Relationships）
+## Prohibited（禁止行为）
+
+
+以下行为明确禁止：
+
+- 待补充
+
+
+---
+
+---
+
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 基于其文档标准
-- [ADR-960：Onboarding 文档治理宪法](../governance/ADR-960-onboarding-documentation-governance.md) - 基于其 Onboarding 结构
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 基于其文档标准
+- [ADR-960：Onboarding 文档治理规范](../governance/ADR-960-onboarding-documentation-governance.md) - 基于其 Onboarding 结构
 
 **被依赖（Depended By）**：
 - 无
@@ -591,68 +482,12 @@ docs/onboarding/leaderboard.md
 
 ---
 
-## 执法模型（Enforcement）
 
-| 规则编号 | 执行级别 | 测试/手段 | 说明 |
-|---------|---------|----------|------|
-| ADR-965.1 | L2 | Issue Template 存在性 | 确保 Template 存在 |
-| ADR-965.2 | L2 | 文档审查 | 确保包含可视化路径 |
-| ADR-965.3 | L1 | GitHub Actions | 自动追踪进度 |
-| ADR-965.4 | L2 | 文件存在性检查 | 确保 Template 配置正确 |
-| ADR-965.5 | L3 | 可选 | 成就系统为增强特性 |
-
----
-
-## 破例与归还（Exception）
-
-### 允许破例的前提
-
-破例 **仅在以下情况允许**：
-- 小团队（<5 人）可简化流程
-- 技术限制无法自动化追踪（需手动）
-- Issue Template 无法满足特殊需求（需定制）
-
-### 破例要求
-
-每个破例 **必须**：
-- 记录原因
-- 提供替代方案
-- Tech Lead 批准
-
----
-
-## 变更政策（Change Policy）
-
-### 变更规则
-
-本 ADR 属于 **治理层体验优化规则**：
-- 修改需 Tech Lead + Onboarding Champion 同意
-- 需更新 Issue Template
-- 需通知正在 Onboarding 的成员
-
-### 失效与替代
-
-- 本 ADR 一旦被替代，**必须**更新所有 Issue Template
-- 不允许"隐性废弃"
-
----
-
-## 明确不管什么（Non-Goals）
-
-本 ADR **不负责**：
-- Onboarding 内容质量（由 ADR-960 负责）
-- 技术培训内容设计
-- 团队文化建设
-- 绩效评估
-- 薪酬和福利
-
----
-
-## 非裁决性参考（References）
+## References（非裁决性参考）
 
 ### 相关 ADR
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md)
-- [ADR-960：Onboarding 文档治理宪法](../governance/ADR-960-onboarding-documentation-governance.md)
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md)
+- [ADR-960：Onboarding 文档治理规范](../governance/ADR-960-onboarding-documentation-governance.md)
 
 ### 实施工具
 - `.github/ISSUE_TEMPLATE/onboarding-checklist.md` - Issue Template
@@ -664,15 +499,10 @@ docs/onboarding/leaderboard.md
 
 ---
 
-## 版本历史（Version History）
+## History（版本历史）
 
-| 版本 | 日期 | 变更说明 | 作者 |
-|------|------|----------|------|
-| 1.0 | 2026-01-26 | 初版：定义 Onboarding 互动式学习路径 | GitHub Copilot |
 
----
-
-**维护**：Tech Lead & Onboarding Champion  
-**审核**：待定  
-**状态**：✅ Accepted
-**版本**：1.0
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 2.0 | 2026-02-03 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | 架构委员会 |
+| 1.0 | 2026-01-29 | 初始版本 |

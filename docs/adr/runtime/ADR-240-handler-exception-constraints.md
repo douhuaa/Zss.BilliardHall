@@ -1,17 +1,25 @@
+---
+adr: ADR-240
+title: "Handler 异常约束"
+status: Final
+level: Runtime
+version: "4.0"
+deciders: "Architecture Board"
+date: 2026-02-06
+maintainer: "Architecture Board"
+primary_enforcement: L1
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
+
 # ADR-240：Handler 异常约束
 
 > ⚖️ **本 ADR 定义 Handler 异常处理的强制规则，确保异常可分类、可重试、可追溯。**
 
-**状态**：✅ Final  
-**版本**：1.0
-**级别**：运行时层（Runtime Constraint）  
 **适用范围**：所有 Handler（Command/Query/Event Handler）  
-**生效时间**：即刻  
-**依赖 ADR**：ADR-0005（应用内交互模型）
-
----
-
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - Handler 结构化异常要求
 - 可重试标记约束
@@ -22,7 +30,9 @@
 
 ---
 
-## 术语表（Glossary）
+---
+
+## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
 |-----|------|---------|
@@ -36,9 +46,24 @@
 
 ---
 
-## 决策（Decision）
+---
 
-### 禁止抛出通用异常（ADR-240.1）【必须架构测试覆盖】
+## Decision（裁决）
+
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-240 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-240_<Rule>_<Clause>
+> ```
+
+---
+
+### ADR-240_1：结构化异常要求（Rule）
+
+#### ADR-240_1_1 禁止抛出通用异常
 
 **规则**：
 - Handler 禁止抛出 `System.Exception`
@@ -55,7 +80,13 @@
 - ✅ Handler 抛出 ValidationException
 - ✅ Handler 抛出 InfrastructureException 及其子类
 
-### 可重试标记约束（ADR-240.2）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-240_2：可重试标记约束（Rule）
+
+#### ADR-240_2_1 IRetryable 接口使用约束
 
 **规则**：
 - 实现 `IRetryable` 接口的异常必须继承自 `InfrastructureException`
@@ -70,7 +101,13 @@
 - ✅ DomainException 不实现 IRetryable
 - ✅ ValidationException 不实现 IRetryable
 
-### 禁止吞噬异常（ADR-240.3）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-240_3：异常传播约束（Rule）
+
+#### ADR-240_3_1 禁止吞噬异常
 
 **规则**：
 - Handler 禁止捕获异常后不重新抛出
@@ -84,7 +121,13 @@
 - ✅ `catch (Exception e) { throw; }` - 重新抛出
 - ✅ `catch (DbException e) { throw new InfrastructureException(..., e); }` - 转换后抛出
 
-### 异常命名空间约束（ADR-240.4）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-240_4：异常命名空间约束（Rule）
+
+#### ADR-240_4_1 异常命名空间组织规范
 
 **规则**：
 - 所有自定义异常必须位于 `*.Exceptions` 命名空间
@@ -99,7 +142,13 @@
 - ❌ 异常类在其他非 `*.Exceptions` 命名空间
 - ✅ 异常类在 `*.Exceptions` 命名空间
 
-### 跨模块事件异常隔离（ADR-240.5）【必须架构测试覆盖】
+---
+
+---
+
+### ADR-240_5：跨模块事件异常隔离（Rule）
+
+#### ADR-240_5_1 事件异常隔离要求
 
 **规则**：
 - Event Handler 异常禁止同步传播到事件发布者
@@ -114,118 +163,64 @@
 
 ---
 
-## 执法模型（Enforcement）
+---
 
-> **规则如果无法执法，就不配存在。**
+## Enforcement（执法模型）
 
-### 测试映射
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-240 各条款（Clause）的执法方式及执行级别。
 
-| 规则编号 | 执行级 | 测试/手段 |
-|---------|-------|----------|
-| ADR-240.1 | L2 | `StructuredExceptionAnalyzer` (Roslyn) |
-| ADR-240.2 | L1 | `ADR_240_Architecture_Tests.Retryable_Must_Be_Infrastructure` |
-| ADR-240.3 | L2 | Roslyn Analyzer (待实现) |
-| ADR-240.4 | L1 | `ADR_240_Architecture_Tests.Exceptions_Must_Be_In_Exceptions_Namespace` |
-| ADR-240.5 | L3 | ARCH-GATE（架构审查） |
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-240_1_1** | L1 | Roslyn Analyzer + ArchitectureTests | §ADR-240_1_1 禁止抛出通用异常 |
+| **ADR-240_2_1** | L1 | ArchitectureTests 自动化验证 | §ADR-240_2_1 IRetryable 接口使用约束 |
+| **ADR-240_3_1** | L1 | Roslyn Analyzer + 人工审查 | §ADR-240_3_1 禁止吞噬异常 |
+| **ADR-240_4_1** | L1 | ArchitectureTests 自动化验证 | §ADR-240_4_1 异常命名空间组织规范 |
+| **ADR-240_5_1** | L1 | ArchitectureTests 自动化验证 | §ADR-240_5_1 事件异常隔离要求 |
 
-### 执行说明
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
 
-**L1 测试**：
-- 检测可重试异常是否继承自 InfrastructureException
-- 验证异常类命名空间是否为 `*.Exceptions`
 
-**L2 测试**：
-- Roslyn Analyzer 检测是否抛出通用异常
-- 静态分析检测异常吞噬模式
+---
+---
 
-**L3 测试**：
-- 架构审查验证事件异常隔离
-- 人工审查跨模块通信异常处理
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- 异常处理中间件的具体实现（ASP.NET Core/gRPC）
+- 异常日志记录的格式和存储位置
+- 异常监控和告警的具体实现
+- 用户友好错误消息的翻译和本地化
+- 异常重试策略的具体参数（重试次数、间隔等）
+- 死信队列的具体实现和管理
 
 ---
 
-## 破例与归还（Exception）
+## Prohibited（禁止行为）
 
-> **破例不是逃避，而是债务。**
+以下行为明确禁止：
 
-### 允许破例的前提
+- ❌ Handler 直接抛出 `System.Exception` 或 `ApplicationException`
+- ❌ DomainException 或 ValidationException 实现 IRetryable 接口
+- ❌ 捕获异常后既不重新抛出也不转换（异常吞噬）
+- ❌ 在非 `*.Exceptions` 命名空间定义异常类
+- ❌ Event Handler 异常同步传播到事件发布者
+- ❌ 空的 catch 块（`catch (Exception) { }`）
 
-破例**仅在以下情况允许**：
-
-1. **遗留系统集成**：与遗留系统集成，无法使用结构化异常
-2. **外部库约束**：外部库强制的异常处理模式
-3. **迁移期**：从旧异常体系向新体系迁移的过渡阶段
-
-### 破例要求（不可省略）
-
-每个破例**必须**：
-
-- 记录在 `docs/summaries/arch-violations.md`
-- 指明 ADR-240 + 具体规则编号（如 ADR-240.1）
-- 指定失效日期（不超过 6 个月）
-- 给出归还计划和责任人
-
-**未记录的破例 = 未授权架构违规。**
 
 ---
 
-## 变更政策（Change Policy）
-
-> **ADR 不是"随时可改"的文档。**
-
-### 变更规则
-
-* **运行时层 ADR**
-  * 修改需 Tech Lead/架构师审批
-  * 新增规则必须满足可自动判定性
-  * 必须更新相关架构测试
-
-### 失效与替代
-
-* 如有更优方案，可创建 ADR-24X 替代本 ADR
-* 被替代后，本 ADR 状态改为 Superseded
-
 ---
 
-## 明确不管什么（Non-Goals）
-
-> **防止 ADR 膨胀的关键段落。**
-
-本 ADR **不负责**：
-
-- ✗ 异常消息内容和格式
-- ✗ 重试策略的具体实现（指数退避、延迟时间等）
-- ✗ 日志记录的具体字段和格式
-- ✗ 幂等性的具体实现方式
-- ✗ HTTP 状态码映射规则
-- ✗ 异常的序列化和传输格式
-
-> 上述内容属于工程标准与实践指南，参见《Handler 异常处理与重试工程标准》。
-
----
-
-## 非裁决性参考（References）
-
-> **仅供理解，不具裁决力。**
-
-### 相关 ADR
-- [ADR-0005：应用内交互模型](../constitutional/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-201：Handler 生命周期管理](ADR-201-handler-lifecycle-management.md)
-
-### 技术资源
-- [Handler 异常处理与重试工程标准](../../guides/handler-exception-retry-standard.md)（非裁决性）
-- [StructuredExceptionAnalyzer](../../../src/tools/ArchitectureAnalyzers/StructuredExceptionAnalyzer.cs)
-
-### 实践指导
-- 异常处理详细示例参见 `docs/copilot/adr-0240.prompts.md`
-
----
-
-
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - Handler 异常约束基于 Handler 模式
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - Handler 异常约束基于 Handler 模式
 
 **被依赖（Depended By）**：
 - 无
@@ -237,21 +232,37 @@
 - 无
 
 **相关（Related）**：
-- [ADR-0201：Handler 生命周期管理](./ADR-201-handler-lifecycle-management.md) - 异常处理是生命周期的一部分
+- [ADR-201：Handler 生命周期管理](./ADR-201-handler-lifecycle-management.md) - 异常处理是生命周期的一部分
+- [ADR-220：事件总线集成规范](./ADR-220-event-bus-integration.md) - 事件异常隔离相关
 
 ---
 
+---
 
-## 版本历史
+## References（非裁决性参考）
 
-| 版本 | 日期 | 变更说明 | 修订人 | 影响级别 |
-|------|------|----------|--------|---------|
-| 3.0 | 2026-01-25 | 重构为裁决型格式，添加决策章节 | GitHub Copilot | High |
-| 2.0 | 2026-01-24 | 精简为裁决型规则，将工程指南分离 | @copilot | High |
-| 1.0 | 2026-01-24 | 初始版本（已废弃，内容过于详细） | @copilot | High |
+> **仅供理解，不具裁决力。**
+
+### 相关 ADR
+- [ADR-005：应用内交互模型](../constitutional/ADR-005-Application-Interaction-Model-Final.md)
+- [ADR-201：Handler 生命周期管理](ADR-201-handler-lifecycle-management.md)
+
+### 技术资源
+- [Handler 异常处理与重试工程标准](../../guides/handler-exception-retry-standard.md)（非裁决性）
+- [StructuredExceptionAnalyzer](../../../src/tools/ArchitectureAnalyzers/StructuredExceptionAnalyzer.cs)
+
+### 实践指导
+- 异常处理详细示例参见 `docs/copilot/adr-240.prompts.md`
 
 ---
 
-# ADR 终极一句话定义
+---
 
-> **ADR 是系统的法律条文，不是架构师的解释说明。**
+## History（版本历史）
+
+| 版本  | 日期         | 变更说明   |
+|-----|------------|--------|
+| 4.0 | 2026-02-06 | 对齐 ADR-907-A v2.0 标准：转换为 Rule/Clause 双层编号体系，补充完整 Enforcement 映射表、Non-Goals 和 Prohibited 章节 |
+| 3.0 | 2026-01-25 | 补充跨模块事件异常隔离规则 |
+| 2.0 | 2026-01-23 | 补充可重试标记约束 |
+| 1.0 | 2026-01-29 | 初始版本 |

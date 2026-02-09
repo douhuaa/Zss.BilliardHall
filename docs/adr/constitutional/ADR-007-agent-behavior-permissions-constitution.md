@@ -3,9 +3,9 @@ adr: ADR-007
 title: "Agent 行为与权限宪法"
 status: Final
 level: Constitutional
-version: "1.0"
+version: "2.0"
 deciders: "Architecture Board"
-date: 2026-01-23
+date: 2026-02-04
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "Architecture Board"
@@ -16,7 +16,7 @@ superseded_by: null
 
 # ADR-007：Agent 行为与权限宪法
 
-> ⚖️ **本 ADR 是所有 Agent 的元规则，定义 Agent 行为边界和权限约束的唯一裁决源。**
+> ⚖️ **Constraint | L1** - 本 ADR 是所有 Agent 的元规则，定义 Agent 行为边界和权限约束的唯一裁决源。
 
 ---
 
@@ -56,7 +56,7 @@ superseded_by: null
 > 
 > - **Rule**：主要规则编号（1-9）
 > - **Clause**：具体条款编号（1-n）
-> - 每个 Clause 对应一个可测试的架构约束
+> - 每个 Clause 对应一个可测试的架构约束（L1）
 > - 测试方法必须一一映射到 Clause
 
 ---
@@ -144,8 +144,8 @@ superseded_by: null
 | 冲突处理 | ADR 优先    | Prompts 修正  |
 
 #### ADR-007_4_3 判定规则
-- ❌ "根据 adr-001.prompts.md，这不允许"
-- ✅ "根据 ADR-001 第 X 章，这不允许。参考 adr-001.prompts.md 场景示例"
+- ❌ "根据 adr-####.prompts.md，这不允许"
+- ✅ "根据 ADR-#### 第 X 章，这不允许。参考 adr-####.prompts.md 场景示例"
 
 ---
 
@@ -305,10 +305,8 @@ superseded_by: null
 **Related**：
 
 - [ADR-008：文档编写与维护宪法](./ADR-008-documentation-governance-constitution.md) - Agent 行为与文档权威相互关联，共同规范 Agent 输出与文档裁决力
+- [ADR-009：Guardian 决策失败与反馈宪法](derived/ADR-009-guardian-failure-feedback.md) - Guardian 决策失败与反馈宪法（可选启用）
 - [ADR-940：ADR 关系与溯源管理](../governance/ADR-940-adr-relationship-traceability-management.md) - Agent 必须遵循关系声明规范
-
-**Extended By**：
-- [ADR-007-A](derived/ADR-007-A-guardian-failure-feedback.md) - Guardian 决策失败与反馈宪法（可选启用）
 
 ---
 
@@ -331,5 +329,6 @@ superseded_by: null
 
 | 版本  | 日期         | 说明       | 修订人 |
 |-----|------------|----------|-----|
-| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |
+| 2.0 | 2026-02-04 | 对齐 ADR-907 v2.0，完成 Rule/Clause 双层编号体系对齐，更新测试结构 | Architecture Board |
 | 1.1 | 2026-02-03 | 对齐 ADR-907 格式标准，引入 Rule/Clause 双层编号体系，实现 Decision 与 Enforcement 一一映射 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |

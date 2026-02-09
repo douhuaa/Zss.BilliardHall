@@ -1,7 +1,7 @@
 ﻿# GitHub Actions Workflow - Code Format Check
 #
 # 本工作流验证代码格式是否符合 .editorconfig 规范
-# 与 ADR-0900 和 docs/configuration/editorconfig.md 协同
+# 与 ADR-900 和 docs/configuration/editorconfig.md 协同
 #
 # 触发条件：
 # - Pull Request 到 main 分支
@@ -165,7 +165,7 @@ jobs:
 #    - 开发阶段：使用"警告模式"或"自动修复模式"
 #    - 生产阶段：使用"严格模式"
 #
-# 3. 与 ADR-0900 集成
+# 3. 与 ADR-900 集成
 #    - 本工作流属于技术层 CI 配置
 #    - 格式检查不涉及架构约束（架构测试在其他工作流中）
 #    - 格式问题建议自动修复或警告，架构问题必须失败

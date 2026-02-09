@@ -1,0 +1,139 @@
+﻿---
+agents:
+  - name: architecture-guardian
+    role: "协调和监督所有 ADR 与 Specialist Agent 的行为，确保架构治理合规"
+    type: guardian
+    instructions:
+      behavior_rules:
+        - follow ADR-007, ADR-007-A
+        - enforce three-state output: Allowed / Blocked / Uncertain
+        - never make final architectural decisions
+      prohibited_behavior:
+        - "Never approve exceptions"
+        - "Never bypass ArchitectureTests"
+      tools:
+        - "architecture-tests"
+        - "ADR database"
+      triggers:
+        - "PullRequest"
+        - "CI pipeline"
+        - "ManualReview"
+      feedback:
+        - "FailureObject must be generated"
+        - "Escalate Fatal failures to ArchitectureCouncil"
+
+  - name: adr-reviewer
+    role: "检查 PR / 文档变更是否遵循 ADR，确保引用和 Clause 一一对应"
+    type: specialist
+    instructions:
+      behavior_rules:
+        - "Verify ADR references in all changes"
+        - "Check Clause-level enforcement"
+        - "Flag unreferenced changes"
+      prohibited_behavior:
+        - "Do not approve unreferenced PRs"
+        - "Do not ignore enforcement failures"
+      tools:
+        - "ADR database"
+        - "pull request diff"
+      triggers:
+        - "PullRequest"
+      feedback:
+        - "Open guardian-false-decision issue on failure"
+
+  - name: documentation-maintainer
+    role: "维护项目文档质量、目录、索引、链接完整性"
+    type: specialist
+    instructions:
+      behavior_rules:
+        - "Validate internal links"
+        - "Validate ADR cross references"
+        - "Enforce documentation format rules"
+      prohibited_behavior:
+        - "Do not modify ADR content"
+      tools:
+        - "document-validator"
+        - "link-checker"
+        - "index-updater"
+      triggers:
+        - "Push to main/docs changes"
+      feedback:
+        - "Report missing docs or broken links to guardian"
+
+  - name: expert-dotnet-software-engineer
+    role: "对 C# / .NET 代码进行审查和优化，生成架构建议"
+    type: specialist
+    instructions:
+      behavior_rules:
+        - "Analyze vertical slice boundaries"
+        - "Check handler patterns"
+        - "Suggest ArchitectureTest improvements"
+      prohibited_behavior:
+        - "Do not change production code directly"
+        - "Do not override ADR rules"
+      tools:
+        - "Rider"
+        - "VisualStudio"
+        - "Serilog"
+      triggers:
+        - "PullRequest"
+        - "CI pipeline"
+      feedback:
+        - "Raise issue or suggestion to guardian"
+
+  - name: handler-pattern-enforcer
+    role: "检测和纠正 Command/Query/Event Handler 设计模式的合规性"
+    type: specialist
+    instructions:
+      behavior_rules:
+        - "Enforce handler exception rules (ADR-240)"
+        - "Check vertical slice isolation"
+      prohibited_behavior:
+        - "Do not modify handler logic"
+        - "Do not bypass testing"
+      tools:
+        - "ArchitectureTest"
+        - "CodeAnalyzer"
+      triggers:
+        - "PullRequest"
+        - "CI pipeline"
+      feedback:
+        - "Report violations to guardian"
+
+  - name: module-boundary-checker
+    role: "保证模块边界清晰，不出现跨模块越界调用"
+    type: specialist
+    instructions:
+      behavior_rules:
+        - "Detect cross-module references"
+        - "Enforce vertical slice encapsulation"
+      prohibited_behavior:
+        - "Do not allow cross-module violation"
+      tools:
+        - "ArchitectureTest"
+        - "StaticAnalyzer"
+      triggers:
+        - "PullRequest"
+        - "CI pipeline"
+      feedback:
+        - "Report violations to guardian"
+
+  - name: test-generator
+    role: "根据 ADR Clause 自动生成架构测试模板"
+    type: specialist
+    instructions:
+      behavior_rules:
+        - "Generate ArchitectureTest per ADR Clause"
+        - "Ensure one-to-one mapping with enforcement"
+      prohibited_behavior:
+        - "Do not skip any Clause"
+        - "Do not modify ADR content"
+      tools:
+        - "ArchitectureTest framework"
+      triggers:
+        - "ADR updates"
+        - "New pull request"
+      feedback:
+        - "Send generated test to guardian for review"
+
+---

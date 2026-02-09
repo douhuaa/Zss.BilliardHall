@@ -33,11 +33,13 @@ jobs:
       - name: Build solution
         run: dotnet build --no-restore --configuration Release
 
-      - name: Validate ADR Consistency
+      - name: Validate ADR Consistency (Architecture Tests)
         run: |
-          echo "::group::ADR 编号/目录/内容一致性验证"
-          chmod +x ./scripts/validate-adr-consistency.sh
-          ./scripts/validate-adr-consistency.sh
+          echo "::group::ADR 编号/目录/内容一致性验证（架构测试）"
+          dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj \
+            --filter "FullyQualifiedName~AdrConsistencyTests" \
+            --logger "console;verbosity=normal" \
+            --configuration Release
           echo "::endgroup::"
 
       - name: Validate Three-Way Mapping
@@ -47,11 +49,13 @@ jobs:
           ./scripts/validate-three-way-mapping.sh
           echo "::endgroup::"
 
-      - name: Validate ADR-Test Mapping (Legacy)
+      - name: Validate ADR-Test Mapping (Architecture Tests)
         run: |
-          echo "::group::ADR-测试映射一致性验证（传统）"
-          chmod +x ./scripts/validate-adr-test-mapping.sh
-          ./scripts/validate-adr-test-mapping.sh
+          echo "::group::ADR-测试映射一致性验证（架构测试）"
+          dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj \
+            --filter "FullyQualifiedName~AdrTestMappingTests" \
+            --logger "console;verbosity=normal" \
+            --configuration Release
           echo "::endgroup::"
 
       - name: Run architecture tests
@@ -126,7 +130,7 @@ jobs:
         with:
           script: |
             try {
-              const comment = `## ❌ 架构测试失败\n\n⚠️ 本 PR 的架构测试未通过，检测到架构违规行为。\n\n### 📋 使用 Copilot 诊断和修复\n\n#### 1️⃣ 查看失败日志\n点击上方 \"Run architecture tests\" 步骤查看详细的失败信息。\n\n#### 2️⃣ 询问 Copilot\n将失败日志复制给 GitHub Copilot，并询问：\n\n\`\`\`\n请根据以下架构测试失败日志，解释违规原因并提供修复建议\n\n[粘贴失败日志]\n\`\`\`\n\n#### 3️⃣ Copilot 参考资源\nCopilot 会基于以下资源为你提供详细解释：\n- [Copilot 治理体系](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/copilot/README.md)\n- [ADR 提示词库](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/main/docs/copilot)\n- [架构测试失败解释指南](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/copilot/architecture-test-failures.md)\n\n#### 4️⃣ 修复并验证\n根据 Copilot 的建议修复代码后，在本地运行：\n\n\`\`\`bash\ndotnet test src/tests/ArchitectureTests/\n\`\`\`\n\n### 📚 相关 ADR\n\n- [ADR-0001: 模块化单体与垂直切片架构](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)\n- [ADR-0002: Platform / Application / Host 三层启动体系](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-0002-platform-application-host-bootstrap.md)\n- [ADR-0003: 命名空间与项目边界规范](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-0003-namespace-rules.md)\n- [ADR-0004: 中央包管理（CPM）规范](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-0004-Cpm-Final.md)\n- [ADR-0005: 应用内交互模型与执行边界](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)\n\n---\n\n💡 **提示**：记得在 PR 描述中完成 \"Copilot 参与检查清单\"。\n`;
+              const comment = `## ❌ 架构测试失败\n\n⚠️ 本 PR 的架构测试未通过，检测到架构违规行为。\n\n### 📋 使用 Copilot 诊断和修复\n\n#### 1️⃣ 查看失败日志\n点击上方 \"Run architecture tests\" 步骤查看详细的失败信息。\n\n#### 2️⃣ 询问 Copilot\n将失败日志复制给 GitHub Copilot，并询问：\n\n\`\`\`\n请根据以下架构测试失败日志，解释违规原因并提供修复建议\n\n[粘贴失败日志]\n\`\`\`\n\n#### 3️⃣ Copilot 参考资源\nCopilot 会基于以下资源为你提供详细解释：\n- [Copilot 治理体系](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/copilot/README.md)\n- [ADR 提示词库](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/main/docs/copilot)\n- [架构测试失败解释指南](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/copilot/architecture-test-failures.md)\n\n#### 4️⃣ 修复并验证\n根据 Copilot 的建议修复代码后，在本地运行：\n\n\`\`\`bash\ndotnet test src/tests/ArchitectureTests/\n\`\`\`\n\n### 📚 相关 ADR\n\n- [ADR-001: 模块化单体与垂直切片架构](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)\n- [ADR-002: Platform / Application / Host 三层启动体系](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md)\n- [ADR-003: 命名空间与项目边界规范](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-003-namespace-rules.md)\n- [ADR-004: 中央包管理（CPM）规范](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-004-Cpm-Final.md)\n- [ADR-005: 应用内交互模型与执行边界](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/docs/adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)\n\n---\n\n💡 **提示**：记得在 PR 描述中完成 \"Copilot 参与检查清单\"。\n`;
               github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
@@ -145,11 +149,11 @@ jobs:
           echo "🎉 所有架构测试通过！"
           echo ""
           echo "✅ 本 PR 符合以下架构决策记录（ADR）："
-          echo "   - ADR-0001: 模块化单体与垂直切片架构"
-          echo "   - ADR-0002: Platform / Application / Host 三层启动体系"
-          echo "   - ADR-0003: 命名空间与项目边界规范"
-          echo "   - ADR-0004: 中央包管理（CPM）规范"
-          echo "   - ADR-0005: 应用内交互模型与执行边界"
+          echo "   - ADR-001: 模块化单体与垂直切片架构"
+          echo "   - ADR-002: Platform / Application / Host 三层启动体系"
+          echo "   - ADR-003: 命名空间与项目边界规范"
+          echo "   - ADR-004: 中央包管理（CPM）规范"
+          echo "   - ADR-005: 应用内交互模型与执行边界"
           echo ""
           echo "💡 提示：在 PR 中勾选 'Copilot 参与检查清单'"
           echo ""

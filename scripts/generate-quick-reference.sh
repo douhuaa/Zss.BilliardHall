@@ -150,16 +150,16 @@ EOF
 ### 按约束类型
 
 #### 模块隔离相关
-- ADR-0001：模块禁止直接引用其他模块
-- ADR-0003：命名空间必须遵循项目结构
+- ADR-001：模块禁止直接引用其他模块
+- ADR-003：命名空间必须遵循项目结构
 
 #### 依赖管理相关
-- ADR-0002：Platform 禁止依赖 Application/Host
-- ADR-0004：所有依赖版本必须在 Directory.Packages.props 中管理
+- ADR-002：Platform 禁止依赖 Application/Host
+- ADR-004：所有依赖版本必须在 Directory.Packages.props 中管理
 
 #### 代码组织相关
-- ADR-0005：Command Handler 禁止返回业务数据
-- ADR-0120：领域事件命名必须遵循过去式规范
+- ADR-005：Command Handler 禁止返回业务数据
+- ADR-120：领域事件命名必须遵循过去式规范
 
 ### 按检测方式
 
@@ -185,7 +185,7 @@ using Zss.BilliardHall.Modules.Orders.Domain;
 
 **正确做法**：通过领域事件、数据契约或原始类型通信
 
-**相关 ADR**：ADR-0001
+**相关 ADR**：ADR-001
 
 ### 2. Platform 依赖业务层
 
@@ -196,7 +196,7 @@ using Zss.BilliardHall.Modules.Orders.Domain;
 
 **正确做法**：Platform 只能被依赖，不能依赖业务模块
 
-**相关 ADR**：ADR-0002
+**相关 ADR**：ADR-002
 
 ### 3. Command Handler 返回业务数据
 
@@ -207,7 +207,7 @@ public OrderDto Handle(CreateOrder command) { ... }
 
 **正确做法**：Command Handler 只返回 void 或 ID
 
-**相关 ADR**：ADR-0005
+**相关 ADR**：ADR-005
 
 ---
 
@@ -221,7 +221,7 @@ public OrderDto Handle(CreateOrder command) { ... }
 4. 提供技术理由和归还计划
 5. 获得架构委员会批准
 
-**参考**：[ADR-0900 流程规范](./governance/ADR-0900-adr-process.md)
+**参考**：[ADR-900 流程规范](./governance/ADR-900-adr-process.md)
 
 ---
 

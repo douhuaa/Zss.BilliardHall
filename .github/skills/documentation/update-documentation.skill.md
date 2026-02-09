@@ -37,7 +37,7 @@ required_agent: "documentation-maintainer"
     {
       "file": "docs/adr/README.md",
       "type": "index",
-      "changes": "添加 ADR-0010 到索引"
+      "changes": "添加 ADR-010 到索引"
     },
     {
       "file": "docs/adr/constitutional/README.md",
@@ -47,8 +47,8 @@ required_agent: "documentation-maintainer"
   ],
   "crossReferences": [
     {
-      "source": "ADR-0010",
-      "target": "ADR-0005",
+      "source": "ADR-010",
+      "target": "ADR-005",
       "type": "references",
       "needsBackReference": true
     }
@@ -120,24 +120,24 @@ required_agent: "documentation-maintainer"
 
 | ADR | 标题 | 状态 |
 |-----|------|------|
-| [ADR-0001](constitutional/ADR-0001-...) | ... | ✅ |
-| [ADR-0010](constitutional/ADR-0010-...) | ... | 🚧 | ← 新增
+| [ADR-001](constitutional/ADR-001-...) | ... | ✅ |
+| [ADR-010](constitutional/ADR-010-...) | ... | 🚧 | ← 新增
 ```
 
 2. **`docs/adr/constitutional/README.md`**
 ```markdown
 ## 文档列表
 
-- [ADR-0001：...](ADR-0001-...)
-- [ADR-0010：...](ADR-0010-...) ← 新增
+- [ADR-001：...](ADR-001-...)
+- [ADR-010：...](ADR-010-...) ← 新增
 ```
 
 3. **相关 ADR 的"相关 ADR"章节**
 ```markdown
 ## 相关 ADR
 
-- [ADR-0005：...](../constitutional/ADR-0005-...)
-- [ADR-0010：...](../constitutional/ADR-0010-...) ← 新增反向引用
+- [ADR-005：...](../constitutional/ADR-005-...)
+- [ADR-010：...](../constitutional/ADR-010-...) ← 新增反向引用
 ```
 
 ### 添加 Summary
@@ -163,8 +163,8 @@ required_agent: "documentation-maintainer"
 
 | 文件 | 关联 ADR | 用途 |
 |------|---------|------|
-| adr-0001.prompts.md | ADR-0001 | ... |
-| adr-0010.prompts.md | ADR-0010 | ... | ← 新增
+| adr-001.prompts.md | ADR-001 | ... |
+| adr-010.prompts.md | ADR-010 | ... | ← 新增
 ```
 
 ---
@@ -182,7 +182,7 @@ required_agent: "documentation-maintainer"
 
 ```mermaid
 graph LR
-    A[ADR-0010] -->|引用| B[ADR-0005]
+    A[ADR-010] -->|引用| B[ADR-005]
     B -.应该反向引用.-> A
     
     style A fill:#ccffcc
@@ -196,11 +196,11 @@ graph LR
 
 ⚠️ 以下引用需要补充：
 
-- ADR-0010 引用了 ADR-0005
-  建议：在 ADR-0005 的"相关 ADR"章节添加 ADR-0010
+- ADR-010 引用了 ADR-005
+  建议：在 ADR-005 的"相关 ADR"章节添加 ADR-010
 
-- ADR-0010 引用了 ADR-0001
-  建议：在 ADR-0001 的"相关 ADR"章节添加 ADR-0010
+- ADR-010 引用了 ADR-001
+  建议：在 ADR-001 的"相关 ADR"章节添加 ADR-010
 ```
 
 ---
@@ -253,13 +253,13 @@ graph LR
 {
   "operation": "add",
   "docType": "adr",
-  "filePath": "docs/adr/constitutional/ADR-0010-event-sourcing.md",
+  "filePath": "docs/adr/constitutional/ADR-010-event-sourcing.md",
   "metadata": {
     "number": "0010",
     "title": "Event Sourcing Pattern",
     "level": "宪法",
     "status": "草稿",
-    "relatedAdrs": ["ADR-0005", "ADR-0001"]
+    "relatedAdrs": ["ADR-005", "ADR-001"]
   }
 }
 ```
@@ -267,7 +267,7 @@ graph LR
 **输出**：
 - 更新 `docs/adr/README.md`
 - 更新 `docs/adr/constitutional/README.md`
-- 标记需要在 ADR-0005 和 ADR-0001 中添加反向引用
+- 标记需要在 ADR-005 和 ADR-001 中添加反向引用
 
 ### 示例 2：检查文档索引
 
@@ -288,7 +288,7 @@ graph LR
 
 ## 参考资料
 
-- [ADR-0008：文档编写规范](../../../docs/adr/constitutional/ADR-0008-documentation-writing-maintenance-constitution.md)
+- [ADR-008：文档编写规范](../../../docs/adr/constitutional/ADR-008-documentation-writing-maintenance-constitution.md)
 - [文档编写指令](../../instructions/documentation.instructions.md)
 
 ---

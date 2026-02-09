@@ -4,8 +4,8 @@ title: "Platform / Application / Host 三层启动体系"
 status: Final
 level: Constitutional
 deciders: "Architecture Board"
-date: 2026-01-29
-version: "2.0"
+date: 2026-02-04
+version: "3.0"
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "Architecture Board"
@@ -32,8 +32,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -46,72 +44,196 @@ superseded_by: null
 
 ---
 
----
-
 ## Decision（裁决）
 
-### Platform 层约束（ADR-002.1, 0002.2, 0002.3, 0002.4）
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-002 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-002_<Rule>_<Clause>
+> ```
 
-**规则**：
-- 只提供通用技术能力（日志、追踪、异常、序列化）
-- 不感知任何业务（不可访问 Application、Host、Modules）
-- 必须有唯一入口 `PlatformBootstrapper.Configure`
+---
+
+### ADR-002_1：Platform 层约束（Rule）
+
+#### ADR-002_1_1 Platform 仅提供通用技术能力
+
+- Platform 只提供通用技术能力（日志、追踪、异常、序列化）
+- 不感知任何业务领域概念
+
+**判定**：
+- ❌ Platform 包含业务逻辑或领域类型
+- ✅ 仅包含技术基础设施
+
+#### ADR-002_1_2 Platform 不依赖上层
+
+- Platform 不可访问 Application、Host、Modules
+- 确保技术基座的独立性和可复用性
 
 **判定**：
 - ❌ Platform 依赖 Application/Host/Modules
-- ❌ Platform 缺少唯一 Bootstrapper 入口
-- ✅ 仅包含技术基础设施
+- ✅ Platform 完全独立
 
-### Application 层约束（ADR-002.5, 0002.6, 0002.7, 0002.8）
+#### ADR-002_1_3 Platform 唯一 Bootstrapper 入口
 
-**规则**：
-- 负责系统能力的装配和集成
-- 禁止依赖 Host
-- 必须有唯一入口 `ApplicationBootstrapper.Configure`
-- 不包含 HttpContext 等 Host 专属类型
+- Platform 必须有唯一入口 `PlatformBootstrapper.Configure`
+- 所有 Platform 服务注册集中在 Bootstrapper
 
 **判定**：
-- ❌ Application 依赖 Host/Modules
-- ❌ Application 使用 HttpContext
-- ❌ Application 缺少唯一 Bootstrapper 入口
+- ❌ Platform 缺少唯一 Bootstrapper 入口
+- ❌ Platform 存在多个 Bootstrapper
+- ✅ 唯一 PlatformBootstrapper.Configure 入口
+
+---
+
+### ADR-002_2：Application 层约束（Rule）
+
+#### ADR-002_2_1 Application 负责系统能力装配
+
+- Application 负责系统能力的装配和集成
+- 定义"系统是什么"，聚合模块和用例
+
+**判定**：
+- ❌ Application 包含具体业务逻辑
 - ✅ 仅做模块装配和集成
 
-### Host 层约束（ADR-002.9, 0002.10, 0002.11, 0002.12, 0002.13）
+#### ADR-002_2_2 Application 禁止依赖 Host
 
-**规则**：
-- 唯一职责：调用 Platform、Application 的 Bootstrapper
+- Application 禁止依赖 Host 层
+- 不感知运行形态（Web/Worker/Test）
+
+**判定**：
+- ❌ Application 依赖 Host
+- ✅ Application 独立于运行环境
+
+#### ADR-002_2_3 Application 禁止依赖 Modules
+
+- Application 禁止直接引用 Modules
+- 通过扫描和反射加载模块
+
+**判定**：
+- ❌ Application 直接引用 Modules
+- ✅ Application 通过扫描发现模块
+
+#### ADR-002_2_4 Application 不包含 Host 专属类型
+
+- Application 不包含 HttpContext 等 Host 专属类型
+- 使用抽象替代具体的 Host 类型
+
+**判定**：
+- ❌ Application 使用 HttpContext
+- ✅ Application 只依赖抽象接口
+
+#### ADR-002_2_5 Application 唯一 Bootstrapper 入口
+
+- Application 必须有唯一入口 `ApplicationBootstrapper.Configure`
+- 所有 Application 服务注册集中在 Bootstrapper
+
+**判定**：
+- ❌ Application 缺少唯一 Bootstrapper 入口
+- ❌ Application 存在多个 Bootstrapper
+- ✅ 唯一 ApplicationBootstrapper.Configure 入口
+
+---
+
+### ADR-002_3：Host 层约束（Rule）
+
+#### ADR-002_3_1 Host 唯一职责为调用 Bootstrapper
+
+- Host 唯一职责：调用 Platform、Application 的 Bootstrapper
 - 决定进程模型，不包含任何业务逻辑
-- Program.cs 保持极简（建议 ≤30 行）
+
+**判定**：
+- ❌ Host 包含业务逻辑或技术配置
+- ✅ 仅调用两个 Bootstrapper
+
+#### ADR-002_3_2 Host 决定进程模型
+
+- Host 决定进程模型（Web/Worker/Test）
 - 项目命名为 `Zss.BilliardHall.Host.*`
 
 **判定**：
-- ❌ Host 依赖 Modules
-- ❌ Host 包含业务类型
-- ❌ Host 项目文件引用 Modules
-- ❌ Program.cs 超过 30 行
-- ❌ Program.cs 做了 Bootstrapper 以外的事
-- ✅ 仅调用两个 Bootstrapper
+- ❌ Host 项目命名不规范
+- ✅ Host 项目命名符合规范
 
-### 三层依赖方向验证（ADR-002.14）
+#### ADR-002_3_3 Host 不依赖 Modules
 
-**规则**：
-- 完整的单向依赖链：Host → Application → Platform
+- Host 不应依赖任何业务模块
+- Host 通过 Application 间接引入模块
 
 **判定**：
-- ❌ 任何反向依赖
-- ✅ 严格的单向依赖流
+- ❌ Host 依赖 Modules
+- ❌ Host 项目文件引用 Modules
+- ✅ Host 完全独立于业务模块
+
+#### ADR-002_3_4 Program.cs 极简化
+
+- Program.cs 保持极简（建议 ≤30 行）
+- 只保留核心调用
+
+**判定**：
+- ❌ Program.cs 超过 30 行
+- ✅ Program.cs 简洁明了
+
+#### ADR-002_3_5 Program.cs 只调用 Bootstrapper
+
+- Program.cs 只应调用 Bootstrapper
+- 不包含具体的服务注册、配置逻辑
+
+**判定**：
+- ❌ Program.cs 包含具体配置
+- ❌ Program.cs 做了 Bootstrapper 以外的事
+- ✅ Program.cs 只调用 Bootstrapper
 
 ---
+
+### ADR-002_4：三层依赖方向验证（Rule）
+
+#### ADR-002_4_1 完整的单向依赖链
+
+- 完整的单向依赖链：Host → Application → Platform
+- 任何反向依赖都是违规
+
+**判定**：
+- ❌ 存在反向依赖
+- ✅ 严格的单向依赖流
 
 ---
 
 ## Enforcement（执法模型）
 
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_002_Architecture_Tests.cs` 强制验证。
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-002 各条款（Clause）的执法方式及执行级别。
+>
+> 所有规则通过 `src/tests/ArchitectureTests/ADR-002/` 目录下的测试强制验证。
 
-**有一项违规视为架构违规，CI 自动阻断。**
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-002_1_1** | L1 | ArchitectureTests 验证 Platform 不依赖 Application | §ADR-002_1_1 |
+| **ADR-002_1_2** | L1 | ArchitectureTests 验证 Platform 不依赖 Host/Modules | §ADR-002_1_2 |
+| **ADR-002_1_3** | L1 | ArchitectureTests 验证 PlatformBootstrapper 存在 | §ADR-002_1_3 |
+| **ADR-002_2_1** | L1 | ArchitectureTests 验证 Application 职责边界 | §ADR-002_2_1 |
+| **ADR-002_2_2** | L1 | ArchitectureTests 验证 Application 不依赖 Host | §ADR-002_2_2 |
+| **ADR-002_2_3** | L1 | ArchitectureTests 验证 Application 不依赖 Modules | §ADR-002_2_3 |
+| **ADR-002_2_4** | L1 | ArchitectureTests 验证 Application 不使用 HttpContext | §ADR-002_2_4 |
+| **ADR-002_2_5** | L1 | ArchitectureTests 验证 ApplicationBootstrapper 存在 | §ADR-002_2_5 |
+| **ADR-002_3_1** | L1 | ArchitectureTests 验证 Host 不依赖 Modules | §ADR-002_3_1 |
+| **ADR-002_3_2** | L1 | ArchitectureTests 验证 Host 项目命名规范 | §ADR-002_3_2 |
+| **ADR-002_3_3** | L1 | ArchitectureTests 验证 Host 项目文件不引用 Modules | §ADR-002_3_3 |
+| **ADR-002_3_4** | L2 | ArchitectureTests 验证 Program.cs 行数限制 | §ADR-002_3_4 |
+| **ADR-002_3_5** | L2 | ArchitectureTests 语义检查 Program.cs 内容 | §ADR-002_3_5 |
+| **ADR-002_4_1** | L1 | ArchitectureTests 验证三层依赖方向 | §ADR-002_4_1 |
 
----
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+
+**有一项 L1 违规视为架构违规，CI 自动阻断。**
+
 ---
 
 ## Non-Goals（明确不管什么）
@@ -158,9 +280,6 @@ superseded_by: null
 - ❌ **Platform 访问 Application 配置**：禁止 Platform 依赖 Application 的配置或状态
 - ❌ **跨层直接访问**：禁止通过 ServiceLocator 模式或静态访问器绕过依赖方向
 
-
----
-
 ---
 
 ## Relationships（关系声明）
@@ -188,8 +307,6 @@ superseded_by: null
 
 ---
 
----
-
 ## References（非裁决性参考）
 
 
@@ -204,16 +321,13 @@ superseded_by: null
 - [ADR-004：中央包管理与层级依赖规则](./ADR-004-Cpm-Final.md) - 层级包依赖规则
 - [ADR-005：应用内交互模型与执行边界](./ADR-005-Application-Interaction-Model-Final.md) - 三层运行时交互
 
-
----
-
 ---
 
 ## History（版本历史）
 
-| 版本  | 日期         | 变更说明                                         |
-|-----|------------|----------------------------------------------|
-| 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 |
-| 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
+| 版本  | 日期         | 变更说明                                         | 修订人 |
+|-----|------------|----------------------------------------------|----|
+| 3.0 | 2026-02-04 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
+| 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 | Architecture Board |
+| 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   | Architecture Board |
 
----

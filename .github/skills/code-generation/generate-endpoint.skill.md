@@ -298,7 +298,7 @@ public class GetOrderByIdEndpoint : IEndpoint
 
 ## 参考资料
 
-- [ADR-0005：应用内交互模型](../../../docs/adr/constitutional/ADR-0005-Application-Interaction-Model-Final.md)
+- [ADR-005：应用内交互模型](../../../docs/adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
 - [后端开发指令](../../instructions/backend.instructions.md)
 
 ---

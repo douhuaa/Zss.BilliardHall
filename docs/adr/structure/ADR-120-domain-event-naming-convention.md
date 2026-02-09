@@ -1,15 +1,23 @@
-# ADR-120：领域事件命名规范
-
-**状态**：✅ 已采纳（Adopted）  
-**版本**：1.0
-**级别**：结构约束（Structure Constraint）  
-**适用范围**：所有模块（Modules）、领域事件定义、事件处理器  
-**生效时间**：即刻  
-**依赖 ADR**：ADR-0001、ADR-0003、ADR-0005
-
+---
+adr: ADR-120
+title: "领域事件命名规范"
+status: Final
+level: Structure
+version: "2.2"
+deciders: "Architecture Board"
+date: 2026-02-06
+maintainer: "Architecture Board"
+primary_enforcement: L1
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
 ---
 
-## 聚焦内容（Focus）
+
+# ADR-120：领域事件命名规范
+
+**适用范围**：所有模块（Modules）、领域事件定义、事件处理器  
+## Focus（聚焦内容）
 
 - 统一事件命名：动词过去式 + Event 后缀
 - 强制命名空间组织：Modules.{Name}.Events
@@ -18,21 +26,38 @@
 
 ---
 
-## 术语表（Glossary）
+---
 
-| 术语         | 定义                       |
-|------------|--------------------------|
-| 领域事件       | 描述已发生业务事实的不可变对象          |
-| 集成事件       | 跨系统事件，由领域事件转换            |
-| 事件命名空间     | 必须与物理文件结构对应              |
-| 事件版本       | V{N} 格式，用于向后兼容演进         |
-| 事件聚合根      | 事件所属聚合根实体，决定业务语义边界       |
+## Glossary（术语表）
+
+| 术语 | 定义 | 英文对照 |
+|------------|--------------------------|----------------------|
+| 领域事件       | 描述已发生业务事实的不可变对象          | Domain Event      |
+| 集成事件       | 跨系统事件，由领域事件转换            | Integration Event |
+| 事件命名空间     | 必须与物理文件结构对应              | Event Namespace   |
+| 事件版本       | V{N} 格式，用于向后兼容演进         | Event Version     |
+| 事件聚合根      | 事件所属聚合根实体，决定业务语义边界       | Event Aggregate Root |
 
 ---
 
-## 决策（Decision）
+---
 
-### 事件命名规则
+## Decision（裁决）
+
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-120 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-120_<Rule>_<Clause>
+> ```
+
+---
+
+### ADR-120_1：事件类型命名规范（Rule）
+
+#### ADR-120_1_1 事件命名模式强制要求
 
 **命名模式**：`{AggregateRoot}{Action}Event[{Version}]`
 
@@ -56,7 +81,7 @@ public record OrderCreateEvent(Guid OrderId);  // 动词原形
 
 ---
 
-### 命名空间组织
+#### ADR-120_1_2 事件命名空间组织规范
 
 **命名空间规则**：`Zss.BilliardHall.Modules.{ModuleName}.Events[.{SubNamespace}]`
 
@@ -77,7 +102,11 @@ src/Modules/{ModuleName}/
 
 ---
 
-### 事件处理器命名
+---
+
+### ADR-120_2：事件处理器命名规范（Rule）
+
+#### ADR-120_2_1 事件处理器命名模式
 
 **命名模式**：
 - 基础：`{EventName}Handler`
@@ -104,7 +133,11 @@ public class OrderPaidEventHandler1 { }  // Purpose 不清晰
 
 ---
 
-### 事件内容约束
+---
+
+### ADR-120_3：事件内容约束（Rule）
+
+#### ADR-120_3_1 事件内容类型约束
 
 **允许**：
 - 原始类型（Guid、int、string、DateTime）
@@ -130,21 +163,38 @@ public record OrderItemDto(string ProductId, int Quantity, decimal Price);
 
 // ❌ 错误
 public record OrderCreatedEvent(Order Order, Member Member);  // 领域实体
-public record OrderCreatedEvent(Guid OrderId)
-{
-    public bool CanBeCancelled() => ...;  // 业务方法
-}
 ```
 
 ---
 
-### 版本演进
+#### ADR-120_3_2 事件行为约束
+
+**禁止在事件中包含业务方法**：
+
+```csharp
+// ❌ 错误
+public record OrderCreatedEvent(Guid OrderId)
+{
+    public bool CanBeCancelled() => ...;  // 业务方法
+}
+
+// ✅ 正确
+public record OrderCreatedEvent(Guid OrderId, DateTime CreatedAt);
+```
+
+---
+
+---
+
+### ADR-120_4：事件版本演进规范（Rule）
+
+#### ADR-120_4_1 版本命名规范
 
 **版本标识**：`V{N}`（N 从 2 开始）
 
 - ❌ 禁止直接修改现有事件
 - ✅ 必须提供转换适配器
-- ⚠️  类型版本 ≠ 序列化兼容性（在 ADR-300 系列定义）
+- ⚠️  类型版本 ≠ 序列化兼容性（在 ADR-210 系列定义）
 
 **示例**：
 
@@ -168,68 +218,58 @@ public class OrderCreatedEventAdapter
 
 ---
 
-## 快速参考表（Quick Reference）
+---
 
-| 约束编号      | 描述                     | 层级 | 测试用例                                      | 章节       |
-|-----------|------------------------|----|--------------------------------------------|----------|
-| ADR-120.1 | 事件必须以 Event 后缀结尾      | L1 | Event_Types_Should_End_With_Event_Suffix   | 事件命名规则   |
-| ADR-120.2 | 事件名称必须使用动词过去式          | L1 | Event_Names_Should_Use_Past_Tense_Verbs    | 事件命名规则   |
-| ADR-120.3 | 事件必须在模块 Events 命名空间下  | L1 | Events_Should_Be_In_Events_Namespace       | 命名空间组织   |
-| ADR-120.4 | 事件处理器必须以 Handler 后缀结尾 | L1 | Event_Handlers_Should_End_With_Handler_Suffix | 事件处理器命名  |
-| ADR-120.5 | 事件不得包含领域实体类型           | L1 | Events_Should_Not_Contain_Domain_Entities  | 事件内容约束   |
-| ADR-120.6 | 事件不得包含业务方法             | L1 | Events_Should_Not_Contain_Business_Methods | 事件内容约束   |
-| ADR-120.7 | 事件文件名必须与类型名一致          | L2 | 人工 Code Review                             | 命名空间组织   |
-| ADR-120.8 | 事件版本标识使用 V{N} 格式       | L2 | Event_Versions_Should_Use_VN_Format        | 版本演进     |
+## Enforcement（执法模型）
 
-> L1: 架构测试覆盖（CI 自动阻断），L2: Code Review 或启发式检查
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-120 各条款（Clause）的执法方式及执行级别。
+
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-120_1_1** | L1 | ArchitectureTests 验证事件命名模式 | §ADR-120_1_1 |
+| **ADR-120_1_2** | L1 | ArchitectureTests 验证事件命名空间 | §ADR-120_1_2 |
+| **ADR-120_2_1** | L1 | ArchitectureTests 验证事件处理器命名 | §ADR-120_2_1 |
+| **ADR-120_3_1** | L1 | ArchitectureTests 验证事件内容类型 | §ADR-120_3_1 |
+| **ADR-120_3_2** | L1 | ArchitectureTests 验证事件行为约束 | §ADR-120_3_2 |
+| **ADR-120_4_1** | L1 | ArchitectureTests 验证版本命名规范 | §ADR-120_4_1 |
+
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
+
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
 
 ---
 
-## 依赖与相关 ADR
+## Prohibited（禁止行为）
 
-| 关联 ADR   | 关系          |
-|----------|-------------|
-| ADR-0001 | 定义模块隔离和通信原则 |
-| ADR-0003 | 定义命名空间映射规则  |
-| ADR-0005 | 定义事件通信机制    |
-| ADR-0000 | 定义架构约束测试方法  |
 
----
+以下行为明确禁止：
 
-## 检查清单（Checklist）
+- 待补充
 
-- [ ] 事件名称遵循 {AggregateRoot}{Action}Event 模式
-- [ ] 动词使用过去式
-- [ ] 事件在 Zss.BilliardHall.Modules.{ModuleName}.Events 命名空间
-- [ ] 文件路径与命名空间严格对应
-- [ ] 事件使用 record 定义
-- [ ] 事件只包含原始类型、DTO
-- [ ] 事件不包含业务方法
-- [ ] 事件处理器命名为 {EventName}Handler
-- [ ] 跨模块订阅仅通过事件
-- [ ] 版本演进使用 V{N} 后缀
-- [ ] L1 级约束有架构测试覆盖
 
 ---
 
-## 明确不管什么（Non-Goals）
-
-本 ADR **不负责**：
-
-- 事件发布/订阅基础设施实现（ADR-300 系列）
-- 事件序列化兼容策略（ADR-300 系列）
-- 事件风暴和领域建模方法（DDD 最佳实践）
-- 事件存储和回放机制
-- 代码生成模板和 IDE 插件
-
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 事件命名基于 CQRS 和事件驱动模式
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 命名约定遵循术语规范
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - 事件命名基于 CQRS 和事件驱动模式
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - 命名约定遵循术语规范
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
 
 **被依赖（Depended By）**：
 - [ADR-210：事件版本化与兼容性](../runtime/ADR-210-event-versioning-compatibility.md) - 事件版本化依赖命名约定
@@ -246,10 +286,22 @@ public class OrderCreatedEventAdapter
 
 ---
 
-## 版本历史
+---
 
-| 版本  | 日期         | 变更摘要                                                                                           |
-|-----|------------|------------------------------------------------------------------------------------------------|
-| 1.2 | 2026-01-24 | 精简版本：移除冗长说明，只保留规则本体；ADR-120.2 升级至 L1；ADR-120.7 降级至 L2；强化事件处理器命名规则支持多订阅场景；明确类型版本 ≠ 序列化兼容 |
-| 1.1 | 2026-01-24 | 强化版本：扩展 EventHandler 命名规则；明确版本命名不等于序列化策略；升级动词过去式约束至 L1                                       |
-| 1.0 | 2026-01-24 | 初始版本                                                                                           |
+## References（非裁决性参考）
+
+
+- 待补充
+
+
+---
+
+---
+
+## History（版本历史）
+
+
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------|-------|
+| 2.2 | 2026-02-06 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系。将原有规则智能分组为 4 个 Rule、6 个 Clause，并创建完整的 Enforcement 映射表 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |

@@ -58,7 +58,48 @@ dotnet run --project src/Host/Worker/Worker.csproj
 - **[快速开始指南](docs/guides/quick-start-guide.md)** - 15 分钟极速上手 / 60 分钟完整入门
 - **[架构指南](docs/guides/architecture-design-guide.md)** - 架构概述和开发指南
 - **[CI/CD 指南](docs/guides/ci-cd-integration-guide.md)** - 持续集成和测试
-- **[ADR-0001](docs/adr/constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)** - 架构决策记录
+
+### 架构决策记录（ADR）
+
+> ⚠️ **所有架构决策以 ADR 正文为准**。完整列表请查看 [ADR 目录](docs/adr/README.md)
+
+本项目采用分层 ADR 体系，共 **44 个** 架构决策记录：
+
+| 层级 | 编号范围 | 数量 | 目录 | 说明 |
+|------|----------|------|------|------|
+| **宪法层** | ADR-001~0009 | 8 | [constitutional](docs/adr/constitutional/) | 系统根基约束 |
+| **结构层** | ADR-100~199 | 5 | [structure](docs/adr/structure/) | 静态组织与命名 |
+| **运行层** | ADR-200~299 | 4 | [runtime](docs/adr/runtime/) | 运行时模型与异常 |
+| **技术层** | ADR-300~399 | 4 | [technical](docs/adr/technical/) | 技术选型与实现 |
+| **治理层** | ADR-900, 900~999 | 23 | [governance](docs/adr/governance/) | 流程与测试治理 |
+
+#### 核心 ADR 快速链接
+
+**宪法层（系统基础）**：
+- [ADR-001：模块化单体与垂直切片架构](docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md) - 核心架构模式
+- [ADR-002：Platform / Application / Host 三层启动体系](docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md) - 启动与依赖注入
+- [ADR-003：命名空间与项目边界规范](docs/adr/constitutional/ADR-003-namespace-rules.md) - 命名空间规则
+- [ADR-005：应用内交互模型与执行边界](docs/adr/constitutional/ADR-005-Application-Interaction-Model-Final.md) - CQRS 与 Handler 规范
+- [ADR-006：术语与编号宪法](docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md) - ADR 编号与术语
+- [ADR-007：Agent 行为与权限宪法](docs/adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md) - AI Agent 治理
+- [ADR-008：文档编写与维护宪法](docs/adr/constitutional/ADR-008-documentation-governance-constitution.md) - 文档规范
+
+**治理层（流程与规则）**：
+- [ADR-900：架构测试与 CI 治理元规则](docs/adr/governance/ADR-900-architecture-tests.md) - 元治理规则
+- [ADR-900：ADR 新增与修订流程](docs/adr/governance/ADR-900-adr-process.md) - ADR 生命周期
+- [ADR-910：README 编写与维护治理规范](docs/adr/governance/ADR-910-readme-governance-constitution.md) - README 治理
+- [ADR-930：代码审查与 ADR 合规自检流程](docs/adr/governance/ADR-930-code-review-compliance.md) - PR 审查流程
+
+**结构层（命名与组织）**：
+- [ADR-120：领域事件命名规范](docs/adr/structure/ADR-120-domain-event-naming-convention.md) - 事件命名
+- [ADR-121：契约（Contract）与 DTO 命名组织规范](docs/adr/structure/ADR-121-contract-dto-naming-organization.md) - 契约与 DTO
+
+**运行层（运行时行为）**：
+- [ADR-240：Handler 异常约束](docs/adr/runtime/ADR-240-handler-exception-constraints.md) - 异常处理规范
+
+**技术层（技术实现）**：
+- [ADR-340：结构化日志与监控约束](docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md) - 日志规范
+- [ADR-360：CI/CD Pipeline 流程标准化](docs/adr/technical/ADR-360-cicd-pipeline-standardization.md) - CI/CD 标准
 
 ## 🤖 AI 驱动的架构治理体系
 
@@ -144,28 +185,28 @@ dotnet run --project src/Host/Worker/Worker.csproj
 
 ```
 @adr-reviewer
-请基于 ADR-0001 至 ADR-0005 审查本 PR 的变更，检查是否存在架构违规。
+请基于 ADR-001 至 ADR-005 审查本 PR 的变更，检查是否存在架构不符合。
 ```
 
 **场景 4：检查模块边界（使用 module-boundary-checker）**
 
 ```
 @module-boundary-checker
-这种跨模块调用方式是否符合 ADR-0001 的要求？
+这种跨模块调用方式是否符合 ADR-001 的要求？
 ```
 
 ### 三大核心价值
 
-1. **预防架构违规** - 通过 Agents 在编码阶段就识别潜在问题
+1. **预防架构不符合** - 通过 Agents 在编码阶段就识别潜在问题
 2. **人话翻译 ADR** - 通过 Prompts 将架构规则翻译为具体的开发指导
 3. **新人快速上手** - 通过 Instructions 实现对话式学习架构约束
 
 ### PR 要求
 
-所有 PR 必须完成 [AI 参与检查清单](.github/PULL_REQUEST_TEMPLATE.md#-ai-参与检查清单)：
+根据 [ADR-930](docs/adr/governance/ADR-930-code-review-compliance.md)，所有 PR 需要完成 [AI 参与检查清单](.github/PULL_REQUEST_TEMPLATE.md#-ai-参与检查清单)：
 
 - ✅ 已使用 Architecture Guardian 审查架构合规性
-- ✅ AI Agents 未发现违规问题或已修复
+- ✅ AI Agents 未发现不符合问题或已修复
 - ✅ 已评估并采纳 AI Agents 的合理建议
 - ✅ 理解并遵守所有相关 ADR
 
@@ -316,7 +357,7 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 测试覆盖：
 
 - ✅ 模块隔离（不能相互引用）
-- ✅ 垂直切片（禁止横向 Service）
+- ✅ 垂直切片（根据 ADR-001，不使用横向 Service）
 - ✅ 契约使用规则
 - ✅ Platform 层约束
 
@@ -353,7 +394,7 @@ dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj
 
 ### 架构约束
 
-所有代码必须遵守架构约束：
+根据相关 ADR，代码应遵守以下架构约束：
 
 - ❌ 模块之间不能直接引用
 - ❌ 不能创建横向 Service

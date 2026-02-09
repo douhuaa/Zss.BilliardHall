@@ -1,0 +1,39 @@
+name: CI
+
+# 主CI工作流，集成所有检查
+# 根据 ADR-900_3_2: CI 必须自动监控破例状态
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # 每月第一天 UTC 00:00 运行，扫描过期架构破例
+    - cron: '0 0 1 * *'
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  # 调用架构测试工作流
+  architecture-tests:
+    uses: ./.github/workflows/architecture-tests.yml
+    
+  # 调用ADR关系检查工作流
+  adr-relationship-check:
+    uses: ./.github/workflows/adr-relationship-check.yml
+    
+  # 调用ADR版本同步检查工作流
+  adr-version-sync:
+    uses: ./.github/workflows/adr-version-sync.yml
+    
+  # 调用架构破例扫描工作流
+  arch-violations-scanner:
+    uses: ./.github/workflows/arch-violations-scanner.yml
+    
+  # 调用代码格式检查工作流
+  code-format:
+    uses: ./.github/workflows/code-format.yml

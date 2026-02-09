@@ -1,16 +1,24 @@
+---
+adr: ADR-930
+title: "代码审查与 ADR 合规自检流程"
+status: Final
+level: Governance
+version: "2.1"
+deciders: "Architecture Board"
+date: 2026-02-04
+maintainer: "Architecture Board"
+primary_enforcement: L1
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
+---
+
 # ADR-930：代码审查与 ADR 合规自检流程
 
 > ⚖️ **本 ADR 是所有 PR 和代码审查流程的唯一裁决源，定义 ADR 合规性检查的执行标准。**
 
 **状态**：✅ Final（裁决型ADR）  
-**版本**：1.0
-**级别**：治理层 / 架构元规则  
-**适用范围**：所有 Pull Request 和代码审查流程  
-**生效时间**：即刻
-
----
-
-## 聚焦内容（Focus）
+## Focus（聚焦内容）
 
 - PR 必填信息和变更类型声明
 - ADR 相关 PR 的自检要求
@@ -20,9 +28,9 @@
 
 ---
 
-## 术语表（Glossary）
+## Glossary（术语表）
 
-| 术语         | 定义                                              | 英文对照                      |
+| 术语 | 定义 | 英文对照 |
 |------------|------------------------------------------------|---------------------------|
 | PR         | Pull Request，代码变更的审查单元                         | Pull Request              |
 | 变更类型       | PR 的分类标签（feat/fix/docs/refactor/test/chore）     | Change Type               |
@@ -34,168 +42,122 @@
 
 ---
 
-## 决策（Decision）
+## Decision（裁决）
 
-### PR 必须填写变更类型和影响范围（ADR-930.1）
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-930 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-930_<Rule>_<Clause>
+> ```
 
-**规则**：
+### ADR-930_1：PR 必填信息规范
 
-所有 Pull Request **必须**在描述中明确标注：
+#### ADR-930_1_1 PR 必须填写变更类型和影响范围
 
-- ✅ 变更类型：feat/fix/docs/refactor/test/chore
-- ✅ 影响模块：明确列出受影响的模块或层
-- ✅ ADR 相关性：如变更涉及 ADR，必须标注 ADR 编号
-- ❌ 禁止空白 PR 描述
+**裁决**：
 
-**PR 模板强制字段**：
-```markdown
-## 变更类型
-- [ ] feat: 新功能
-- [ ] fix: Bug 修复
-- [ ] docs: 文档更新
-- [ ] refactor: 重构
-- [ ] test: 测试
-- [ ] chore: 构建/工具
+所有 Pull Request **必须**在描述中完整填写：
 
-## 影响范围
-- 模块：[列出]
-- ADR：[编号或无]
-```
+1. 变更类型（feat/fix/docs/refactor/test/chore）
+2. 影响模块/层
+3. ADR 相关性（如涉及 ADR，必须标注 ADR 编号）
 
-**判定**：
-- ❌ 空白 PR 描述
-- ❌ 未标注变更类型
-- ❌ ADR 相关变更未标注 ADR 编号
-- ✅ 完整的变更类型和影响范围声明
+❌ 禁止空白 PR 描述
+✅ 完整填写字段的 PR 才可通过架构自检与合并
 
 ---
 
-### ADR 相关 PR 必须通过 Copilot 自检（ADR-930.2）
+#### ADR-930_1_2 ADR 相关 PR 自检
 
-**规则**：
+**裁决**：
 
-涉及架构约束的 PR **必须**运行 Copilot 自检，并将结果附在 PR 中。
+所有涉及 ADR 的 PR **必须**执行 Copilot 自检：
 
-**触发条件**：
-- 修改 ADR 文档
-- 修改架构测试
-- 新增模块或重大重构
-- 变更核心基础设施
+- 检查是否违反 ADR 约束
+- 检查是否包含 L1/L2 违规
+- 必须标记任何临时架构破例，并附理由与批准人
 
-**自检要求**：
-- ✅ 使用 `code_review` 工具进行自检
-- ✅ 在 PR 描述中附上自检结果
-- ✅ 解决所有标记为"必须修复"的问题
-- ❌ 禁止跳过 Copilot 自检
-
-**判定**：
-- ❌ ADR 相关 PR 未执行自检
-- ❌ 自检发现的"必须修复"问题未解决
-- ✅ 完整的自检流程和结果记录
+❌ 未执行自检或未标注破例的 PR，不允许合并
 
 ---
 
-### 架构测试失败必须说明原因和计划（ADR-930.3）
+#### ADR-930_1_3 架构测试失败处理
 
-**规则**：
+**裁决**：
 
-如果 PR 中存在架构测试失败，**必须**在 PR 中说明原因和修复计划。
+当 PR 引入的代码导致 ArchitectureTests 失败时：
 
-**说明要求**：
-- ✅ 失败的具体测试和 ADR 编号
-- ✅ 失败原因分析
-- ✅ 修复计划或破例申请
-- ❌ 禁止静默忽略测试失败
+- CI 自动阻断合并
+- 责任人必须审查失败原因
+- 仅在有批准的架构破例情况下，可手动标记并允许修复后合并
 
-**允许的情况**：
-- 测试本身有 Bug（需创建 Issue 修复测试）
-- 合法的破例场景（需记录在 arch-violations.md）
-
-**判定**：
-- ❌ 测试失败未说明原因
-- ❌ 静默忽略测试失败
-- ✅ 完整的失败原因分析和修复计划
+❌ 未修复 L1 架构违规，不得合并
 
 ---
 
-### 每个 PR 必须至少一名责任人审查（ADR-930.4）
+#### ADR-930_1_4 责任人审查与记录
 
-**规则**：
+**裁决**：
 
-Pull Request **必须**至少获得一名具有审查权限的责任人批准。
+每个 PR 必须至少有一名责任人（Tech Lead/模块负责人/架构师）进行审查，并记录：
 
-**责任人定义**：
-- Tech Lead
-- 模块负责人
-- 架构师
+- 审查意见必须引用具体 ADR 编号
+- PR 修改后必须重新请求审查
 
-**审查职责**：
-- ✅ 验证变更符合相关 ADR
-- ✅ 检查代码质量和安全性
-- ✅ 确认测试覆盖充分
-- ❌ 禁止机械式批准（无实质审查）
-
-**判定**：
-- ❌ 无责任人审查
-- ❌ 机械式批准
-- ✅ 责任人实质审查并批准
+❌ 不记录审查依据
+❌ 自行批准自己的 PR
 
 ---
 
-### 破例必须在 PR 中明确标注（ADR-930.5）
+#### ADR-930_1_5 架构破例标注和记录
 
-**规则**：
+**裁决**：
 
-如果 PR 包含架构破例，**必须**在 PR 描述和代码中明确标注。
+若 PR 需要临时违反 ADR 约束：
 
-**标注要求**：
-- ✅ PR 描述中说明破例的 ADR 和规则
-- ✅ 代码中添加 `// ARCH-EXCEPTION: ADR-XXX.Y` 注释
-- ✅ 更新 `docs/summaries/arch-violations.md`
-- ❌ 禁止未声明的破例
-
-**判定**：
-- ❌ 破例未在 PR 中声明
-- ❌ 代码中未标注破例注释
-- ❌ arch-violations.md 未更新
-- ✅ 完整的破例声明和记录
+- 必须明确标注 `[Architecture Exception]`
+- 必须附上批准人和理由
+- 仅在经过批准后，允许合并
+>
+❌ 未批准或未记录理由的破例，不可合并
 
 ---
 
-## 关系声明（Relationships）
+🔹 **核心原则总结**：
 
-**依赖（Depends On）**：
-- [ADR-0000：架构测试与 CI 治理宪法](./ADR-0000-architecture-tests.md) - 代码审查流程基于测试和 CI 机制
-- [ADR-0008：文档编写与维护宪法](../constitutional/ADR-0008-documentation-governance-constitution.md) - 文档变更需遵循文档治理规则
-- [ADR-900：ADR 新增与修订流程](./ADR-900-adr-process.md) - ADR 相关 PR 需遵循 ADR 流程
-
-**被依赖（Depended By）**：
-- 无（代码审查规则是终端流程规则）
-
-**替代（Supersedes）**：
-- 无
-
-**被替代（Superseded By）**：
-- 无
-
-**相关（Related）**：
-- [ADR-0007：Agent 行为与权限宪法](../constitutional/ADR-0007-agent-behavior-permissions-constitution.md) - Copilot 在审查中的角色
+1. PR 描述、变更类型、影响范围和 ADR 相关性是 **强制**
+2. Copilot 自检与 ArchitectureTests 是 **阻断级 L1** 执行
+3. 任何违规都必须在 CI 阻断或人工审查下修复
+4. 所有审查意见和破例必须正式记录，口头或私下批准无效
 
 ---
 
-## 快速参考表
+## Enforcement（执法模型）
 
-| 约束编号       | 约束描述                | 测试方式             | 必须遵守 |
-|------------|---------------------|------------------|------|
-| ADR-930.1  | PR 必须填写变更类型和影响范围    | L1 - PR 模板强制验证 | ✅    |
-| ADR-930.2  | ADR 相关 PR 必须 Copilot 自检 | L2 - 人工检查 + CI 提醒 | ✅    |
-| ADR-930.3  | 架构测试失败必须说明原因        | L2 - 人工审查        | ✅    |
-| ADR-930.4  | 每个 PR 必须责任人审查       | L1 - GitHub Branch Protection | ✅    |
-| ADR-930.5  | 破例必须明确标注            | L2 - 人工审查 + 脚本检查 | ✅    |
+📋 **Enforcement 映射说明**：
+
+下表展示了 ADR-930 各条款（Clause）的执法方式及执行级别。
+
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-930_1_1** | L2 | PR 模板验证 + 人工审查 | §ADR-930_1_1 |
+| **ADR-930_1_2** | L2 | CI 提醒 + 人工审查 | §ADR-930_1_2 |
+| **ADR-930_1_3** | L1 | ArchitectureTests 自动阻断 + CI Gate | §ADR-930_1_3 |
+| **ADR-930_1_4** | L2 | GitHub Branch Protection + 人工审查 | §ADR-930_1_4 |
+| **ADR-930_1_5** | L2 | 人工审查 + PR 标签检查 | §ADR-930_1_5 |
+
+### 执行级别说明
+
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构委员会人工裁决
 
 ---
 
-## 必测/必拦架构测试（Enforcement）
+## 测试实现参考
 
 所有规则通过以下方式强制验证：
 
@@ -208,57 +170,83 @@ Pull Request **必须**至少获得一名具有审查权限的责任人批准。
 
 ---
 
-## 破例与归还（Exception）
+## Non-Goals（明确不管什么）
 
-### 允许破例的前提
+本 ADR 明确不涉及以下内容：
 
-流程规则的破例**仅在以下情况允许**：
-- **紧急热修复**：生产环境重大故障
-- **自动化工具故障**：Copilot 或 CI 系统不可用
-- **小型文档修正**：纯文档拼写或格式修正
-
-### 破例要求
-
-紧急破例后**必须**：
-- 在 24 小时内补充完整的审查流程
-- 记录破例原因和时间
-- 创建 Follow-up Issue 跟踪
+- **代码审查工具的选择**：不规定使用 GitHub PR Review、GitLab MR 还是其他代码审查工具
+- **代码审查的详细检查清单**：不提供逐项的代码质量检查项（如命名、注释等）
+- **代码审查的时效性要求**：不规定审查必须在多长时间内完成
+- **代码审查的人员资格**：不规定谁有资格进行代码审查或需要什么级别审批
+- **代码审查的沟通技巧**：不涉及如何给出建设性反馈等软技能
+- **代码审查的会议流程**：不规定是否需要同步会议讨论代码
+- **非架构相关的代码质量**：不涉及性能优化、安全漏洞等非架构约束的审查
+- **代码审查的工作量统计**：不建立代码审查工作量的度量和考核机制
 
 ---
 
-## 变更政策（Change Policy）
+## Prohibited（禁止行为）
 
-- **ADR-930**（治理层）
-  - 修改需架构师大多数同意
-  - 需评估对团队工作流的影响
-  - 必须提供过渡期方案
 
----
+以下行为明确禁止：
 
-## 明确不管什么（Non-Goals）
+### 审查绕过
+- ❌ **禁止未经代码审查直接合并**：所有包含代码变更的 PR 必须经过至少一次审查
+- ❌ **禁止自行批准自己的 PR**：代码作者不得批准自己的变更
+- ❌ **禁止以"紧急修复"为由跳过架构审查**：紧急修复也必须符合架构约束
 
-本 ADR **不负责**：
-- 代码风格检查（由 linter 负责）
-- 具体的编码规范
-- 性能优化建议
-- 业务逻辑的正确性验证
+### 审查质量违规
+- ❌ **禁止未运行架构测试就批准 PR**：审查者必须确认架构测试通过
+- ❌ **禁止忽视明显的架构违规**：审查者发现架构违规必须拒绝批准
+- ❌ **禁止"看起来没问题"式的敷衍审查**：必须实际验证代码是否符合 ADR
 
----
-
-## 版本历史
-
-| 版本  | 日期         | 变更说明       |
-|-----|------------|------------|
-| 2.0 | 2026-01-26 | 裁决型重构，移除冗余，补充决策章节 |
-| 1.0 | 2026-01-24 | 初版，定义 PR 和代码审查流程 |
+### 记录违规
+- ❌ **禁止不记录审查决策依据**：重要的审查意见必须引用具体的 ADR 编号
+- ❌ **禁止口头批准代码变更**：所有批准必须在 PR 系统中正式记录
+- ❌ **禁止修改代码后不重新审查**：代码有实质性修改后必须重新请求审查
 
 ---
 
-## 附注
+## Relationships（关系声明）
 
-本文件禁止添加示例/建议/FAQ/背景说明，仅维护自动化可判定的架构红线。
+**依赖（Depends On）**：
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 代码审查流程基于测试和 CI 机制
+- [ADR-008：文档编写与维护宪法](../constitutional/ADR-008-documentation-governance-constitution.md) - 文档变更需遵循文档治理规则
+- [ADR-900：ADR 新增与修订流程](./ADR-900-architecture-tests.md) - ADR 相关 PR 需遵循 ADR 流程
 
-非裁决性参考（详细示例、审查清单）请查阅：
-- PR 模板参见 `.github/PULL_REQUEST_TEMPLATE.md`
-- 审查清单参见 `docs/copilot/adr-0930.prompts.md`
+**被依赖（Depended By）**：
+- 无（代码审查规则是终端流程规则）
 
+**替代（Supersedes）**：
+- 无
+
+**被替代（Superseded By）**：
+- 无
+
+**相关（Related）**：
+- [ADR-007：Agent 行为与权限宪法](../constitutional/ADR-007-agent-behavior-permissions-constitution.md) - Copilot 在审查中的角色
+
+---
+
+## References（非裁决性参考）
+
+**相关外部资源**：
+- [Google Code Review Guidelines](https://google.github.io/eng-practices/review/) - Google 工程实践中的代码审查指南
+- [GitHub Pull Request Best Practices](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/getting-started/best-practices-for-pull-requests) - GitHub PR 最佳实践
+- [The Art of Code Review](https://www.atlassian.com/agile/software-development/code-reviews) - Atlassian 关于代码审查的指南
+
+**相关内部文档**：
+- [ADR-900：架构测试与 CI 治理元规则](./ADR-900-architecture-tests.md) - 审查中的测试验证要求
+- [ADR-007：Agent 行为与权限宪法](../constitutional/ADR-007-agent-behavior-permissions-constitution.md) - Copilot 在审查中的辅助角色
+- [ADR-900：ADR 新增与修订流程](./ADR-900-architecture-tests.md) - ADR 相关变更的审查流程
+- [ADR-905：执行级别分类](./ADR-905-enforcement-level-classification.md) - 不同级别违规的审查处理
+
+---
+
+## History（版本历史）
+
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------|-------|
+| 2.1 | 2026-02-04 | 补充完整 Enforcement 表格，包含所有 5 个 Clause 的执法方式 | Copilot Agent |
+| 2.0 | 2026-02-03 | 对齐 ADR-907 v2.0（部分），Rule 1 已完成。**Alignment Incomplete**：其他规则待后续补充 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |

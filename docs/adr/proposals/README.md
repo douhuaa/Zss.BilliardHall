@@ -1,7 +1,8 @@
 # ADR 提案目录
 
-> ⚠️ **无裁决力声明**：本目录中的文档均为提案（Proposal），不具备架构裁决权。  
-> 提案需经过正式的 RFC 流程和架构委员会审批后，才能转化为正式 ADR。
+> ⚠️ 本文档不具备裁决力。所有架构决策以对应 ADR 正文为准。
+
+> 📋 本目录中的文档均为提案（Proposal），需经过正式的 RFC 流程和架构委员会审批后，才能转化为正式 ADR。
 
 ---
 
@@ -55,7 +56,7 @@
 
 ## 相关资源
 
-- [ADR 流程管理](../../adr/governance/ADR-900-adr-process.md) - ADR 新增与修订流程
+- [ADR 流程管理](../../adr/governance/ADR-900-architecture-tests.md) - ADR 新增与修订流程
 - [ADR 目录](../../adr/README.md) - 已批准的 ADR
 - [改进总结](../../summaries/README.md) - 实施总结
 

@@ -3,9 +3,9 @@ adr: ADR-008
 title: "文档编写与维护宪法"
 status: Final
 level: Constitutional
-version: "1.0"
+version: "2.0"
 deciders: "Architecture Board"
-date: 2026-01-23
+date: 2026-02-04
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "Architecture Board"
@@ -49,76 +49,122 @@ superseded_by: null
 
 ## Decision（裁决）
 
-### 文档分级与裁决权（ADR-008.1）
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-008 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-008_<Rule>_<Clause>
+> ```
 
-**规则**：
+---
+
+### ADR-008_1：文档分级与裁决权（Rule）
+
+#### ADR-008_1_1 文档分级定义
 
 | 级别  | 类型                    | 裁决力   | 示例                     | 权限边界                |
 |-----|------------------------|-------|------------------------|--------------------|
-| 宪法级 | ADR                    | **最高** | ADR-001 ~ ADR-0099    | 定义规则、明确约束、裁决冲突    |
+| 宪法级 | ADR                    | **最高** | ADR-####~ADR-####    | 定义规则、明确约束、裁决冲突    |
 | 治理级 | Instructions / Agents  | 中     | copilot-instructions.md | 定义流程、行为规范、不得覆盖 ADR |
 | 执行级 | Skills                 | 低（事实） | scan-cross-module-refs | 仅输出事实、不得解释或判断     |
 | 说明级 | README / Guide         | **无**  | docs/*.md              | 仅解释使用方法、必须声明无裁决力  |
 
-**核心原则**：
+#### ADR-008_1_2 唯一裁决权原则
 
-> **只有 ADR 具备裁决力。任何非 ADR 文档，即使全文逐字引用 ADR，也不具备裁决力。**
+- 只有 ADR 具备裁决力
+- 任何非 ADR 文档，即使全文逐字引用 ADR，也不具备裁决力
 
-**判定**：
+#### ADR-008_1_3 文档分级判定规则
+
+**禁止行为**：
 - ❌ 非 ADR 文档定义架构规则
 - ❌ 非 ADR 文档试图裁决架构冲突
 - ❌ 非 ADR 文档修改或解释 ADR 语义
+
+**允许行为**：
 - ✅ ADR 是唯一裁决源
 
-### ADR 允许与禁止的内容（ADR-008.2）
+---
 
-**ADR 仅允许**：
+### ADR-008_2：ADR 内容边界（Rule）
+
+#### ADR-008_2_1 ADR 允许的内容
+
+ADR 仅允许：
 - ✅ 定义规则、术语、裁决逻辑
 - ✅ 明确"允许 / 禁止 / 例外"
 - ✅ 定义违规处理方式
 - ✅ 定义执行机制（测试、CI、人工审查）
 
-**ADR 禁止包含**：
+#### ADR-008_2_2 ADR 禁止的内容
+
+ADR 禁止包含：
 - ❌ 示例代码实现细节（移至 README/Guide）
 - ❌ 操作步骤、How-to 指南（移至 Guide）
 - ❌ 工具参数、命令行细节（移至 Guide）
 - ❌ 教学示例和场景说明（移至 Prompts）
 
-**判定**：
+#### ADR-008_2_3 ADR 内容判定规则
+
+**禁止行为**：
 - ❌ ADR 包含详细实施示例
 - ❌ ADR 包含工具使用说明
+
+**允许行为**：
 - ✅ ADR 仅定义规则和裁决逻辑
 
-### 非 ADR 文档强制约束（ADR-008.3）
+---
 
-**Instructions/Agents 必须**：
+### ADR-008_3：非 ADR 文档约束（Rule）
+
+#### ADR-008_3_1 Instructions/Agents 约束
+
+**强制要求**：
 - ✅ 显式声明所服从的 ADR 编号
 - ✅ 声明"冲突时以 ADR 正文为准"
-- ❌ 禁止引入新规则或术语
-- ❌ 禁止覆盖或弱化 ADR
 
-**Skills 必须**：
+**禁止行为**：
+- ❌ 引入新规则或术语
+- ❌ 覆盖或弱化 ADR
+
+#### ADR-008_3_2 Skills 约束
+
+**强制要求**：
 - ✅ 只输出事实，不输出判断
-- ❌ 禁止解释 ADR
-- ❌ 禁止输出"合规/不合规"结论
-- ❌ 禁止包含"建议"或"推荐"
 
-**README/Guide 必须**：
+**禁止行为**：
+- ❌ 解释 ADR
+- ❌ 输出"合规/不合规"结论
+- ❌ 包含判断性或指导性内容
+
+#### ADR-008_3_3 README/Guide 约束
+
+**强制要求**：
 - ✅ 只解释"如何使用"
 - ✅ 首部声明"无裁决力"
-- ❌ 禁止定义规则或做架构判断
 
-> **注意**：README 详细约束见 [ADR-910](../../governance/ADR-910-readme-governance-constitution.md)
+**禁止行为**：
+- ❌ 定义规则或做架构判断
 
-**判定**：
+> ℹ️ **Notice**: README 详细内容见 [ADR-####](../../governance/ADR-####-readme-governance-constitution.md)
+
+#### ADR-008_3_4 非 ADR 文档判定规则
+
+**禁止行为**：
 - ❌ Instructions 定义新架构规则
-- ❌ Skills 输出"违反 ADR-001"
+- ❌ Skills 输出"违反 ADR-####"
 - ❌ README 包含"模块必须..."
+
+**允许行为**：
 - ✅ 文档遵守权限边界
 
-### ADR 必需章节（ADR-008.4）
+---
 
-**规则**：
+### ADR-008_4：ADR 结构规范（Rule）
+
+#### ADR-008_4_1 ADR 必需章节
 
 所有 ADR **必须**包含：
 - ✅ 状态（Proposed/Adopted/Final/Superseded）
@@ -129,21 +175,29 @@ superseded_by: null
 - ✅ 规则本体（Rule）- 详细约束
 - ✅ 执法模型（Enforcement）- 如需自动化测试
 
-**判定**：
+#### ADR-008_4_2 ADR 结构判定规则
+
+**禁止行为**：
 - ❌ ADR 缺少必需章节
 - ❌ ADR 章节顺序错乱
+
+**允许行为**：
 - ✅ ADR 结构完整符合标准
 
-### ADR 禁用语言（ADR-008.5）
+---
 
-**规则**：
+### ADR-008_5：ADR 语言规范（Rule）
+
+#### ADR-008_5_1 ADR 禁用语言
 
 ADR 中**禁止**使用模糊词汇：
-- ❌ "建议"（suggest）
-- ❌ "推荐"（recommend）
+- ❌ "指导性内容"（suggest）
+- ❌ "推荐性内容"（recommend）
 - ❌ "通常"（usually）
 - ❌ "可能"（might）
 - ❌ "尽量"（try to）
+
+#### ADR-008_5_2 ADR 允许的裁决性语言
 
 **只允许裁决性语言**：
 - ✅ "必须"（MUST）
@@ -151,18 +205,24 @@ ADR 中**禁止**使用模糊词汇：
 - ✅ "应当"（SHALL）
 - ✅ "允许"（MAY）
 
-**核心原则**：
+#### ADR-008_5_3 ADR 语言核心原则
 
-> **ADR 中没有"建议"，只有"规则"。**
+> ℹ️ **Notice**: ADR 中只有裁决性规则，不使用模糊的指导性语言。
 
-**判定**：
-- ❌ ADR 包含"建议使用..."
+#### ADR-008_5_4 ADR 语言判定规则
+
+**禁止行为**：
+- ❌ ADR 包含指导性语言
 - ❌ ADR 包含"通常情况下..."
+
+**允许行为**：
 - ✅ ADR 仅使用裁决性语言
 
-### 文档变更治理（ADR-008.6）
+---
 
-**规则**：
+### ADR-008_6：文档变更治理（Rule）
+
+#### ADR-008_6_1 文档变更要求
 
 | 文档类型                | 变更要求           | 审批流程       |
 |---------------------|----------------|------------|
@@ -172,32 +232,42 @@ ADR 中**禁止**使用模糊词汇：
 | Skills              | 若改变输出语义，需评审    | Code Review |
 | README/Guide        | 自由修改，但需保持声明    | Code Review |
 
-**冲突裁决优先级**：
+#### ADR-008_6_2 冲突裁决优先级
 
 ```
 ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 ```
 
-**判定**：
+#### ADR-008_6_3 文档变更判定规则
+
+**禁止行为**：
 - ❌ 宪法层 ADR 未经架构委员会修改
 - ❌ 以"辅导材料说了"为由违反 ADR
 - ❌ 仅更新辅导材料不修订 ADR
+
+**允许行为**：
 - ✅ 文档变更按分级权限审批
 
-### 违规处理（ADR-008.7）
+---
 
-**规则**：
+### ADR-008_7：违规处理（Rule）
+
+#### ADR-008_7_1 违规行为定义
 
 | 违规行为                    | 处理方式      | 示例                         |
 |-------------------------|-----------|----------------------------|
 | 非 ADR 文档引入规则            | PR **必须拒绝** | README 定义"模块必须使用事件通信"     |
 | README 试图裁决架构问题         | 标记为违规     | README 判定"这个设计不符合架构"       |
-| Skills 输出判断性结论          | Agent 阻断   | Skills 输出"违反 ADR-001"    |
+| Skills 输出判断性结论          | Agent 阻断   | Skills 输出"违反 ADR-####"    |
 | Instructions 覆盖 ADR 语义 | PR 必须拒绝   | Instructions 弱化"禁止"为"不推荐" |
 | 文档缺失"无裁决力"声明           | CI 失败      | README 未声明无裁决力             |
 
-**判定**：
+#### ADR-008_7_2 违规处理判定规则
+
+**禁止行为**：
 - ❌ 检测到上述任何违规行为
+
+**允许行为**：
 - ✅ 文档遵守所有约束
 
 ---
@@ -206,21 +276,56 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 ## Enforcement（执法模型）
 
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_008_Architecture_Tests.cs` 强制验证：
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-008 各条款（Clause）的执法方式及执行级别。
+> 每条 Clause 对应一个或多个具体的测试方法，形成可机器执行的验证规则。
 
-- ADR 必需章节检查（Status/Level/Focus/Decision/Enforcement）
-- ADR 禁用语言检查（suggest/recommend/usually/might）
-- 非 ADR 文档权威声明检查
-- Skills 输出判断性词汇检查
-- README/Guide 裁决性语言检查
-- 文档变更版本历史记录检查
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-008_1_1** | L1 | ArchitectureTests 验证文档分级定义 | §ADR-008_1_1 |
+| **ADR-008_1_2** | L1 | ArchitectureTests 验证唯一裁决权原则 | §ADR-008_1_2 |
+| **ADR-008_1_3** | L1 | ArchitectureTests 验证文档分级判定规则 | §ADR-008_1_3 |
+| **ADR-008_2_1** | L1 | ArchitectureTests 验证 ADR 允许的内容 | §ADR-008_2_1 |
+| **ADR-008_2_2** | L1 | ArchitectureTests 验证 ADR 禁止的内容 | §ADR-008_2_2 |
+| **ADR-008_2_3** | L1 | ArchitectureTests 验证 ADR 内容判定规则 | §ADR-008_2_3 |
+| **ADR-008_3_1** | L1 | ArchitectureTests 验证 Instructions/Agents 约束 | §ADR-008_3_1 |
+| **ADR-008_3_2** | L1 | ArchitectureTests 验证 Skills 约束 | §ADR-008_3_2 |
+| **ADR-008_3_3** | L1 | ArchitectureTests 验证 README/Guide 约束 | §ADR-008_3_3 |
+| **ADR-008_3_4** | L1 | ArchitectureTests 验证非 ADR 文档判定规则 | §ADR-008_3_4 |
+| **ADR-008_4_1** | L1 | ArchitectureTests 验证 ADR 必需章节 | §ADR-008_4_1 |
+| **ADR-008_4_2** | L1 | ArchitectureTests 验证 ADR 结构判定规则 | §ADR-008_4_2 |
+| **ADR-008_5_1** | L1 | ArchitectureTests 验证 ADR 禁用语言 | §ADR-008_5_1 |
+| **ADR-008_5_2** | L1 | ArchitectureTests 验证 ADR 裁决性语言 | §ADR-008_5_2 |
+| **ADR-008_5_3** | L1 | ArchitectureTests 验证 ADR 语言核心原则 | §ADR-008_5_3 |
+| **ADR-008_5_4** | L1 | ArchitectureTests 验证 ADR 语言判定规则 | §ADR-008_5_4 |
+| **ADR-008_6_1** | L1 | ArchitectureTests 验证文档变更要求 | §ADR-008_6_1 |
+| **ADR-008_6_2** | L1 | ArchitectureTests 验证冲突裁决优先级 | §ADR-008_6_2 |
+| **ADR-008_6_3** | L1 | ArchitectureTests 验证文档变更判定规则 | §ADR-008_6_3 |
+| **ADR-008_7_1** | L1 | ArchitectureTests 验证违规行为定义 | §ADR-008_7_1 |
+| **ADR-008_7_2** | L1 | ArchitectureTests 验证违规处理判定规则 | §ADR-008_7_2 |
 
-**CI 强制检查**：
-- 所有非 ADR 文档是否包含权威依据或无裁决力声明
-- Skills 输出是否包含判断性词汇
-- README/Guide 是否使用裁决性语言
+### 执行级别说明
 
-**有一项违规视为架构违规，CI 自动阻断。**
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+
+### 测试组织映射
+
+基于上述 Enforcement 表，ADR-008 的测试应组织为：
+
+- **测试类数量**：7 个（对应 7 个 Rule）
+  - `ADR_008_1_Architecture_Tests.cs` → ADR-008_1（3 个测试方法）
+  - `ADR_008_2_Architecture_Tests.cs` → ADR-008_2（3 个测试方法）
+  - `ADR_008_3_Architecture_Tests.cs` → ADR-008_3（4 个测试方法）
+  - `ADR_008_4_Architecture_Tests.cs` → ADR-008_4（2 个测试方法）
+  - `ADR_008_5_Architecture_Tests.cs` → ADR-008_5（4 个测试方法）
+  - `ADR_008_6_Architecture_Tests.cs` → ADR-008_6（3 个测试方法）
+  - `ADR_008_7_Architecture_Tests.cs` → ADR-008_7（2 个测试方法）
+
+- **测试方法数量**：21 个（对应 21 个 Clause）
+  - 每个测试方法命名格式：`ADR_008_<Rule>_<Clause>_<行为描述>`
+  - 示例：`ADR_008_1_1_Document_Classification_Must_Be_Defined`
 
 ---
 ---
@@ -343,7 +448,7 @@ ADR 正文 > Instructions > Agents > Skills > Prompts > README/Guide
 
 ## History（版本历史）
 
-
-| 版本  | 日期         | 变更说明   |
-|-----|------------|--------|
-| 1.0 | 2026-01-29 | 初始版本 |
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------|-----|
+| 2.0 | 2026-02-04 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系（7 个 Rule，21 个 Clause），完整重构 Decision 和 Enforcement 章节 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |

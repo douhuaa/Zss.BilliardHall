@@ -20,7 +20,7 @@
 ./scripts/validate-adr-consistency.sh --format json
 
 # JSON 格式保存到文件
-./scripts/validate-adr-consistency.sh --format json --output docs/reports/architecture-tests/adr-consistency.json
+./scripts/validate-adr-consistency.sh --format json --output adr-consistency.json
 ```
 
 ### JSON 输出格式
@@ -43,7 +43,7 @@
   "details": [
     {
       "test": "ADR_Numbering_Format",
-      "adr": "ADR-0001",
+      "adr": "ADR-001",
       "severity": "info | warning | error",
       "message": "详细消息",
       "file": "path/to/file",
@@ -113,7 +113,7 @@
 **检查项**：
 - ✅ ADR 与测试文件的映射
 - ✅ ADR 与 Prompt 文件的映射
-- ✅ 根据 ADR-0000，检查需要测试覆盖的 ADR 是否有测试
+- ✅ 根据 ADR-900，检查需要测试覆盖的 ADR 是否有测试
 - ✅ 孤立的测试和 Prompt 文件
 - ✅ 映射覆盖率统计
 
@@ -123,7 +123,7 @@
 ./scripts/validate-three-way-mapping.sh
 
 # JSON 模式
-./scripts/validate-three-way-mapping.sh --format json --output docs/reports/architecture-tests/three-way-mapping.json
+./scripts/validate-three-way-mapping.sh --format json --output three-way-mapping.json
 ```
 
 **输出**：
@@ -218,7 +218,7 @@
 **提取内容**：
 - 🔴 红线约束（MUST/MUST NOT）
 - 🟡 建议约束（SHOULD）
-- ✅ 根据 ADR-0000，提取需要测试覆盖的条款
+- ✅ 根据 ADR-900，提取需要测试覆盖的条款
 - 🚧 人工审核门控点
 
 **使用方法**：
@@ -251,10 +251,10 @@
 ./scripts/adr-cli.sh create structure "领域事件命名规范"
 
 # 2. 编辑生成的 ADR 文档
-vim docs/adr/structure/ADR-0120-domain-event-naming.md
+vim docs/adr/structure/ADR-120-domain-event-naming.md
 
 # 3. 如需测试，创建测试文件
-vim src/tests/ArchitectureTests/ADR/ADR_0120_Architecture_Tests.cs
+vim src/tests/ArchitectureTests/ADR/ADR_120_Architecture_Tests.cs
 
 # 4. 完善 Prompt 文件
 vim docs/copilot/adr-120.prompts.md
@@ -267,10 +267,10 @@ vim docs/copilot/adr-120.prompts.md
 
 ```bash
 # 1. 修改 ADR 文档
-vim docs/adr/constitutional/ADR-0001-*.md
+vim docs/adr/constitutional/ADR-001-*.md
 
 # 2. 同步更新测试（如需要）
-vim src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
+vim src/tests/ArchitectureTests/ADR/ADR_001_Architecture_Tests.cs
 
 # 3. 同步更新 Prompt
 vim docs/copilot/adr-1.prompts.md
@@ -318,7 +318,7 @@ PR 模板中包含：
 
 ## 层级编号规范
 
-基于 [ADR-0006 术语与编号宪法](../docs/adr/constitutional/ADR-0006-terminology-numbering-constitution.md)：
+基于 [ADR-006 术语与编号宪法](../docs/adr/constitutional/ADR-006-terminology-numbering-constitution.md)：
 
 | 层级 | 编号范围 | 目录 | 用途 |
 |-----|---------|------|------|
@@ -340,39 +340,39 @@ PR 模板中包含：
 ```
 
 **解决**：
-确保 ADR 文件名使用4位编号格式：`ADR-0001-*.md`
+确保 ADR 文件名使用4位编号格式：`ADR-001-*.md`
 
 ### 问题：目录位置错误
 
 **症状**：
 ```
-❌ 目录位置错误：ADR-0150 不在 constitutional 的编号范围内
+❌ 目录位置错误：ADR-150 不在 constitutional 的编号范围内
 ```
 
 **解决**：
 将 ADR 移动到正确的目录：
 ```bash
-mv docs/adr/constitutional/ADR-0150-*.md docs/adr/structure/
+mv docs/adr/constitutional/ADR-150-*.md docs/adr/structure/
 ```
 
 ### 问题：缺少测试文件
 
 **症状**：
 ```
-⚠️ ADR-0001：需要测试但缺少测试文件
+⚠️ ADR-001：需要测试但缺少测试文件
 ```
 
 **解决**：
 创建对应的测试文件：
 ```bash
-touch src/tests/ArchitectureTests/ADR/ADR_0001_Architecture_Tests.cs
+touch src/tests/ArchitectureTests/ADR/ADR_001_Architecture_Tests.cs
 ```
 
 ### 问题：孤立的测试或 Prompt 文件
 
 **症状**：
 ```
-⚠️ 测试文件 ADR_0120_Architecture_Tests.cs：对应的 ADR 不存在
+⚠️ 测试文件 ADR_120_Architecture_Tests.cs：对应的 ADR 不存在
 ```
 
 **解决方案**：
@@ -438,8 +438,8 @@ main "$@"
 
 ### 文档
 - [ADR 目录](../docs/adr/README.md)
-- [ADR 流程规范](../docs/adr/governance/ADR-0900-adr-process.md)
-- [架构测试宪法](../docs/adr/governance/ADR-0000-architecture-tests.md)
+- [ADR 流程规范](../docs/adr/governance/ADR-900-adr-process.md)
+- [架构测试宪法](../docs/adr/governance/ADR-900-architecture-tests.md)
 - [Copilot 治理体系](../docs/copilot/README.md)
 
 ### 模板

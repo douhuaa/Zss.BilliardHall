@@ -13,7 +13,6 @@ supersedes: null
 superseded_by: null
 ---
 
-
 # ADR-001：模块化单体与垂直切片架构
 
 > ⚖️ **本 ADR 是架构宪法的核心，定义模块隔离与垂直切片的唯一裁决源。**
@@ -32,8 +31,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -44,8 +41,6 @@ superseded_by: null
 | 领域事件          | 描述业务事实，供其他模块异步订阅               | Domain Event      |
 | 横向分层          | Controller/Service/Repository 抽象 | Horizontal Layers |
 | 依赖隔离          | 模块内部不可被外部引用、反射或直接调用            | Dependency Isolation |
-
----
 
 ---
 
@@ -167,7 +162,6 @@ superseded_by: null
 **有一项 L1 违规视为架构违规，CI 自动阻断。**
 
 ---
----
 
 ## Non-Goals（明确不管什么）
 
@@ -209,9 +203,6 @@ superseded_by: null
 - ❌ **修改 InternalsVisibleTo**：禁止为绕过模块隔离而暴露 internal 类型给其他模块
 - ❌ **添加 public 访问修饰符**：禁止仅为其他模块访问而将原本应该 internal 的类型标记为 public
 
-
----
-
 ---
 
 ## Relationships（关系声明）
@@ -242,8 +233,6 @@ superseded_by: null
 
 ---
 
----
-
 ## References（非裁决性参考）
 
 **相关外部资源**：
@@ -257,11 +246,6 @@ superseded_by: null
 - [ADR-003：命名空间与项目结构规范](./ADR-003-namespace-rules.md) - 模块命名空间规范
 - [ADR-004：中央包管理与层级依赖规则](./ADR-004-Cpm-Final.md) - 模块依赖管理
 - [ADR-005：应用内交互模型与执行边界](./ADR-005-Application-Interaction-Model-Final.md) - 模块间通信
-
----
-
-
----
 
 ---
 

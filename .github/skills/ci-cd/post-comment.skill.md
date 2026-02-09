@@ -127,8 +127,8 @@ required_agent: "adr-reviewer"
 
 <sub>
 此评论由架构守护者自动生成 | 
-基于 ADR-0007 | 
-[了解更多](docs/adr/constitutional/ADR-0007-...)
+基于 ADR-007 | 
+[了解更多](docs/adr/constitutional/ADR-007-...)
 </sub>
 ```
 
@@ -237,7 +237,7 @@ required_agent: "adr-reviewer"
     "compliant": ["模块隔离正确", "CQRS 分离清晰"],
     "concerns": ["缺少单元测试"],
     "violations": [],
-    "relatedAdrs": ["ADR-0001", "ADR-0005"]
+    "relatedAdrs": ["ADR-001", "ADR-005"]
   },
   "tag": "architecture"
 }
@@ -269,7 +269,7 @@ required_agent: "adr-reviewer"
     },
     "failures": [
       {
-        "test": "ADR_0001_Test",
+        "test": "ADR_001_Test",
         "reason": "..."
       }
     ]
@@ -296,7 +296,7 @@ required_agent: "adr-reviewer"
 ## 参考资料
 
 - [GitHub API 文档](https://docs.github.com/en/rest)
-- [ADR-0007：Agent 行为规范](../../../docs/adr/constitutional/ADR-0007-agent-behavior-permissions-constitution.md)
+- [ADR-007：Agent 行为规范](../../../docs/adr/constitutional/ADR-007-agent-behavior-permissions-constitution.md)
 
 ---
 

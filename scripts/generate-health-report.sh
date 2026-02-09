@@ -411,7 +411,7 @@ function generate_footer() {
 ### 相关资源
 
 - [ADR 目录](./adr/README.md)
-- [ADR 流程规范](./adr/governance/ADR-0900-adr-process.md)
+- [ADR 流程规范](./adr/governance/ADR-900-adr-process.md)
 - [架构测试宪法](./adr/governance/ADR-0000-architecture-tests.md)
 - [Copilot 治理体系](./copilot/README.md)
 

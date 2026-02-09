@@ -1,15 +1,23 @@
-# ADR-121：契约（Contract）与 DTO 命名组织规范
-
-**状态**：✅ 已采纳（Adopted）  
-**版本**：1.0
-**级别**：结构约束（Structure Constraint）  
-**适用范围**：所有模块（Modules）、跨模块数据传递、API 层、事件与命令 Query 消息  
-**生效时间**：即刻  
-**依赖 ADR**：ADR-0001（模块化单体与垂直切片架构）、ADR-0003（命名空间规范）、ADR-0005（应用内交互模型）、ADR-120（领域事件命名规范）
-
+---
+adr: ADR-121
+title: "契约（Contract）与 DTO 命名组织规范"
+status: Final
+level: Structure
+version: "2.2"
+deciders: "Architecture Board"
+date: 2026-02-06
+maintainer: "Architecture Board"
+primary_enforcement: L1
+reviewer: "GitHub Copilot"
+supersedes: null
+superseded_by: null
 ---
 
-## 聚焦内容（Focus）
+
+# ADR-121：契约（Contract）与 DTO 命名组织规范
+
+**适用范围**：所有模块（Modules）、跨模块数据传递、API 层、事件与命令 Query 消息  
+## Focus（聚焦内容）
 
 - 统一跨模块契约/DTO 命名规则，确保类型隔离和可演进性
 - 规范契约目录组织和命名空间映射
@@ -20,24 +28,39 @@
 
 ---
 
-## 术语表（Glossary）
+---
 
-| 术语               | 定义                                    |
-|------------------|---------------------------------------|
-| 契约（Contract）     | 跨模块数据传递的只读、版本化的数据 DTO，只用于信息传递       |
-| DTO              | 数据传输对象，用于在不同层次或模块间传递数据，不包含业务逻辑      |
-| 模块内 DTO          | 仅在模块内部使用的 DTO，不对外暴露                 |
-| 跨模块契约            | 在模块间传递的契约，必须严格遵守命名和组织规范             |
-| 契约版本             | 契约结构的版本标识（如 V2、V3），用于支持向后兼容和演进     |
-| 业务含义后缀           | 反映数据用途的后缀，如 `InfoDto`、`DetailContract` |
+## Glossary（术语表）
+
+| 术语 | 定义 | 英文对照 |
+|------------------|---------------------------------------|---------------------------|
+| 契约（Contract）     | 跨模块数据传递的只读、版本化的数据 DTO，只用于信息传递       | Contract               |
+| DTO              | 数据传输对象，用于在不同层次或模块间传递数据，不包含业务逻辑      | Data Transfer Object   |
+| 模块内 DTO          | 仅在模块内部使用的 DTO，不对外暴露                 | Internal DTO           |
+| 跨模块契约            | 在模块间传递的契约，必须严格遵守命名和组织规范             | Cross-Module Contract  |
+| 契约版本             | 契约结构的版本标识（如 V2、V3），用于支持向后兼容和演进     | Contract Version       |
+| 业务含义后缀           | 反映数据用途的后缀，如 `InfoDto`、`DetailContract` | Business Meaning Suffix |
 
 ---
 
-## 决策（Decision）
+---
 
-### 命名规范
+## Decision（裁决）
 
-#### 契约类型命名模式
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-121 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-121_<Rule>_<Clause>
+> ```
+
+---
+
+### ADR-121_1：契约类型命名规范（Rule）
+
+#### ADR-121_1_1 契约类型命名模式
 
 所有跨模块契约必须遵循以下命名模式：
 
@@ -72,15 +95,19 @@ public record MemberData(Guid MemberId);        // ❌ 模糊名称
 public record MemberEntity(Guid MemberId);      // ❌ Entity 保留给领域模型
 ```
 
-#### 属性命名规范
+#### ADR-121_1_2 属性命名规范
 
 - 主键属性：`{AggregateRoot}Id`（如 `MemberId`、`OrderId`）
 - 避免通用名称（`Id`、`Data`、`Value`），使用明确业务语义
 - 集合属性使用复数（`Items`、`Orders`）
 
-### 目录与命名空间组织
+---
 
-#### 目录结构
+---
+
+### ADR-121_2：目录与命名空间组织（Rule）
+
+#### ADR-121_2_1 契约目录结构规范
 
 契约组织支持三种方式：
 
@@ -106,7 +133,7 @@ src/Contracts/
   Members/MemberInfoDto.cs
 ```
 
-#### 命名空间映射
+#### ADR-121_2_2 命名空间映射规范
 
 契约命名空间必须与物理目录一致：
 
@@ -120,9 +147,13 @@ namespace Zss.BilliardHall.Modules.Members.Contracts;
 public record MemberInfoDto(...);
 ```
 
-### 契约约束
+---
 
-#### 不可变性
+---
+
+### ADR-121_3：契约内容约束（Rule）
+
+#### ADR-121_3_1 不可变性约束
 
 所有契约必须是只读的：
 
@@ -144,7 +175,9 @@ public class MemberInfoDto
 }
 ```
 
-#### 无业务逻辑
+---
+
+#### ADR-121_3_2 无业务逻辑约束
 
 契约不得包含业务方法：
 
@@ -165,7 +198,9 @@ public record MemberInfoDto(Guid MemberId, decimal Balance)
 }
 ```
 
-#### 不包含领域模型
+---
+
+#### ADR-121_3_3 不包含领域模型约束
 
 契约只能包含原始类型和其他 DTO：
 
@@ -186,7 +221,7 @@ public record OrderDetailContract(
 
 ### 版本管理
 
-#### 版本命名
+#### ADR-121_4_1 版本命名规范
 
 破坏性变更必须创建新版本（V2、V3）：
 
@@ -201,7 +236,9 @@ public record MemberInfoDto(Guid MemberId, string UserName);
 public record MemberInfoDtoV2(Guid MemberId, string UserName, string Email);
 ```
 
-#### 废弃策略
+---
+
+#### ADR-121_4_2 版本废弃策略
 
 使用 `[Obsolete]` 标记旧版本，采用渐进式流程：
 
@@ -209,7 +246,9 @@ public record MemberInfoDtoV2(Guid MemberId, string UserName, string Email);
 2. **阶段 2**：6 个月后升级为错误级别（`error: true`）
 3. **阶段 3**：12 个月后移除旧版本
 
-#### 嵌套 DTO 版本
+---
+
+#### ADR-121_4_3 嵌套DTO版本演进
 
 嵌套 DTO 独立版本管理：
 
@@ -228,7 +267,13 @@ public record OrderItemDtoV2(
 );
 ```
 
-### 标记接口（可选）
+---
+
+---
+
+### ADR-121_4：标记接口规范（Rule）
+
+#### ADR-121_4_1 IContract接口使用规范（可选）
 
 为支持工具和文档生成，契约可实现 `IContract`：
 
@@ -249,66 +294,64 @@ public record MemberInfoDto(Guid MemberId, string UserName) : IContract
 
 ---
 
-## 约束及检查点（Constraints & Checklist）
+---
 
-### 必须架构测试覆盖的约束
+## Enforcement（执法模型）
 
-- [ ] **ADR-121.1**：契约类型必须以 `Dto` 或 `Contract` 结尾
-- [ ] **ADR-121.2**：契约属性必须是只读的（record 或 init-only）
-- [ ] **ADR-121.3**：契约不得包含业务方法
-- [ ] **ADR-121.4**：契约不得包含领域模型类型
-- [ ] **ADR-121.5**：契约必须位于 Contracts 命名空间下
-- [ ] **ADR-121.6**：契约命名空间必须与物理目录一致（L1 核心约束）
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-121 各条款（Clause）的执法方式及执行级别。
 
-### 开发检查清单
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-121_1_1** | L1 | ArchitectureTests 验证契约命名模式 | §ADR-121_1_1 |
+| **ADR-121_1_2** | L1 | ArchitectureTests 验证属性命名规范 | §ADR-121_1_2 |
+| **ADR-121_2_1** | L1 | ArchitectureTests 验证契约目录结构 | §ADR-121_2_1 |
+| **ADR-121_2_2** | L1 | ArchitectureTests 验证命名空间映射 | §ADR-121_2_2 |
+| **ADR-121_3_1** | L1 | ArchitectureTests 验证不可变性 | §ADR-121_3_1 |
+| **ADR-121_3_2** | L1 | ArchitectureTests 验证无业务逻辑 | §ADR-121_3_2 |
+| **ADR-121_3_3** | L1 | ArchitectureTests 验证不包含领域模型 | §ADR-121_3_3 |
+| **ADR-121_4_1** | L1 | ArchitectureTests 验证版本命名规范 | §ADR-121_4_1 |
+| **ADR-121_4_2** | L2 | Code Review 检查版本废弃流程 | §ADR-121_4_2 |
+| **ADR-121_4_3** | L2 | Code Review 检查嵌套DTO版本一致性 | §ADR-121_4_3 |
+| **ADR-121_4_1** | L3 | 文档审查 | §ADR-121_4_1 |
 
-- [ ] 跨模块 DTO 均以 `Dto`/`Contract` 结尾
-- [ ] 契约位于 Contracts 目录内
-- [ ] 不包含领域模型类型（Entity/Aggregate/ValueObject）
-- [ ] 版本迭代采用 V2/V3 后缀
-- [ ] 旧版本使用 `[Obsolete]` 标记
-- [ ] Command Handler 不依赖契约进行业务决策
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
+- **L3（人工级）**：需要架构师人工裁决
+
+
+---
+---
+
+## Non-Goals（明确不管什么）
+
+本 ADR 明确不涉及以下内容：
+
+- 待补充
 
 ---
 
-## 与其他 ADR 关系（Related ADRs）
+## Prohibited（禁止行为）
 
-| 编号                  | 关系说明                         |
-|---------------------|------------------------------|
-| ADR-0001            | 定义模块隔离原则，本 ADR 细化契约通信规范      |
-| ADR-0003            | 定义命名空间规则，本 ADR 细化契约命名空间约束    |
-| ADR-0005            | 定义 Handler 模式，本 ADR 约束契约在其中的使用 |
-| ADR-120             | 定义事件命名规范，与契约命名规范并行           |
-| ADR-0000            | 架构测试元规则，本 ADR 的约束需要测试覆盖      |
+
+以下行为明确禁止：
+
+- 待补充
+
 
 ---
 
-## 快速参考表（Quick Reference）
-
-| 约束编号      | 约束描述                          | 层级 | 测试方法                                                | 必须覆盖 | ADR 章节 |
-|-----------|-------------------------------|----|----------------------------------------------------|------|--------|
-| ADR-121.1 | 契约类型必须以 Dto 或 Contract 结尾    | L1 | Contract_Types_Should_End_With_Dto_Or_Contract_Suffix | ✅    | 决策 §1  |
-| ADR-121.2 | 契约属性必须是只读的                    | L1 | Contracts_Should_Be_Immutable                      | ✅    | 决策 §3  |
-| ADR-121.3 | 契约不得包含业务方法                    | L1 | Contracts_Should_Not_Contain_Business_Methods      | ✅    | 决策 §3  |
-| ADR-121.4 | 契约不得包含领域模型类型                  | L1 | Contracts_Should_Not_Contain_Domain_Types          | ✅    | 决策 §3  |
-| ADR-121.5 | 契约必须位于 Contracts 命名空间下        | L1 | Contracts_Should_Be_In_Contracts_Namespace         | ✅    | 决策 §2  |
-| ADR-121.6 | 契约命名空间必须与物理目录一致（升级为 L1）      | L1 | Contract_Namespace_Should_Match_Directory          | 🔜   | 决策 §2  |
-
-**层级说明**：
-- **L1（核心约束）**：架构测试必须覆盖，违反即为严重架构违规
-- **L2（建议约束）**：架构测试可选覆盖，违反会影响代码可维护性
-
-**关于 ADR-121.6**：已从 L2 升级为 L1，建议实施 CI 验证脚本扫描 Platform.Contracts 确保命名空间与路径匹配。
-
 ---
 
-## 关系声明（Relationships）
+## Relationships（关系声明）
 
 **依赖（Depends On）**：
-- [ADR-0005：应用内交互模型与执行边界](../constitutional/ADR-0005-Application-Interaction-Model-Final.md) - 契约 DTO 基于 CQRS 模式
-- [ADR-0006：术语与编号宪法](../constitutional/ADR-0006-terminology-numbering-constitution.md) - 命名约定遵循术语规范
-- [ADR-0003：命名空间与项目结构规范](../constitutional/ADR-0003-namespace-rules.md) - 命名空间规范
-- [ADR-0001：模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-005：应用内交互模型与执行边界](../constitutional/ADR-005-Application-Interaction-Model-Final.md) - 契约 DTO 基于 CQRS 模式
+- [ADR-006：术语与编号宪法](../constitutional/ADR-006-terminology-numbering-constitution.md) - 命名约定遵循术语规范
+- [ADR-003：命名空间与项目结构规范](../constitutional/ADR-003-namespace-rules.md) - 命名空间规范
+- [ADR-001：模块化单体与垂直切片架构](../constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
 
 **被依赖（Depended By）**：
 - [ADR-124：Endpoint 命名及参数约束规范](./ADR-124-endpoint-naming-constraints.md) - Endpoint 使用契约遵循命名规范
@@ -324,81 +367,22 @@ public record MemberInfoDto(Guid MemberId, string UserName) : IContract
 
 ---
 
-## 版本历史（Version History）
+---
 
-| 版本  | 日期         | 变更说明                                                             | 修订人            |
-|-----|------------|------------------------------------------------------------------|----------------|
-| 1.0 | 2026-01-24 | 初稿发布，定义契约命名、组织、版本管理和约束规范                                         | GitHub Copilot |
-| 1.1 | 2026-01-24 | 增强版本管理：添加 Obsolete 废弃标记策略、嵌套 DTO 版本规则、IContract.Version 属性、文档生成建议 | GitHub Copilot |
-| 1.2 | 2026-01-24 | 重构为严格遵循 ADR 模板格式，精简内容，去除过度说明                                   | GitHub Copilot |
+## References（非裁决性参考）
+
+
+- 待补充
+
 
 ---
 
-## 附录
+---
 
-### A. 自动化文档生成建议
+## History（版本历史）
 
-**Swashbuckle (OpenAPI/Swagger)**：
 
-```csharp
-services.AddSwaggerGen(options =>
-{
-    options.IncludeXmlComments(xmlPath);
-    options.SchemaFilter<ObsoleteSchemaFilter>();
-});
-```
-
-**DocFX 静态文档**：
-
-```yaml
-{
-  "metadata": [{ "src": [{ "files": ["Platform/Contracts/**/*.cs"] }] }]
-}
-```
-
-**Roslyn Analyzer 契约变更检测**：
-
-```csharp
-[DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class ContractBreakingChangeAnalyzer : DiagnosticAnalyzer
-{
-    // 检测破坏性变更，强制版本升级
-}
-```
-
-### B. 契约组织架构图
-
-```mermaid
-graph TB
-    subgraph Platform["Platform.Contracts"]
-        IC[IContract 接口]
-        M[Members/MemberInfoDto]
-        O[Orders/OrderDetailContract]
-    end
-    
-    subgraph Module1["Modules/Members"]
-        MF[Features/MemberDto<br/>（模块内）]
-    end
-    
-    subgraph Module2["Modules/Orders"]
-        OF[Features/OrderDto<br/>（模块内）]
-    end
-    
-    Module1 -.引用.-> Platform
-    Module2 -.引用.-> Platform
-    Module2 -.引用.-> M
-```
-
-### C. 参考资源
-
-**架构相关**：
-- [ADR-0001: 模块化单体与垂直切片架构](../constitutional/ADR-0001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-0005: 应用内交互模型](../constitutional/ADR-0005-Application-Interaction-Model-Final.md)
-- [ADR-120: 领域事件命名规范](ADR-120-domain-event-naming-convention.md)
-
-**设计模式与工具**：
-- [Martin Fowler: DTO Pattern](https://martinfowler.com/eaaCatalog/dataTransferObject.html)
-- [Semantic Versioning](https://semver.org/)
-- [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
-- [DocFX](https://dotnet.github.io/docfx/)
-- [Roslyn Analyzers](https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/)
+| 版本  | 日期         | 变更说明   | 修订人 |
+|-----|------------|--------|-------|
+| 2.2 | 2026-02-06 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系。将原有规则智能分组为 5 个 Rule、11 个 Clause，并创建完整的 Enforcement 映射表 | Architecture Board |
+| 1.0 | 2026-01-29 | 初始版本 | Architecture Board |

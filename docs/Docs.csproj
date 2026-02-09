@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <None Include="**\*.md"/>
-    <Compile Include="**\*.cs"/>
+    <Compile Include="**\*.cs" Exclude="obj/**"/>
   </ItemGroup>
 </Project>

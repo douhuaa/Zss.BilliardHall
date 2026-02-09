@@ -4,15 +4,14 @@ title: "命名空间与项目边界规范"
 status: Final
 level: Constitutional
 deciders: "Architecture Board"
-date: 2026-01-29
-version: "2.0"
+date: 2026-02-04
+version: "3.0"
 maintainer: "Architecture Board"
 primary_enforcement: L1
 reviewer: "Architecture Board"
 supersedes: null
 superseded_by: null
 ---
-
 
 # ADR-003：命名空间与项目边界规范
 
@@ -31,8 +30,6 @@ superseded_by: null
 
 ---
 
----
-
 ## Glossary（术语表）
 
 | 术语 | 定义 | 英文对照 |
@@ -44,51 +41,157 @@ superseded_by: null
 
 ---
 
----
-
 ## Decision（裁决）
 
-### 命名空间自动推导与一致性（ADR-003.1, 0003.2, 0003.3, 0003.4, 0003.5）
+> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**
+> 
+> 🔒 **统一铁律**：
+> 
+> ADR-003 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ```
+> ADR-003_<Rule>_<Clause>
+> ```
 
-**规则**：
-- 所有项目必须通过 Directory.Build.props 定义 BaseNamespace
-- 目录结构直接推导 RootNamespace
-- 类型命名空间必须与项目层级匹配
+---
+
+### ADR-003_1：基础命名空间约束（Rule）
+
+#### ADR-003_1_1 所有类型必须以 BaseNamespace 开头
+
+- 所有项目的类型命名空间必须以 BaseNamespace 开头
+- BaseNamespace 为 `Zss.BilliardHall`
 
 **判定**：
 - ❌ 类型命名空间不以 BaseNamespace 开头
-- ❌ Platform 类型不以 `Zss.BilliardHall.Platform` 为前缀
-- ❌ Application 类型不以 `Zss.BilliardHall.Application` 为前缀
-- ❌ Module 类型不对应 `Zss.BilliardHall.Modules.{Name}`
-- ❌ Host 类型不对应 `Zss.BilliardHall.Host.{Name}`
-- ✅ 所有命名空间自动映射正确
+- ✅ 所有类型命名空间符合规范
 
-### 防御规则（ADR-003.6, 0003.7, 0003.8, 0003.9）
+---
 
-**规则**：
+### ADR-003_2：Platform 命名空间约束（Rule）
+
+#### ADR-003_2_1 Platform 类型必须在 Platform 命名空间
+
+- Platform 类型必须以 `Zss.BilliardHall.Platform` 为前缀
+- 确保 Platform 层边界清晰
+
+**判定**：
+- ❌ Platform 类型命名空间不符合规范
+- ✅ Platform 类型命名空间正确
+
+---
+
+### ADR-003_3：Application 命名空间约束（Rule）
+
+#### ADR-003_3_1 Application 类型必须在 Application 命名空间
+
+- Application 类型必须以 `Zss.BilliardHall.Application` 为前缀
+- 确保 Application 层边界清晰
+
+**判定**：
+- ❌ Application 类型命名空间不符合规范
+- ✅ Application 类型命名空间正确
+
+---
+
+### ADR-003_4：Modules 命名空间约束（Rule）
+
+#### ADR-003_4_1 Module 类型必须在对应模块命名空间
+
+- Module 类型必须对应 `Zss.BilliardHall.Modules.{ModuleName}`
+- 每个模块有独立的命名空间
+
+**判定**：
+- ❌ Module 类型命名空间不符合规范
+- ✅ Module 类型命名空间正确
+
+---
+
+### ADR-003_5：Host 命名空间约束（Rule）
+
+#### ADR-003_5_1 Host 类型必须在对应 Host 命名空间
+
+- Host 类型必须对应 `Zss.BilliardHall.Host.{HostName}`
+- 每个 Host 有独立的命名空间
+
+**判定**：
+- ❌ Host 类型命名空间不符合规范
+- ✅ Host 类型命名空间正确
+
+---
+
+### ADR-003_6：Directory.Build.props 约束（Rule）
+
+#### ADR-003_6_1 Directory.Build.props 必须存在
+
 - Directory.Build.props 必须存在于仓库根目录
-- Directory.Build.props 必须定义 BaseNamespace
-- 项目命名需遵循命名空间映射
-- 不得出现不规范命名空间（Common、Shared、Utils）
+- 统一管理 BaseNamespace 定义
 
 **判定**：
 - ❌ 缺少 Directory.Build.props
+- ✅ Directory.Build.props 存在
+
+#### ADR-003_6_2 Directory.Build.props 必须定义 BaseNamespace
+
+- Directory.Build.props 必须定义 BaseNamespace 属性
+- 值为 `Zss.BilliardHall`
+
+**判定**：
 - ❌ Directory.Build.props 未定义 BaseNamespace
-- ❌ 项目命名不符合规范
-- ❌ 存在不规范命名空间
-- ✅ 所有配置和命名正确
+- ✅ Directory.Build.props 正确定义 BaseNamespace
 
 ---
+
+### ADR-003_7：项目命名约束（Rule）
+
+#### ADR-003_7_1 所有项目必须遵循命名空间约定
+
+- 项目命名必须与目录结构和命名空间对应
+- 通过 MSBuild 自动推导 RootNamespace
+
+**判定**：
+- ❌ 项目命名不符合规范
+- ✅ 项目命名符合命名空间约定
+
+---
+
+### ADR-003_8：禁止的命名空间模式（Rule）
+
+#### ADR-003_8_1 禁止不规范命名空间模式
+
+- 不得出现不规范命名空间（Common、Shared、Utils）
+- 使用明确的层级命名
+
+**判定**：
+- ❌ 存在不规范命名空间
+- ✅ 所有命名空间符合规范
 
 ---
 
 ## Enforcement（执法模型）
 
-所有规则通过 `src/tests/ArchitectureTests/ADR/ADR_003_Architecture_Tests.cs` 强制验证。
+> 📋 **Enforcement 映射说明**：
+> 
+> 下表展示了 ADR-003 各条款（Clause）的执法方式及执行级别。
+>
+> 所有规则通过 `src/tests/ArchitectureTests/ADR-003/` 目录下的测试强制验证。
 
-**有一项违规视为架构违规，CI 自动阻断。**
+| 规则编号 | 执行级 | 执法方式 | Decision 映射 |
+|---------|--------|---------|--------------|
+| **ADR-003_1_1** | L1 | ArchitectureTests 验证所有类型命名空间以 BaseNamespace 开头 | §ADR-003_1_1 |
+| **ADR-003_2_1** | L1 | ArchitectureTests 验证 Platform 类型命名空间 | §ADR-003_2_1 |
+| **ADR-003_3_1** | L1 | ArchitectureTests 验证 Application 类型命名空间 | §ADR-003_3_1 |
+| **ADR-003_4_1** | L1 | ArchitectureTests 验证 Module 类型命名空间 | §ADR-003_4_1 |
+| **ADR-003_5_1** | L1 | ArchitectureTests 验证 Host 类型命名空间 | §ADR-003_5_1 |
+| **ADR-003_6_1** | L1 | ArchitectureTests 验证 Directory.Build.props 存在 | §ADR-003_6_1 |
+| **ADR-003_6_2** | L1 | ArchitectureTests 验证 Directory.Build.props 定义 BaseNamespace | §ADR-003_6_2 |
+| **ADR-003_7_1** | L1 | ArchitectureTests 验证项目命名约定 | §ADR-003_7_1 |
+| **ADR-003_8_1** | L1 | ArchitectureTests 验证不存在不规范命名空间 | §ADR-003_8_1 |
 
----
+### 执行级别说明
+- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
+
+**有一项 L1 违规视为架构违规，CI 自动阻断。**
+
 ---
 
 ## Non-Goals（明确不管什么）
@@ -97,12 +200,12 @@ superseded_by: null
 
 - **代码风格与格式化**：不规定命名约定（如 PascalCase、camelCase）、缩进、换行等代码格式规则，这些由代码规范（如 .editorconfig）管理
 - **业务逻辑命名**：不规定业务类型、方法、变量的具体命名方式，仅管理命名空间结构
-- **包版本管理**：不管理 NuGet 包的版本选择和依赖关系，这些由 [ADR-004](./ADR-004-Cpm-Final.md) 管理
-- **依赖注入配置**：不规定服务注册、生命周期管理等 DI 细节，这些由 [ADR-002](./ADR-002-platform-application-host-bootstrap.md) 和 [ADR-005](./ADR-005-Application-Interaction-Model-Final.md) 管理
-- **模块间通信方式**：不规定模块如何通信（事件、契约），这些由 [ADR-001](./ADR-001-modular-monolith-vertical-slice-architecture.md) 管理
+- **包版本管理**：不管理 NuGet 包的版本选择和依赖关系，这些由 [ADR-####](./ADR-####-Cpm-Final.md) 管理
+- **依赖注入配置**：不规定服务注册、生命周期管理等 DI 细节，这些由 [ADR-####](./ADR-####-platform-application-host-bootstrap.md) 和 [ADR-####](./ADR-####-Application-Interaction-Model-Final.md) 管理
+- **模块间通信方式**：不规定模块如何通信（事件、契约），这些由 [ADR-####](./ADR-####-modular-monolith-vertical-slice-architecture.md) 管理
 - **文件组织结构**：不规定文件在命名空间内的具体组织方式（如按用例、按层），仅管理命名空间边界
 - **多语言项目**：本 ADR 仅适用于 C# 项目，不涉及前端、脚本或其他语言项目的命名空间规范
-- **测试命名空间详细规则**：测试项目的详细命名规范由 [ADR-122](../structure/ADR-122-test-organization-naming.md) 管理
+- **测试命名空间详细规则**：测试项目的详细命名规范由 [ADR-####](../structure/ADR-####-test-organization-naming.md) 管理
 - **运行时命名空间验证**：本 ADR 仅在编译时和架构测试中验证，不涉及运行时的命名空间检查
 
 ---
@@ -139,9 +242,6 @@ superseded_by: null
 - ❌ **注释掉失败的测试**：当架构测试失败时，注释掉测试而不是修复违规代码
 - ❌ **使用反射绕过检查**：使用反射或其他动态技术绕过命名空间约束
 
-
----
-
 ---
 
 ## Relationships（关系声明）
@@ -168,8 +268,6 @@ superseded_by: null
 
 ---
 
----
-
 ## References（非裁决性参考）
 
 ### 官方文档
@@ -191,16 +289,12 @@ superseded_by: null
 - [Screaming Architecture](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html) - Robert C. Martin 关于目录结构应体现业务意图的理念
 - [Package by Feature](https://phauer.com/2020/package-by-feature/) - 按功能组织代码而非按层组织
 
-
----
-
 ---
 
 ## History（版本历史）
 
-| 版本  | 日期         | 变更说明                                         |
-|-----|------------|----------------------------------------------|
-| 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 |
-| 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   |
-
----
+| 版本  | 日期         | 变更说明                                         | 修订人 |
+|-----|------------|----------------------------------------------|----|
+| 3.0 | 2026-02-04 | 对齐 ADR-907 v2.0，引入 Rule/Clause 双层编号体系 | Architecture Board |
+| 2.0 | 2026-01-29 | 同步 ADR-902/940/0006 标准：添加 Front Matter、术语表英文对照 | Architecture Board |
+| 1.0 | 2026-01-26 | 裁决型重构，移除冗余                                   | Architecture Board |
