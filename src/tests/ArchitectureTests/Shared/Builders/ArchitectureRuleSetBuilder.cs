@@ -7,19 +7,13 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Builders;
 /// ArchitectureRuleSet 构建器
 /// 用于在测试中快速创建架构规则集
 /// </summary>
-public class ArchitectureRuleSetBuilder : TestDataBuilder<ArchitectureRuleSet, ArchitectureRuleSetBuilder>
+public class ArchitectureRuleSetBuilder
 {
-    private readonly int _adrNumber;
+    private readonly ArchitectureRuleSet _entity;
 
     public ArchitectureRuleSetBuilder(int adrNumber)
     {
-        _adrNumber = adrNumber;
-        Entity = CreateDefault();
-    }
-
-    protected override ArchitectureRuleSet CreateDefault()
-    {
-        return new ArchitectureRuleSet(_adrNumber);
+        _entity = new ArchitectureRuleSet(adrNumber);
     }
 
     /// <summary>
@@ -32,13 +26,13 @@ public class ArchitectureRuleSetBuilder : TestDataBuilder<ArchitectureRuleSet, A
         RuleSeverity severity = RuleSeverity.Governance,
         RuleScope scope = RuleScope.Test)
     {
-        Entity.AddRule(
+        _entity.AddRule(
             ruleNumber,
             summary ?? $"规则 {ruleNumber}",
             decision,
             severity,
             scope);
-        return This;
+        return this;
     }
 
     /// <summary>
@@ -51,13 +45,13 @@ public class ArchitectureRuleSetBuilder : TestDataBuilder<ArchitectureRuleSet, A
         string? enforcement = null,
         ClauseExecutionType executionType = ClauseExecutionType.Convention)
     {
-        Entity.AddClause(
+        _entity.AddClause(
             ruleNumber,
             clauseNumber,
             condition ?? $"条件 {ruleNumber}.{clauseNumber}",
             enforcement ?? $"执行 {ruleNumber}.{clauseNumber}",
             executionType);
-        return This;
+        return this;
     }
 
     /// <summary>
@@ -72,7 +66,7 @@ public class ArchitectureRuleSetBuilder : TestDataBuilder<ArchitectureRuleSet, A
     {
         WithRule(ruleNumber, summary, decision, severity, scope);
         WithClause(ruleNumber, 1); // 至少添加一个条款
-        return This;
+        return this;
     }
 
     /// <summary>
@@ -84,6 +78,15 @@ public class ArchitectureRuleSetBuilder : TestDataBuilder<ArchitectureRuleSet, A
         {
             WithCompleteRule(ruleNumber);
         }
-        return This;
+        return this;
+    }
+
+    /// <summary>
+    /// 构建最终的 RuleSet
+    /// </summary>
+    public ArchitectureRuleSet Build()
+    {
+        return _entity;
     }
 }
+
