@@ -1,16 +1,26 @@
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests.Infrastructure;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
 /// <summary>
 /// RuleIdParser 的单元测试
 /// 验证 RuleId 字符串解析的核心功能
+/// 
+/// 重构说明：
+/// - 使用 RuleIdAssertions 辅助类替代重复的断言逻辑
+/// - 提取测试数据为静态属性，避免延迟枚举问题
+/// - 保持 Theory + InlineData 的数据驱动测试模式
 /// </summary>
 public sealed class RuleIdParser_Tests
 {
-    #region 数据源（物化避免延迟枚举）
+    #region 测试数据源（物化避免延迟枚举）
 
+    /// <summary>
+    /// 无效输入的测试数据
+    /// </summary>
     public static IEnumerable<object[]> InvalidInputs { get; } = new List<object[]>
     {
-        new object[] { null },
+        new object[] { null! },
         new object[] { "" },
         new object[] { "   " },
         new object[] { "invalid" },
@@ -21,38 +31,6 @@ public sealed class RuleIdParser_Tests
         new object[] { "001" },
         new object[] { "ADR-001" },
     };
-
-    #endregion
-
-    #region 辅助断言
-
-    private static void AssertParsedResult(
-        ArchitectureRuleId result,
-        int expectedAdr,
-        int expectedRule,
-        int? expectedClause,
-        bool expectedIsRule,
-        bool expectedIsClause)
-    {
-        result.AdrNumber.Should().Be(expectedAdr);
-        result.RuleNumber.Should().Be(expectedRule);
-        result.ClauseNumber.Should().Be(expectedClause);
-        result.IsRule.Should().Be(expectedIsRule);
-        result.IsClause.Should().Be(expectedIsClause);
-    }
-
-    private static void AssertTryParseSuccess(
-        string input,
-        int expectedAdr,
-        int expectedRule,
-        int? expectedClause,
-        bool expectedIsRule,
-        bool expectedIsClause)
-    {
-        var success = RuleIdParser.TryParse(input, out var result);
-        success.Should().BeTrue($"TryParse 应成功解析 '{input}'");
-        AssertParsedResult(result, expectedAdr, expectedRule, expectedClause, expectedIsRule, expectedIsClause);
-    }
 
     #endregion
 
@@ -69,7 +47,7 @@ public sealed class RuleIdParser_Tests
         int expectedRule,
         int? expectedClause)
     {
-        AssertTryParseSuccess(input, expectedAdr, expectedRule, expectedClause, expectedIsRule: true, expectedIsClause: false);
+        RuleIdAssertions.AssertTryParseSuccess(input, expectedAdr, expectedRule, expectedClause);
     }
 
     [Theory(DisplayName = "TryParse 应该正确解析下划线格式的 Clause ID")]
@@ -83,7 +61,7 @@ public sealed class RuleIdParser_Tests
         int expectedRule,
         int expectedClause)
     {
-        AssertTryParseSuccess(input, expectedAdr, expectedRule, expectedClause, expectedIsRule: false, expectedIsClause: true);
+        RuleIdAssertions.AssertTryParseSuccess(input, expectedAdr, expectedRule, expectedClause);
     }
 
     [Theory(DisplayName = "TryParse 应该正确解析点号格式的 Rule ID（兼容旧格式）")]
@@ -97,7 +75,7 @@ public sealed class RuleIdParser_Tests
         int expectedRule,
         int? expectedClause)
     {
-        AssertTryParseSuccess(input, expectedAdr, expectedRule, expectedClause, expectedIsRule: true, expectedIsClause: false);
+        RuleIdAssertions.AssertTryParseSuccess(input, expectedAdr, expectedRule, expectedClause);
     }
 
     [Theory(DisplayName = "TryParse 应该正确解析点号格式的 Clause ID（兼容旧格式）")]
@@ -111,16 +89,14 @@ public sealed class RuleIdParser_Tests
         int expectedRule,
         int expectedClause)
     {
-        AssertTryParseSuccess(input, expectedAdr, expectedRule, expectedClause, expectedIsRule: false, expectedIsClause: true);
+        RuleIdAssertions.AssertTryParseSuccess(input, expectedAdr, expectedRule, expectedClause);
     }
 
     [Theory(DisplayName = "TryParse 应该对无效格式返回 false")]
     [MemberData(nameof(InvalidInputs))]
     public void TryParse_Should_Return_False_For_Invalid_Format(string? input)
     {
-        var success = RuleIdParser.TryParse(input!, out var result);
-        success.Should().BeFalse($"TryParse 应该失败解析 '{input ?? "null"}'");
-        result.Should().Be(default(ArchitectureRuleId));
+        RuleIdAssertions.AssertTryParseFailed(input);
     }
 
     [Theory(DisplayName = "TryParse 应该支持大小写不敏感")]
@@ -130,7 +106,7 @@ public sealed class RuleIdParser_Tests
     [InlineData("adr001_1")]
     public void TryParse_Should_Be_Case_Insensitive(string input)
     {
-        AssertTryParseSuccess(input, expectedAdr: 1, expectedRule: 1, expectedClause: null, expectedIsRule: true, expectedIsClause: false);
+        RuleIdAssertions.AssertTryParseSuccess(input, expectedAdr: 1, expectedRule: 1, expectedClause: null);
     }
 
     #endregion
@@ -149,7 +125,8 @@ public sealed class RuleIdParser_Tests
         int? expectedClause)
     {
         var result = RuleIdParser.ParseStrict(input);
-        AssertParsedResult(result, expectedAdr, expectedRule, expectedClause, expectedIsRule: expectedClause is null, expectedIsClause: expectedClause is not null);
+        RuleIdAssertions.AssertParsedRuleId(result, expectedAdr, expectedRule, expectedClause, 
+            context: $"ParseStrict('{input}')");
     }
 
     [Theory(DisplayName = "ParseStrict 应该对空字符串抛出 ArgumentException")]
@@ -212,8 +189,9 @@ public sealed class RuleIdParser_Tests
         var tryParseSuccess = RuleIdParser.TryParse(input, out var tryParseResult);
         var strictResult = RuleIdParser.ParseStrict(input);
 
-        tryParseSuccess.Should().BeTrue();
-        tryParseResult.Should().Be(strictResult);
+        tryParseSuccess.Should().BeTrue($"TryParse 应成功解析 '{input}'");
+        RuleIdAssertions.AssertRuleIdEquals(tryParseResult, strictResult, 
+            context: $"TryParse 和 ParseStrict 对 '{input}' 的结果");
     }
 
     [Theory(DisplayName = "解析结果应该能正确识别 IsRule 和 IsClause")]

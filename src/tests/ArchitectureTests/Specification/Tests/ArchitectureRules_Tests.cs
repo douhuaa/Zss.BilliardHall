@@ -1,38 +1,67 @@
+using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests.Infrastructure;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
 /// <summary>
 /// 验证 RuleSetRegistry 和规则集定义的正确性
 /// 确保从 ADR 文档定义的规则集可以正常工作
+/// 
+/// 重构说明：
+/// - 使用 RuleSetValidator 辅助类替代重复的验证逻辑
+/// - 保持 Theory + InlineData/MemberData 的数据驱动测试模式
+/// - 提取的辅助方法移到 RuleSetValidator 工具类
 /// </summary>
 public sealed class ArchitectureRules_Tests
 {
-    // 物化 MemberData：所有已定义的 ADR 编号（避免延迟枚举问题）
+    #region 测试数据源
+
+    /// <summary>
+    /// 所有已定义的 ADR 编号（物化避免延迟枚举问题）
+    /// </summary>
     public static IEnumerable<object[]> AllAdrNumbers =>
         RuleSetRegistry.GetAllAdrNumbers()
             .Select(n => new object[] { n })
             .ToList();
+
+    #endregion
+
+    #region RuleSet 结构完整性测试
 
     [Theory(DisplayName = "RuleSet 结构与标识符应符合全局规范")]
     [MemberData(nameof(AllAdrNumbers))]
     public void RuleSet_Should_Maintain_Structural_Integrity(int adrNumber)
     {
         var ruleSet = RuleSetRegistry.GetStrict(adrNumber);
-
-        VerifyRuleStructure(ruleSet, adrNumber);
-        VerifyClauseStructure(ruleSet, adrNumber);
+        
+        // 使用统一的验证器执行完整验证
+        RuleSetValidator.ValidateFull(ruleSet, adrNumber);
     }
+
+    #endregion
+
+    #region 核心规则和条款验证测试
 
     [Theory(DisplayName = "核心业务规则定义应匹配 ADR 规范")]
     [InlineData(1, 1, "模块物理隔离", RuleSeverity.Constitutional)]
     [InlineData(900, 1, "架构裁决权威性", RuleSeverity.Governance)]
     [InlineData(907, 3, "最小断言语义规范", null)]
     [InlineData(120, 1, "事件类型命名规范", null)]
-    public void Core_Rules_Should_Match_Specification(int adr, int ruleNum, string summary, RuleSeverity? severity)
+    public void Core_Rules_Should_Match_Specification(
+        int adr, 
+        int ruleNum, 
+        string summary, 
+        RuleSeverity? severity)
     {
         var rule = RuleSetRegistry.GetStrict(adr).GetRule(ruleNum);
+        
         rule.Should().NotBeNull($"ADR-{adr:000} Rule {ruleNum} 应存在");
         rule!.Summary.Should().Be(summary, $"ADR-{adr:000} Rule {ruleNum} 摘要应为预期值");
-        if (severity.HasValue) rule.Severity.Should().Be(severity.Value);
+        
+        if (severity.HasValue)
+        {
+            rule.Severity.Should().Be(severity.Value, 
+                $"ADR-{adr:000} Rule {ruleNum} 严重程度应为 {severity.Value}");
+        }
     }
 
     [Theory(DisplayName = "关键条款约束应匹配 ADR 规范内容")]
@@ -40,23 +69,36 @@ public sealed class ArchitectureRules_Tests
     [InlineData(900, 1, 1, "Condition", "ADR 正文是唯一裁决依据")]
     [InlineData(907, 3, 4, "Enforcement", "Assert.True(true)")]
     [InlineData(120, 1, 1, "Enforcement", "Event 后缀")]
-    public void Core_Clauses_Should_Match_Specification(int adr, int ruleNum, int clauseNum, string type, string expected)
+    public void Core_Clauses_Should_Match_Specification(
+        int adr, 
+        int ruleNum, 
+        int clauseNum, 
+        string type, 
+        string expected)
     {
         var clause = RuleSetRegistry.GetStrict(adr).GetClause(ruleNum, clauseNum);
+        
         clause.Should().NotBeNull($"ADR-{adr:000} Clause {ruleNum}.{clauseNum} 应存在");
 
         var content = type.Equals("Condition", StringComparison.OrdinalIgnoreCase)
             ? clause!.Condition
             : clause!.Enforcement;
 
-        content.Should().Contain(expected, $"ADR-{adr:000} Clause {ruleNum}.{clauseNum} 应包含期望文本");
+        content.Should().Contain(expected, 
+            $"ADR-{adr:000} Clause {ruleNum}.{clauseNum} 的 {type} 应包含 '{expected}'");
     }
+
+    #endregion
+
+    #region Registry 行为测试
 
     [Fact(DisplayName = "Registry 应支持常规获取与错误处理")]
     public void Registry_Should_Handle_Lookup_Correctly()
     {
+        // 测试宽容模式：未定义的 ADR 应返回 null
         RuleSetRegistry.Get(999).Should().BeNull("未定义的 ADR 应返回 null");
 
+        // 验证关键 ADR 存在
         var adrList = RuleSetRegistry.GetAllAdrNumbers();
         adrList.Should().Contain(new[] { 1, 900, 907 }, "应包含关键 ADR 编号");
     }
@@ -66,40 +108,8 @@ public sealed class ArchitectureRules_Tests
     {
         var first = RuleSetRegistry.GetStrict(1);
         var second = RuleSetRegistry.GetStrict(1);
+        
         first.Should().BeSameAs(second, "多次访问应返回同一内存实例");
-    }
-
-    #region 辅助方法
-
-    private static void VerifyRuleStructure(ArchitectureRuleSet ruleSet, int adrNumber)
-    {
-        // 基本计数检查
-        ruleSet.RuleCount.Should().BeGreaterThan(0, $"ADR-{adrNumber:000} 必须包含规则");
-
-        // 逐条检查以便失败定位（每项断言都包含具体 ID）
-        foreach (ArchitectureRuleDefinition rule in ruleSet.Rules)
-        {
-            var id = rule.Id.ToString();
-            rule.Id.Level.Should().Be(RuleLevel.Rule, $"规则 {id} 的级别应为 Rule");
-            rule.Id.AdrNumber.Should().Be(adrNumber, $"规则 {id} 的 ADR 应为 ADR-{adrNumber:000}");
-            rule.Summary.Should().NotBeNullOrWhiteSpace($"规则 {id} 的摘要不应为空");
-        }
-    }
-
-    private static void VerifyClauseStructure(ArchitectureRuleSet ruleSet, int adrNumber)
-    {
-        ruleSet.ClauseCount.Should().BeGreaterThanOrEqualTo(
-            ruleSet.RuleCount,
-            $"ADR-{adrNumber:000} 的条款数 ({ruleSet.ClauseCount}) 应至少等于规则数 ({ruleSet.RuleCount})");
-
-        foreach (ArchitectureClauseDefinition clause in ruleSet.Clauses)
-        {
-            var id = clause.Id.ToString();
-            clause.Id.Level.Should().Be(RuleLevel.Clause, $"条款 {id} 的级别应为 Clause");
-            clause.Id.AdrNumber.Should().Be(adrNumber, $"条款 {id} 的 ADR 应为 ADR-{adrNumber:000}");
-            clause.Condition.Should().NotBeNullOrWhiteSpace($"条款 {id} 的 Condition 不应为空");
-            clause.Enforcement.Should().NotBeNullOrWhiteSpace($"条款 {id} 的 Enforcement 不应为空");
-        }
     }
 
     #endregion
