@@ -1,7 +1,7 @@
 ---
 name: "Generate ADR"
 description: "生成符合 ADR-902 和 ADR-907 规范的 ADR 文档"
-version: "1.01
+version: "1.0"
 risk_level: "高"
 category: "文档生成"
 required_agent: "adr-reviewer"
@@ -11,7 +11,7 @@ required_agent: "adr-reviewer"
 
 **类别**：文档生成  
 **风险等级**：高  
-**版本**：3.0
+**版本**：1.0
 
 ---
 
