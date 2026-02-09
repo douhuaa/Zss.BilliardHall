@@ -1,11 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
-using System.Collections.Immutable;
-using System.Linq;
-
-namespace Zss.BilliardHall.ArchitectureAnalyzers;
+﻿namespace Zss.BilliardHall.ArchitectureAnalyzers;
 
 /// <summary>
 /// ADR-005.11: Handler 应使用结构化异常

@@ -1,7 +1,5 @@
-﻿using Serilog;
-using Zss.BilliardHall.Application;
+using Serilog;
 using Zss.BilliardHall.Host.Worker;
-using Zss.BilliardHall.Platform;
 
 var builder = Host.CreateApplicationBuilder(args);
 

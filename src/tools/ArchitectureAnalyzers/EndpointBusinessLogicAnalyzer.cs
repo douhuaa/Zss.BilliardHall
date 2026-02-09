@@ -1,11 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
-using System.Collections.Immutable;
-using System.Linq;
-
-namespace Zss.BilliardHall.ArchitectureAnalyzers;
+﻿namespace Zss.BilliardHall.ArchitectureAnalyzers;
 
 /// <summary>
 /// ADR-005.2: Endpoint 不应包含业务逻辑

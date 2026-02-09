@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Zss.BilliardHall.AdrSemanticParser.Models;
-
 namespace Zss.BilliardHall.AdrSemanticParser.Tests;
 
 public sealed class AdrParserTests
