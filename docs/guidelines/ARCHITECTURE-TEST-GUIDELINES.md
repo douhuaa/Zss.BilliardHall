@@ -43,7 +43,7 @@ ADR ≠ Test ≠ Specification（三者物理隔离）
 | **RuleSetRegistry** | 从 Registry 获取规则信息 | 🔴 P0 | 100% |
 | **参数化测试** | 使用 Theory + InlineData 减少重复 | 🔴 P1 | 80% |
 | **TestEnvironment** | 使用共享路径常量 | 🔴 P0 | 100% |
-| **FileSystemTestHelper** | 使用统一文件操作方法 | 🔴 P1 | 80% |
+| **FileAssertionHelper / FileContentAnalyzer / FileSearchHelper** | 使用专用文件操作工具 | 🔴 P1 | 80% |
 | **AssertionMessageBuilder** | 使用标准断言消息 | 🔴 P1 | 80% |
 | **AdrTestFixture** | 使用 ADR 文档缓存 | 🟡 P2 | 50% |
 | **sealed 关键字** | 所有测试类必须 sealed | 🔴 P0 | 100% |
@@ -54,7 +54,7 @@ ADR ≠ Test ≠ Specification（三者物理隔离）
 | 指标 | 现状 | 说明 |
 |------|------|------|
 | ✅ TestEnvironment 采用 | 65.6% (82/125) | FindRepositoryRoot 重复已基本消除 |
-| ⚠️ FileSystemTestHelper 采用 | 17.6% (22/125) | 仍有 73 个文件直接使用 File/Directory |
+| ⚠️ 文件操作工具采用 | 17.6% (22/125) | 仍有 73 个文件直接使用 File/Directory |
 | ⚠️ AssertionMessageBuilder 采用 | 22.4% (28/125) | 97 个文件手动构建断言消息 |
 | 🚨 AdrTestFixture 采用 | 0.8% (1/125) | 40 个测试重复加载 ADR 文档 |
 
@@ -172,15 +172,18 @@ var repoRoot = TestEnvironment.RepositoryRoot;
 | **潜在收益** | 减少 ~1,825 行代码 |
 | **当前问题** | 缺少错误处理、格式不统一 |
 
-**✅ 解决方案**：使用 `FileSystemTestHelper`
+**✅ 解决方案**：使用专用文件操作工具
 
 ```csharp
 // ❌ 不推荐
 var content = File.ReadAllText(filePath);
 content.Should().Contain("关键词");
 
-// ✅ 推荐
-FileSystemTestHelper.AssertFileContains(filePath, "关键词", "文件应包含关键词");
+// ✅ 推荐 - 使用 FileContentAnalyzer
+FileContentAnalyzer.AssertFileContains(filePath, "关键词", "文件应包含关键词");
+
+// ✅ 推荐 - 使用 FileAssertionHelper
+FileAssertionHelper.AssertFileExists(filePath, "❌ ADR-XXX_Y_Z 违规：文件不存在");
 ```
 
 #### 问题 3：手动构建断言消息（97 个文件）
@@ -770,25 +773,84 @@ var repoRoot = TestEnvironment.RepositoryRoot;
 var adrPath = TestEnvironment.AdrPath;
 ```
 
-### 2️⃣ FileSystemTestHelper（采用率目标 80%）
+### 2️⃣ 文件操作工具（采用率目标 80%）
 
-**核心方法**：
+> **重要更新（2026-02-09）**：FileSystemTestHelper 已重构为三个专用类，提升单一职责和性能。
 
-| 方法 | 功能 | 替代的原生操作 |
-|------|------|---------------|
-| `AssertFileExists()` | 文件存在性断言 | `File.Exists()` + 手动断言 |
-| `ReadFileContent()` | 安全读取文件 | `File.ReadAllText()` |
-| `AssertFileContains()` | 内容断言 | 读取 + `Contains()` |
-| `GetAdrFiles()` | 获取 ADR 文件列表 | `Directory.GetFiles()` + 过滤 |
-| `GetAbsolutePath()` | 相对路径转绝对路径 | `Path.Combine()` |
+**新的工具类结构**：
+
+| 工具类 | 职责 | 主要方法 |
+|--------|------|---------|
+| **FileAssertionHelper** | 文件/目录断言 | `AssertFileExists()`, `AssertDirectoryExists()`, `AssertFileContains()` |
+| **FileContentAnalyzer** | 内容分析 | `FileContainsAllKeywords()`, `CountPatternOccurrences()`, `FileContainsTable()` |
+| **FileSearchHelper** | 文件搜索和路径 | `GetAdrFiles()`, `GetAbsolutePath()`, `GetRelativePath()` |
+| **FileSystemTestHelper** | 向后兼容（已废弃）| ⚠️ 不推荐使用，使用上述专用类 |
+
+**核心方法详解**：
+
+#### FileAssertionHelper - 文件断言
+```csharp
+// 断言文件存在
+FileAssertionHelper.AssertFileExists(path, "❌ 文件不存在");
+
+// 断言目录存在
+FileAssertionHelper.AssertDirectoryExists(dirPath, "❌ 目录不存在");
+
+// 断言文件包含内容
+FileAssertionHelper.AssertFileContains(path, "期望内容", "❌ 缺少必需内容");
+
+// 断言文件内容长度
+FileAssertionHelper.AssertFileContentLength(path, 100, "❌ 文件内容过短");
+```
+
+#### FileContentAnalyzer - 内容分析
+```csharp
+// 检查是否包含所有关键词（支持流式读取，性能优化）
+bool hasAll = FileContentAnalyzer.FileContainsAllKeywords(
+    path, 
+    new[] { "关键词1", "关键词2" },
+    ignoreCase: true);
+
+// 检查是否包含表格
+bool hasTable = FileContentAnalyzer.FileContainsTable(path, "表头");
+
+// 统计模式出现次数（流式读取，适合大文件）
+int count = FileContentAnalyzer.CountPatternOccurrences(path, @"ADR-\d{3,4}");
+```
+
+#### FileSearchHelper - 文件搜索
+```csharp
+// 获取 ADR 文件列表
+var adrFiles = FileSearchHelper.GetAdrFiles();
+
+// 获取 ADR 文件（指定子目录）
+var govFiles = FileSearchHelper.GetAdrFiles(subfolder: "governance");
+
+// 路径转换
+var absPath = FileSearchHelper.GetAbsolutePath("docs/adr/ADR-001.md");
+var relPath = FileSearchHelper.GetRelativePath(absPath);
+```
 
 **重构模式**：
 
 | 场景 | 重构前 ❌ | 重构后 ✅ |
 |------|----------|----------|
-| 文件存在性检查 | `File.Exists(path).Should().BeTrue()` | `FileSystemTestHelper.AssertFileExists(path, message)` |
-| 读取文件内容 | `var content = File.ReadAllText(path);` | `var content = FileSystemTestHelper.ReadFileContent(path);` |
-| 内容包含验证 | `File.ReadAllText(path).Should().Contain("text")` | `FileSystemTestHelper.AssertFileContains(path, "text", message)` |
+| 文件存在性检查 | `File.Exists(path).Should().BeTrue()` | `FileAssertionHelper.AssertFileExists(path, message)` |
+| 读取文件内容 | `var content = File.ReadAllText(path);` | `var content = FileSearchHelper.ReadFileContent(path);` |
+| 内容包含验证 | `File.ReadAllText(path).Should().Contain("text")` | `FileContentAnalyzer.AssertFileContains(path, "text", message)` |
+| 获取 ADR 文件 | `Directory.GetFiles(adrPath, "*.md")` | `FileSearchHelper.GetAdrFiles()` |
+
+**命名空间引用**：
+
+所有工具类通过 `GlobalUsings.cs` 自动引入，无需显式 using：
+```csharp
+// ✅ 无需添加 using 语句，直接使用
+FileAssertionHelper.AssertFileExists(path, message);
+FileContentAnalyzer.FileContainsAllKeywords(path, keywords);
+FileSearchHelper.GetAdrFiles();
+```
+
+**详细文档**：参见 [Shared/README.md](../../src/tests/ArchitectureTests/Shared/README.md)
 
 ### 3️⃣ AssertionMessageBuilder（采用率目标 80%）
 
@@ -865,7 +927,7 @@ public sealed class ADR_XXX_Tests : IClassFixture<AdrTestFixture>
 | [ ] **使用 RuleSetRegistry** | **100%** | **🔴 P0** |
 | [ ] 使用 TestEnvironment | 100% | 🔴 P0 |
 | [ ] 删除本地 FindRepositoryRoot | 100% | 🔴 P0 |
-| [ ] 使用 FileSystemTestHelper | 80% | 🔴 P1 |
+| [ ] 使用文件操作工具 | 80% | 🔴 P1 |
 | [ ] 使用 AssertionMessageBuilder | 80% | 🔴 P1 |
 | [ ] 使用 AdrTestFixture | 50% | 🟡 P2 |
 
@@ -902,11 +964,27 @@ src/tests/ArchitectureTests/
 │  ├─ ADR_960_1_Architecture_Tests.cs
 │  └─ ADR_960_2_Architecture_Tests.cs
 └─ Shared/
-   ├─ TestEnvironment.cs              # 路径常量
-   ├─ FileSystemTestHelper.cs         # 文件操作
-   ├─ AssertionMessageBuilder.cs      # 断言消息
-   ├─ AdrTestFixture.cs               # ADR 缓存
-   └─ TestConstants.cs                # 通用常量
+   ├─ Adr/                            # ADR 相关工具（11个）
+   │  ├─ AdrCategoryClassifier.cs
+   │  ├─ AdrParser.cs
+   │  ├─ AdrRepository.cs
+   │  └─ ...
+   ├─ FileSystem/                     # 文件系统操作（4个）
+   │  ├─ FileAssertionHelper.cs       # 文件断言
+   │  ├─ FileContentAnalyzer.cs       # 内容分析（流式读取）
+   │  ├─ FileSearchHelper.cs          # 文件搜索
+   │  └─ FileSystemTestHelper.cs      # 向后兼容（已废弃）
+   ├─ Assemblies/                     # 程序集加载（3个）
+   │  ├─ AssemblyLoaderBase.cs
+   │  ├─ ModuleAssemblyData.cs
+   │  └─ HostAssemblyData.cs
+   ├─ Testing/                        # 测试辅助（5个）
+   │  ├─ TestEnvironment.cs           # 路径常量
+   │  ├─ AssertionMessageBuilder.cs   # 断言消息
+   │  ├─ NetArchTestHelper.cs         # NetArchTest 封装
+   │  ├─ AdrTestFixture.cs            # ADR 缓存
+   │  └─ TestConstants.cs             # 通用常量
+   └─ README.md                       # 工具类使用指南
 ```
 
 ### 组织原则
@@ -947,7 +1025,9 @@ src/tests/ArchitectureTests/
 | 场景 | 推荐工具 | 优先级 |
 |------|---------|--------|
 | 获取仓库路径 | TestEnvironment | 🔴 必须 |
-| 文件操作 | FileSystemTestHelper | 🔴 必须 |
+| 文件断言 | FileAssertionHelper | 🔴 必须 |
+| 内容分析 | FileContentAnalyzer | 🔴 必须 |
+| 文件搜索 | FileSearchHelper | 🔴 必须 |
 | 构建断言消息 | AssertionMessageBuilder | 🔴 必须 |
 | 加载 ADR 文档 | AdrTestFixture | 🟡 推荐 |
 | 通用常量 | TestConstants | 🟡 推荐 |

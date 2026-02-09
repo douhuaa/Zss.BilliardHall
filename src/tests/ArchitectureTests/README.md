@@ -1,6 +1,6 @@
 # ArchitectureTests（架构自动化测试）
 
-## 目的
+## 🎯 目的
 
 这组测试的目的是把 **ADR-001 至 ADR-005 的核心静态约束** 写成可执行规则，确保架构规范能够被自动化检查并在 CI 中执行。
 
@@ -8,30 +8,39 @@
 
 ---
 
-## 测试组织结构
+## 📁 测试组织结构
 
-### 目录结构
+### 目录结构（2026-02-09 更新）
 
 从 2026-02-06 开始，架构测试采用统一的扁平目录结构：
 
 ```
 /tests/ArchitectureTests/
-  ├─ ADR_001/  - ADR-001 模块化单体与垂直切片架构
-  ├─ ADR_002/  - ADR-002 Platform/Application/Host 三层启动体系
-  ├─ ADR_003/  - ADR-003 命名空间与项目边界规范
-  ├─ ADR_004/  - ADR-004 中央包管理 (CPM) 规范
-  ├─ ADR_005/  - ADR-005 应用内交互模型与执行边界
-  ├─ ...       - 其他 ADR 测试
-  └─ Shared/   - 共享测试辅助代码
+├─ Specification/          # 规则定义（RuleSet 体系）
+│  ├─ RuleSets/           # ADR → RuleSet 映射
+│  ├─ Language/           # DSL 语言支持
+│  └─ Index/              # 规则索引和注册
+├─ ADR-001/               # ADR-001 模块化单体与垂直切片架构
+├─ ADR-002/               # ADR-002 Platform/Application/Host 三层启动体系
+├─ ADR-003/               # ADR-003 命名空间与项目边界规范
+├─ ADR-004/               # ADR-004 中央包管理 (CPM) 规范
+├─ ADR-005/               # ADR-005 应用内交互模型与执行边界
+├─ ...                    # 其他 ADR 测试
+└─ Shared/                # 共享测试辅助代码（按功能分组）
+   ├─ Adr/                # ADR 相关工具（11个）
+   ├─ FileSystem/         # 文件系统操作（4个）
+   ├─ Assemblies/         # 程序集加载（3个）
+   └─ Testing/            # 测试辅助（5个）
 ```
 
 **设计原则：**
 
-- 每个 ADR 拥有独立的目录（格式：`ADR_XXX`）
-- 所有相关测试文件放在对应的 ADR 目录中
-- 目录命名统一使用下划线（`_`）而非连字符（`-`）
-- 不使用三层架构目录（已废弃：Governance/Enforcement/Heuristics）
-- 不使用聚合目录（已废弃：ADR/）
+- ✅ 每个 ADR 拥有独立的目录（格式：`ADR-XXX`）
+- ✅ 所有相关测试文件放在对应的 ADR 目录中
+- ✅ 目录命名统一使用连字符（`-`）
+- ✅ 工具类按功能分组到 Shared 子目录中
+- ❌ 不使用三层架构目录（已废弃：Governance/Enforcement/Heuristics）
+- ❌ 不使用聚合目录（已废弃：ADR/）
 
 ---
 
@@ -118,6 +127,50 @@
 3. **CI 效率**：减少冗余测试执行，降低 CI 时间和误报风险
 
 所有架构约束现在通过 ADR 测试统一执行和维护。
+
+---
+
+## 🛠️ 共享工具类
+
+架构测试使用结构化的共享工具类，按功能分组以提升可维护性。
+
+### 工具类分组
+
+| 目录 | 职责 | 主要工具类 |
+|------|------|-----------|
+| **Adr/** | ADR 文档处理 | AdrParser, AdrRepository, AdrCategoryClassifier |
+| **FileSystem/** | 文件系统操作 | FileAssertionHelper, FileContentAnalyzer, FileSearchHelper |
+| **Assemblies/** | 程序集加载 | AssemblyLoaderBase, ModuleAssemblyData, HostAssemblyData |
+| **Testing/** | 测试辅助 | AssertionMessageBuilder, NetArchTestHelper, TestEnvironment |
+
+### 常用工具
+
+#### 文件操作
+```csharp
+// 文件断言
+FileAssertionHelper.AssertFileExists(path, "❌ 文件不存在");
+
+// 内容分析
+FileContentAnalyzer.FileContainsAllKeywords(path, keywords);
+
+// 文件搜索
+var adrFiles = FileSearchHelper.GetAdrFiles();
+```
+
+#### 测试辅助
+```csharp
+// 路径常量
+var repoRoot = TestEnvironment.RepositoryRoot;
+var adrPath = TestEnvironment.AdrPath;
+
+// 断言消息构建
+var message = AssertionMessageBuilder.BuildFileNotFoundMessage(...);
+
+// NetArchTest 封装
+NetArchTestHelper.AssertNamespaceConvention(assembly, ...);
+```
+
+**详细文档**：参见 [Shared/README.md](./Shared/README.md)
 
 ---
 

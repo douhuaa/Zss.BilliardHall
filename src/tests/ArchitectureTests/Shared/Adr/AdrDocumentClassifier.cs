@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
 
 /// <summary>
 /// ADR 文档分类器

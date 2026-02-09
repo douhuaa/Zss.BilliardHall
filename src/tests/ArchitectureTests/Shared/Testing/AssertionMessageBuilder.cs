@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing;
 
 /// <summary>
 /// 架构测试断言消息构建器

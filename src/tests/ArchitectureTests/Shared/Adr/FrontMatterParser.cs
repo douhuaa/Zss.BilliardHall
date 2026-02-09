@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
 
 /// <summary>
 /// YAML Front Matter 解析器
@@ -121,12 +121,12 @@ public static class FrontMatterParser
         }
 
         return new FrontMatterData(
-            hasFrontMatter: true,
-            adrField: adrField,
-            typeField: typeField,
-            statusField: statusField,
-            levelField: levelField,
-            dateField: dateField
+            HasFrontMatter: true,
+            AdrField: adrField,
+            TypeField: typeField,
+            StatusField: statusField,
+            LevelField: levelField,
+            DateField: dateField
         );
     }
 }
@@ -134,31 +134,17 @@ public static class FrontMatterParser
 /// <summary>
 /// Front Matter 解析结果
 /// 不可变数据对象 (Immutable Data Object)
+/// 
+/// 重构说明（2026-02-09）：
+/// 改为 record 类型提升简洁性和不可变性
 /// </summary>
-public sealed class FrontMatterData
+public sealed record FrontMatterData(
+    bool HasFrontMatter,
+    string? AdrField,
+    string? TypeField,
+    string? StatusField,
+    string? LevelField,
+    string? DateField)
 {
     public static readonly FrontMatterData Empty = new(false, null, null, null, null, null);
-
-    public bool HasFrontMatter { get; }
-    public string? AdrField { get; }
-    public string? TypeField { get; }
-    public string? StatusField { get; }
-    public string? LevelField { get; }
-    public string? DateField { get; }
-
-    public FrontMatterData(
-        bool hasFrontMatter,
-        string? adrField,
-        string? typeField,
-        string? statusField,
-        string? levelField,
-        string? dateField)
-    {
-        HasFrontMatter = hasFrontMatter;
-        AdrField = adrField;
-        TypeField = typeField;
-        StatusField = statusField;
-        LevelField = levelField;
-        DateField = dateField;
-    }
 }

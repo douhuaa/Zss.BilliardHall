@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing;
 
 /// <summary>
 /// 共享测试环境工具类
