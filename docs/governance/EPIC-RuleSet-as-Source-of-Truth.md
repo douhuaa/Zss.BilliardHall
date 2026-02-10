@@ -93,21 +93,27 @@ var clause = ruleSet.GetClause(1, 1);  // Rule 1, Clause 1
 
 #### 阶段 0: 治理与准备 ✅
 **时间**: 1天  
-**状态**: 进行中
+**状态**: ✅ 已完成
 
 - [x] 架构委员会批准决策
 - [x] 创建会议纪要
-- [ ] 创建 Epic 文档
-- [ ] 创建 GitHub Epic Issue
-- [ ] 创建 Milestones 和 Project
+- [x] 创建 Epic 文档
+- [x] 创建 GitHub Epic Issue (#367)
+- [x] 创建 Milestones (#5, #6, #7) 和标签
+- [x] 创建 13 个子任务 Issues (#368-#380)
+- [ ] 创建 GitHub Project 看板（需手动操作）
 - [ ] PR #365 标记 Ready
 
 **产物**:
 - [x] 会议纪要: `ARCHITECTURE-BOARD-MEETING-2026-02-10.md`
-- [ ] Epic 文档: `EPIC-RuleSet-as-Source-of-Truth.md`
-- [ ] GitHub Issue: Epic #TBD
-- [ ] GitHub Milestones: 3 个
-- [ ] GitHub Project: RuleSet SoT
+- [x] Epic 文档: `EPIC-RuleSet-as-Source-of-Truth.md`
+- [x] GitHub Issue: Epic #367
+- [x] GitHub Milestones: 3 个 (#5, #6, #7)
+- [x] GitHub Issues: 13 个子任务 (#368-#380)
+- [x] GitHub 标签: 20 个
+- [ ] GitHub Project: 待创建
+
+**完成日期**: 2026-02-10
 
 ---
 

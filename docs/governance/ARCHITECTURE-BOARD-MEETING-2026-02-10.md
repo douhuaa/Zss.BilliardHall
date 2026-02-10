@@ -93,10 +93,12 @@
 - [x] 架构委员会批准"重新定位"策略
 - [x] 批准 7 阶段实施路径
 - [x] 创建会议纪要文档
-- [ ] 创建 Epic 文档
-- [ ] 在 GitHub 创建 Epic Issue
-- [ ] 在 GitHub 创建 3 个 Milestones
-- [ ] 在 GitHub 创建 Project 看板
+- [x] 创建 Epic 文档
+- [x] 在 GitHub 创建 Epic Issue (#367)
+- [x] 在 GitHub 创建 3 个 Milestones (#5, #6, #7)
+- [x] 创建 13 个子任务 Issues (#368-#380)
+- [x] 创建标签体系（20个标签）
+- [ ] 在 GitHub 创建 Project 看板（需手动创建）
 - [ ] PR #365 标记为 Ready for Review
 - [ ] 记录行动项与责任人
 
