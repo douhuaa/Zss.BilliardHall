@@ -98,8 +98,8 @@
 - [x] 在 GitHub 创建 3 个 Milestones (#5, #6, #7)
 - [x] 创建 13 个子任务 Issues (#368-#380)
 - [x] 创建标签体系（20个标签）
-- [ ] 在 GitHub 创建 Project 看板（需手动创建）
-- [ ] PR #365 标记为 Ready for Review
+- [x] 在 GitHub 创建 Project 看板（https://github.com/users/douhuaa/projects/11）
+- [x] PR #365 标记为 Ready for Review
 - [ ] 记录行动项与责任人
 
 ### 后续阶段验收标准
@@ -143,12 +143,12 @@
 
 | 行动项 | 责任人 | 截止日期 | 状态 |
 |--------|--------|----------|------|
-| 创建 Epic 文档 | Copilot Agent | 2026-02-10 | ⏳ 进行中 |
-| 创建 GitHub Epic Issue | douhuaa | 2026-02-10 | 📋 待办 |
-| 创建 3 个 GitHub Milestones | douhuaa | 2026-02-10 | 📋 待办 |
-| 创建 GitHub Project 看板 | douhuaa | 2026-02-10 | 📋 待办 |
-| PR #365 标记 Ready | Copilot Agent | 2026-02-10 | 📋 待办 |
-| 创建后续 Phase Issues | Copilot Agent | 2026-02-10 | 📋 待办 |
+| 创建 Epic 文档 | Copilot Agent | 2026-02-10 | ✅ 已完成 |
+| 创建 GitHub Epic Issue | douhuaa | 2026-02-10 | ✅ 已完成 |
+| 创建 3 个 GitHub Milestones | douhuaa | 2026-02-10 | ✅ 已完成 |
+| 创建 GitHub Project 看板 | douhuaa | 2026-02-10 | ✅ 已完成 |
+| PR #365 标记 Ready | Copilot Agent | 2026-02-10 | ✅ 已完成 |
+| 创建后续 Phase Issues | Copilot Agent | 2026-02-10 | ✅ 已完成 |
 
 ### 后续行动（阶段 1-6）
 

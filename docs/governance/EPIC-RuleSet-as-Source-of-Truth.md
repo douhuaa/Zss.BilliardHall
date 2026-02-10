@@ -101,8 +101,9 @@ var clause = ruleSet.GetClause(1, 1);  // Rule 1, Clause 1
 - [x] 创建 GitHub Epic Issue (#367)
 - [x] 创建 Milestones (#5, #6, #7) 和标签
 - [x] 创建 13 个子任务 Issues (#368-#380)
-- [ ] 创建 GitHub Project 看板（需手动操作）
-- [ ] PR #365 标记 Ready
+- [x] 创建 GitHub Project 看板（https://github.com/users/douhuaa/projects/11）
+- [x] 将 Issues #367-#380 添加到 Project
+- [x] PR #365 标记 Ready
 
 **产物**:
 - [x] 会议纪要: `ARCHITECTURE-BOARD-MEETING-2026-02-10.md`
@@ -111,7 +112,7 @@ var clause = ruleSet.GetClause(1, 1);  // Rule 1, Clause 1
 - [x] GitHub Milestones: 3 个 (#5, #6, #7)
 - [x] GitHub Issues: 13 个子任务 (#368-#380)
 - [x] GitHub 标签: 20 个
-- [ ] GitHub Project: 待创建
+- [x] GitHub Project: https://github.com/users/douhuaa/projects/11
 
 **完成日期**: 2026-02-10
 

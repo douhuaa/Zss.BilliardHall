@@ -53,7 +53,12 @@
 - `type:documentation` - Documentation 类型
 - `type:optimization` - Optimization 类型
 
-### 4. 子任务 Issues (13个)
+### 4. GitHub Project 看板
+- **名称**: RuleSet-as-Source-of-Truth
+- **URL**: https://github.com/users/douhuaa/projects/11
+- **状态**: Open
+
+### 5. 子任务 Issues (13个)
 
 #### 阶段 0: 治理与准备
 - **#368**: [Phase 0] 创建 GitHub Epic 基础设施
@@ -133,6 +138,7 @@
 ### GitHub 资源
 - **Epic Issue**: https://github.com/douhuaa/Zss.BilliardHall/issues/367
 - **Milestones**: https://github.com/douhuaa/Zss.BilliardHall/milestones
+- **Project 看板**: https://github.com/users/douhuaa/projects/11
 - **所有 Issues**: https://github.com/douhuaa/Zss.BilliardHall/issues?q=label:epic:ruleset-sot
 - **看板过滤**: https://github.com/douhuaa/Zss.BilliardHall/issues?q=is:issue+is:open+label:epic:ruleset-sot+sort:created-asc
 
@@ -152,27 +158,14 @@
 - [x] 创建 13 个子任务 Issues (#368-#380)
 - [x] 为所有子任务添加 Epic 关联
 - [x] 更新 Epic Issue，添加子任务清单
+- [x] 创建 GitHub Project 看板（RuleSet-as-Source-of-Truth）
+- [x] 将 Issues #367-#380 添加到 Project
 
----
+### 1. 配置 Project 看板状态列
 
-## 📋 待办事项
-
-### 1. 创建 GitHub Project 看板（手动操作）
-
-**步骤**:
-1. 访问: https://github.com/douhuaa/Zss.BilliardHall/projects
-2. 点击 "New project"
-3. 选择 "Board" 模板
-4. 配置：
-   - **名称**: RuleSet-as-Source-of-Truth
-   - **描述**: 将 RuleSet 确立为架构治理的唯一真相源
-5. 创建列：
-   - 📋 To Do
-   - 🔨 In Progress
-   - 👀 In Review
-   - ✅ Done
-6. 添加所有 Issues (#367-#380) 到 Project
-7. 配置自动化规则（可选）
+**待调整**:
+- 将 Status 选项调整为：`To Do / In Progress / In Review / Done`
+- 在 Board 视图按 Status 分组并调整列顺序
 
 ### 2. 更新 PR #365
 
@@ -200,7 +193,7 @@ gh pr edit 365 --add-label "epic:ruleset-sot"
 - [x] 创建 Epic 文档
 - [x] 在 GitHub 创建 Epic Issue (#367)
 - [x] 在 GitHub 创建 3 个 Milestones (#5, #6, #7)
-- [ ] 在 GitHub 创建 Project 看板（待手动创建）
+- [x] 在 GitHub 创建 Project 看板（https://github.com/users/douhuaa/projects/11）
 - [x] PR #365 标记为 Ready for Review
 
 ---
@@ -213,11 +206,13 @@ gh pr edit 365 --add-label "epic:ruleset-sot"
 - Epic Issue: 1 个
 - 子任务 Issues: 13 个
 - 关联评论: 14 条
+- Project 看板: 1 个
 
 ### 执行脚本
 - `create-epic-github-resources-simple.ps1` - 创建标签、Milestones、Epic Issue
 - `create-child-issues.ps1` - 批量创建子任务 Issues
 - `finalize-epic-setup.ps1` - 更新 Epic、添加关联
+ - `finalize-epic-setup.ps1` - 更新 Epic、添加关联
 
 ### 文档创建
 - `GITHUB-EPIC-SETUP-SCRIPT.md` - 详细的创建指南
@@ -232,7 +227,7 @@ gh pr edit 365 --add-label "epic:ruleset-sot"
 ## 🎯 下一步行动
 
 ### 立即行动
-1. **创建 GitHub Project 看板**（需要手动操作）
+1. **配置 Project 看板状态列**（To Do / In Progress / In Review / Done）
 2. **更新 PR #365**，添加 Epic 关联
 
 ### 本周行动
