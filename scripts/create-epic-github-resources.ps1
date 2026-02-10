@@ -107,7 +107,7 @@ if ($DryRun) {
 }
 else {
     try {
-        $result = gh api -X POST "/repos/$repo/milestones" --input - <<< $milestone1 | ConvertFrom-Json
+        $result = $milestone1 | gh api -X POST "/repos/$repo/milestones" --input - | ConvertFrom-Json
         $resources.Milestone1 = $result.number
         Write-Host "  ✅ 成功创建 Milestone #$($result.number): $($result.title)" -ForegroundColor Green
     }
