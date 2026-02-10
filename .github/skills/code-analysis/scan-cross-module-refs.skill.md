@@ -5,6 +5,10 @@ version: "1.1"
 risk_level: "低"
 category: "代码分析"
 required_agent: "module-boundary-checker"
+dependencies:
+  - "verify-project-builds"  # 前置：确保项目可编译以加载程序集
+post_execution:
+  - "post-comment"  # 可选：将扫描结果发布到 PR
 ---
 
 # Scan Cross-Module References Skill

@@ -5,6 +5,11 @@ version: "1.0"
 risk_level: "高"
 category: "代码生成"
 required_agent: "architecture-guardian"
+dependencies:
+  - "verify-module-structure"  # 前置：验证模块结构存在
+  - "check-naming-conventions"  # 前置：检查命名规范
+post_execution:
+  - "run-architecture-tests"  # 建议：生成后运行架构测试验证
 ---
 
 # Generate Handler Skill

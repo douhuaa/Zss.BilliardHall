@@ -207,8 +207,22 @@ version: "1.0"
 risk_level: "高/中/低"
 category: "代码生成/代码分析/代码修改/文档生成/测试执行/CI集成"
 required_agent: "必须由哪个 Agent 授权"
+dependencies: []  # 可选：前置依赖的 Skill 列表
+post_execution: []  # 可选：建议后续执行的 Skill 列表
 ---
 ```
+
+**新增字段说明**（v1.1）：
+
+- `dependencies`：前置依赖列表
+  - 声明此 Skill 执行前必须满足的其他 Skills
+  - 用于建立执行顺序和依赖关系
+  - 示例：`["verify-project-builds", "check-naming-conventions"]`
+
+- `post_execution`：建议后续操作列表
+  - 声明此 Skill 执行后建议进行的其他 Skills
+  - 用于形成完整的工作流
+  - 示例：`["run-architecture-tests", "post-comment"]`
 
 ### 4.2 功能定义
 

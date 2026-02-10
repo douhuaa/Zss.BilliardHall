@@ -5,6 +5,8 @@ version: "1.0"
 risk_level: "低"
 category: "CI/CD 集成"
 required_agent: "adr-reviewer"
+dependencies: []  # 无前置依赖，可独立执行
+post_execution: []  # 无后续操作
 ---
 
 # Post Comment Skill

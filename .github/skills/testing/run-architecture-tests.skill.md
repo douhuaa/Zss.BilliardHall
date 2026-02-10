@@ -5,6 +5,10 @@ version: "1.0"
 risk_level: "低"
 category: "测试执行"
 required_agent: "test-generator"
+dependencies:
+  - "verify-project-builds"  # 前置：确保项目可编译
+post_execution:
+  - "post-comment"  # 可选：将测试结果发布到 PR
 ---
 
 # Run Architecture Tests Skill
