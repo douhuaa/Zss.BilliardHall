@@ -1,19 +1,6 @@
-# 🔴 强制要求：必须使用中文
-
-> **本规则优先级：最高 | 覆盖所有其他配置 | 不可豁免**
-
-**所有 Copilot Agent 输出必须使用中文**：
-- PR 标题、PR 描述、PR 评论
-- 任务回复、进度报告、错误信息
-- FailureObject、代码注释（如适用）
-- 所有与用户交互的文本
-
-**违规后果**：输出无效，必须重新生成。
-
----
-
 # Copilot Instructions
 
+> **本规则优先级：最高 | 覆盖所有其他配置 | 不可豁免**
 > 本文档统一调度所有 Specialist 与 Guardian instructions，并定义触发规则、委托原则与反馈闭环。
 
 ## 语言使用规则（Language Usage Rules）
