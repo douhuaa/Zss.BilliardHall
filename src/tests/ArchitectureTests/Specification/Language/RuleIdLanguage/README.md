@@ -67,5 +67,7 @@ var clauseId = ArchitectureRuleId.Clause(907, 3, 2);
 
 ## 相关文档
 
-- [ADR-905: 裁决语义模型](../../../docs/adr/governance/ADR-905-decision-semantic-model.md)
-- [ADR-907: ArchitectureTests 执法治理体系](../../../docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md)
+- [ADR-905: 执行级别分类](../../../../../docs/adr/governance/ADR-905-enforcement-level-classification.md)
+- [ADR-907: ArchitectureTests 执法治理体系](../../../../../docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md)
+- [ADR-907-A: RuleId 格式规范](../../../../../docs/adr/governance/ADR-907-a-alignment-checklist.md)
+- [Specification 主文档](../../README.md)

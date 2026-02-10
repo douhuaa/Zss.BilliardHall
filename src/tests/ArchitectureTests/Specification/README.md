@@ -23,6 +23,19 @@
 
 ## 目录结构
 
+### 当前状态（2026-02）
+
+| 组件 | 状态 | 数量/进度 | 说明 |
+|------|------|----------|------|
+| **Language/DecisionLanguage** | ✅ 稳定 | 4 个核心类型 | DecisionLevel、DecisionRule、解析和执行结果 |
+| **Language/RuleIdLanguage** | ✅ 稳定 | 2 个核心类型 | ArchitectureRuleId、RuleIdParser |
+| **Rules** | ✅ 稳定 | 9 个核心类型 | 规则集、规则定义、条款定义及枚举类型 |
+| **RuleSets** | ✅ 生产就绪 | 43 个 RuleSet | 覆盖宪法、结构、运行时、治理四大层 |
+| **Index** | ✅ 稳定 | 2 个索引类 | RuleSetRegistry、AdrRuleIndex |
+| **Tests/Infrastructure** | ✅ 稳定 | 3 个辅助类 | RuleIdAssertions、RuleSetValidator、TestDataBuilder |
+
+### 目录树
+
 ```
 /Specification
 ├── ArchitectureTestSpecification.cs    # 根聚合（统一入口）
@@ -56,20 +69,19 @@
 │   └── README.md
 │
 ├── /RuleSets                            # 规则集定义（按 ADR 拆分）
-│   ├── /ADR001
-│   │   └── Adr001RuleSet.cs             # ADR-001 的规则集
-│   ├── /ADR002
-│   │   └── Adr002RuleSet.cs             # ADR-002 的规则集
-│   ├── /ADR003
-│   │   └── Adr003RuleSet.cs             # ADR-003 的规则集
-│   ├── /ADR120
-│   │   └── Adr120RuleSet.cs             # ADR-120 的规则集
-│   ├── /ADR201
-│   │   └── Adr201RuleSet.cs             # ADR-201 的规则集
-│   ├── /ADR900
-│   │   └── Adr900RuleSet.cs             # ADR-900 的规则集
-│   └── /ADR907
-│       └── Adr907RuleSet.cs             # ADR-907 的规则集
+│   ├── /ADR001 ~ /ADR008                # 宪法层规则集（Constitutional）
+│   │   └── AdrXxxRuleSet.cs             # 各 ADR 的规则集定义
+│   ├── /ADR120 ~ /ADR124                # 结构层规则集（Structure）
+│   │   └── AdrXxxRuleSet.cs
+│   ├── /ADR201 ~ /ADR360                # 运行时层规则集（Runtime）
+│   │   └── AdrXxxRuleSet.cs
+│   └── /ADR900 ~ /ADR990                # 治理层规则集（Governance）
+│       └── AdrXxxRuleSet.cs
+│   
+│   # 当前已创建：43 个 RuleSet（覆盖所有核心 ADR）
+│   # 完整列表：ADR-001~008, 120~124, 201/210/220/240, 301/340/350/360,
+│   #          ADR-900~907, 910/920/930/940/945~947, 950~952/955,
+│   #          ADR-960/965/970/975/980/990
 │
 ├── /Index                               # 规则集索引层
 │   ├── RuleSetRegistry.cs               # 规则集注册表（统一访问入口）
@@ -126,6 +138,13 @@ var rule = new ArchitectureRuleDefinition(
 - **一个文件**：`Adr{编号}RuleSet.cs`
 - **一个静态类**：`Adr{编号}RuleSet`
 - **一个静态属性**：`RuleSet`（返回 `ArchitectureRuleSet`）
+
+**当前覆盖范围**：
+- 宪法层（ADR-001 ~ 008）：8 个 RuleSet ✅
+- 结构层（ADR-120 ~ 124）：5 个 RuleSet ✅
+- 运行时层（ADR-201 ~ 360）：8 个 RuleSet ✅
+- 治理层（ADR-900 ~ 990）：22 个 RuleSet ✅
+- **总计**：43 个 RuleSet
 
 **特点**：
 - 只表达"规范"，不知道如何测试
@@ -279,6 +298,20 @@ var moduleRules = RuleSetRegistry.GetByScope(RuleScope.Module);
 - [ADR-905: 执行级别分类](../../../docs/adr/governance/ADR-905-enforcement-level-classification.md)
 - [ADR-907: ArchitectureTests 执法治理体系](../../../docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md)
 - [ADR-907-A: RuleId 格式规范](../../../docs/adr/governance/ADR-907-a-alignment-checklist.md)
+
+## 更新历史
+
+### 2026-02-10
+- ✅ 更新文档以反映 43 个 RuleSet 的实际状态
+- ✅ 添加当前状态概览表格
+- ✅ 更新 RuleSets 目录结构说明
+- ✅ 修正文档日期标记
+
+### 2026-02-06 之前
+- ✅ 建立 Specification 三层架构（Language、RuleSets、Index）
+- ✅ 实现 DecisionLanguage 和 RuleIdLanguage
+- ✅ 创建测试基础设施（Infrastructure）
+- ✅ 完成重构总结文档
 
 ## 常见问题
 
