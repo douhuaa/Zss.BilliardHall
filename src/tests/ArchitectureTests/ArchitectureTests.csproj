@@ -31,4 +31,10 @@
     <ProjectReference Include="..\..\Host\Web\Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Specification/Generator/Tests/golden/**/*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

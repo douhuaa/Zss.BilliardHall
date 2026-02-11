@@ -11,6 +11,35 @@ public static class FrontMatterParser
         RegexOptions.Singleline | RegexOptions.Compiled);
 
     /// <summary>
+    /// 提取原始 Front Matter 文本（包括 --- 分隔符）
+    /// 适用于需要保留原始格式的场景，如文档合并
+    /// </summary>
+    /// <param name="content">Markdown 文本内容</param>
+    /// <returns>原始 Front Matter 文本，如果不存在则返回 null</returns>
+    public static string? ExtractRawFrontMatter(string content)
+    {
+        if (!content.StartsWith("---"))
+            return null;
+
+        var lines = content.Split('\n');
+        var endIndex = -1;
+
+        for (int i = 1; i < lines.Length; i++)
+        {
+            if (lines[i].Trim() == "---")
+            {
+                endIndex = i;
+                break;
+            }
+        }
+
+        if (endIndex == -1)
+            return null;
+
+        return string.Join('\n', lines.Take(endIndex + 1));
+    }
+
+    /// <summary>
     /// 从文本中解析完整的 Front Matter
     /// 返回所有相关字段：adr, type, status, level, date
     /// </summary>
