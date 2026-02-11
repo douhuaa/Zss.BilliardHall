@@ -42,7 +42,7 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
             .ToList();
 
         if (!orderedRules.Any())
-            return sb.ToString();
+            return NormalizeNewlines(sb.ToString());
 
         for (int i = 0; i < orderedRules.Count; i++)
         {
@@ -54,7 +54,8 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
             }
         }
 
-        return sb.ToString();
+        // 统一行尾为 LF，避免跨平台差异
+        return NormalizeNewlines(sb.ToString());
     }
 
     private static void AppendSectionHeader(StringBuilder sb, DecisionGenerationOptions options)
@@ -160,4 +161,12 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
     }
 
     private static string MakeHeaderPrefix(int level) => new string('#', Math.Max(1, level));
+
+    /// <summary>
+    /// 统一行尾为 LF，避免跨平台差异
+    /// </summary>
+    private static string NormalizeNewlines(string? input) =>
+        string.IsNullOrEmpty(input)
+            ? string.Empty
+            : input.Replace("\r\n", "\n").Replace("\r", "\n");
 }
