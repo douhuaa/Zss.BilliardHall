@@ -8,6 +8,8 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing;
 /// </summary>
 public static class CSharpIdentifierHelper
 {
+    private static readonly Regex ConsecutiveUnderscores = new("_{2,}", RegexOptions.Compiled);
+
     /// <summary>
     /// 将字符串转换为有效的 C# 标识符
     /// 规则：
@@ -53,7 +55,7 @@ public static class CSharpIdentifierHelper
             .Replace("@", "At");
 
         // 使用正则表达式移除连续的下划线
-        identifier = Regex.Replace(identifier, "_{2,}", "_");
+        identifier = ConsecutiveUnderscores.Replace(identifier, "_");
 
         // 移除首尾下划线
         identifier = identifier.Trim('_');
