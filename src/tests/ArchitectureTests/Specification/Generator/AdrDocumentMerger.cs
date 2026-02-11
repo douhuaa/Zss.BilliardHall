@@ -47,38 +47,39 @@ public sealed class AdrDocumentMerger : IAdrDocumentMerger
         // 提取所有章节
         var sections = ExtractSections(document, existingAdrContent);
 
-        // 构建新文档
+        // 构建新文档（使用显式 \n 而非 AppendLine 以确保跨平台一致性）
         var result = new System.Text.StringBuilder();
 
         // 1. 添加 Front Matter
         if (!string.IsNullOrEmpty(frontMatter))
         {
-            result.AppendLine(frontMatter);
-            result.AppendLine();
+            result.Append(frontMatter);
+            result.Append("\n\n");
         }
 
         // 2. 添加 Decision 之前的章节（如 Focus、Glossary）
         foreach (var section in sections.Where(s => s.Order < GetDecisionOrder()))
         {
-            result.AppendLine(section.Content);
-            result.AppendLine();
+            result.Append(section.Content);
+            result.Append("\n\n");
         }
 
         // 3. 添加新的 Decision 章节
         result.Append(newDecisionContent);
         if (!newDecisionContent.EndsWith("\n\n"))
         {
-            result.AppendLine();
+            result.Append("\n");
         }
 
         // 4. 添加 Decision 之后的章节（如 Context、Consequences）
         foreach (var section in sections.Where(s => s.Order > GetDecisionOrder()))
         {
-            result.AppendLine(section.Content);
-            result.AppendLine();
+            result.Append(section.Content);
+            result.Append("\n\n");
         }
 
-        return result.ToString().TrimEnd() + "\n";
+        // 统一行尾为 LF，避免跨平台差异
+        return NormalizeNewlines(result.ToString().TrimEnd() + "\n");
     }
 
     /// <summary>
@@ -88,20 +89,6 @@ public sealed class AdrDocumentMerger : IAdrDocumentMerger
     {
         var sections = new List<DocumentSection>();
         var lines = content.Split('\n');
-
-        // 跳过 Front Matter
-        var startLine = 0;
-        if (content.StartsWith("---"))
-        {
-            for (int i = 1; i < lines.Length; i++)
-            {
-                if (lines[i].Trim() == "---")
-                {
-                    startLine = i + 1;
-                    break;
-                }
-            }
-        }
 
         // 提取所有 H2 级别的章节
         var headings = document.Descendants<HeadingBlock>()
@@ -139,12 +126,9 @@ public sealed class AdrDocumentMerger : IAdrDocumentMerger
         if (inline == null) return string.Empty;
 
         var text = new System.Text.StringBuilder();
-        foreach (var item in inline)
+        foreach (var literal in inline.OfType<Markdig.Syntax.Inlines.LiteralInline>())
         {
-            if (item is Markdig.Syntax.Inlines.LiteralInline literal)
-            {
-                text.Append(literal.Content.ToString());
-            }
+            text.Append(literal.Content);
         }
         
         return text.ToString();
@@ -200,6 +184,14 @@ public sealed class AdrDocumentMerger : IAdrDocumentMerger
     /// 获取 Decision 章节的排序顺序
     /// </summary>
     private static int GetDecisionOrder() => 3;
+
+    /// <summary>
+    /// 统一行尾为 LF，避免跨平台差异
+    /// </summary>
+    private static string NormalizeNewlines(string? input) =>
+        string.IsNullOrEmpty(input)
+            ? string.Empty
+            : input.Replace("\r\n", "\n").Replace("\r", "\n");
 
     /// <summary>
     /// 文档章节

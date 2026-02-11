@@ -20,7 +20,7 @@ public sealed class DecisionGenerationOptions
     /// <summary>
     /// 标题层级偏移量
     /// 默认为 0（使用标准层级：## Decision, ### Rule, #### Clause）
-    /// 有效范围：0-4（确保输出的标题层级在 H2-H6 之间）
+    /// 有效范围：0-2（确保 Clause 标题最高为 H6）
     /// </summary>
     public int HeaderLevelOffset { get; init; } = 0;
 
@@ -46,12 +46,14 @@ public sealed class DecisionGenerationOptions
     /// </summary>
     internal void Validate()
     {
-        if (HeaderLevelOffset is < 0 or > 4)
+        // Rule 标题是 H3 (3+offset)，Clause 标题是 H4 (4+offset)
+        // 为确保所有标题都在 H2-H6 范围内，offset 最大为 2
+        if (HeaderLevelOffset is < 0 or > 2)
         {
             throw new ArgumentOutOfRangeException(
             nameof(HeaderLevelOffset),
             HeaderLevelOffset,
-            "HeaderLevelOffset 必须在 0-4 之间，以确保输出的标题层级在 H2-H6 范围内");
+            "HeaderLevelOffset 必须在 0-2 之间，以确保所有标题层级（H3-H6）都不超过 H6");
         }
     }
 }

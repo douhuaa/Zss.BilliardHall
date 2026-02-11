@@ -105,7 +105,7 @@ public sealed class AdrDecisionGenerator_SafetyTests
     {
         // Arrange
         var ruleSet = CreateRuleSet();
-        var options = new DecisionGenerationOptions { HeaderLevelOffset = 5 };
+        var options = new DecisionGenerationOptions { HeaderLevelOffset = 3 };
 
         // Act & Assert
         Action act = () => Generate(ruleSet, options);
@@ -116,8 +116,6 @@ public sealed class AdrDecisionGenerator_SafetyTests
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(2)]
-    [InlineData(3)]
-    [InlineData(4)]
     public void GenerateDecisionSection_AcceptsValidHeaderLevelOffset(int offset)
     {
         // Arrange

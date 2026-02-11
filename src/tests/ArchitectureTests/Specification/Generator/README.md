@@ -117,17 +117,20 @@ File.WriteAllText("docs/adr/ADR-907.md", updatedAdr);
 
 ## 测试覆盖
 
-- **单元测试**：16 个测试验证核心生成逻辑
-- **集成测试**：12 个测试验证与真实 RuleSet 的集成
-- **Golden 测试**：验证生成内容与标准样本的一致性
-- **安全测试**：验证边界条件和异常处理
+当前测试集包含以下几类：
 
-总计 **49 个测试**，覆盖率 > 80%
+- **单元测试**：16 个测试验证核心生成逻辑和选项组合
+- **集成测试**：12 个测试验证与真实 RuleSet、ADR 文档的端到端集成
+- **安全/边界测试**：21 个测试验证异常处理、空输入、极端场景等边界条件
+- **Golden 测试**：3 个测试通过标准样本文件验证生成结果的一致性和结构正确性
+- **文档合并测试**：11 个测试验证 AdrDocumentMerger 的各种合并场景
+
+总计 **63 个测试**，覆盖率 > 80%
 
 ## 相关文档
 
-- [ADR-907: ArchitectureTests 执法治理体系](../../RuleSets/ADR907/ADR-907.md)
-- [ADR-907-A: ADR-907 对齐执行标准](../../RuleSets/ADR907A/ADR-907-A.md)
+- [ADR-907: ArchitectureTests 执法治理体系](../../../../docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md)
+- [ADR-907-A: ADR-907 对齐执行标准](../../../../docs/adr/governance/adr-907-a-adr-alignment-execution-standard.md)
 - [Specification Language 规范](../Language/README.md)
 
 ## 维护指南
