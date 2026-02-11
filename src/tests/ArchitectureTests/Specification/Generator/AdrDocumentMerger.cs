@@ -41,8 +41,8 @@ public sealed class AdrDocumentMerger : IAdrDocumentMerger
         // 解析现有 ADR 文档
         var document = Markdown.Parse(existingAdrContent, _pipeline);
 
-        // 提取 Front Matter（如果存在）
-        var frontMatter = ExtractFrontMatter(existingAdrContent);
+        // 提取 Front Matter（如果存在）- 使用 Shared 中的统一方法
+        var frontMatter = FrontMatterParser.ExtractRawFrontMatter(existingAdrContent);
 
         // 提取所有章节
         var sections = ExtractSections(document, existingAdrContent);
@@ -79,32 +79,6 @@ public sealed class AdrDocumentMerger : IAdrDocumentMerger
         }
 
         return result.ToString().TrimEnd() + "\n";
-    }
-
-    /// <summary>
-    /// 提取 Front Matter（YAML 头部）
-    /// </summary>
-    private static string? ExtractFrontMatter(string content)
-    {
-        if (!content.StartsWith("---"))
-            return null;
-
-        var lines = content.Split('\n');
-        var endIndex = -1;
-
-        for (int i = 1; i < lines.Length; i++)
-        {
-            if (lines[i].Trim() == "---")
-            {
-                endIndex = i;
-                break;
-            }
-        }
-
-        if (endIndex == -1)
-            return null;
-
-        return string.Join('\n', lines.Take(endIndex + 1));
     }
 
     /// <summary>
