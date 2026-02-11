@@ -98,4 +98,24 @@ public sealed class CSharpIdentifierHelper_Tests
         // Assert
         result.Should().Be(expected);
     }
+
+    [Theory(DisplayName = "ToValidIdentifier 应该对只包含被移除字符的输入返回 Unnamed")]
+    [InlineData("()")]
+    [InlineData("[]")]
+    [InlineData("{}")]
+    [InlineData("<>")]
+    [InlineData("\"'")]
+    [InlineData("(){}[]<>\"'")]
+    [InlineData("()()()")]
+    [InlineData("[[[]]]")]
+    [InlineData("???***")]
+    [InlineData("____")]
+    public void ToValidIdentifier_Should_Return_Unnamed_For_All_Removed_Input(string input)
+    {
+        // Act
+        var result = CSharpIdentifierHelper.ToValidIdentifier(input);
+
+        // Assert
+        result.Should().Be("Unnamed");
+    }
 }

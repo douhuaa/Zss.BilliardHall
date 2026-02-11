@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing;
 
 /// <summary>
@@ -50,25 +52,22 @@ public static class CSharpIdentifierHelper
             .Replace("=", "Equals")
             .Replace("@", "At");
 
-        // 移除连续的下划线
-        while (identifier.Contains("__"))
-        {
-            identifier = identifier.Replace("__", "_");
-        }
+        // 使用正则表达式移除连续的下划线
+        identifier = Regex.Replace(identifier, "_{2,}", "_");
 
         // 移除首尾下划线
         identifier = identifier.Trim('_');
-
-        // 确保以字母或下划线开头
-        if (!char.IsLetter(identifier[0]) && identifier[0] != '_')
-        {
-            identifier = "_" + identifier;
-        }
 
         // 如果结果为空或只有下划线，返回默认值
         if (string.IsNullOrWhiteSpace(identifier) || identifier == "_")
         {
             return "Unnamed";
+        }
+
+        // 确保以字母或下划线开头
+        if (!char.IsLetter(identifier[0]) && identifier[0] != '_')
+        {
+            identifier = "_" + identifier;
         }
 
         return identifier;
