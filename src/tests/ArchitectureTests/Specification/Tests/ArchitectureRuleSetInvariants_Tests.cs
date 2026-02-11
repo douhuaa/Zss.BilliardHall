@@ -1,5 +1,4 @@
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests.Infrastructure;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 

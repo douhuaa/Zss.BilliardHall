@@ -25,6 +25,7 @@ global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.Rul
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.FileSystem;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Assemblies;
+global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Infrastructure;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing;
 
 global using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing.AssertionMessageBuilder;

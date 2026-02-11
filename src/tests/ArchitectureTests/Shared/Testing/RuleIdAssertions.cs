@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests.Infrastructure;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Infrastructure;
 
 /// <summary>
 /// RuleId 断言辅助类
