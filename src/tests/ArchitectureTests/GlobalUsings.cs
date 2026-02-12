@@ -17,6 +17,8 @@ global using Zss.BilliardHall.Platform.Exceptions;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator;
+global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Implementations;
+global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Models;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.DecisionLanguage;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
@@ -31,4 +33,3 @@ global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Infrastructure;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing;
 
 global using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing.AssertionMessageBuilder;
-
