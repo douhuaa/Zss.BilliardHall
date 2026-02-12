@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
 
 /// <summary>
 /// C# 标识符辅助工具
