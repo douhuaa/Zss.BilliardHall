@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
 
 /// <summary>

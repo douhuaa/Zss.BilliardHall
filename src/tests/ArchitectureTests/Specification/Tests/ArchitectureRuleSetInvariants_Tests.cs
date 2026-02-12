@@ -1,5 +1,3 @@
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
 /// <summary>

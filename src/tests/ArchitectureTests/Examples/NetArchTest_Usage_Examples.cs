@@ -3,13 +3,13 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Examples;
 /// <summary>
 /// NetArchTest 使用示例
 /// 展示如何使用 NetArchTest 和 NetArchTestHelper 编写架构测试
-/// 
+///
 /// 这个文件是一个教学示例，展示了：
 /// 1. 如何使用 NetArchTest 的流畅 API
 /// 2. 如何集成 RuleSetRegistry 获取规则元数据
 /// 3. 如何使用 NetArchTestHelper 简化测试编写
 /// 4. 如何使用 AssertionMessageBuilder 生成标准化错误消息
-/// 
+///
 /// 参考：
 /// - docs/guidelines/NETARCHTEST-USAGE-GUIDE.md
 /// - src/tests/ArchitectureTests/Specification/RuleSets/ADR001/tests/Adr001_Module_Isolation_Tests.cs
@@ -20,7 +20,7 @@ public sealed class NetArchTest_Usage_Examples
 
     /// <summary>
     /// 示例: 从 RuleSetRegistry 获取规则元数据
-    /// 
+    ///
     /// 优势：
     /// - 规则信息统一管理
     /// - 避免硬编码

@@ -1,6 +1,4 @@
-﻿using Zss.BilliardHall.Generators.ClauseExecutors;
-
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.Tests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.Tests;
 
 /// <summary>
 /// ClauseExecutor 单元测试

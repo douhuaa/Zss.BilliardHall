@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
 
 /// <summary>
 /// AdrDecisionGenerator 的单元测试（重构版）
