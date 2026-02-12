@@ -24,6 +24,10 @@ var app = builder.Build();
 app.MapWolverineEndpoints();
 
 // 添加健康检查端点
-app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
+app.MapGet("/health", () => Results.Ok(new Zss.BilliardHall.Host.Web.HealthCheckResponse 
+{ 
+    Status = "healthy", 
+    Timestamp = DateTime.UtcNow 
+}));
 
 app.Run();

@@ -14,6 +14,6 @@ public static class CreateMemberEndpoint
     public static async Task<IResult> Create(CreateMemberCommand command, IMessageBus bus)
     {
         var memberId = await bus.InvokeAsync<Guid>(command);
-        return Results.Created($"/api/members/{memberId}", new { Id = memberId });
+        return Results.Created($"/api/members/{memberId}", new CreateMemberResponse { Id = memberId });
     }
 }
