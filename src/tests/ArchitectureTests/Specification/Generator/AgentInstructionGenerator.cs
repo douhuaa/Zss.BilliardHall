@@ -248,14 +248,25 @@ public sealed class AgentInstructionGenerator : IAgentInstructionGenerator
 
     /// <summary>
     /// 转义 YAML 字符串中的特殊字符
+    /// 防止 YAML 注入攻击和结构破坏
     /// </summary>
     private static string EscapeYamlString(string? text)
     {
         if (string.IsNullOrEmpty(text))
             return string.Empty;
 
-        // 转义双引号
-        return text.Replace("\"", "\\\"");
+        // 重要：必须先转义反斜杠，然后再转义其他字符
+        // 否则会导致双重转义问题
+        var escaped = text
+            .Replace("\\", "\\\\")  // 反斜杠必须首先转义
+            .Replace("\"", "\\\"")  // 转义双引号 - 防止字符串边界破坏
+            .Replace("\n", "\\n")   // 换行符 - 防止多行注入
+            .Replace("\r", "\\r")   // 回车符
+            .Replace("\t", "\\t")   // 制表符
+            .Replace("`", "\\`")    // 反引号 - 防止命令注入
+            .Replace("$", "\\$");   // 美元符号 - 防止变量替换注入
+        
+        return escaped;
     }
 
     /// <summary>
