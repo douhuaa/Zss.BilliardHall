@@ -26,7 +26,7 @@ public sealed class AdrDocumentMerger : IAdrDocumentMerger
         ArgumentNullException.ThrowIfNull(ruleSet);
 
         var newDecisionContent = _decisionGenerator.GenerateDecisionSection(
-        ruleSet, 
+        ruleSet,
         options ?? DecisionGenerationOptions.Default);
 
         return MergeDecisionSection(existingAdrContent, newDecisionContent);
@@ -100,7 +100,7 @@ public sealed class AdrDocumentMerger : IAdrDocumentMerger
         foreach (var heading in headings)
         {
             var title = GetHeadingText(heading);
-            
+
             // 跳过 Decision 章节（将被替换）
             if (title.Contains("Decision") || title.Contains("裁决"))
                 continue;
@@ -132,7 +132,7 @@ public sealed class AdrDocumentMerger : IAdrDocumentMerger
         {
             text.Append(literal.Content);
         }
-        
+
         return text.ToString();
     }
 

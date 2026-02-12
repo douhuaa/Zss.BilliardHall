@@ -7,7 +7,7 @@
 /// </summary>
 public static class FrontMatterParser
 {
-    private static readonly Regex FrontMatterPattern = new(@"^---\s*\r?\n(.*?)\r?\n---\s*\r?\n", 
+    private static readonly Regex FrontMatterPattern = new(@"^---\s*\r?\n(.*?)\r?\n---\s*\r?\n",
         RegexOptions.Singleline | RegexOptions.Compiled);
 
     /// <summary>
@@ -108,7 +108,7 @@ public static class FrontMatterParser
     private static FrontMatterData ParseYamlKeyValues(string yamlText, bool includeAllFields)
     {
         var lines = yamlText.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-        
+
         string? adrField = null;
         string? typeField = null;
         string? statusField = null;
