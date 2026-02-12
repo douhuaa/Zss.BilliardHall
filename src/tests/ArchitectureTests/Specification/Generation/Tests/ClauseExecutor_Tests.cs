@@ -1,4 +1,4 @@
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.ClauseExecutors;
+﻿using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.ClauseExecutors;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.Tests;
 
@@ -207,13 +207,13 @@ public sealed class ClauseExecutor_Tests
         {
             var clause = CreateTestClause(executor.SupportedType);
             var code = executor.GenerateAssertionCode(clause, indent);
-            
+
             code.Should().NotBeNull($"{executor.GetType().Name} 应该返回代码");
-            
+
             // 如果有缩进，验证生成的代码包含缩进
             if (!string.IsNullOrEmpty(indent))
             {
-                code.Should().Contain(indent, 
+                code.Should().Contain(indent,
                     $"{executor.GetType().Name} 生成的代码应该包含缩进");
             }
         }
