@@ -31,7 +31,6 @@ global using Zss.BilliardHall.Specification.Language.DecisionLanguage;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.FileSystem;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Assemblies;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Infrastructure;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
+global using Zss.BilliardHall.Specification.RuleSets.ADR907;
 global using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing.AssertionMessageBuilder;

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Infrastructure;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing;
 
 /// <summary>
 /// RuleSet 验证器
