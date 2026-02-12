@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.Tests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.Tests;
 
 /// <summary>
 /// ArchitectureTestGenerator 集成测试
@@ -205,7 +205,7 @@ public sealed class ArchitectureTestGenerator_IntegrationTests
         {
             var ruleId = clause.Id.RuleNumber;
             var clauseId = clause.Id.ClauseNumber;
-            
+
             // 应该包含条款数据
             result.SourceCode.Should().Contain($"{{ {ruleId}, {clauseId},");
         }

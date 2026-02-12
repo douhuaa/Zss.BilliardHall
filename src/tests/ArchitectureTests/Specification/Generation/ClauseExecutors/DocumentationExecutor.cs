@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.ClauseExecutors;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.ClauseExecutors;
 
 /// <summary>
 /// 文档验证执行器

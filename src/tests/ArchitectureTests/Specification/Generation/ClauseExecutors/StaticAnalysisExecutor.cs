@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.ClauseExecutors;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.ClauseExecutors;
 
 /// <summary>
 /// 静态分析执行器

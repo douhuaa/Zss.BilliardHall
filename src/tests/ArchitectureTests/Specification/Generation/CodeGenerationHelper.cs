@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
 
 /// <summary>
 /// 代码生成辅助工具
@@ -34,8 +34,8 @@ public static class CodeGenerationHelper
 
         var indent = string.Concat(Enumerable.Repeat(indentString, indentLevel));
         var lines = text.Split('\n');
-        
-        return string.Join('\n', lines.Select(line => 
+
+        return string.Join('\n', lines.Select(line =>
             string.IsNullOrWhiteSpace(line) ? line : indent + line));
     }
 

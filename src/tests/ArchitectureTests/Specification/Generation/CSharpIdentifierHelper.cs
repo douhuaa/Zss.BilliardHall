@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
 
@@ -81,7 +81,7 @@ public static class CSharpIdentifierHelper
     public static string ToPascalCase(string input)
     {
         var identifier = ToValidIdentifier(input);
-        
+
         if (string.IsNullOrEmpty(identifier))
         {
             return identifier;

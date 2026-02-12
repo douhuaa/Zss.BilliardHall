@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
 
 /// <summary>
 /// 模板渲染器
@@ -186,7 +186,7 @@ public sealed class TemplateRenderer
         foreach (ClauseExecutionType executionType in Enum.GetValues(typeof(ClauseExecutionType)))
         {
             parts.Add($"{baseIndent}{indent}case ClauseExecutionType.{executionType}:");
-            
+
             var executor = _executorFactory.GetExecutor(executionType);
             var assertionCode = executor.GenerateAssertionCode(
                 new ArchitectureClauseDefinition(
