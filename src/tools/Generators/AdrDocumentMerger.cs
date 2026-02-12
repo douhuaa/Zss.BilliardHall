@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using Markdig;
 using Markdig.Syntax;
 using Zss.BilliardHall.Specification.Rules;

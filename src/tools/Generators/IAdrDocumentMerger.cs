@@ -1,4 +1,4 @@
-using Zss.BilliardHall.Specification.Rules;
+﻿using Zss.BilliardHall.Specification.Rules;
 
 namespace Zss.BilliardHall.Generators;
 
