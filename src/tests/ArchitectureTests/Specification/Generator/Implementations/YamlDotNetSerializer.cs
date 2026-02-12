@@ -11,12 +11,18 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Imple
 public sealed class YamlDotNetSerializer : IYamlSerializer
 {
     private readonly ISerializer _serializer;
+    private readonly IDeserializer _deserializer;
 
     public YamlDotNetSerializer()
     {
         _serializer = new SerializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
             .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
+            .Build();
+
+        _deserializer = new DeserializerBuilder()
+            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .IgnoreUnmatchedProperties()
             .Build();
     }
 
@@ -31,6 +37,15 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
         yaml = NormalizeNewlines(yaml);
         yaml = PostProcessYaml(yaml);
         return yaml;
+    }
+
+    /// <summary>
+    /// 反序列化 YAML 字符串为对象
+    /// </summary>
+    public T Deserialize<T>(string yaml) where T : class
+    {
+        ArgumentNullException.ThrowIfNull(yaml);
+        return _deserializer.Deserialize<T>(yaml);
     }
 
     /// <summary>
