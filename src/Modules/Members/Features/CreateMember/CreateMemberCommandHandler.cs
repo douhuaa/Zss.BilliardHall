@@ -7,17 +7,16 @@
 /// </summary>
 public class CreateMemberCommandHandler
 {
-    public static async Task<Guid> Handle(CreateMemberCommand command, IDocumentSession session, CancellationToken ct = default)
+    public static  Task<Guid> Handle(CreateMemberCommand command, IDocumentSession session,ISystemClock clock)
     {
         var member = new Member(Id: Guid.CreateVersion7(),
         Name: command.Name,
         Email: command.Email,
         PhoneNumber: command.PhoneNumber,
-        CreatedAt: DateTimeOffset.UtcNow);
+        CreatedAt: clock.UtcNow);
 
         session.Store(member);
-        await session.SaveChangesAsync(ct);
 
-        return member.Id;
+        return Task.FromResult(member.Id);
     }
 }

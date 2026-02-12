@@ -19,23 +19,31 @@ public static class ApplicationBootstrapper
 
         var enableHttp = configuration.GetValue("Wolverine:Http:Enabled", true);
 
-        ConfigureMarten(services, configuration);
+        var moduleAssemblies = LoadModuleAssemblies(ReadModuleAssemblyNames(configuration));
+
+        // 关键：先实例化模块（按配置顺序 + 每程序集唯一 IModule）
+        var modules = CreateModulesInOrder(moduleAssemblies);
+
+        ConfigureMarten(services, configuration, modules);
         ConfigureWolverine(services, enableHttp);
-
-        var moduleAssemblyNames = ReadModuleAssemblyNames(configuration);
-        var moduleAssemblies = LoadModuleAssemblies(moduleAssemblyNames);
-
         ConfigureWolverineDiscovery(services, moduleAssemblies);
-        ConfigureModulesInOrder(services, configuration, environment, moduleAssemblies);
+
+        ConfigureModules(services, configuration, environment, modules);
     }
 
-    private static void ConfigureMarten(IServiceCollection services, IConfiguration configuration)
+    private static void ConfigureMarten(IServiceCollection services, IConfiguration configuration, IReadOnlyList<IModule> modules)
     {
         var connectionString = configuration.GetConnectionString("Postgres");
         if (string.IsNullOrWhiteSpace(connectionString))
             throw new InvalidOperationException("缺少 ConnectionStrings:Postgres（请用 User Secrets/KeyVault 注入，禁止硬编码）。");
 
-        services.AddMarten(opts => opts.Connection(connectionString))
+        services.AddMarten(opts =>
+            {
+                opts.Connection(connectionString);
+
+                foreach (var module in modules.OfType<IMartenModule>())
+                    module.ConfigureMarten(opts);
+            })
             .UseLightweightSessions();
     }
 
@@ -45,6 +53,40 @@ public static class ApplicationBootstrapper
 
         if (enableHttp)
             services.AddWolverineHttp();
+    }
+
+    private static void ConfigureWolverineDiscovery(IServiceCollection services, Assembly[] moduleAssemblies)
+    {
+        services.Configure<WolverineOptions>(w =>
+        {
+            foreach (var assembly in moduleAssemblies)
+                w.Discovery.IncludeAssembly(assembly);
+
+            w.Policies.AutoApplyTransactions();
+        });
+    }
+
+    private static void ConfigureModules(
+        IServiceCollection services,
+        IConfiguration configuration,
+        IHostEnvironment environment,
+        IReadOnlyList<IModule> modules)
+    {
+        foreach (var module in modules)
+            module.ConfigureServices(services, configuration, environment);
+    }
+
+    private static IReadOnlyList<IModule> CreateModulesInOrder(Assembly[] moduleAssemblies)
+    {
+        var modules = new List<IModule>(moduleAssemblies.Length);
+
+        foreach (var assembly in moduleAssemblies)
+        {
+            var moduleType = GetSingleModuleTypeOrThrow(assembly);
+            modules.Add(CreateModuleInstance(moduleType));
+        }
+
+        return modules;
     }
 
     private static string[] ReadModuleAssemblyNames(IConfiguration configuration)
@@ -86,33 +128,6 @@ public static class ApplicationBootstrapper
         return assemblies.ToArray();
     }
 
-    private static void ConfigureWolverineDiscovery(IServiceCollection services, Assembly[] moduleAssemblies)
-    {
-        services.Configure<WolverineOptions>(w =>
-        {
-            foreach (var assembly in moduleAssemblies)
-                w.Discovery.IncludeAssembly(assembly);
-
-            w.Policies.AutoApplyTransactions();
-        });
-    }
-
-    private static void ConfigureModulesInOrder(
-        IServiceCollection services,
-        IConfiguration configuration,
-        IHostEnvironment environment,
-        Assembly[] moduleAssemblies)
-    {
-        // 严格按配置顺序执行：moduleAssemblies 的顺序就是配置顺序
-        foreach (var assembly in moduleAssemblies)
-        {
-            var moduleType = GetSingleModuleTypeOrThrow(assembly);
-            var module = CreateModuleInstance(moduleType);
-
-            module.ConfigureServices(services, configuration, environment);
-        }
-    }
-
     private static Type GetSingleModuleTypeOrThrow(Assembly assembly)
     {
         var moduleTypes = SafeGetTypes(assembly)
@@ -137,7 +152,6 @@ public static class ApplicationBootstrapper
 
     private static IModule CreateModuleInstance(Type moduleType)
     {
-        // 当前版本：无参构造。未来如需 DI 实例化，只需替换这一处为 ActivatorUtilities.CreateInstance(...)
         try
         {
             return (IModule)Activator.CreateInstance(moduleType)!;
