@@ -15,7 +15,7 @@ global using Xunit;
 global using Xunit.Abstractions;
 global using Zss.BilliardHall.Platform.Exceptions;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Specification;
+global using Zss.BilliardHall.Specification;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
 global using Zss.BilliardHall.Generators;

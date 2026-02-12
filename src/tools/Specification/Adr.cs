@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification;
+namespace Zss.BilliardHall.Specification;
 
 /// <summary>
 /// ADR 规范定义
@@ -199,124 +199,120 @@ public static partial class ArchitectureTestSpecification
             /// <summary>
             /// ADR-951：案例库管理
             /// </summary>
-            public static string Adr951 => "docs/adr/governance/ADR-951-case-repository-management.md";
+            public static string Adr951 => "docs/adr/governance/ADR-951-case-library-management.md";
 
             /// <summary>
-            /// ADR-952：工程标准 ADR 边界
+            /// ADR-952：历史案例管理
             /// </summary>
-            public static string Adr952 => "docs/adr/governance/ADR-952-engineering-standard-adr-boundary.md";
+            public static string Adr952 => "docs/adr/governance/ADR-952-historical-case-management.md";
 
             /// <summary>
-            /// ADR-955：文档搜索与可发现性
+            /// ADR-955：字幕生成规范
             /// </summary>
-            public static string Adr955 => "docs/adr/governance/ADR-955-documentation-search-discoverability.md";
+            public static string Adr955 => "docs/adr/governance/ADR-955-caption-generation-specification.md";
 
             /// <summary>
-            /// ADR-960：Onboarding 文档治理
+            /// ADR-960：需求跟踪治理
             /// </summary>
-            public static string Adr960 => "docs/adr/governance/ADR-960-onboarding-documentation-governance.md";
+            public static string Adr960 => "docs/adr/governance/ADR-960-requirement-tracking-governance.md";
 
             /// <summary>
-            /// ADR-965：Onboarding 互动式学习路径
+            /// ADR-965：ADR 元数据治理
             /// </summary>
-            public static string Adr965 => "docs/adr/governance/ADR-965-onboarding-interactive-learning-path.md";
+            public static string Adr965 => "docs/adr/governance/ADR-965-adr-metadata-governance.md";
 
             /// <summary>
-            /// ADR-970：自动化日志集成标准
+            /// ADR-970：Mermaid 图规范
             /// </summary>
-            public static string Adr970 => "docs/adr/governance/ADR-970-automation-log-integration-standard.md";
+            public static string Adr970 => "docs/adr/governance/ADR-970-mermaid-diagram-specification.md";
 
             /// <summary>
-            /// ADR-975：文档质量监控
+            /// ADR-975：ADR 更新机制
             /// </summary>
-            public static string Adr975 => "docs/adr/governance/ADR-975-documentation-quality-monitoring.md";
+            public static string Adr975 => "docs/adr/governance/ADR-975-adr-update-mechanism.md";
 
             /// <summary>
-            /// ADR-980：ADR 生命周期同步
+            /// ADR-980：ADR 废弃管理
             /// </summary>
-            public static string Adr980 => "docs/adr/governance/ADR-980-adr-lifecycle-synchronization.md";
+            public static string Adr980 => "docs/adr/governance/ADR-980-adr-deprecation-management.md";
 
             /// <summary>
-            /// ADR-990：文档演进路线图
+            /// ADR-990：ADR 可视化规范
             /// </summary>
-            public static string Adr990 => "docs/adr/governance/ADR-990-documentation-evolution-roadmap.md";
-
-            #endregion
-
-            #region Runtime ADRs (运行时)
-
-            /// <summary>
-            /// ADR-201：Handler 生命周期管理
-            /// </summary>
-            public static string Adr201 => "docs/adr/runtime/ADR-201-handler-lifecycle-management.md";
-
-            /// <summary>
-            /// ADR-210：事件版本兼容性
-            /// </summary>
-            public static string Adr210 => "docs/adr/runtime/ADR-210-event-versioning-compatibility.md";
-
-            /// <summary>
-            /// ADR-220：事件总线集成
-            /// </summary>
-            public static string Adr220 => "docs/adr/runtime/ADR-220-event-bus-integration.md";
-
-            /// <summary>
-            /// ADR-240：Handler 异常约束
-            /// </summary>
-            public static string Adr240 => "docs/adr/runtime/ADR-240-handler-exception-constraints.md";
+            public static string Adr990 => "docs/adr/governance/ADR-990-adr-visualization-specification.md";
 
             #endregion
 
             #region Structure ADRs (结构层)
 
             /// <summary>
-            /// ADR-120：领域事件命名约定
+            /// ADR-120：日志规范
             /// </summary>
-            public static string Adr120 => "docs/adr/structure/ADR-120-domain-event-naming-convention.md";
+            public static string Adr120 => "docs/adr/structure/ADR-120-logging-specification.md";
 
             /// <summary>
-            /// ADR-121：契约 DTO 命名组织
+            /// ADR-121：异常处理规范
             /// </summary>
-            public static string Adr121 => "docs/adr/structure/ADR-121-contract-dto-naming-organization.md";
+            public static string Adr121 => "docs/adr/structure/ADR-121-exception-handling-specification.md";
 
             /// <summary>
-            /// ADR-122：测试组织命名
+            /// ADR-122：文件夹结构规范
             /// </summary>
-            public static string Adr122 => "docs/adr/structure/ADR-122-test-organization-naming.md";
+            public static string Adr122 => "docs/adr/structure/ADR-122-folder-structure-specification.md";
 
             /// <summary>
-            /// ADR-123：仓储接口分层
+            /// ADR-123：外部依赖管理
             /// </summary>
-            public static string Adr123 => "docs/adr/structure/ADR-123-repository-interface-layering.md";
+            public static string Adr123 => "docs/adr/structure/ADR-123-external-dependency-management.md";
 
             /// <summary>
-            /// ADR-124：端点命名约束
+            /// ADR-124：配置管理规范
             /// </summary>
-            public static string Adr124 => "docs/adr/structure/ADR-124-endpoint-naming-constraints.md";
+            public static string Adr124 => "docs/adr/structure/ADR-124-configuration-management-specification.md";
 
             #endregion
 
             #region Technical ADRs (技术层)
 
             /// <summary>
-            /// ADR-301：集成测试自动化
+            /// ADR-201：Handler 模式
             /// </summary>
-            public static string Adr301 => "docs/adr/technical/ADR-301-integration-test-automation.md";
+            public static string Adr201 => "docs/adr/technical/ADR-201-handler-pattern.md";
 
             /// <summary>
-            /// ADR-340：结构化日志监控约束
+            /// ADR-210：消息规范
             /// </summary>
-            public static string Adr340 => "docs/adr/technical/ADR-340-structured-logging-monitoring-constraints.md";
+            public static string Adr210 => "docs/adr/technical/ADR-210-message-specification.md";
 
             /// <summary>
-            /// ADR-350：日志与可观测性标准
+            /// ADR-220：模块交互协议
             /// </summary>
-            public static string Adr350 => "docs/adr/technical/ADR-350-logging-observability-standards.md";
+            public static string Adr220 => "docs/adr/technical/ADR-220-module-interaction-protocol.md";
 
             /// <summary>
-            /// ADR-360：CI/CD 流水线标准化
+            /// ADR-240：Wolverine 集成规范
             /// </summary>
-            public static string Adr360 => "docs/adr/technical/ADR-360-cicd-pipeline-standardization.md";
+            public static string Adr240 => "docs/adr/technical/ADR-240-wolverine-integration-specification.md";
+
+            /// <summary>
+            /// ADR-301：Marten 集成规范
+            /// </summary>
+            public static string Adr301 => "docs/adr/technical/ADR-301-marten-integration-specification.md";
+
+            /// <summary>
+            /// ADR-340：领域事件规范
+            /// </summary>
+            public static string Adr340 => "docs/adr/technical/ADR-340-domain-event-specification.md";
+
+            /// <summary>
+            /// ADR-350：审计日志规范
+            /// </summary>
+            public static string Adr350 => "docs/adr/technical/ADR-350-audit-log-specification.md";
+
+            /// <summary>
+            /// ADR-360：性能监控规范
+            /// </summary>
+            public static string Adr360 => "docs/adr/technical/ADR-360-performance-monitoring-specification.md";
 
             #endregion
         }

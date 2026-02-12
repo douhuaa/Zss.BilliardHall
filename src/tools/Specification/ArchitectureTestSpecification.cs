@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification;
+namespace Zss.BilliardHall.Specification;
 
 /// <summary>
 /// Architecture Tests 的规范定义入口
@@ -18,7 +18,7 @@ public static partial class ArchitectureTestSpecification
     /// </summary>
     public static partial class Namespaces
     {
-        // Nested static classes defined in _Namespaces.cs
+        // Nested static classes defined in Namespaces.cs
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ public static partial class ArchitectureTestSpecification
     /// </summary>
     public static partial class Adr
     {
-        // Nested static classes defined in _Adr.cs
+        // Nested static classes defined in Adr.cs
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ public static partial class ArchitectureTestSpecification
     /// </summary>
     public static partial class Semantics
     {
-        // Nested static class defined in _Semantics.cs
+        // Nested static class defined in Semantics.cs
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public static partial class ArchitectureTestSpecification
     /// </summary>
     public static partial class Output
     {
-        // Nested static class defined in _Output.cs
+        // Nested static class defined in Output.cs
     }
 
     /// <summary>
@@ -50,6 +50,6 @@ public static partial class ArchitectureTestSpecification
     /// </summary>
     public static partial class Onboarding
     {
-        // Nested static class defined in _Onboarding.cs
+        // Nested static class defined in Onboarding.cs
     }
 }
