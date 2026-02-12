@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wolverine;
+using Wolverine.Http;
 using Zss.BilliardHall.Platform;
 
 namespace Zss.BilliardHall.Application;
@@ -16,11 +17,21 @@ public static class ApplicationBootstrapper
         IHostEnvironment environment,
         params Assembly[] moduleAssemblies)
     {
+        Configure(services, configuration, environment, enableHttp: false, moduleAssemblies);
+    }
+
+    public static void Configure(
+        IServiceCollection services, 
+        IConfiguration configuration, 
+        IHostEnvironment environment,
+        bool enableHttp,
+        params Assembly[] moduleAssemblies)
+    {
         // 配置 Marten 文档数据库
         ConfigureMarten(services, configuration, environment);
         
         // 配置 Wolverine 消息总线
-        ConfigureWolverine(services, moduleAssemblies);
+        ConfigureWolverine(services, enableHttp, moduleAssemblies);
         
         // 加载业务模块
         ModuleLoader.LoadModules(services, configuration, environment, moduleAssemblies);
@@ -39,7 +50,7 @@ public static class ApplicationBootstrapper
         .UseLightweightSessions();
     }
 
-    private static void ConfigureWolverine(IServiceCollection services, Assembly[] moduleAssemblies)
+    private static void ConfigureWolverine(IServiceCollection services, bool enableHttp, Assembly[] moduleAssemblies)
     {
         services.AddWolverine(opts =>
         {
@@ -52,6 +63,12 @@ public static class ApplicationBootstrapper
             // 启用事务
             opts.Policies.AutoApplyTransactions();
         });
+        
+        // 添加 Wolverine HTTP 支持（仅在 Web Host 中）
+        if (enableHttp)
+        {
+            services.AddWolverineHttp();
+        }
     }
 }
 

@@ -16,7 +16,7 @@ var moduleAssemblies = new[]
     typeof(Zss.BilliardHall.Modules.Members.ModuleMarker).Assembly,
 };
 
-ApplicationBootstrapper.Configure(builder.Services, builder.Configuration, builder.Environment, moduleAssemblies);
+ApplicationBootstrapper.Configure(builder.Services, builder.Configuration, builder.Environment, enableHttp: true, moduleAssemblies);
 
 var app = builder.Build();
 
