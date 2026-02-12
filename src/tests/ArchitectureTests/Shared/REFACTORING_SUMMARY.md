@@ -1,8 +1,43 @@
 # 架构测试工具类重构总结
 
-> **重构日期**: 2026-02-09  
-> **任务**: 按最佳实践重构架构测试工具类  
-> **PR 分支**: copilot/refactor-architecture-test-utils
+> **最后更新**: 2026-02-12  
+> **维护者**: Copilot Agent
+
+---
+
+## 📅 重构历史
+
+### 2026-02-12: 垂直切片原则 - 限制全局 Helper
+> **PR**: #383 反馈  
+> **分支**: copilot/refactor-usage-of-global-helpers
+
+**问题**：
+- `CSharpIdentifierHelper` 和 `CodeGenerationHelper` 作为"全局 helper"违背垂直切片原则
+- 这些工具实际上仅被 `Specification/Generation` Feature 使用
+- 通过 `GlobalUsings.cs` 全局引入，造成不必要的耦合
+
+**解决方案**：
+- 将 `CSharpIdentifierHelper.cs` 从 `Shared/Testing` 移动到 `Specification/Generation`
+- 将 `CodeGenerationHelper.cs` 从 `Shared/Testing` 移动到 `Specification/Generation`
+- 更新命名空间：`Shared.Testing` → `Specification.Generation`
+- 验证：477 个测试全部通过
+
+**原则**：
+- ✅ Helper 限定到 Feature 内
+- ✅ Shared Kernel 仅用于跨 Feature 的稳定、低耦合工具
+- ✅ 避免"全局 helper"污染
+
+**Shared/Testing 保留的工具**（真正跨 Feature 使用）：
+- `NetArchTestHelper` - NetArchTest 封装（多个 RuleSet 使用）
+- `AssertionMessageBuilder` - 统一断言消息格式（全局使用）
+- `RuleIdAssertions` - RuleId 断言（多个测试使用）
+- `TestConstants` - 测试常量
+- `TestEnvironment` - 测试环境工具
+
+---
+
+### 2026-02-09: 工具类职责分离与性能优化
+> **PR**: copilot/refactor-architecture-test-utils
 
 ---
 

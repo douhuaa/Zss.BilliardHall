@@ -21,6 +21,7 @@ global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.DecisionLanguage;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.RuleIdLanguage;
+global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
 
 // 工具类子命名空间（2026-02-09 结构化重构）
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
