@@ -90,9 +90,22 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
 
         var orderedRules = GetOrderedRules(ruleSet);
 
+        // 性能优化：一次性构建按 RuleNumber 分组的条款字典
+        // 复杂度从 O(N*M) 降低为 O(M log M + N)
+        var clausesByRule = ruleSet.Clauses
+            .Where(c => c.Id.AdrNumber == ruleSet.AdrNumber)
+            .GroupBy(c => c.Id.RuleNumber)
+            .ToDictionary(
+                g => g.Key,
+                g => g.OrderBy(c => c.Id.ClauseNumber).ToList());
+
         for (int i = 0; i < orderedRules.Count; i++)
         {
-            BuildRuleSection(sb, orderedRules[i], ruleSet, options);
+            var clauses = clausesByRule.TryGetValue(orderedRules[i].Id.RuleNumber, out var list)
+                ? list
+                : new List<ArchitectureClauseDefinition>();
+
+            BuildRuleSection(sb, orderedRules[i], clauses, options);
 
             // 规则之间添加空行（除了最后一个）
             if (i < orderedRules.Count - 1)
@@ -115,16 +128,16 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
     }
 
     /// <summary>
-    /// 构建单个规则章节
+    /// 构建单个规则章节（带预处理的条款列表）
     /// </summary>
     private static void BuildRuleSection(
         StringBuilder sb,
         ArchitectureRuleDefinition rule,
-        ArchitectureRuleSet ruleSet,
+        List<ArchitectureClauseDefinition> clauses,
         DecisionGenerationOptions options)
     {
         ArgumentNullException.ThrowIfNull(sb);
-        ArgumentNullException.ThrowIfNull(ruleSet);
+        ArgumentNullException.ThrowIfNull(clauses);
         ArgumentNullException.ThrowIfNull(options);
 
         // 早期返回：如果规则为空，直接返回
@@ -134,7 +147,7 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
         }
 
         BuildRuleHeader(sb, rule, options);
-        BuildClausesForRule(sb, rule, ruleSet, options);
+        BuildClausesForRule(sb, clauses, options);
     }
 
     /// <summary>
@@ -155,41 +168,21 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
     }
 
     /// <summary>
-    /// 构建规则的所有条款
+    /// 构建规则的所有条款（使用预处理的条款列表）
     /// </summary>
     private static void BuildClausesForRule(
         StringBuilder sb,
-        ArchitectureRuleDefinition rule,
-        ArchitectureRuleSet ruleSet,
+        List<ArchitectureClauseDefinition> clauses,
         DecisionGenerationOptions options)
     {
         ArgumentNullException.ThrowIfNull(sb);
-        ArgumentNullException.ThrowIfNull(rule);
-        ArgumentNullException.ThrowIfNull(ruleSet);
+        ArgumentNullException.ThrowIfNull(clauses);
         ArgumentNullException.ThrowIfNull(options);
-
-        var clauses = GetOrderedClausesForRule(rule, ruleSet);
 
         foreach (var clause in clauses)
         {
             BuildClauseSection(sb, clause, options);
         }
-    }
-
-    /// <summary>
-    /// 获取规则的排序后条款列表
-    /// </summary>
-    private static List<ArchitectureClauseDefinition> GetOrderedClausesForRule(
-        ArchitectureRuleDefinition rule,
-        ArchitectureRuleSet ruleSet)
-    {
-        ArgumentNullException.ThrowIfNull(rule);
-        ArgumentNullException.ThrowIfNull(ruleSet);
-
-        return ruleSet.Clauses
-            .Where(c => c.Id.AdrNumber == rule.Id.AdrNumber && c.Id.RuleNumber == rule.Id.RuleNumber)
-            .OrderBy(c => c.Id.ClauseNumber)
-            .ToList();
     }
 
     /// <summary>
