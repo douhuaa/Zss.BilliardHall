@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.Rules;
+﻿namespace Zss.BilliardHall.Specification.Rules;
 
 /// <summary>
 /// 使用示例：如何使用强类型 ArchitectureRuleId 系统
@@ -73,14 +73,14 @@ public static class ArchitectureRulesExample
         {
             // 明确是 Rule 级别
             var rule = ArchitectureRuleId.Rule(907, 3);
-            
+
             // 明确是 Clause 级别
             var clause = ArchitectureRuleId.Clause(907, 3, 2);
-            
+
             // 规范的字符串格式
             var ruleStr = rule.ToString();  // "ADR-0907.3"
             var clauseStr = clause.ToString();  // "ADR-0907.3.2"
-            
+
             // 类型安全的比较
             var isRule = rule.Level == RuleLevel.Rule;
             var isClause = clause.Level == RuleLevel.Clause;
@@ -114,7 +114,7 @@ public static class ArchitectureRulesExample
         // 获取所有规则和条款
         var allRules = ruleSet.Rules;
         var allClauses = ruleSet.Clauses;
-        
+
         // 排序（按 ADR、Rule、Clause 顺序）
         var sortedIds = allClauses
             .Select(c => c.Id)
@@ -132,7 +132,7 @@ public static class ArchitectureRulesExample
             var ruleId = ArchitectureRuleId.Clause(907, 3, 1);
             var violations = new List<string>();
             // ... 收集违规
-            
+
             // 清晰的规则引用
             // violations.Should().BeEmpty(
             //     $"❌ {ruleId} 违规：测试类必须包含至少一个有效断言\n\n" +
@@ -146,16 +146,16 @@ public static class ArchitectureRulesExample
     public static class FutureExtensions
     {
         // 可以基于 RuleId 进行的未来扩展：
-        
+
         // 1. 自动生成测试方法
         // public static void GenerateTest(ArchitectureRuleId ruleId) { }
-        
+
         // 2. RuleSet -> Markdown 文档生成
         // public static string ToMarkdown(ArchitectureRuleSet ruleSet) { }
-        
+
         // 3. RuleSet -> JSON 序列化
         // public static string ToJson(ArchitectureRuleSet ruleSet) { }
-        
+
         // 4. 强类型的 DSL 入口
         // public static class ArchitectureRules
         // {

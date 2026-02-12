@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.Language.DecisionLanguage;
+﻿namespace Zss.BilliardHall.Specification.Language.DecisionLanguage;
 
 /// <summary>
 /// 裁决规则定义

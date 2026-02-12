@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification;
+﻿namespace Zss.BilliardHall.Specification;
 
 /// <summary>
 /// ADR 规范定义
