@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR990;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR990;
 
 /// <summary>
 /// ADR-990：运维规范与最佳实践

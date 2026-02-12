@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR947;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR947;
 
 /// <summary>
 /// ADR-947：日志与审计规范

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR965;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR965;
 
 /// <summary>
 /// ADR-965：注释与文档规范

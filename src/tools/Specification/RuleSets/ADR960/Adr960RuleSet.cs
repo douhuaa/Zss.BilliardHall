@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR960;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR960;
 
 /// <summary>
 /// ADR-960：命名规范与约定

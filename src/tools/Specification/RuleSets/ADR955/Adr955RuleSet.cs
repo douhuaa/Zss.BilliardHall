@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR955;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR955;
 
 /// <summary>
 /// ADR-955：代码审查规范

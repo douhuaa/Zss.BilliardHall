@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR970;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR970;
 
 /// <summary>
 /// ADR-970：可观测性与监控

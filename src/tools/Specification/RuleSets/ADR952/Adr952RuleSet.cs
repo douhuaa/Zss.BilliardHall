@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR952;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR952;
 
 /// <summary>
 /// ADR-952：重构策略与实践
