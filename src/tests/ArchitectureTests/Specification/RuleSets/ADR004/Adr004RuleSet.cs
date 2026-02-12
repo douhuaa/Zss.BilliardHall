@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR004;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR004;
 
 /// <summary>
 /// ADR-004：Central Package Management (CPM) 规范

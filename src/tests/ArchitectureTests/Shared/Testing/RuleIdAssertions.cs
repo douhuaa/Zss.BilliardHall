@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Infrastructure;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Infrastructure;
 
 /// <summary>
 /// RuleId 断言辅助类
@@ -28,22 +28,22 @@ public static class RuleIdAssertions
     {
         var prefix = string.IsNullOrEmpty(context) ? "" : $"{context}: ";
 
-        result.AdrNumber.Should().Be(expectedAdr, 
+        result.AdrNumber.Should().Be(expectedAdr,
             $"{prefix}ADR 编号应为 {expectedAdr}");
-        
-        result.RuleNumber.Should().Be(expectedRule, 
+
+        result.RuleNumber.Should().Be(expectedRule,
             $"{prefix}Rule 编号应为 {expectedRule}");
-        
-        result.ClauseNumber.Should().Be(expectedClause, 
+
+        result.ClauseNumber.Should().Be(expectedClause,
             $"{prefix}Clause 编号应为 {expectedClause?.ToString() ?? "null"}");
-        
+
         var expectedIsRule = expectedClause is null;
         var expectedIsClause = expectedClause is not null;
-        
-        result.IsRule.Should().Be(expectedIsRule, 
+
+        result.IsRule.Should().Be(expectedIsRule,
             $"{prefix}IsRule 应为 {expectedIsRule}");
-        
-        result.IsClause.Should().Be(expectedIsClause, 
+
+        result.IsClause.Should().Be(expectedIsClause,
             $"{prefix}IsClause 应为 {expectedIsClause}");
     }
 
@@ -57,10 +57,10 @@ public static class RuleIdAssertions
         int? expectedClause)
     {
         var success = RuleIdParser.TryParse(input, out var result);
-        
+
         success.Should().BeTrue($"TryParse 应成功解析 '{input}'");
-        
-        AssertParsedRuleId(result, expectedAdr, expectedRule, expectedClause, 
+
+        AssertParsedRuleId(result, expectedAdr, expectedRule, expectedClause,
             context: $"解析 '{input}'");
     }
 
@@ -70,9 +70,9 @@ public static class RuleIdAssertions
     public static void AssertTryParseFailed(string? input)
     {
         var success = RuleIdParser.TryParse(input!, out var result);
-        
+
         success.Should().BeFalse($"TryParse 应该失败解析 '{input ?? "null"}'");
-        result.Should().Be(default(ArchitectureRuleId), 
+        result.Should().Be(default(ArchitectureRuleId),
             "解析失败时应返回默认值");
     }
 

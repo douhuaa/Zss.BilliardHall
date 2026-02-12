@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
 
 /// <summary>
 /// AgentInstructionGenerator 安全测试
@@ -44,11 +44,11 @@ public sealed class AgentInstructionGenerator_SecurityTests
 
         // Assert - 使用结构比对而非文本比对
         result.Should().NotBeNull();
-        
+
         // 尝试反序列化验证 YAML 结构完整性
         var deserializer = new YamlDotNetSerializer();
         InstructionsContainer? container = null;
-        
+
         try
         {
             container = deserializer.Deserialize<InstructionsContainer>(result);
@@ -58,13 +58,13 @@ public sealed class AgentInstructionGenerator_SecurityTests
             // 如果反序列化失败，说明YAML结构被破坏，这是一个安全问题
             Assert.Fail($"生成的 YAML 无法被解析，可能存在注入漏洞。恶意内容：{maliciousSummary}");
         }
-        
+
         container.Should().NotBeNull("YAML 应该能够被成功反序列化");
         container!.Instructions.Should().HaveCount(1, "应该有且仅有一个指令");
-        
+
         var instruction = container.Instructions[0];
         instruction.Description.Should().Contain(maliciousSummary, "描述应包含原始内容");
-        
+
         // 验证没有注入额外的命令部分
         // 如果原始内容不包含 "commands:"，那么序列化后的对象也不应该有意外的 Commands
         if (maliciousSummary.Contains("commands:"))
@@ -72,7 +72,7 @@ public sealed class AgentInstructionGenerator_SecurityTests
             // 恶意内容应该被转义为描述的一部分，而不是创建新的 Commands 字段
             instruction.Description.Should().NotBeNull();
         }
-        
+
         // 验证指令的其他必需字段存在且正确
         instruction.Id.Should().NotBeEmpty();
         instruction.Action.Should().NotBeEmpty();
@@ -110,25 +110,25 @@ public sealed class AgentInstructionGenerator_SecurityTests
 
         // Assert - 使用结构比对而非文本比对
         result.Should().NotBeNull();
-        
+
         // 反序列化验证 YAML 结构完整性
         var deserializer = new YamlDotNetSerializer();
         var container = deserializer.Deserialize<InstructionsContainer>(result);
-        
+
         container.Should().NotBeNull();
         container.Instructions.Should().HaveCount(1);
-        
+
         var instruction = container.Instructions[0];
-        
+
         // 验证 Guidelines 中包含了条件信息（如果启用了 guidelines）
         if (instruction.Guidelines != null && instruction.Guidelines.Any())
         {
             // Guidelines 应该包含对 clause 条件的引用
             var guidelinesText = string.Join(" ", instruction.Guidelines);
-            guidelinesText.Should().Contain(maliciousCondition, 
+            guidelinesText.Should().Contain(maliciousCondition,
                 "guidelines 应包含条件内容，但作为安全的字符串，不是可执行代码");
         }
-        
+
         // 验证反序列化后的对象结构完整
         instruction.Id.Should().NotBeEmpty();
         instruction.Description.Should().NotBeEmpty();
@@ -164,11 +164,11 @@ public sealed class AgentInstructionGenerator_SecurityTests
 
         // Assert - 使用结构比对而非文本比对
         result.Should().NotBeNull();
-        
+
         // 尝试反序列化验证 YAML 结构完整性
         var deserializer = new YamlDotNetSerializer();
         InstructionsContainer? container = null;
-        
+
         try
         {
             container = deserializer.Deserialize<InstructionsContainer>(result);
@@ -178,21 +178,21 @@ public sealed class AgentInstructionGenerator_SecurityTests
             // 如果反序列化失败，说明YAML结构被破坏，这是一个安全问题
             Assert.Fail($"生成的 YAML 无法被解析，可能存在注入漏洞。恶意内容：{maliciousEnforcement}");
         }
-        
+
         container.Should().NotBeNull("YAML 应该能够被成功反序列化");
         container!.Instructions.Should().HaveCount(1);
-        
+
         var instruction = container.Instructions[0];
-        
+
         // 验证 Guidelines 中包含了 enforcement 信息（如果启用了 guidelines）
         if (instruction.Guidelines != null && instruction.Guidelines.Any())
         {
             // Guidelines 应该包含对 enforcement 的引用
             var guidelinesText = string.Join(" ", instruction.Guidelines);
-            guidelinesText.Should().Contain(maliciousEnforcement, 
+            guidelinesText.Should().Contain(maliciousEnforcement,
                 "guidelines 应包含 enforcement 内容，但作为安全的字符串");
         }
-        
+
         // 验证反序列化后的对象结构完整且字段正确
         instruction.Id.Should().NotBeEmpty();
         instruction.Description.Should().NotBeEmpty();
@@ -227,10 +227,10 @@ public sealed class AgentInstructionGenerator_SecurityTests
 
         // Assert
         result.Should().NotBeNull();
-        
+
         // 所有引号都应该被转义
         result.Should().Contain("\\\"");
-        
+
         // 不应该有未转义的引号破坏字符串
         var lines = result.Split('\n');
         foreach (var line in lines.Where(l => l.Contains("description:") || l.Contains("action:")))
@@ -268,11 +268,11 @@ public sealed class AgentInstructionGenerator_SecurityTests
 
         // Assert
         result.Should().NotBeNull();
-        
+
         // commands 部分应该只包含预定义的安全命令
         result.Should().Contain("run_adr_tests:");
         result.Should().Contain("run_all_architecture_tests:");
-        
+
         // 验证命令格式 - 应该是 dotnet test 命令
         var commandLines = result.Split('\n').Where(l => l.Contains("dotnet test")).ToList();
         foreach (var cmdLine in commandLines)
@@ -280,13 +280,13 @@ public sealed class AgentInstructionGenerator_SecurityTests
             cmdLine.Should().Contain("dotnet test", "commands should only be dotnet test");
             cmdLine.Should().NotContain("&", "should not contain shell operators");
             cmdLine.Should().NotContain("|", "should not contain pipe operators");
-            
+
             // 检查恶意的命令分隔符 - 但允许 logger 格式中的分号
             if (cmdLine.Contains(";") && !cmdLine.Contains("console;verbosity"))
             {
                 Assert.Fail($"Command line should not contain command separator ';' outside logger format: {cmdLine}");
             }
-            
+
             cmdLine.Should().NotContain("$(", "should not contain command substitution");
         }
     }
@@ -318,7 +318,7 @@ public sealed class AgentInstructionGenerator_SecurityTests
         // Arrange
         var generator = new AgentInstructionGenerator();
         var ruleSet = new ArchitectureRuleSet(999);
-        
+
         // 添加多个规则
         for (int i = 1; i <= 5; i++)
         {
@@ -345,7 +345,7 @@ public sealed class AgentInstructionGenerator_SecurityTests
         result.Should().Contain("id: GEN-003");
         result.Should().Contain("id: GEN-004");
         result.Should().Contain("id: GEN-005");
-        
+
         // 不应该有跳号
         result.Should().NotContain("id: GEN-006");
     }
@@ -376,7 +376,7 @@ public sealed class AgentInstructionGenerator_SecurityTests
         // Arrange
         var generator = new AgentInstructionGenerator();
         var ruleSet = CreateTestRuleSet();
-        
+
         var options1 = new InstructionGenerationOptions { AgentPrefix = "AG" };
         var options2 = new InstructionGenerationOptions { AgentPrefix = "TG" };
         var options3 = new InstructionGenerationOptions { AgentPrefix = "HP" };
@@ -390,7 +390,7 @@ public sealed class AgentInstructionGenerator_SecurityTests
         result1.Should().Contain("id: AG-001");
         result2.Should().Contain("id: TG-001");
         result3.Should().Contain("id: HP-001");
-        
+
         // 确保没有冲突
         result1.Should().NotContain("id: TG-");
         result1.Should().NotContain("id: HP-");
@@ -401,14 +401,14 @@ public sealed class AgentInstructionGenerator_SecurityTests
     {
         // Arrange
         var generator = new AgentInstructionGenerator();
-        
+
         // 创建两个 RuleSet，规则相同但添加顺序不同
         var ruleSet1 = new ArchitectureRuleSet(999);
         ruleSet1.AddRule(1, "Rule 1", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Solution);
         ruleSet1.AddClause(1, 1, "C1", "E1", ClauseExecutionType.StaticAnalysis);
         ruleSet1.AddRule(2, "Rule 2", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Solution);
         ruleSet1.AddClause(2, 1, "C2", "E2", ClauseExecutionType.StaticAnalysis);
-        
+
         var ruleSet2 = new ArchitectureRuleSet(999);
         ruleSet2.AddRule(2, "Rule 2", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Solution);
         ruleSet2.AddClause(2, 1, "C2", "E2", ClauseExecutionType.StaticAnalysis);
@@ -448,7 +448,7 @@ public sealed class AgentInstructionGenerator_SecurityTests
         // Arrange
         var generator = new AgentInstructionGenerator();
         var ruleSet = new ArchitectureRuleSet(999);
-        
+
         // 添加规则但不添加条款 - 这应该在 RuleSet.ValidateCompleteness() 时失败
         // 但生成器本身应该能处理这种情况
         ruleSet.AddRule(
@@ -462,7 +462,7 @@ public sealed class AgentInstructionGenerator_SecurityTests
         // 生成器应该能处理，即使没有 clauses
         var act = () => generator.GenerateInstructions(ruleSet);
         act.Should().NotThrow();
-        
+
         var result = act();
         result.Should().Contain("id: GEN-001");
         result.Should().Contain("验证 ADR-999_1 的 0 个约束条款");
@@ -474,7 +474,7 @@ public sealed class AgentInstructionGenerator_SecurityTests
         // Arrange
         var generator = new AgentInstructionGenerator();
         var largeRuleSet = new ArchitectureRuleSet(999);
-        
+
         // 添加大量规则
         for (int i = 1; i <= 100; i++)
         {
@@ -499,11 +499,11 @@ public sealed class AgentInstructionGenerator_SecurityTests
         result.Should().NotBeNull();
         result.Should().Contain("id: GEN-001");
         result.Should().Contain("id: GEN-100");
-        
+
         // 验证所有 ID 都是三位数格式
         var lines = result.Split('\n').Where(l => l.Contains("id: GEN-")).ToList();
         lines.Should().HaveCount(100);
-        
+
         foreach (var line in lines)
         {
             line.Should().MatchRegex(@"id: GEN-\d{3}", "IDs should be three-digit format");
@@ -519,7 +519,7 @@ public sealed class AgentInstructionGenerator_SecurityTests
         // Arrange
         var generator = new AgentInstructionGenerator();
         var ruleSet = new ArchitectureRuleSet(999);
-        
+
         // Note: ArchitectureRuleDefinition.Validate() 会阻止空 summary，
         // 但我们测试生成器本身的健壮性
         try
@@ -577,7 +577,7 @@ public sealed class AgentInstructionGenerator_SecurityTests
         result.Should().NotBeNull();
         result.Should().Contain("规则包含中文");
         result.Should().Contain("Unicode condition");
-        
+
         // 验证 YAML 结构仍然正确
         var lines = result.Split('\n');
         lines[0].Should().Be("instructions:");
@@ -589,9 +589,9 @@ public sealed class AgentInstructionGenerator_SecurityTests
         // Arrange
         var generator = new AgentInstructionGenerator();
         var ruleSet = new ArchitectureRuleSet(999);
-        
+
         var longText = new string('A', 10000); // 10KB 文本
-        
+
         ruleSet.AddRule(
             ruleNumber: 1,
             summary: longText,
@@ -611,7 +611,7 @@ public sealed class AgentInstructionGenerator_SecurityTests
         // Assert
         result.Should().NotBeNull();
         result.Should().Contain(longText);
-        
+
         // 验证 YAML 结构仍然正确
         var lines = result.Split('\n');
         lines[0].Should().Be("instructions:");

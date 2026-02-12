@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR975;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR975;
 
 /// <summary>
 /// ADR-975：监控告警规范

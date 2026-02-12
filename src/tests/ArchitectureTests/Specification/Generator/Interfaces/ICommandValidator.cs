@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Interfaces;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Interfaces;
 
 /// <summary>
 /// 命令验证器接口

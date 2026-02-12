@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
 /// <summary>
 /// RuleIdParser 的单元测试
@@ -123,7 +123,7 @@ public sealed class RuleIdParser_Tests
         int? expectedClause)
     {
         var result = RuleIdParser.ParseStrict(input);
-        RuleIdAssertions.AssertParsedRuleId(result, expectedAdr, expectedRule, expectedClause, 
+        RuleIdAssertions.AssertParsedRuleId(result, expectedAdr, expectedRule, expectedClause,
             context: $"ParseStrict('{input}')");
     }
 
@@ -188,7 +188,7 @@ public sealed class RuleIdParser_Tests
         var strictResult = RuleIdParser.ParseStrict(input);
 
         tryParseSuccess.Should().BeTrue($"TryParse 应成功解析 '{input}'");
-        RuleIdAssertions.AssertRuleIdEquals(tryParseResult, strictResult, 
+        RuleIdAssertions.AssertRuleIdEquals(tryParseResult, strictResult,
             context: $"TryParse 和 ParseStrict 对 '{input}' 的结果");
     }
 

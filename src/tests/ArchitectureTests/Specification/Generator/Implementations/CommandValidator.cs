@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Interfaces;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Implementations;

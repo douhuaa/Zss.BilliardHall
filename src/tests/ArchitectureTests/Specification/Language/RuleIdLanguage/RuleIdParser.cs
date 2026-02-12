@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.RuleIdLanguage;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.RuleIdLanguage;
 
 /// <summary>
 /// RuleId 语言规范解析器
@@ -99,7 +99,7 @@ public static class RuleIdParser
                     result = ArchitectureRuleId.Clause(adr, rule, clause);
                     return true;
                 }
-                
+
                 // 只有正好2个部分时才返回 Rule
                 if (underscoreParts.Length == 2)
                 {

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification;
+﻿namespace Zss.BilliardHall.Specification;
 
 /// <summary>
 /// 输出规范定义

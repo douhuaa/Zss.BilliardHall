@@ -21,7 +21,7 @@ public sealed class ArchitectureRuleIdParsingInvariants_Tests
         var act = () => ArchitectureRuleId.Parse(input);
 
         act.Should().NotThrow($"'{input}' 是合法格式，应该成功解析");
-        
+
         var id = ArchitectureRuleId.Parse(input);
         id.Should().NotBe(default(ArchitectureRuleId), "解析结果应该是有效的 RuleId");
     }

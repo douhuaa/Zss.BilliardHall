@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Platform.Exceptions;
+﻿namespace Zss.BilliardHall.Platform.Exceptions;
 
 /// <summary>
 /// ADR-240: 基础设施异常，表示技术依赖失败

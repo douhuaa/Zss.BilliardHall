@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
 
 /// <summary>
 /// ADR 关系图生成工具
@@ -42,7 +42,7 @@ public static class AdrRelationshipMapGenerator
             var adrs = repo.LoadAll().OrderBy(a => a.Id).ToList();
 
             var markdown = new StringBuilder();
-        
+
             // 文件头
             markdown.AppendLine("# ADR 关系图");
             markdown.AppendLine();
@@ -51,7 +51,7 @@ public static class AdrRelationshipMapGenerator
             markdown.AppendLine();
             markdown.AppendLine("本文档展示所有 ADR 之间的关系声明。");
             markdown.AppendLine();
-        
+
             // 统计信息
             markdown.AppendLine("## 统计");
             markdown.AppendLine();
@@ -63,17 +63,17 @@ public static class AdrRelationshipMapGenerator
             // 按分类列出 ADR
             markdown.AppendLine("## ADR 列表");
             markdown.AppendLine();
-        
+
             // 使用 AdrCategoryClassifier 进行分类
-            var grouped = adrs.GroupBy(a => AdrCategoryClassifier.TryGetCategory(a.Id, out var category) 
-                ? category 
+            var grouped = adrs.GroupBy(a => AdrCategoryClassifier.TryGetCategory(a.Id, out var category)
+                ? category
                 : "其他");
-        
+
             foreach (var group in grouped.OrderBy(g => g.Key))
             {
                 markdown.AppendLine($"### {group.Key}");
                 markdown.AppendLine();
-            
+
                 foreach (var adr in group)
                 {
                     markdown.AppendLine($"#### {adr.Id}");

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.FileSystem;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.FileSystem;
 
 /// <summary>
 /// 文件搜索辅助类

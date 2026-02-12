@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
 
 /// <summary>
 /// AdrDocumentMerger 的单元测试
@@ -73,12 +73,12 @@ adr: ADR-001
         result.Should().Contain("## Decision（裁决）");
         result.Should().Contain("## Focus（聚焦）");
         result.Should().Contain("## Context（上下文）");
-        
+
         // 验证章节顺序：Focus -> Decision -> Context
         var focusIndex = result.IndexOf("## Focus");
         var decisionIndex = result.IndexOf("## Decision");
         var contextIndex = result.IndexOf("## Context");
-        
+
         focusIndex.Should().BeLessThan(decisionIndex);
         decisionIndex.Should().BeLessThan(contextIndex);
     }

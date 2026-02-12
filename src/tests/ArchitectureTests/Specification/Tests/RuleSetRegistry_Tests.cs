@@ -169,7 +169,8 @@ public sealed class RuleSetRegistry_Tests
     public void Test_CI_Scenario_Should_Use_GetStrict()
     {
         var ruleId = "ADR-001";
-        Action act = () => {
+        Action act = () =>
+        {
             var ruleSet = RuleSetRegistry.GetStrict(ruleId);
             AssertRuleSetExists(ruleSet, 1);
         };

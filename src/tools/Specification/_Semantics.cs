@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification;
+﻿namespace Zss.BilliardHall.Specification;
 
 public static partial class ArchitectureTestSpecification
 {

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Performance;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Performance;
 
 /// <summary>
 /// AdrTestFixture 性能测试
@@ -7,7 +7,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Performance;
 public sealed class AdrTestFixture_Performance_Tests : IClassFixture<AdrTestFixture>
 {
     private readonly AdrTestFixture _fixture;
-    
+
     private const int PerformanceTestIterations = 10;
     private const double MinimumExpectedImprovement = 50.0; // 最低期望性能提升百分比
 
@@ -48,13 +48,13 @@ public sealed class AdrTestFixture_Performance_Tests : IClassFixture<AdrTestFixt
         // 计算平均时间
         var avgDirectLoad = directLoadTimes.Average();
         var avgFixtureLoad = fixtureLoadTimes.Average();
-        
+
         // 防止除零错误
         if (avgDirectLoad <= 0)
         {
             throw new InvalidOperationException("直接加载时间为零，无法计算性能提升");
         }
-        
+
         var improvement = ((avgDirectLoad - avgFixtureLoad) / avgDirectLoad) * 100;
 
         // 输出结果
@@ -152,9 +152,9 @@ public sealed class AdrTestFixture_Performance_Tests : IClassFixture<AdrTestFixt
         }
 
         var avgTime = totalTime / (double)testCount;
-        
+
         System.Console.WriteLine($"\n模拟 {testCount} 个测试的平均执行时间: {avgTime:F2} ms");
-        
+
         // 验证性能合理（每个测试应该在 1ms 内完成，因为使用了缓存）
         avgTime.Should().BeLessThan(5,
             because: "使用 Fixture 缓存后，每个测试应该非常快（< 5ms）");

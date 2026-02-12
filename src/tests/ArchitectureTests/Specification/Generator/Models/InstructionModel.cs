@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Models;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Models;
 
 /// <summary>
 /// Agent 指令模型

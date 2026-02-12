@@ -1,4 +1,4 @@
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Models;
+﻿using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Models;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator;
 

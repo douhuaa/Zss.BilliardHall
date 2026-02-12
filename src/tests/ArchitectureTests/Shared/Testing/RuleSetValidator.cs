@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Infrastructure;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Infrastructure;
 
 /// <summary>
 /// RuleSet 验证器
@@ -17,16 +17,16 @@ public static class RuleSetValidator
     /// <param name="ruleSet">要验证的规则集</param>
     /// <param name="expectedAdrNumber">预期的 ADR 编号</param>
     public static void ValidateRuleStructure(
-        ArchitectureRuleSet ruleSet, 
+        ArchitectureRuleSet ruleSet,
         int expectedAdrNumber)
     {
-        ruleSet.AdrNumber.Should().Be(expectedAdrNumber, 
+        ruleSet.AdrNumber.Should().Be(expectedAdrNumber,
             $"RuleSet 的 ADR 编号应为 {expectedAdrNumber}");
 
-        ruleSet.RuleCount.Should().BeGreaterThan(0, 
+        ruleSet.RuleCount.Should().BeGreaterThan(0,
             $"ADR-{expectedAdrNumber:000} 必须包含至少一个规则");
 
-        ruleSet.RuleCount.Should().Be(ruleSet.Rules.Count, 
+        ruleSet.RuleCount.Should().Be(ruleSet.Rules.Count,
             "RuleCount 应与 Rules 集合的实际数量一致");
 
         foreach (var rule in ruleSet.Rules)
@@ -39,15 +39,15 @@ public static class RuleSetValidator
     /// 验证单个 Rule 的有效性
     /// </summary>
     private static void ValidateSingleRule(
-        ArchitectureRuleDefinition rule, 
+        ArchitectureRuleDefinition rule,
         int expectedAdrNumber)
     {
         var ruleId = rule.Id.ToString();
 
-        rule.Id.Level.Should().Be(RuleLevel.Rule, 
+        rule.Id.Level.Should().Be(RuleLevel.Rule,
             $"规则 {ruleId} 的级别应为 Rule");
 
-        rule.Id.AdrNumber.Should().Be(expectedAdrNumber, 
+        rule.Id.AdrNumber.Should().Be(expectedAdrNumber,
             $"规则 {ruleId} 的 ADR 编号应为 {expectedAdrNumber}");
 
         rule.Summary.Should().NotBeNullOrWhiteSpace(
@@ -70,7 +70,7 @@ public static class RuleSetValidator
     /// <param name="ruleSet">要验证的规则集</param>
     /// <param name="expectedAdrNumber">预期的 ADR 编号</param>
     public static void ValidateClauseStructure(
-        ArchitectureRuleSet ruleSet, 
+        ArchitectureRuleSet ruleSet,
         int expectedAdrNumber)
     {
         ruleSet.ClauseCount.Should().BeGreaterThanOrEqualTo(ruleSet.RuleCount,
@@ -89,7 +89,7 @@ public static class RuleSetValidator
     /// 验证单个 Clause 的有效性
     /// </summary>
     private static void ValidateSingleClause(
-        ArchitectureClauseDefinition clause, 
+        ArchitectureClauseDefinition clause,
         int expectedAdrNumber)
     {
         var clauseId = clause.Id.ToString();
@@ -155,7 +155,7 @@ public static class RuleSetValidator
     /// <param name="ruleSet">要验证的规则集</param>
     /// <param name="expectedAdrNumber">预期的 ADR 编号</param>
     public static void ValidateFull(
-        ArchitectureRuleSet ruleSet, 
+        ArchitectureRuleSet ruleSet,
         int expectedAdrNumber)
     {
         ValidateRuleStructure(ruleSet, expectedAdrNumber);

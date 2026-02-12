@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
 
 /// <summary>
 /// ADR 文件过滤器
@@ -34,7 +34,7 @@ public static class AdrFileFilter
         }
 
         var files = Directory.GetFiles(directory, "ADR-*.md", searchOption);
-        
+
         foreach (var file in files)
         {
             if (IsAdrDocument(file))

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
 
 /// <summary>
 /// ADR 规则索引

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
 
 /// <summary>
 /// 架构规则集

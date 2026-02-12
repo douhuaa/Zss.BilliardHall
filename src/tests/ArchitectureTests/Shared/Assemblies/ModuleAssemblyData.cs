@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Assemblies;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Assemblies;
 
 /// <summary>
 /// 模块程序集数据提供器
@@ -15,10 +15,10 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Assemblies;
 /// </summary>
 public sealed class ModuleAssemblyData : AssemblyLoaderBase, IEnumerable<object[]>
 {
-    private static readonly Lazy<List<Assembly>> _moduleAssemblies = 
+    private static readonly Lazy<List<Assembly>> _moduleAssemblies =
         new(LoadModuleAssemblies, LazyThreadSafetyMode.ExecutionAndPublication);
-    
-    private static readonly Lazy<List<string>> _moduleNames = 
+
+    private static readonly Lazy<List<string>> _moduleNames =
         new(LoadModuleNames, LazyThreadSafetyMode.ExecutionAndPublication);
 
     /// <summary>
@@ -87,7 +87,7 @@ public sealed class ModuleAssemblyData : AssemblyLoaderBase, IEnumerable<object[
     {
         Debug.WriteLine($"[ArchitectureTests] Loaded module assemblies count={ModuleAssemblies.Count}, names={string.Join(",", ModuleNames)}");
         ValidateAssembliesNotEmpty(ModuleAssemblies, "模块");
-        
+
         foreach (var asm in ModuleAssemblies)
         {
             yield return new object[] { asm };

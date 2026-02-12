@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.FileSystem;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.FileSystem;
 
 /// <summary>
 /// 文件系统测试辅助类（向后兼容桥接类）

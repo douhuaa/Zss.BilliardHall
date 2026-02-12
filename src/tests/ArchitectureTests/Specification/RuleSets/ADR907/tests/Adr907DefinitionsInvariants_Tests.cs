@@ -60,10 +60,10 @@ public sealed class Adr907DefinitionsInvariants_Tests
     public void Clause_RuleId_Should_Match_Parent_Rule()
     {
         foreach (var rule in Adr907Definitions.AllRules)
-        foreach (var clause in rule.Clauses)
-        {
-            clause.RuleId.Should().Be(rule.RuleId, "条款必须属于其父规则");
-        }
+            foreach (var clause in rule.Clauses)
+            {
+                clause.RuleId.Should().Be(rule.RuleId, "条款必须属于其父规则");
+            }
     }
 
     #endregion

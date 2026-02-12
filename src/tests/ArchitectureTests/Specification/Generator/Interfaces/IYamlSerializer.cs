@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Interfaces;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Interfaces;
 
 /// <summary>
 /// YAML 序列化器接口

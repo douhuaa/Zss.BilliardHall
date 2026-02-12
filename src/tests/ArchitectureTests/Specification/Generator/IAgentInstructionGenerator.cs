@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator;
 
 /// <summary>
 /// Agent 指令生成器接口

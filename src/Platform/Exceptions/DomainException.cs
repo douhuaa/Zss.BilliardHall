@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Platform.Exceptions;
+﻿namespace Zss.BilliardHall.Platform.Exceptions;
 
 /// <summary>
 /// ADR-240: 领域异常基类，表示业务规则违反

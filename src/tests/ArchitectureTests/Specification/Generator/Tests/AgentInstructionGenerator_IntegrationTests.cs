@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
 
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
 
@@ -38,12 +38,12 @@ public sealed class AgentInstructionGenerator_IntegrationTests
 
         // Assert
         result.Should().NotBeNullOrEmpty();
-        
+
         // Should contain all rules
         result.Should().Contain("id: GEN-001");
         result.Should().Contain("id: GEN-002");
         result.Should().Contain("id: GEN-003");
-        
+
         // Should have proper YAML structure
         var lines = result.Split('\n');
         lines[0].Should().Be("instructions:");
@@ -90,7 +90,7 @@ public sealed class AgentInstructionGenerator_IntegrationTests
         // Assert
         // 验证基本 YAML 结构
         result.Should().NotBeNullOrEmpty();
-        
+
         // 验证缩进一致性
         var lines = result.Split('\n');
         foreach (var line in lines.Where(l => !string.IsNullOrWhiteSpace(l)))
@@ -110,16 +110,16 @@ public sealed class AgentInstructionGenerator_IntegrationTests
         // Arrange
         var generator = new AgentInstructionGenerator();
         var ruleSet = new ArchitectureRuleSet(999);
-        
+
         ruleSet.AddRule(1, "Static Analysis Rule", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Solution);
         ruleSet.AddClause(1, 1, "Condition", "Enforcement", ClauseExecutionType.StaticAnalysis);
-        
+
         ruleSet.AddRule(2, "Convention Check Rule", DecisionLevel.Must, RuleSeverity.Technical, RuleScope.Module);
         ruleSet.AddClause(2, 1, "Condition", "Enforcement", ClauseExecutionType.Convention);
-        
+
         ruleSet.AddRule(3, "Runtime Check Rule", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
         ruleSet.AddClause(3, 1, "Condition", "Enforcement", ClauseExecutionType.Runtime);
-        
+
         ruleSet.AddRule(4, "Manual Review Rule", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
         ruleSet.AddClause(4, 1, "Condition", "Enforcement", ClauseExecutionType.ManualReview);
 
@@ -139,7 +139,7 @@ public sealed class AgentInstructionGenerator_IntegrationTests
         // Arrange
         var generator = new AgentInstructionGenerator();
         var ruleSet = new ArchitectureRuleSet(950);
-        
+
         ruleSet.AddRule(1, "Multi-Clause Rule", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Solution);
         ruleSet.AddClause(1, 1, "Condition 1", "Enforcement 1", ClauseExecutionType.StaticAnalysis);
         ruleSet.AddClause(1, 2, "Condition 2", "Enforcement 2", ClauseExecutionType.Convention);
@@ -191,22 +191,22 @@ public sealed class AgentInstructionGenerator_IntegrationTests
     private static ArchitectureRuleSet CreateComplexRuleSet()
     {
         var ruleSet = new ArchitectureRuleSet(920);
-        
+
         // Rule 1: Critical with 2 clauses
         ruleSet.AddRule(1, "Critical Rule", DecisionLevel.Must, RuleSeverity.Constitutional, RuleScope.Solution);
         ruleSet.AddClause(1, 1, "Critical Condition 1", "Critical Enforcement 1", ClauseExecutionType.StaticAnalysis);
         ruleSet.AddClause(1, 2, "Critical Condition 2", "Critical Enforcement 2", ClauseExecutionType.Convention);
-        
+
         // Rule 2: High with 1 clause
         ruleSet.AddRule(2, "High Priority Rule", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Module);
         ruleSet.AddClause(2, 1, "High Condition", "High Enforcement", ClauseExecutionType.StaticAnalysis);
-        
+
         // Rule 3: Medium with 3 clauses
         ruleSet.AddRule(3, "Medium Priority Rule", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
         ruleSet.AddClause(3, 1, "Medium Condition 1", "Medium Enforcement 1", ClauseExecutionType.Convention);
         ruleSet.AddClause(3, 2, "Medium Condition 2", "Medium Enforcement 2", ClauseExecutionType.Runtime);
         ruleSet.AddClause(3, 3, "Medium Condition 3", "Medium Enforcement 3", ClauseExecutionType.ManualReview);
-        
+
         return ruleSet;
     }
 }

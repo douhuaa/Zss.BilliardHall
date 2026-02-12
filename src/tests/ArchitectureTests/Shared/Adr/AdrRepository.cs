@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
 
 /// <summary>
 /// ADR 仓库 - 负责扫描和加载所有 ADR 文档
@@ -6,7 +6,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
 public sealed class AdrRepository
 {
     private static readonly Regex AdrFilePattern = new(@"ADR-\d{3,4}", RegexOptions.Compiled);
-    
+
     private readonly string _adrRoot;
 
     public AdrRepository(string adrRoot)

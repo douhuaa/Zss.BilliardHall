@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
 
 /// <summary>
 /// AgentInstructionGenerator 单元测试
@@ -264,11 +264,11 @@ public sealed class AgentInstructionGenerator_Tests
         // Arrange
         var generator = new AgentInstructionGenerator();
         var ruleSet = new ArchitectureRuleSet(907);
-        
+
         // Add first rule
         ruleSet.AddRule(1, "First Rule", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Solution);
         ruleSet.AddClause(1, 1, "Condition 1", "Enforcement 1", ClauseExecutionType.StaticAnalysis);
-        
+
         // Add second rule
         ruleSet.AddRule(2, "Second Rule", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
         ruleSet.AddClause(2, 1, "Condition 2", "Enforcement 2", ClauseExecutionType.Convention);
@@ -358,12 +358,12 @@ public sealed class AgentInstructionGenerator_Tests
     {
         // Arrange
         var generator = new AgentInstructionGenerator();
-        
+
         // Repository scope
         var repoRuleSet = new ArchitectureRuleSet(901);
         repoRuleSet.AddRule(1, "Repo Rule", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Solution);
         repoRuleSet.AddClause(1, 1, "Condition", "Enforcement", ClauseExecutionType.StaticAnalysis);
-        
+
         // Module scope
         var moduleRuleSet = new ArchitectureRuleSet(902);
         moduleRuleSet.AddRule(1, "Module Rule", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Module);

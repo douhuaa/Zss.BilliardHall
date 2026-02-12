@@ -1,4 +1,4 @@
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Interfaces;
 
@@ -63,26 +63,26 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
     {
         // 处理空列表格式：instructions: [] -> instructions:
         yaml = yaml.Replace("instructions: []", "instructions:");
-        
+
         // 将YamlDotNet的多行字符串格式转换为单行转义格式
         yaml = ConvertMultilineToSingleLine(yaml);
-        
+
         // YamlDotNet 对简单值不加引号，但为了兼容旧测试，我们需要添加引号
         // 处理常见的字段值
         yaml = AddQuotesToField(yaml, "id");
         yaml = AddQuotesToField(yaml, "description");
         yaml = AddQuotesToField(yaml, "action");
         yaml = AddQuotesToField(yaml, "output");
-        
+
         // 处理列表项的引号
         yaml = AddQuotesToListItems(yaml);
-        
+
         // 处理 commands 的键值对
         yaml = AddQuotesToCommands(yaml);
-        
+
         // 转义特殊字符（在添加引号之后）
         yaml = EscapeSpecialCharactersInQuotedValues(yaml);
-        
+
         return yaml;
     }
 
@@ -93,21 +93,21 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
     {
         var lines = yaml.Split('\n');
         var result = new List<string>();
-        
+
         for (int i = 0; i < lines.Length; i++)
         {
             var line = lines[i];
-            
+
             // 检测多行字符串标记 | 或 >
             if (line.TrimEnd().EndsWith("|") || line.TrimEnd().EndsWith(">"))
             {
                 var indent = GetIndent(line);
                 var fieldPart = line.Substring(0, line.LastIndexOf(':') + 1);
-                
+
                 // 收集多行内容
                 var content = new StringBuilder();
                 i++; // 跳过标记行
-                
+
                 while (i < lines.Length && (string.IsNullOrWhiteSpace(lines[i]) || lines[i].StartsWith(indent + "  ")))
                 {
                     if (!string.IsNullOrWhiteSpace(lines[i]))
@@ -120,14 +120,14 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
                     i++;
                 }
                 i--; // 回退一行
-                
+
                 // 转义并添加引号
                 var escaped = content.ToString()
                     .Replace("\\", "\\\\")
                     .Replace("\"", "\\\"")
                     .Replace("`", "\\`")
                     .Replace("$", "\\$");
-                
+
                 result.Add($"{fieldPart} \"{escaped}\"");
             }
             else
@@ -135,7 +135,7 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
                 result.Add(line);
             }
         }
-        
+
         return string.Join("\n", result);
     }
 
@@ -161,7 +161,7 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
         for (int i = 0; i < lines.Length; i++)
         {
             var line = lines[i];
-            
+
             // 查找引号内的内容并转义
             if (line.Contains("\""))
             {
@@ -169,7 +169,7 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
                     .Replace("$(", "\\$(")
                     .Replace("`", "\\`")
                     .Replace("${", "\\${");
-                
+
                 lines[i] = line;
             }
         }
@@ -183,7 +183,7 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
         {
             var line = lines[i];
             var trimmed = line.TrimStart();
-            
+
             // 匹配类似 "id: value" 的行
             if (trimmed.StartsWith($"{fieldName}:") && !trimmed.Contains($"{fieldName}: \""))
             {
@@ -192,7 +192,7 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
                 {
                     var indent = line.Substring(0, line.IndexOf(fieldName));
                     var value = line.Substring(colonIndex + 1).TrimStart();
-                    
+
                     // 如果值不为空且不是列表/对象标记
                     if (!string.IsNullOrWhiteSpace(value) && value != "[]" && !value.StartsWith('-'))
                     {
@@ -211,7 +211,7 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
         {
             var line = lines[i];
             var trimmed = line.TrimStart();
-            
+
             // 匹配列表项 "- value" （不包括已有引号的）
             if (trimmed.StartsWith("- ") && !trimmed.StartsWith("- \"") && !trimmed.StartsWith("- '"))
             {
@@ -220,7 +220,7 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
                 {
                     var indent = line.Substring(0, dashIndex);
                     var value = line.Substring(dashIndex + 1).TrimStart();
-                    
+
                     // 不要给嵌套的键值对或子列表添加引号
                     if (!string.IsNullOrWhiteSpace(value) && !value.Contains(':'))
                     {
@@ -236,25 +236,25 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
     {
         var lines = yaml.Split('\n');
         bool inCommands = false;
-        
+
         for (int i = 0; i < lines.Length; i++)
         {
             var line = lines[i];
             var trimmed = line.TrimStart();
-            
+
             // 检测 commands 部分
             if (trimmed.StartsWith("commands:"))
             {
                 inCommands = true;
                 continue;
             }
-            
+
             // 检测是否离开了 commands 部分（缩进减少）
             if (inCommands && !string.IsNullOrWhiteSpace(line) && !line.StartsWith(" "))
             {
                 inCommands = false;
             }
-            
+
             // 处理 commands 中的键值对
             if (inCommands && trimmed.Contains(":") && !trimmed.StartsWith("-"))
             {
@@ -263,7 +263,7 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
                 {
                     var key = line.Substring(0, colonIndex).TrimStart();
                     var value = line.Substring(colonIndex + 1).TrimStart();
-                    
+
                     // 为命令值添加引号
                     if (!string.IsNullOrWhiteSpace(value) && !value.StartsWith("\""))
                     {

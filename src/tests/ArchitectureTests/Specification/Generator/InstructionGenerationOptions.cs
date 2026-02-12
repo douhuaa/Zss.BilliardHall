@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator;
 
 /// <summary>
 /// Agent 指令生成选项
@@ -76,7 +76,7 @@ public sealed class InstructionGenerationOptions
         if (!System.Text.RegularExpressions.Regex.IsMatch(AgentPrefix, "^[A-Z]{2,3}$"))
         {
             throw new ArgumentException(
-                "AgentPrefix 必须是 2-3 个大写字母", 
+                "AgentPrefix 必须是 2-3 个大写字母",
                 nameof(AgentPrefix));
         }
 
@@ -88,14 +88,14 @@ public sealed class InstructionGenerationOptions
         if (StartInstructionNumber < 1)
         {
             throw new ArgumentException(
-                "StartInstructionNumber 必须大于 0", 
+                "StartInstructionNumber 必须大于 0",
                 nameof(StartInstructionNumber));
         }
 
         if (IndentSpaces < 1 || IndentSpaces > 8)
         {
             throw new ArgumentException(
-                "IndentSpaces 必须在 1-8 之间", 
+                "IndentSpaces 必须在 1-8 之间",
                 nameof(IndentSpaces));
         }
     }
