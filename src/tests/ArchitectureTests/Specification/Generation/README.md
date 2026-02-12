@@ -55,7 +55,10 @@ public sealed record GeneratedTestCode(
 );
 ```
 
-## 辅助工具类
+## 辅助工具类（Feature 内部实现）
+
+> **注意**：这些工具类是 Generation Feature 的内部实现，专门用于代码生成场景。
+> 根据垂直切片原则，它们不应被其他 Feature 直接引用。
 
 ### CSharpIdentifierHelper
 
@@ -65,6 +68,11 @@ C# 标识符辅助工具，用于清理和规范化标识符。
 - `ToValidIdentifier(string input)`: 将字符串转换为有效的 C# 标识符
 - `ToPascalCase(string input)`: 转换为 Pascal 命名格式
 - `IsValidIdentifier(string input)`: 验证标识符有效性
+
+**使用场景**：
+- 从 Clause 描述生成方法名
+- 清理特殊字符和非法标识符
+- 规范化命名格式
 
 ### CodeGenerationHelper
 
@@ -78,6 +86,11 @@ C# 标识符辅助工具，用于清理和规范化标识符。
 - `EscapeStringLiteral(string input)`: 转义字符串字面量
 - `BuildNamespaceDeclaration(string ns)`: 构建命名空间声明
 - `BuildUsingStatements(params string[] namespaces)`: 构建 using 语句
+
+**使用场景**：
+- 生成格式化的 C# 代码
+- 构建 XML 文档注释
+- 行尾标准化（避免跨平台差异）
 
 ## 使用示例
 
