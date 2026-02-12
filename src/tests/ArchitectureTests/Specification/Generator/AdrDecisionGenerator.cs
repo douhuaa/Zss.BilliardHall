@@ -25,10 +25,16 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
     /// </summary>
     public string GenerateDecisionSection(ArchitectureRuleSet ruleSet, DecisionGenerationOptions options)
     {
+        // 参数验证
         ArgumentNullException.ThrowIfNull(ruleSet);
         ArgumentNullException.ThrowIfNull(options);
 
-        options.Validate();
+        // 验证 HeaderLevelOffset 范围（0-2），确保所有标题层级（H3-H6）不超过 H6
+        if (options.HeaderLevelOffset is < 0 or > 2)
+        {
+            throw new ArgumentOutOfRangeException(nameof(options.HeaderLevelOffset), options.HeaderLevelOffset,
+                "HeaderLevelOffset 必须在 0-2 之间");
+        }
 
         var sb = new StringBuilder();
 
@@ -44,9 +50,22 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
         if (!orderedRules.Any())
             return NormalizeNewlines(sb.ToString());
 
+        // 优化：一次性构建按 RuleNumber 分组并排序的条款字典，避免 N*M 重复扫描
+        var clausesByRule = ruleSet.Clauses
+            .Where(c => c.Id.AdrNumber == ruleSet.AdrNumber)
+            .GroupBy(c => c.Id.RuleNumber)
+            .ToDictionary(
+                g => g.Key,
+                g => g.OrderBy(c => c.Id.ClauseNumber).ToList()
+            );
+
         for (int i = 0; i < orderedRules.Count; i++)
         {
-            AppendRuleSection(sb, orderedRules[i], ruleSet, options);
+            var clauses = clausesByRule.TryGetValue(orderedRules[i].Id.RuleNumber, out var list)
+                ? list
+                : new List<ArchitectureClauseDefinition>();
+
+            AppendRuleSection(sb, orderedRules[i], clauses, options);
 
             if (i < orderedRules.Count - 1)
             {
@@ -74,7 +93,7 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
     private static void AppendRuleSection(
         StringBuilder sb,
         ArchitectureRuleDefinition rule,
-        ArchitectureRuleSet ruleSet,
+        List<ArchitectureClauseDefinition> clauses,
         DecisionGenerationOptions options)
     {
         if (rule is null)
@@ -83,8 +102,6 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
         var summary = options.EscapeMarkdown ? EscapeMarkdown(rule.Summary) : rule.Summary;
 
         AppendRuleHeader(sb, rule.Id.ToString(), summary, options);
-
-        var clauses = GetClausesForRule(rule, ruleSet);
         AppendRuleClauses(sb, clauses, options);
     }
 
@@ -93,17 +110,6 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
         var headerPrefix = MakeHeaderPrefix(3 + options.HeaderLevelOffset);
         sb.AppendLine($"{headerPrefix} {ruleIdText}：{summary}（Rule）");
         sb.AppendLine();
-    }
-
-    private static List<ArchitectureClauseDefinition> GetClausesForRule(ArchitectureRuleDefinition rule, ArchitectureRuleSet ruleSet)
-    {
-        if (rule is null || ruleSet is null)
-            return new List<ArchitectureClauseDefinition>();
-
-        return ruleSet.Clauses
-            .Where(c => c.Id.AdrNumber == rule.Id.AdrNumber && c.Id.RuleNumber == rule.Id.RuleNumber)
-            .OrderBy(c => c.Id.ClauseNumber)
-            .ToList();
     }
 
     private static void AppendRuleClauses(StringBuilder sb, IEnumerable<ArchitectureClauseDefinition> clauses, DecisionGenerationOptions options)

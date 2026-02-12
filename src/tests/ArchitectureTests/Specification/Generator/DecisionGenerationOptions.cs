@@ -40,20 +40,4 @@ public sealed class DecisionGenerationOptions
     /// 默认选项实例
     /// </summary>
     public static DecisionGenerationOptions Default { get; } = new();
-
-    /// <summary>
-    /// 验证选项的有效性
-    /// </summary>
-    internal void Validate()
-    {
-        // Rule 标题是 H3 (3+offset)，Clause 标题是 H4 (4+offset)
-        // 为确保所有标题都在 H2-H6 范围内，offset 最大为 2
-        if (HeaderLevelOffset is < 0 or > 2)
-        {
-            throw new ArgumentOutOfRangeException(
-            nameof(HeaderLevelOffset),
-            HeaderLevelOffset,
-            "HeaderLevelOffset 必须在 0-2 之间，以确保所有标题层级（H3-H6）都不超过 H6");
-        }
-    }
 }
