@@ -6,7 +6,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Imple
 
 /// <summary>
 /// 基于 YamlDotNet 的 YAML 序列化器实现
-/// 为了保持向后兼容，对输出进行后处理以匹配原有格式
+/// 为了保持向后兼容和安全性，对输出进行后处理以匹配原有格式
 /// </summary>
 public sealed class YamlDotNetSerializer : IYamlSerializer
 {
@@ -49,6 +49,9 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
         // 处理空列表格式：instructions: [] -> instructions:
         yaml = yaml.Replace("instructions: []", "instructions:");
         
+        // 将YamlDotNet的多行字符串格式转换为单行转义格式
+        yaml = ConvertMultilineToSingleLine(yaml);
+        
         // YamlDotNet 对简单值不加引号，但为了兼容旧测试，我们需要添加引号
         // 处理常见的字段值
         yaml = AddQuotesToField(yaml, "id");
@@ -62,7 +65,100 @@ public sealed class YamlDotNetSerializer : IYamlSerializer
         // 处理 commands 的键值对
         yaml = AddQuotesToCommands(yaml);
         
+        // 转义特殊字符（在添加引号之后）
+        yaml = EscapeSpecialCharactersInQuotedValues(yaml);
+        
         return yaml;
+    }
+
+    /// <summary>
+    /// 将 YamlDotNet 的多行格式（| 或 >）转换为单行转义格式
+    /// </summary>
+    private static string ConvertMultilineToSingleLine(string yaml)
+    {
+        var lines = yaml.Split('\n');
+        var result = new List<string>();
+        
+        for (int i = 0; i < lines.Length; i++)
+        {
+            var line = lines[i];
+            
+            // 检测多行字符串标记 | 或 >
+            if (line.TrimEnd().EndsWith("|") || line.TrimEnd().EndsWith(">"))
+            {
+                var indent = GetIndent(line);
+                var fieldPart = line.Substring(0, line.LastIndexOf(':') + 1);
+                
+                // 收集多行内容
+                var content = new StringBuilder();
+                i++; // 跳过标记行
+                
+                while (i < lines.Length && (string.IsNullOrWhiteSpace(lines[i]) || lines[i].StartsWith(indent + "  ")))
+                {
+                    if (!string.IsNullOrWhiteSpace(lines[i]))
+                    {
+                        var contentLine = lines[i].Trim();
+                        if (content.Length > 0)
+                            content.Append("\\n");
+                        content.Append(contentLine);
+                    }
+                    i++;
+                }
+                i--; // 回退一行
+                
+                // 转义并添加引号
+                var escaped = content.ToString()
+                    .Replace("\\", "\\\\")
+                    .Replace("\"", "\\\"")
+                    .Replace("`", "\\`")
+                    .Replace("$", "\\$");
+                
+                result.Add($"{fieldPart} \"{escaped}\"");
+            }
+            else
+            {
+                result.Add(line);
+            }
+        }
+        
+        return string.Join("\n", result);
+    }
+
+    private static string GetIndent(string line)
+    {
+        int spaces = 0;
+        foreach (char c in line)
+        {
+            if (c == ' ')
+                spaces++;
+            else
+                break;
+        }
+        return new string(' ', spaces);
+    }
+
+    /// <summary>
+    /// 在引号内转义特殊字符以防止命令注入
+    /// </summary>
+    private static string EscapeSpecialCharactersInQuotedValues(string yaml)
+    {
+        var lines = yaml.Split('\n');
+        for (int i = 0; i < lines.Length; i++)
+        {
+            var line = lines[i];
+            
+            // 查找引号内的内容并转义
+            if (line.Contains("\""))
+            {
+                line = line
+                    .Replace("$(", "\\$(")
+                    .Replace("`", "\\`")
+                    .Replace("${", "\\${");
+                
+                lines[i] = line;
+            }
+        }
+        return string.Join("\n", lines);
     }
 
     private static string AddQuotesToField(string yaml, string fieldName)
