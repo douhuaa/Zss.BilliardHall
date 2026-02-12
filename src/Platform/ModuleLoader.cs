@@ -26,11 +26,13 @@ public static class ModuleLoader
         IHostEnvironment environment,
         params Assembly[] moduleAssemblies)
     {
-        var logger = CreateLogger(services);
+        // 添加日志服务（如果尚未添加）
+        services.AddLogging();
         
         foreach (var assembly in moduleAssemblies)
         {
-            logger.LogInformation("扫描模块程序集: {AssemblyName}", assembly.FullName);
+            // 使用 Console 日志临时记录，避免创建 ServiceProvider
+            Console.WriteLine($"[ModuleLoader] 扫描模块程序集: {assembly.FullName}");
             
             var bootstrapperTypes = assembly.GetTypes()
                 .Where(t => typeof(IModuleBootstrapper).IsAssignableFrom(t) 
@@ -41,32 +43,24 @@ public static class ModuleLoader
             {
                 try
                 {
-                    logger.LogInformation("发现模块启动器: {TypeName}", bootstrapperType.FullName);
+                    Console.WriteLine($"[ModuleLoader] 发现模块启动器: {bootstrapperType.FullName}");
                     
                     var bootstrapper = Activator.CreateInstance(bootstrapperType) as IModuleBootstrapper;
                     if (bootstrapper == null)
                     {
-                        logger.LogWarning("无法创建模块启动器实例: {TypeName}", bootstrapperType.FullName);
+                        Console.WriteLine($"[ModuleLoader] 警告: 无法创建模块启动器实例: {bootstrapperType.FullName}");
                         continue;
                     }
                     
                     bootstrapper.Configure(services, configuration, environment);
-                    logger.LogInformation("模块启动器配置成功: {TypeName}", bootstrapperType.FullName);
+                    Console.WriteLine($"[ModuleLoader] 模块启动器配置成功: {bootstrapperType.FullName}");
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, "模块启动器配置失败: {TypeName}", bootstrapperType.FullName);
+                    Console.WriteLine($"[ModuleLoader] 错误: 模块启动器配置失败: {bootstrapperType.FullName} - {ex.Message}");
                     throw;
                 }
             }
         }
-    }
-
-    private static ILogger CreateLogger(IServiceCollection services)
-    {
-        var serviceProvider = services.BuildServiceProvider();
-        var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-        return loggerFactory?.CreateLogger(typeof(ModuleLoader)) 
-            ?? Microsoft.Extensions.Logging.Abstractions.NullLogger.Instance;
     }
 }

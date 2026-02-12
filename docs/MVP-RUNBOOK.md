@@ -267,9 +267,9 @@ Modules/Members/
 
 ## 相关文档
 
-- [ADR-001: 模块化单体与垂直切片架构](../../docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
-- [ADR-002: Platform / Application / Host 三层启动体系](../../docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md)
-- [架构测试说明](../../src/tests/ArchitectureTests/README.md)
+- [ADR-001: 模块化单体与垂直切片架构](../docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
+- [ADR-002: Platform / Application / Host 三层启动体系](../docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md)
+- [架构测试说明](../src/tests/ArchitectureTests/README.md)
 
 ---
 

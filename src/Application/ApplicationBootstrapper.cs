@@ -39,8 +39,24 @@ public static class ApplicationBootstrapper
 
     private static void ConfigureMarten(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
-        var connectionString = configuration.GetConnectionString("Postgres") 
-            ?? "Host=localhost;Port=5432;Database=zss_billiard_hall;Username=postgres;Password=postgres";
+        var connectionString = configuration.GetConnectionString("Postgres");
+        
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            const string defaultConnectionString = "Host=localhost;Port=5432;Database=zss_billiard_hall;Username=postgres;Password=postgres";
+            
+            // 开发环境允许使用默认连接字符串，但记录警告
+            if (environment.IsDevelopment())
+            {
+                Console.WriteLine("[警告] 使用默认数据库连接字符串。生产环境请通过 ConnectionStrings:Postgres 配置。");
+                connectionString = defaultConnectionString;
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    "生产环境必须配置数据库连接字符串。请设置 ConnectionStrings:Postgres 配置项。");
+            }
+        }
 
         services.AddMarten(options =>
         {
