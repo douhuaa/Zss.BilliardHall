@@ -12,4 +12,8 @@
     <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../../../tests/ArchitectureTests/ArchitectureTests.csproj" />
+  </ItemGroup>
+
 </Project>
