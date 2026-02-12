@@ -22,6 +22,27 @@ Decision 生成器的默认实现，负责：
 - 自动排序和层次化输出
 - Markdown 特殊字符转义
 
+**重构说明（2026-02-12）**：
+- **提高可读性**：将大型方法拆分为多个职责单一的小方法
+- **增强可测试性**：每个方法独立可测，新增 53 个单元测试
+- **防御式编程**：使用 ArgumentNullException.ThrowIfNull 进行参数验证
+- **减少嵌套**：采用早期返回模式，提高代码可读性
+- **性能优化**：避免重复计算，循环外复用只读集合
+- **兼容性保证**：所有公共 API 签名保持不变，输出格式与 golden 示例完全一致
+
+**内部方法结构**：
+- `BuildSectionHeader` - 构建章节标题（Decision）
+- `BuildRulesContent` - 构建所有规则内容
+- `GetOrderedRules` - 获取排序后的规则列表
+- `BuildRuleSection` - 构建单个规则章节
+- `BuildRuleHeader` - 构建规则标题
+- `BuildClausesForRule` - 构建规则的所有条款
+- `GetOrderedClausesForRule` - 获取规则的排序后条款列表
+- `BuildClauseSection` - 构建单个条款章节
+- `EscapeMarkdown` - Markdown 特殊字符转义
+- `MakeHeaderPrefix` - 生成 Markdown 标题前缀
+- `NormalizeNewlines` - 统一行尾为 LF
+
 ### 3. IAdrDocumentMerger
 
 文档合并器接口，用于将生成的 Decision 章节与现有 ADR 文档合并。
@@ -119,13 +140,25 @@ File.WriteAllText("docs/adr/ADR-907.md", updatedAdr);
 
 当前测试集包含以下几类：
 
-- **单元测试**：16 个测试验证核心生成逻辑和选项组合
+- **单元测试**：20 个测试验证核心生成逻辑和选项组合（AdrDecisionGenerator_Tests）
+- **重构方法测试**：53 个测试验证重构后的内部方法行为（AdrDecisionGenerator_RefactoredMethodsTests）
 - **集成测试**：12 个测试验证与真实 RuleSet、ADR 文档的端到端集成
 - **安全/边界测试**：21 个测试验证异常处理、空输入、极端场景等边界条件
 - **Golden 测试**：3 个测试通过标准样本文件验证生成结果的一致性和结构正确性
 - **文档合并测试**：11 个测试验证 AdrDocumentMerger 的各种合并场景
 
-总计 **63 个测试**，覆盖率 > 80%
+总计 **120 个测试**，覆盖率 > 85%
+
+**重构测试重点**：
+- 章节标题生成（5 个测试场景）
+- 规则内容构建（4 个测试场景）
+- 规则标题格式（8 个测试场景）
+- 条款章节构建（10 个测试场景）
+- Markdown 转义（11 个测试场景）
+- 行尾标准化（4 个测试场景）
+- 标题前缀生成（5 个测试场景）
+- 边界条件和错误处理（3 个测试场景）
+- 性能和确定性测试（2 个测试场景）
 
 ## 相关文档
 
@@ -151,5 +184,11 @@ File.WriteAllText("docs/adr/ADR-907.md", updatedAdr);
 
 ## 版本历史
 
+- **2026-02-12**: 重构 AdrDecisionGenerator，提高可读性和可测试性
+  - 将大型方法拆分为多个职责单一的小方法
+  - 新增 53 个单元测试验证重构后的方法行为
+  - 采用早期返回模式减少嵌套
+  - 增强参数验证和防御式编程
+  - 保持所有现有 API 和输出格式兼容性
 - **2026-02-11**: 初始实现，支持 RuleSet → Markdown 转换和文档合并
 - **2026-02-11**: 重构，统一使用 Shared/Adr/FrontMatterParser 处理 Front Matter
