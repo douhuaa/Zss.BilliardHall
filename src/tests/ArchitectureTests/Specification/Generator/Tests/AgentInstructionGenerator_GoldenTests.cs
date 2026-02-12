@@ -10,10 +10,8 @@ public sealed class AgentInstructionGenerator_GoldenTests
 
     public AgentInstructionGenerator_GoldenTests()
     {
-        var testDir = Path.GetDirectoryName(typeof(AgentInstructionGenerator_GoldenTests).Assembly.Location)!;
         _goldenFilePath = Path.Combine(
-            testDir,
-            "..", "..", "..", "..", "..", "..",
+            TestEnvironment.RepositoryRoot,
             "src", "tests", "ArchitectureTests", "Specification", "Generator", "Tests", "golden",
             "agent_instructions_sample.yaml");
     }
