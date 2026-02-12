@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.Tests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.Tests;
 
 /// <summary>
 /// ArchitectureTestGenerator 单元测试
@@ -211,7 +211,7 @@ public sealed class ArchitectureTestGenerator_Tests
     private ArchitectureRuleSet CreateTestRuleSet()
     {
         var ruleSet = new ArchitectureRuleSet(999);
-        
+
         ruleSet.AddRule(
             1,
             "测试规则",
