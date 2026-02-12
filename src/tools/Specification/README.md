@@ -1,20 +1,8 @@
-# Architecture Test Specification（测试基础设施）
-
-> **⚠️ 重要说明**：核心规范模型已迁移到生产级库 [`src/tools/Specification`](../../../tools/Specification)。
->
-> 本目录现在包含：
-> - **Index**：规则集注册表和索引（`RuleSetRegistry`、`AdrRuleIndex`）
-> - **RuleSets**：具体 ADR 的规则集定义
-> - **Tests**：规范模型自身的测试
-> - **Generation**：测试生成工具
-> - **Generator**：ADR 文档生成工具
->
-> 核心规范定义（`ArchitectureTestSpecification`、`Adr`、`Namespaces`、`Output` 等）
-> 现在位于 `Zss.BilliardHall.Specification` 命名空间。
+# Architecture Test Specification
 
 ## 概述
 
-本目录包含架构测试的基础设施和测试辅助工具，是整个架构治理体系的测试层。通过将 ADR 文档转换为可执行的规范，实现"把 ADR 变成可执行规范"的目标。
+本目录包含架构测试的规范定义，是整个架构治理体系的核心。通过将 ADR 文档转换为可执行的规范，实现"把 ADR 变成可执行规范"的目标。
 
 ## 设计原则
 

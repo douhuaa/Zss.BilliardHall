@@ -1,5 +1,3 @@
-using Zss.BilliardHall.Generators;
-
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
 
 /// <summary>

@@ -19,6 +19,8 @@
   </Folder>
   <Folder Name="/src/Tools/">
     <Project Path="src/tools/ArchitectureAnalyzers/ArchitectureAnalyzers.csproj"/>
+    <Project Path="src/tools/Generators/Zss.BilliardHall.Generators.csproj"/>
+    <Project Path="src/tools/Specification/Zss.BilliardHall.Specification.csproj"/>
   </Folder>
   <Folder Name="/docs/">
     <Project Path="docs/Docs.csproj"/>
