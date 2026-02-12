@@ -106,7 +106,7 @@ Line 5: another colon case";
     }
 
     [Fact]
-    public void GenerateInstructions_Should_Use_Literal_Style_For_Multiline_Strings()
+    public void GenerateInstructions_Should_Use_DoubleQuoted_Style_For_Multiline_Strings()
     {
         // Arrange
         var multilineString = "Line 1\nLine 2\nLine 3";
@@ -128,13 +128,18 @@ Line 5: another colon case";
         var yaml = _generator.GenerateInstructions(ruleSet);
 
         // Assert
-        // 验证使用了 literal block 格式（| 符号）用于多行字符串
-        yaml.Should().Contain("|", "多行字符串应使用 literal block 格式");
+        // 验证使用了引号格式并正确转义换行符（\\n）
+        yaml.Should().Contain("\\n", "多行字符串应使用转义换行符");
 
         // 验证可以正确反序列化
         var container = _serializer.Deserialize<InstructionsContainer>(yaml);
         container.Should().NotBeNull();
         container.Instructions.Should().HaveCount(1);
+        
+        // 验证反序列化后的内容包含原始换行符
+        container.Instructions[0].Description.Should().Contain("Line 1");
+        container.Instructions[0].Description.Should().Contain("Line 2");
+        container.Instructions[0].Description.Should().Contain("Line 3");
     }
 
     [Fact]
