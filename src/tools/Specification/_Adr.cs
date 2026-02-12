@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification;
+namespace Zss.BilliardHall.Specification;
 
 /// <summary>
 /// ADR 规范定义
