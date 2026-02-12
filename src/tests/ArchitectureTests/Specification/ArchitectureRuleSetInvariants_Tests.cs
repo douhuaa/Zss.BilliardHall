@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification;
 
 /// <summary>
 /// ArchitectureRuleSet 不变量清单测试（整合完整版）

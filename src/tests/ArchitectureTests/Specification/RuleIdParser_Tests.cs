@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification;
 
 /// <summary>
 /// RuleIdParser 的单元测试

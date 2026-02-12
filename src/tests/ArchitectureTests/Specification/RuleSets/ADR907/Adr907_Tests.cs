@@ -1,4 +1,4 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests.RuleSets.ADR907;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR907;
 
 public sealed class Adr907_Tests
 {

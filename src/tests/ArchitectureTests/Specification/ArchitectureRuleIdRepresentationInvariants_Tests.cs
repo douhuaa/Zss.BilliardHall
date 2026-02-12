@@ -1,4 +1,4 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification;
 
 /// <summary>
 /// ArchitectureRuleId 字符串表示不变量测试

@@ -1,4 +1,4 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation.Tests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
 
 /// <summary>
 /// 生成器使用示例
