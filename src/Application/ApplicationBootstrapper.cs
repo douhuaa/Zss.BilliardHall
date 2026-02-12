@@ -1,13 +1,57 @@
-﻿namespace Zss.BilliardHall.Application;
+﻿using System.Reflection;
+using Marten;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Wolverine;
+using Zss.BilliardHall.Platform;
+
+namespace Zss.BilliardHall.Application;
 
 public static class ApplicationBootstrapper
 {
-    public static void Configure(Microsoft.Extensions.DependencyInjection.IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration, Microsoft.Extensions.Hosting.IHostEnvironment environment)
+    public static void Configure(
+        IServiceCollection services, 
+        IConfiguration configuration, 
+        IHostEnvironment environment,
+        params Assembly[] moduleAssemblies)
     {
-        // 注册 Wolverine/Marten/模块扫描/通用 Pipeline
-        // 示例：
-        // services.AddWolverine(...);
-        // services.AddMarten(...).IntegrateWithWolverine();
-        // 模块扫描可在此处根据 Module Marker 自动注册
+        // 配置 Marten 文档数据库
+        ConfigureMarten(services, configuration, environment);
+        
+        // 配置 Wolverine 消息总线
+        ConfigureWolverine(services, moduleAssemblies);
+        
+        // 加载业务模块
+        ModuleLoader.LoadModules(services, configuration, environment, moduleAssemblies);
+    }
+
+    private static void ConfigureMarten(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
+    {
+        var connectionString = configuration.GetConnectionString("Postgres") 
+            ?? "Host=localhost;Port=5432;Database=zss_billiard_hall;Username=postgres;Password=postgres";
+
+        services.AddMarten(options =>
+        {
+            options.Connection(connectionString);
+            options.DatabaseSchemaName = "public";
+        })
+        .UseLightweightSessions();
+    }
+
+    private static void ConfigureWolverine(IServiceCollection services, Assembly[] moduleAssemblies)
+    {
+        services.AddWolverine(opts =>
+        {
+            // 发现模块中的 Handler
+            foreach (var assembly in moduleAssemblies)
+            {
+                opts.Discovery.IncludeAssembly(assembly);
+            }
+            
+            // 启用事务
+            opts.Policies.AutoApplyTransactions();
+        });
     }
 }
+

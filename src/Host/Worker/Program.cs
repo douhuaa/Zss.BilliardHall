@@ -9,7 +9,14 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddSerilog();
 
 PlatformBootstrapper.Configure(builder.Services, builder.Configuration, builder.Environment);
-ApplicationBootstrapper.Configure(builder.Services, builder.Configuration, builder.Environment);
+
+// 显式提供模块程序集清单
+var moduleAssemblies = new[]
+{
+    typeof(Zss.BilliardHall.Modules.Members.ModuleMarker).Assembly,
+};
+
+ApplicationBootstrapper.Configure(builder.Services, builder.Configuration, builder.Environment, moduleAssemblies);
 
 builder.Services.AddHostedService<Worker>();
 
