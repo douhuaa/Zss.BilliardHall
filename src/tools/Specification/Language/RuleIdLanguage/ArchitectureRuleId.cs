@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.Language.RuleIdLanguage;
+﻿namespace Zss.BilliardHall.Specification.Language.RuleIdLanguage;
 
 /// <summary>
 /// 架构规则ID的强类型表示

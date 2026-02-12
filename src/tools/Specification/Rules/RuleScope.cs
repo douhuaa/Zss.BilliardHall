@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.Rules;
+﻿namespace Zss.BilliardHall.Specification.Rules;
 
 /// <summary>
 /// 规则作用域

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.Rules;
+﻿namespace Zss.BilliardHall.Specification.Rules;
 
 /// <summary>
 /// 条款执行类型

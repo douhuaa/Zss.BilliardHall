@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification;
+﻿namespace Zss.BilliardHall.Specification;
 
 /// <summary>
 /// 输出规范定义
