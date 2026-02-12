@@ -2,7 +2,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Inter
 
 /// <summary>
 /// YAML 序列化器接口
-/// 负责将对象序列化为 YAML 格式字符串
+/// 负责将对象序列化为 YAML 格式字符串，以及反序列化
 /// </summary>
 public interface IYamlSerializer
 {
@@ -13,4 +13,12 @@ public interface IYamlSerializer
     /// <param name="obj">要序列化的对象</param>
     /// <returns>YAML 格式字符串</returns>
     string Serialize<T>(T obj) where T : class;
+
+    /// <summary>
+    /// 反序列化 YAML 字符串为对象
+    /// </summary>
+    /// <typeparam name="T">对象类型</typeparam>
+    /// <param name="yaml">YAML 格式字符串</param>
+    /// <returns>反序列化后的对象</returns>
+    T Deserialize<T>(string yaml) where T : class;
 }
