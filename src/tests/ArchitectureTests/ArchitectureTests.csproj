@@ -30,6 +30,7 @@
     <ProjectReference Include="..\..\Modules\Members\Members.csproj" />
     <ProjectReference Include="..\..\Modules\Orders\Orders.csproj" />
     <ProjectReference Include="..\..\Host\Web\Web.csproj" />
+    <ProjectReference Include="..\..\tools\Generators\Zss.BilliardHall.Generators.csproj" />
   </ItemGroup>
 
   <ItemGroup>

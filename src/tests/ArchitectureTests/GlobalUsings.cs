@@ -32,4 +32,7 @@ global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Assemblies;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Infrastructure;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing;
 
+// 新生成器项目命名空间（2026-02-12 提取到生产代码）
+global using Zss.BilliardHall.Generators;
+
 global using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing.AssertionMessageBuilder;
