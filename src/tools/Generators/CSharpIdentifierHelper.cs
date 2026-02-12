@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.RuleIdLanguage;
+using Zss.BilliardHall.Specification.Rules;
+using Zss.BilliardHall.Specification.Language.RuleIdLanguage;
 
 namespace Zss.BilliardHall.Generators;
 

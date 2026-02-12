@@ -1,4 +1,4 @@
-﻿using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
+﻿using Zss.BilliardHall.Specification.Rules;
 
 namespace Zss.BilliardHall.Generators;
 

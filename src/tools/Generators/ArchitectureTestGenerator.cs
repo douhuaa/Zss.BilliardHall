@@ -1,5 +1,5 @@
 ﻿namespace Zss.BilliardHall.Generators;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
+using Zss.BilliardHall.Specification.Rules;
 
 /// <summary>
 /// 架构测试生成器实现（协调器模式）

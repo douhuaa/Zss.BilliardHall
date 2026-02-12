@@ -16,14 +16,15 @@ global using Xunit.Abstractions;
 global using Zss.BilliardHall.Platform.Exceptions;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Implementations;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Models;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.DecisionLanguage;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.RuleIdLanguage;
 global using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
+global using Zss.BilliardHall.Generators;
+global using Zss.BilliardHall.Generators.Implementations;
+global using Zss.BilliardHall.Generators.Models;
+global using Zss.BilliardHall.Generators.Interfaces;
+global using Zss.BilliardHall.Specification.Rules;
+global using Zss.BilliardHall.Specification.Language.RuleIdLanguage;
+global using Zss.BilliardHall.Specification.Language.DecisionLanguage;
 
 // 工具类子命名空间（2026-02-09 结构化重构）
 global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;

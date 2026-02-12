@@ -1,5 +1,5 @@
 ﻿namespace Zss.BilliardHall.Generators.ClauseExecutors;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
+using Zss.BilliardHall.Specification.Rules;
 
 /// <summary>
 /// 运行时验证执行器

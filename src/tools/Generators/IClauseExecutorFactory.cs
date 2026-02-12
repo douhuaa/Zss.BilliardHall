@@ -1,6 +1,6 @@
 ﻿namespace Zss.BilliardHall.Generators;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Language.RuleIdLanguage;
+using Zss.BilliardHall.Specification.Rules;
+using Zss.BilliardHall.Specification.Language.RuleIdLanguage;
 
 /// <summary>
 /// 条款执行器工厂接口

@@ -1,5 +1,5 @@
-﻿using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Rules;
-using Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
+﻿using Zss.BilliardHall.Specification.Rules;
+using Zss.BilliardHall.Generators;
 
 namespace Zss.BilliardHall.Generators;
 
