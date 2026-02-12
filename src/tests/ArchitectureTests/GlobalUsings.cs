@@ -22,6 +22,7 @@ global using Zss.BilliardHall.Generators;
 global using Zss.BilliardHall.Generators.Implementations;
 global using Zss.BilliardHall.Generators.Models;
 global using Zss.BilliardHall.Generators.Interfaces;
+global using Zss.BilliardHall.Generators.ClauseExecutors;
 global using Zss.BilliardHall.Specification.Rules;
 global using Zss.BilliardHall.Specification.Language.RuleIdLanguage;
 global using Zss.BilliardHall.Specification.Language.DecisionLanguage;
