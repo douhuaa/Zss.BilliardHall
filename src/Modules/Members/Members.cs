@@ -1,9 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Zss.BilliardHall.Platform.Contracts;
-
-namespace Zss.BilliardHall.Modules.Members;
+﻿namespace Zss.BilliardHall.Modules.Members;
 
 /// <summary>
 /// Members 模块启动器

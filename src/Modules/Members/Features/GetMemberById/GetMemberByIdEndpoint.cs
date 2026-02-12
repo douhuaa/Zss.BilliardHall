@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Wolverine;
-using Wolverine.Http;
-
-namespace Zss.BilliardHall.Modules.Members.Features.GetMemberById;
+﻿namespace Zss.BilliardHall.Modules.Members.Features.GetMemberById;
 
 /// <summary>
 /// 查询会员端点

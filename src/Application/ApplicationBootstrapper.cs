@@ -22,9 +22,11 @@ public static class ApplicationBootstrapper
         ConfigureMarten(services, configuration);
         ConfigureWolverine(services, enableHttp);
 
-        var moduleAssemblies = LoadModuleAssembliesFromConfig(configuration);
+        var moduleAssemblyNames = ReadModuleAssemblyNames(configuration);
+        var moduleAssemblies = LoadModuleAssemblies(moduleAssemblyNames);
+
         ConfigureWolverineDiscovery(services, moduleAssemblies);
-        ConfigureModules(services, configuration, environment, moduleAssemblies);
+        ConfigureModulesInOrder(services, configuration, environment, moduleAssemblies);
     }
 
     private static void ConfigureMarten(IServiceCollection services, IConfiguration configuration)
@@ -45,23 +47,23 @@ public static class ApplicationBootstrapper
             services.AddWolverineHttp();
     }
 
-    private static Assembly[] LoadModuleAssembliesFromConfig(IConfiguration configuration)
+    private static string[] ReadModuleAssemblyNames(IConfiguration configuration)
     {
         var raw = configuration["Modules:Assemblies"];
         if (string.IsNullOrWhiteSpace(raw))
-        {
-            throw new InvalidOperationException(
-                "缺少 Modules:Assemblies。模块加载必须显式声明（禁止目录扫描兜底）。");
-        }
+            throw new InvalidOperationException("缺少 Modules:Assemblies。模块加载必须显式声明。");
 
-        var names = raw
+        return raw
             .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
             .Distinct(StringComparer.Ordinal)
             .ToArray();
+    }
 
-        var assemblies = new List<Assembly>(names.Length);
+    private static Assembly[] LoadModuleAssemblies(string[] assemblyNames)
+    {
+        var assemblies = new List<Assembly>(assemblyNames.Length);
 
-        foreach (var name in names)
+        foreach (var name in assemblyNames)
         {
             try
             {
@@ -95,40 +97,47 @@ public static class ApplicationBootstrapper
         });
     }
 
-    private static void ConfigureModules(
+    private static void ConfigureModulesInOrder(
         IServiceCollection services,
         IConfiguration configuration,
         IHostEnvironment environment,
         Assembly[] moduleAssemblies)
     {
-        foreach (var moduleType in DiscoverModuleTypes(moduleAssemblies))
+        // 严格按配置顺序执行：moduleAssemblies 的顺序就是配置顺序
+        foreach (var assembly in moduleAssemblies)
         {
+            var moduleType = GetSingleModuleTypeOrThrow(assembly);
             var module = CreateModuleInstance(moduleType);
+
             module.ConfigureServices(services, configuration, environment);
         }
     }
 
-    private static IEnumerable<Type> DiscoverModuleTypes(Assembly[] moduleAssemblies)
-        => moduleAssemblies
-            .SelectMany(SafeGetTypes)
-            .Where(static t =>
-                t is { IsAbstract: false, IsInterface: false } &&
-                typeof(IModule).IsAssignableFrom(t));
+    private static Type GetSingleModuleTypeOrThrow(Assembly assembly)
+    {
+        var moduleTypes = SafeGetTypes(assembly)
+            .Where(t => t is { IsAbstract: false, IsInterface: false } && typeof(IModule).IsAssignableFrom(t))
+            .ToArray();
+
+        return moduleTypes.Length switch
+        {
+            0 => throw new InvalidOperationException($"模块程序集未声明 IModule：{assembly.GetName().Name}（必须且只能有一个）。"),
+            1 => moduleTypes[0],
+            _ => throw new InvalidOperationException(
+                $"模块程序集包含多个 IModule（必须且只能有一个）：{assembly.GetName().Name}\n" +
+                string.Join('\n', moduleTypes.Select(t => $" - {t.FullName}")))
+        };
+    }
 
     private static IEnumerable<Type> SafeGetTypes(Assembly assembly)
     {
-        try
-        {
-            return assembly.GetTypes();
-        }
-        catch (ReflectionTypeLoadException ex)
-        {
-            return ex.Types.Where(static t => t is not null)!;
-        }
+        try { return assembly.GetTypes(); }
+        catch (ReflectionTypeLoadException ex) { return ex.Types.Where(t => t is not null)!; }
     }
 
     private static IModule CreateModuleInstance(Type moduleType)
     {
+        // 当前版本：无参构造。未来如需 DI 实例化，只需替换这一处为 ActivatorUtilities.CreateInstance(...)
         try
         {
             return (IModule)Activator.CreateInstance(moduleType)!;
