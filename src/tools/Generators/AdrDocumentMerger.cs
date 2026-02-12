@@ -40,6 +40,10 @@ public sealed class AdrDocumentMerger : IAdrDocumentMerger
         ArgumentNullException.ThrowIfNull(existingAdrContent);
         ArgumentNullException.ThrowIfNull(newDecisionContent);
 
+        // 归一化换行符为 LF
+        existingAdrContent = NormalizeNewlines(existingAdrContent);
+        newDecisionContent = NormalizeNewlines(newDecisionContent);
+
         // 解析现有 ADR 文档
         var document = Markdown.Parse(existingAdrContent, _pipeline);
 
@@ -195,4 +199,10 @@ public sealed class AdrDocumentMerger : IAdrDocumentMerger
         var parts = text.Split(new[] { ' ', '（', '(', '：', ':' }, StringSplitOptions.RemoveEmptyEntries);
         return parts.Length > 0 ? parts[0] : string.Empty;
     }
+
+    /// <summary>
+    /// 统一行尾为 LF，避免跨平台差异
+    /// </summary>
+    private static string NormalizeNewlines(string input) =>
+        input.Replace("\r\n", "\n").Replace("\r", "\n");
 }
