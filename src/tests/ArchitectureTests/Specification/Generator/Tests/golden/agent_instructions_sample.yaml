@@ -1,0 +1,54 @@
+instructions:
+  - id: GEN-001
+    description: "架构测试命名规则"
+    action: "验证 ADR-907_1 的 3 个约束条款"
+    conditions:
+      - "PullRequest"
+      - "CI pipeline"
+    output: "Allowed / Blocked / Uncertain"
+    tools:
+      - "RuleSet API"
+      - "ArchitectureTests"
+      - "ADR-907 RuleSet"
+    feedback:
+      - "生成 FailureObject（如违反约束）"
+      - "阻止 PR 合并（Governance 级别）"
+      - "记录违规到日志"
+    guidelines:
+      - "RuleSet API 查询示例："
+        - "ruleSet.GetClause(1, 1) → 测试类使用 ADR-XXX_Y_Z_Tests 格式"
+        - "ruleSet.GetClause(1, 2) → 测试方法使用 Should_描述预期行为 格式"
+        - "ruleSet.GetClause(1, 3) → Rule 测试类必须有明确的 Rule 后缀"
+      - "约束检查逻辑："
+        - "ADR-907_1_1 - 使用静态分析验证: 文件名必须匹配 'ADR-{Number}_{RuleNumber}_{ClauseNumber}_Tests.cs' 或 'ADR-{Number}_{RuleNumber}_Tests.cs'"
+        - "ADR-907_1_2 - 使用静态分析验证: 方法名必须以 'Should_' 开头，后接清晰的行为描述"
+        - "ADR-907_1_3 - 使用静态分析验证: Rule 级别测试类名必须以 '_Tests' 结尾（区分于其他测试）"
+    commands:
+      run_adr_tests: "dotnet test src/tests/ArchitectureTests/ --filter \"FullyQualifiedName~ADR907\" --logger \"console;verbosity=detailed\""
+      run_all_architecture_tests: "dotnet test src/tests/ArchitectureTests/ --filter \"Category=Architecture\" --logger \"console;verbosity=detailed\""
+
+  - id: GEN-002
+    description: "测试断言标准化"
+    action: "验证 ADR-907_2 的 2 个约束条款"
+    conditions:
+      - "PullRequest"
+      - "CI pipeline"
+    output: "Allowed / Blocked / Uncertain"
+    tools:
+      - "RuleSet API"
+      - "ArchitectureTests"
+      - "ADR-907 RuleSet"
+    feedback:
+      - "生成 FailureObject（如违反约束）"
+      - "阻止 PR 合并（Governance 级别）"
+      - "记录违规到日志"
+    guidelines:
+      - "RuleSet API 查询示例："
+        - "ruleSet.GetClause(2, 1) → 使用 FluentAssertions 编写断言"
+        - "ruleSet.GetClause(2, 2) → 失败消息包含具体违规信息和修复建议"
+      - "约束检查逻辑："
+        - "ADR-907_2_1 - 使用静态分析验证: 所有测试文件必须包含 'using FluentAssertions;'"
+        - "ADR-907_2_2 - 检查约定遵守情况: 所有 Should().Fail() 调用必须包含详细的上下文信息"
+    commands:
+      run_adr_tests: "dotnet test src/tests/ArchitectureTests/ --filter \"FullyQualifiedName~ADR907\" --logger \"console;verbosity=detailed\""
+      run_all_architecture_tests: "dotnet test src/tests/ArchitectureTests/ --filter \"Category=Architecture\" --logger \"console;verbosity=detailed\""
