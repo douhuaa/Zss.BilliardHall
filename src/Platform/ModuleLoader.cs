@@ -9,7 +9,7 @@ namespace Zss.BilliardHall.Platform;
 
 /// <summary>
 /// 模块加载器
-/// 职责：通过反射加载并注册实现了 IModuleBootstrapper 的模块
+/// 职责：通过反射加载并注册实现了 IModule 的模块
 /// </summary>
 public static class ModuleLoader
 {
@@ -28,14 +28,14 @@ public static class ModuleLoader
     {
         // 添加日志服务（如果尚未添加）
         services.AddLogging();
-        
+
         foreach (var assembly in moduleAssemblies)
         {
             // 使用 Console 日志临时记录，避免创建 ServiceProvider
             Console.WriteLine($"[ModuleLoader] 扫描模块程序集: {assembly.FullName}");
-            
+
             var bootstrapperTypes = assembly.GetTypes()
-                .Where(t => typeof(IModuleBootstrapper).IsAssignableFrom(t) 
+                .Where(t => typeof(IModule).IsAssignableFrom(t)
                     && t is { IsClass: true, IsAbstract: false })
                 .ToList();
 
@@ -44,15 +44,15 @@ public static class ModuleLoader
                 try
                 {
                     Console.WriteLine($"[ModuleLoader] 发现模块启动器: {bootstrapperType.FullName}");
-                    
-                    var bootstrapper = Activator.CreateInstance(bootstrapperType) as IModuleBootstrapper;
+
+                    var bootstrapper = Activator.CreateInstance(bootstrapperType) as IModule;
                     if (bootstrapper == null)
                     {
                         Console.WriteLine($"[ModuleLoader] 警告: 无法创建模块启动器实例: {bootstrapperType.FullName}");
                         continue;
                     }
-                    
-                    bootstrapper.Configure(services, configuration, environment);
+
+                    bootstrapper.ConfigureServices(services, configuration, environment);
                     Console.WriteLine($"[ModuleLoader] 模块启动器配置成功: {bootstrapperType.FullName}");
                 }
                 catch (Exception ex)

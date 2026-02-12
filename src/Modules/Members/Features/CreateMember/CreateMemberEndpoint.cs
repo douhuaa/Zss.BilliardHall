@@ -11,9 +11,9 @@ namespace Zss.BilliardHall.Modules.Members.Features.CreateMember;
 public static class CreateMemberEndpoint
 {
     [WolverinePost("/api/members")]
-    public static async Task<IResult> Create(CreateMemberCommand command, IMessageBus bus)
+    public static async Task<IResult> Create(CreateMemberCommand command, IMessageBus bus, CancellationToken ct=default)
     {
-        var memberId = await bus.InvokeAsync<Guid>(command);
+        var memberId = await bus.InvokeAsync<Guid>(command,ct);
         return Results.Created($"/api/members/{memberId}", new CreateMemberResponse { Id = memberId });
     }
 }

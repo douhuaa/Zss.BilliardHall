@@ -5,86 +5,137 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wolverine;
 using Wolverine.Http;
-using Zss.BilliardHall.Platform;
+using Zss.BilliardHall.Platform.Contracts;
 
 namespace Zss.BilliardHall.Application;
 
 public static class ApplicationBootstrapper
 {
-    public static void Configure(
-        IServiceCollection services, 
-        IConfiguration configuration, 
-        IHostEnvironment environment,
-        params Assembly[] moduleAssemblies)
+    public static void Configure(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
-        Configure(services, configuration, environment, enableHttp: false, moduleAssemblies);
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentNullException.ThrowIfNull(environment);
+
+        var enableHttp = configuration.GetValue("Wolverine:Http:Enabled", true);
+
+        ConfigureMarten(services, configuration);
+        ConfigureWolverine(services, enableHttp);
+
+        var moduleAssemblies = LoadModuleAssembliesFromConfig(configuration);
+        ConfigureWolverineDiscovery(services, moduleAssemblies);
+        ConfigureModules(services, configuration, environment, moduleAssemblies);
     }
 
-    public static void Configure(
-        IServiceCollection services, 
-        IConfiguration configuration, 
-        IHostEnvironment environment,
-        bool enableHttp,
-        params Assembly[] moduleAssemblies)
-    {
-        // 配置 Marten 文档数据库
-        ConfigureMarten(services, configuration, environment);
-        
-        // 配置 Wolverine 消息总线
-        ConfigureWolverine(services, enableHttp, moduleAssemblies);
-        
-        // 加载业务模块
-        ModuleLoader.LoadModules(services, configuration, environment, moduleAssemblies);
-    }
-
-    private static void ConfigureMarten(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
+    private static void ConfigureMarten(IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("Postgres");
-        
         if (string.IsNullOrWhiteSpace(connectionString))
+            throw new InvalidOperationException("缺少 ConnectionStrings:Postgres（请用 User Secrets/KeyVault 注入，禁止硬编码）。");
+
+        services.AddMarten(opts => opts.Connection(connectionString))
+            .UseLightweightSessions();
+    }
+
+    private static void ConfigureWolverine(IServiceCollection services, bool enableHttp)
+    {
+        services.AddWolverine(_ => { });
+
+        if (enableHttp)
+            services.AddWolverineHttp();
+    }
+
+    private static Assembly[] LoadModuleAssembliesFromConfig(IConfiguration configuration)
+    {
+        var raw = configuration["Modules:Assemblies"];
+        if (string.IsNullOrWhiteSpace(raw))
         {
-            const string defaultConnectionString = "Host=localhost;Port=5432;Database=zss_billiard_hall;Username=postgres;Password=postgres";
-            
-            // 开发环境允许使用默认连接字符串，但记录警告
-            if (environment.IsDevelopment())
+            throw new InvalidOperationException(
+                "缺少 Modules:Assemblies。模块加载必须显式声明（禁止目录扫描兜底）。");
+        }
+
+        var names = raw
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+
+        var assemblies = new List<Assembly>(names.Length);
+
+        foreach (var name in names)
+        {
+            try
             {
-                Console.WriteLine("[警告] 使用默认数据库连接字符串。生产环境请通过 ConnectionStrings:Postgres 配置。");
-                connectionString = defaultConnectionString;
+                assemblies.Add(Assembly.Load(new AssemblyName(name)));
             }
-            else
+            catch (FileNotFoundException ex)
             {
-                throw new InvalidOperationException(
-                    "生产环境必须配置数据库连接字符串。请设置 ConnectionStrings:Postgres 配置项。");
+                throw new InvalidOperationException($"模块程序集未找到：{name}。请确认已构建并可被加载。", ex);
+            }
+            catch (FileLoadException ex)
+            {
+                throw new InvalidOperationException($"模块程序集加载失败：{name}（文件存在但无法加载）。", ex);
+            }
+            catch (BadImageFormatException ex)
+            {
+                throw new InvalidOperationException($"模块程序集格式错误：{name}（可能是目标框架/架构不匹配）。", ex);
             }
         }
 
-        services.AddMarten(options =>
-        {
-            options.Connection(connectionString);
-            options.DatabaseSchemaName = "public";
-        })
-        .UseLightweightSessions();
+        return assemblies.ToArray();
     }
 
-    private static void ConfigureWolverine(IServiceCollection services, bool enableHttp, Assembly[] moduleAssemblies)
+    private static void ConfigureWolverineDiscovery(IServiceCollection services, Assembly[] moduleAssemblies)
     {
-        services.AddWolverine(opts =>
+        services.Configure<WolverineOptions>(w =>
         {
-            // 发现模块中的 Handler
             foreach (var assembly in moduleAssemblies)
-            {
-                opts.Discovery.IncludeAssembly(assembly);
-            }
-            
-            // 启用事务
-            opts.Policies.AutoApplyTransactions();
+                w.Discovery.IncludeAssembly(assembly);
+
+            w.Policies.AutoApplyTransactions();
         });
-        
-        // 添加 Wolverine HTTP 支持（仅在 Web Host 中）
-        if (enableHttp)
+    }
+
+    private static void ConfigureModules(
+        IServiceCollection services,
+        IConfiguration configuration,
+        IHostEnvironment environment,
+        Assembly[] moduleAssemblies)
+    {
+        foreach (var moduleType in DiscoverModuleTypes(moduleAssemblies))
         {
-            services.AddWolverineHttp();
+            var module = CreateModuleInstance(moduleType);
+            module.ConfigureServices(services, configuration, environment);
+        }
+    }
+
+    private static IEnumerable<Type> DiscoverModuleTypes(Assembly[] moduleAssemblies)
+        => moduleAssemblies
+            .SelectMany(SafeGetTypes)
+            .Where(static t =>
+                t is { IsAbstract: false, IsInterface: false } &&
+                typeof(IModule).IsAssignableFrom(t));
+
+    private static IEnumerable<Type> SafeGetTypes(Assembly assembly)
+    {
+        try
+        {
+            return assembly.GetTypes();
+        }
+        catch (ReflectionTypeLoadException ex)
+        {
+            return ex.Types.Where(static t => t is not null)!;
+        }
+    }
+
+    private static IModule CreateModuleInstance(Type moduleType)
+    {
+        try
+        {
+            return (IModule)Activator.CreateInstance(moduleType)!;
+        }
+        catch (MissingMethodException ex)
+        {
+            throw new InvalidOperationException($"模块必须提供 public 无参构造函数：{moduleType.FullName}", ex);
         }
     }
 }
-

@@ -9,19 +9,16 @@ namespace Zss.BilliardHall.Modules.Members.Features.CreateMember;
 /// </summary>
 public class CreateMemberCommandHandler
 {
-    public static async Task<Guid> Handle(CreateMemberCommand command, IDocumentSession session)
+    public static async Task<Guid> Handle(CreateMemberCommand command, IDocumentSession session, CancellationToken ct = default)
     {
-        var member = new Member
-        {
-            Id = Guid.NewGuid(),
-            Name = command.Name,
-            Email = command.Email,
-            PhoneNumber = command.PhoneNumber,
-            CreatedAt = DateTime.UtcNow
-        };
+        var member = new Member(Id: Guid.CreateVersion7(),
+        Name: command.Name,
+        Email: command.Email,
+        PhoneNumber: command.PhoneNumber,
+        CreatedAt: DateTimeOffset.UtcNow);
 
         session.Store(member);
-        await session.SaveChangesAsync();
+        await session.SaveChangesAsync(ct);
 
         return member.Id;
     }

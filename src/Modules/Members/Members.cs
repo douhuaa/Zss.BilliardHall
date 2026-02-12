@@ -9,9 +9,9 @@ namespace Zss.BilliardHall.Modules.Members;
 /// Members 模块启动器
 /// 负责注册模块内的服务和配置
 /// </summary>
-public class MembersBootstrapper : IModuleBootstrapper
+public class Members : IModule
 {
-    public void Configure(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
+    public void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
         // Members 模块特定的服务注册
         // 例如：validators, custom services 等

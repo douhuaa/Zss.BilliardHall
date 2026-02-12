@@ -9,10 +9,10 @@ namespace Zss.BilliardHall.Modules.Members.Features.GetMemberById;
 /// </summary>
 public class GetMemberByIdQueryHandler
 {
-    public static async Task<MemberDto?> Handle(GetMemberByIdQuery query, IDocumentSession session)
+    public static async Task<MemberDto?> Handle(GetMemberByIdQuery query, IDocumentSession session, CancellationToken ct=default)
     {
-        var member = await session.LoadAsync<CreateMember.Member>(query.MemberId);
-        
+        var member = await session.LoadAsync<CreateMember.Member>(query.MemberId,ct);
+
         if (member == null)
         {
             return null;

@@ -11,13 +11,13 @@ namespace Zss.BilliardHall.Modules.Members.Features.GetMemberById;
 public static class GetMemberByIdEndpoint
 {
     [WolverineGet("/api/members/{memberId}")]
-    public static async Task<IResult> Get(Guid memberId, IMessageBus bus)
+    public static async Task<IResult> Get(Guid memberId, IMessageBus bus, CancellationToken ct=default)
     {
         var query = new GetMemberByIdQuery { MemberId = memberId };
-        var member = await bus.InvokeAsync<MemberDto?>(query);
-        
-        return member == null 
-            ? Results.NotFound() 
+        var member = await bus.InvokeAsync<MemberDto?>(query,ct);
+
+        return member == null
+            ? Results.NotFound()
             : Results.Ok(member);
     }
 }
