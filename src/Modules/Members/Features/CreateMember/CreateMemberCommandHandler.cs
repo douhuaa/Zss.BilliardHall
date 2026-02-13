@@ -20,9 +20,7 @@ public class CreateMemberCommandHandler(IDocumentSession session): ICommandHandl
 
         session.Store(member);
 
-        // ✅ Wolverine 的 AutoApplyTransactions 会自动提交这个变更
-        // 无需显式调用 SaveChangesAsync()
-        // session.SaveChangesAsync();
+        // ✅ IntegrateWithWolverine() + AutoApplyTransactions() 会在消息 pipeline 的事务上下文里自动提交
 
         return Task.FromResult(member.Id);
     }

@@ -6,7 +6,8 @@
 /// </summary>
 public static class CreateMemberEndpoint
 {
-    [WolverinePost("/api/members")]
+
+    [WolverinePost("/api/members")] //不能自动提交事务，必须手动调用 SaveChangesAsync()，不推荐使用
     public static CreateMemberCommand Create(CreateMemberCommand command) => command;
 
     [WolverinePost("/api/v2/members")]
