@@ -84,7 +84,7 @@ public sealed class TestPerformanceCollector
         var report = new System.Text.StringBuilder();
         report.AppendLine("# 测试性能报告");
         report.AppendLine();
-        report.AppendLine($"**生成时间**：{DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+        report.AppendLine($"**生成时间**：{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC");
         report.AppendLine();
         report.AppendLine("## 📊 总体统计");
         report.AppendLine();

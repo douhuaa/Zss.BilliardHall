@@ -21,15 +21,8 @@ public static class AdrRelationshipMapGenerator
     public static void GenerateRelationshipMap(string adrRootPath, string outputFilePath)
     {
         // 参数验证
-        if (string.IsNullOrWhiteSpace(adrRootPath))
-        {
-            throw new ArgumentException("ADR 根目录路径不能为空", nameof(adrRootPath));
-        }
-
-        if (string.IsNullOrWhiteSpace(outputFilePath))
-        {
-            throw new ArgumentException("输出文件路径不能为空", nameof(outputFilePath));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(adrRootPath);
+        ArgumentException.ThrowIfNullOrWhiteSpace(outputFilePath);
 
         if (!Directory.Exists(adrRootPath))
         {
