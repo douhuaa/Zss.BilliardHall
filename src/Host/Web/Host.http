@@ -18,10 +18,10 @@ Content-Type: application/json
 
 {
   "name": "John Doe",
-  "email": "test1@test.com"
+  "email": "test1111@test.com"
 }
 ###
 
-GET  {{Host_HostAddress}}/api/members/019c57c1-e910-7824-86af-bf8a64015ec0
+GET  {{Host_HostAddress}}/api/members/019c57f0-dacd-78c5-8df0-add5f9c870f3
 Accept: application/json
 ###
