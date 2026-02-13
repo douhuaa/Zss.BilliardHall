@@ -15,7 +15,7 @@ global using NetArchTest.Rules;
 global using Xunit;
 global using Xunit.Abstractions;
 global using Zss.BilliardHall.Platform.Exceptions;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Shared;
+global using Zss.BilliardHall.Tests.SharedTestHelpers;
 global using Zss.BilliardHall.Specification;
 global using Zss.BilliardHall.Generators;
 global using Zss.BilliardHall.Generators.Implementations;
@@ -28,9 +28,9 @@ global using Zss.BilliardHall.Specification.Language.RuleIdLanguage;
 global using Zss.BilliardHall.Specification.Language.DecisionLanguage;
 
 // 工具类子命名空间（2026-02-09 结构化重构）
-global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Adr;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.FileSystem;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Assemblies;
-global using Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing;
+global using Zss.BilliardHall.Tests.SharedTestHelpers.Adr;
+global using Zss.BilliardHall.Tests.SharedTestHelpers.FileSystem;
+global using Zss.BilliardHall.Tests.SharedTestHelpers.Assemblies;
+global using Zss.BilliardHall.Tests.SharedTestHelpers.Testing;
 global using Zss.BilliardHall.Specification.RuleSets.ADR907;
-global using static Zss.BilliardHall.Tests.ArchitectureTests.Shared.Testing.AssertionMessageBuilder;
+global using static Zss.BilliardHall.Tests.SharedTestHelpers.Testing.AssertionMessageBuilder;
