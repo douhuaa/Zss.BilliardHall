@@ -47,7 +47,7 @@ public static class ModuleRegistry
     private static void ValidateNoMissing(HashSet<string> enabledSet, Assembly[] result)
     {
         var found = result
-            .SelectMany(a => new[] { a.GetName().Name!, a.GetName().FullName })
+            .SelectMany(a => new[] { a.GetName().Name!, a.GetName().FullName ?? a.GetName().Name! })
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var missing = enabledSet.Except(found).ToArray();
