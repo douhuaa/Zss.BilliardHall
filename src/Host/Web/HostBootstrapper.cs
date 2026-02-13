@@ -43,19 +43,5 @@ public static class HostBootstrapper
 
         app.Logger.LogInformation("Host 管道配置完成");
     }
-
-    /// <summary>
-    /// 创建早期日志记录器（用于启动阶段）
-    /// </summary>
-    private static ILogger CreateBootstrapLogger(WebApplicationBuilder builder)
-    {
-        using var loggerFactory = LoggerFactory.Create(loggingBuilder =>
-        {
-            loggingBuilder.AddConfiguration(builder.Configuration.GetSection("Logging"));
-            loggingBuilder.AddConsole();
-        });
-
-        return loggerFactory.CreateLogger("HostBootstrapper");
-    }
 }
 
