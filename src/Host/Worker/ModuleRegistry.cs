@@ -1,8 +1,9 @@
 ﻿using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Zss.BilliardHall.Modules.Members;
 using Zss.BilliardHall.Modules.Orders;
 
-namespace Zss.BilliardHall.Host.Web;
+namespace Zss.BilliardHall.Host.Worker;
 
 /// <summary>
 /// 模块注册表 - Host 层负责决定加载哪些模块
