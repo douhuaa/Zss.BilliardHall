@@ -12,7 +12,7 @@ public sealed class AgentInstructionGenerator_GoldenTests
     {
         _goldenFilePath = Path.Combine(
             TestEnvironment.RepositoryRoot,
-            "src", "tests", "ArchitectureTests", "Specification", "Generator", "Tests", "golden",
+            "src", "tests", "ArchitectureTests", "Specification", "Generator", "golden",
             "agent_instructions_sample.yaml");
     }
 
