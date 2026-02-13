@@ -6,9 +6,99 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wolverine;
 using Wolverine.Http;
+using Zss.BilliardHall.Modules.Members;
+using Zss.BilliardHall.Modules.Orders;
 using Zss.BilliardHall.Platform.Contracts;
 
 namespace Zss.BilliardHall.Application;
+
+/// <summary>
+/// 模块注册表 - 类型安全的模块声明
+/// 优势：
+/// 1. IDE 可跟踪引用（F12 导航、重构支持）
+/// 2. 编译时检查（模块缺失立即发现）
+/// 3. 明确的依赖关系（通过 ProjectReference 强制存在）
+/// </summary>
+public static class ModuleRegistry
+{
+    /// <summary>
+    /// 所有可用模块的类型列表
+    /// 注意：顺序决定了模块的初始化顺序
+    /// </summary>
+    private static readonly Type[] AllModuleTypes =
+    [
+        typeof(MemberModule),  // Members 模块
+        typeof(OrderModule)    // Orders 模块
+    ];
+
+    /// <summary>
+    /// 获取启用的模块程序集
+    /// 支持通过配置控制启用/禁用（可选）
+    /// </summary>
+    public static Assembly[] GetEnabledModuleAssemblies(IConfiguration configuration)
+    {
+        var enabledModuleNames = GetEnabledModuleNames(configuration);
+
+        // 如果配置为空，默认启用所有模块
+        if (enabledModuleNames.Length == 0)
+            return AllModuleTypes.Select(t => t.Assembly).Distinct().ToArray();
+
+        // 根据配置筛选启用的模块
+        var enabledSet = new HashSet<string>(enabledModuleNames, StringComparer.OrdinalIgnoreCase);
+        var enabledModules = AllModuleTypes
+            .Where(t => enabledSet.Contains(t.Assembly.GetName().Name!))
+            .Select(t => t.Assembly)
+            .Distinct()
+            .ToArray();
+
+        // 验证配置的模块是否存在
+        var foundNames = new HashSet<string>(enabledModules.Select(a => a.GetName().Name!), StringComparer.OrdinalIgnoreCase);
+        var missingModules = enabledSet.Except(foundNames).ToArray();
+        if (missingModules.Length > 0)
+            throw new InvalidOperationException(
+                $"配置中指定的模块不存在：{string.Join(", ", missingModules)}\n" +
+                $"可用模块：{string.Join(", ", AllModuleTypes.Select(t => t.Assembly.GetName().Name))}");
+
+        return enabledModules;
+    }
+
+    private static string[] GetEnabledModuleNames(IConfiguration configuration)
+    {
+        // 支持两种配置方式：
+        // 1. Modules:Enabled 数组（推荐）- 明确控制启用的模块
+        // 2. Modules:Assemblies 数组（兼容旧格式）
+        var section = configuration.GetSection("Modules:Enabled");
+        if (section.Exists())
+        {
+            var names = section.Get<string[]>();
+            if (names is { Length: > 0 })
+                return NormalizeModuleNames(names);
+        }
+
+        // 兼容旧格式
+        section = configuration.GetSection("Modules:Assemblies");
+        if (section.Exists())
+        {
+            var names = section.Get<string[]>();
+            if (names is { Length: > 0 })
+                return NormalizeModuleNames(names);
+        }
+
+        var raw = configuration["Modules:Assemblies"];
+        if (!string.IsNullOrWhiteSpace(raw))
+            return NormalizeModuleNames(raw.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries));
+
+        // 默认启用所有模块
+        return [];
+    }
+
+    private static string[] NormalizeModuleNames(IEnumerable<string> names)
+        => names
+            .Where(static x => !string.IsNullOrWhiteSpace(x))
+            .Select(static x => x.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+}
 
 public static class ApplicationBootstrapper
 {
@@ -50,6 +140,12 @@ public static class ApplicationBootstrapper
                 w.Discovery.IncludeAssembly(assembly);
 
             w.Policies.AutoApplyTransactions();
+
+            // 🚀 根据环境切换 CodeGen 模式
+            // Development: Dynamic (快速开发，支持热重载)
+            // Production: Auto (Wolverine 自动选择最佳模式)
+            // 注意：Wolverine 5.x 会根据环境自动优化，无需显式配置
+            // 如需强制 Static 模式，可设置环境变量 WOLVERINE_CODEGEN_MODE=Static
         });
 
         if (enableHttp)
@@ -67,59 +163,18 @@ public static class ApplicationBootstrapper
     }
 
     private static Assembly[] GetModuleAssemblies(IConfiguration configuration, IHostEnvironment environment)
-        => LoadModuleAssemblies(ReadModuleAssemblyNames(configuration, environment));
-
-    private static string[] ReadModuleAssemblyNames(IConfiguration configuration, IHostEnvironment environment)
     {
-        // 推荐最终只保留数组格式；此处兼容 string/array 两种写法
-        var section = configuration.GetSection("Modules:Assemblies");
-        var namesFromArray = section.Get<string[]>();
+        // 🚀 使用类型安全的模块注册表
+        // 优势：编译时检查、IDE 跟踪、重构支持
+        var assemblies = ModuleRegistry.GetEnabledModuleAssemblies(configuration);
 
-        if (namesFromArray is { Length: > 0 })
-            return NormalizeAssemblyNames(namesFromArray);
+        if (assemblies.Length == 0)
+            throw new InvalidOperationException(
+                "未找到任何启用的模块。\n" +
+                $"Environment={environment.EnvironmentName}\n" +
+                $"请在 ModuleRegistry 中注册模块类型。");
 
-        var raw = configuration["Modules:Assemblies"];
-        if (!string.IsNullOrWhiteSpace(raw))
-            return NormalizeAssemblyNames(raw.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries));
-
-        throw new InvalidOperationException(
-            "缺少 Modules:Assemblies。模块加载必须显式声明。\n" +
-            $"Environment={environment.EnvironmentName}\n" +
-            $"BaseDirectory={AppContext.BaseDirectory}");
-    }
-
-    private static string[] NormalizeAssemblyNames(IEnumerable<string> names)
-        => names
-            .Where(static x => !string.IsNullOrWhiteSpace(x))
-            .Select(static x => x.Trim())
-            .Distinct(StringComparer.Ordinal)
-            .ToArray();
-
-    private static Assembly[] LoadModuleAssemblies(string[] assemblyNames)
-    {
-        var assemblies = new List<Assembly>(assemblyNames.Length);
-
-        foreach (var name in assemblyNames)
-        {
-            try
-            {
-                assemblies.Add(Assembly.Load(new AssemblyName(name)));
-            }
-            catch (FileNotFoundException ex)
-            {
-                throw new InvalidOperationException($"模块程序集未找到：{name}。请确认已构建并可被加载。", ex);
-            }
-            catch (FileLoadException ex)
-            {
-                throw new InvalidOperationException($"模块程序集加载失败：{name}（文件存在但无法加载）。", ex);
-            }
-            catch (BadImageFormatException ex)
-            {
-                throw new InvalidOperationException($"模块程序集格式错误：{name}（可能是目标框架/架构不匹配）。", ex);
-            }
-        }
-
-        return assemblies.ToArray();
+        return assemblies;
     }
 
     private static IReadOnlyList<IModule> CreateModulesInOrder(Assembly[] moduleAssemblies)
