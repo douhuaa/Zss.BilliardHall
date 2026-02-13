@@ -1,4 +1,6 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
+﻿using Zss.BilliardHall.Generators;
+
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generation;
 
 /// <summary>
 /// CSharpIdentifierHelper 单元测试

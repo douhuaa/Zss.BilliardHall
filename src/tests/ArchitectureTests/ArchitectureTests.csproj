@@ -22,6 +22,8 @@
     <ProjectReference Include="..\..\Application\Application.csproj" />
     <ProjectReference Include="..\..\Modules\Members\Members.csproj" />
     <ProjectReference Include="..\..\Modules\Orders\Orders.csproj" />
+    <ProjectReference Include="..\..\tools\Generators\Generators.csproj" />
+    <ProjectReference Include="..\..\tools\Specification\Specification.csproj" />
     <ProjectReference Include="..\SharedTestHelpers\SharedTestHelpers.csproj" />
   </ItemGroup>
 
