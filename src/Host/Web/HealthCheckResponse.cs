@@ -4,7 +4,7 @@
 /// 健康检查响应
 /// 用于 /health 端点返回系统健康状态
 /// </summary>
-public class HealthCheckResponse
+public sealed record HealthCheckResponse
 {
     /// <summary>
     /// 健康状态（例如："healthy", "degraded", "unhealthy"）

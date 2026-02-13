@@ -9,11 +9,14 @@ public class CreateMemberCommandHandler
 {
     public static  Task<Guid> Handle(CreateMemberCommand command, IDocumentSession session,ISystemClock clock)
     {
-        var member = new Member(Id: Guid.CreateVersion7(),
-        Name: command.Name,
-        Email: command.Email,
-        PhoneNumber: command.PhoneNumber,
-        CreatedAt: clock.UtcNow);
+        var member = new Member
+        {
+            Id = Guid.CreateVersion7(),
+            Name = command.Name,
+            Email = command.Email,
+            PhoneNumber = command.PhoneNumber,
+            CreatedAt = clock.UtcNow
+        };
 
         session.Store(member);
 

@@ -11,12 +11,7 @@ public class GetMemberByIdQueryHandler
     {
         var member = await session.LoadAsync<CreateMember.Member>(query.MemberId,ct);
 
-        if (member == null)
-        {
-            return null;
-        }
-
-        return new MemberDto
+        return member == null ? null : new MemberDto
         {
             Id = member.Id,
             Name = member.Name,

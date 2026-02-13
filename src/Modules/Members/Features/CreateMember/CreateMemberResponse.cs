@@ -3,7 +3,7 @@
 /// <summary>
 /// 创建会员响应
 /// </summary>
-public sealed class CreateMemberResponse
+public sealed record CreateMemberResponse
 {
     public required Guid Id { get; init; }
 }
