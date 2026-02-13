@@ -1,116 +1,42 @@
 ﻿using System.Reflection;
 using Marten;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wolverine;
 using Wolverine.Http;
-using Zss.BilliardHall.Modules.Members;
-using Zss.BilliardHall.Modules.Orders;
 using Zss.BilliardHall.Platform.Contracts;
 
 namespace Zss.BilliardHall.Application;
 
 /// <summary>
-/// 模块注册表 - 类型安全的模块声明
-/// 优势：
-/// 1. IDE 可跟踪引用（F12 导航、重构支持）
-/// 2. 编译时检查（模块缺失立即发现）
-/// 3. 明确的依赖关系（通过 ProjectReference 强制存在）
+/// Application 层 Bootstrapper
+/// 负责装配应用程序的核心服务和中间件
+/// 符合 ADR-002：Application 不依赖 Modules，不包含进程相关代码
 /// </summary>
-public static class ModuleRegistry
-{
-    /// <summary>
-    /// 所有可用模块的类型列表
-    /// 注意：顺序决定了模块的初始化顺序
-    /// </summary>
-    private static readonly Type[] AllModuleTypes =
-    [
-        typeof(MemberModule),  // Members 模块
-        typeof(OrderModule)    // Orders 模块
-    ];
-
-    /// <summary>
-    /// 获取启用的模块程序集
-    /// 支持通过配置控制启用/禁用（可选）
-    /// </summary>
-    public static Assembly[] GetEnabledModuleAssemblies(IConfiguration configuration)
-    {
-        var enabledModuleNames = GetEnabledModuleNames(configuration);
-
-        // 如果配置为空，默认启用所有模块
-        if (enabledModuleNames.Length == 0)
-            return AllModuleTypes.Select(t => t.Assembly).Distinct().ToArray();
-
-        // 根据配置筛选启用的模块
-        var enabledSet = new HashSet<string>(enabledModuleNames, StringComparer.OrdinalIgnoreCase);
-        var enabledModules = AllModuleTypes
-            .Where(t => enabledSet.Contains(t.Assembly.GetName().Name!))
-            .Select(t => t.Assembly)
-            .Distinct()
-            .ToArray();
-
-        // 验证配置的模块是否存在
-        var foundNames = new HashSet<string>(enabledModules.Select(a => a.GetName().Name!), StringComparer.OrdinalIgnoreCase);
-        var missingModules = enabledSet.Except(foundNames).ToArray();
-        if (missingModules.Length > 0)
-            throw new InvalidOperationException(
-                $"配置中指定的模块不存在：{string.Join(", ", missingModules)}\n" +
-                $"可用模块：{string.Join(", ", AllModuleTypes.Select(t => t.Assembly.GetName().Name))}");
-
-        return enabledModules;
-    }
-
-    private static string[] GetEnabledModuleNames(IConfiguration configuration)
-    {
-        // 支持两种配置方式：
-        // 1. Modules:Enabled 数组（推荐）- 明确控制启用的模块
-        // 2. Modules:Assemblies 数组（兼容旧格式）
-        var section = configuration.GetSection("Modules:Enabled");
-        if (section.Exists())
-        {
-            var names = section.Get<string[]>();
-            if (names is { Length: > 0 })
-                return NormalizeModuleNames(names);
-        }
-
-        // 兼容旧格式
-        section = configuration.GetSection("Modules:Assemblies");
-        if (section.Exists())
-        {
-            var names = section.Get<string[]>();
-            if (names is { Length: > 0 })
-                return NormalizeModuleNames(names);
-        }
-
-        var raw = configuration["Modules:Assemblies"];
-        if (!string.IsNullOrWhiteSpace(raw))
-            return NormalizeModuleNames(raw.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries));
-
-        // 默认启用所有模块
-        return [];
-    }
-
-    private static string[] NormalizeModuleNames(IEnumerable<string> names)
-        => names
-            .Where(static x => !string.IsNullOrWhiteSpace(x))
-            .Select(static x => x.Trim())
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToArray();
-}
 
 public static class ApplicationBootstrapper
 {
-    public static void Configure(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
+    /// <summary>
+    /// 配置应用程序服务
+    /// </summary>
+    /// <param name="services">服务集合</param>
+    /// <param name="configuration">配置</param>
+    /// <param name="environment">环境</param>
+    /// <param name="moduleAssemblies">模块程序集列表（由 Host 层提供）</param>
+    public static void Configure(
+        IServiceCollection services,
+        IConfiguration configuration,
+        IHostEnvironment environment,
+        Assembly[] moduleAssemblies)
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configuration);
         ArgumentNullException.ThrowIfNull(environment);
+        ArgumentNullException.ThrowIfNull(moduleAssemblies);
 
         var enableHttp = configuration.GetValue("Wolverine:Http:Enabled", true);
 
-        var moduleAssemblies = GetModuleAssemblies(configuration, environment);
         var modules = CreateModulesInOrder(moduleAssemblies);
 
         ConfigureMarten(services, configuration, modules);
@@ -162,20 +88,6 @@ public static class ApplicationBootstrapper
             module.ConfigureServices(services, configuration, environment);
     }
 
-    private static Assembly[] GetModuleAssemblies(IConfiguration configuration, IHostEnvironment environment)
-    {
-        // 🚀 使用类型安全的模块注册表
-        // 优势：编译时检查、IDE 跟踪、重构支持
-        var assemblies = ModuleRegistry.GetEnabledModuleAssemblies(configuration);
-
-        if (assemblies.Length == 0)
-            throw new InvalidOperationException(
-                "未找到任何启用的模块。\n" +
-                $"Environment={environment.EnvironmentName}\n" +
-                $"请在 ModuleRegistry 中注册模块类型。");
-
-        return assemblies;
-    }
 
     private static IReadOnlyList<IModule> CreateModulesInOrder(Assembly[] moduleAssemblies)
     {
@@ -231,10 +143,5 @@ public static class ApplicationBootstrapper
             throw new InvalidOperationException($"缺少 ConnectionStrings:{name}（请用 User Secrets/KeyVault 注入，禁止硬编码）。");
 
         return value;
-    }
-
-    public static void UseApplication(this WebApplication app)
-    {
-        app.MapWolverineEndpoints();
     }
 }
