@@ -18,6 +18,106 @@ permissions:
   pull-requests: write
 
 jobs:
+  # 单元测试和架构测试（并行执行，快速反馈）
+  unit-and-architecture-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.*'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run unit tests
+        run: |
+          echo "::group::Unit Tests Execution"
+          dotnet test src/tests/UnitTests/UnitTests.csproj \
+            --no-build \
+            --configuration Release \
+            --verbosity normal \
+            --logger "trx;LogFileName=unit-test-results.trx" \
+            --logger "console;verbosity=detailed" \
+            --collect:"XPlat Code Coverage"
+          echo "::endgroup::"
+        continue-on-error: false
+
+      - name: Run architecture tests
+        run: |
+          echo "::group::Architecture Tests Execution"
+          dotnet test src/tests/ArchitectureTests/ArchitectureTests.csproj \
+            --no-build \
+            --configuration Release \
+            --verbosity normal \
+            --logger "trx;LogFileName=architecture-test-results.trx" \
+            --logger "console;verbosity=detailed" \
+            --collect:"XPlat Code Coverage"
+          echo "::endgroup::"
+        continue-on-error: false
+
+      - name: Publish test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-and-architecture-test-results
+          path: |
+            **/unit-test-results.trx
+            **/architecture-test-results.trx
+            **/TestResults/
+
+  # 集成测试（需要 Docker 支持，依赖前面的测试通过）
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: unit-and-architecture-tests
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.*'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run integration tests
+        run: |
+          echo "::group::Integration Tests Execution"
+          dotnet test src/tests/IntegrationTests/IntegrationTests.csproj \
+            --no-build \
+            --configuration Release \
+            --verbosity normal \
+            --logger "trx;LogFileName=integration-test-results.trx" \
+            --logger "console;verbosity=detailed" \
+            --collect:"XPlat Code Coverage"
+          echo "::endgroup::"
+        env:
+          # 使用 GitHub Secrets 配置数据库连接（占位，实际使用时需要配置）
+          TESTCONTAINERS_RYUK_DISABLED: "false"
+        continue-on-error: false
+
+      - name: Publish test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-test-results
+          path: |
+            **/integration-test-results.trx
+            **/TestResults/
+    
   # 调用架构测试工作流
   architecture-tests:
     uses: ./.github/workflows/architecture-tests.yml
