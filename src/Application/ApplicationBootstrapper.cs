@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wolverine;
 using Wolverine.Http;
+using Wolverine.Marten;
 using Zss.BilliardHall.Platform.Contracts;
 
 namespace Zss.BilliardHall.Application;
@@ -48,14 +49,16 @@ public static class ApplicationBootstrapper
     {
         var connectionString = GetRequiredConnectionString(configuration, "Postgres");
 
-        services.AddMarten(opts =>
+        services
+            .AddMarten(opts =>
             {
                 opts.Connection(connectionString);
 
                 foreach (var module in modules.OfType<IMartenModule>())
                     module.ConfigureMarten(opts);
             })
-            .UseLightweightSessions();
+            .UseLightweightSessions()
+            .IntegrateWithWolverine(); // 🚀 自动将 Marten 事务集成到 Wolverine 消息处理管道，无需显式调用 SaveChangesAsync()
     }
 
     private static void ConfigureWolverine(IServiceCollection services, bool enableHttp, Assembly[] moduleAssemblies)

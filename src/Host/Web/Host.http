@@ -12,3 +12,16 @@ Content-Type: application/json
   "email": "test@test.com"
 }
 ###
+
+POST {{Host_HostAddress}}/api/v2/members
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "test1@test.com"
+}
+###
+
+GET  {{Host_HostAddress}}/api/members/019c57c1-e910-7824-86af-bf8a64015ec0
+Accept: application/json
+###

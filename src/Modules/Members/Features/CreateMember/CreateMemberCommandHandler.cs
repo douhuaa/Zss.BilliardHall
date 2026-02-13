@@ -7,7 +7,7 @@
 /// </summary>
 public class CreateMemberCommandHandler
 {
-    public static  Task<Guid> Handle(CreateMemberCommand command, IDocumentSession session)
+    public static Task<Guid> Handle(CreateMemberCommand command, IDocumentSession session)
     {
         var member = new Member
         {
@@ -19,6 +19,10 @@ public class CreateMemberCommandHandler
         };
 
         session.Store(member);
+
+        // ✅ Wolverine 的 AutoApplyTransactions 会自动提交这个变更
+        // 无需显式调用 SaveChangesAsync()
+        // session.SaveChangesAsync();
 
         return Task.FromResult(member.Id);
     }
