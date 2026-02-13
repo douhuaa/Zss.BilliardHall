@@ -1,3 +1,8 @@
+using Zss.BilliardHall.Generators;
+using Zss.BilliardHall.Generators.Interfaces;
+using Zss.BilliardHall.Generators.Implementations;
+using Zss.BilliardHall.Generators.Models;
+
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
 
 /// <summary>
