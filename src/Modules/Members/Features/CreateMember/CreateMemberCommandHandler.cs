@@ -7,7 +7,7 @@
 /// </summary>
 public class CreateMemberCommandHandler
 {
-    public static  Task<Guid> Handle(CreateMemberCommand command, IDocumentSession session,ISystemClock clock)
+    public static  Task<Guid> Handle(CreateMemberCommand command, IDocumentSession session)
     {
         var member = new Member
         {
@@ -15,7 +15,7 @@ public class CreateMemberCommandHandler
             Name = command.Name,
             Email = command.Email,
             PhoneNumber = command.PhoneNumber,
-            CreatedAt = clock.UtcNow
+            CreatedAt = DateTimeOffset.UtcNow
         };
 
         session.Store(member);

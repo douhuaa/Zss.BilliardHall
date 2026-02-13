@@ -10,6 +10,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\Application.csproj"/>
-    <ProjectReference Include="..\..\Modules\Members\Members.csproj"/>
   </ItemGroup>
 </Project>

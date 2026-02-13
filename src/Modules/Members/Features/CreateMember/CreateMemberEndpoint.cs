@@ -7,9 +7,8 @@
 public static class CreateMemberEndpoint
 {
     [WolverinePost("/api/members")]
-    public static async Task<IResult> Create(CreateMemberCommand command, IMessageBus bus, CancellationToken ct=default)
-    {
-        var memberId = await bus.InvokeAsync<Guid>(command,ct);
-        return Results.Created($"/api/members/{memberId}", new CreateMemberResponse { Id = memberId });
-    }
+    public static CreateMemberCommand Create(CreateMemberCommand command) => command;
+
+    [WolverinePost("/api/v2/members")]
+    public static Task<Guid> CreateV2(CreateMemberCommand command, IMessageBus bus, CancellationToken ct = default) => bus.InvokeAsync<Guid>(command, ct);
 }

@@ -8,8 +8,7 @@ public sealed class Adr_Modules_NoMagicScan_Tests
     [InlineData("Zss.BilliardHall.Modules.*.dll")]
     public void ApplicationBootstrapper_Should_Not_Contain_Magic_Scan_Tokens(string forbiddenToken)
     {
-        var path = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "..",
-        "src", "Application", "ApplicationBootstrapper.cs");
+        var path = Path.Combine(TestEnvironment.SourceRoot, "Application", "ApplicationBootstrapper.cs");
 
         // 如果你们测试项目的工作目录不同，可改为 TestEnvironment/RepositoryRoot（看你们 Shared 里是否已有）
         File.Exists(path).Should().BeTrue($"测试需要能读取源码文件：{path}");
