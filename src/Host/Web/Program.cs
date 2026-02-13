@@ -12,4 +12,5 @@ ApplicationBootstrapper.Configure(builder.Services, builder.Configuration, build
 
 var app = builder.Build();
 
+app.UseApplication();
 app.Run();
