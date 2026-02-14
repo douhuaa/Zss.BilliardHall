@@ -38,10 +38,17 @@ Zss.BilliardHall MVP 采用**模块化单体（Modular Monolith）**架构，结
 └─────────────────────────────────────────┘
                ↓                ↓
 ┌─────────────────────────────────────────┐
+│    Composition Root (模块组装层)          │
+│  • 唯一了解具体模块类型                   │
+│  • 提供 GetEnabledModules() 方法        │
+│  • 解耦 Host 与 Modules                │
+└─────────────────────────────────────────┘
+               ↓                ↓
+┌─────────────────────────────────────────┐
 │      Application Layer (应用装配)         │
 │  • Wolverine + Marten 集成               │
-│  • 模块发现与加载                         │
 │  • 事务管理、消息路由                     │
+│  • IOptions 配置模式                    │
 └─────────────────────────────────────────┘
                ↓                ↓
 ┌─────────────────────────────────────────┐
@@ -69,6 +76,12 @@ Zss.BilliardHall MVP 采用**模块化单体（Modular Monolith）**架构，结
 - 每个模块独立可部署（未来支持）
 
 ### 2. 三层启动体系（ADR-002）
+
+**符合 ADR-002 的架构边界**：
+- Host 不依赖 Modules（通过 Composition Root 解耦）
+- 使用 IOptions 模式管理配置
+- 类型安全的显式模块注册
+
 ```csharp
 // Host 层决定"怎么跑"
 var builder = WebApplication.CreateBuilder(args);
@@ -76,8 +89,8 @@ var builder = WebApplication.CreateBuilder(args);
 // 1. Platform 配置技术基座
 PlatformBootstrapper.Configure(...);
 
-// 2. Host 显式获取启用的模块（无反射）
-var modules = ModuleRegistry.GetEnabledModules(configuration);
+// 2. 通过 Composition Root 获取启用的模块（无反射）
+var modules = ModuleComposition.GetEnabledModules(configuration);
 
 // 3. Application 装配业务能力
 ApplicationBootstrapper.Configure(..., modules);
@@ -96,8 +109,9 @@ app.Run();
 **禁止横向分层**：不允许创建全局的 Services、Repositories 层。
 
 ### 4. 显式优于隐式
-- **无反射扫描**：模块在 `ModuleRegistry` 中显式声明
+- **无反射扫描**：模块在 `ModuleComposition` 中显式声明
 - **类型安全**：模块实例直接传递，编译时检查
+- **架构合规**：Host 通过 Composition Root 解耦，符合 ADR-002
 - **约定优于配置**：
   - Wolverine 自动发现 Handlers 和 Endpoints
   - Marten 自动创建表结构
