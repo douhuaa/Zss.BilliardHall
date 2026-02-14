@@ -1,15 +1,20 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Zss.BilliardHall.Modules.Members;
 using Zss.BilliardHall.Modules.Orders;
 using Zss.BilliardHall.Platform.Contracts;
 
-namespace Zss.BilliardHall.Host.Web;
+namespace Zss.BilliardHall.Composition;
 
 /// <summary>
-/// 模块注册表 - Host 层显式决定加载哪些模块
-/// 无反射、无运行时扫描、完全显式
-/// 冻结规范：所有新增模块必须在这里声明
+/// Composition Root - 唯一了解具体模块类型的地方
+/// 职责：提供可用的模块实例，支持配置过滤
+/// 设计：
+/// - Composition 项目可以引用所有 Modules
+/// - Host 项目仅引用 Composition，不直接引用 Modules
+/// - 这样保持了类型安全，同时满足 ADR-002 的架构边界约束
 /// </summary>
-public static class ModuleRegistry
+public static class ModuleComposition
 {
     /// <summary>
     /// 所有可用的模块实例
@@ -24,8 +29,12 @@ public static class ModuleRegistry
     /// <summary>
     /// 获取启用的模块
     /// </summary>
+    /// <param name="configuration">配置对象</param>
+    /// <returns>根据配置启用的模块数组</returns>
     public static IModule[] GetEnabledModules(IConfiguration configuration)
     {
+        ArgumentNullException.ThrowIfNull(configuration);
+
         var enabledNames = ReadEnabledModuleNames(configuration);
 
         // 如果未配置，返回全部
