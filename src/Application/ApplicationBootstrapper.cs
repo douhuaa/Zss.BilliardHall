@@ -41,9 +41,16 @@ public static class ApplicationBootstrapper
         services.AddOptions<MartenOptions>()
             .Validate(opts =>
             {
-                opts.Validate();
-                return true;
-            }, "Marten 配置无效");
+                try
+                {
+                    opts.Validate();
+                    return true;
+                }
+                catch (InvalidOperationException ex)
+                {
+                    throw new InvalidOperationException($"Marten 配置验证失败：{ex.Message}", ex);
+                }
+            });
 
         ConfigureMarten(services, configuration, modules);
         ConfigureWolverine(services, enableHttp, modules);

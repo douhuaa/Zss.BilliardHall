@@ -45,7 +45,7 @@ public class ValidationExceptionMiddleware
 
         var problemDetails = new ValidationProblemDetails(errors)
         {
-            Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+            Type = "https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.1",
             Title = "验证失败",
             Status = StatusCodes.Status400BadRequest,
             Detail = "一个或多个验证错误发生。",

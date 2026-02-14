@@ -31,6 +31,10 @@ public static class ModuleComposition
     /// </summary>
     /// <param name="configuration">配置对象</param>
     /// <returns>根据配置启用的模块数组</returns>
+    /// <remarks>
+    /// 如果未配置 Modules:Enabled，则返回所有注册的模块。
+    /// 如果配置了 Modules:Enabled，则只返回配置中指定的模块。
+    /// </remarks>
     public static IModule[] GetEnabledModules(IConfiguration configuration)
     {
         ArgumentNullException.ThrowIfNull(configuration);
