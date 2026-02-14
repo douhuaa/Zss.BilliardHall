@@ -5,7 +5,8 @@ namespace Zss.BilliardHall.Host.Worker;
 
 /// <summary>
 /// Worker Host 层统一 Bootstrapper
-/// 封装所有初始化逻辑，简化 Program.cs
+/// 职责：编排 Platform → Application → Modules 的初始化
+/// 冻结：永不修改
 /// </summary>
 public static class HostBootstrapper
 {
@@ -16,15 +17,20 @@ public static class HostBootstrapper
     {
         ArgumentNullException.ThrowIfNull(builder);
 
+        // 1. Platform 层（日志、遥测等基础设施）
         PlatformBootstrapper.Configure(builder.Services, builder.Configuration, builder.Environment);
 
-        // Host 层决定加载哪些模块（类型安全）
-        var moduleAssemblies = ModuleRegistry.GetEnabledAssemblies(builder.Configuration);
+        // 2. 显式获取启用的模块（来自 Application 层的共享 ModuleRegistry）
+        var modules = ModuleRegistry.GetEnabledModules(builder.Configuration);
 
+        // 3. Application 层（Wolverine、Marten、DI 装配）
         ApplicationBootstrapper.Configure(
             builder.Services,
             builder.Configuration,
             builder.Environment,
-            moduleAssemblies);
+            modules);
+
+        // 4. 注册模块实例供后续 ConfigureApplication 使用
+        builder.Services.AddSingleton(modules);
     }
 }

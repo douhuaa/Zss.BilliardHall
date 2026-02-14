@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Marten;
+﻿using Marten;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,40 +11,39 @@ namespace Zss.BilliardHall.Application;
 
 /// <summary>
 /// Application 层 Bootstrapper
-/// 负责装配应用程序的核心服务和中间件
-/// 符合 ADR-002：Application 不依赖 Modules，不包含进程相关代码
+/// 职责：装配 Wolverine、Marten、DI 容器
+/// 输入：显式的 IModule[] 实例（由 Host 层提供）
+/// 不依赖反射，完全显式
+/// 冻结规范：应仅被 HostBootstrapper 调用，不支持扩展
 /// </summary>
-
 public static class ApplicationBootstrapper
 {
     /// <summary>
     /// 配置应用程序服务
     /// </summary>
-    /// <param name="services">服务集合</param>
-    /// <param name="configuration">配置</param>
-    /// <param name="environment">环境</param>
-    /// <param name="moduleAssemblies">模块程序集列表（由 Host 层提供）</param>
     public static void Configure(
         IServiceCollection services,
         IConfiguration configuration,
         IHostEnvironment environment,
-        Assembly[] moduleAssemblies)
+        IModule[] modules)
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configuration);
         ArgumentNullException.ThrowIfNull(environment);
-        ArgumentNullException.ThrowIfNull(moduleAssemblies);
+        ArgumentNullException.ThrowIfNull(modules);
 
         var enableHttp = configuration.GetValue("Wolverine:Http:Enabled", true);
 
-        var modules = CreateModulesInOrder(moduleAssemblies);
-
         ConfigureMarten(services, configuration, modules);
-        ConfigureWolverine(services, enableHttp, moduleAssemblies);
+        ConfigureWolverine(services, enableHttp, modules);
         ConfigureModules(services, configuration, environment, modules);
     }
 
-    private static void ConfigureMarten(IServiceCollection services, IConfiguration configuration, IReadOnlyList<IModule> modules)
+    /// <summary>
+    /// 配置 Marten（EF Core 替代品）+ Wolverine 集成
+    /// 调用所有模块的 IMartenModule.ConfigureMarten()
+    /// </summary>
+    private static void ConfigureMarten(IServiceCollection services, IConfiguration configuration, IModule[] modules)
     {
         var connectionString = GetRequiredConnectionString(configuration, "Postgres");
 
@@ -54,89 +52,55 @@ public static class ApplicationBootstrapper
             {
                 opts.Connection(connectionString);
 
+                // 调用所有 IMartenModule 扩展 Schema
                 foreach (var module in modules.OfType<IMartenModule>())
                     module.ConfigureMarten(opts);
             })
             .UseLightweightSessions()
-            .IntegrateWithWolverine(); // 🚀 自动将 Marten 事务集成到 Wolverine 消息处理管道，无需显式调用 SaveChangesAsync()
+            .IntegrateWithWolverine(); // 自动将 Marten 事务集成到 Wolverine 管道
     }
 
-    private static void ConfigureWolverine(IServiceCollection services, bool enableHttp, Assembly[] moduleAssemblies)
+    /// <summary>
+    /// 配置 Wolverine 消息总线
+    /// 收集所有模块的 Handlers（通过程序集扫描）
+    /// </summary>
+    private static void ConfigureWolverine(IServiceCollection services, bool enableHttp, IModule[] modules)
     {
         services.AddWolverine(w =>
         {
-            foreach (var assembly in moduleAssemblies)
-                w.Discovery.IncludeAssembly(assembly);
+            // 从所有模块的程序集扫描 Handlers
+            var scannedAssemblies = new HashSet<System.Reflection.Assembly>();
+            foreach (var module in modules)
+            {
+                var moduleType = module.GetType();
+                var assembly = moduleType.Assembly;
+                if (scannedAssemblies.Add(assembly))
+                {
+                    w.Discovery.IncludeAssembly(assembly);
+                }
+            }
 
+            // 自动事务：所有 Handler 都在 Marten 事务上下文运行
             w.Policies.AutoApplyTransactions();
-
-            // 🚀 根据环境切换 CodeGen 模式
-            // Development: Dynamic (快速开发，支持热重载)
-            // Production: Auto (Wolverine 自动选择最佳模式)
-            // 注意：Wolverine 5.x 会根据环境自动优化，无需显式配置
-            // 如需强制 Static 模式，可设置环境变量 WOLVERINE_CODEGEN_MODE=Static
+            // 使用持久化本地队列（如果消息未能处理，将自动重试）
+            w.Policies.UseDurableLocalQueues();
         });
 
         if (enableHttp)
             services.AddWolverineHttp();
     }
 
+    /// <summary>
+    /// 调用所有模块的 ConfigureServices
+    /// </summary>
     private static void ConfigureModules(
         IServiceCollection services,
         IConfiguration configuration,
         IHostEnvironment environment,
-        IReadOnlyList<IModule> modules)
+        IModule[] modules)
     {
         foreach (var module in modules)
             module.ConfigureServices(services, configuration, environment);
-    }
-
-
-    private static IReadOnlyList<IModule> CreateModulesInOrder(Assembly[] moduleAssemblies)
-    {
-        var modules = new List<IModule>(moduleAssemblies.Length);
-
-        foreach (var assembly in moduleAssemblies)
-        {
-            var moduleType = GetSingleModuleTypeOrThrow(assembly);
-            modules.Add(CreateModuleInstance(moduleType));
-        }
-
-        return modules;
-    }
-
-    private static Type GetSingleModuleTypeOrThrow(Assembly assembly)
-    {
-        var moduleTypes = SafeGetTypes(assembly)
-            .Where(static t => t is { IsAbstract: false, IsInterface: false } && typeof(IModule).IsAssignableFrom(t))
-            .ToArray();
-
-        return moduleTypes.Length switch
-        {
-            0 => throw new InvalidOperationException($"模块程序集未声明 IModule：{assembly.GetName().Name}（必须且只能有一个）。"),
-            1 => moduleTypes[0],
-            _ => throw new InvalidOperationException(
-                $"模块程序集包含多个 IModule（必须且只能有一个）：{assembly.GetName().Name}\n" +
-                string.Join('\n', moduleTypes.Select(t => $" - {t.FullName}")))
-        };
-    }
-
-    private static IEnumerable<Type> SafeGetTypes(Assembly assembly)
-    {
-        try { return assembly.GetTypes(); }
-        catch (ReflectionTypeLoadException ex) { return ex.Types.Where(static t => t is not null)!; }
-    }
-
-    private static IModule CreateModuleInstance(Type moduleType)
-    {
-        try
-        {
-            return (IModule)Activator.CreateInstance(moduleType)!;
-        }
-        catch (MissingMethodException ex)
-        {
-            throw new InvalidOperationException($"模块必须提供 public 无参构造函数：{moduleType.FullName}", ex);
-        }
     }
 
     private static string GetRequiredConnectionString(IConfiguration configuration, string name)

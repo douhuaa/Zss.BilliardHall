@@ -6,16 +6,20 @@ namespace Zss.BilliardHall.Platform.Contracts;
 
 /// <summary>
 /// 模块契约：每个业务模块通过实现此接口参与系统装配。
-/// 每个业务模块必须实现此接口以声明其存在
-/// Platform 通过反射发现并调用模块的 ConfigureServices 方法
+/// 不依赖反射，完全显式管理模块生命周期。
+/// 冻结规范：不允许扩展此接口，简单才稳定。
 /// </summary>
 public interface IModule
 {
     /// <summary>
-    /// 注册模块所需服务（DI 注册、配置绑定、基础设施扩展点等）。
+    /// 模块名称（用于配置和日志）
     /// </summary>
-    /// <param name="services">服务集合</param>
-    /// <param name="configuration">配置</param>
-    /// <param name="environment">主机环境</param>
+    string Name { get; }
+
+    /// <summary>
+    /// 注册模块所需服务（DI 注册、配置绑定、Marten Schema 扩展等）
+    /// </summary>
     void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment);
 }
+
+

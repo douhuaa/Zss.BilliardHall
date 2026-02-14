@@ -1,82 +1,70 @@
-using System.Reflection;
 using Zss.BilliardHall.Modules.Members;
 using Zss.BilliardHall.Modules.Orders;
+using Zss.BilliardHall.Platform.Contracts;
 
 namespace Zss.BilliardHall.Host.Worker;
 
 /// <summary>
-/// 模块注册表 - Host 层负责决定加载哪些模块
-/// 通过 typeof 确保类型安全和编译时检查
+/// 模块注册表 - Host 层显式决定加载哪些模块
+/// 无反射、无运行时扫描、完全显式
+/// 冻结规范：所有新增模块必须在这里声明
 /// </summary>
 public static class ModuleRegistry
 {
     /// <summary>
-    /// 所有可用模块的程序集列表
+    /// 所有可用的模块实例
+    /// 冻结：添加新模块时，只需在此数组中实例化
     /// </summary>
-    private static readonly Assembly[] AllModuleAssemblies =
+    private static readonly IModule[] AllModules =
     [
-        typeof(MemberModule).Assembly,
-        typeof(OrderModule).Assembly
+        new MemberModule(),
+        new OrderModule()
     ];
 
     /// <summary>
-    /// 获取启用的模块程序集
-    /// 支持短名称 (Members) 或完整名称 (Zss.BilliardHall.Modules.Members)
+    /// 获取启用的模块
     /// </summary>
-    public static Assembly[] GetEnabledAssemblies(IConfiguration configuration)
+    public static IModule[] GetEnabledModules(IConfiguration configuration)
     {
-        var enabled = ReadEnabledModuleNames(configuration);
-        if (enabled.Length == 0)
-            return AllModuleAssemblies;
+        var enabledNames = ReadEnabledModuleNames(configuration);
 
-        var enabledSet = enabled.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        // 如果未配置，返回全部
+        if (enabledNames.Length == 0)
+            return AllModules;
 
-        var result = AllModuleAssemblies
-            .Where(a =>
-            {
-                var shortName = a.GetName().Name!;
-                var fullName = a.GetName().FullName ?? shortName;
-                return enabledSet.Contains(shortName) || enabledSet.Contains(fullName);
-            })
+        var enabledSet = enabledNames.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var result = AllModules
+            .Where(m => enabledSet.Contains(m.Name))
             .ToArray();
 
         ValidateNoMissing(enabledSet, result);
-
         return result;
     }
 
-    private static void ValidateNoMissing(HashSet<string> enabledSet, Assembly[] result)
+    private static void ValidateNoMissing(HashSet<string> enabledSet, IModule[] result)
     {
-        var found = result
-            .SelectMany(a => new[] { a.GetName().Name!, a.GetName().FullName ?? a.GetName().Name! })
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
+        var found = result.Select(m => m.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
         var missing = enabledSet.Except(found).ToArray();
+
         if (missing.Length == 0)
             return;
 
         throw new InvalidOperationException(
-            $"配置中指定的模块不存在：{string.Join(", ", missing)}\n" +
-            $"可用模块：{string.Join(", ", AllModuleAssemblies.Select(a => a.GetName().Name))}");
+        $"配置中指定的模块不存在：{string.Join(", ", missing)}\n" +
+        $"可用模块：{string.Join(", ", AllModules.Select(m => m.Name))}");
     }
 
     private static string[] ReadEnabledModuleNames(IConfiguration configuration)
     {
-        // 优先读取新键
+        // 支持多种配置方式
         var enabled = configuration.GetSection("Modules:Enabled").Get<string[]>();
         if (enabled is { Length: > 0 })
             return Normalize(enabled);
 
-        // 兼容旧键
-        var assemblies = configuration.GetSection("Modules:Assemblies").Get<string[]>();
-        if (assemblies is { Length: > 0 })
-            return Normalize(assemblies);
-
-        var raw = configuration["Modules:Assemblies"];
+        var raw = configuration["Modules:Enabled"];
         if (!string.IsNullOrWhiteSpace(raw))
             return Normalize(raw.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries));
 
-        // 未配置则启用所有
         return [];
     }
 
