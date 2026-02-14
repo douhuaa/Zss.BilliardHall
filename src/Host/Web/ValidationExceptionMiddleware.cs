@@ -8,6 +8,12 @@ namespace Zss.BilliardHall.Host.Web;
 /// 处理 FluentValidation 验证异常，转换为标准 ProblemDetails 响应
 /// 确保 Web API 返回一致的错误格式
 /// </summary>
+/// <remarks>
+/// 注意：本中间件直接引用 FluentValidation.ValidationException，
+/// 因此 Web.csproj 必须显式引用 FluentValidation 包。
+/// 虽然 Application 层已通过 WolverineFx.Http.FluentValidation 集成验证，
+/// 但该中间件需要直接捕获和处理 ValidationException 类型。
+/// </remarks>
 public class ValidationExceptionMiddleware
 {
     private readonly RequestDelegate _next;
