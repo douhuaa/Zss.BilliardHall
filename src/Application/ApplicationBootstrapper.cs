@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wolverine;
+using Wolverine.FluentValidation;
 using Wolverine.Http;
 using Wolverine.Marten;
 using Zss.BilliardHall.Platform.Contracts;
@@ -63,6 +64,7 @@ public static class ApplicationBootstrapper
     /// <summary>
     /// 配置 Wolverine 消息总线
     /// 收集所有模块的 Handlers（通过程序集扫描）
+    /// 注册验证中间件
     /// </summary>
     private static void ConfigureWolverine(IServiceCollection services, bool enableHttp, IModule[] modules)
     {
@@ -80,10 +82,12 @@ public static class ApplicationBootstrapper
                 }
             }
 
+            // 官方推荐：使用 Wolverine.FluentValidation 提供的验证集成
+            w.UseFluentValidation();
+
             // 自动事务：所有 Handler 都在 Marten 事务上下文运行
             w.Policies.AutoApplyTransactions();
-            // 使用持久化本地队列（如果消息未能处理，将自动重试）
-            w.Policies.UseDurableLocalQueues();
+
         });
 
         if (enableHttp)

@@ -7,5 +7,6 @@
     <PackageReference Include="WolverineFx.Marten"/>
     <PackageReference Include="Marten"/>
     <PackageReference Include="Marten.AspNetCore"/>
+    <PackageReference Include="WolverineFx.Http.FluentValidation"/>
   </ItemGroup>
 </Project>
