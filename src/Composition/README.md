@@ -58,3 +58,27 @@ private static readonly IModule[] AllModules =
 
 - [ADR-002：Platform / Application / Host 三层启动体系](../../docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md)
 - [ADR-001：模块化单体与垂直切片架构](../../docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
+
+## 依赖与未来优化
+
+### 当前依赖
+
+本项目当前引用：
+- `Platform.csproj`：获取 `IModule` 和 `IMartenModule` 接口
+- 各模块项目（`Members.csproj`、`Orders.csproj` 等）
+
+### 未来优化机会
+
+当前 Composition 引用整个 `Platform.csproj`，但实际只使用了 `Platform.Contracts` 命名空间中的接口（`IModule`、`IMartenModule`）。
+
+**建议的改进方向**（后续 ADR/重构可考虑）：
+1. 将 `Platform.Contracts` 抽取为独立项目（如 `Platform.Contracts.csproj`）
+2. 让 Composition 只依赖 `Platform.Contracts` + 各模块
+3. 避免把 Platform 的技术基座（日志、遥测等）引入 Composition 的编译依赖链
+
+**收益**：
+- 更清晰的依赖边界
+- 更快的编译速度（减少不必要的传递依赖）
+- 更符合"接口与实现分离"的原则
+
+**注意**：这是一个渐进式优化，当前架构已符合 ADR-002 的边界约束。
