@@ -46,11 +46,12 @@ public static class ApplicationBootstrapper
                     opts.Validate();
                     return true;
                 }
-                catch (InvalidOperationException ex)
+                catch (InvalidOperationException)
                 {
-                    throw new InvalidOperationException($"Marten 配置验证失败：{ex.Message}", ex);
+                    return false;
                 }
-            });
+            }, "Marten 配置无效：请配置 Marten:ConnectionString（建议使用 User Secrets、KeyVault 或环境变量）")
+            .ValidateOnStart();
 
         ConfigureMarten(services, configuration, modules);
         ConfigureWolverine(services, enableHttp, modules);
