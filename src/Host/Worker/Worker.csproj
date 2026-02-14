@@ -10,5 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\Application.csproj"/>
+    <ProjectReference Include="..\..\Composition\Composition.csproj"/>
   </ItemGroup>
 </Project>
