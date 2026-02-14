@@ -1,8 +1,8 @@
 # Zss.BilliardHall MVP 架构总结
 
-> **文档版本**: 1.0  
-> **创建日期**: 2026-02-13  
-> **基于**: PR #404 最终版本
+> **文档版本**: 1.1  
+> **更新日期**: 2026-02-14  
+> **基于**: PR #404 最终版本（含重构优化）
 
 本文档提供 Zss.BilliardHall MVP（最小可行产品）的架构概述，帮助快速理解系统的核心设计和实现。
 
@@ -76,11 +76,11 @@ var builder = WebApplication.CreateBuilder(args);
 // 1. Platform 配置技术基座
 PlatformBootstrapper.Configure(...);
 
-// 2. Host 提供模块清单
-var moduleAssemblies = ModuleRegistry.GetEnabledAssemblies();
+// 2. Host 显式获取启用的模块（无反射）
+var modules = ModuleRegistry.GetEnabledModules(configuration);
 
 // 3. Application 装配业务能力
-ApplicationBootstrapper.Configure(..., moduleAssemblies);
+ApplicationBootstrapper.Configure(..., modules);
 
 var app = builder.Build();
 app.Run();
@@ -95,10 +95,13 @@ app.Run();
 
 **禁止横向分层**：不允许创建全局的 Services、Repositories 层。
 
-### 4. 约定优于配置
-- Wolverine 自动发现 Handlers 和 Endpoints
-- Marten 自动创建表结构
-- 模块通过 `IModule` 接口自注册
+### 4. 显式优于隐式
+- **无反射扫描**：模块在 `ModuleRegistry` 中显式声明
+- **类型安全**：模块实例直接传递，编译时检查
+- **约定优于配置**：
+  - Wolverine 自动发现 Handlers 和 Endpoints
+  - Marten 自动创建表结构
+  - FluentValidation 自动验证命令
 
 ---
 
@@ -203,14 +206,17 @@ ModuleName/
 
 ### 模块注册机制
 
-1. **定义模块**：实现 `IModule` 接口
+1. **定义模块**：实现 `IModule` 接口（可选实现 `IMartenModule`）
 ```csharp
 public class MemberModule : IModule, IMartenModule
 {
+    public string Name => "Members";
+
     public void ConfigureServices(IServiceCollection services, 
         IConfiguration configuration, IHostEnvironment environment)
     {
         // 注册模块特定服务
+        // Wolverine 会自动发现 Handlers 和 Endpoints
     }
 
     public void ConfigureMarten(StoreOptions options)
@@ -224,14 +230,17 @@ public class MemberModule : IModule, IMartenModule
 2. **在 Host 中注册**：
 ```csharp
 // Host/Web/ModuleRegistry.cs
-private static readonly Assembly[] AllModuleAssemblies =
+private static readonly IModule[] AllModules =
 [
-    typeof(MemberModule).Assembly,
-    typeof(OrderModule).Assembly
+    new MemberModule(),
+    new OrderModule()
 ];
 ```
 
-3. **自动加载**：ApplicationBootstrapper 会自动发现并调用模块的 `ConfigureServices` 方法。
+3. **自动装配**：ApplicationBootstrapper 会自动：
+   - 调用 `ConfigureServices` 注册服务
+   - 调用 `ConfigureMarten` 配置 Schema（如果实现了 `IMartenModule`）
+   - 扫描模块程序集发现 Handlers 和 Endpoints
 
 ---
 
@@ -249,13 +258,16 @@ private static readonly Assembly[] AllModuleAssemblies =
    - 配置 OpenTelemetry
    - 注册异常体系
    ↓
-4. ModuleRegistry.GetEnabledAssemblies(...)
-   - 返回启用的模块程序集
+4. ModuleRegistry.GetEnabledModules(...)
+   - 返回启用的模块实例
+   - 无反射，完全显式
    ↓
-5. ApplicationBootstrapper.Configure(..., moduleAssemblies)
+5. ApplicationBootstrapper.Configure(..., modules)
    - 配置 Marten（连接数据库）
-   - 配置 Wolverine（消息总线）
-   - 加载模块（调用 IModule.ConfigureServices）
+   - 调用 IMartenModule.ConfigureMarten（扩展 Schema）
+   - 配置 Wolverine（消息总线 + FluentValidation）
+   - 扫描模块程序集（发现 Handlers 和 Endpoints）
+   - 调用 IModule.ConfigureServices（注册服务）
    ↓
 6. HostBootstrapper.ConfigureApplication(app)
    - 映射 Wolverine HTTP 端点
@@ -271,23 +283,34 @@ private static readonly Assembly[] AllModuleAssemblies =
 ```csharp
 public interface IModule
 {
+    /// <summary>
+    /// 模块名称（用于配置和日志）
+    /// </summary>
+    string Name { get; }
+
+    /// <summary>
+    /// 注册模块所需服务
+    /// </summary>
     void ConfigureServices(IServiceCollection services, 
         IConfiguration configuration, IHostEnvironment environment);
 }
 ```
 每个业务模块必须实现此接口，用于自注册服务。
 
-### 2. ModuleLoader
+### 2. ModuleRegistry
 ```csharp
-public static class ModuleLoader
+public static class ModuleRegistry
 {
-    public static void LoadModules(
-        IServiceCollection services,
-        IConfiguration configuration,
-        IHostEnvironment environment,
-        params Assembly[] moduleAssemblies)
+    private static readonly IModule[] AllModules =
+    [
+        new MemberModule(),
+        new OrderModule()
+    ];
+
+    public static IModule[] GetEnabledModules(IConfiguration configuration)
     {
-        // 通过反射发现并调用 IModule 实现
+        // 根据配置返回启用的模块
+        // 无反射、完全显式
     }
 }
 ```
@@ -300,22 +323,40 @@ public static class ApplicationBootstrapper
         IServiceCollection services,
         IConfiguration configuration,
         IHostEnvironment environment,
-        Assembly[] moduleAssemblies)
+        IReadOnlyList<IModule> modules)
     {
-        // 配置 Marten + Wolverine
-        // 加载模块
+        // 配置 Marten + Wolverine + FluentValidation
+        // 装配模块
     }
 }
 ```
 
-### 4. Wolverine Handler 自动发现
+### 4. FluentValidation 自动验证
+```csharp
+// Validator（Wolverine 自动发现）
+public class CreateMemberCommandValidator : AbstractValidator<CreateMemberCommand>
+{
+    public CreateMemberCommandValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
+        RuleFor(x => x.Email).NotEmpty().EmailAddress();
+    }
+}
+
+// ApplicationBootstrapper 中配置
+services.AddWolverine(w =>
+{
+    w.UseFluentValidation(); // 自动验证所有命令
+});
+```
+
+### 5. Wolverine Handler 自动发现
 ```csharp
 // Command
 public sealed record CreateMemberCommand(string Name, string Email);
 
 // Handler（Wolverine 自动发现）
-public class CreateMemberCommandHandler(IDocumentSession session) 
-    : ICommandHandler<CreateMemberCommand, Guid>
+public class CreateMemberCommandHandler(IDocumentSession session)
 {
     public Task<Guid> Handle(CreateMemberCommand command)
     {
@@ -327,7 +368,7 @@ public class CreateMemberCommandHandler(IDocumentSession session)
 }
 ```
 
-### 5. Wolverine Endpoint 自动发现
+### 6. Wolverine Endpoint 自动发现
 ```csharp
 public static class CreateMemberEndpoint
 {

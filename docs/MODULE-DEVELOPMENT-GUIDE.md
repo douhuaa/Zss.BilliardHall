@@ -1,7 +1,7 @@
 # 模块开发指南
 
-> **文档版本**: 1.0  
-> **创建日期**: 2026-02-13  
+> **文档版本**: 1.1  
+> **更新日期**: 2026-02-14  
 > **适用于**: Zss.BilliardHall MVP
 
 本指南提供在 Zss.BilliardHall 中开发新业务模块的完整步骤和最佳实践。
@@ -83,12 +83,6 @@ dotnet new classlib -n YourModule -f net10.0
 创建 `YourModuleModule.cs`：
 
 ```csharp
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Zss.BilliardHall.Platform.Contracts;
-using Marten;
-
 namespace Zss.BilliardHall.Modules.YourModule;
 
 /// <summary>
@@ -96,8 +90,26 @@ namespace Zss.BilliardHall.Modules.YourModule;
 /// </summary>
 public class YourModuleModule : IModule, IMartenModule
 {
+    public string Name => "YourModule";
+
     public void ConfigureServices(
         IServiceCollection services, 
+        IConfiguration configuration, 
+        IHostEnvironment environment)
+    {
+        // 注册模块特定的服务
+        // 例如：validators、custom services 等
+        // Wolverine 会自动发现 Handlers 和 Endpoints
+    }
+
+    public void ConfigureMarten(StoreOptions options)
+    {
+        // 配置 Marten 文档映射和索引
+        options.Schema.For<YourEntity>()
+            .UniqueIndex(x => x.SomeUniqueField);
+    }
+}
+```
         IConfiguration configuration, 
         IHostEnvironment environment)
     {
@@ -133,11 +145,11 @@ global using Zss.BilliardHall.Platform.Contracts;
 编辑 `src/Host/Web/ModuleRegistry.cs` 和 `src/Host/Worker/ModuleRegistry.cs`：
 
 ```csharp
-private static readonly Assembly[] AllModuleAssemblies =
+private static readonly IModule[] AllModules =
 [
-    typeof(MemberModule).Assembly,
-    typeof(OrderModule).Assembly,
-    typeof(YourModuleModule).Assembly,  // 添加新模块
+    new MemberModule(),
+    new OrderModule(),
+    new YourModuleModule(),  // 添加新模块
 ];
 ```
 
@@ -200,12 +212,12 @@ namespace Zss.BilliardHall.Modules.YourModule.Features.CreateYourEntity;
 /// <summary>
 /// 创建 YourEntity 命令处理器
 /// </summary>
-public class CreateYourEntityCommandHandler(IDocumentSession session) 
-    : ICommandHandler<CreateYourEntityCommand, Guid>
+public class CreateYourEntityCommandHandler(IDocumentSession session)
 {
     public Task<Guid> Handle(CreateYourEntityCommand command)
     {
-        // 1. 验证（可选，推荐使用 FluentValidation）
+        // 1. 验证已由 FluentValidation 在 Wolverine 管道中自动完成
+        
         // 2. 创建实体
         var entity = new YourEntity
         {
@@ -225,7 +237,32 @@ public class CreateYourEntityCommandHandler(IDocumentSession session)
 }
 ```
 
-#### 4. 创建 Endpoint
+#### 4. 添加验证器（推荐）
+
+`Features/CreateYourEntity/CreateYourEntityCommandValidator.cs`：
+
+```csharp
+namespace Zss.BilliardHall.Modules.YourModule.Features.CreateYourEntity;
+
+/// <summary>
+/// 创建 YourEntity 命令验证器
+/// Wolverine 会自动在处理命令前调用此验证器
+/// </summary>
+public class CreateYourEntityCommandValidator : AbstractValidator<CreateYourEntityCommand>
+{
+    public CreateYourEntityCommandValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("名称不能为空")
+            .MaximumLength(100).WithMessage("名称不能超过100个字符");
+            
+        RuleFor(x => x.Description)
+            .MaximumLength(500).WithMessage("描述不能超过500个字符");
+    }
+}
+```
+
+#### 5. 创建 Endpoint
 
 `Features/CreateYourEntity/CreateYourEntityEndpoint.cs`：
 
