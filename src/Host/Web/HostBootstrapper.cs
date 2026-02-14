@@ -1,5 +1,6 @@
 using Wolverine.Http;
 using Zss.BilliardHall.Application;
+using Zss.BilliardHall.Composition;
 using Zss.BilliardHall.Platform;
 
 namespace Zss.BilliardHall.Host.Web;
@@ -21,8 +22,8 @@ public static class HostBootstrapper
         // 1. Platform 层（日志、遥测等基础设施）
         PlatformBootstrapper.Configure(builder.Services, builder.Configuration, builder.Environment);
 
-        // 2. 显式获取启用的模块
-        var modules = ModuleRegistry.GetEnabledModules(builder.Configuration);
+        // 2. 通过 Composition Root 获取启用的模块
+        var modules = ModuleComposition.GetEnabledModules(builder.Configuration);
 
         // 3. Application 层（Wolverine、Marten、DI 装配）
         ApplicationBootstrapper.Configure(
