@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Wolverine;
 using Wolverine.FluentValidation;
 using Wolverine.Http;
@@ -35,6 +36,15 @@ public static class ApplicationBootstrapper
 
         var enableHttp = configuration.GetValue("Wolverine:Http:Enabled", true);
 
+        // 配置 Marten 选项（使用 IOptions 模式）
+        services.Configure<MartenOptions>(configuration.GetSection(MartenOptions.SectionName));
+        services.AddOptions<MartenOptions>()
+            .Validate(opts =>
+            {
+                opts.Validate();
+                return true;
+            }, "Marten 配置无效");
+
         ConfigureMarten(services, configuration, modules);
         ConfigureWolverine(services, enableHttp, modules);
         ConfigureModules(services, configuration, environment, modules);
@@ -43,19 +53,22 @@ public static class ApplicationBootstrapper
     /// <summary>
     /// 配置 Marten（EF Core 替代品）+ Wolverine 集成
     /// 调用所有模块的 IMartenModule.ConfigureMarten()
+    /// 使用 IOptions 模式获取配置
     /// </summary>
     private static void ConfigureMarten(IServiceCollection services, IConfiguration configuration, IReadOnlyList<IModule> modules)
     {
-        var connectionString = GetRequiredConnectionString(configuration, "Postgres");
-
         services
-            .AddMarten(opts =>
+            .AddMarten(sp =>
             {
-                opts.Connection(connectionString);
+                var martenOptions = sp.GetRequiredService<IOptions<MartenOptions>>().Value;
+                var opts = new StoreOptions();
+                opts.Connection(martenOptions.ConnectionString);
 
                 // 调用所有 IMartenModule 扩展 Schema
                 foreach (var module in modules.OfType<IMartenModule>())
                     module.ConfigureMarten(opts);
+
+                return opts;
             })
             .UseLightweightSessions()
             .IntegrateWithWolverine(); // 自动将 Marten 事务集成到 Wolverine 管道
@@ -99,15 +112,6 @@ public static class ApplicationBootstrapper
     {
         foreach (var module in modules)
             module.ConfigureServices(services, configuration, environment);
-    }
-
-    private static string GetRequiredConnectionString(IConfiguration configuration, string name)
-    {
-        var value = configuration.GetConnectionString(name);
-        if (string.IsNullOrWhiteSpace(value))
-            throw new InvalidOperationException($"缺少 ConnectionStrings:{name}（请用 User Secrets/KeyVault 注入，禁止硬编码）。");
-
-        return value;
     }
 
     private static IReadOnlyList<System.Reflection.Assembly> GetDistinctModuleAssemblies(IReadOnlyList<IModule> modules)

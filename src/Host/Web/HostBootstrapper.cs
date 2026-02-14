@@ -40,6 +40,9 @@ public static class HostBootstrapper
     {
         ArgumentNullException.ThrowIfNull(app);
 
+        // 添加验证异常处理中间件（将 FluentValidation 错误转换为 ProblemDetails）
+        app.UseMiddleware<ValidationExceptionMiddleware>();
+
         // 映射 Wolverine HTTP 端点
         app.MapWolverineEndpoints();
 

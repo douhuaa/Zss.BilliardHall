@@ -8,5 +8,6 @@
     <PackageReference Include="Marten"/>
     <PackageReference Include="Marten.AspNetCore"/>
     <PackageReference Include="WolverineFx.Http.FluentValidation"/>
+    <PackageReference Include="Microsoft.Extensions.Options"/>
   </ItemGroup>
 </Project>
