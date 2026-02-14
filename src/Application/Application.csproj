@@ -2,4 +2,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Platform\Platform.csproj"/>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WolverineFx.Http"/>
+    <PackageReference Include="WolverineFx.Marten"/>
+    <PackageReference Include="Marten"/>
+    <PackageReference Include="Marten.AspNetCore"/>
+    <PackageReference Include="WolverineFx.Http.FluentValidation"/>
+    <PackageReference Include="Microsoft.Extensions.Options"/>
+  </ItemGroup>
 </Project>

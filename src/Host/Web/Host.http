@@ -2,5 +2,17 @@
 
 GET {{Host_HostAddress}}/weatherforecast/
 Accept: application/json
+###
 
+POST {{Host_HostAddress}}/api/members
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "test1@test.com"
+}
+###
+
+GET  {{Host_HostAddress}}/api/members/019c5acd-2e8c-790c-aa8c-50fd621f6a31
+Accept: application/json
 ###
