@@ -26,7 +26,7 @@ public static class ApplicationBootstrapper
         IServiceCollection services,
         IConfiguration configuration,
         IHostEnvironment environment,
-        IModule[] modules)
+        IReadOnlyList<IModule> modules)
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configuration);
@@ -44,7 +44,7 @@ public static class ApplicationBootstrapper
     /// 配置 Marten（EF Core 替代品）+ Wolverine 集成
     /// 调用所有模块的 IMartenModule.ConfigureMarten()
     /// </summary>
-    private static void ConfigureMarten(IServiceCollection services, IConfiguration configuration, IModule[] modules)
+    private static void ConfigureMarten(IServiceCollection services, IConfiguration configuration, IReadOnlyList<IModule> modules)
     {
         var connectionString = GetRequiredConnectionString(configuration, "Postgres");
 
@@ -66,20 +66,14 @@ public static class ApplicationBootstrapper
     /// 收集所有模块的 Handlers（通过程序集扫描）
     /// 注册验证中间件
     /// </summary>
-    private static void ConfigureWolverine(IServiceCollection services, bool enableHttp, IModule[] modules)
+    private static void ConfigureWolverine(IServiceCollection services, bool enableHttp, IReadOnlyList<IModule> modules)
     {
         services.AddWolverine(w =>
         {
-            // 从所有模块的程序集扫描 Handlers
-            var scannedAssemblies = new HashSet<System.Reflection.Assembly>();
-            foreach (var module in modules)
+            var assemblies = GetDistinctModuleAssemblies(modules);
+            foreach (var assembly in assemblies)
             {
-                var moduleType = module.GetType();
-                var assembly = moduleType.Assembly;
-                if (scannedAssemblies.Add(assembly))
-                {
-                    w.Discovery.IncludeAssembly(assembly);
-                }
+                w.Discovery.IncludeAssembly(assembly);
             }
 
             // 官方推荐：使用 Wolverine.FluentValidation 提供的验证集成
@@ -101,7 +95,7 @@ public static class ApplicationBootstrapper
         IServiceCollection services,
         IConfiguration configuration,
         IHostEnvironment environment,
-        IModule[] modules)
+        IReadOnlyList<IModule> modules)
     {
         foreach (var module in modules)
             module.ConfigureServices(services, configuration, environment);
@@ -114,5 +108,14 @@ public static class ApplicationBootstrapper
             throw new InvalidOperationException($"缺少 ConnectionStrings:{name}（请用 User Secrets/KeyVault 注入，禁止硬编码）。");
 
         return value;
+    }
+
+    private static IReadOnlyList<System.Reflection.Assembly> GetDistinctModuleAssemblies(IReadOnlyList<IModule> modules)
+    {
+        var set = new HashSet<System.Reflection.Assembly>();
+        foreach (var module in modules)
+            set.Add(module.GetType().Assembly);
+
+        return set.ToArray();
     }
 }

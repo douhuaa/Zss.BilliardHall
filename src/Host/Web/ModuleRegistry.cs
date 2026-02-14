@@ -30,7 +30,7 @@ public static class ModuleRegistry
 
         // 如果未配置，返回全部
         if (enabledNames.Length == 0)
-            return AllModules;
+            return AllModules.ToArray();
 
         var enabledSet = enabledNames.ToHashSet(StringComparer.OrdinalIgnoreCase);
         var result = AllModules

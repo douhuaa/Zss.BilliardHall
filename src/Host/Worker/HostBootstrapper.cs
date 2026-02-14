@@ -29,8 +29,5 @@ public static class HostBootstrapper
             builder.Configuration,
             builder.Environment,
             modules);
-
-        // 4. 注册模块实例供后续 ConfigureApplication 使用
-        builder.Services.AddSingleton(modules);
     }
 }
