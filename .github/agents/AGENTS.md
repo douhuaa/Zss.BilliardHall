@@ -47,7 +47,7 @@ maintainer: Architecture Board
 - **角色**：校验 Handler 模式执行正确性
 - **权限**：生成 Evidence，报告 Guardian
 - **输出**：Allowed / Blocked / Uncertain
-- **依赖**：ADR-0240, ADR-007_1
+- **依赖**：ADR-240, ADR-007_1
 - **执行级**：L1
 
 ### architecture-test-runner
