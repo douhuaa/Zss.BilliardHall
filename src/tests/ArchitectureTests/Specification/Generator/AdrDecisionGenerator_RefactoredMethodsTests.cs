@@ -323,13 +323,13 @@ public sealed class AdrDecisionGenerator_RefactoredMethodsTests
         // EscapeMarkdown 是私有方法，但我们可以通过公共 API 间接验证
         // 当 Summary/Condition/Enforcement 为空时，生成器会处理它们
         var ruleSet = NewRuleSet(AdrNumber);
-        
+
         // 使用非空值来避免验证错误，但验证转义逻辑
         AddRuleWithClauses(ruleSet, 1, "测试", (1, "测试", "测试"));
-        
+
         var options = new DecisionGenerationOptions { EscapeMarkdown = false };
         var result = _generator.GenerateDecisionSection(ruleSet, options);
-        
+
         // 验证不转义时的行为
         result.Should().Contain("测试");
     }
@@ -354,7 +354,7 @@ public sealed class AdrDecisionGenerator_RefactoredMethodsTests
         // 验证输出中的换行符都是 LF
         result.Should().NotContain("\r\n");
         result.Should().NotContain("\r");
-        
+
         // 验证内容中包含预期的部分
         result.Should().Contain(expectedPart1);
         result.Should().Contain(expectedPart2);

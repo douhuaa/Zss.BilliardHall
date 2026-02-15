@@ -12,15 +12,18 @@ public sealed class GenerateAdrCommandHandler
     private readonly IFileSystem _fileSystem;
     private readonly IAdrDecisionGenerator _decisionGenerator;
     private readonly IAdrDocumentMerger _documentMerger;
+    private readonly IPathValidator _pathValidator;
 
     public GenerateAdrCommandHandler(
         IFileSystem fileSystem,
         IAdrDecisionGenerator decisionGenerator,
-        IAdrDocumentMerger documentMerger)
+        IAdrDocumentMerger documentMerger,
+        IPathValidator? pathValidator = null)
     {
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _decisionGenerator = decisionGenerator ?? throw new ArgumentNullException(nameof(decisionGenerator));
         _documentMerger = documentMerger ?? throw new ArgumentNullException(nameof(documentMerger));
+        _pathValidator = pathValidator ?? new AdrFilePathValidator();
     }
 
     public async Task<int> ExecuteAsync(string adrNumberOrId, string adrFilePath, CancellationToken cancellationToken = default)
@@ -34,6 +37,13 @@ public sealed class GenerateAdrCommandHandler
             if (adrNumber == null)
             {
                 Console.WriteLine($"❌ 无效的 ADR 编号格式: {adrNumberOrId}");
+                return 1;
+            }
+
+            // 路径安全检查：防止路径遍历攻击
+            if (!_pathValidator.IsPathSafe(adrFilePath, out var errorMessage))
+            {
+                Console.WriteLine($"❌ 路径安全检查失败: {errorMessage}");
                 return 1;
             }
 

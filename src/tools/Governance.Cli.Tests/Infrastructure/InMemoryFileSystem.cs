@@ -46,6 +46,13 @@ public sealed class InMemoryFileSystem : IFileSystem
         _directories.Add(path);
     }
 
+    /// <summary>
+    /// 获取指定路径下的文件列表
+    /// </summary>
+    /// <remarks>
+    /// 简化实现：忽略 searchPattern 和 SearchOption 参数，仅用于测试。
+    /// 实际行为：返回所有以指定路径开头的文件。
+    /// </remarks>
     public string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(path);

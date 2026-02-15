@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.SharedTestHelpers.Assemblies;
+﻿namespace Zss.BilliardHall.Tests.SharedTestHelpers.Assemblies;
 
 /// <summary>
 /// Host 程序集数据提供器
@@ -48,7 +48,7 @@ public sealed class HostAssemblyData : AssemblyLoaderBase, IEnumerable<object[]>
     {
         Debug.WriteLine($"[ArchitectureTests] Loaded host assemblies count={HostAssemblies.Count}");
         ValidateAssembliesNotEmpty(HostAssemblies, "Host");
-        
+
         foreach (var asm in HostAssemblies)
         {
             yield return new object[] { asm };

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR240;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR240;
 
 /// <summary>
 /// ADR-240：Handler 异常约束

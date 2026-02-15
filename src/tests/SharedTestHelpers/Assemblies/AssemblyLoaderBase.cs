@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.SharedTestHelpers.Assemblies;
+﻿namespace Zss.BilliardHall.Tests.SharedTestHelpers.Assemblies;
 
 /// <summary>
 /// 程序集加载器基类
@@ -42,7 +42,7 @@ public abstract class AssemblyLoaderBase
         try
         {
             fallback.AddRange(Directory.GetFiles(projectDir, $"{projectName}.dll", SearchOption.AllDirectories));
-            
+
             var binDir = Path.Combine(projectDir, "bin");
             if (Directory.Exists(binDir))
             {

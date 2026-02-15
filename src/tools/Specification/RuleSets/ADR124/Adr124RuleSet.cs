@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR124;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR124;
 
 /// <summary>
 /// ADR-124：Endpoint 命名及参数约束规范

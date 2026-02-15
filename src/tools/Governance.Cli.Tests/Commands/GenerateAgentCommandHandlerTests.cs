@@ -1,5 +1,6 @@
 using Zss.BilliardHall.Generators;
 using Zss.BilliardHall.Tools.Governance.Cli.Commands;
+using Zss.BilliardHall.Tools.Governance.Cli.Infrastructure;
 using Zss.BilliardHall.Tools.Governance.Cli.Tests.Infrastructure;
 
 namespace Zss.BilliardHall.Tools.Governance.Cli.Tests.Commands;
@@ -15,7 +16,8 @@ public sealed class GenerateAgentCommandHandlerTests
         fileSystem.CreateDirectory(outputDir);
 
         var instructionGenerator = new AgentInstructionGenerator();
-        var handler = new GenerateAgentCommandHandler(fileSystem, instructionGenerator);
+        var pathValidator = new NoOpPathValidator();
+        var handler = new GenerateAgentCommandHandler(fileSystem, instructionGenerator, pathValidator);
 
         // Act
         var exitCode = await handler.ExecuteAsync(outputDir, adrNumber: 1);
@@ -35,7 +37,8 @@ public sealed class GenerateAgentCommandHandlerTests
         fileSystem.CreateDirectory(outputDir);
 
         var instructionGenerator = new AgentInstructionGenerator();
-        var handler = new GenerateAgentCommandHandler(fileSystem, instructionGenerator);
+        var pathValidator = new NoOpPathValidator();
+        var handler = new GenerateAgentCommandHandler(fileSystem, instructionGenerator, pathValidator);
 
         // Act
         var exitCode = await handler.ExecuteAsync(outputDir, adrNumber: null);
@@ -55,7 +58,8 @@ public sealed class GenerateAgentCommandHandlerTests
         const string outputDir = "/new/output";
 
         var instructionGenerator = new AgentInstructionGenerator();
-        var handler = new GenerateAgentCommandHandler(fileSystem, instructionGenerator);
+        var pathValidator = new NoOpPathValidator();
+        var handler = new GenerateAgentCommandHandler(fileSystem, instructionGenerator, pathValidator);
 
         // Act
         var exitCode = await handler.ExecuteAsync(outputDir, adrNumber: 1);

@@ -1,4 +1,4 @@
-using Zss.BilliardHall.Generators;
+﻿using Zss.BilliardHall.Generators;
 using Zss.BilliardHall.Generators.Interfaces;
 using Zss.BilliardHall.Generators.Implementations;
 using Zss.BilliardHall.Generators.Models;
@@ -101,7 +101,7 @@ Line 5: another colon case";
         var container = _serializer.Deserialize<InstructionsContainer>(yaml);
         container.Should().NotBeNull();
         container.Instructions.Should().HaveCount(1);
-        
+
         var instruction = container.Instructions[0];
         instruction.Description.Should().Contain("This is a complex string:");
         instruction.Description.Should().Contain("Line 1 with colon: value");
@@ -140,7 +140,7 @@ Line 5: another colon case";
         var container = _serializer.Deserialize<InstructionsContainer>(yaml);
         container.Should().NotBeNull();
         container.Instructions.Should().HaveCount(1);
-        
+
         // 验证反序列化后的内容包含原始换行符
         container.Instructions[0].Description.Should().Contain("Line 1");
         container.Instructions[0].Description.Should().Contain("Line 2");
@@ -230,7 +230,7 @@ Line 5: another colon case";
         // Assert
         var container = _serializer.Deserialize<InstructionsContainer>(yaml);
         container.Should().NotBeNull();
-        
+
         // 注意：YamlDotNet 可能会修剪尾随空格，这是预期行为
         // 我们主要验证不会导致解析错误
         container.Instructions.Should().HaveCount(1);

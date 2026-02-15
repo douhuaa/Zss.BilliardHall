@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR907;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR907;
 
 /// <summary>
 /// 条款规范

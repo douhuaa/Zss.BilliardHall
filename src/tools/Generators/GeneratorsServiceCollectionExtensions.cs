@@ -20,7 +20,7 @@ public static class GeneratorsServiceCollectionExtensions
         services.AddSingleton<IAgentInstructionGenerator, AgentInstructionGenerator>();
         services.AddSingleton<IAdrDocumentMerger, AdrDocumentMerger>();
         services.AddSingleton<IArchitectureTestGenerator, ArchitectureTestGenerator>();
-        
+
         return services;
     }
 

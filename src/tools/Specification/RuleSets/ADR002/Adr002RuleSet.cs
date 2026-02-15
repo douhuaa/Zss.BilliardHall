@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR002;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR002;
 
 /// <summary>
 /// ADR-002：Platform/Application/Host 启动引导

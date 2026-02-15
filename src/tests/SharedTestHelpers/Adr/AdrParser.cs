@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.SharedTestHelpers.Adr;
+﻿namespace Zss.BilliardHall.Tests.SharedTestHelpers.Adr;
 
 /// <summary>
 /// ADR 文档解析器
@@ -14,10 +14,10 @@ public static class AdrParser
     public static AdrDocument Parse(string adrId, string filePath)
     {
         var text = File.ReadAllText(filePath);
-        
+
         // 使用统一的 Front Matter 解析器
         var frontMatter = FrontMatterParser.ParseFromText(text);
-        
+
         // 使用统一的文档分类器判断是否是正式 ADR
         var fileName = Path.GetFileName(filePath);
         var isAdr = AdrDocumentClassifier.IsAdrByFrontMatter(frontMatter, fileName);
@@ -39,7 +39,7 @@ public static class AdrParser
         var pipeline = new MarkdownPipelineBuilder().Build();
         var document = Markdown.Parse(text, pipeline);
         ParseRelationships(document, adr);
-        
+
         return adr;
     }
 
@@ -92,7 +92,7 @@ public static class AdrParser
             {
                 var itemText = ExtractText(listItem);
                 var matches = AdrIdPattern.Matches(itemText);
-                
+
                 foreach (Match match in matches)
                 {
                     AddRelation(adr, currentSection, match.Value);
@@ -107,7 +107,7 @@ public static class AdrParser
     private static string ExtractText(Block block)
     {
         var text = new System.Text.StringBuilder();
-        
+
         foreach (var inline in block.Descendants<Inline>())
         {
             if (inline is LiteralInline literal)
@@ -115,7 +115,7 @@ public static class AdrParser
                 text.Append(literal.Content);
             }
         }
-        
+
         return text.ToString();
     }
 
@@ -135,26 +135,26 @@ public static class AdrParser
         {
             return "DependsOn";
         }
-        
+
         if (normalized.Contains("Depended By", StringComparison.OrdinalIgnoreCase) ||
             normalized.Contains("被依赖", StringComparison.OrdinalIgnoreCase))
         {
             return "DependedBy";
         }
-        
+
         if (normalized.Contains("Supersedes", StringComparison.OrdinalIgnoreCase) &&
             !normalized.Contains("Superseded By", StringComparison.OrdinalIgnoreCase) &&
             !normalized.Contains("被替代", StringComparison.OrdinalIgnoreCase))
         {
             return "Supersedes";
         }
-        
+
         if (normalized.Contains("Superseded By", StringComparison.OrdinalIgnoreCase) ||
             normalized.Contains("被替代", StringComparison.OrdinalIgnoreCase))
         {
             return "SupersededBy";
         }
-        
+
         if (normalized.Contains("Related", StringComparison.OrdinalIgnoreCase) ||
             normalized.Contains("相关", StringComparison.OrdinalIgnoreCase))
         {

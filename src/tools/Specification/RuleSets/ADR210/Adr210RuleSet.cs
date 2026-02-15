@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR210;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR210;
 
 /// <summary>
 /// ADR-210：领域事件版本化与兼容性

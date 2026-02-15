@@ -1,6 +1,7 @@
 using Zss.BilliardHall.Generators;
 using Zss.BilliardHall.Specification.Index;
 using Zss.BilliardHall.Tools.Governance.Cli.Commands;
+using Zss.BilliardHall.Tools.Governance.Cli.Infrastructure;
 using Zss.BilliardHall.Tools.Governance.Cli.Tests.Infrastructure;
 
 namespace Zss.BilliardHall.Tools.Governance.Cli.Tests.Commands;
@@ -29,7 +30,8 @@ Some consequences
 
         var decisionGenerator = new AdrDecisionGenerator();
         var documentMerger = new AdrDocumentMerger(decisionGenerator);
-        var handler = new GenerateAdrCommandHandler(fileSystem, decisionGenerator, documentMerger);
+        var pathValidator = new NoOpPathValidator();
+        var handler = new GenerateAdrCommandHandler(fileSystem, decisionGenerator, documentMerger, pathValidator);
 
         // Act
         var exitCode = await handler.ExecuteAsync("1", adrPath);
@@ -47,7 +49,8 @@ Some consequences
         var fileSystem = new InMemoryFileSystem();
         var decisionGenerator = new AdrDecisionGenerator();
         var documentMerger = new AdrDocumentMerger(decisionGenerator);
-        var handler = new GenerateAdrCommandHandler(fileSystem, decisionGenerator, documentMerger);
+        var pathValidator = new NoOpPathValidator();
+        var handler = new GenerateAdrCommandHandler(fileSystem, decisionGenerator, documentMerger, pathValidator);
 
         // Act
         var exitCode = await handler.ExecuteAsync("1", "/non/existent/file.md");
@@ -66,7 +69,8 @@ Some consequences
 
         var decisionGenerator = new AdrDecisionGenerator();
         var documentMerger = new AdrDocumentMerger(decisionGenerator);
-        var handler = new GenerateAdrCommandHandler(fileSystem, decisionGenerator, documentMerger);
+        var pathValidator = new NoOpPathValidator();
+        var handler = new GenerateAdrCommandHandler(fileSystem, decisionGenerator, documentMerger, pathValidator);
 
         // Act
         var exitCode = await handler.ExecuteAsync("999", adrPath);
@@ -87,7 +91,8 @@ Some consequences
 
         var decisionGenerator = new AdrDecisionGenerator();
         var documentMerger = new AdrDocumentMerger(decisionGenerator);
-        var handler = new GenerateAdrCommandHandler(fileSystem, decisionGenerator, documentMerger);
+        var pathValidator = new NoOpPathValidator();
+        var handler = new GenerateAdrCommandHandler(fileSystem, decisionGenerator, documentMerger, pathValidator);
 
         // Act
         var exitCode = await handler.ExecuteAsync(adrInput, adrPath);

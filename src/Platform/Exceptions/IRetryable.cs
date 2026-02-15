@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Platform.Exceptions;
+﻿namespace Zss.BilliardHall.Platform.Exceptions;
 
 /// <summary>
 /// ADR-240: 标记接口，表示异常可通过重试解决

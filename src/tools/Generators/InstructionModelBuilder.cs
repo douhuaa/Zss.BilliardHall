@@ -1,4 +1,4 @@
-using Zss.BilliardHall.Generators.Models;
+﻿using Zss.BilliardHall.Generators.Models;
 using Zss.BilliardHall.Specification.Rules;
 using Zss.BilliardHall.Specification.Language.RuleIdLanguage;
 
