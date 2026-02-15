@@ -26,6 +26,16 @@ public sealed class ValidateCommandHandler
             {
                 Console.WriteLine($"\n📖 校验 ADR-{ruleSet.AdrNumber:D3}");
 
+                // 校验规则集完整性（确保每个 Rule 至少有一个 Clause）
+                try
+                {
+                    ruleSet.ValidateCompleteness();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    validationErrors.Add($"ADR-{ruleSet.AdrNumber:D3} 完整性错误: {ex.Message}");
+                }
+
                 // 校验所有 Rules
                 foreach (var rule in ruleSet.Rules)
                 {
@@ -35,6 +45,13 @@ public sealed class ValidateCommandHandler
                     if (string.IsNullOrWhiteSpace(rule.Summary))
                     {
                         validationErrors.Add($"{rule.Id}: Summary 为空");
+                    }
+
+                    // 校验 RuleId 格式
+                    var expectedRuleIdFormat = $"ADR-{ruleSet.AdrNumber:D3}_{rule.Id.RuleNumber}";
+                    if (rule.Id.ToString() != expectedRuleIdFormat)
+                    {
+                        validationErrors.Add($"{rule.Id}: RuleId 格式错误，期望 '{expectedRuleIdFormat}'");
                     }
                 }
 
@@ -52,6 +69,13 @@ public sealed class ValidateCommandHandler
                     if (string.IsNullOrWhiteSpace(clause.Enforcement))
                     {
                         validationErrors.Add($"{clause.Id}: Enforcement 为空");
+                    }
+
+                    // 校验 ClauseId 格式
+                    var expectedClauseIdFormat = $"ADR-{ruleSet.AdrNumber:D3}_{clause.Id.RuleNumber}_{clause.Id.ClauseNumber}";
+                    if (clause.Id.ToString() != expectedClauseIdFormat)
+                    {
+                        validationErrors.Add($"{clause.Id}: ClauseId 格式错误，期望 '{expectedClauseIdFormat}'");
                     }
                 }
 

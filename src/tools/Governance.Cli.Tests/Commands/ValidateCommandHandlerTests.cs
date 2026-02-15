@@ -5,7 +5,7 @@ namespace Zss.BilliardHall.Tools.Governance.Cli.Tests.Commands;
 public sealed class ValidateCommandHandlerTests
 {
     [Fact]
-    public async Task ExecuteAsync_ShouldValidateAllRuleSets()
+    public async Task ExecuteAsync_ShouldValidateAllRuleSets_AndReturnSuccess()
     {
         // Arrange
         var handler = new ValidateCommandHandler();
@@ -14,8 +14,8 @@ public sealed class ValidateCommandHandlerTests
         var exitCode = await handler.ExecuteAsync();
 
         // Assert
-        // 如果校验通过应该返回0，如果有错误应该返回1
-        // 由于我们不能mock RuleSetRegistry，这个测试依赖实际的规则集
-        exitCode.Should().BeOneOf(0, 1);
+        // 当前仓库的 RuleSetRegistry 应该是完整的，期望返回 0
+        // 如果此测试失败，说明仓库中的 RuleSet 定义存在问题
+        exitCode.Should().Be(0, "当前仓库的所有 RuleSet 应该通过完整性校验");
     }
 }
