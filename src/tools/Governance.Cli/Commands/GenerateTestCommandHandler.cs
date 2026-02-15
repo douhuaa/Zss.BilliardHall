@@ -92,7 +92,7 @@ public sealed class GenerateTestCommandHandler
                     
                     // 确保 expectedDir 以目录分隔符结尾，避免路径前缀碰撞
                     // 例如：避免 /tmp/out 与 /tmp/outside 的前缀误匹配
-                    if (!expectedDir.EndsWith(Path.DirectorySeparatorChar.ToString()))
+                    if (!expectedDir.EndsWith(Path.DirectorySeparatorChar))
                     {
                         expectedDir += Path.DirectorySeparatorChar;
                     }
