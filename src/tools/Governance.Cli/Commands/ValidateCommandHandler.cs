@@ -1,7 +1,6 @@
 using Zss.BilliardHall.Specification;
 using Zss.BilliardHall.Specification.Index;
 using Zss.BilliardHall.Specification.Rules;
-using AdrRuleIndex = Zss.BilliardHall.Tests.ArchitectureTests.Specification.Index.AdrRuleIndex;
 
 namespace Zss.BilliardHall.Tools.Governance.Cli.Commands;
 

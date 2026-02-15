@@ -1,4 +1,5 @@
 using System.CommandLine;
+using System.CommandLine.Invocation;
 using Zss.BilliardHall.Generators;
 using Zss.BilliardHall.Tools.Governance.Cli.Commands;
 using Zss.BilliardHall.Tools.Governance.Cli.Infrastructure;
@@ -61,16 +62,20 @@ public static class Program
         command.AddOption(adrOption);
         command.AddOption(pathOption);
 
-        command.SetHandler(async (string adr, string path, bool dryRun) =>
+        command.SetHandler(async (InvocationContext context) =>
         {
+            var adr = context.ParseResult.GetValueForOption(adrOption)!;
+            var path = context.ParseResult.GetValueForOption(pathOption)!;
+            var dryRun = context.ParseResult.GetValueForOption(dryRunOption);
+            
             var fileSystem = CreateFileSystem(dryRun);
             var decisionGenerator = new AdrDecisionGenerator();
             var documentMerger = new AdrDocumentMerger(decisionGenerator);
             var handler = new GenerateAdrCommandHandler(fileSystem, decisionGenerator, documentMerger);
 
             var exitCode = await handler.ExecuteAsync(adr, path);
-            Environment.ExitCode = exitCode;
-        }, adrOption, pathOption, dryRunOption);
+            context.ExitCode = exitCode;
+        });
 
         return command;
     }
@@ -92,15 +97,19 @@ public static class Program
         command.AddOption(outputOption);
         command.AddOption(adrOption);
 
-        command.SetHandler(async (string output, int? adr, bool dryRun) =>
+        command.SetHandler(async (InvocationContext context) =>
         {
+            var output = context.ParseResult.GetValueForOption(outputOption)!;
+            var adr = context.ParseResult.GetValueForOption(adrOption);
+            var dryRun = context.ParseResult.GetValueForOption(dryRunOption);
+            
             var fileSystem = CreateFileSystem(dryRun);
             var instructionGenerator = new AgentInstructionGenerator();
             var handler = new GenerateAgentCommandHandler(fileSystem, instructionGenerator);
 
             var exitCode = await handler.ExecuteAsync(output, adr);
-            Environment.ExitCode = exitCode;
-        }, outputOption, adrOption, dryRunOption);
+            context.ExitCode = exitCode;
+        });
 
         return command;
     }
@@ -109,11 +118,11 @@ public static class Program
     {
         var command = new Command("validate", "校验 RuleSetRegistry 注册完整性与 RuleId 格式");
 
-        command.SetHandler(async () =>
+        command.SetHandler(async (InvocationContext context) =>
         {
             var handler = new ValidateCommandHandler();
             var exitCode = await handler.ExecuteAsync();
-            Environment.ExitCode = exitCode;
+            context.ExitCode = exitCode;
         });
 
         return command;
