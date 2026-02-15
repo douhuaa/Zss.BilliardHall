@@ -133,6 +133,14 @@ if (检测到跨模块引用)
 ```json
 {
   "decision": "Blocked",
-  "evidence": ["ADR-0240.2", "ArchitectureTest HandlerException"],
-  "reason": "Handler swallow domain exception"
+  "ruleId": "ADR-240_1_1",
+  "evidence": [
+    "Handler 抛出非结构化异常",
+    "ArchitectureTest HandlerException 失败"
+  ],
+  "reason": "Handler 违反异常约束规则",
+  "ruleDetails": {
+    "condition": "Handler 仅抛出结构化异常",
+    "enforcement": "验证所有自定义异常继承自 DomainException、ValidationException 或 InfrastructureException"
+  }
 }
