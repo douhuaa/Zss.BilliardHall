@@ -89,6 +89,14 @@ public sealed class GenerateTestCommandHandler
                     // 再次验证完整路径
                     var fullPath = Path.GetFullPath(filePath);
                     var expectedDir = Path.GetFullPath(outputDirectory);
+                    
+                    // 确保 expectedDir 以目录分隔符结尾，避免路径前缀碰撞
+                    // 例如：避免 /tmp/out 与 /tmp/outside 的前缀误匹配
+                    if (!expectedDir.EndsWith(Path.DirectorySeparatorChar.ToString()))
+                    {
+                        expectedDir += Path.DirectorySeparatorChar;
+                    }
+                    
                     if (!fullPath.StartsWith(expectedDir, StringComparison.OrdinalIgnoreCase))
                     {
                         Console.WriteLine($"⚠️  跳过 ADR-{ruleSet.AdrNumber:D3}: 路径验证失败");
