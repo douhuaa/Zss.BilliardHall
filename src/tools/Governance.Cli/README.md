@@ -7,7 +7,11 @@
 ### 核心特性
 
 - ✅ **规则来源唯一**：通过 `RuleSetRegistry` / `AdrRuleIndex` 读取规则，禁止硬编码
-- ✅ **生成器复用**：复用 `Generators` 项目中的生成器（`AdrDecisionGenerator`、`AdrDocumentMerger`、`AgentInstructionGenerator`、`ArchitectureTestGenerator`）
+- ✅ **生成器复用**：复用 `Generators` 项目中的生成器
+  - `AdrDecisionGenerator` - ADR Decision 章节生成
+  - `AdrDocumentMerger` - ADR 文档合并
+  - `AgentInstructionGenerator` - Agent Instructions 生成
+  - `ArchitectureTestGenerator` - 架构测试代码生成
 - ✅ **可测试架构**：抽象文件系统操作（`IFileSystem`），支持单元测试
 - ✅ **Dry-run 模式**：使用 `--dry-run` 仅预览输出，不写入文件
 - ✅ **约定式提交**：生成的提交信息遵循约定式提交规范
@@ -508,6 +512,8 @@ dotnet run --project src/tools/Governance.Cli -- generate agent \
 ## 扩展性
 
 CLI 设计为可扩展，未来可添加：
+
+> **注**：`generate test` 命令已在此 PR 中实现（原扩展性列表项 #1）
 
 1. **生成 Roslyn Analyzer**：`generate analyzer --adr <number>`
 2. **批量更新**：`generate adr --all`
