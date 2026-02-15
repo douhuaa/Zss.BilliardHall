@@ -24,7 +24,43 @@ post_execution:
 
 ### 用途
 
-根据用例需求生成符合 ADR-005 规范的 Handler 代码，确保遵循 CQRS 原则和垂直切片架构。
+根据用例需求生成符合 ADR-005 规范的 Handler 代码，确保遵循 CQRS 原则和垂直切片架构。**使用 RuleSetRegistry API 查询 Handler 规则并生成符合规范的代码。**
+
+### RuleSet API 集成
+
+```csharp
+// 获取 Handler 模式规则集 (ADR-005)
+var handlerRules = RuleSetRegistry.GetStrict(5);
+
+// 查询 CQRS 分离约束 (Rule 5)
+var clause5_1 = handlerRules.GetClause(5, 1);
+// Condition: "Command Handler 只执行业务逻辑"
+// Enforcement: "验证 CommandHandler 返回简单类型（ID/bool/void），不返回复杂业务对象"
+
+var clause5_2 = handlerRules.GetClause(5, 2);
+// Condition: "Query Handler 只读返回"
+// Enforcement: "验证 QueryHandler 返回 DTO/Contract，无写操作"
+
+// 查询 Handler 无状态约束 (Rule 2)
+var clause2_1 = handlerRules.GetClause(2, 1);
+// Condition: "Handler 不得持有业务状态"
+// Enforcement: "验证 Handler 无可变字段（非 readonly）"
+
+// 生成时验证规则
+if (handlerType == "Command" && !IsSimpleReturnType(returnType))
+{
+    throw new ValidationException(
+        $"违反规则 ADR-005_5_1: {clause5_1.Condition}\n" +
+        $"Enforcement: {clause5_1.Enforcement}");
+}
+
+if (handlerType == "Query" && !IsDto(returnType))
+{
+    throw new ValidationException(
+        $"违反规则 ADR-005_5_2: {clause5_2.Condition}\n" +
+        $"Enforcement: {clause5_2.Enforcement}");
+}
+```
 
 ### 输入参数
 

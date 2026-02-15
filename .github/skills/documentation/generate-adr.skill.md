@@ -24,7 +24,112 @@ post_execution:
 
 ### 用途
 
-根据 ADR-902 标准模板与结构契约生成标准化的 ADR 文档模板，并对齐 ADR-907 Rule/Clause 双层编号体系。
+根据 ADR-902 标准模板与结构契约生成标准化的 ADR 文档模板，并对齐 ADR-907 Rule/Clause 双层编号体系。**使用 RuleSetRegistry API 从现有 RuleSet 生成或验证 ADR 文档。**
+
+### RuleSet API 集成
+
+```csharp
+// 从现有 RuleSet 生成 ADR 文档
+public string GenerateAdrFromRuleSet(int adrNumber)
+{
+    var ruleSet = RuleSetRegistry.GetStrict(adrNumber);
+    
+    var sb = new StringBuilder();
+    
+    // 生成标题和元数据
+    sb.AppendLine($"# ADR-{adrNumber:D3}: {GetAdrTitle(adrNumber)}");
+    sb.AppendLine();
+    
+    // 生成 Decision 章节
+    sb.AppendLine("## Decision");
+    sb.AppendLine();
+    
+    foreach (var rule in ruleSet.Rules.OrderBy(r => r.Id.RuleNumber))
+    {
+        sb.AppendLine($"### Rule {rule.Id.RuleNumber}: {rule.Summary}");
+        sb.AppendLine();
+        sb.AppendLine($"**RuleId**: `ADR-{adrNumber:D3}_{rule.Id.RuleNumber}`");
+        sb.AppendLine($"**Decision Level**: {rule.Decision}");
+        sb.AppendLine($"**Severity**: {rule.Severity}");
+        sb.AppendLine($"**Scope**: {rule.Scope}");
+        sb.AppendLine();
+        
+        // 生成 Clauses
+        var clauses = ruleSet.Clauses
+            .Where(c => c.Id.RuleNumber == rule.Id.RuleNumber)
+            .OrderBy(c => c.Id.ClauseNumber);
+        
+        foreach (var clause in clauses)
+        {
+            sb.AppendLine($"#### Clause {clause.Id.RuleNumber}.{clause.Id.ClauseNumber}");
+            sb.AppendLine();
+            sb.AppendLine($"**ClauseId**: `ADR-{adrNumber:D3}_{clause.Id.RuleNumber}_{clause.Id.ClauseNumber}`");
+            sb.AppendLine();
+            sb.AppendLine($"**Condition**: {clause.Condition}");
+            sb.AppendLine();
+            sb.AppendLine($"**Enforcement**: {clause.Enforcement}");
+            sb.AppendLine();
+            sb.AppendLine($"**Execution Type**: {clause.ExecutionType}");
+            sb.AppendLine();
+        }
+    }
+    
+    // 生成 Enforcement 章节
+    sb.AppendLine("## Enforcement");
+    sb.AppendLine();
+    
+    var conventionClauses = ruleSet.Clauses
+        .Where(c => c.ExecutionType == ClauseExecutionType.Convention);
+    if (conventionClauses.Any())
+    {
+        sb.AppendLine("### L1: 架构测试自动验证");
+        foreach (var clause in conventionClauses)
+        {
+            sb.AppendLine($"- `ADR-{adrNumber:D3}_{clause.Id.RuleNumber}_{clause.Id.ClauseNumber}`: {clause.Enforcement}");
+        }
+        sb.AppendLine();
+    }
+    
+    return sb.ToString();
+}
+
+// 验证 ADR 文档与 RuleSet 的一致性
+public List<string> ValidateAdrAgainstRuleSet(string adrPath, int adrNumber)
+{
+    var issues = new List<string>();
+    var ruleSet = RuleSetRegistry.Get(adrNumber);
+    
+    if (ruleSet == null)
+    {
+        issues.Add($"ADR-{adrNumber:D3} 文档存在，但没有对应的 RuleSet 定义");
+        return issues;
+    }
+    
+    var adrContent = File.ReadAllText(adrPath);
+    
+    // 验证所有 Rule 是否在文档中引用
+    foreach (var rule in ruleSet.Rules)
+    {
+        var ruleId = $"ADR-{adrNumber:D3}_{rule.Id.RuleNumber}";
+        if (!adrContent.Contains(ruleId))
+        {
+            issues.Add($"文档缺少 Rule 引用: {ruleId}");
+        }
+    }
+    
+    // 验证所有 Clause 是否在文档中引用
+    foreach (var clause in ruleSet.Clauses)
+    {
+        var clauseId = $"ADR-{adrNumber:D3}_{clause.Id.RuleNumber}_{clause.Id.ClauseNumber}";
+        if (!adrContent.Contains(clauseId))
+        {
+            issues.Add($"文档缺少 Clause 引用: {clauseId}");
+        }
+    }
+    
+    return issues;
+}
+```
 
 ### 输入参数
 

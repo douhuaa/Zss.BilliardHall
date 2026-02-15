@@ -23,7 +23,93 @@ post_execution:
 
 ### 用途
 
-扫描项目中的跨模块引用，提取引用事实，由 Agent 根据 ADR 进行判定。
+扫描项目中的跨模块引用，提取引用事实，由 Agent 根据 ADR 进行判定。**使用 RuleSetRegistry API 查询模块边界规则并验证引用的合法性。**
+
+### RuleSet API 集成
+
+```csharp
+// 获取模块边界规则集
+var adr001 = RuleSetRegistry.GetStrict(1);  // 模块化架构
+var adr003 = RuleSetRegistry.GetStrict(3);  // 命名空间规范
+
+// 查询模块物理隔离规则 (ADR-001, Rule 1)
+var clause1_1 = adr001.GetClause(1, 1);
+// Condition: "模块按业务能力独立划分"
+// Enforcement: "通过 NetArchTest 验证模块不相互引用"
+
+var clause1_2 = adr001.GetClause(1, 2);
+// Condition: "项目文件禁止引用其他模块"
+// Enforcement: "解析 .csproj 文件验证无 ProjectReference 指向其他模块"
+
+// 查询模块通信机制 (ADR-001, Rule 3)
+var clause3_1 = adr001.GetClause(3, 1);
+// Condition: "模块间仅通过领域事件异步通信"
+// Enforcement: "验证无直接方法调用，仅事件发布/订阅"
+
+// 扫描时验证引用
+public ViolationReport ValidateReference(string sourceModule, string targetModule, string targetNamespace)
+{
+    // 检查是否违反物理隔离
+    if (IsDirectModuleReference(targetNamespace))
+    {
+        return new ViolationReport
+        {
+            RuleId = "ADR-001_1_1",
+            Severity = RuleSeverity.Constitutional,
+            Condition = clause1_1.Condition,
+            Enforcement = clause1_1.Enforcement,
+            Message = $"模块 {sourceModule} 直接引用了模块 {targetModule}",
+            FixSuggestion = "使用领域事件、契约查询或原始类型进行模块间通信"
+        };
+    }
+    
+    // 检查命名空间是否合法
+    var namespaceRule = adr003.GetClause(1, 2);
+    if (!IsValidModuleNamespace(targetNamespace))
+    {
+        return new ViolationReport
+        {
+            RuleId = "ADR-003_1_2",
+            Severity = RuleSeverity.Constitutional,
+            Condition = namespaceRule.Condition,
+            Enforcement = namespaceRule.Enforcement,
+            Message = $"命名空间不符合规范: {targetNamespace}"
+        };
+    }
+    
+    return null; // 无违规
+}
+
+// 按严重程度分类违规
+public Dictionary<RuleSeverity, List<Violation>> ClassifyViolations(List<Violation> violations)
+{
+    var classified = new Dictionary<RuleSeverity, List<Violation>>();
+    
+    foreach (var violation in violations)
+    {
+        // 从 RuleId 解析 ADR 编号
+        var match = Regex.Match(violation.RuleId, @"ADR-(\d+)_(\d+)");
+        if (!match.Success) continue;
+        
+        var adrNumber = int.Parse(match.Groups[1].Value);
+        var ruleNumber = int.Parse(match.Groups[2].Value);
+        
+        var ruleSet = RuleSetRegistry.Get(adrNumber);
+        if (ruleSet == null) continue;
+        
+        var rule = ruleSet.GetRule(ruleNumber);
+        if (rule == null) continue;
+        
+        if (!classified.ContainsKey(rule.Severity))
+        {
+            classified[rule.Severity] = new List<Violation>();
+        }
+        classified[rule.Severity].Add(violation);
+    }
+    
+    return classified;
+}
+```
 
 ### 输入参数
 

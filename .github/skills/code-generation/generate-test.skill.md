@@ -23,7 +23,72 @@ post_execution:
 
 ### 用途
 
-根据源代码自动生成符合项目规范的测试代码，包括单元测试、架构测试和集成测试。
+根据源代码自动生成符合项目规范的测试代码，包括单元测试、架构测试和集成测试。**使用 RuleSetRegistry API 查询测试规则并生成符合规范的测试。**
+
+### RuleSet API 集成
+
+```csharp
+// 获取架构测试规则集 (ADR-900)
+var testRules = RuleSetRegistry.GetStrict(900);
+
+// 查询测试映射规则 (Rule 2)
+var clause2_2 = testRules.GetClause(2, 2);
+// Condition: "ADR ↔ 测试 ↔ CI 的一一映射"
+// Enforcement: "每个 L1 规则必须有对应的架构测试"
+
+// 为特定 ADR 生成测试
+public void GenerateTestsForAdr(int adrNumber)
+{
+    var ruleSet = RuleSetRegistry.GetStrict(adrNumber);
+    
+    foreach (var rule in ruleSet.Rules)
+    {
+        var clauses = ruleSet.Clauses
+            .Where(c => c.Id.RuleNumber == rule.Id.RuleNumber);
+        
+        foreach (var clause in clauses)
+        {
+            // 生成测试类名：ADR_{adrNumber}_{rule}_{clause}_Tests
+            var testClassName = $"ADR_{adrNumber:D3}_{clause.Id.RuleNumber}_{clause.Id.ClauseNumber}_Tests";
+            
+            // 根据 ExecutionType 选择测试模板
+            var template = clause.ExecutionType switch
+            {
+                ClauseExecutionType.Convention => GenerateNetArchTest(clause),
+                ClauseExecutionType.StaticAnalysis => GenerateFileSystemTest(clause),
+                ClauseExecutionType.Runtime => GenerateRuntimeTest(clause),
+                _ => throw new NotSupportedException()
+            };
+            
+            // 生成测试文件
+            GenerateTestFile(testClassName, template, clause);
+        }
+    }
+}
+
+// 生成测试时引用 RuleId
+private string GenerateTestMethod(ArchitectureClauseDefinition clause)
+{
+    var ruleId = $"ADR-{clause.Id.AdrNumber:D3}_{clause.Id.RuleNumber}_{clause.Id.ClauseNumber}";
+    
+    return $@"
+[Fact]
+public void {clause.Id}_Should_Be_Enforced()
+{{
+    // Arrange
+    var message = AssertionMessageBuilder.Build(
+        ruleId: ""{ruleId}"",
+        violation: ""{clause.Condition}"",
+        currentState: ""实际检测到的状态"",
+        expectedState: ""{clause.Enforcement}"",
+        remediation: ""修复建议""
+    );
+    
+    // Act & Assert
+    // 具体测试逻辑
+}}";
+}
+```
 
 ### 输入参数
 

@@ -23,7 +23,121 @@ post_execution:
 
 ### 用途
 
-自动更新文档索引、目录和交叉引用，确保文档体系的完整性和可发现性。
+自动更新文档索引、目录和交叉引用，确保文档体系的完整性和可发现性。**使用 RuleSetRegistry API 同步 RuleSet 更新到文档，确保文档与代码定义一致。**
+
+### RuleSet API 集成
+
+```csharp
+// 检测需要更新的文档
+public List<DocumentUpdate> DetectDocumentUpdates()
+{
+    var updates = new List<DocumentUpdate>();
+    var allRuleSets = RuleSetRegistry.GetAllRuleSets();
+    
+    foreach (var ruleSet in allRuleSets)
+    {
+        var adrPath = $"docs/adr/ADR-{ruleSet.AdrNumber:D3}.md";
+        
+        if (!File.Exists(adrPath))
+        {
+            updates.Add(new DocumentUpdate
+            {
+                Type = "Missing",
+                RuleSetNumber = ruleSet.AdrNumber,
+                Action = "Create ADR document from RuleSet"
+            });
+            continue;
+        }
+        
+        // 检查文档是否需要同步
+        if (NeedsSynchronization(adrPath, ruleSet))
+        {
+            updates.Add(new DocumentUpdate
+            {
+                Type = "OutOfSync",
+                RuleSetNumber = ruleSet.AdrNumber,
+                Action = "Update Decision section from RuleSet"
+            });
+        }
+    }
+    
+    return updates;
+}
+
+// 同步 RuleSet 到 ADR 文档
+public string GenerateDecisionSection(ArchitectureRuleSet ruleSet)
+{
+    var sb = new StringBuilder();
+    sb.AppendLine("## Decision");
+    sb.AppendLine();
+    
+    foreach (var rule in ruleSet.Rules.OrderBy(r => r.Id.RuleNumber))
+    {
+        sb.AppendLine($"### Rule {rule.Id.RuleNumber}: {rule.Summary}");
+        sb.AppendLine();
+        sb.AppendLine($"**RuleId**: `ADR-{ruleSet.AdrNumber:D3}_{rule.Id.RuleNumber}`");
+        sb.AppendLine($"**Decision Level**: {rule.Decision}");
+        sb.AppendLine($"**Severity**: {rule.Severity}");
+        sb.AppendLine($"**Scope**: {rule.Scope}");
+        sb.AppendLine();
+        
+        // 获取此 Rule 的所有 Clause
+        var clauses = ruleSet.Clauses
+            .Where(c => c.Id.RuleNumber == rule.Id.RuleNumber)
+            .OrderBy(c => c.Id.ClauseNumber);
+        
+        foreach (var clause in clauses)
+        {
+            sb.AppendLine($"#### Clause {clause.Id.RuleNumber}.{clause.Id.ClauseNumber}");
+            sb.AppendLine();
+            sb.AppendLine($"**ClauseId**: `ADR-{ruleSet.AdrNumber:D3}_{clause.Id.RuleNumber}_{clause.Id.ClauseNumber}`");
+            sb.AppendLine();
+            sb.AppendLine($"**Condition**: {clause.Condition}");
+            sb.AppendLine();
+            sb.AppendLine($"**Enforcement**: {clause.Enforcement}");
+            sb.AppendLine();
+            sb.AppendLine($"**Execution Type**: {clause.ExecutionType}");
+            sb.AppendLine();
+        }
+    }
+    
+    return sb.ToString();
+}
+
+// 生成 ADR 索引
+public string GenerateAdrIndex()
+{
+    var sb = new StringBuilder();
+    sb.AppendLine("# ADR Index");
+    sb.AppendLine();
+    
+    // 按层级分类
+    sb.AppendLine("## 宪法层 (001-008)");
+    foreach (var ruleSet in RuleSetRegistry.GetConstitutionalRuleSets())
+    {
+        var firstRule = ruleSet.Rules.FirstOrDefault();
+        sb.AppendLine($"- [ADR-{ruleSet.AdrNumber:D3}](./ADR-{ruleSet.AdrNumber:D3}.md): {firstRule?.Summary ?? ""}");
+    }
+    sb.AppendLine();
+    
+    sb.AppendLine("## 治理层 (900-999)");
+    foreach (var ruleSet in RuleSetRegistry.GetGovernanceRuleSets())
+    {
+        var firstRule = ruleSet.Rules.FirstOrDefault();
+        sb.AppendLine($"- [ADR-{ruleSet.AdrNumber:D3}](./ADR-{ruleSet.AdrNumber:D3}.md): {firstRule?.Summary ?? ""}");
+    }
+    sb.AppendLine();
+    
+    sb.AppendLine("## 运行时层 (201-240)");
+    foreach (var ruleSet in RuleSetRegistry.GetRuntimeRuleSets())
+    {
+        var firstRule = ruleSet.Rules.FirstOrDefault();
+        sb.AppendLine($"- [ADR-{ruleSet.AdrNumber:D3}](./ADR-{ruleSet.AdrNumber:D3}.md): {firstRule?.Summary ?? ""}");
+    }
+    
+    return sb.ToString();
+}
+```
 
 ### 输入参数
 

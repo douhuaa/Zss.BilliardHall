@@ -24,7 +24,36 @@ post_execution:
 
 ### 用途
 
-生成符合规范的薄 HTTP Endpoint 适配器，确保 Endpoint 只做请求/响应映射，不包含业务逻辑。
+生成符合规范的薄 HTTP Endpoint 适配器，确保 Endpoint 只做请求/响应映射，不包含业务逻辑。**使用 RuleSetRegistry API 查询 Endpoint 约束并验证生成的代码。**
+
+### RuleSet API 集成
+
+```csharp
+// 获取 Handler 模式规则集 (ADR-005)
+var handlerRules = RuleSetRegistry.GetStrict(5);
+
+// 查询 Endpoint 职责约束 (Rule 1, Clause 2)
+var clause1_2 = handlerRules.GetClause(1, 2);
+// Condition: "Endpoint 仅做请求适配"
+// Enforcement: "验证 Endpoint/Controller 构造函数依赖不超过 5 个"
+
+// 生成时验证
+public void ValidateEndpoint(Type endpointType)
+{
+    var constructors = endpointType.GetConstructors();
+    foreach (var ctor in constructors)
+    {
+        var paramCount = ctor.GetParameters().Length;
+        if (paramCount > 5)
+        {
+            throw new ValidationException(
+                $"违反规则 ADR-005_1_2: {clause1_2.Condition}\n" +
+                $"Enforcement: {clause1_2.Enforcement}\n" +
+                $"当前构造函数参数数量: {paramCount}，最大允许: 5");
+        }
+    }
+}
+```
 
 ### 输入参数
 

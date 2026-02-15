@@ -23,7 +23,78 @@ post_execution:
 
 ### 用途
 
-运行项目的架构测试，验证代码是否符合 ADR 约束，并提供详细的失败分析。
+运行项目的架构测试，验证代码是否符合 ADR 约束，并提供详细的失败分析。**使用 RuleSetRegistry API 识别需要测试的规则并生成测试报告。**
+
+### RuleSet API 集成
+
+```csharp
+// 获取需要测试的 ADR 规则集
+public List<ArchitectureRuleSet> GetTestableRuleSets(string adrFilter = null)
+{
+    if (adrFilter != null)
+    {
+        // 运行特定 ADR 的测试
+        var ruleSet = RuleSetRegistry.GetStrict(adrFilter);
+        return new List<ArchitectureRuleSet> { ruleSet };
+    }
+    
+    // 运行所有架构测试
+    return RuleSetRegistry.GetAllRuleSets().ToList();
+}
+
+// 根据 RuleSet 信息生成测试报告
+public TestReport GenerateReport(TestResult result)
+{
+    // 从测试名称解析 RuleId (如 "ADR_001_1_1_Tests")
+    var match = Regex.Match(result.TestName, @"ADR_(\d{3})_(\d+)_(\d+)");
+    if (!match.Success) return null;
+    
+    var adrNumber = int.Parse(match.Groups[1].Value);
+    var ruleNumber = int.Parse(match.Groups[2].Value);
+    var clauseNumber = int.Parse(match.Groups[3].Value);
+    
+    // 查询对应的 RuleSet
+    var ruleSet = RuleSetRegistry.Get(adrNumber);
+    if (ruleSet == null) return null;
+    
+    var clause = ruleSet.GetClause(ruleNumber, clauseNumber);
+    if (clause == null) return null;
+    
+    return new TestReport
+    {
+        RuleId = $"ADR-{adrNumber:D3}_{ruleNumber}_{clauseNumber}",
+        Condition = clause.Condition,
+        Enforcement = clause.Enforcement,
+        ExecutionType = clause.ExecutionType.ToString(),
+        TestResult = result.Passed ? "Passed" : "Failed",
+        FailureMessage = result.FailureMessage,
+        FixSuggestion = GenerateFixSuggestion(clause)
+    };
+}
+
+// 按严重程度分类失败的测试
+public Dictionary<RuleSeverity, List<TestFailure>> ClassifyFailures(List<TestFailure> failures)
+{
+    var classified = new Dictionary<RuleSeverity, List<TestFailure>>();
+    
+    foreach (var failure in failures)
+    {
+        var ruleSet = RuleSetRegistry.Get(failure.AdrNumber);
+        if (ruleSet == null) continue;
+        
+        var rule = ruleSet.GetRule(failure.RuleNumber);
+        if (rule == null) continue;
+        
+        if (!classified.ContainsKey(rule.Severity))
+        {
+            classified[rule.Severity] = new List<TestFailure>();
+        }
+        classified[rule.Severity].Add(failure);
+    }
+    
+    return classified;
+}
+```
 
 ### 输入参数
 
