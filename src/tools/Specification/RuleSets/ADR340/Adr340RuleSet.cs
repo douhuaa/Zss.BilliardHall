@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR340;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR340;
 
 /// <summary>
 /// ADR-340：结构化日志与监控约束

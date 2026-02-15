@@ -1,4 +1,4 @@
-using Zss.BilliardHall.Generators.Interfaces;
+﻿using Zss.BilliardHall.Generators.Interfaces;
 using Zss.BilliardHall.Specification.Rules;
 using Zss.BilliardHall.Generators.Implementations;
 using Zss.BilliardHall.Generators.Models;
@@ -89,7 +89,7 @@ public sealed class AgentInstructionGenerator : IAgentInstructionGenerator
         foreach (var rule in orderedRules)
         {
             var instruction = builder.BuildInstruction(rule, ruleSet, instructionNumber);
-            
+
             // 如果启用命令验证，验证所有命令
             if (_commandValidator != null && instruction.Commands != null)
             {

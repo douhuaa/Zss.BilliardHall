@@ -1,4 +1,4 @@
-using Zss.BilliardHall.Generators;
+﻿using Zss.BilliardHall.Generators;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
 
@@ -38,10 +38,10 @@ public sealed class AgentInstructionGenerator_GoldenTests
 
         // Assert
         result.Should().NotBeNullOrEmpty();
-        
+
         // 验证顶层结构
         result.Should().StartWith("instructions:\n");
-        
+
         // 验证必需字段存在
         result.Should().Contain("- id:");
         result.Should().Contain("description:");
@@ -71,7 +71,7 @@ public sealed class AgentInstructionGenerator_GoldenTests
             .Where(l => !string.IsNullOrWhiteSpace(l))
             .Select(l => l.Trim())
             .ToList();
-        
+
         var resultLines = result.Split('\n')
             .Where(l => !string.IsNullOrWhiteSpace(l))
             .Select(l => l.Trim())
@@ -79,7 +79,7 @@ public sealed class AgentInstructionGenerator_GoldenTests
 
         // 验证开头
         resultLines.First().Should().Be("instructions:");
-        
+
         // 验证包含 id 字段
         resultLines.Should().Contain(l => l.StartsWith("- id: GEN-"));
     }
@@ -142,14 +142,14 @@ public sealed class AgentInstructionGenerator_GoldenTests
 
         // Assert
         var lines = result.Split('\n');
-        
+
         // 验证缩进层次
         foreach (var line in lines.Where(l => !string.IsNullOrWhiteSpace(l)))
         {
             var leadingSpaces = line.TakeWhile(c => c == ' ').Count();
-            
+
             // 所有缩进必须是 2 的倍数
-            (leadingSpaces % 2).Should().Be(0, 
+            (leadingSpaces % 2).Should().Be(0,
                 $"Line should have even number of spaces: '{line}'");
         }
     }
@@ -186,7 +186,7 @@ public sealed class AgentInstructionGenerator_GoldenTests
     private static ArchitectureRuleSet CreateSampleRuleSet()
     {
         var ruleSet = new ArchitectureRuleSet(907);
-        
+
         // Rule 1: 架构测试命名规则
         ruleSet.AddRule(
             ruleNumber: 1,
@@ -194,28 +194,28 @@ public sealed class AgentInstructionGenerator_GoldenTests
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Governance,
             scope: RuleScope.Solution);
-        
+
         ruleSet.AddClause(
             ruleNumber: 1,
             clauseNumber: 1,
             condition: "测试类使用 ADR-XXX_Y_Z_Tests 格式",
             enforcement: "文件名必须匹配 'ADR-{Number}_{RuleNumber}_{ClauseNumber}_Tests.cs' 或 'ADR-{Number}_{RuleNumber}_Tests.cs'",
             executionType: ClauseExecutionType.StaticAnalysis);
-        
+
         ruleSet.AddClause(
             ruleNumber: 1,
             clauseNumber: 2,
             condition: "测试方法使用 Should_描述预期行为 格式",
             enforcement: "方法名必须以 'Should_' 开头，后接清晰的行为描述",
             executionType: ClauseExecutionType.StaticAnalysis);
-        
+
         ruleSet.AddClause(
             ruleNumber: 1,
             clauseNumber: 3,
             condition: "Rule 测试类必须有明确的 Rule 后缀",
             enforcement: "Rule 级别测试类名必须以 '_Tests' 结尾（区分于其他测试）",
             executionType: ClauseExecutionType.StaticAnalysis);
-        
+
         // Rule 2: 测试断言标准化
         ruleSet.AddRule(
             ruleNumber: 2,
@@ -223,21 +223,21 @@ public sealed class AgentInstructionGenerator_GoldenTests
             decision: DecisionLevel.Must,
             severity: RuleSeverity.Governance,
             scope: RuleScope.Solution);
-        
+
         ruleSet.AddClause(
             ruleNumber: 2,
             clauseNumber: 1,
             condition: "使用 FluentAssertions 编写断言",
             enforcement: "所有测试文件必须包含 'using FluentAssertions;'",
             executionType: ClauseExecutionType.StaticAnalysis);
-        
+
         ruleSet.AddClause(
             ruleNumber: 2,
             clauseNumber: 2,
             condition: "失败消息包含具体违规信息和修复建议",
             enforcement: "所有 Should().Fail() 调用必须包含详细的上下文信息",
             executionType: ClauseExecutionType.Convention);
-        
+
         return ruleSet;
     }
 }

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR201;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR201;
 
 /// <summary>
 /// ADR-201：Handler 生命周期管理

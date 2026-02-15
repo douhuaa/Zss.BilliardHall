@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification;
 
 /// <summary>
 /// ArchitectureRuleSet 不变量清单测试（整合完整版）
@@ -62,9 +62,9 @@ public sealed class ArchitectureRuleSetInvariants_Tests
     public void Rule_Summary_Should_Not_Be_Empty()
     {
         var ruleSet = new ArchitectureRuleSet(907);
-        
+
         var act = () => ruleSet.AddRule(1, "", DecisionLevel.Must, RuleSeverity.Governance, RuleScope.Test);
-        
+
         act.Should().Throw<ArgumentException>()
             .WithMessage("*摘要不能为空*", "规则摘要是必填项");
     }
@@ -80,7 +80,7 @@ public sealed class ArchitectureRuleSetInvariants_Tests
 
         actEmptyCondition.Should().Throw<ArgumentException>()
             .WithMessage("*条件*不能为空*", "条款条件是必填项");
-        
+
         actEmptyEnforcement.Should().Throw<ArgumentException>()
             .WithMessage("*执行*不能为空*", "条款执行是必填项");
     }
@@ -97,7 +97,7 @@ public sealed class ArchitectureRuleSetInvariants_Tests
 
         actDuplicateRule.Should().Throw<InvalidOperationException>()
             .WithMessage("*已存在*", "不允许重复添加相同编号的规则");
-        
+
         actDuplicateClause.Should().Throw<InvalidOperationException>()
             .WithMessage("*已存在*", "不允许重复添加相同编号的条款");
     }
@@ -114,7 +114,7 @@ public sealed class ArchitectureRuleSetInvariants_Tests
         ruleSet.AddRule(2, "规则2-无条款", DecisionLevel.Should, RuleSeverity.Technical, RuleScope.Module);
 
         var act = () => ruleSet.ValidateCompleteness();
-        
+
         act.Should().Throw<InvalidOperationException>()
             .WithMessage("*没有任何条款*", "完整性验证应检测到缺失的条款");
     }
@@ -130,7 +130,7 @@ public sealed class ArchitectureRuleSetInvariants_Tests
         ruleSet.AddClause(2, 1, "条件2", "执行2", ClauseExecutionType.StaticAnalysis);
 
         var act = () => ruleSet.ValidateCompleteness();
-        
+
         act.Should().NotThrow("完整的规则集不应抛出异常");
     }
 

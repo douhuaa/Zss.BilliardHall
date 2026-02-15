@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR902;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR902;
 
 /// <summary>
 /// ADR-902：ADR 模板结构契约

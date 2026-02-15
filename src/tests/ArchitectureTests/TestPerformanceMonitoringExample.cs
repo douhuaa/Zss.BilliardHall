@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests;
 
 /// <summary>
 /// 测试性能监控示例

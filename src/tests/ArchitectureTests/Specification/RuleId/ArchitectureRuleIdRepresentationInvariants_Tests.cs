@@ -20,7 +20,7 @@ public sealed class ArchitectureRuleIdRepresentationInvariants_Tests
     {
         var id = ArchitectureRuleId.Rule(adr, rule);
 
-        id.ToString().Should().Be(expected, 
+        id.ToString().Should().Be(expected,
             $"RuleId({adr}, {rule}) 的字符串表示应为 '{expected}'");
     }
 
@@ -32,7 +32,7 @@ public sealed class ArchitectureRuleIdRepresentationInvariants_Tests
     {
         var id = ArchitectureRuleId.Clause(adr, rule, clause);
 
-        id.ToString().Should().Be(expected, 
+        id.ToString().Should().Be(expected,
             $"ClauseId({adr}, {rule}, {clause}) 的字符串表示应为 '{expected}'");
     }
 }

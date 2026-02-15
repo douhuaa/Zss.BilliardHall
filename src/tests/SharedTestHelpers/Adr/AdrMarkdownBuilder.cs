@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.SharedTestHelpers.Adr;
+﻿namespace Zss.BilliardHall.Tests.SharedTestHelpers.Adr;
 
 /// <summary>
 /// ADR Markdown 文档构建器
@@ -11,7 +11,7 @@ namespace Zss.BilliardHall.Tests.SharedTestHelpers.Adr;
 public sealed class AdrMarkdownBuilder
 {
     private static readonly Regex AdrIdPattern = new(@"^ADR-\d{3,4}$", RegexOptions.Compiled);
-    
+
     private string _id = "ADR-001";
     private string _title = "测试 ADR 文档";
     private string _status = "Final";

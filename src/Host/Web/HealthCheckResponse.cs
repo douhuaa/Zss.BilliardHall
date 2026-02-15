@@ -10,7 +10,7 @@ public sealed record HealthCheckResponse
     /// 健康状态（例如："healthy", "degraded", "unhealthy"）
     /// </summary>
     public required string Status { get; init; }
-    
+
     /// <summary>
     /// 检查时间戳（UTC）
     /// </summary>

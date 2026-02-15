@@ -165,7 +165,7 @@ public sealed class AdrDecisionGenerator : IAdrDecisionGenerator
         var ruleIdText = rule.Id.ToString();
         var summary = options.EscapeMarkdown ? EscapeMarkdown(rule.Summary) : rule.Summary;
         var headerPrefix = MakeHeaderPrefix(3 + options.HeaderLevelOffset);
-        
+
         sb.AppendLine($"{headerPrefix} {ruleIdText}：{summary}（Rule）");
         sb.AppendLine();
     }

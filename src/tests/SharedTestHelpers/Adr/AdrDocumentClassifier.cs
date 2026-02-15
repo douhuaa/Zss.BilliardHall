@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.SharedTestHelpers.Adr;
+﻿namespace Zss.BilliardHall.Tests.SharedTestHelpers.Adr;
 
 /// <summary>
 /// ADR 文档分类器
@@ -64,7 +64,7 @@ public static class AdrDocumentClassifier
             }
 
             // 有 Front Matter 且 type 为 adr 或未指定
-            return frontMatter.TypeField == null || 
+            return frontMatter.TypeField == null ||
                    frontMatter.TypeField.Equals("adr", StringComparison.OrdinalIgnoreCase);
         }
 
@@ -102,9 +102,9 @@ public static class AdrDocumentClassifier
         }
 
         var lowerType = typeField.ToLowerInvariant();
-        return lowerType == "checklist" || 
-               lowerType == "guide" || 
-               lowerType == "template" || 
+        return lowerType == "checklist" ||
+               lowerType == "guide" ||
+               lowerType == "template" ||
                lowerType == "proposal";
     }
 }

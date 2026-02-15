@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR001;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.RuleSets.ADR001;
 
 /// <summary>
 /// ADR-001 模块隔离架构测试
@@ -40,7 +40,7 @@ public sealed class Adr001_Module_Isolation_Tests
 
         // 获取当前模块名称
         var currentModuleName = moduleAssembly.GetName().Name?.Split('.').Last() ?? "Unknown";
-        
+
         // 获取其他模块的命名空间（用于依赖检查）
         var otherModules = ModuleAssemblyData.ModuleNames
             .Where(m => !m.Equals(currentModuleName, StringComparison.OrdinalIgnoreCase))
@@ -103,7 +103,7 @@ public sealed class Adr001_Module_Isolation_Tests
 
         // 获取当前模块名称
         var currentModuleName = moduleAssembly.GetName().Name?.Split('.').Last() ?? "Unknown";
-        
+
         // 构建禁止的跨模块层依赖列表
         var forbiddenLayerDependencies = ModuleAssemblyData.ModuleNames
             .Where(m => !m.Equals(currentModuleName, StringComparison.OrdinalIgnoreCase))
@@ -157,7 +157,7 @@ public sealed class Adr001_Module_Isolation_Tests
 
         // 获取当前模块名称
         var currentModuleName = moduleAssembly.GetName().Name?.Split('.').Last() ?? "Unknown";
-        
+
         // 构建禁止直接调用的其他模块API命名空间
         var forbiddenApiDependencies = ModuleAssemblyData.ModuleNames
             .Where(m => !m.Equals(currentModuleName, StringComparison.OrdinalIgnoreCase))

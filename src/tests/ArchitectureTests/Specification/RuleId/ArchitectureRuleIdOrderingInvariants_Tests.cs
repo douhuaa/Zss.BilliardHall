@@ -37,7 +37,7 @@ public sealed class ArchitectureRuleIdOrderingInvariants_Tests
         var ruleId = ArchitectureRuleId.Rule(adr, rule);
         var clauseId = ArchitectureRuleId.Clause(adr, rule, clause);
 
-        ruleId.CompareTo(clauseId).Should().BeLessThan(0, 
+        ruleId.CompareTo(clauseId).Should().BeLessThan(0,
             $"{ruleId} 应该排在 {clauseId} 之前");
     }
 }

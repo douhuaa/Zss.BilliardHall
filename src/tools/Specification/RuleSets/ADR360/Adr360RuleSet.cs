@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR360;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR360;
 
 /// <summary>
 /// ADR-360：CI/CD Pipeline 流程标准化
