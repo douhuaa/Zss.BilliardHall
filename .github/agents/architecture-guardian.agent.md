@@ -40,8 +40,14 @@
 
 ## RuleSetRegistry API 使用指南
 
+> ⚠️ **免责声明**：以下示例为伪代码/示意，用于说明 API 使用方式。实际 API 签名、返回类型和行为以 `src/tools/Specification` 项目中的实现为准。在实际使用前，请参考源代码验证 API 的可用性和正确用法。
+
+### 规则权威来源声明
+- **裁决依据**：Guardian 做架构裁决时，必须以 RuleSetRegistry API 为唯一权威来源。禁止直接解析 ADR Markdown 文档来推导规则或做裁决。
+- **文档用途**：ADR Markdown 文档仅供人类阅读理解，不作为 Agent 裁决的输入源。
+- **边界说明**：此限制仅适用于架构裁决场景。对于文档结构审查（如 Documentation Maintainer、ADR Reviewer 的职责），可以读取 Markdown 检查格式和一致性，但不得将 Markdown 内容作为规则来源。
+
 ### 获取规则集
-**禁止直接解析 ADR Markdown 文档**。所有架构规则必须通过 RuleSetRegistry API 访问。
 
 #### 基本查询
 ```csharp
@@ -123,11 +129,29 @@ foreach (var c in ruleSet.Clauses)
 ruleSet.ValidateCompleteness();
 ```
 
-### 重要提醒
-1. **禁止硬编码 ADR 编号**：使用 RuleSetRegistry API 动态查询
-2. **禁止直接读取 Markdown**：ADR 文档仅供人类阅读，Agent 必须使用 API
-3. **使用 RuleId 格式**：引用规则时使用标准格式 `ADR-XXX_Y_Z`
-4. **异常处理**：使用 `Get()` 进行探索性查询，使用 `GetStrict()` 进行严格验证
+### RuleId 输出规范
+在 evidence 和判决输出中引用规则时，必须遵循以下规范：
+
+1. **使用强类型 RuleId**：通过 `rule.Id.ToString()` 或 `clause.Id.ToString()` 生成 RuleId 字符串
+2. **禁止手写规则文本**：禁止在 evidence 中硬编码规则内容或手写 `"ADR-240_2_1: xxx"` 这类字符串
+3. **标准格式**：RuleId 格式为 `ADR-XXX_Y_Z`（由 `ArchitectureRuleId.ToString()` 自动生成）
+4. **代码查询可用字面量**：在调用 API 时（如 `GetStrict(240)`），可以使用 ADR 编号字面量，但最终输出的 evidence 必须使用 API 返回的 RuleId 对象
+
+**正确示例**：
+```csharp
+var ruleSet = RuleSetRegistry.GetStrict(240);
+var clause = ruleSet.GetClause(2, 1);
+var evidence = $"{clause.Id}: {clause.Condition}";  // ✅ 使用 clause.Id
+```
+
+**错误示例**：
+```csharp
+var evidence = "ADR-240_2_1: Handler 异常约束";  // ❌ 手写硬编码
+```
+
+### 异常处理策略
+- **探索性查询**：使用 `Get()` 进行探索性查询（不存在时返回 null）
+- **严格验证**：使用 `GetStrict()` 进行严格验证（不存在时抛出异常）
 
 ## 依赖 ADR
 - ADR-007：Agent 行为与权限宪法

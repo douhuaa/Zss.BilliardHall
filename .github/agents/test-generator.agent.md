@@ -35,8 +35,20 @@
 
 ## RuleSetRegistry API 使用指南
 
+> ⚠️ **免责声明**：以下示例为伪代码/示意，用于说明 API 使用方式。实际 API 签名、返回类型和行为以 `src/tools/Specification` 项目中的实现为准。在实际使用前，请参考源代码验证 API 的可用性和正确用法。
+
 ### 从 RuleSet 生成测试
 **核心职责**：基于 RuleSetRegistry 中的规则集自动生成架构测试代码。
+
+#### 规则权威来源声明
+- **生成依据**：Test Generator 生成测试代码时，必须以 RuleSetRegistry API 为唯一规则来源
+- **职责边界**：本 Agent 专注于将规则集转换为可执行的测试代码
+- **边界说明**：
+  - ✅ 可以查询 RuleSetRegistry 获取所有规则和条款
+  - ✅ 可以基于规则属性（严重程度、作用域、执行类型）生成不同类型的测试
+  - ✅ 可以在生成的测试中使用 `rule.Id` 和 `clause.Id` 作为标识
+  - ❌ 禁止直接解析 ADR Markdown 推导测试需求
+  - ❌ 禁止在生成的测试代码中硬编码 RuleId 字符串（应使用 API 返回的 RuleId）
 
 #### 获取规则集进行测试生成
 ```csharp
@@ -151,10 +163,36 @@ dotnet run --project src/tools/Governance.Cli -- generate test --out src/tests/A
 dotnet run --project src/tools/Governance.Cli -- generate test --out src/tests/ArchitectureTests/
 ```
 
+### RuleId 在生成测试中的使用
+生成测试代码时的 RuleId 使用规范：
+
+1. **使用 API 返回的 RuleId**：在生成测试方法时，使用 `clause.Id.ToString()` 获取标准格式
+2. **禁止在生成的测试中硬编码 RuleId 字符串**：生成的断言消息应使用变量或常量，而非硬编码字符串
+3. **测试命名约定**：方法名可以使用 RuleId 格式（如 `ADR_900_1_1_Should_XXX`），但断言消息中的 RuleId 应来自 API
+
+**正确的生成模式**：
+```csharp
+var ruleSet = RuleSetRegistry.GetStrict(900);
+var clause = ruleSet.GetClause(1, 1);
+
+// 生成测试方法时使用 clause.Id
+var testCode = $@"
+[Fact]
+public void {clause.Id.ToString().Replace(""-"", ""_"")}_Should_ValidateConstraint()
+{{
+    var message = AssertionMessageBuilder.Build(
+        ruleId: ""{clause.Id}"",  // 使用 clause.Id
+        violation: ""xxx"",
+        // ...
+    );
+}}
+";
+```
+
 ### 重要提醒
-1. **禁止硬编码规则描述**：所有规则信息从 RuleSetRegistry 获取
+1. **禁止手写规则描述**：所有规则信息从 RuleSetRegistry 获取
 2. **使用 Theory + MemberData**：生成参数化测试
-3. **标准化命名**：遵循 `ADR_XXX_Y_Z` 格式
+3. **使用强类型 RuleId**：生成的测试代码中使用 `clause.Id` 而非硬编码字符串
 4. **包含元数据**：在测试注释中引用 RuleSet 定义
 
 ## 测试生成规范

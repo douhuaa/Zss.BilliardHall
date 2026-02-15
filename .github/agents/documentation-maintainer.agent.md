@@ -33,8 +33,20 @@
 
 ## RuleSetRegistry API 使用指南
 
+> ⚠️ **免责声明**：以下示例为伪代码/示意，用于说明 API 使用方式。实际 API 签名、返回类型和行为以 `src/tools/Specification` 项目中的实现为准。在实际使用前，请参考源代码验证 API 的可用性和正确用法。
+
 ### 文档规则查询
 **核心职责**：从 RuleSetRegistry 获取文档相关规则，验证文档是否符合规范。
+
+#### 规则权威来源与文档审查的区分
+- **规则权威来源**：RuleSetRegistry 是架构裁决的唯一权威来源（Guardian/Enforcer 使用）
+- **文档审查职责**：Documentation Maintainer 负责审查文档结构、格式和质量
+- **边界说明**：
+  - ✅ 可以读取 ADR/README/Agent 配置等 Markdown 文档进行结构和质量检查
+  - ✅ 可以从 RuleSetRegistry 获取文档相关规则（ADR-008, ADR-910 等）
+  - ✅ 可以对比文档内容与规则要求的一致性
+  - ❌ 禁止将 Markdown 内容作为规则来源进行架构裁决
+  - ❌ 禁止基于 Markdown 推导规则而忽略 RuleSetRegistry
 
 #### 获取文档宪法规则
 ```csharp
@@ -212,10 +224,24 @@ dotnet run --project src/tools/Governance.Cli -- validate
 dotnet run --project src/tools/Governance.Cli -- generate adr ADR-008 docs/adr/ADR-008.md
 ```
 
+### RuleId 输出规范
+在文档验证报告中引用规则时：
+
+1. **使用 API 返回的 RuleId**：通过 `rule.Id.ToString()` 或 `clause.Id.ToString()` 获取
+2. **禁止手写 RuleId 字符串**：避免硬编码如 `"ADR-946_1_1"` 这样的字符串
+3. **在测试断言中使用 RuleId**：确保失败信息包含准确的 RuleId 引用
+
+**正确示例**：
+```csharp
+var adr946 = RuleSetRegistry.GetStrict(946);
+var clause = adr946.GetClause(1, 1);
+var message = $"{clause.Id}: {clause.Enforcement}";  // ✅ 使用 clause.Id
+```
+
 ### 重要提醒
-1. **禁止硬编码文档规则**：所有规则从 RuleSetRegistry 动态获取
+1. **禁止手写文档规则**：所有规则从 RuleSetRegistry 动态获取
 2. **同步 RuleSet 更新**：当 RuleSet 更新时，需要同步文档
-3. **使用 RuleId 格式**：报告违规时使用 `ADR-XXX_Y_Z`
+3. **使用强类型 RuleId**：报告违规时使用 `rule.Id` 或 `clause.Id` 而非手写字符串
 4. **关注文档作用域**：使用 `GetByScope(RuleScope.Document)` 快速定位文档规则
 
 ## 职责

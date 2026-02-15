@@ -37,8 +37,19 @@
 
 ## RuleSetRegistry API 使用指南
 
+> ⚠️ **免责声明**：以下示例为伪代码/示意，用于说明 API 使用方式。实际 API 签名、返回类型和行为以 `src/tools/Specification` 项目中的实现为准。在实际使用前，请参考源代码验证 API 的可用性和正确用法。
+
 ### 查询 Handler 模式约束
 **核心职责**：从 RuleSetRegistry 获取 Handler 相关规则，验证 Handler 实现是否符合约束。
+
+#### 规则权威来源声明
+- **裁决依据**：Handler Pattern Enforcer 做架构裁决时，必须以 RuleSetRegistry API 为唯一权威来源
+- **职责边界**：本 Agent 专注于 Handler 模式验证，输出三态判定（Allowed/Blocked/Uncertain）
+- **边界说明**：
+  - ✅ 可以查询 RuleSetRegistry 获取 Handler 相关约束（ADR-201, ADR-240 等）
+  - ✅ 可以基于规则验证 Handler 实现并输出判定结果
+  - ❌ 禁止直接解析 ADR Markdown 推导 Handler 约束
+  - ❌ 禁止在无规则支持的情况下做 Blocked 判定（应输出 Uncertain）
 
 #### 获取 Handler 生命周期规则
 ```csharp
@@ -182,9 +193,28 @@ foreach (var rule in adr240.Rules)
 }
 ```
 
+### RuleId 输出规范
+在验证结果和 evidence 中引用规则时：
+
+1. **使用 API 返回的 RuleId**：通过 `rule.Id.ToString()` 或 `clause.Id.ToString()` 获取
+2. **禁止手写规则内容**：避免硬编码规则文本或手写 `"ADR-240_2_1: xxx"` 这类字符串
+3. **标准 evidence 格式**：使用 `clause.Id` 加描述，例如 `$"{clause.Id}: {clause.Condition}"`
+
+**正确示例**：
+```csharp
+var adr240 = RuleSetRegistry.GetStrict(240);
+var clause = adr240.GetClause(2, 1);
+var evidence = $"{clause.Id}: {clause.Condition}";  // ✅ 使用 clause.Id
+```
+
+**错误示例**：
+```csharp
+var evidence = "ADR-240_2_1: Handler 异常约束";  // ❌ 手写硬编码
+```
+
 ### 重要提醒
-1. **禁止硬编码 Handler 约束**：所有约束从 RuleSetRegistry 动态获取
-2. **使用 RuleId 格式**：报告违规时使用 `ADR-XXX_Y_Z`
+1. **禁止手写 Handler 约束**：所有约束从 RuleSetRegistry 动态获取
+2. **使用强类型 RuleId**：报告违规时使用 `rule.Id` 或 `clause.Id` 而非手写字符串
 3. **关注执行类型**：`ClauseExecutionType` 决定如何验证
 4. **多条款综合判断**：一个 Rule 可能有多个 Clause，需要全部检查
 
