@@ -38,6 +38,10 @@ public static class Program
         var generateAgentCommand = CreateGenerateAgentCommand(dryRunOption);
         generateCommand.Add(generateAgentCommand);
 
+        // 子命令: generate test
+        var generateTestCommand = CreateGenerateTestCommand(dryRunOption);
+        generateCommand.Add(generateTestCommand);
+
         // 子命令: validate
         var validateCommand = CreateValidateCommand();
         rootCommand.Add(validateCommand);
@@ -106,6 +110,40 @@ public static class Program
             var fileSystem = CreateFileSystem(dryRun);
             var instructionGenerator = new AgentInstructionGenerator();
             var handler = new GenerateAgentCommandHandler(fileSystem, instructionGenerator);
+
+            var exitCode = await handler.ExecuteAsync(output, adr);
+            context.ExitCode = exitCode;
+        });
+
+        return command;
+    }
+
+    private static Command CreateGenerateTestCommand(Option<bool> dryRunOption)
+    {
+        var command = new Command("test", "生成架构测试代码（C# xUnit）");
+
+        var outputOption = new Option<string>(
+            aliases: new[] { "--out", "-o" },
+            description: "输出目录"
+        ) { IsRequired = true };
+
+        var adrOption = new Option<int?>(
+            aliases: new[] { "--adr", "-a" },
+            description: "可选：仅生成指定 ADR 的测试代码（默认：全部）"
+        );
+
+        command.AddOption(outputOption);
+        command.AddOption(adrOption);
+
+        command.SetHandler(async (InvocationContext context) =>
+        {
+            var output = context.ParseResult.GetValueForOption(outputOption)!;
+            var adr = context.ParseResult.GetValueForOption(adrOption);
+            var dryRun = context.ParseResult.GetValueForOption(dryRunOption);
+            
+            var fileSystem = CreateFileSystem(dryRun);
+            var testGenerator = new ArchitectureTestGenerator();
+            var handler = new GenerateTestCommandHandler(fileSystem, testGenerator);
 
             var exitCode = await handler.ExecuteAsync(output, adr);
             context.ExitCode = exitCode;
