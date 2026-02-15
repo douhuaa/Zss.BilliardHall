@@ -26,12 +26,67 @@
 - 自动生成架构与功能测试的 Agent
 - 确保 ADR Clause 可执行
 - 遵循架构测试编写最佳实践
+- 使用 RuleSetRegistry API 查询规则并生成测试
 
 ## 职责
-- 根据 ADR 生成测试代码
+- 基于 RuleSet API 查询规则并生成测试代码
 - 输出 Allowed / Blocked / Uncertain
 - 提供生成的测试文件和验证路径
 - 确保测试符合编写规范
+
+## RuleSet API 使用
+
+### 查询架构测试规则 (ADR-900)
+```csharp
+// 获取架构测试治理规则集
+var ruleSet = RuleSetRegistry.GetStrict(900);
+
+// 查询执行级别与测试映射 (Rule 2)
+var clause2_2 = ruleSet.GetClause(2, 2);
+// Condition: "ADR ↔ 测试 ↔ CI 的一一映射"
+// Enforcement: "每个 L1 规则必须有对应的架构测试"
+
+// 用于验证是否需要为每个 Rule 生成测试
+```
+
+### 从任意 RuleSet 生成测试
+```csharp
+// 例如：为 ADR-001 生成测试
+var ruleSet = RuleSetRegistry.GetStrict(1);
+
+// 遍历所有规则
+foreach (var rule in ruleSet.Rules)
+{
+    // 获取该规则的所有条款
+    var clauses = ruleSet.Clauses
+        .Where(c => c.Id.RuleNumber == rule.Id.RuleNumber);
+    
+    foreach (var clause in clauses)
+    {
+        // 生成测试：ADR_001_{RuleNumber}_{ClauseNumber}_Tests
+        var testName = $"ADR_{ruleSet.AdrNumber:D3}_{clause.Id.RuleNumber}_{clause.Id.ClauseNumber}_Tests";
+        
+        // 根据 ExecutionType 选择测试模板
+        // - ClauseExecutionType.Convention -> NetArchTest
+        // - ClauseExecutionType.StaticAnalysis -> 文件系统测试
+        // - ClauseExecutionType.Runtime -> 反射/DI容器测试
+    }
+}
+```
+
+### 生成测试时引用 RuleId
+```csharp
+// 在测试断言消息中引用 RuleId
+var ruleId = $"ADR-{ruleSet.AdrNumber:D3}_{rule.Id.RuleNumber}_{clause.Id.ClauseNumber}";
+
+var message = AssertionMessageBuilder.Build(
+    ruleId: ruleId,
+    violation: clause.Condition,
+    currentState: "实际状态",
+    expectedState: clause.Enforcement,
+    remediation: "根据 RuleSet 生成的修复建议"
+);
+```
 
 ## 测试生成规范
 

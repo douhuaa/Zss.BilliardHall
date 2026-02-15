@@ -30,6 +30,7 @@
 - 确保 ADR、AGENT 文档、Prompts 的完整性和一致性
 - 验证文档质量和结构规范
 - 支持文档编辑和自动修复
+- 使用 RuleSetRegistry API 同步 RuleSet 更新到文档
 
 ## 职责
 
@@ -63,6 +64,114 @@
 - 更新索引和交叉引用
 - 格式化文档（不涉及约束内容）
 - 生成文档更新报告
+- **使用 RuleSet API 同步规则变更到 ADR 文档**
+
+## RuleSet API 使用
+
+### 同步 RuleSet 到 ADR 文档
+```csharp
+// 获取需要同步的 RuleSet
+var ruleSet = RuleSetRegistry.GetStrict(1);  // ADR-001
+
+// 生成 Decision 章节内容
+var decisionSection = new StringBuilder();
+decisionSection.AppendLine("## Decision");
+decisionSection.AppendLine();
+
+foreach (var rule in ruleSet.Rules.OrderBy(r => r.Id.RuleNumber))
+{
+    decisionSection.AppendLine($"### Rule {rule.Id.RuleNumber}: {rule.Summary}");
+    decisionSection.AppendLine();
+    decisionSection.AppendLine($"**Decision Level**: {rule.Decision}");
+    decisionSection.AppendLine($"**Severity**: {rule.Severity}");
+    decisionSection.AppendLine($"**Scope**: {rule.Scope}");
+    decisionSection.AppendLine();
+    
+    // 获取此 Rule 的所有 Clause
+    var clauses = ruleSet.Clauses
+        .Where(c => c.Id.RuleNumber == rule.Id.RuleNumber)
+        .OrderBy(c => c.Id.ClauseNumber);
+    
+    foreach (var clause in clauses)
+    {
+        decisionSection.AppendLine($"#### Clause {clause.Id.RuleNumber}.{clause.Id.ClauseNumber}");
+        decisionSection.AppendLine();
+        decisionSection.AppendLine($"**Condition**: {clause.Condition}");
+        decisionSection.AppendLine();
+        decisionSection.AppendLine($"**Enforcement**: {clause.Enforcement}");
+        decisionSection.AppendLine();
+        decisionSection.AppendLine($"**Execution Type**: {clause.ExecutionType}");
+        decisionSection.AppendLine();
+    }
+}
+
+// 将生成的内容写入 ADR 文档的 Decision 章节
+```
+
+### 验证 ADR 文档与 RuleSet 一致性
+```csharp
+// 检查 ADR 文档是否包含所有 RuleSet 中的规则
+var adrNumber = 1;
+var ruleSet = RuleSetRegistry.Get(adrNumber);
+
+if (ruleSet == null)
+{
+    // 警告：ADR 存在但 RuleSet 未定义
+    return new ValidationResult {
+        Decision = "Uncertain",
+        Issue = $"ADR-{adrNumber:D3} 文档存在，但没有对应的 RuleSet 定义"
+    };
+}
+
+// 读取 ADR 文档内容
+var adrContent = File.ReadAllText($"docs/adr/ADR-{adrNumber:D3}.md");
+
+// 验证文档中是否引用了所有 Rule
+foreach (var rule in ruleSet.Rules)
+{
+    var ruleId = $"ADR-{adrNumber:D3}_{rule.Id.RuleNumber}";
+    if (!adrContent.Contains(ruleId))
+    {
+        // 警告：文档缺少 Rule 引用
+    }
+}
+
+// 验证文档中是否引用了所有 Clause
+foreach (var clause in ruleSet.Clauses)
+{
+    var clauseId = $"ADR-{adrNumber:D3}_{clause.Id.RuleNumber}_{clause.Id.ClauseNumber}";
+    if (!adrContent.Contains(clauseId))
+    {
+        // 警告：文档缺少 Clause 引用
+    }
+}
+```
+
+### 检测文档更新需求
+```csharp
+// 当 RuleSet 更新时，检测哪些文档需要同步
+var allRuleSets = RuleSetRegistry.GetAllRuleSets();
+
+var documentUpdateNeeded = new List<string>();
+
+foreach (var ruleSet in allRuleSets)
+{
+    var adrPath = $"docs/adr/ADR-{ruleSet.AdrNumber:D3}.md";
+    
+    if (!File.Exists(adrPath))
+    {
+        documentUpdateNeeded.Add($"ADR-{ruleSet.AdrNumber:D3} 文档缺失");
+        continue;
+    }
+    
+    // 检查文档最后修改时间
+    var docLastModified = File.GetLastWriteTimeUtc(adrPath);
+    var ruleSetAssemblyDate = typeof(RuleSetRegistry).Assembly.GetName().Version;
+    
+    // 如果 RuleSet 程序集比文档新，可能需要同步
+    // 实际实现中可能需要更精确的版本追踪机制
+}
+```
 
 ## 权限和工具
 
