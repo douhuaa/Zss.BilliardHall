@@ -138,6 +138,6 @@ ruleSet.ValidateCompleteness();
 ```json
 {
   "decision": "Blocked",
-  "evidence": ["ADR-240_2", "ArchitectureTest HandlerException"],
+  "evidence": ["ADR-240_2: Handler 异常约束", "ArchitectureTest: HandlerException 失败"],
   "reason": "Handler swallow domain exception"
 }

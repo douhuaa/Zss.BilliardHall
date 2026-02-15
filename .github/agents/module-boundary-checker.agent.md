@@ -176,6 +176,6 @@ public void ModuleBoundary_Should_RespectIsolation(
 ```json
 {
   "decision": "Allowed",
-  "evidence": ["ADR-001_1_1", "ModuleBoundary 检查通过"],
+  "evidence": ["ADR-001_1_1: 模块边界隔离", "模块边界检查通过"],
   "recommendation": "模块调用合规"
 }

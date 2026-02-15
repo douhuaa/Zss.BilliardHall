@@ -278,7 +278,7 @@ public class CodeReviewer
 ```json
 {
   "decision": "Allowed",
-  "evidence": ["ADR-201_1_1", "ADR-240_2_1"],
+  "evidence": ["ADR-201_1_1: Handler 生命周期管理", "ADR-240_2_1: Handler 异常约束"],
   "recommendation": "Handler 实现符合生命周期管理和异常约束",
   "technical_notes": [
     "使用了正确的 ICommandHandler 接口",
@@ -292,7 +292,7 @@ public class CodeReviewer
 ```json
 {
   "decision": "Blocked",
-  "evidence": ["ADR-001_1_1"],
+  "evidence": ["ADR-001_1_1: 模块隔离原则"],
   "recommendation": "模块边界违规",
   "violations": [
     {
@@ -308,7 +308,7 @@ public class CodeReviewer
 ```json
 {
   "decision": "Uncertain",
-  "evidence": ["ADR-003_1_2"],
+  "evidence": ["ADR-003_1_2: 命名空间规范"],
   "recommendation": "命名空间使用需要澄清",
   "questions": [
     "该类应该属于哪个模块？",

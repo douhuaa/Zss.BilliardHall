@@ -197,6 +197,6 @@ foreach (var rule in adr240.Rules)
 ```json
 {
   "decision": "Blocked",
-  "evidence": ["ADR-240_2_1"],
+  "evidence": ["ADR-240_2_1: Handler 异常约束"],
   "recommendation": "Handler must not swallow exceptions"
 }
