@@ -31,6 +31,193 @@
 - 验证文档质量和结构规范
 - 支持文档编辑和自动修复
 
+## RuleSetRegistry API 使用指南
+
+### 文档规则查询
+**核心职责**：从 RuleSetRegistry 获取文档相关规则，验证文档是否符合规范。
+
+#### 获取文档宪法规则
+```csharp
+// ADR-008：文档编写与维护宪法
+var adr008 = RuleSetRegistry.GetStrict(8);
+
+// 查询所有文档规则
+foreach (var rule in adr008.Rules)
+{
+    Console.WriteLine($"文档规则: {rule.Id} - {rule.Summary}");
+    Console.WriteLine($"裁决级别: {rule.Decision}");
+}
+
+// 查询具体的文档约束条款
+foreach (var clause in adr008.Clauses)
+{
+    Console.WriteLine($"条款: {clause.Id}");
+    Console.WriteLine($"条件: {clause.Condition}");
+    Console.WriteLine($"执行要求: {clause.Enforcement}");
+}
+```
+
+#### 获取 README 治理规则
+```csharp
+// ADR-910：README 治理宪法
+var adr910 = RuleSetRegistry.GetStrict(910);
+
+// 查询 README 质量要求
+foreach (var rule in adr910.Rules)
+{
+    if (rule.Scope == RuleScope.Document)
+    {
+        Console.WriteLine($"README 规则: {rule.Summary}");
+    }
+}
+```
+
+#### 获取 ADR 关系规则
+```csharp
+// ADR-940：ADR 关系与溯源管理
+var adr940 = RuleSetRegistry.GetStrict(940);
+
+// 查询关系声明约束
+var relationshipClauses = adr940.Clauses
+    .Where(c => c.Condition.Contains("关系") || c.Condition.Contains("依赖"));
+
+foreach (var clause in relationshipClauses)
+{
+    Console.WriteLine($"关系约束: {clause.Id} - {clause.Enforcement}");
+}
+```
+
+#### 获取标题级别规则
+```csharp
+// ADR-946：ADR 标题级别即语义级别约束
+var adr946 = RuleSetRegistry.GetStrict(946);
+
+// 查询标题级别约束
+foreach (var clause in adr946.Clauses)
+{
+    Console.WriteLine($"标题约束: {clause.Id}");
+    Console.WriteLine($"  条件: {clause.Condition}");
+    Console.WriteLine($"  要求: {clause.Enforcement}");
+}
+```
+
+#### 获取循环依赖规则
+```csharp
+// ADR-947：关系声明区的结构与解析安全规则
+var adr947 = RuleSetRegistry.GetStrict(947);
+
+// 查询循环依赖检测规则
+var circularRule = adr947.GetRule(3);
+if (circularRule != null)
+{
+    Console.WriteLine($"循环依赖规则: {circularRule.Summary}");
+    
+    // 获取该规则的所有条款
+    var circularClauses = adr947.Clauses
+        .Where(c => c.Id.RuleNumber == 3);
+    
+    foreach (var clause in circularClauses)
+    {
+        Console.WriteLine($"  - {clause.Id}: {clause.Enforcement}");
+    }
+}
+```
+
+### 文档验证工作流
+1. **获取文档规则**：从 RuleSetRegistry 查询 ADR-008, ADR-910, ADR-940, ADR-946, ADR-947
+2. **读取文档内容**：扫描 Markdown 文档
+3. **验证合规性**：
+   - 标题级别是否符合语义约束
+   - 关系声明区结构是否正确
+   - 是否存在循环依赖
+   - 文档质量是否达标
+   - README 是否完整
+4. **输出结果**：使用三态判定并引用具体 RuleId
+
+### 批量文档检查
+```csharp
+// 获取所有治理层规则集（包含文档相关 ADR）
+var governanceRuleSets = RuleSetRegistry.GetGovernanceRuleSets();
+
+foreach (var ruleSet in governanceRuleSets)
+{
+    // 筛选文档作用域的规则
+    var docRules = ruleSet.Rules
+        .Where(r => r.Scope == RuleScope.Document);
+    
+    if (docRules.Any())
+    {
+        Console.WriteLine($"ADR-{ruleSet.AdrNumber:D3} 包含 {docRules.Count()} 个文档规则");
+    }
+}
+```
+
+### 实用验证示例
+```csharp
+// 基于 RuleSet 验证文档标题级别
+var adr946 = RuleSetRegistry.GetStrict(946);
+
+[Theory]
+[MemberData(nameof(GetAdrDocuments))]
+public void AdrDocument_Should_HaveOnlyOneH1Title(string adrFilePath)
+{
+    var rule = adr946.GetRule(1);
+    var clause = adr946.GetClause(1, 1);
+    
+    Assert.NotNull(rule);
+    Assert.NotNull(clause);
+    
+    // 验证文档标题
+    var content = File.ReadAllText(adrFilePath);
+    var h1Count = Regex.Matches(content, @"^# ", RegexOptions.Multiline).Count;
+    
+    var message = AssertionMessageBuilder.Build(
+        ruleId: clause.Id.ToString(),
+        violation: $"文档包含 {h1Count} 个 # 标题",
+        currentState: $"{h1Count} 个 H1 标题",
+        expectedState: clause.Enforcement,
+        remediation: "确保文档仅有一个 # 标题（ADR 标题）"
+    );
+    
+    Assert.Equal(1, h1Count, message);
+}
+```
+
+### RuleSet 更新同步
+当 RuleSet 更新时，Documentation Maintainer 需要：
+```csharp
+// 检查 RuleSet 是否有新增规则
+var adr008 = RuleSetRegistry.GetStrict(8);
+var previousRuleCount = 5; // 假设之前有5个规则
+
+if (adr008.RuleCount > previousRuleCount)
+{
+    Console.WriteLine("检测到新增规则，需要更新文档:");
+    
+    // 查找新增的规则
+    // 同步到相关文档
+}
+
+// 验证 RuleSet 完整性
+adr008.ValidateCompleteness();
+```
+
+### CLI 工具集成
+可以使用 Governance.Cli 工具辅助文档维护：
+```bash
+# 验证 RuleSetRegistry 完整性
+dotnet run --project src/tools/Governance.Cli -- validate
+
+# 为 ADR 生成 Decision 章节
+dotnet run --project src/tools/Governance.Cli -- generate adr ADR-008 docs/adr/ADR-008.md
+```
+
+### 重要提醒
+1. **禁止硬编码文档规则**：所有规则从 RuleSetRegistry 动态获取
+2. **同步 RuleSet 更新**：当 RuleSet 更新时，需要同步文档
+3. **使用 RuleId 格式**：报告违规时使用 `ADR-XXX_Y_Z`
+4. **关注文档作用域**：使用 `GetByScope(RuleScope.Document)` 快速定位文档规则
+
 ## 职责
 
 ### 1. 文档结构和格式验证
