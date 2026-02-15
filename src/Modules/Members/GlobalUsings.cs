@@ -1,4 +1,4 @@
-global using Marten;
+﻿global using Marten;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;

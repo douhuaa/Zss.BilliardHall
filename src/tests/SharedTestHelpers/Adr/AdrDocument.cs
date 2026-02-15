@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.SharedTestHelpers.Adr;
+﻿namespace Zss.BilliardHall.Tests.SharedTestHelpers.Adr;
 
 /// <summary>
 /// ADR 文档的强类型模型

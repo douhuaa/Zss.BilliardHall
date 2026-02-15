@@ -1,4 +1,5 @@
 ﻿namespace Zss.BilliardHall.Generators.ClauseExecutors;
+
 using Zss.BilliardHall.Specification.Rules;
 
 /// <summary>

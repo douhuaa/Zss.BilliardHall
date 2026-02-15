@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR120;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR120;
 
 /// <summary>
 /// ADR-120：领域事件命名规范

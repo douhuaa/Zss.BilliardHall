@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Modules.Members;
+﻿namespace Zss.BilliardHall.Modules.Members;
 
 /// <summary>
 /// 会员实体

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.SharedTestHelpers.FileSystem;
+﻿namespace Zss.BilliardHall.Tests.SharedTestHelpers.FileSystem;
 
 /// <summary>
 /// 文件内容分析辅助类

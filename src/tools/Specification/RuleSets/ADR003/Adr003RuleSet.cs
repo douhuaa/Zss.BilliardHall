@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR003;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR003;
 
 /// <summary>
 /// ADR-003：命名空间规则

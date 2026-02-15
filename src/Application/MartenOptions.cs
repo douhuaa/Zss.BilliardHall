@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Application;
+﻿namespace Zss.BilliardHall.Application;
 
 /// <summary>
 /// Marten 数据库配置选项

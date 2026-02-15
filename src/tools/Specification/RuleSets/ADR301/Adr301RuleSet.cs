@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR301;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR301;
 
 /// <summary>
 /// ADR-301：集成测试环境自动化与隔离约束

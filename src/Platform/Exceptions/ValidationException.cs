@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Platform.Exceptions;
+﻿namespace Zss.BilliardHall.Platform.Exceptions;
 
 /// <summary>
 /// ADR-240: 验证异常，表示输入数据不符合契约或约束

@@ -7,9 +7,9 @@
 /// </summary>
 public class GetMemberByIdQueryHandler
 {
-    public static async Task<MemberDto?> Handle(GetMemberByIdQuery query, IDocumentSession session, CancellationToken ct=default)
+    public static async Task<MemberDto?> Handle(GetMemberByIdQuery query, IDocumentSession session, CancellationToken ct = default)
     {
-        var member = await session.LoadAsync<Member>(query.MemberId,ct);
+        var member = await session.LoadAsync<Member>(query.MemberId, ct);
 
         return member == null ? null : new MemberDto
         {

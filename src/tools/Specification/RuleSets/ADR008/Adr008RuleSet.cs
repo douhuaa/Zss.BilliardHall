@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR008;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR008;
 
 /// <summary>
 /// ADR-008：文档层级治理

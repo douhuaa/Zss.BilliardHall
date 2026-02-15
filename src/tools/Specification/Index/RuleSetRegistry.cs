@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.Index;
+﻿namespace Zss.BilliardHall.Specification.Index;
 
 /// <summary>
 /// 规则集注册表

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR123;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR123;
 
 /// <summary>
 /// ADR-123：Repository 接口与分层命名规范

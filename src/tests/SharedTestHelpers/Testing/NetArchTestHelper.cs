@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.SharedTestHelpers.Testing;
+﻿namespace Zss.BilliardHall.Tests.SharedTestHelpers.Testing;
 
 /// <summary>
 /// NetArchTest 辅助类
@@ -24,10 +24,10 @@ public static class NetArchTestHelper
     private static readonly Lazy<Assembly[]> _allAssemblies = new(() =>
     {
         var assemblies = new List<Assembly>();
-        
+
         // 添加模块程序集
         assemblies.AddRange(ModuleAssemblyData.ModuleAssemblies);
-        
+
         // 添加其他关键程序集（如需要）
         try
         {
@@ -39,11 +39,11 @@ public static class NetArchTestHelper
             {
                 assemblies.Add(platformAssembly);
             }
-            
+
             // Application 程序集
             var appAssembly = AppDomain.CurrentDomain
                 .GetAssemblies()
-                .FirstOrDefault(a => a.GetName().Name?.Contains("Application") == true && 
+                .FirstOrDefault(a => a.GetName().Name?.Contains("Application") == true &&
                                     !a.GetName().Name.Contains("Test"));
             if (appAssembly != null)
             {
@@ -54,7 +54,7 @@ public static class NetArchTestHelper
         {
             Debug.WriteLine($"[NetArchTestHelper] 加载程序集时出错: {ex.Message}");
         }
-        
+
         return assemblies.Distinct().ToArray();
     });
 
@@ -130,7 +130,7 @@ public static class NetArchTestHelper
         string adrReference)
     {
         var predicateList = Types.InAssembly(assembly);
-        
+
         foreach (var dependency in forbiddenDependencies)
         {
             var result = predicateList

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Tests.ArchitectureTests.Examples;
+﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Examples;
 
 /// <summary>
 /// NetArchTest 使用示例

@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR005;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR005;
 
 /// <summary>
 /// ADR-005：业务逻辑分层架构

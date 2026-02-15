@@ -1,4 +1,4 @@
-namespace Zss.BilliardHall.Specification.RuleSets.ADR900;
+﻿namespace Zss.BilliardHall.Specification.RuleSets.ADR900;
 
 /// <summary>
 /// ADR-900：架构测试与 CI 治理元规则
