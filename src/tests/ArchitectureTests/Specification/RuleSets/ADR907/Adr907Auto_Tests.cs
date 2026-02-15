@@ -32,7 +32,7 @@ public sealed class Adr907Auto_Tests
 
     [Theory(DisplayName = "ADR-907 自动生成条款测试")]
     [MemberData(nameof(GetFactData))]
-    public void RunClause(int ruleId, int clauseId, string displayName)
+    public void RunClause(int ruleId, int clauseId, string safeName, string displayName)
     {
         // 可以在这里调用具体绑定的执行器
         var binding = Adr907ExecutionBindings.Lookup(ruleId, clauseId);
