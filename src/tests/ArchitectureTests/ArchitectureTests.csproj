@@ -6,18 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Markdig" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="NetArchTest.Rules" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="FluentAssertions" />
-    <PackageReference Include="Marten.AspNetCore" />
-    <PackageReference Include="WolverineFx.Http" />
-    <PackageReference Include="Testcontainers" />
-    <PackageReference Include="Testcontainers.PostgreSql" />
-    <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,13 +22,13 @@
     <ProjectReference Include="..\..\Application\Application.csproj" />
     <ProjectReference Include="..\..\Modules\Members\Members.csproj" />
     <ProjectReference Include="..\..\Modules\Orders\Orders.csproj" />
-    <ProjectReference Include="..\..\Host\Web\Web.csproj" />
-    <ProjectReference Include="..\..\tools\Specification\Specification.csproj" />
     <ProjectReference Include="..\..\tools\Generators\Generators.csproj" />
+    <ProjectReference Include="..\..\tools\Specification\Specification.csproj" />
+    <ProjectReference Include="..\SharedTestHelpers\SharedTestHelpers.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Specification/Generator/Tests/golden/**/*">
+    <None Include="Specification/Generator/golden/**/*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

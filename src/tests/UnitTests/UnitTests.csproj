@@ -5,4 +5,24 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Moq" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Platform\Platform.csproj" />
+    <ProjectReference Include="..\..\Application\Application.csproj" />
+    <ProjectReference Include="..\..\Modules\Members\Members.csproj" />
+    <ProjectReference Include="..\..\Modules\Orders\Orders.csproj" />
+    <ProjectReference Include="..\SharedTestHelpers\SharedTestHelpers.csproj" />
+  </ItemGroup>
+
 </Project>

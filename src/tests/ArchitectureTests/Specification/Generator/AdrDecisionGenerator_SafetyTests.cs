@@ -1,4 +1,6 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
+﻿using Zss.BilliardHall.Generators;
+
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
 
 /// <summary>
 /// Markdown 转义和选项验证测试

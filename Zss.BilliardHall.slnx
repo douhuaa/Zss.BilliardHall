@@ -17,6 +17,7 @@
   <Folder Name="/src/Tests/">
     <Project Path="src/tests/ArchitectureTests/ArchitectureTests.csproj" />
     <Project Path="src/tests/IntegrationTests/IntegrationTests.csproj" />
+    <Project Path="src/tests/SharedTestHelpers/SharedTestHelpers.csproj" />
     <Project Path="src/tests/UnitTests/UnitTests.csproj" />
   </Folder>
   <Folder Name="/src/Tools/">

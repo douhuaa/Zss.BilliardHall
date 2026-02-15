@@ -1,4 +1,6 @@
-﻿namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
+﻿using Zss.BilliardHall.Generators;
+
+namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Generator.Tests;
 
 /// <summary>
 /// AdrDecisionGenerator 的集成测试（重构版）

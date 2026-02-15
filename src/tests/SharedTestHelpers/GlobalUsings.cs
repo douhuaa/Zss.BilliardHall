@@ -1,31 +1,21 @@
-global using System.Collections.Concurrent;
+﻿global using System.Collections.Concurrent;
 global using System.Diagnostics;
 global using System.IO;
 global using System.Linq;
 global using System.Reflection;
-global using System.Security.Cryptography;
 global using System.Text;
 global using System.Text.RegularExpressions;
-global using System.Xml;
+global using Xunit;
 global using FluentAssertions;
 global using Markdig;
 global using Markdig.Syntax;
 global using Markdig.Syntax.Inlines;
 global using NetArchTest.Rules;
-global using Xunit;
-global using Xunit.Abstractions;
-global using Zss.BilliardHall.Tests.SharedTestHelpers;
 global using Zss.BilliardHall.Specification;
-global using Zss.BilliardHall.Generators;
-global using Zss.BilliardHall.Specification.Index;
 global using Zss.BilliardHall.Specification.Rules;
-global using Zss.BilliardHall.Specification.Language.RuleIdLanguage;
 global using Zss.BilliardHall.Specification.Language.DecisionLanguage;
-
-// 工具类子命名空间（2026-02-09 结构化重构）
+global using Zss.BilliardHall.Specification.Language.RuleIdLanguage;
 global using Zss.BilliardHall.Tests.SharedTestHelpers.Adr;
-global using Zss.BilliardHall.Tests.SharedTestHelpers.FileSystem;
 global using Zss.BilliardHall.Tests.SharedTestHelpers.Assemblies;
+global using Zss.BilliardHall.Tests.SharedTestHelpers.FileSystem;
 global using Zss.BilliardHall.Tests.SharedTestHelpers.Testing;
-global using Zss.BilliardHall.Specification.RuleSets.ADR907;
-global using static Zss.BilliardHall.Tests.SharedTestHelpers.Testing.AssertionMessageBuilder;
