@@ -18,15 +18,12 @@ public sealed class Adr907Auto_Tests
         }
     }
 
-    // 每条条款生成独立 Fact 方法
-    // 方法名格式：ADR_{RuleId}_{ClauseId}_{SafeName}
-    // SafeName 用于方法名安全替换空格和特殊字符
+    // 每条条款生成独立测试数据
     public static IEnumerable<object[]> GetFactData()
     {
         foreach (var (ruleId, clauseId, name) in AllClauses())
         {
-            var safeName = name.Replace(" ", "_").Replace("-", "_").Replace("/", "_");
-            yield return new object[] { ruleId, clauseId, safeName, name };
+            yield return new object[] { ruleId, clauseId, name };
         }
     }
 
