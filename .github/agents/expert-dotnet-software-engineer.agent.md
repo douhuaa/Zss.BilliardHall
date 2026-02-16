@@ -33,8 +33,20 @@
 
 ## RuleSetRegistry API 使用指南
 
+> ⚠️ **免责声明**：以下示例为伪代码/示意，用于说明 API 使用方式。实际 API 签名、返回类型和行为以 `src/tools/Specification` 项目中的实现为准。在实际使用前，请参考源代码验证 API 的可用性和正确用法。
+
 ### 查询技术规范
 **核心职责**：从 RuleSetRegistry 获取技术规范和最佳实践，指导 .NET 代码实现。
+
+#### 规则权威来源声明
+- **咨询依据**：Expert .NET Engineer 提供技术建议时，必须以 RuleSetRegistry API 为唯一规则来源
+- **职责边界**：本 Agent 提供专业咨询和建议，但不做最终架构裁决（由 Guardian 负责）
+- **边界说明**：
+  - ✅ 可以查询 RuleSetRegistry 获取技术约束和最佳实践
+  - ✅ 可以基于规则给出代码实现建议
+  - ✅ 可以标识潜在的违规风险并引用相应 RuleId
+  - ❌ 禁止直接解析 ADR Markdown 推导技术规范
+  - ❌ 禁止做最终的 Allowed/Blocked 裁决（应引导 Guardian）
 
 #### 获取宪法层技术约束
 ```csharp
@@ -247,8 +259,27 @@ public class CodeReviewer
 }
 ```
 
+### RuleId 输出规范
+在技术建议和审查反馈中引用规则时：
+
+1. **使用 API 返回的 RuleId**：通过 `rule.Id.ToString()` 或 `clause.Id.ToString()` 获取
+2. **禁止手写规则内容**：避免硬编码规则文本或手写 RuleId 字符串
+3. **标识潜在违规**：发现可能违反规则的代码时，引用具体的 RuleId 并建议修复
+
+**正确示例**：
+```csharp
+var adr240 = RuleSetRegistry.GetStrict(240);
+var clause = adr240.GetClause(2, 1);
+var suggestion = $"建议检查 {clause.Id}: {clause.Condition}";  // ✅ 使用 clause.Id
+```
+
+**错误示例**：
+```csharp
+var suggestion = "建议检查 ADR-240_2_1: Handler 异常约束";  // ❌ 手写硬编码
+```
+
 ### 重要提醒
-1. **禁止硬编码技术规范**：所有技术约束从 RuleSetRegistry 动态获取
+1. **禁止手写技术规范**：所有技术约束从 RuleSetRegistry 动态获取
 2. **区分裁决级别**：
    - `DecisionLevel.Must`：必须遵守
    - `DecisionLevel.MustNot`：禁止违反
@@ -257,7 +288,7 @@ public class CodeReviewer
    - `StaticAnalysis`：静态分析可验证
    - `Convention`：约定检查
    - `ManualReview`：需人工审查
-4. **使用 RuleId 格式**：报告时使用 `ADR-XXX_Y_Z`
+4. **使用强类型 RuleId**：报告时使用 `rule.Id` 或 `clause.Id` 而非手写字符串
 
 ## 输出规范
 - 三态输出：✅ Allowed / ⚠️ Blocked / ❓ Uncertain

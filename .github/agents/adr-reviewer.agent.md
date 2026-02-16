@@ -39,8 +39,19 @@
 
 ## RuleSetRegistry API 使用指南
 
+> ⚠️ **免责声明**：以下示例为伪代码/示意，用于说明 API 使用方式。实际 API 签名、返回类型和行为以 `src/tools/Specification` 项目中的实现为准。在实际使用前，请参考源代码验证 API 的可用性和正确用法。
+
 ### 审查 ADR 与 RuleSet 一致性
 **核心职责**：确保 ADR Markdown 文档与 RuleSetRegistry 中的规则集保持一致。
+
+#### 规则权威来源与审查来源的区分
+- **规则权威来源**：RuleSetRegistry 是架构裁决的唯一权威来源（Guardian/Enforcer 使用）
+- **文档审查来源**：ADR Reviewer 的职责是审查 Markdown 文档质量和结构一致性
+- **边界说明**：
+  - ✅ 可以读取 ADR Markdown 文档检查格式、结构、完整性
+  - ✅ 可以对比 Markdown 文档与 RuleSetRegistry 的一致性
+  - ❌ 禁止将 Markdown 内容作为规则来源进行架构裁决
+  - ❌ 禁止基于 Markdown 推导规则而忽略 RuleSetRegistry
 
 #### 检查规则集存在性
 ```csharp
@@ -110,6 +121,20 @@ var adr940 = RuleSetRegistry.GetStrict(940);  // ADR 关系与溯源管理
    - ADR 文档中的 Rule/Clause 编号与 RuleSet 是否匹配
    - 确保 RuleSet 定义完整且可执行
 4. **报告差异**：使用三态输出
+
+### RuleId 输出规范
+在审查报告中引用规则时：
+
+1. **使用 API 返回的 RuleId**：通过 `rule.Id.ToString()` 或 `clause.Id.ToString()` 获取
+2. **禁止手写 RuleId 字符串**：避免硬编码如 `"ADR-902_1_1"` 这样的字符串
+3. **格式一致性检查**：确保 Markdown 中的 RuleId 引用与 API 返回的格式一致
+
+**正确示例**：
+```csharp
+var ruleSet = RuleSetRegistry.GetStrict(902);
+var clause = ruleSet.GetClause(1, 1);
+var report = $"缺少条款 {clause.Id} 的实现";  // ✅ 使用 clause.Id
+```
 
 ### 重要提醒
 1. **双向审查**：既审查 Markdown 文档，也验证 RuleSet 定义
