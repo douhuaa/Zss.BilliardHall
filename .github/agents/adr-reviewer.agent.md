@@ -11,6 +11,15 @@
 >
 > **冲突裁决**：若本文档与 ADR 正文冲突，以 ADR 正文为准。
 
+## 伪代码声明
+
+> ⚠️ **重要说明**：
+> - 本文档中的所有 API 调用、数据结构、代码示例均为**伪代码示例**
+> - 仅用于表达设计意图和治理规范，不得直接用于生产代码或提交
+> - 实际使用时，必须以仓库中的真实 API 实现、类型定义和字段名为准
+> - 遇到歧义时，以实际 API 文档和 ADR 约定为权威解释
+> - **禁止**将下述示例直接复制粘贴到生产代码中
+
 ## 核心原则
 
 ### 三态判定 (ADR-007_2_1)
@@ -42,10 +51,76 @@
 - ADR-006：术语与编号宪法
 - ADR-940：ADR 关系与溯源管理
 
+## RuleSetRegistry API 使用指南
+
+### API 访问原则
+
+**强制要求**：
+- ✅ 所有架构规则访问必须通过 `RuleSetRegistry` API
+- ✅ 所有 Evidence 和 RuleId 必须使用强类型 API 生成
+- ❌ 禁止手写 evidence 字符串
+- ❌ 禁止直接解析 ADR Markdown 文档
+
+### Evidence & RuleId 强类型输出规范
+
+```csharp
+// --- 伪代码示意，仅表达 API 用法（实际签名请查阅源码） ---
+
+// 验证 RuleSet 完整性
+var ruleSet = RuleSetRegistry.GetStrict(907);
+
+// 检查规则和条款
+foreach (var rule in ruleSet.Rules)
+{
+    var ruleId = rule.Id.ToString(); // ✅ 使用强类型 API
+    var hasClause = ruleSet.Clauses.Any(c => c.Id.RuleNumber == rule.Id.RuleNumber);
+    
+    if (!hasClause)
+    {
+        var evidence = $"{rule.Id}: 规则缺少执行条款";
+        // 输出到审查报告
+    }
+}
+```
+
 ## 示例
+
+### 示例 1：格式合规的审查
+
 ```json
 {
   "decision": "Allowed",
+  "agent": "adr-reviewer",
   "issues": [],
-  "recommendation": "格式合规"
+  "recommendation": "ADR 格式完全合规"
+}
+```
+
+### 示例 2：发现违规的审查
+
+```json
+{
+  "decision": "Blocked",
+  "agent": "adr-reviewer",
+  "timestamp": "2026-02-17T05:00:00Z",
+  "rule_violations": [
+    {
+      "rule_id": "ADR-902_1_1",
+      "violated_clause": "ADR 必须包含 Decision 章节",
+      "evidence": [
+        "文件：docs/adr/ADR-950.md",
+        "缺失章节：Decision",
+        "规则：ADR-902_1_1"
+      ],
+      "severity": "High"
+    }
+  ],
+  "remediation": {
+    "required_actions": [
+      "在 ADR-950.md 中添加 Decision 章节",
+      "按照 ADR-902 模板结构组织内容"
+    ],
+    "reference_docs": ["ADR-902"],
+    "estimated_effort": "30m"
+  }
 }

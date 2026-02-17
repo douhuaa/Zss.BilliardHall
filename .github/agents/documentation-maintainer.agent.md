@@ -12,6 +12,15 @@
 >
 > **冲突裁决**：若本文档与 ADR 正文冲突，以 ADR 正文为准。
 
+## 伪代码声明
+
+> ⚠️ **重要说明**：
+> - 本文档中的所有 API 调用、数据结构、代码示例均为**伪代码示例**
+> - 仅用于表达设计意图和治理规范，不得直接用于生产代码或提交
+> - 实际使用时，必须以仓库中的真实 API 实现、类型定义和字段名为准
+> - 遇到歧义时，以实际 API 文档和 ADR 约定为权威解释
+> - **禁止**将下述示例直接复制粘贴到生产代码中
+
 ## 核心原则
 
 ### 三态判定 (ADR-007_2_1)
@@ -150,6 +159,30 @@
 - ADR-940：ADR 关系与溯源管理
 - ADR-946：ADR 标题级别即语义级别约束
 - ADR-947：关系声明区的结构与解析安全规则
+
+## RuleSetRegistry API 使用指南
+
+### API 访问原则
+
+**强制要求**：
+- ✅ 所有架构规则访问必须通过 `RuleSetRegistry` API
+- ✅ 所有 Evidence 和 RuleId 必须使用强类型 API 生成
+- ❌ 禁止手写 evidence 字符串
+- ❌ 禁止直接解析 ADR Markdown 文档
+
+### Evidence & RuleId 强类型输出规范
+
+```csharp
+// --- 伪代码示意，仅表达 API 用法（实际签名请查阅源码） ---
+
+// 验证 ADR 文档质量
+var ruleSet = RuleSetRegistry.GetStrict(946);
+var clause = ruleSet.GetClause(1, 1);
+
+// ✅ 使用强类型 API 生成 evidence
+var evidence = $"{clause.Id}: {clause.Condition}";
+// 输出示例："ADR-946_1_1: ADR 文档标题级别语义约束"
+```
 
 ## 示例
 
