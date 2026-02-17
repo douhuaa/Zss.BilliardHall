@@ -14,10 +14,10 @@ public sealed class UpdateDocumentationCommandHandler
 
     public UpdateDocumentationCommandHandler(
         IFileSystem fileSystem,
-        IRuleSetQueryService? ruleSetQueryService = null)
+        IRuleSetQueryService ruleSetQueryService)
     {
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _ruleSetQueryService = ruleSetQueryService ?? new RuleSetQueryService();
+        _ruleSetQueryService = ruleSetQueryService ?? throw new ArgumentNullException(nameof(ruleSetQueryService));
     }
 
     /// <summary>

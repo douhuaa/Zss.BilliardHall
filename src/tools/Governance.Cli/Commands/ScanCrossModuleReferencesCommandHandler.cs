@@ -14,10 +14,10 @@ public sealed class ScanCrossModuleReferencesCommandHandler
 
     public ScanCrossModuleReferencesCommandHandler(
         IFileSystem fileSystem,
-        IRuleSetQueryService? ruleSetQueryService = null)
+        IRuleSetQueryService ruleSetQueryService)
     {
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _ruleSetQueryService = ruleSetQueryService ?? new RuleSetQueryService();
+        _ruleSetQueryService = ruleSetQueryService ?? throw new ArgumentNullException(nameof(ruleSetQueryService));
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ public sealed class ScanCrossModuleReferencesCommandHandler
             Console.WriteLine("    2. 使用领域事件（异步）");
             Console.WriteLine("    3. 使用原始类型（ID）传递");
 
-            return references.Count;
+            return 0;  // 命令成功执行，返回0（发现引用不等于失败）
         }
         catch (Exception ex)
         {

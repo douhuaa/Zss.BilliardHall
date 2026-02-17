@@ -191,18 +191,25 @@ public static class Program
             description: "输出详细信息"
         );
 
+        var noBuildOption = new Option<bool>(
+            aliases: new[] { "--no-build" },
+            description: "跳过编译，使用现有构建产物"
+        );
+
         command.AddOption(adrOption);
         command.AddOption(verboseOption);
+        command.AddOption(noBuildOption);
 
         command.SetHandler(async (InvocationContext context) =>
         {
             var adr = context.ParseResult.GetValueForOption(adrOption);
             var verbose = context.ParseResult.GetValueForOption(verboseOption);
+            var noBuild = context.ParseResult.GetValueForOption(noBuildOption);
             
-            var fileSystem = new RealFileSystem();
-            var handler = new RunArchitectureTestsCommandHandler(fileSystem);
+            var ruleSetQueryService = new RuleSetQueryService();
+            var handler = new RunArchitectureTestsCommandHandler(ruleSetQueryService);
 
-            var exitCode = await handler.ExecuteAsync(adr, verbose);
+            var exitCode = await handler.ExecuteAsync(adr, verbose, noBuild);
             context.ExitCode = exitCode;
         });
 
@@ -232,7 +239,8 @@ public static class Program
             var includeTests = context.ParseResult.GetValueForOption(includeTestsOption);
             
             var fileSystem = new RealFileSystem();
-            var handler = new ScanCrossModuleReferencesCommandHandler(fileSystem);
+            var ruleSetQueryService = new RuleSetQueryService();
+            var handler = new ScanCrossModuleReferencesCommandHandler(fileSystem, ruleSetQueryService);
 
             var exitCode = await handler.ExecuteAsync(module, includeTests);
             context.ExitCode = exitCode;
@@ -259,7 +267,8 @@ public static class Program
             var dryRun = context.ParseResult.GetValueForOption(dryRunOption);
             
             var fileSystem = CreateFileSystem(dryRun);
-            var handler = new UpdateDocumentationCommandHandler(fileSystem);
+            var ruleSetQueryService = new RuleSetQueryService();
+            var handler = new UpdateDocumentationCommandHandler(fileSystem, ruleSetQueryService);
 
             var exitCode = await handler.ExecuteAsync(path);
             context.ExitCode = exitCode;

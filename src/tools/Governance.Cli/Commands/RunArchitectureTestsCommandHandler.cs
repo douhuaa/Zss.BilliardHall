@@ -8,15 +8,12 @@ namespace Zss.BilliardHall.Tools.Governance.Cli.Commands;
 /// </summary>
 public sealed class RunArchitectureTestsCommandHandler
 {
-    private readonly IFileSystem _fileSystem;
     private readonly IRuleSetQueryService _ruleSetQueryService;
 
     public RunArchitectureTestsCommandHandler(
-        IFileSystem fileSystem,
-        IRuleSetQueryService? ruleSetQueryService = null)
+        IRuleSetQueryService ruleSetQueryService)
     {
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _ruleSetQueryService = ruleSetQueryService ?? new RuleSetQueryService();
+        _ruleSetQueryService = ruleSetQueryService ?? throw new ArgumentNullException(nameof(ruleSetQueryService));
     }
 
     /// <summary>
@@ -24,8 +21,9 @@ public sealed class RunArchitectureTestsCommandHandler
     /// </summary>
     /// <param name="adrNumber">可选：仅运行指定ADR的测试</param>
     /// <param name="verbose">是否输出详细信息</param>
+    /// <param name="noBuild">是否跳过编译（默认false，会先编译）</param>
     /// <returns>退出代码：0表示成功，1表示失败</returns>
-    public async Task<int> ExecuteAsync(int? adrNumber = null, bool verbose = false)
+    public async Task<int> ExecuteAsync(int? adrNumber = null, bool verbose = false, bool noBuild = false)
     {
         try
         {
@@ -50,7 +48,7 @@ public sealed class RunArchitectureTestsCommandHandler
             }
 
             // 构建dotnet test命令
-            var testCommand = BuildTestCommand(adrNumber, verbose);
+            var testCommand = BuildTestCommand(adrNumber, verbose, noBuild);
             Console.WriteLine($"🔧 执行命令: {testCommand}");
 
             // 执行测试
@@ -90,7 +88,7 @@ public sealed class RunArchitectureTestsCommandHandler
         }
     }
 
-    private string BuildTestCommand(int? adrNumber, bool verbose)
+    private string BuildTestCommand(int? adrNumber, bool verbose, bool noBuild)
     {
         var baseCommand = "dotnet test src/tests/ArchitectureTests/";
         var args = new List<string>();
@@ -98,9 +96,9 @@ public sealed class RunArchitectureTestsCommandHandler
         // 添加过滤器
         if (adrNumber.HasValue)
         {
-            // 按ADR编号过滤，匹配测试类名包含 Adr{编号} 的模式
-            // 支持多种格式：Adr001、Adr1（兼容性考虑）
-            args.Add($"--filter \"FullyQualifiedName~Adr{adrNumber.Value:000} | FullyQualifiedName~Adr{adrNumber.Value}\"");
+            // 按ADR编号过滤，使用标准的三位数字格式
+            // dotnet test filter语法：使用|作为OR运算符（无空格）
+            args.Add($"--filter \"FullyQualifiedName~Adr{adrNumber.Value:000}\"");
         }
         else
         {
@@ -112,8 +110,11 @@ public sealed class RunArchitectureTestsCommandHandler
         var verbosity = verbose ? "detailed" : "normal";
         args.Add($"--logger \"console;verbosity={verbosity}\"");
 
-        // 不使用缓存，确保运行最新代码
-        args.Add("--no-build");
+        // 可选：跳过编译（默认会先编译以确保运行最新代码）
+        if (noBuild)
+        {
+            args.Add("--no-build");
+        }
 
         return args.Count > 0 ? $"{baseCommand} {string.Join(" ", args)}" : baseCommand;
     }
