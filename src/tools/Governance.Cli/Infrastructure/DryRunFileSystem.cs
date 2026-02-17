@@ -50,4 +50,9 @@ public sealed class DryRunFileSystem : IFileSystem
     {
         return _innerFileSystem.GetFiles(path, searchPattern, searchOption);
     }
+
+    public string[] GetDirectories(string path)
+    {
+        return _innerFileSystem.GetDirectories(path);
+    }
 }

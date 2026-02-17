@@ -42,4 +42,10 @@ public sealed class RealFileSystem : IFileSystem
         ArgumentException.ThrowIfNullOrWhiteSpace(searchPattern);
         return Directory.GetFiles(path, searchPattern, searchOption);
     }
+
+    public string[] GetDirectories(string path)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(path);
+        return Directory.GetDirectories(path);
+    }
 }

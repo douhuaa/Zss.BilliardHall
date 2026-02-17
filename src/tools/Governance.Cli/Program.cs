@@ -54,6 +54,14 @@ public static class Program
         var runArchTestsCommand = CreateRunArchitectureTestsCommand();
         runCommand.Add(runArchTestsCommand);
 
+        // 子命令: scan
+        var scanCommand = new Command("scan", "扫描和分析");
+        rootCommand.Add(scanCommand);
+
+        // 子命令: scan cross-module-refs
+        var scanCrossModuleCommand = CreateScanCrossModuleRefsCommand();
+        scanCommand.Add(scanCrossModuleCommand);
+
         return await rootCommand.InvokeAsync(args);
     }
 
@@ -207,6 +215,45 @@ public static class Program
             var handler = new RunArchitectureTestsCommandHandler(fileSystem);
 
             var exitCode = await handler.ExecuteAsync(adrNumber, verbose, failFast);
+            context.ExitCode = exitCode;
+        });
+
+        return command;
+    }
+
+    private static Command CreateScanCrossModuleRefsCommand()
+    {
+        var command = new Command("cross-module-refs", "扫描跨模块引用");
+
+        var sourceOption = new Option<string?>(
+            aliases: new[] { "--source", "-s" },
+            description: "可选：仅扫描指定源模块（默认：全部）"
+        );
+
+        var includeTestsOption = new Option<bool>(
+            aliases: new[] { "--include-tests", "-t" },
+            description: "包含测试代码"
+        );
+
+        var jsonOption = new Option<bool>(
+            aliases: new[] { "--json", "-j" },
+            description: "以 JSON 格式输出"
+        );
+
+        command.AddOption(sourceOption);
+        command.AddOption(includeTestsOption);
+        command.AddOption(jsonOption);
+
+        command.SetHandler(async (InvocationContext context) =>
+        {
+            var source = context.ParseResult.GetValueForOption(sourceOption);
+            var includeTests = context.ParseResult.GetValueForOption(includeTestsOption);
+            var outputJson = context.ParseResult.GetValueForOption(jsonOption);
+
+            var fileSystem = new RealFileSystem();
+            var handler = new ScanCrossModuleReferencesCommandHandler(fileSystem);
+
+            var exitCode = await handler.ExecuteAsync(source, includeTests, outputJson);
             context.ExitCode = exitCode;
         });
 

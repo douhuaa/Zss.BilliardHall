@@ -34,4 +34,9 @@ public interface IFileSystem
     /// 获取目录下的所有文件
     /// </summary>
     string[] GetFiles(string path, string searchPattern, SearchOption searchOption);
+
+    /// <summary>
+    /// 获取目录下的所有子目录
+    /// </summary>
+    string[] GetDirectories(string path);
 }
