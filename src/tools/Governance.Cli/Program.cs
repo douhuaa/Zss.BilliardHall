@@ -46,6 +46,14 @@ public static class Program
         var validateCommand = CreateValidateCommand();
         rootCommand.Add(validateCommand);
 
+        // 子命令: run
+        var runCommand = new Command("run", "运行测试或检查");
+        rootCommand.Add(runCommand);
+
+        // 子命令: run architecture-tests
+        var runArchTestsCommand = CreateRunArchitectureTestsCommand();
+        runCommand.Add(runArchTestsCommand);
+
         return await rootCommand.InvokeAsync(args);
     }
 
@@ -160,6 +168,45 @@ public static class Program
         {
             var handler = new ValidateCommandHandler();
             var exitCode = await handler.ExecuteAsync();
+            context.ExitCode = exitCode;
+        });
+
+        return command;
+    }
+
+    private static Command CreateRunArchitectureTestsCommand()
+    {
+        var command = new Command("architecture-tests", "运行架构测试并分析结果");
+
+        var adrOption = new Option<int?>(
+            aliases: new[] { "--adr", "-a" },
+            description: "可选：仅运行指定 ADR 的测试（默认：全部）"
+        );
+
+        var verboseOption = new Option<bool>(
+            aliases: new[] { "--verbose", "-v" },
+            description: "输出详细信息"
+        );
+
+        var failFastOption = new Option<bool>(
+            aliases: new[] { "--fail-fast", "-f" },
+            description: "在首次失败后停止"
+        );
+
+        command.AddOption(adrOption);
+        command.AddOption(verboseOption);
+        command.AddOption(failFastOption);
+
+        command.SetHandler(async (InvocationContext context) =>
+        {
+            var adrNumber = context.ParseResult.GetValueForOption(adrOption);
+            var verbose = context.ParseResult.GetValueForOption(verboseOption);
+            var failFast = context.ParseResult.GetValueForOption(failFastOption);
+
+            var fileSystem = new RealFileSystem();
+            var handler = new RunArchitectureTestsCommandHandler(fileSystem);
+
+            var exitCode = await handler.ExecuteAsync(adrNumber, verbose, failFast);
             context.ExitCode = exitCode;
         });
 
