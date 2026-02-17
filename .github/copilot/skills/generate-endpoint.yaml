@@ -1,0 +1,11 @@
+name: "Generate Endpoint"
+description: "生成符合规范的 HTTP Endpoint 代码"
+version: "1.0"
+risk_level: "高"
+category: "代码生成"
+required_agent: "architecture-guardian"
+dependencies:
+  - "verify-module-structure"
+  - "generate-handler"
+post_execution:
+  - "run-architecture-tests"

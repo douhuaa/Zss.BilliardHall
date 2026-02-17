@@ -1,0 +1,10 @@
+name: "Update Documentation"
+description: "更新文档索引和交叉引用"
+version: "1.0"
+risk_level: "低"
+category: "文档生成"
+required_agent: "documentation-maintainer"
+dependencies:
+  - "verify-documentation-structure"
+post_execution:
+  - "validate-links"

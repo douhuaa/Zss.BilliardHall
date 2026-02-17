@@ -1,0 +1,10 @@
+name: "Run Architecture Tests"
+description: "运行架构测试并分析结果"
+version: "1.0"
+risk_level: "低"
+category: "测试执行"
+required_agent: "test-generator"
+dependencies:
+  - "verify-project-builds"
+post_execution:
+  - "post-comment"

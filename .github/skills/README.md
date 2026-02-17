@@ -1,9 +1,13 @@
 # GitHub Copilot Skills 体系
 
+⚠️ **迁移通知**：部分 Skills 配置已迁移到 `.github/copilot/skills/*.yaml`，作为单一真相源。  
+包括：generate-test、generate-adr、generate-handler、generate-endpoint、run-architecture-tests、scan-cross-module-refs、update-documentation。  
+请参考新位置的 YAML 配置文件获取最新配置。
+
 ⚠️ 本文档不具备裁决力。所有架构决策以对应 ADR 正文为准。
 
 **版本**：1.0  
-**最后更新**：2026-01-25  
+**最后更新**：2026-02-17  
 **状态**：Active
 
 ---
@@ -355,29 +359,32 @@ graph TB
 
 ### 6.2 文件组织
 
+⚠️ **注意**：部分 Skills 配置已迁移到 `.github/copilot/skills/*.yaml` 作为单一真相源。
+
+**新位置（YAML 配置 - 单一真相源）**：
+```
+.github/copilot/skills/
+  ├── generate-test.yaml
+  ├── generate-adr.yaml
+  ├── generate-handler.yaml
+  ├── generate-endpoint.yaml
+  ├── run-architecture-tests.yaml
+  ├── scan-cross-module-refs.yaml
+  └── update-documentation.yaml
+```
+
+**旧位置（部分保留）**：
 ```
 .github/skills/
   ├── README.md                    ← 本文件
   ├── code-generation/             ← 代码生成类
-  │   ├── generate-handler.skill.md
-  │   ├── generate-test.skill.md
-  │   └── generate-endpoint.skill.md
   ├── code-analysis/               ← 代码分析类
-  │   ├── scan-dependencies.skill.md
-  │   ├── analyze-architecture.skill.md
-  │   └── check-naming.skill.md
   ├── code-modification/           ← 代码修改类（高风险）
-  │   ├── batch-rename.skill.md
-  │   └── move-files.skill.md
   ├── documentation/               ← 文档生成类
-  │   ├── generate-adr.skill.md
-  │   └── generate-prompts.skill.md
   ├── testing/                     ← 测试执行类
-  │   ├── run-architecture-tests.skill.md
-  │   └── run-unit-tests.skill.md
+  │   └── run-unit-tests.skill.md  ← 保留
   └── ci-cd/                       ← CI/CD 集成类
-      ├── trigger-build.skill.md
-      └── post-comment.skill.md
+      └── post-comment.skill.md    ← 保留
 ```
 
 ### 6.3 版本管理
@@ -558,9 +565,10 @@ Agent 分析原因
 
 ## 版本历史
 
-| 版本  | 日期         | 变更说明                  |
-|-----|------------|----------------------------|
-| 1.0 | 2026-01-25 | 初始版本，建立 Skills 规范体系 |
+| 版本  | 日期         | 变更说明                                                |
+|-----|------------|-----------------------------------------------------|
+| 1.1 | 2026-02-17 | 迁移 7 个核心 Skills 配置到 `.github/copilot/skills/*.yaml` 作为单一真相源 |
+| 1.0 | 2026-01-25 | 初始版本，建立 Skills 规范体系                                |
 
 ---
 
