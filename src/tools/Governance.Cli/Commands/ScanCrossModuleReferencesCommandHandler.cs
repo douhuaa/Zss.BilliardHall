@@ -303,7 +303,7 @@ public sealed class ScanCrossModuleReferencesCommandHandler
             },
             metadata = new
             {
-                scanTimestamp = DateTime.UtcNow.ToString("o"),
+                scanTimestamp = DateTimeOffset.UtcNow.ToString("o"),
                 filesScanned = violations.Select(v => v.File).Distinct().Count()
             }
         };

@@ -133,7 +133,7 @@ public sealed class UpdateDocumentationCommandHandler
         content.AppendLine();
         content.AppendLine("> ⚠️ **本文件由 RuleSetRegistry 自动生成，请勿手动编辑**");
         content.AppendLine();
-        content.AppendLine($"生成时间：{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC");
+        content.AppendLine($"生成时间：{DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm:ss} UTC");
         content.AppendLine();
         content.AppendLine("## 规则集列表");
         content.AppendLine();
