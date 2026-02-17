@@ -297,11 +297,11 @@ public void ADR_007_1_1_Agent_Positioning_Must_Be_Tool()
     // 手动过滤 Agent 文件
     var systemAgents = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
-        "expert-dotnet-software-engineer.agent.md",
-        "README.md"
+        "expert-dotnet-software-engineer.agent",
+        "registry.yml"
     };
     
-    var agentFiles = Directory.GetFiles(agentPath, "*.agent.md", SearchOption.AllDirectories)
+    var agentFiles = Directory.GetFiles(agentPath, "*.agent", SearchOption.AllDirectories)
         .Where(f => !systemAgents.Contains(Path.GetFileName(f)))
         .ToArray();
     
