@@ -1,6 +1,7 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using Zss.BilliardHall.Generators;
+using Zss.BilliardHall.Specification.Services;
 using Zss.BilliardHall.Tools.Governance.Cli.Commands;
 using Zss.BilliardHall.Tools.Governance.Cli.Infrastructure;
 
@@ -41,6 +42,30 @@ public static class Program
         // 子命令: generate test
         var generateTestCommand = CreateGenerateTestCommand(dryRunOption);
         generateCommand.Add(generateTestCommand);
+
+        // 子命令: run
+        var runCommand = new Command("run", "运行测试和检查");
+        rootCommand.Add(runCommand);
+
+        // 子命令: run architecture-tests
+        var runArchitectureTestsCommand = CreateRunArchitectureTestsCommand();
+        runCommand.Add(runArchitectureTestsCommand);
+
+        // 子命令: scan
+        var scanCommand = new Command("scan", "扫描代码");
+        rootCommand.Add(scanCommand);
+
+        // 子命令: scan cross-module-refs
+        var scanCrossModuleRefsCommand = CreateScanCrossModuleRefsCommand();
+        scanCommand.Add(scanCrossModuleRefsCommand);
+
+        // 子命令: update
+        var updateCommand = new Command("update", "更新文档");
+        rootCommand.Add(updateCommand);
+
+        // 子命令: update documentation
+        var updateDocumentationCommand = CreateUpdateDocumentationCommand(dryRunOption);
+        updateCommand.Add(updateDocumentationCommand);
 
         // 子命令: validate
         var validateCommand = CreateValidateCommand();
@@ -146,6 +171,97 @@ public static class Program
             var handler = new GenerateTestCommandHandler(fileSystem, testGenerator);
 
             var exitCode = await handler.ExecuteAsync(output, adr);
+            context.ExitCode = exitCode;
+        });
+
+        return command;
+    }
+
+    private static Command CreateRunArchitectureTestsCommand()
+    {
+        var command = new Command("architecture-tests", "运行架构测试");
+
+        var adrOption = new Option<int?>(
+            aliases: new[] { "--adr", "-a" },
+            description: "可选：仅运行指定 ADR 的测试"
+        );
+
+        var verboseOption = new Option<bool>(
+            aliases: new[] { "--verbose", "-v" },
+            description: "输出详细信息"
+        );
+
+        command.AddOption(adrOption);
+        command.AddOption(verboseOption);
+
+        command.SetHandler(async (InvocationContext context) =>
+        {
+            var adr = context.ParseResult.GetValueForOption(adrOption);
+            var verbose = context.ParseResult.GetValueForOption(verboseOption);
+            
+            var fileSystem = new RealFileSystem();
+            var handler = new RunArchitectureTestsCommandHandler(fileSystem);
+
+            var exitCode = await handler.ExecuteAsync(adr, verbose);
+            context.ExitCode = exitCode;
+        });
+
+        return command;
+    }
+
+    private static Command CreateScanCrossModuleRefsCommand()
+    {
+        var command = new Command("cross-module-refs", "扫描跨模块引用");
+
+        var moduleOption = new Option<string>(
+            aliases: new[] { "--module", "-m" },
+            description: "源模块名称（如 Orders）"
+        ) { IsRequired = true };
+
+        var includeTestsOption = new Option<bool>(
+            aliases: new[] { "--include-tests" },
+            description: "包含测试代码"
+        );
+
+        command.AddOption(moduleOption);
+        command.AddOption(includeTestsOption);
+
+        command.SetHandler(async (InvocationContext context) =>
+        {
+            var module = context.ParseResult.GetValueForOption(moduleOption)!;
+            var includeTests = context.ParseResult.GetValueForOption(includeTestsOption);
+            
+            var fileSystem = new RealFileSystem();
+            var handler = new ScanCrossModuleReferencesCommandHandler(fileSystem);
+
+            var exitCode = await handler.ExecuteAsync(module, includeTests);
+            context.ExitCode = exitCode;
+        });
+
+        return command;
+    }
+
+    private static Command CreateUpdateDocumentationCommand(Option<bool> dryRunOption)
+    {
+        var command = new Command("documentation", "更新文档索引");
+
+        var pathOption = new Option<string>(
+            aliases: new[] { "--path", "-p" },
+            description: "文档路径（默认: docs/adr）",
+            getDefaultValue: () => "docs/adr"
+        );
+
+        command.AddOption(pathOption);
+
+        command.SetHandler(async (InvocationContext context) =>
+        {
+            var path = context.ParseResult.GetValueForOption(pathOption)!;
+            var dryRun = context.ParseResult.GetValueForOption(dryRunOption);
+            
+            var fileSystem = CreateFileSystem(dryRun);
+            var handler = new UpdateDocumentationCommandHandler(fileSystem);
+
+            var exitCode = await handler.ExecuteAsync(path);
             context.ExitCode = exitCode;
         });
 
