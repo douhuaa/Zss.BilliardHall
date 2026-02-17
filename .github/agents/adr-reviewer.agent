@@ -1,34 +1,71 @@
 ---
-agent:
+schema_version: 1
 name: adr-reviewer
-version: 1.0
-role: "ADR 文档质量审查 Agent"
-description: >
-负责审查 ADR 文档的完整性、一致性和关联性。
-确保每条 Clause 都有对应测试、引用正确、文档格式符合规范。
-risk_level: "低"
-based_on: ["ADR-007"]
-tools:
-- document-validator
-- link-checker
-- index-updater
-- failure-object-analyzer
-- adr-diff-tool
-output_rules:
-- Allowed
-- Blocked
-- Uncertain
-enforcement_level: "L1"
-delegation_to: "architecture-guardian"
-reports_to: "architecture-guardian"
+version: "1.0"
+type: evidence
+status: active
+risk_level: low
+enforcement_level: L2
+
+# 触发器（GitHub Actions 风格 snake_case）
+triggers:
+  - pull_request
+  - push
+  - workflow_dispatch
+
+# 上报与委托
+reports_to: architecture-guardian
+delegation_to: []  # Evidence Agent 不委托其他 Agent
+
+# 治理配置
+governance:
+  adr_dependencies:
+    - ADR-007    # Agent 行为与权限宪法
+    - ADR-007-A  # ADR-007 对齐执行标准
+    - ADR-902    # ADR 文档规范
+    - ADR-940    # ADR 关系管理
+  output_states:
+    - Allowed
+    - Blocked
+    - Uncertain
+  default_policy: deny_on_uncertain
+  evidence_required: true
+
+# 能力配置
+capabilities:
+  tools:
+    - document-validator
+    - link-checker
+    - index-updater
+    - failure-object-analyzer
+    - adr-diff-tool
+
+# 职责定义
 responsibilities:
-- 审查 ADR 正文是否完整
-- 验证 Clause 与测试一一映射
-- 检查 ADR 引用和依赖关系正确
-- 标注不符合规范的条目（Blocked）
-- 未明确条目标注 Uncertain 并引导人工确认
-prohibited:
-- ❌ 不得修改 ADR 内容
-- ❌ 不得替代 Guardian 做最终裁决
-- ❌ 不得输出模糊或主观判断
----
+  - id: R1
+    text: "审查 ADR 正文是否完整"
+  - id: R2
+    text: "验证 Clause 与测试一一映射"
+  - id: R3
+    text: "检查 ADR 引用和依赖关系正确"
+  - id: R4
+    text: "标注不符合规范的条目（Blocked）"
+  - id: R5
+    text: "未明确条目标注 Uncertain 并引导人工确认"
+
+# 禁止行为
+prohibitions:
+  - id: P1
+    text: "不得修改 ADR 内容"
+  - id: P2
+    text: "不得替代 Guardian 做最终裁决"
+  - id: P3
+    text: "不得输出模糊或主观判断"
+
+# 证据契约
+evidence_contract:
+  must_include:
+    - adr_clause_refs   # ADR 条款引用（格式：ADR-XXX_Y_Z）
+    - rule_ids          # 违反的规则 ID
+    - file_paths        # 相关文件路径
+    - decision_summary  # 决策摘要
