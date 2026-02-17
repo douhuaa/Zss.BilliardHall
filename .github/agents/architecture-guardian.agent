@@ -123,4 +123,3 @@ automatic_escalation:
     target: "Architecture Board"
   - trigger: "guardian-false-decision Issue"
     target: "Architecture Board Review"
----

@@ -121,4 +121,3 @@ permissions:
     - "link-checker"
     - "markdown-linter"
     - "document-validator"
----

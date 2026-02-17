@@ -91,4 +91,3 @@ evidence_contract:
     - rule_ids          # 违反的规则 ID（如适用）
     - file_paths        # 相关文件路径
     - decision_summary  # 决策摘要
----

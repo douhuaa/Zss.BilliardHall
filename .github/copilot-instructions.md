@@ -76,7 +76,7 @@
 | 模块边界检查（Module Boundary Checker）        | 检查模块边界规则、依赖约束                  | ADR-001, ADR-003, ADR-005 | [`module-boundary-checker.instructions.yaml`](./instructions/module-boundary-checker.instructions.yaml)                 |
 | 测试生成（Test Generator）                   | 根据 ADR 与约束生成 ArchitectureTests | ADR-900, ADR-907, ADR-907-A | [`test-generator.instructions.yaml`](./instructions/test-generator.instructions.yaml)                                   |
 
-**详细配置**：每个 Agent 的详细行为规范、权限边界、ADR 映射请参见 [`agents/`](./agents/) 目录下的对应 `.agent.md` 文件。
+**详细配置**：每个 Agent 的详细行为规范、权限边界、ADR 映射请参见 [`agents/`](./agents/) 目录下的对应 `.agent` 文件。Agent 注册与分组信息参见 [`agents/registry.yml`](./agents/registry.yml)。
 
 ---
 
