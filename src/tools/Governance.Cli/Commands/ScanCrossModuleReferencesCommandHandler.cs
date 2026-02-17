@@ -131,16 +131,17 @@ public sealed class ScanCrossModuleReferencesCommandHandler
     private IEnumerable<string> ExtractUsingStatements(string content)
     {
         // 简单的using语句提取（可以改进为使用Roslyn）
+        const string usingKeyword = "using ";
         var lines = content.Split('\n');
         var usingStatements = new List<string>();
 
         foreach (var line in lines)
         {
             var trimmed = line.Trim();
-            if (trimmed.StartsWith("using ") && trimmed.EndsWith(";"))
+            if (trimmed.StartsWith(usingKeyword) && trimmed.EndsWith(";"))
             {
                 var usingNamespace = trimmed
-                    .Substring(6) // "using ".Length
+                    .Substring(usingKeyword.Length)
                     .TrimEnd(';')
                     .Trim();
                 usingStatements.Add(usingNamespace);

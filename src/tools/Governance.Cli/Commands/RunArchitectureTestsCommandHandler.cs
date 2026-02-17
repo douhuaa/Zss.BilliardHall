@@ -99,7 +99,8 @@ public sealed class RunArchitectureTestsCommandHandler
         if (adrNumber.HasValue)
         {
             // 按ADR编号过滤，匹配测试类名包含 Adr{编号} 的模式
-            args.Add($"--filter \"FullyQualifiedName~Adr{adrNumber:000}\"");
+            // 支持多种格式：Adr001、Adr1（兼容性考虑）
+            args.Add($"--filter \"FullyQualifiedName~Adr{adrNumber.Value:000} | FullyQualifiedName~Adr{adrNumber.Value}\"");
         }
         else
         {
@@ -167,8 +168,9 @@ public sealed class RunArchitectureTestsCommandHandler
     private void ExtractRuleIdReferences(string output)
     {
         // 提取可能的RuleId引用（格式: ADR-XXX_Y 或 ADR-XXX_Y_Z）
+        // 使用严格的三位数字格式匹配标准ADR编号
         var ruleIdPattern = new System.Text.RegularExpressions.Regex(
-            @"ADR[-_](\d{1,3})_(\d+)(?:_(\d+))?",
+            @"ADR[-_](\d{3})_(\d+)(?:_(\d+))?",
             System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
         var matches = ruleIdPattern.Matches(output);
