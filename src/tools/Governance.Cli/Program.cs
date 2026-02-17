@@ -62,6 +62,14 @@ public static class Program
         var scanCrossModuleCommand = CreateScanCrossModuleRefsCommand();
         scanCommand.Add(scanCrossModuleCommand);
 
+        // 子命令: update
+        var updateCommand = new Command("update", "更新文档和索引");
+        rootCommand.Add(updateCommand);
+
+        // 子命令: update documentation
+        var updateDocsCommand = CreateUpdateDocumentationCommand(dryRunOption);
+        updateCommand.Add(updateDocsCommand);
+
         return await rootCommand.InvokeAsync(args);
     }
 
@@ -254,6 +262,32 @@ public static class Program
             var handler = new ScanCrossModuleReferencesCommandHandler(fileSystem);
 
             var exitCode = await handler.ExecuteAsync(source, includeTests, outputJson);
+            context.ExitCode = exitCode;
+        });
+
+        return command;
+    }
+
+    private static Command CreateUpdateDocumentationCommand(Option<bool> dryRunOption)
+    {
+        var command = new Command("documentation", "更新文档索引和交叉引用");
+
+        var typeOption = new Option<string?>(
+            aliases: new[] { "--type", "-t" },
+            description: "可选：文档类型（adr, summary）（默认：adr）"
+        );
+
+        command.AddOption(typeOption);
+
+        command.SetHandler(async (InvocationContext context) =>
+        {
+            var docType = context.ParseResult.GetValueForOption(typeOption);
+            var dryRun = context.ParseResult.GetValueForOption(dryRunOption);
+
+            var fileSystem = CreateFileSystem(dryRun);
+            var handler = new UpdateDocumentationCommandHandler(fileSystem);
+
+            var exitCode = await handler.ExecuteAsync(docType, dryRun);
             context.ExitCode = exitCode;
         });
 
