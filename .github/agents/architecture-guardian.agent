@@ -37,7 +37,7 @@ governance:
     - ADR-004    # 架构约束
     - ADR-005    # 架构约束
     - ADR-006    # 架构约束
-    - ADR-008    # 架构约束
+    - ADR-008    # 文档编写与维护宪法
   output_states:
     - Allowed
     - Blocked

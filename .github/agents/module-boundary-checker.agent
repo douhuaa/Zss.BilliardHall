@@ -41,7 +41,7 @@ capabilities:
 # 职责定义
 responsibilities:
   - id: R1
-    text: "检查模块间依赖是否违反 ADR-005/ADR-240"
+    text: "检查模块间依赖是否违反 ADR-005"
   - id: R2
     text: "阻止跨模块违规调用"
   - id: R3
