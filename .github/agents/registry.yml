@@ -1,0 +1,104 @@
+---
+registry_version: 1.0
+description: "Agent 体系权威索引与配置管理"
+last_updated: "2026-02-17"
+
+# 全局默认策略
+defaults:
+  output_states:
+    - Allowed
+    - Blocked
+    - Uncertain
+  default_policy: deny_on_uncertain
+  evidence_required: true
+  enforcement_levels:
+    - L1  # 阻断级，违规直接阻止 CI/PR 合并
+    - L2  # 警告级，需人工 Review 或治理产物跟进
+
+# Agent 注册清单
+agents:
+  # Guardian 层
+  - name: architecture-guardian
+    file: architecture-guardian.agent
+    group: guardian
+    status: active
+    description: "协调与监督所有 Agent，保证架构约束不被违反"
+    priority: 1
+
+  # 核心执行 Agent (Core)
+  - name: module-boundary-checker
+    file: module-boundary-checker.agent
+    group: core
+    status: active
+    description: "检查模块边界是否被违规访问"
+    priority: 2
+
+  - name: handler-pattern-enforcer
+    file: handler-pattern-enforcer.agent
+    group: core
+    status: active
+    description: "校验 Handler 模式执行正确性"
+    priority: 2
+
+  # 证据生成 Agent (Evidence)
+  - name: adr-reviewer
+    file: adr-reviewer.agent
+    group: evidence
+    status: active
+    description: "审查 ADR 文档完整性与格式"
+    priority: 3
+
+  # 冻结或暂不启用 Agent (Frozen)
+  - name: documentation-maintainer
+    file: documentation-maintainer.agent
+    group: frozen
+    status: frozen
+    description: "文档维护、链接检查、索引更新"
+    priority: 4
+
+  - name: expert-dotnet-software-engineer
+    file: expert-dotnet-software-engineer.agent
+    group: frozen
+    status: frozen
+    description: "提供 .NET 技术建议、代码规范检查"
+    priority: 4
+
+  - name: test-generator
+    file: test-generator.agent
+    group: frozen
+    status: frozen
+    description: "根据 ADR 与约束生成 ArchitectureTests"
+    priority: 4
+
+# 分组说明
+groups:
+  guardian:
+    description: "Guardian 层 - 监督协调所有 Agent"
+    enforcement_level: L1
+  core:
+    description: "核心执行 Agent - 直接参与架构约束执行"
+    enforcement_level: L1
+  evidence:
+    description: "证据生成 Agent - 提供分析证据给 Guardian"
+    enforcement_level: L2
+  frozen:
+    description: "冻结或暂不启用 Agent - 不参与裁决链"
+    enforcement_level: L2
+
+# 触发器说明（GitHub Actions 风格）
+supported_triggers:
+  - pull_request      # PR 创建或更新
+  - push              # 代码推送到分支
+  - workflow_dispatch # 手动触发
+  - schedule          # 定时任务
+  - merge_group       # 合并队列
+  - manual_review     # 人工审查触发
+  - agent_delegation  # Agent 委托触发
+
+# ADR 依赖关系
+adr_dependencies:
+  - ADR-007   # Agent 行为与权限宪法
+  - ADR-007-A # ADR-007 对齐执行标准
+  - ADR-900   # 架构测试与 CI 治理元规则
+  - ADR-907   # ArchitectureTests 执法治理体系
+  - ADR-907-A # ADR-907 对齐执行标准

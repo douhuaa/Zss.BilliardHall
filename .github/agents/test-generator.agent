@@ -1,31 +1,72 @@
 ---
-agent:
+schema_version: 1
 name: test-generator
-version: 1.0
-role: "测试代码生成 Agent"
-description: >
-根据 ADR Clause 自动生成 Architecture / Unit / Integration 测试模板，确保每条规则可被验证。
-risk_level: "中"
-based_on: ["ADR-007", "ADR-900"]
-tools:
-- test-framework
-- code-generator
-- unit-test-generator
-- architecture-test-generator
-- coverage-reporter
-- ci-integration-tool
-output_rules:
-- Allowed
-- Blocked
-- Uncertain
-enforcement_level: "L2"
-delegation_to: "architecture-guardian"
-reports_to: "architecture-guardian"
+version: "1.0"
+type: specialist
+status: frozen
+risk_level: medium
+enforcement_level: L2
+
+# 触发器（GitHub Actions 风格 snake_case）
+triggers:
+  - pull_request
+  - workflow_dispatch
+
+# 上报与委托
+reports_to: architecture-guardian
+delegation_to: null
+
+# 治理配置
+governance:
+  adr_dependencies:
+    - ADR-007    # Agent 行为与权限宪法
+    - ADR-900    # 架构测试与 CI 治理元规则
+    - ADR-907    # ArchitectureTests 执法治理体系
+    - ADR-907-A  # ADR-907 对齐执行标准
+  output_states:
+    - Allowed
+    - Blocked
+    - Uncertain
+  default_policy: deny_on_uncertain
+  evidence_required: true
+
+# 能力配置
+capabilities:
+  tools:
+    - test-framework
+    - code-generator
+    - unit-test-generator
+    - architecture-test-generator
+    - coverage-reporter
+    - ci-integration-tool
+
+# 职责定义
 responsibilities:
-- 自动生成覆盖 ADR Clause 的测试代码
-- 确保测试与 Clause 映射一一对应
-- 输出生成状态与异常报告
-prohibited:
-- ❌ 不得修改 ADR 正文
-- ❌ 不得替代人工 Code Review
+  - id: R1
+    text: "自动生成覆盖 ADR Clause 的测试代码"
+  - id: R2
+    text: "确保测试与 Clause 映射一一对应"
+  - id: R3
+    text: "输出生成状态与异常报告"
+  - id: R4
+    text: "根据 ADR Clause 自动生成 Architecture/Unit/Integration 测试模板"
+
+# 禁止行为
+prohibitions:
+  - id: P1
+    text: "不得修改 ADR 正文"
+  - id: P2
+    text: "不得替代人工 Code Review"
+  - id: P3
+    text: "不得跳过任何 Clause"
+  - id: P4
+    text: "不得替代 Guardian 做最终裁决"
+
+# 证据契约
+evidence_contract:
+  must_include:
+    - adr_clause_refs   # ADR 条款引用（格式：ADR-XXX_Y_Z）
+    - rule_ids          # 违反的规则 ID
+    - file_paths        # 相关文件路径
+    - decision_summary  # 决策摘要
 ---
