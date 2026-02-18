@@ -65,7 +65,7 @@ public sealed class ScanCrossModuleReferencesCommandHandler
                 {
                     Console.WriteLine($"   📄 {reference.FilePath}");
                     Console.WriteLine($"      命名空间: {reference.TargetNamespace}");
-                    Console.WriteLine($"      层级: {reference.TargetLayer}");
+                    Console.WriteLine($"      区域(命名空间段): {reference.TargetArea}");
                     Console.WriteLine();
                 }
             }
@@ -177,15 +177,15 @@ public sealed class ScanCrossModuleReferencesCommandHandler
             return null;
         }
 
-        // 判定层级
-        var targetLayer = parts.Length > 1 ? parts[1] : "Unknown";
+        // 提取命名空间区域（第二段，如Domain、Application等）
+        var targetArea = parts.Length > 1 ? parts[1] : "Unknown";
 
         return new CrossModuleReference(
             FilePath: filePath,
             SourceModule: currentModule,
             TargetModule: targetModule,
             TargetNamespace: usingNamespace,
-            TargetLayer: targetLayer);
+            TargetArea: targetArea);
     }
 
     private string ExtractModuleFromPath(string filePath)
@@ -211,4 +211,4 @@ public sealed record CrossModuleReference(
     string SourceModule,
     string TargetModule,
     string TargetNamespace,
-    string TargetLayer);
+    string TargetArea);  // 命名空间段（如Domain、Application等），非ADR层级
