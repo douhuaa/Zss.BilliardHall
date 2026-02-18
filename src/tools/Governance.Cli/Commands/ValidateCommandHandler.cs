@@ -72,7 +72,7 @@ public sealed class ValidateCommandHandler
                     }
 
                     // 校验 ClauseId 格式
-                    var expectedClauseIdFormat = $"ADR-{ruleSet.AdrNumber:D3}_{clause.Id.RuleNumber}_{clause.Id.ClauseNumber}";
+                    var expectedClauseIdFormat = $"ADR-{ruleSet.AdrNumber:D3}.{clause.Id.RuleNumber}.{clause.Id.ClauseNumber}";
                     if (clause.Id.ToString() != expectedClauseIdFormat)
                     {
                         validationErrors.Add($"{clause.Id}: ClauseId 格式错误，期望 '{expectedClauseIdFormat}'");

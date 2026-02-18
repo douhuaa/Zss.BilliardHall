@@ -56,7 +56,7 @@ public sealed record ClauseSpec(
     }
 
     /// <summary>
-    /// 获取条款的完整标识符（格式：ADR-XXX_Rule_Clause）
+    /// 获取条款的完整标识符（格式：ADR-XXX.Rule.Clause）
     /// </summary>
-    public string GetFullId(int adrNumber) => $"ADR-{adrNumber:000}_{RuleId}_{ClauseId}";
+    public string GetFullId(int adrNumber) => $"ADR-{adrNumber:000}.{RuleId}.{ClauseId}";
 }

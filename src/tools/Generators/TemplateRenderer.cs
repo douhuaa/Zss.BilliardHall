@@ -178,7 +178,7 @@ public sealed class TemplateRenderer
             $"{baseIndent}clause.Should().NotBeNull($\"Rule {{ruleId}} Clause {{clauseId}} 应该存在\");",
             $"{baseIndent}",
             $"{baseIndent}// 构建 RuleId",
-            $"{baseIndent}var ruleIdStr = $\"ADR-{ruleSet.AdrNumber:D3}_{{ruleId}}_{{clauseId}}\";",
+            $"{baseIndent}var ruleIdStr = $\"ADR-{ruleSet.AdrNumber:D3}.{{ruleId}}.{{clauseId}}\";",
             $"{baseIndent}",
             $"{baseIndent}// 根据执行类型执行不同的验证逻辑",
             $"{baseIndent}switch (clause!.ExecutionType)",
@@ -254,11 +254,11 @@ public sealed class TemplateRenderer
             if (options.IncludeComments)
             {
                 parts.Add($"{indent}/// <summary>");
-                parts.Add($"{indent}/// ADR-{ruleSet.AdrNumber:D3}_Rule{ruleId}_Clause{clauseId}: {clause.Condition}");
+                parts.Add($"{indent}/// ADR-{ruleSet.AdrNumber:D3}.Rule{ruleId}.Clause{clauseId}: {clause.Condition}");
                 parts.Add($"{indent}/// </summary>");
             }
 
-            parts.Add($"{indent}[Fact(DisplayName = \"ADR-{ruleSet.AdrNumber:D3}_{ruleId}_{clauseId}: {CodeGenerationHelper.EscapeStringLiteral(clause.Condition)}\")]");
+            parts.Add($"{indent}[Fact(DisplayName = \"ADR-{ruleSet.AdrNumber:D3}.{ruleId}.{clauseId}: {CodeGenerationHelper.EscapeStringLiteral(clause.Condition)}\")]");
             parts.Add($"{indent}public void {methodName}()");
             parts.Add($"{indent}{{");
             parts.Add($"{indent}{indent}// TODO: 实现 Rule {ruleId} Clause {clauseId} 的测试逻辑");

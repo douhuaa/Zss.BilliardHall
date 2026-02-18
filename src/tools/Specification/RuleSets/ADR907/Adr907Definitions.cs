@@ -205,7 +205,7 @@ public static class Adr907Definitions
                     Name: "RuleId 格式",
                     Description: "测试失败必须精确映射至 ADR 子规则（RuleId）",
                     ExecutionType: ClauseExecutionType.Convention,
-                    ValidationHint: "验证 RuleId 格式为 ADR-XXX_Y_Z"),
+                    ValidationHint: "验证 RuleId 格式为 ADR-XXX.Y.Z"),
 
                 new ClauseSpec(
                     RuleId: 4,

@@ -58,7 +58,7 @@ public sealed class ArchitectureTestGenerator_IntegrationTests
 
         // Assert
         result.SourceCode.Should().Contain("ADR-907");
-        result.SourceCode.Should().Contain("var ruleIdStr = $\"ADR-907_{ruleId}_{clauseId}\";");
+        result.SourceCode.Should().Contain("var ruleIdStr = $\"ADR-907.{ruleId}.{clauseId}\";");
     }
 
     [Fact(DisplayName = "生成的代码应该包含 RuleSetRegistry 访问")]
