@@ -14,7 +14,7 @@ public sealed class ArchitectureRuleIdOrderingInvariants_Tests
     [Theory(DisplayName = "不变量：排序顺序为 ADR → Rule → Clause")]
     [InlineData(
         new[] { "ADR-907_3_2", "ADR-907_1", "ADR-907_3_1", "ADR-900_1", "ADR-900_1_1" },
-        new[] { "ADR-900_1", "ADR-900_1_1", "ADR-907_1", "ADR-907_3_1", "ADR-907_3_2" }
+        new[] { "ADR-900.1", "ADR-900.1.1", "ADR-907.1", "ADR-907.3.1", "ADR-907.3.2" }
     )]
     public void RuleIds_Should_Sort_By_Adr_Then_Rule_Then_Clause(
         string[] input,
