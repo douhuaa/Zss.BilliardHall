@@ -239,8 +239,7 @@ public static class Program
             var includeTests = context.ParseResult.GetValueForOption(includeTestsOption);
             
             var fileSystem = new RealFileSystem();
-            var ruleSetQueryService = new RuleSetQueryService();
-            var handler = new ScanCrossModuleReferencesCommandHandler(fileSystem, ruleSetQueryService);
+            var handler = new ScanCrossModuleReferencesCommandHandler(fileSystem);
 
             var exitCode = await handler.ExecuteAsync(module, includeTests);
             context.ExitCode = exitCode;

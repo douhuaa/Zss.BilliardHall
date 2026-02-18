@@ -1,4 +1,3 @@
-using Zss.BilliardHall.Specification.Services;
 using Zss.BilliardHall.Tools.Governance.Cli.Infrastructure;
 
 namespace Zss.BilliardHall.Tools.Governance.Cli.Commands;
@@ -10,14 +9,10 @@ namespace Zss.BilliardHall.Tools.Governance.Cli.Commands;
 public sealed class ScanCrossModuleReferencesCommandHandler
 {
     private readonly IFileSystem _fileSystem;
-    private readonly IRuleSetQueryService _ruleSetQueryService;
 
-    public ScanCrossModuleReferencesCommandHandler(
-        IFileSystem fileSystem,
-        IRuleSetQueryService ruleSetQueryService)
+    public ScanCrossModuleReferencesCommandHandler(IFileSystem fileSystem)
     {
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _ruleSetQueryService = ruleSetQueryService ?? throw new ArgumentNullException(nameof(ruleSetQueryService));
     }
 
     /// <summary>
@@ -130,7 +125,12 @@ public sealed class ScanCrossModuleReferencesCommandHandler
 
     private IEnumerable<string> ExtractUsingStatements(string content)
     {
-        // 简单的using语句提取（可以改进为使用Roslyn）
+        // 简单的using语句提取
+        // 当前实现局限性：
+        // 1. 不处理 using static 和 using alias（如 using Project = ...）
+        // 2. 不处理 C# 10+ 的 global using 语句
+        // 3. 不处理跨多行的 using 语句
+        // 可以改进为使用 Roslyn 进行完整解析
         const string usingKeyword = "using ";
         var lines = content.Split('\n');
         var usingStatements = new List<string>();
@@ -138,7 +138,9 @@ public sealed class ScanCrossModuleReferencesCommandHandler
         foreach (var line in lines)
         {
             var trimmed = line.Trim();
-            if (trimmed.StartsWith(usingKeyword) && trimmed.EndsWith(";"))
+            // 跳过 using static 和 using alias（包含 = 或 static 关键字）
+            if (trimmed.StartsWith(usingKeyword) && trimmed.EndsWith(";") &&
+                !trimmed.Contains('=') && !trimmed.Contains("static"))
             {
                 var usingNamespace = trimmed
                     .Substring(usingKeyword.Length)

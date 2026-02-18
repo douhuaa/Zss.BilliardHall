@@ -107,10 +107,10 @@ public sealed class UpdateDocumentationCommandHandler
             
             if (nextSectionStart >= 0)
             {
-                // 替换索引章节，保留下一个章节的标题
+                // 替换索引章节，保留下一个章节的标题（跳过已找到的换行符，避免产生额外空行）
                 return existingContent.Substring(0, indexSectionStart) +
                        newIndexContent +
-                       existingContent.Substring(nextSectionStart);
+                       existingContent.Substring(nextSectionStart + 1);
             }
             else
             {

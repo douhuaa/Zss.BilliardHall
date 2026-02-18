@@ -91,6 +91,9 @@ public sealed class RunArchitectureTestsCommandHandler
 
     private string BuildTestArguments(int? adrNumber, bool verbose, bool noBuild)
     {
+        // 注意：命令行参数中的引号处理在不同操作系统上可能有差异
+        // 当前实现适用于 Windows/Linux/macOS 的标准 shell 环境
+        // Process.Start 会自动处理大部分跨平台差异
         var args = new List<string> { "test", "src/tests/ArchitectureTests/" };
 
         // 添加过滤器
@@ -165,9 +168,9 @@ public sealed class RunArchitectureTestsCommandHandler
 
     private void ExtractRuleIdReferences(string output)
     {
-        // 提取可能的RuleId引用（格式: ADR-XXX.Y 或 ADR-XXX.Y.Z）
-        // 使用严格的三位数字格式匹配标准ADR编号
-        // 同时兼容历史下划线格式，但输出时统一转换为点号
+        // 提取可能的 RuleId 引用（权威格式: ADR-XXX.Y 或 ADR-XXX.Y.Z）
+        // 使用严格的三位数字格式匹配标准 ADR 编号（点号 . 为权威/标准分隔符）
+        // 正则中的 (?:[._]) 同时接受点号和下划线，仅用于向后兼容历史下划线格式；解析后统一转换为点号格式输出
         var ruleIdPattern = new System.Text.RegularExpressions.Regex(
             @"ADR-(\d{3})(?:[._](\d+))(?:[._](\d+))?",
             System.Text.RegularExpressions.RegexOptions.IgnoreCase);
