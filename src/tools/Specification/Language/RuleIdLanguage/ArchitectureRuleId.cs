@@ -100,14 +100,14 @@ public readonly record struct ArchitectureRuleId
         => RuleIdParser.ParseStrict(ruleId);
 
     /// <summary>
-    /// 转换为规范的字符串格式
-    /// Rule: ADR-907_3
-    /// Clause: ADR-907_3_2
+    /// 转换为规范的字符串格式（点号格式为权威标准）
+    /// Rule: ADR-907.3
+    /// Clause: ADR-907.3.2
     /// </summary>
     public override string ToString()
         => ClauseNumber is null
-            ? $"ADR-{AdrNumber:000}_{RuleNumber}"
-            : $"ADR-{AdrNumber:000}_{RuleNumber}_{ClauseNumber}";
+            ? $"ADR-{AdrNumber:000}.{RuleNumber}"
+            : $"ADR-{AdrNumber:000}.{RuleNumber}.{ClauseNumber}";
 
     /// <summary>
     /// 实现可比较接口，用于排序
