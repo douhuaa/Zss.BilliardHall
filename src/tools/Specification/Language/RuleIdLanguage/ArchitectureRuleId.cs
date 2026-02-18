@@ -102,7 +102,7 @@ public readonly record struct ArchitectureRuleId
         => RuleIdParser.ParseStrict(ruleId);
 
     /// <summary>
-    /// 转换为规范的字符串格式
+    /// 转换为规范的字符串格式（点号格式为权威标准）
     /// Rule: ADR-907.3
     /// Clause: ADR-907.3.2
     /// </summary>
