@@ -17,7 +17,7 @@
 ### 重构前（❌ 不推荐）
 
 ```csharp
-[Fact(DisplayName = "ADR-960_1_2: Onboarding 不得定义新架构约束")]
+[Fact(DisplayName = "ADR-960.1.2: Onboarding 不得定义新架构约束")]
 public void ADR_960_1_2_Onboarding_Must_Not_Define_New_Constraints()
 {
     var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -26,7 +26,7 @@ public void ADR_960_1_2_Onboarding_Must_Not_Define_New_Constraints()
     var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
     
     File.Exists(adr960Path).Should().BeTrue(
-        $"❌ ADR-960_1_2 违规：ADR-960 文档不存在\n\n" +
+        $"❌ ADR-960.1.2 违规：ADR-960 文档不存在\n\n" +
         $"修复建议：确保 ADR-960 存在以定义 Onboarding 文档规范\n\n" +
         $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §1.2");
 }
@@ -40,7 +40,7 @@ public void ADR_960_1_2_Onboarding_Must_Not_Define_New_Constraints()
 ### 重构后（✅ 推荐）
 
 ```csharp
-[Fact(DisplayName = "ADR-960_1_2: Onboarding 不得定义新架构约束")]
+[Fact(DisplayName = "ADR-960.1.2: Onboarding 不得定义新架构约束")]
 public void ADR_960_1_2_Onboarding_Must_Not_Define_New_Constraints()
 {
     // 使用预定义的常量
@@ -48,7 +48,7 @@ public void ADR_960_1_2_Onboarding_Must_Not_Define_New_Constraints()
     
     // 使用 AssertionMessageBuilder 构建标准化的错误消息
     var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
-        ruleId: "ADR-960_1_2",
+        ruleId: "ADR-960.1.2",
         filePath: adr960Path,
         fileDescription: "ADR-960 文档",
         remediationSteps: new[]
@@ -74,7 +74,7 @@ public void ADR_960_1_2_Onboarding_Must_Not_Define_New_Constraints()
 ### 重构前（❌ 不推荐）
 
 ```csharp
-[Fact(DisplayName = "ADR-946_1_1: ADR 文件必须有且仅有一个 # 标题")]
+[Fact(DisplayName = "ADR-946.1.1: ADR 文件必须有且仅有一个 # 标题")]
 public void ADR_946_1_1_ADR_Must_Have_Exactly_One_H1_Title()
 {
     var repoRoot = TestEnvironment.RepositoryRoot ?? throw new InvalidOperationException("未找到仓库根目录");
@@ -105,7 +105,7 @@ public void ADR_946_1_1_ADR_Must_Have_Exactly_One_H1_Title()
 ### 重构后（✅ 推荐）
 
 ```csharp
-[Fact(DisplayName = "ADR-946_1_1: ADR 文件必须有且仅有一个 # 标题")]
+[Fact(DisplayName = "ADR-946.1.1: ADR 文件必须有且仅有一个 # 标题")]
 public void ADR_946_1_1_ADR_Must_Have_Exactly_One_H1_Title()
 {
     // 使用辅助方法获取所有 ADR 文件
@@ -120,7 +120,7 @@ public void ADR_946_1_1_ADR_Must_Have_Exactly_One_H1_Title()
     
     // 使用 AssertionMessageBuilder 构建格式化的错误消息
     var message = AssertionMessageBuilder.BuildFormatViolationMessage(
-        ruleId: "ADR-946_1_1",
+        ruleId: "ADR-946.1.1",
         summary: "以下 ADR 文件违反标题级别即语义级别规则",
         violations: violations,
         remediationSteps: new[]
@@ -155,7 +155,7 @@ public sealed class ADR_960_1_Architecture_Tests
         "必须", "禁止", "不得", "强制", "不允许"
     };
     
-    [Fact(DisplayName = "ADR-960_1_1: Onboarding 文档不得包含裁决性语言")]
+    [Fact(DisplayName = "ADR-960.1.1: Onboarding 文档不得包含裁决性语言")]
     public void ADR_960_1_1_Onboarding_Must_Not_Contain_Decision_Language()
     {
         // 使用本地定义的关键词
@@ -177,7 +177,7 @@ public sealed class ADR_960_1_Architecture_Tests
 ```csharp
 public sealed class ADR_960_1_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-960_1_1: Onboarding 文档不得包含裁决性语言")]
+    [Fact(DisplayName = "ADR-960.1.1: Onboarding 文档不得包含裁决性语言")]
     public void ADR_960_1_1_Onboarding_Must_Not_Contain_Decision_Language()
     {
         var docsPath = FileSystemTestHelper.GetAbsolutePath("docs");
@@ -210,7 +210,7 @@ public void ADR_960_1_3_Onboarding_Responsibilities_Must_Be_Defined()
     var adr960Path = Path.Combine(repoRoot, "docs/adr/governance/ADR-960-onboarding-documentation-governance.md");
     
     File.Exists(adr960Path).Should().BeTrue(
-        $"❌ ADR-960_1_3 违规：ADR-960 文档不存在");
+        $"❌ ADR-960.1.3 违规：ADR-960 文档不存在");
     
     var content = File.ReadAllText(adr960Path);
     
@@ -218,7 +218,7 @@ public void ADR_960_1_3_Onboarding_Responsibilities_Must_Be_Defined()
                                      content.Contains("告诉你", StringComparison.OrdinalIgnoreCase);
     
     hasResponsibilityDefinition.Should().BeTrue(
-        $"❌ ADR-960_1_3 违规：ADR-960 必须明确定义 Onboarding 的唯一合法职责\n\n" +
+        $"❌ ADR-960.1.3 违规：ADR-960 必须明确定义 Onboarding 的唯一合法职责\n\n" +
         $"参考：docs/adr/governance/ADR-960-onboarding-documentation-governance.md §1.3");
 }
 ```
@@ -231,14 +231,14 @@ public void ADR_960_1_3_Onboarding_Responsibilities_Must_Be_Defined()
 ### 重构后（✅ 推荐）
 
 ```csharp
-[Fact(DisplayName = "ADR-960_1_3: Onboarding 唯一职责必须明确定义")]
+[Fact(DisplayName = "ADR-960.1.3: Onboarding 唯一职责必须明确定义")]
 public void ADR_960_1_3_Onboarding_Responsibilities_Must_Be_Defined()
 {
     var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
     
     // 使用专门的模板方法构建文件不存在的错误消息
     var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
-        ruleId: "ADR-960_1_3",
+        ruleId: "ADR-960.1.3",
         filePath: adr960Path,
         fileDescription: "ADR-960 文档",
         remediationSteps: new[]
@@ -257,7 +257,7 @@ public void ADR_960_1_3_Onboarding_Responsibilities_Must_Be_Defined()
     
     // 使用标准模板构建完整的错误消息
     var message = AssertionMessageBuilder.Build(
-        ruleId: "ADR-960_1_3",
+        ruleId: "ADR-960.1.3",
         summary: "ADR-960 必须明确定义 Onboarding 的唯一合法职责",
         currentState: "文档中未找到职责定义（应包含'唯一合法职责'或'告诉你'等关键词）",
         remediationSteps: new[]
@@ -317,7 +317,7 @@ public void ADR_007_1_1_Agent_Positioning_Must_Be_Tool()
 ### 重构后（✅ 推荐）
 
 ```csharp
-[Fact(DisplayName = "ADR-007_1_1: Agent 定位必须为工具")]
+[Fact(DisplayName = "ADR-007.1.1: Agent 定位必须为工具")]
 public void ADR_007_1_1_Agent_Positioning_Must_Be_Tool()
 {
     // 使用辅助方法获取 Agent 文件（自动排除系统 Agent）
@@ -332,7 +332,7 @@ public void ADR_007_1_1_Agent_Positioning_Must_Be_Tool()
     // 验证逻辑...
     
     var message = AssertionMessageBuilder.BuildWithViolations(
-        ruleId: "ADR-007_1_1",
+        ruleId: "ADR-007.1.1",
         summary: "以下 Agent 文件违反了定位规则",
         failingTypes: violations,
         remediationSteps: new[]
@@ -521,7 +521,7 @@ public void ADR_007_2_1_Agent_Responses_Must_Include_Three_State_Indicators()
 ### 重构后（✅ 推荐）
 
 ```csharp
-[Fact(DisplayName = "ADR-007_2_1: Agent 响应必须包含三态标识")]
+[Fact(DisplayName = "ADR-007.2.1: Agent 响应必须包含三态标识")]
 public void ADR_007_2_1_Agent_Responses_Must_Include_Three_State_Indicators()
 {
     var agentFiles = FileSystemTestHelper.GetAgentFiles(
@@ -558,7 +558,7 @@ public void ADR_007_2_1_Agent_Responses_Must_Include_Three_State_Indicators()
     }
 
     var message = AssertionMessageBuilder.BuildWithViolations(
-        ruleId: "ADR-007_2_1",
+        ruleId: "ADR-007.2.1",
         summary: "以下 Agent 文件未实现三态输出规范",
         failingTypes: violations,
         remediationSteps: new[]
@@ -612,13 +612,13 @@ public void ADR_960_2_1_Onboarding_Must_Follow_Content_Type_Restrictions()
 ### 重构后（✅ 推荐）
 
 ```csharp
-[Fact(DisplayName = "ADR-960_2_1: Onboarding 必须遵循内容类型限制")]
+[Fact(DisplayName = "ADR-960.2.1: Onboarding 必须遵循内容类型限制")]
 public void ADR_960_2_1_Onboarding_Must_Follow_Content_Type_Restrictions()
 {
     var adr960Path = FileSystemTestHelper.GetAbsolutePath(TestConstants.Adr960Path);
 
     var fileNotFoundMessage = AssertionMessageBuilder.BuildFileNotFoundMessage(
-        ruleId: "ADR-960_2_1",
+        ruleId: "ADR-960.2.1",
         filePath: adr960Path,
         fileDescription: "ADR-960 文档",
         remediationSteps: new[]
@@ -636,7 +636,7 @@ public void ADR_960_2_1_Onboarding_Must_Follow_Content_Type_Restrictions()
         "是否允许出现在 Onboarding");
 
     var tableMessage = AssertionMessageBuilder.Build(
-        ruleId: "ADR-960_2_1",
+        ruleId: "ADR-960.2.1",
         summary: "ADR-960 必须定义 Onboarding 的内容类型限制表",
         currentState: "文档中未找到内容类型限制表",
         remediationSteps: new[]
@@ -759,11 +759,11 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 
 public sealed class ADR_002_1_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-002_1_1: Platform 不应依赖 Application")]
+    [Fact(DisplayName = "ADR-002.1.1: Platform 不应依赖 Application")]
     public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
     {
         // ❌ 硬编码规则信息
-        var ruleId = "ADR-002_1_1";
+        var ruleId = "ADR-002.1.1";
         var summary = "Platform 层不应依赖 Application 层";
         
         var platformAssembly = typeof(Platform.PlatformBootstrapper).Assembly;
@@ -800,10 +800,10 @@ public sealed class ADR_002_1_Architecture_Tests
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 
 /// <summary>
-/// ADR-002_1: 依赖方向规则
+/// ADR-002.1: 依赖方向规则
 ///
 /// 测试覆盖映射：
-/// - ADR-002_1_1: Platform 不应依赖 Application
+/// - ADR-002.1.1: Platform 不应依赖 Application
 ///
 /// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md
@@ -811,7 +811,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 /// </summary>
 public sealed class ADR_002_1_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-002_1_1: Platform 不应依赖 Application")]
+    [Fact(DisplayName = "ADR-002.1.1: Platform 不应依赖 Application")]
     public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
     {
         // ✅ 从 RuleSetRegistry 获取规则信息
@@ -863,7 +863,7 @@ public sealed class ADR_002_1_Architecture_Tests
 
 3. **使用规则信息**：
    ```csharp
-   ruleId: clause.Id,          // 替代硬编码的 "ADR-002_1_1"
+   ruleId: clause.Id,          // 替代硬编码的 "ADR-002.1.1"
    summary: clause.Condition    // 替代硬编码的描述
    ```
 
@@ -902,11 +902,11 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 
 public sealed class RuleIdParserTests
 {
-    [Fact(DisplayName = "应该解析 ADR-001_1")]
+    [Fact(DisplayName = "应该解析 ADR-001.1")]
     public void Should_Parse_ADR_001_1()
     {
         // Act
-        var success = RuleIdParser.TryParse("ADR-001_1", out var result);
+        var success = RuleIdParser.TryParse("ADR-001.1", out var result);
         
         // Assert
         success.Should().BeTrue();
@@ -915,11 +915,11 @@ public sealed class RuleIdParserTests
         result.ClauseNumber.Should().BeNull();
     }
 
-    [Fact(DisplayName = "应该解析 ADR-907_3")]
+    [Fact(DisplayName = "应该解析 ADR-907.3")]
     public void Should_Parse_ADR_907_3()
     {
         // Act
-        var success = RuleIdParser.TryParse("ADR-907_3", out var result);
+        var success = RuleIdParser.TryParse("ADR-907.3", out var result);
         
         // Assert
         success.Should().BeTrue();
@@ -973,8 +973,8 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.Specification.Tests;
 public sealed class RuleIdParserTests
 {
     [Theory(DisplayName = "TryParse 应该正确解析下划线格式的 Rule ID")]
-    [InlineData("ADR-001_1", 1, 1, null)]    // 标准格式
-    [InlineData("ADR-907_3", 907, 3, null)]  // 三位数 ADR
+    [InlineData("ADR-001.1", 1, 1, null)]    // 标准格式
+    [InlineData("ADR-907.3", 907, 3, null)]  // 三位数 ADR
     [InlineData("001_1", 1, 1, null)]        // 短格式（省略 ADR-）
     [InlineData("907_3", 907, 3, null)]      // 三位数短格式
     public void TryParse_Should_Parse_Underscore_Rule_Format(

@@ -61,9 +61,9 @@ superseded_by: null
 
 ---
 
-### ADR-210_1：破坏性变更与版本控制（Rule）
+### ADR-210.1：破坏性变更与版本控制（Rule）
 
-#### ADR-210_1_1 破坏性变更定义
+#### ADR-210.1.1 破坏性变更定义
 
 **规则**：
 - 破坏性变更定义：
@@ -91,9 +91,9 @@ superseded_by: null
 
 ---
 
-### ADR-210_2：事件 SchemaVersion 要求（Rule）
+### ADR-210.2：事件 SchemaVersion 要求（Rule）
 
-#### ADR-210_2_1 SchemaVersion 属性强制要求
+#### ADR-210.2.1 SchemaVersion 属性强制要求
 
 **规则**：
 - 所有领域事件必须包含 `SchemaVersion` 属性
@@ -110,9 +110,9 @@ superseded_by: null
 
 ---
 
-### ADR-210_3：旧版本保留策略（Rule）
+### ADR-210.3：旧版本保留策略（Rule）
 
-#### ADR-210_3_1 旧版本保留周期要求
+#### ADR-210.3.1 旧版本保留周期要求
 
 **规则**：
 - 旧版本事件必须保持至少 2 个大版本周期
@@ -135,9 +135,9 @@ superseded_by: null
 
 ---
 
-### ADR-210_4：订阅者多版本处理（Rule）
+### ADR-210.4：订阅者多版本处理（Rule）
 
-#### ADR-210_4_1 订阅者多版本处理要求
+#### ADR-210.4.1 订阅者多版本处理要求
 
 **规则**：
 - 订阅者必须处理所有活跃版本
@@ -155,9 +155,9 @@ superseded_by: null
 
 ---
 
-### ADR-210_5：事件序列化兼容性（Rule）
+### ADR-210.5：事件序列化兼容性（Rule）
 
-#### ADR-210_5_1 序列化向前兼容要求
+#### ADR-210.5.1 序列化向前兼容要求
 
 **规则**：
 - 序列化必须支持向前兼容（新代码读旧数据）
@@ -176,9 +176,9 @@ superseded_by: null
 
 ---
 
-### ADR-210_6：版本异常容错机制（Rule）
+### ADR-210.6：版本异常容错机制（Rule）
 
-#### ADR-210_6_1 版本异常降级处理要求
+#### ADR-210.6.1 版本异常降级处理要求
 
 **规则**：
 - 版本异常必须降级处理，不得中断消费
@@ -211,12 +211,12 @@ superseded_by: null
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-210_1_1** | L1 | ArchitectureTests 自动化验证 | §ADR-210_1_1 破坏性变更定义 |
-| **ADR-210_2_1** | L1 | ArchitectureTests 自动化验证 | §ADR-210_2_1 SchemaVersion 属性强制要求 |
-| **ADR-210_3_1** | L1 | ArchitectureTests 自动化验证 | §ADR-210_3_1 旧版本保留周期要求 |
-| **ADR-210_4_1** | L1 | ArchitectureTests 自动化验证 | §ADR-210_4_1 订阅者多版本处理要求 |
-| **ADR-210_5_1** | L1 | ArchitectureTests 自动化验证 | §ADR-210_5_1 序列化向前兼容要求 |
-| **ADR-210_6_1** | L1 | ArchitectureTests 自动化验证 + 运行时监控 | §ADR-210_6_1 版本异常降级处理要求 |
+| **ADR-210.1.1** | L1 | ArchitectureTests 自动化验证 | §ADR-210.1.1 破坏性变更定义 |
+| **ADR-210.2.1** | L1 | ArchitectureTests 自动化验证 | §ADR-210.2.1 SchemaVersion 属性强制要求 |
+| **ADR-210.3.1** | L1 | ArchitectureTests 自动化验证 | §ADR-210.3.1 旧版本保留周期要求 |
+| **ADR-210.4.1** | L1 | ArchitectureTests 自动化验证 | §ADR-210.4.1 订阅者多版本处理要求 |
+| **ADR-210.5.1** | L1 | ArchitectureTests 自动化验证 | §ADR-210.5.1 序列化向前兼容要求 |
+| **ADR-210.6.1** | L1 | ArchitectureTests 自动化验证 + 运行时监控 | §ADR-210.6.1 版本异常降级处理要求 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

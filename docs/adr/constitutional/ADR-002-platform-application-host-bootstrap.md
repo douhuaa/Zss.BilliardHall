@@ -57,9 +57,9 @@ superseded_by: null
 
 ---
 
-### ADR-002_1：Platform 层约束（Rule）
+### ADR-002.1：Platform 层约束（Rule）
 
-#### ADR-002_1_1 Platform 仅提供通用技术能力
+#### ADR-002.1.1 Platform 仅提供通用技术能力
 
 - Platform 只提供通用技术能力（日志、追踪、异常、序列化）
 - 不感知任何业务领域概念
@@ -68,7 +68,7 @@ superseded_by: null
 - ❌ Platform 包含业务逻辑或领域类型
 - ✅ 仅包含技术基础设施
 
-#### ADR-002_1_2 Platform 不依赖上层
+#### ADR-002.1.2 Platform 不依赖上层
 
 - Platform 不可访问 Application、Host、Modules
 - 确保技术基座的独立性和可复用性
@@ -77,7 +77,7 @@ superseded_by: null
 - ❌ Platform 依赖 Application/Host/Modules
 - ✅ Platform 完全独立
 
-#### ADR-002_1_3 Platform 唯一 Bootstrapper 入口
+#### ADR-002.1.3 Platform 唯一 Bootstrapper 入口
 
 - Platform 必须有唯一入口 `PlatformBootstrapper.Configure`
 - 所有 Platform 服务注册集中在 Bootstrapper
@@ -89,9 +89,9 @@ superseded_by: null
 
 ---
 
-### ADR-002_2：Application 层约束（Rule）
+### ADR-002.2：Application 层约束（Rule）
 
-#### ADR-002_2_1 Application 负责系统能力装配
+#### ADR-002.2.1 Application 负责系统能力装配
 
 - Application 负责系统能力的装配和集成
 - 定义"系统是什么"，聚合模块和用例
@@ -100,7 +100,7 @@ superseded_by: null
 - ❌ Application 包含具体业务逻辑
 - ✅ 仅做模块装配和集成
 
-#### ADR-002_2_2 Application 禁止依赖 Host
+#### ADR-002.2.2 Application 禁止依赖 Host
 
 - Application 禁止依赖 Host 层
 - 不感知运行形态（Web/Worker/Test）
@@ -109,7 +109,7 @@ superseded_by: null
 - ❌ Application 依赖 Host
 - ✅ Application 独立于运行环境
 
-#### ADR-002_2_3 Application 禁止依赖 Modules
+#### ADR-002.2.3 Application 禁止依赖 Modules
 
 - Application 禁止直接引用 Modules
 - 通过扫描和反射加载模块
@@ -118,7 +118,7 @@ superseded_by: null
 - ❌ Application 直接引用 Modules
 - ✅ Application 通过扫描发现模块
 
-#### ADR-002_2_4 Application 不包含 Host 专属类型
+#### ADR-002.2.4 Application 不包含 Host 专属类型
 
 - Application 不包含 HttpContext 等 Host 专属类型
 - 使用抽象替代具体的 Host 类型
@@ -127,7 +127,7 @@ superseded_by: null
 - ❌ Application 使用 HttpContext
 - ✅ Application 只依赖抽象接口
 
-#### ADR-002_2_5 Application 唯一 Bootstrapper 入口
+#### ADR-002.2.5 Application 唯一 Bootstrapper 入口
 
 - Application 必须有唯一入口 `ApplicationBootstrapper.Configure`
 - 所有 Application 服务注册集中在 Bootstrapper
@@ -139,9 +139,9 @@ superseded_by: null
 
 ---
 
-### ADR-002_3：Host 层约束（Rule）
+### ADR-002.3：Host 层约束（Rule）
 
-#### ADR-002_3_1 Host 唯一职责为调用 Bootstrapper
+#### ADR-002.3.1 Host 唯一职责为调用 Bootstrapper
 
 - Host 唯一职责：调用 Platform、Application 的 Bootstrapper
 - 决定进程模型，不包含任何业务逻辑
@@ -150,7 +150,7 @@ superseded_by: null
 - ❌ Host 包含业务逻辑或技术配置
 - ✅ 仅调用两个 Bootstrapper
 
-#### ADR-002_3_2 Host 决定进程模型
+#### ADR-002.3.2 Host 决定进程模型
 
 - Host 决定进程模型（Web/Worker/Test）
 - 项目命名为 `Zss.BilliardHall.Host.*`
@@ -159,7 +159,7 @@ superseded_by: null
 - ❌ Host 项目命名不规范
 - ✅ Host 项目命名符合规范
 
-#### ADR-002_3_3 Host 不依赖 Modules
+#### ADR-002.3.3 Host 不依赖 Modules
 
 - Host 不应依赖任何业务模块
 - Host 通过 Application 间接引入模块
@@ -169,7 +169,7 @@ superseded_by: null
 - ❌ Host 项目文件引用 Modules
 - ✅ Host 完全独立于业务模块
 
-#### ADR-002_3_4 Program.cs 极简化
+#### ADR-002.3.4 Program.cs 极简化
 
 - Program.cs 保持极简（建议 ≤30 行）
 - 只保留核心调用
@@ -178,7 +178,7 @@ superseded_by: null
 - ❌ Program.cs 超过 30 行
 - ✅ Program.cs 简洁明了
 
-#### ADR-002_3_5 Program.cs 只调用 Bootstrapper
+#### ADR-002.3.5 Program.cs 只调用 Bootstrapper
 
 - Program.cs 只应调用 Bootstrapper
 - 不包含具体的服务注册、配置逻辑
@@ -190,9 +190,9 @@ superseded_by: null
 
 ---
 
-### ADR-002_4：三层依赖方向验证（Rule）
+### ADR-002.4：三层依赖方向验证（Rule）
 
-#### ADR-002_4_1 完整的单向依赖链
+#### ADR-002.4.1 完整的单向依赖链
 
 - 完整的单向依赖链：Host → Application → Platform
 - 任何反向依赖都是违规
@@ -213,20 +213,20 @@ superseded_by: null
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-002_1_1** | L1 | ArchitectureTests 验证 Platform 不依赖 Application | §ADR-002_1_1 |
-| **ADR-002_1_2** | L1 | ArchitectureTests 验证 Platform 不依赖 Host/Modules | §ADR-002_1_2 |
-| **ADR-002_1_3** | L1 | ArchitectureTests 验证 PlatformBootstrapper 存在 | §ADR-002_1_3 |
-| **ADR-002_2_1** | L1 | ArchitectureTests 验证 Application 职责边界 | §ADR-002_2_1 |
-| **ADR-002_2_2** | L1 | ArchitectureTests 验证 Application 不依赖 Host | §ADR-002_2_2 |
-| **ADR-002_2_3** | L1 | ArchitectureTests 验证 Application 不依赖 Modules | §ADR-002_2_3 |
-| **ADR-002_2_4** | L1 | ArchitectureTests 验证 Application 不使用 HttpContext | §ADR-002_2_4 |
-| **ADR-002_2_5** | L1 | ArchitectureTests 验证 ApplicationBootstrapper 存在 | §ADR-002_2_5 |
-| **ADR-002_3_1** | L1 | ArchitectureTests 验证 Host 不依赖 Modules | §ADR-002_3_1 |
-| **ADR-002_3_2** | L1 | ArchitectureTests 验证 Host 项目命名规范 | §ADR-002_3_2 |
-| **ADR-002_3_3** | L1 | ArchitectureTests 验证 Host 项目文件不引用 Modules | §ADR-002_3_3 |
-| **ADR-002_3_4** | L2 | ArchitectureTests 验证 Program.cs 行数限制 | §ADR-002_3_4 |
-| **ADR-002_3_5** | L2 | ArchitectureTests 语义检查 Program.cs 内容 | §ADR-002_3_5 |
-| **ADR-002_4_1** | L1 | ArchitectureTests 验证三层依赖方向 | §ADR-002_4_1 |
+| **ADR-002.1.1** | L1 | ArchitectureTests 验证 Platform 不依赖 Application | §ADR-002.1.1 |
+| **ADR-002.1.2** | L1 | ArchitectureTests 验证 Platform 不依赖 Host/Modules | §ADR-002.1.2 |
+| **ADR-002.1.3** | L1 | ArchitectureTests 验证 PlatformBootstrapper 存在 | §ADR-002.1.3 |
+| **ADR-002.2.1** | L1 | ArchitectureTests 验证 Application 职责边界 | §ADR-002.2.1 |
+| **ADR-002.2.2** | L1 | ArchitectureTests 验证 Application 不依赖 Host | §ADR-002.2.2 |
+| **ADR-002.2.3** | L1 | ArchitectureTests 验证 Application 不依赖 Modules | §ADR-002.2.3 |
+| **ADR-002.2.4** | L1 | ArchitectureTests 验证 Application 不使用 HttpContext | §ADR-002.2.4 |
+| **ADR-002.2.5** | L1 | ArchitectureTests 验证 ApplicationBootstrapper 存在 | §ADR-002.2.5 |
+| **ADR-002.3.1** | L1 | ArchitectureTests 验证 Host 不依赖 Modules | §ADR-002.3.1 |
+| **ADR-002.3.2** | L1 | ArchitectureTests 验证 Host 项目命名规范 | §ADR-002.3.2 |
+| **ADR-002.3.3** | L1 | ArchitectureTests 验证 Host 项目文件不引用 Modules | §ADR-002.3.3 |
+| **ADR-002.3.4** | L2 | ArchitectureTests 验证 Program.cs 行数限制 | §ADR-002.3.4 |
+| **ADR-002.3.5** | L2 | ArchitectureTests 语义检查 Program.cs 内容 | §ADR-002.3.5 |
+| **ADR-002.4.1** | L1 | ArchitectureTests 验证三层依赖方向 | §ADR-002.4.1 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

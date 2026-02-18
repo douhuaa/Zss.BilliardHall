@@ -172,7 +172,7 @@ Console.WriteLine($"已注册的 ADR 数量: {allAdrs.Count}");
 
 ```csharp
 // 旧方式 - 硬编码规则信息
-Assert.True(condition, "违反 ADR-001_1_1: 模块不应相互引用");
+Assert.True(condition, "违反 ADR-001.1.1: 模块不应相互引用");
 
 // 新方式 - 从 Registry 获取规则信息
 var clause = RuleSetRegistry.GetStrict(1).GetClause(1, 1);

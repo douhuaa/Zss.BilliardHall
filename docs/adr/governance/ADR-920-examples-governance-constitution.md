@@ -50,9 +50,9 @@ superseded_by: null
 
 ---
 
-### ADR-920_1：示例代码权限边界（Rule）
+### ADR-920.1：示例代码权限边界（Rule）
 
-#### ADR-920_1_1 示例代码的法律地位
+#### ADR-920.1.1 示例代码的法律地位
 
 **规则**：
 
@@ -82,7 +82,7 @@ superseded_by: null
 
 ---
 
-#### ADR-920_1_2 示例代码必须包含的免责声明
+#### ADR-920.1.2 示例代码必须包含的免责声明
 
 **规则**：
 
@@ -126,15 +126,15 @@ superseded_by: null
 
 ---
 
-### ADR-920_2：示例代码架构约束（Rule）
+### ADR-920.2：示例代码架构约束（Rule）
 
-#### ADR-920_2_1 示例代码禁止的架构违规行为
+#### ADR-920.2.1 示例代码禁止的架构违规行为
 
 **规则**：
 
 示例代码**禁止**包含以下"示例代码禁止的架构违规行为"：
 
-##### ADR-920_2_1_a 跨模块直接引用（ADR-####）
+##### ADR-920.2.1_a 跨模块直接引用（ADR-####）
 ```csharp
 // ❌ 禁止
 using Zss.BilliardHall.Modules.Members.Domain;
@@ -144,7 +144,7 @@ await _eventBus.Publish(new OrderCreated(orderId));
 var memberDto = await _queryBus.Send(new GetMemberById(memberId));
 ```
 
-##### ADR-920_2_1_b 违反 Handler 模式（ADR-####）
+##### ADR-920.2.1_b 违反 Handler 模式（ADR-####）
 ```csharp
 // ❌ 禁止：Command Handler 返回业务数据
 public async Task<OrderDto> Handle(CreateOrder command)
@@ -153,7 +153,7 @@ public async Task<OrderDto> Handle(CreateOrder command)
 public async Task<Guid> Handle(CreateOrder command)
 ```
 
-##### ADR-920_2_1_c 创建横向 Service 层（ADR-####）
+##### ADR-920.2.1_c 创建横向 Service 层（ADR-####）
 ```csharp
 // ❌ 禁止
 public class OrderService { }
@@ -183,9 +183,9 @@ public class CreateOrderHandler { }
 
 ---
 
-### ADR-920_3：示例类型边界管理（Rule）
+### ADR-920.3：示例类型边界管理（Rule）
 
-#### ADR-920_3_1 示例 vs 测试 vs PoC
+#### ADR-920.3.1 示例 vs 测试 vs PoC
 
 **规则**：
 
@@ -212,10 +212,10 @@ public class CreateOrderHandler { }
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-920_1_1** | L2 | 人工审查：示例是否引入未经 ADR 允许的模式 | §ADR-920_1_1 |
-| **ADR-920_1_2** | L1 | ArchitectureTests 验证示例文档/代码包含免责声明 | §ADR-920_1_2 |
-| **ADR-920_2_1** | L1 | ArchitectureTests 验证示例不包含架构违规 | §ADR-920_2_1 |
-| **ADR-920_3_1** | L1 | ArchitectureTests 验证示例、测试、PoC 边界与存放位置 | §ADR-920_3_1 |
+| **ADR-920.1.1** | L2 | 人工审查：示例是否引入未经 ADR 允许的模式 | §ADR-920.1.1 |
+| **ADR-920.1.2** | L1 | ArchitectureTests 验证示例文档/代码包含免责声明 | §ADR-920.1.2 |
+| **ADR-920.2.1** | L1 | ArchitectureTests 验证示例不包含架构违规 | §ADR-920.2.1 |
+| **ADR-920.3.1** | L1 | ArchitectureTests 验证示例、测试、PoC 边界与存放位置 | §ADR-920.3.1 |
 
 ### 执行级别说明
 

@@ -470,7 +470,7 @@ public sealed class AgentInstructionGenerator_SecurityTests
 
         var result = act();
         result.Should().Contain("id: GEN-001");
-        result.Should().Contain("验证 ADR-999_1 的 0 个约束条款");
+        result.Should().Contain("验证 ADR-999.1 的 0 个约束条款");
     }
 
     [Fact]

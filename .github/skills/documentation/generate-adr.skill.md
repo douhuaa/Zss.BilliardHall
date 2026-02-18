@@ -95,8 +95,8 @@ post_execution:
 
 3. **生成文档内容**
    - 使用 ADR-902 标准模板
-   - 填充 Front Matter（符合 ADR-902_1_3）
-   - 添加所有必需章节（ADR-902_1_4）
+   - 填充 Front Matter（符合 ADR-902.1.3）
+   - 添加所有必需章节（ADR-902.1.4）
    - 插入 Rule/Clause 结构占位符（ADR-907）
    - 插入占位符
 
@@ -247,7 +247,7 @@ primary_enforcement: L2
 
 - [ ] 文件名符合规范
 - [ ] 包含所有 ADR-902 必需章节（Focus, Glossary, Decision, Enforcement, Non-Goals, Prohibited, Relationships, References, History）
-- [ ] Front Matter 符合 ADR-902_1_3 规范
+- [ ] Front Matter 符合 ADR-902.1.3 规范
 - [ ] Decision 章节使用 ADR-907 Rule/Clause 双层编号体系
 - [ ] 使用简体中文
 - [ ] 包含代码示例（如果适用）

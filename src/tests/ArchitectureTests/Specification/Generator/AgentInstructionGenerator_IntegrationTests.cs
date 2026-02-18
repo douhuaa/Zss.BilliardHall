@@ -149,7 +149,7 @@ public sealed class AgentInstructionGenerator_IntegrationTests
         var result = generator.GenerateInstructions(ruleSet);
 
         // Assert
-        result.Should().Contain("验证 ADR-950_1 的 3 个约束条款");
+        result.Should().Contain("验证 ADR-950.1 的 3 个约束条款");
         result.Should().Contain("ruleSet.GetClause(1, 1)");
         result.Should().Contain("ruleSet.GetClause(1, 2)");
         result.Should().Contain("ruleSet.GetClause(1, 3)");

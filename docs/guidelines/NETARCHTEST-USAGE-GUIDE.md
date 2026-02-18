@@ -130,7 +130,7 @@ var result = Types.InAssembly(assembly)
 if (!result.IsSuccessful)
 {
     var message = AssertionMessageBuilder.BuildFromArchTestResult(
-        ruleId: "ADR-001_1_1",
+        ruleId: "ADR-001.1.1",
         summary: "类未标记为 sealed",
         failingTypeNames: result.FailingTypeNames,
         remediationSteps: new[]
@@ -155,7 +155,7 @@ result.IsSuccessful.Should().BeTrue("Some error"); // 太模糊
 NetArchTestHelper.AssertNamespaceConvention(
     assembly: moduleAssembly,
     expectedNamespacePrefix: "MyApp.Module",
-    ruleId: "ADR-001_1_3",
+    ruleId: "ADR-001.1.3",
     adrReference: "docs/adr/001.md");
 
 // ❌ 避免：每个测试重复编写
@@ -185,7 +185,7 @@ public sealed class MyArchitectureTests
     public void Test()
     {
         var clause = _ruleSet.GetClause(1, 1);
-        var ruleId = clause.Id.ToString(); // "ADR-001_1_1"
+        var ruleId = clause.Id.ToString(); // "ADR-001.1.1"
         // 使用 ruleId 进行测试...
     }
 }
@@ -194,7 +194,7 @@ public sealed class MyArchitectureTests
 [Fact]
 public void Test()
 {
-    var ruleId = "ADR-001_1_1"; // 硬编码，不易维护
+    var ruleId = "ADR-001.1.1"; // 硬编码，不易维护
 }
 ```
 

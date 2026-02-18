@@ -56,9 +56,9 @@ superseded_by: null
 
 ---
 
-### ADR-004_1：CPM 基础设施约束（Rule）
+### ADR-004.1：CPM 基础设施约束（Rule）
 
-#### ADR-004_1_1 Directory.Packages.props 必须存在
+#### ADR-004.1.1 Directory.Packages.props 必须存在
 
 - 仓库根目录必须包含 Directory.Packages.props 文件
 - 该文件是启用 Central Package Management (CPM) 的基础
@@ -67,7 +67,7 @@ superseded_by: null
 - ❌ 仓库根目录缺少 Directory.Packages.props 文件
 - ✅ Directory.Packages.props 文件存在
 
-#### ADR-004_1_2 CPM 必须启用
+#### ADR-004.1.2 CPM 必须启用
 
 - Directory.Packages.props 必须包含 `<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>`
 - 启用 CPM 确保所有包版本集中管理
@@ -77,7 +77,7 @@ superseded_by: null
 - ❌ ManagePackageVersionsCentrally 设置为 false
 - ✅ ManagePackageVersionsCentrally 设置为 true
 
-#### ADR-004_1_3 传递依赖固定建议启用
+#### ADR-004.1.3 传递依赖固定建议启用
 
 - 建议启用 `<CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>`
 - 固定传递依赖版本，避免间接依赖升级导致的破坏性变更
@@ -89,9 +89,9 @@ superseded_by: null
 
 ---
 
-### ADR-004_2：项目依赖管理约束（Rule）
+### ADR-004.2：项目依赖管理约束（Rule）
 
-#### ADR-004_2_1 项目文件禁止手动指定包版本
+#### ADR-004.2.1 项目文件禁止手动指定包版本
 
 - 项目文件（.csproj）中的 PackageReference 不得包含 Version 属性
 - 所有包版本必须在 Directory.Packages.props 中定义
@@ -102,7 +102,7 @@ superseded_by: null
 - ❌ 项目文件中存在 `<PackageReference Update="..." VersionOverride="..." />`
 - ✅ 所有项目文件不包含包版本信息
 
-#### ADR-004_2_2 所有使用的包必须在 CPM 中定义
+#### ADR-004.2.2 所有使用的包必须在 CPM 中定义
 
 - Directory.Packages.props 必须定义所有项目引用的包
 - 不允许存在未在 CPM 中声明的包引用
@@ -113,9 +113,9 @@ superseded_by: null
 
 ---
 
-### ADR-004_3：层级依赖与分组约束（Rule）
+### ADR-004.3：层级依赖与分组约束（Rule）
 
-#### ADR-004_3_1 包应按功能分组
+#### ADR-004.3.1 包应按功能分组
 
 - Directory.Packages.props 中应使用 `<ItemGroup Label="分组名称">` 对包进行逻辑分组
 - 常见分组包括：Logging、Testing、Wolverine Framework、Marten、Aspire 等
@@ -125,7 +125,7 @@ superseded_by: null
 - ⚠️ 未使用 Label 属性进行包分组（建议使用）
 - ✅ 已使用 Label 属性进行包分组
 
-#### ADR-004_3_2 Platform 项目不引用业务包
+#### ADR-004.3.2 Platform 项目不引用业务包
 
 - Platform 层项目只能引用技术基础包（如 Serilog、OpenTelemetry、HealthChecks）
 - 禁止引用业务相关的 NuGet 包（如 FluentValidation、MediatR）
@@ -135,7 +135,7 @@ superseded_by: null
 - ❌ Platform 项目引用了业务包
 - ✅ Platform 项目仅引用技术基础包
 
-#### ADR-004_3_3 测试框架版本统一
+#### ADR-004.3.3 测试框架版本统一
 
 - 所有测试项目必须使用相同版本的测试框架（xUnit、NUnit 或 MSTest）
 - 相关测试包（如 Microsoft.NET.Test.Sdk、FluentAssertions）版本必须一致
@@ -144,7 +144,7 @@ superseded_by: null
 - ❌ 测试框架存在多个版本
 - ✅ 所有测试项目使用统一的测试框架版本
 
-#### ADR-004_3_4 层级依赖规则
+#### ADR-004.3.4 层级依赖规则
 
 - **Platform**：仅技术底座包（Logging、OpenTelemetry、基础异常处理）
 - **Application**：装配与 Pipeline 包（Wolverine、Marten）
@@ -168,15 +168,15 @@ superseded_by: null
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-004_1_1** | L1 | ArchitectureTests 验证 Directory.Packages.props 文件存在性 | §ADR-004_1_1 |
-| **ADR-004_1_2** | L1 | ArchitectureTests 验证 ManagePackageVersionsCentrally 设置 | §ADR-004_1_2 |
-| **ADR-004_1_3** | L2 | ArchitectureTests 建议性检查，不阻断构建 | §ADR-004_1_3 |
-| **ADR-004_2_1** | L1 | ArchitectureTests 扫描所有 .csproj 文件，检查 PackageReference 的 Version 属性 | §ADR-004_2_1 |
-| **ADR-004_2_2** | L1 | ArchitectureTests 对比项目引用与 CPM 定义，检测未声明的包 | §ADR-004_2_2 |
-| **ADR-004_3_1** | L2 | ArchitectureTests 建议性检查，验证 Label 属性使用情况 | §ADR-004_3_1 |
-| **ADR-004_3_2** | L1 | ArchitectureTests 验证 Platform 项目的包引用类型 | §ADR-004_3_2 |
-| **ADR-004_3_3** | L1 | ArchitectureTests 验证测试框架包的版本一致性 | §ADR-004_3_3 |
-| **ADR-004_3_4** | L1 | ArchitectureTests 验证各层级的依赖规则 | §ADR-004_3_4 |
+| **ADR-004.1.1** | L1 | ArchitectureTests 验证 Directory.Packages.props 文件存在性 | §ADR-004.1.1 |
+| **ADR-004.1.2** | L1 | ArchitectureTests 验证 ManagePackageVersionsCentrally 设置 | §ADR-004.1.2 |
+| **ADR-004.1.3** | L2 | ArchitectureTests 建议性检查，不阻断构建 | §ADR-004.1.3 |
+| **ADR-004.2.1** | L1 | ArchitectureTests 扫描所有 .csproj 文件，检查 PackageReference 的 Version 属性 | §ADR-004.2.1 |
+| **ADR-004.2.2** | L1 | ArchitectureTests 对比项目引用与 CPM 定义，检测未声明的包 | §ADR-004.2.2 |
+| **ADR-004.3.1** | L2 | ArchitectureTests 建议性检查，验证 Label 属性使用情况 | §ADR-004.3.1 |
+| **ADR-004.3.2** | L1 | ArchitectureTests 验证 Platform 项目的包引用类型 | §ADR-004.3.2 |
+| **ADR-004.3.3** | L1 | ArchitectureTests 验证测试框架包的版本一致性 | §ADR-004.3.3 |
+| **ADR-004.3.4** | L1 | ArchitectureTests 验证各层级的依赖规则 | §ADR-004.3.4 |
 
 **有一项违规视为架构违规，CI 自动阻断。**
 

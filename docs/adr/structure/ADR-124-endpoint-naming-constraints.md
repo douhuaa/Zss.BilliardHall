@@ -59,9 +59,9 @@ superseded_by: null
 
 ---
 
-### ADR-124_1：Endpoint 命名规范（Rule）
+### ADR-124.1：Endpoint 命名规范（Rule）
 
-#### ADR-124_1_1 Endpoint 类命名必须遵循 {UseCase}Endpoint 模式
+#### ADR-124.1.1 Endpoint 类命名必须遵循 {UseCase}Endpoint 模式
 
 **规则**：
 - Endpoint 类名**必须**为用例名 + `Endpoint` 后缀
@@ -75,7 +75,7 @@ superseded_by: null
 - ❌ `CreateOrderController`（非 Endpoint 后缀）
 - ❌ `CreateOrderApi`（非标准后缀）
 
-#### ADR-124_1_2 请求 DTO 命名必须遵循 {UseCase}Request 模式
+#### ADR-124.1.2 请求 DTO 命名必须遵循 {UseCase}Request 模式
 
 **规则**：
 - 请求 DTO 名称**必须**为用例名 + `Request` 后缀
@@ -89,7 +89,7 @@ superseded_by: null
 - ❌ `OrderRequest`（缺少用例动词）
 - ❌ `CreateOrderInput`（非标准后缀）
 
-#### ADR-124_1_3 响应 DTO 命名必须遵循 {UseCase}Response 模式
+#### ADR-124.1.3 响应 DTO 命名必须遵循 {UseCase}Response 模式
 
 **规则**：
 - 响应 DTO 名称**必须**为用例名 + `Response` 后缀
@@ -105,9 +105,9 @@ superseded_by: null
 
 ---
 
-### ADR-124_2：Endpoint 职责边界（Rule）
+### ADR-124.2：Endpoint 职责边界（Rule）
 
-#### ADR-124_2_1 Endpoint 禁止包含业务逻辑
+#### ADR-124.2.1 Endpoint 禁止包含业务逻辑
 
 **规则**：
 - Endpoint **禁止**包含任何业务逻辑
@@ -152,7 +152,7 @@ var total = request.Items.Sum(i => i.Price * i.Quantity);
 var order = await _dbContext.Orders.FindAsync(id);
 ```
 
-#### ADR-124_2_2 一个 Endpoint 只能调用一个 Command 或 Query
+#### ADR-124.2.2 一个 Endpoint 只能调用一个 Command 或 Query
 
 **规则**：
 - 每个 Endpoint 方法**必须**只调用一个 Command 或一个 Query
@@ -210,11 +210,11 @@ builder.MapPost("/orders/fulfill", async (request, bus) =>
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-124_1_1** | L1 | ArchitectureTests 验证 Endpoint 类命名模式 | §ADR-124_1_1 |
-| **ADR-124_1_2** | L1 | ArchitectureTests 验证 Request DTO 命名 | §ADR-124_1_2 |
-| **ADR-124_1_3** | L1 | ArchitectureTests 验证 Response DTO 命名 | §ADR-124_1_3 |
-| **ADR-124_2_1** | L2 | Code Review + Roslyn Analyzer 检测业务逻辑 | §ADR-124_2_1 |
-| **ADR-124_2_2** | L2 | Code Review 检查单一调用约束 | §ADR-124_2_2 |
+| **ADR-124.1.1** | L1 | ArchitectureTests 验证 Endpoint 类命名模式 | §ADR-124.1.1 |
+| **ADR-124.1.2** | L1 | ArchitectureTests 验证 Request DTO 命名 | §ADR-124.1.2 |
+| **ADR-124.1.3** | L1 | ArchitectureTests 验证 Response DTO 命名 | §ADR-124.1.3 |
+| **ADR-124.2.1** | L2 | Code Review + Roslyn Analyzer 检测业务逻辑 | §ADR-124.2.1 |
+| **ADR-124.2.2** | L2 | Code Review 检查单一调用约束 | §ADR-124.2.2 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

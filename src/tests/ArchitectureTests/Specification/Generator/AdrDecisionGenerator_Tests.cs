@@ -55,19 +55,19 @@ public sealed class AdrDecisionGenerator_Tests
     // 断言辅助：集中常用断言
     private static void ShouldContainRuleHeading(string result, int adr, int ruleNum, string ruleTitle)
     {
-        var expected = $"### ADR-{adr}_{ruleNum}：{ruleTitle}（Rule）";
+        var expected = $"### ADR-{adr}.{ruleNum}：{ruleTitle}（Rule）";
         result.Should().Contain(expected);
     }
 
     private static void ShouldContainClause(string result, int adr, int ruleNum, int clauseNum, string clauseTitle)
     {
-        var expected = $"#### ADR-{adr}_{ruleNum}_{clauseNum} {clauseTitle}";
+        var expected = $"#### ADR-{adr}.{ruleNum}.{clauseNum} {clauseTitle}";
         result.Should().Contain(expected);
     }
 
     private static void ShouldHaveRuleOrder(string result, int adr, params int[] ruleNumbers)
     {
-        var indices = ruleNumbers.Select(n => result.IndexOf($"### ADR-{adr}_{n}", StringComparison.Ordinal)).ToArray();
+        var indices = ruleNumbers.Select(n => result.IndexOf($"### ADR-{adr}.{n}", StringComparison.Ordinal)).ToArray();
         for (int i = 1; i < indices.Length; i++)
         {
             indices[i - 1].Should().BeGreaterThanOrEqualTo(0, $"规则 {ruleNumbers[i - 1]} 未找到");
@@ -77,7 +77,7 @@ public sealed class AdrDecisionGenerator_Tests
 
     private static void ShouldHaveClauseOrder(string result, int adr, int ruleNum, params int[] clauseNumbers)
     {
-        var indices = clauseNumbers.Select(n => result.IndexOf($"#### ADR-{adr}_{ruleNum}_{n}", StringComparison.Ordinal)).ToArray();
+        var indices = clauseNumbers.Select(n => result.IndexOf($"#### ADR-{adr}.{ruleNum}.{n}", StringComparison.Ordinal)).ToArray();
         for (int i = 1; i < indices.Length; i++)
         {
             indices[i - 1].Should().BeGreaterThanOrEqualTo(0, $"条款 {clauseNumbers[i - 1]} 未找到");
@@ -154,9 +154,9 @@ public sealed class AdrDecisionGenerator_Tests
         var lines = result.Split('\n').Select(l => l.Trim()).ToList();
 
         lines.Should().Contain(l => l.StartsWith("## Decision"));
-        lines.Should().Contain(l => l.StartsWith($"### ADR-{AdrNumber}_1"));
-        lines.Should().Contain(l => l.StartsWith($"#### ADR-{AdrNumber}_1_1"));
-        lines.Should().Contain(l => l.StartsWith($"#### ADR-{AdrNumber}_1_2"));
+        lines.Should().Contain(l => l.StartsWith($"### ADR-{AdrNumber}.1"));
+        lines.Should().Contain(l => l.StartsWith($"#### ADR-{AdrNumber}.1.1"));
+        lines.Should().Contain(l => l.StartsWith($"#### ADR-{AdrNumber}.1.2"));
     }
 
     [Fact]
@@ -206,7 +206,7 @@ public sealed class AdrDecisionGenerator_Tests
         else
             result.Should().NotContain(SectionHeader);
 
-        result.Should().Contain($"### ADR-{AdrNumber}_1");
+        result.Should().Contain($"### ADR-{AdrNumber}.1");
     }
 
     [Theory]
@@ -232,8 +232,8 @@ public sealed class AdrDecisionGenerator_Tests
         var result = _generator.GenerateDecisionSection(ruleSet, options);
 
         result.Should().Contain("### Decision（裁决）");  // H3 instead of H2
-        result.Should().Contain($"#### ADR-{AdrNumber}_1");       // H4 instead of H3
-        result.Should().Contain($"##### ADR-{AdrNumber}_1_1");    // H5 instead of H4
+        result.Should().Contain($"#### ADR-{AdrNumber}.1");       // H4 instead of H3
+        result.Should().Contain($"##### ADR-{AdrNumber}.1.1");    // H5 instead of H4
     }
 
     [Fact]
@@ -248,8 +248,8 @@ public sealed class AdrDecisionGenerator_Tests
         var result = _generator.GenerateDecisionSection(ruleSet, options);
 
         var lines = result.Split('\n').Select(l => l.Trim()).ToList();
-        var idx1 = lines.FindIndex(l => l.StartsWith($"#### ADR-{AdrNumber}_1_1"));
-        var idx2 = lines.FindIndex(l => l.StartsWith($"#### ADR-{AdrNumber}_1_2"));
+        var idx1 = lines.FindIndex(l => l.StartsWith($"#### ADR-{AdrNumber}.1.1"));
+        var idx2 = lines.FindIndex(l => l.StartsWith($"#### ADR-{AdrNumber}.1.2"));
 
         idx1.Should().BeGreaterThanOrEqualTo(0);
         idx2.Should().BeGreaterThan(idx1);

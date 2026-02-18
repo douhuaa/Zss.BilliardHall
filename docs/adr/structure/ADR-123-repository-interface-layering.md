@@ -58,9 +58,9 @@ superseded_by: null
 
 ---
 
-### ADR-123_1：Repository 分层约束（Rule）
+### ADR-123.1：Repository 分层约束（Rule）
 
-#### ADR-123_1_1 Repository 接口必须位于 Domain 层
+#### ADR-123.1.1 Repository 接口必须位于 Domain 层
 
 **规则**：
 - Repository 接口**必须**定义在 Domain 层
@@ -73,7 +73,7 @@ superseded_by: null
 - ❌ `src/Modules/{Module}/Infrastructure/...`（禁止）
 - ❌ `src/Modules/{Module}/Application/...`（禁止）
 
-#### ADR-123_1_2 Repository 实现必须位于 Infrastructure 层
+#### ADR-123.1.2 Repository 实现必须位于 Infrastructure 层
 
 **规则**：
 - Repository 具体实现**必须**位于 Infrastructure 层
@@ -87,9 +87,9 @@ superseded_by: null
 
 ---
 
-### ADR-123_2：Repository 命名规范（Rule）
+### ADR-123.2：Repository 命名规范（Rule）
 
-#### ADR-123_2_1 Repository 接口命名必须遵循 I{Aggregate}Repository 模式
+#### ADR-123.2.1 Repository 接口命名必须遵循 I{Aggregate}Repository 模式
 
 **规则**：
 - Repository 接口名称**必须**为 `I` + 聚合根名 + `Repository`
@@ -103,7 +103,7 @@ superseded_by: null
 - ❌ `IOrderRepo`（缩写不规范）
 - ❌ `IOrderDataAccess`（非 Repository 后缀）
 
-#### ADR-123_2_2 Repository 实现命名禁止使用 Impl 后缀
+#### ADR-123.2.2 Repository 实现命名禁止使用 Impl 后缀
 
 **规则**：
 - Repository 实现类名称**必须**直接使用聚合根名 + `Repository`
@@ -117,7 +117,7 @@ superseded_by: null
 - ❌ `OrderRepositoryImpl`
 - ❌ `OrderRepositoryImplementation`
 
-#### ADR-123_2_3 Repository 方法必须表达领域意图
+#### ADR-123.2.3 Repository 方法必须表达领域意图
 
 **规则**：
 - Repository 方法名**必须**表达领域意图
@@ -163,11 +163,11 @@ Task ExecuteSqlAsync(string sql);               // 直接暴露 SQL
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-123_1_1** | L1 | ArchitectureTests 验证接口在 Domain 层 | §ADR-123_1_1 |
-| **ADR-123_1_2** | L1 | ArchitectureTests 验证实现在 Infrastructure 层 | §ADR-123_1_2 |
-| **ADR-123_2_1** | L1 | ArchitectureTests 验证接口命名模式 | §ADR-123_2_1 |
-| **ADR-123_2_2** | L1 | ArchitectureTests 检测 Impl 后缀 | §ADR-123_2_2 |
-| **ADR-123_2_3** | L2 | Code Review + Roslyn Analyzer 检测黑名单方法名 | §ADR-123_2_3 |
+| **ADR-123.1.1** | L1 | ArchitectureTests 验证接口在 Domain 层 | §ADR-123.1.1 |
+| **ADR-123.1.2** | L1 | ArchitectureTests 验证实现在 Infrastructure 层 | §ADR-123.1.2 |
+| **ADR-123.2.1** | L1 | ArchitectureTests 验证接口命名模式 | §ADR-123.2.1 |
+| **ADR-123.2.2** | L1 | ArchitectureTests 检测 Impl 后缀 | §ADR-123.2.2 |
+| **ADR-123.2.3** | L2 | Code Review + Roslyn Analyzer 检测黑名单方法名 | §ADR-123.2.3 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

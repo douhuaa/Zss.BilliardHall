@@ -67,7 +67,7 @@ Agent → 读 ADR Markdown → 文本理解 → 生成代码
 ```csharp
 var ruleSet = RuleSetRegistry.Get(1);  // ADR-001
 var clause = ruleSet.GetClause(1, 1);  // Rule 1, Clause 1
-// clause.Id = "ADR-001_1_1"
+// clause.Id = "ADR-001.1.1"
 // clause.Condition = "模块不相互引用"
 // clause.ExecutionType = ClauseExecutionType.Convention
 ```
@@ -145,7 +145,7 @@ var clause = ruleSet.GetClause(1, 1);  // Rule 1, Clause 1
 ### Rule 1: 模块隔离约束
 
 #### Clause 1.1: 模块不相互引用
-- **RuleId**: `ADR-001_1_1`
+- **RuleId**: `ADR-001.1.1`
 - **执行类型**: Convention
 - **约束**: 模块之间不得直接引用
 - **测试**: `Module_ShouldNotReferenceOtherModules`

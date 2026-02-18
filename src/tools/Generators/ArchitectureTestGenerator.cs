@@ -14,7 +14,7 @@ using Zss.BilliardHall.Specification.Rules;
 /// 生成策略：
 /// 1. 使用 Theory + MemberData 模式（参考 ADR907 Auto_Tests）
 /// 2. 为每个 Clause 生成测试数据
-/// 3. 生成命名符合 ADR-XXX_Rule_Clause 规范的方法
+/// 3. 生成命名符合 ADR-XXX.Rule.Clause 规范的方法
 /// 4. 使用策略模式处理不同 ExecutionType
 /// 5. 统一行尾为 LF
 /// </summary>

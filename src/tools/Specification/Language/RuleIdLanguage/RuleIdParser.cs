@@ -19,13 +19,17 @@ public static class RuleIdParser
     /// <summary>
     /// 解析 RuleId 字符串（严格模式）
     /// 
-    /// 支持的格式：
-    /// - "ADR-{编号}_{Rule}" → Rule 级别
-    /// - "ADR-{编号}_{Rule}_{Clause}" → Clause 级别
-    /// - "ADR-{编号}.{Rule}" → Rule 级别（兼容旧格式）
-    /// - "ADR-{编号}.{Rule}.{Clause}" → Clause 级别（兼容旧格式）
-    /// - "{编号}_{Rule}" → Rule 级别（简化格式）
-    /// - "{编号}_{Rule}_{Clause}" → Clause 级别（简化格式）
+    /// 支持的输入格式（向后兼容）：
+    /// - "ADR-{编号}.{Rule}" → Rule 级别（推荐格式）
+    /// - "ADR-{编号}.{Rule}.{Clause}" → Clause 级别（推荐格式）
+    /// - "ADR-{编号}_{Rule}" → Rule 级别（兼容旧格式）
+    /// - "ADR-{编号}_{Rule}_{Clause}" → Clause 级别（兼容旧格式）
+    /// - "{编号}.{Rule}" → Rule 级别（简化格式）
+    /// - "{编号}.{Rule}.{Clause}" → Clause 级别（简化格式）
+    /// - "{编号}_{Rule}" → Rule 级别（简化格式，旧）
+    /// - "{编号}_{Rule}_{Clause}" → Clause 级别（简化格式，旧）
+    /// 
+    /// 注意：ToString() 输出统一为点号格式（ADR-001.2.3）
     /// 
     /// 不支持的格式会抛出 ArgumentException
     /// </summary>
@@ -49,9 +53,9 @@ public static class RuleIdParser
         throw new ArgumentException(
             $"无效的 RuleId 格式：'{ruleId}'。" +
             $"支持的格式：" +
-            $"'ADR-001_1'（Rule）, 'ADR-001_1_1'（Clause）, " +
-            $"'ADR-001.1'（Rule，旧格式）, 'ADR-001.1.1'（Clause，旧格式）, " +
-            $"'001_1'（Rule，简化格式）, '001_1_1'（Clause，简化格式）。",
+            $"'ADR-001.1'（Rule，推荐）, 'ADR-001.1.1'（Clause，推荐）, " +
+            $"'ADR-001_1'（Rule，旧格式）, 'ADR-001_1_1'（Clause，旧格式）, " +
+            $"'001.1'（Rule，简化）, '001.1.1'（Clause，简化）。",
             nameof(ruleId));
     }
 
@@ -80,36 +84,7 @@ public static class RuleIdParser
             .Replace("ADR", "", StringComparison.OrdinalIgnoreCase)
             .Trim();
 
-        // 尝试用下划线分隔（推荐格式：ADR-XXX_Y_Z）
-        var underscoreParts = normalized.Split('_');
-        if (underscoreParts.Length >= 2)
-        {
-            // 拒绝空部分（如 "907__3" 或 "907_3_"）
-            if (underscoreParts.Any(part => string.IsNullOrWhiteSpace(part)))
-            {
-                return false;
-            }
-
-            if (int.TryParse(underscoreParts[0], out var adr) &&
-                int.TryParse(underscoreParts[1], out var rule))
-            {
-                // 检查是否有 Clause 部分
-                if (underscoreParts.Length >= 3 && int.TryParse(underscoreParts[2], out var clause))
-                {
-                    result = ArchitectureRuleId.Clause(adr, rule, clause);
-                    return true;
-                }
-
-                // 只有正好2个部分时才返回 Rule
-                if (underscoreParts.Length == 2)
-                {
-                    result = ArchitectureRuleId.Rule(adr, rule);
-                    return true;
-                }
-            }
-        }
-
-        // 尝试用点号分隔（兼容旧格式：ADR-XXX.Y.Z）
+        // 尝试用点号分隔（推荐格式：ADR-XXX.Y.Z）
         var dotParts = normalized.Split('.');
         if (dotParts.Length >= 2)
         {
@@ -131,6 +106,35 @@ public static class RuleIdParser
 
                 // 只有正好2个部分时才返回 Rule
                 if (dotParts.Length == 2)
+                {
+                    result = ArchitectureRuleId.Rule(adr, rule);
+                    return true;
+                }
+            }
+        }
+
+        // 尝试用下划线分隔（兼容旧格式：ADR-XXX_Y_Z）
+        var underscoreParts = normalized.Split('_');
+        if (underscoreParts.Length >= 2)
+        {
+            // 拒绝空部分（如 "907__3" 或 "907_3_"）
+            if (underscoreParts.Any(part => string.IsNullOrWhiteSpace(part)))
+            {
+                return false;
+            }
+
+            if (int.TryParse(underscoreParts[0], out var adr) &&
+                int.TryParse(underscoreParts[1], out var rule))
+            {
+                // 检查是否有 Clause 部分
+                if (underscoreParts.Length >= 3 && int.TryParse(underscoreParts[2], out var clause))
+                {
+                    result = ArchitectureRuleId.Clause(adr, rule, clause);
+                    return true;
+                }
+
+                // 只有正好2个部分时才返回 Rule
+                if (underscoreParts.Length == 2)
                 {
                     result = ArchitectureRuleId.Rule(adr, rule);
                     return true;
