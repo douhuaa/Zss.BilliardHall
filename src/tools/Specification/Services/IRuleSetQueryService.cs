@@ -40,7 +40,7 @@ public interface IRuleSetQueryService
     /// 格式化RuleId为标准字符串格式
     /// </summary>
     /// <param name="ruleId">RuleId对象</param>
-    /// <returns>格式化的字符串（如 ADR-001_2 或 ADR-001_2_1）</returns>
+    /// <returns>格式化的字符串（如 ADR-001.2 或 ADR-001.2.1）</returns>
     string FormatRuleId(ArchitectureRuleId ruleId);
 
     /// <summary>

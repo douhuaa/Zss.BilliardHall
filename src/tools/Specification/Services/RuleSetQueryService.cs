@@ -33,7 +33,9 @@ public sealed class RuleSetQueryService : IRuleSetQueryService
 
     public string FormatRuleId(ArchitectureRuleId ruleId)
     {
-        return ruleId.ToString();
+        // ArchitectureRuleId.ToString() 返回 ADR-XXX_Y_Z 格式
+        // 转换为点号格式 ADR-XXX.Y.Z
+        return ruleId.ToString().Replace("_", ".");
     }
 
     public RuleSetSummary CreateSummary(ArchitectureRuleSet ruleSet)
