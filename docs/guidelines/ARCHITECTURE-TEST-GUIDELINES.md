@@ -113,7 +113,7 @@ Console.WriteLine($"规则: {rule.Id} - {rule.Summary}");
 
 // 获取特定条款
 var clause = ruleSet.GetClause(1, 1);    // 获取 Rule 1, Clause 1
-Console.WriteLine($"条款: {clause.Id}");           // "ADR-001_1_1"
+Console.WriteLine($"条款: {clause.Id}");           // "ADR-001.1.1"
 Console.WriteLine($"条件: {clause.Condition}");    // 规则的具体内容
 Console.WriteLine($"执行方式: {clause.Enforcement}"); // 如何执行这个规则
 ```
@@ -308,7 +308,7 @@ public sealed class ADR_XXX_Y_Architecture_Tests
 |------|------|---------|---------|
 | **测试类** | `ADR_<编号>_<Rule序号>_Architecture_Tests` | `ADR_002_1_Architecture_Tests` | `ADR002Tests` |
 | **测试方法** | `ADR_<编号>_<Rule序号>_<Clause序号>_<描述>` | `ADR_002_1_1_Platform_Should_Not_Depend_On_Application` | `TestPlatformDependency` |
-| **DisplayName** | `"ADR-<编号>_<Rule序号>_<Clause序号>: <中文描述>"` | `"ADR-002_1_1: Platform 不应依赖 Application"` | `"测试 Platform 依赖"` |
+| **DisplayName** | `"ADR-<编号>_<Rule序号>_<Clause序号>: <中文描述>"` | `"ADR-002.1.1: Platform 不应依赖 Application"` | `"测试 Platform 依赖"` |
 
 ### 3️⃣ 断言消息标准格式
 
@@ -373,8 +373,8 @@ public sealed class ADR_XXX_Y_Architecture_Tests
 
 ```csharp
 [Theory(DisplayName = "RuleId 解析器应该正确解析下划线格式")]
-[InlineData("ADR-001_1", 1, 1, null)]
-[InlineData("ADR-907_3", 907, 3, null)]
+[InlineData("ADR-001.1", 1, 1, null)]
+[InlineData("ADR-907.3", 907, 3, null)]
 [InlineData("001_1", 1, 1, null)]
 [InlineData("907_3", 907, 3, null)]
 public void TryParse_Should_Parse_Underscore_Rule_Format(
@@ -457,7 +457,7 @@ public void Should_Get_Rule_By_Number(int a, int b, string c)
 
 ```csharp
 [Theory(DisplayName = "应该支持多种 RuleId 格式")]
-[InlineData("ADR-001_1", 1, 1, null)]      // 标准格式
+[InlineData("ADR-001.1", 1, 1, null)]      // 标准格式
 [InlineData("001_1", 1, 1, null)]          // 短格式（省略 ADR-）
 [InlineData("ADR-001.1", 1, 1, null)]      // 旧格式（兼容性）
 ```
@@ -495,19 +495,19 @@ public void RuleSet_Should_Contain_Correct_Rule_Info(
 **重构前（❌ 重复代码）**：
 
 ```csharp
-[Fact(DisplayName = "应该解析 ADR-001_1")]
+[Fact(DisplayName = "应该解析 ADR-001.1")]
 public void Should_Parse_ADR_001_1()
 {
-    var success = RuleIdParser.TryParse("ADR-001_1", out var result);
+    var success = RuleIdParser.TryParse("ADR-001.1", out var result);
     success.Should().BeTrue();
     result.AdrNumber.Should().Be(1);
     result.RuleNumber.Should().Be(1);
 }
 
-[Fact(DisplayName = "应该解析 ADR-907_3")]
+[Fact(DisplayName = "应该解析 ADR-907.3")]
 public void Should_Parse_ADR_907_3()
 {
-    var success = RuleIdParser.TryParse("ADR-907_3", out var result);
+    var success = RuleIdParser.TryParse("ADR-907.3", out var result);
     success.Should().BeTrue();
     result.AdrNumber.Should().Be(907);
     result.RuleNumber.Should().Be(3);
@@ -520,10 +520,10 @@ public void Should_Parse_ADR_907_3()
 
 ```csharp
 [Theory(DisplayName = "应该正确解析 RuleId")]
-[InlineData("ADR-001_1", 1, 1)]
-[InlineData("ADR-907_3", 907, 3)]
-[InlineData("ADR-120_2", 120, 2)]
-[InlineData("ADR-950_1", 950, 1)]
+[InlineData("ADR-001.1", 1, 1)]
+[InlineData("ADR-907.3", 907, 3)]
+[InlineData("ADR-120.2", 120, 2)]
+[InlineData("ADR-950.1", 950, 1)]
 public void Should_Parse_RuleId_Correctly(
     string input,
     int expectedAdr,
@@ -573,13 +573,13 @@ public void Should_Parse_RuleId_Correctly(
 
 ```csharp
 // ❌ 旧方式：硬编码规则信息
-var ruleId = "ADR-002_1_1";
+var ruleId = "ADR-002.1.1";
 var summary = "Platform 不应依赖 Application";
 
 // ✅ 新方式：从 RuleSetRegistry 获取
 var ruleSet = RuleSetRegistry.GetStrict(2);
 var clause = ruleSet.GetClause(1, 1);
-var ruleId = clause.Id;        // "ADR-002_1_1"
+var ruleId = clause.Id;        // "ADR-002.1.1"
 var summary = clause.Condition; // 从 RuleSet 定义获取
 ```
 
@@ -588,7 +588,7 @@ var summary = clause.Condition; // 从 RuleSet 定义获取
 ```csharp
 // ❌ 旧方式：手动拼接字符串
 var message = 
-    $"❌ ADR-002_1_1 违规：Platform 不应依赖 Application\n\n" +
+    $"❌ ADR-002.1.1 违规：Platform 不应依赖 Application\n\n" +
     $"违规类型：\n{string.Join("\n", failingTypes)}\n\n" +
     // ... 更多手动拼接
 
@@ -609,7 +609,7 @@ var message = AssertionMessageBuilder.BuildFromArchTestResult(
 
 ```csharp
 /// <summary>
-/// ADR-002_1: 依赖方向规则
+/// ADR-002.1: 依赖方向规则
 /// ...
 ///
 /// 关联文档：
@@ -638,11 +638,11 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 
 public sealed class ADR_002_1_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-002_1_1: Platform 不应依赖 Application")]
+    [Fact(DisplayName = "ADR-002.1.1: Platform 不应依赖 Application")]
     public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
     {
         // 硬编码规则信息
-        var ruleId = "ADR-002_1_1";
+        var ruleId = "ADR-002.1.1";
         var summary = "Platform 不应依赖 Application";
         
         var result = /* 执行测试 */;
@@ -659,7 +659,7 @@ public sealed class ADR_002_1_Architecture_Tests
 namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 
 /// <summary>
-/// ADR-002_1: 依赖方向规则
+/// ADR-002.1: 依赖方向规则
 ///
 /// 关联文档：
 /// - ADR: docs/adr/constitutional/ADR-002-platform-application-host-bootstrap.md
@@ -667,7 +667,7 @@ namespace Zss.BilliardHall.Tests.ArchitectureTests.ADR_002;
 /// </summary>
 public sealed class ADR_002_1_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-002_1_1: Platform 不应依赖 Application")]
+    [Fact(DisplayName = "ADR-002.1.1: Platform 不应依赖 Application")]
     public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
     {
         // ✅ 从 RuleSetRegistry 获取规则信息
@@ -732,7 +732,7 @@ var ruleSet = RuleSetRegistry.GetStrict(2);
 var clause = ruleSet.GetClause(1, 1);
 
 // 使用规则信息
-Console.WriteLine($"RuleId: {clause.Id}");           // "ADR-002_1_1"
+Console.WriteLine($"RuleId: {clause.Id}");           // "ADR-002.1.1"
 Console.WriteLine($"条件: {clause.Condition}");      // 规则的具体内容
 Console.WriteLine($"执行: {clause.Enforcement}");    // 如何执行
 

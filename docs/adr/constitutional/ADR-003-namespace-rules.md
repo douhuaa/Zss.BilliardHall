@@ -54,9 +54,9 @@ superseded_by: null
 
 ---
 
-### ADR-003_1：基础命名空间约束（Rule）
+### ADR-003.1：基础命名空间约束（Rule）
 
-#### ADR-003_1_1 所有类型必须以 BaseNamespace 开头
+#### ADR-003.1.1 所有类型必须以 BaseNamespace 开头
 
 - 所有项目的类型命名空间必须以 BaseNamespace 开头
 - BaseNamespace 为 `Zss.BilliardHall`
@@ -67,9 +67,9 @@ superseded_by: null
 
 ---
 
-### ADR-003_2：Platform 命名空间约束（Rule）
+### ADR-003.2：Platform 命名空间约束（Rule）
 
-#### ADR-003_2_1 Platform 类型必须在 Platform 命名空间
+#### ADR-003.2.1 Platform 类型必须在 Platform 命名空间
 
 - Platform 类型必须以 `Zss.BilliardHall.Platform` 为前缀
 - 确保 Platform 层边界清晰
@@ -80,9 +80,9 @@ superseded_by: null
 
 ---
 
-### ADR-003_3：Application 命名空间约束（Rule）
+### ADR-003.3：Application 命名空间约束（Rule）
 
-#### ADR-003_3_1 Application 类型必须在 Application 命名空间
+#### ADR-003.3.1 Application 类型必须在 Application 命名空间
 
 - Application 类型必须以 `Zss.BilliardHall.Application` 为前缀
 - 确保 Application 层边界清晰
@@ -93,9 +93,9 @@ superseded_by: null
 
 ---
 
-### ADR-003_4：Modules 命名空间约束（Rule）
+### ADR-003.4：Modules 命名空间约束（Rule）
 
-#### ADR-003_4_1 Module 类型必须在对应模块命名空间
+#### ADR-003.4.1 Module 类型必须在对应模块命名空间
 
 - Module 类型必须对应 `Zss.BilliardHall.Modules.{ModuleName}`
 - 每个模块有独立的命名空间
@@ -106,9 +106,9 @@ superseded_by: null
 
 ---
 
-### ADR-003_5：Host 命名空间约束（Rule）
+### ADR-003.5：Host 命名空间约束（Rule）
 
-#### ADR-003_5_1 Host 类型必须在对应 Host 命名空间
+#### ADR-003.5.1 Host 类型必须在对应 Host 命名空间
 
 - Host 类型必须对应 `Zss.BilliardHall.Host.{HostName}`
 - 每个 Host 有独立的命名空间
@@ -119,9 +119,9 @@ superseded_by: null
 
 ---
 
-### ADR-003_6：Directory.Build.props 约束（Rule）
+### ADR-003.6：Directory.Build.props 约束（Rule）
 
-#### ADR-003_6_1 Directory.Build.props 必须存在
+#### ADR-003.6.1 Directory.Build.props 必须存在
 
 - Directory.Build.props 必须存在于仓库根目录
 - 统一管理 BaseNamespace 定义
@@ -130,7 +130,7 @@ superseded_by: null
 - ❌ 缺少 Directory.Build.props
 - ✅ Directory.Build.props 存在
 
-#### ADR-003_6_2 Directory.Build.props 必须定义 BaseNamespace
+#### ADR-003.6.2 Directory.Build.props 必须定义 BaseNamespace
 
 - Directory.Build.props 必须定义 BaseNamespace 属性
 - 值为 `Zss.BilliardHall`
@@ -141,9 +141,9 @@ superseded_by: null
 
 ---
 
-### ADR-003_7：项目命名约束（Rule）
+### ADR-003.7：项目命名约束（Rule）
 
-#### ADR-003_7_1 所有项目必须遵循命名空间约定
+#### ADR-003.7.1 所有项目必须遵循命名空间约定
 
 - 项目命名必须与目录结构和命名空间对应
 - 通过 MSBuild 自动推导 RootNamespace
@@ -154,9 +154,9 @@ superseded_by: null
 
 ---
 
-### ADR-003_8：禁止的命名空间模式（Rule）
+### ADR-003.8：禁止的命名空间模式（Rule）
 
-#### ADR-003_8_1 禁止不规范命名空间模式
+#### ADR-003.8.1 禁止不规范命名空间模式
 
 - 不得出现不规范命名空间（Common、Shared、Utils）
 - 使用明确的层级命名
@@ -177,15 +177,15 @@ superseded_by: null
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-003_1_1** | L1 | ArchitectureTests 验证所有类型命名空间以 BaseNamespace 开头 | §ADR-003_1_1 |
-| **ADR-003_2_1** | L1 | ArchitectureTests 验证 Platform 类型命名空间 | §ADR-003_2_1 |
-| **ADR-003_3_1** | L1 | ArchitectureTests 验证 Application 类型命名空间 | §ADR-003_3_1 |
-| **ADR-003_4_1** | L1 | ArchitectureTests 验证 Module 类型命名空间 | §ADR-003_4_1 |
-| **ADR-003_5_1** | L1 | ArchitectureTests 验证 Host 类型命名空间 | §ADR-003_5_1 |
-| **ADR-003_6_1** | L1 | ArchitectureTests 验证 Directory.Build.props 存在 | §ADR-003_6_1 |
-| **ADR-003_6_2** | L1 | ArchitectureTests 验证 Directory.Build.props 定义 BaseNamespace | §ADR-003_6_2 |
-| **ADR-003_7_1** | L1 | ArchitectureTests 验证项目命名约定 | §ADR-003_7_1 |
-| **ADR-003_8_1** | L1 | ArchitectureTests 验证不存在不规范命名空间 | §ADR-003_8_1 |
+| **ADR-003.1.1** | L1 | ArchitectureTests 验证所有类型命名空间以 BaseNamespace 开头 | §ADR-003.1.1 |
+| **ADR-003.2.1** | L1 | ArchitectureTests 验证 Platform 类型命名空间 | §ADR-003.2.1 |
+| **ADR-003.3.1** | L1 | ArchitectureTests 验证 Application 类型命名空间 | §ADR-003.3.1 |
+| **ADR-003.4.1** | L1 | ArchitectureTests 验证 Module 类型命名空间 | §ADR-003.4.1 |
+| **ADR-003.5.1** | L1 | ArchitectureTests 验证 Host 类型命名空间 | §ADR-003.5.1 |
+| **ADR-003.6.1** | L1 | ArchitectureTests 验证 Directory.Build.props 存在 | §ADR-003.6.1 |
+| **ADR-003.6.2** | L1 | ArchitectureTests 验证 Directory.Build.props 定义 BaseNamespace | §ADR-003.6.2 |
+| **ADR-003.7.1** | L1 | ArchitectureTests 验证项目命名约定 | §ADR-003.7.1 |
+| **ADR-003.8.1** | L1 | ArchitectureTests 验证不存在不规范命名空间 | §ADR-003.8.1 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

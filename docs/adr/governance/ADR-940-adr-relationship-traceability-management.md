@@ -54,9 +54,9 @@ superseded_by: null
 
 ---
 
-### ADR-940_1：关系声明章节要求
+### ADR-940.1：关系声明章节要求
 
-#### ADR-940_1_1 每个 ADR 必须包含关系声明章节
+#### ADR-940.1.1 每个 ADR 必须包含关系声明章节
 
 **规则**：
 
@@ -74,9 +74,9 @@ superseded_by: null
 
 ---
 
-### ADR-940_2：关系类型定义与约束
+### ADR-940.2：关系类型定义与约束
 
-#### ADR-940_2_1 关系类型定义与使用约束
+#### ADR-940.2.1 关系类型定义与使用约束
 
 **规则**：
 
@@ -104,9 +104,9 @@ superseded_by: null
 
 ---
 
-### ADR-940_3：关系一致性验证
+### ADR-940.3：关系一致性验证
 
-#### ADR-940_3_1 双向一致性
+#### ADR-940.3.1 双向一致性
 
 **规则**：
 
@@ -124,9 +124,9 @@ superseded_by: null
 
 ---
 
-### ADR-940_4：循环依赖治理
+### ADR-940.4：循环依赖治理
 
-#### ADR-940_4_1 循环依赖禁止
+#### ADR-940.4.1 循环依赖禁止
 
 **规则**：
 
@@ -148,9 +148,9 @@ superseded_by: null
 
 ---
 
-### ADR-940_5：关系可视化
+### ADR-940.5：关系可视化
 
-#### ADR-940_5_1 全局关系图生成
+#### ADR-940.5.1 全局关系图生成
 
 **规则**：
 
@@ -185,12 +185,12 @@ graph TB
 
 |规则编号|执行级|测试/手段|Decision 映射|
 |---|---|---|---|
-|ADR-940_1_1|L1|`ADR_940_1_1_Relationship_Section_Required`|§ADR-940_1_1|
-|ADR-940_2_1|L1|`ADR_940_2_1_Relationship_Types_Valid`|§ADR-940_2_1|
-|ADR-940_2_1 已废弃约束|L1|`ADR_940_2_1_No_Superseded_ADR_Dependency`|§ADR-940_2_1|
-|ADR-940_3_1|L1|`ADR_940_3_1_Bidirectional_Consistency`|§ADR-940_3_1|
-|ADR-940_4_1|L1|`ADR_940_4_1_No_Circular_Dependencies`|§ADR-940_4_1|
-|ADR-940_5_1|L2|`scripts/generate-adr-relationship-map.sh`|§ADR-940_5_1|
+|ADR-940.1.1|L1|`ADR_940_1_1_Relationship_Section_Required`|§ADR-940.1.1|
+|ADR-940.2.1|L1|`ADR_940_2_1_Relationship_Types_Valid`|§ADR-940.2.1|
+|ADR-940.2.1 已废弃约束|L1|`ADR_940_2_1_No_Superseded_ADR_Dependency`|§ADR-940.2.1|
+|ADR-940.3.1|L1|`ADR_940_3_1_Bidirectional_Consistency`|§ADR-940.3.1|
+|ADR-940.4.1|L1|`ADR_940_4_1_No_Circular_Dependencies`|§ADR-940.4.1|
+|ADR-940.5.1|L2|`scripts/generate-adr-relationship-map.sh`|§ADR-940.5.1|
 
 **执行级别说明**：
 

@@ -48,7 +48,7 @@
 
 **示例**：
 ```markdown
-| ADR-201_1_1 | Handler Scoped 生命周期 | v2.5.0 | @devteam | 迁移所有 Handler 至 Scoped | 🚧 |
+| ADR-201.1.1 | Handler Scoped 生命周期 | v2.5.0 | @devteam | 迁移所有 Handler 至 Scoped | 🚧 |
 ```
 
 ---

@@ -149,16 +149,16 @@ public sealed class ADR_XXX_Architecture_Tests : IClassFixture<AdrTestFixture>
 **最佳实践示例**：
 ```csharp
 /// <summary>
-/// ADR-965_1: 互动式清单设计
+/// ADR-965.1: 互动式清单设计
 /// 验证 Onboarding 互动式学习路径的清单设计规范
 ///
 /// 测试覆盖映射：
-/// - ADR-965_1_1: 必须包含可互动的任务清单
-/// - ADR-965_1_2: 清单格式（GitHub Issue Template）
+/// - ADR-965.1.1: 必须包含可互动的任务清单
+/// - ADR-965.1.2: 清单格式（GitHub Issue Template）
 /// </summary>
 public sealed class ADR_965_1_Architecture_Tests
 {
-    [Fact(DisplayName = "ADR-965_1_1: 必须包含可互动的任务清单")]
+    [Fact(DisplayName = "ADR-965.1.1: 必须包含可互动的任务清单")]
     public void ADR_965_1_1_Must_Include_Interactive_Checklist()
     {
         // 测试实现

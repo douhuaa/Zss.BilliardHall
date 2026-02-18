@@ -59,11 +59,11 @@ superseded_by: null
 
 ---
 
-### ADR-201_1：生命周期与执行上下文匹配（Rule）
+### ADR-201.1：生命周期与执行上下文匹配（Rule）
 
-#### ADR-201_1_1 Request-driven Handler 生命周期要求
+#### ADR-201.1.1 Request-driven Handler 生命周期要求
 
-#### ADR-201_1_1 Request-driven Handler 生命周期要求
+#### ADR-201.1.1 Request-driven Handler 生命周期要求
 
 **规则**：Request-driven Handler（HTTP/gRPC）必须注册为 Scoped 生命周期。
 
@@ -78,7 +78,7 @@ superseded_by: null
 
 ---
 
-#### ADR-201_1_2 Message-driven Handler 生命周期要求
+#### ADR-201.1.2 Message-driven Handler 生命周期要求
 
 **规则**：Message-driven / Background Handler（消息/后台）必须使用 Scoped 或 Transient。
 
@@ -92,7 +92,7 @@ superseded_by: null
 
 ---
 
-#### ADR-201_1_3 Context-free Handler 生命周期要求
+#### ADR-201.1.3 Context-free Handler 生命周期要求
 
 **规则**：Context-free Handler（无状态纯计算）可使用 Transient，但必须标注。
 
@@ -107,11 +107,11 @@ superseded_by: null
 
 ---
 
-### ADR-201_2：Singleton 依赖约束（Rule）
+### ADR-201.2：Singleton 依赖约束（Rule）
 
-#### ADR-201_2_1 禁止依赖 Singleton 有状态服务
+#### ADR-201.2.1 禁止依赖 Singleton 有状态服务
 
-#### ADR-201_2_1 禁止依赖 Singleton 有状态服务
+#### ADR-201.2.1 禁止依赖 Singleton 有状态服务
 
 **规则**：Handler 禁止依赖包含可变状态的 Singleton 服务。
 
@@ -134,11 +134,11 @@ superseded_by: null
 
 ---
 
-### ADR-201_3：静态字段约束（Rule）
+### ADR-201.3：静态字段约束（Rule）
 
-#### ADR-201_3_1 禁止静态字段存储状态
+#### ADR-201.3.1 禁止静态字段存储状态
 
-#### ADR-201_3_1 禁止静态字段存储状态
+#### ADR-201.3.1 禁止静态字段存储状态
 
 **规则**：Handler 类禁止使用静态字段存储状态（常量除外）。
 
@@ -160,11 +160,11 @@ superseded_by: null
 
 ---
 
-### ADR-201_4：资源释放要求（Rule）
+### ADR-201.4：资源释放要求（Rule）
 
-#### ADR-201_4_1 IDisposable 实现要求
+#### ADR-201.4.1 IDisposable 实现要求
 
-#### ADR-201_4_1 IDisposable 实现要求
+#### ADR-201.4.1 IDisposable 实现要求
 
 **规则**：Handler 直接持有 IDisposable 资源时，必须实现 IDisposable 模式。
 
@@ -189,11 +189,11 @@ superseded_by: null
 
 ---
 
-### ADR-201_5：跨请求状态隔离（Rule）
+### ADR-201.5：跨请求状态隔离（Rule）
 
-#### ADR-201_5_1 禁止跨请求共享状态
+#### ADR-201.5.1 禁止跨请求共享状态
 
-#### ADR-201_5_1 禁止跨请求共享状态
+#### ADR-201.5.1 禁止跨请求共享状态
 
 **规则**：Handler 禁止在不同请求间共享可变状态。
 
@@ -220,13 +220,13 @@ superseded_by: null
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-201_1_1** | L1 | ArchitectureTests 自动化验证 | §ADR-201_1_1 Request-driven Handler 生命周期要求 |
-| **ADR-201_1_2** | L1 | ArchitectureTests 自动化验证 | §ADR-201_1_2 Message-driven Handler 生命周期要求 |
-| **ADR-201_1_3** | L2 | Roslyn Analyzer + 人工审查 | §ADR-201_1_3 Context-free Handler 生命周期要求 |
-| **ADR-201_2_1** | L1 | ArchitectureTests 自动化验证 | §ADR-201_2_1 禁止依赖 Singleton 有状态服务 |
-| **ADR-201_3_1** | L1 | ArchitectureTests 自动化验证 | §ADR-201_3_1 禁止静态字段存储状态 |
-| **ADR-201_4_1** | L2 | Roslyn Analyzer + 人工审查 | §ADR-201_4_1 IDisposable 实现要求 |
-| **ADR-201_5_1** | L1 | ArchitectureTests 自动化验证 | §ADR-201_5_1 禁止跨请求共享状态 |
+| **ADR-201.1.1** | L1 | ArchitectureTests 自动化验证 | §ADR-201.1.1 Request-driven Handler 生命周期要求 |
+| **ADR-201.1.2** | L1 | ArchitectureTests 自动化验证 | §ADR-201.1.2 Message-driven Handler 生命周期要求 |
+| **ADR-201.1.3** | L2 | Roslyn Analyzer + 人工审查 | §ADR-201.1.3 Context-free Handler 生命周期要求 |
+| **ADR-201.2.1** | L1 | ArchitectureTests 自动化验证 | §ADR-201.2.1 禁止依赖 Singleton 有状态服务 |
+| **ADR-201.3.1** | L1 | ArchitectureTests 自动化验证 | §ADR-201.3.1 禁止静态字段存储状态 |
+| **ADR-201.4.1** | L2 | Roslyn Analyzer + 人工审查 | §ADR-201.4.1 IDisposable 实现要求 |
+| **ADR-201.5.1** | L1 | ArchitectureTests 自动化验证 | §ADR-201.5.1 禁止跨请求共享状态 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

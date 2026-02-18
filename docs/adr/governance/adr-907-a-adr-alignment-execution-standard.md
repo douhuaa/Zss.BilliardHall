@@ -285,7 +285,7 @@ ADR-907（主体） > ADR-907-A（本标准） > 各具体 ADR > 指南文档 > 
 
 ```csharp
 // ✅ 正确
-.WithMessage($"违反 ADR-907_2_1：ArchitectureTests 必须集中于独立测试项目")
+.WithMessage($"违反 ADR-907.2.1：ArchitectureTests 必须集中于独立测试项目")
 
 // ❌ 错误
 .WithMessage($"违反 ADR-907.2:L1：ArchitectureTests 必须集中于独立测试项目")
@@ -311,7 +311,7 @@ ADR-907（主体） > ADR-907-A（本标准） > 各具体 ADR > 指南文档 > 
   public void ADR_907_4_5_Analyzer_Must_Detect_Weak_Assertions()
   {
       // TODO: 实现 Analyzer 弱断言检测逻辑
-      throw new NotImplementedException("ADR-907_4_5 测试待实现");
+      throw new NotImplementedException("ADR-907.4.5 测试待实现");
   }
   ```
 

@@ -67,9 +67,9 @@ enforceable: false
 
 ---
 
-### ADR-905_1：执行级别分类体系（Rule）
+### ADR-905.1：执行级别分类体系（Rule）
 
-#### ADR-905_1_1 架构规则必须分级执行
+#### ADR-905.1.1 架构规则必须分级执行
 
 **规则**：
 
@@ -85,7 +85,7 @@ enforceable: false
 
 ---
 
-#### ADR-905_1_2 Level 1（L1）规则的执行标准
+#### ADR-905.1.2 Level 1（L1）规则的执行标准
 
 **定义**：可以通过 NetArchTest 等静态分析工具完全自动化检查的规则。
 
@@ -116,7 +116,7 @@ enforceable: false
 
 ---
 
-#### ADR-905_1_3 Level 2（L2）规则的执行标准
+#### ADR-905.1.3 Level 2（L2）规则的执行标准
 
 **定义**：需要语义分析的规则，建议通过 Roslyn Analyzer 检查，当前测试只能做启发式检查。
 
@@ -145,7 +145,7 @@ enforceable: false
 
 ---
 
-#### ADR-905_1_4 Level 3（L3）规则的执行标准
+#### ADR-905.1.4 Level 3（L3）规则的执行标准
 
 **定义**：无法（或不应该）完全自动化的规则，需要人工审查和决策。
 
@@ -183,7 +183,7 @@ enforceable: false
 
 ---
 
-#### ADR-905_1_5 执行级别的分级意义
+#### ADR-905.1.5 执行级别的分级意义
 
 **规则**：
 
@@ -223,11 +223,11 @@ enforceable: false
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-905_1_1** | L2 | ADR 编写时的执行级别声明检查（Code Review） | §ADR-905_1_1 |
-| **ADR-905_1_2** | L1 | NetArchTest 架构测试（CI 阻断） | §ADR-905_1_2 |
-| **ADR-905_1_3** | L2 | Roslyn Analyzer（警告）+ 人工审查 | §ADR-905_1_3 |
-| **ADR-905_1_4** | L3 | PR Template + 架构师审查 + ARCH-VIOLATIONS 记录 | §ADR-905_1_4 |
-| **ADR-905_1_5** | L2 | Code Review + 教育培训 | §ADR-905_1_5 |
+| **ADR-905.1.1** | L2 | ADR 编写时的执行级别声明检查（Code Review） | §ADR-905.1.1 |
+| **ADR-905.1.2** | L1 | NetArchTest 架构测试（CI 阻断） | §ADR-905.1.2 |
+| **ADR-905.1.3** | L2 | Roslyn Analyzer（警告）+ 人工审查 | §ADR-905.1.3 |
+| **ADR-905.1.4** | L3 | PR Template + 架构师审查 + ARCH-VIOLATIONS 记录 | §ADR-905.1.4 |
+| **ADR-905.1.5** | L2 | Code Review + 教育培训 | §ADR-905.1.5 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

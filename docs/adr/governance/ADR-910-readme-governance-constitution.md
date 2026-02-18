@@ -53,9 +53,9 @@ superseded_by: null
 
 ---
 
-### ADR-910_1：README 的定位与权限边界（Rule）
+### ADR-910.1：README 的定位与权限边界（Rule）
 
-#### ADR-910_1_1 README 是使用说明不是架构裁决书
+#### ADR-910.1.1 README 是使用说明不是架构裁决书
 
 **规则**：
 
@@ -69,7 +69,7 @@ README **仅允许**：
 README **禁止**：
 - ❌ 定义架构规则
 - ❌ 做出架构判断
-- ❌ 使用裁决性语言（见 ADR-910_1_2）
+- ❌ 使用裁决性语言（见 ADR-910.1.2）
 - ❌ 替代 ADR 解释架构约束
 - ❌ 引入新的术语定义
 
@@ -85,7 +85,7 @@ README **禁止**：
 
 ---
 
-#### ADR-910_1_2 禁用裁决性语言规则
+#### ADR-910.1.2 禁用裁决性语言规则
 
 **规则**：
 
@@ -114,7 +114,7 @@ README **禁止**使用以下裁决性词汇：
 
 ---
 
-#### ADR-910_1_3 必须包含无裁决力声明
+#### ADR-910.1.3 必须包含无裁决力声明
 
 **规则**：
 
@@ -141,9 +141,9 @@ README **禁止**使用以下裁决性词汇：
 
 ---
 
-### ADR-910_2：README 与 ADR 的关系治理（Rule）
+### ADR-910.2：README 与 ADR 的关系治理（Rule）
 
-#### ADR-910_2_1 README 引用 ADR 的规范
+#### ADR-910.2.1 README 引用 ADR 的规范
 
 **规则**：
 
@@ -173,7 +173,7 @@ README 引用 ADR 必须遵循：
 
 ---
 
-#### ADR-910_2_2 README 的变更治理规则
+#### ADR-910.2.2 README 的变更治理规则
 
 **规则**：
 
@@ -202,11 +202,11 @@ README 引用 ADR 必须遵循：
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-910_1_1** | L1 | ArchitectureTests 验证 README 功能边界 | §ADR-910_1_1 |
-| **ADR-910_1_2** | L1 | ArchitectureTests 检测裁决性语言 | §ADR-910_1_2 |
-| **ADR-910_1_3** | L1 | ArchitectureTests 验证无裁决力声明存在 | §ADR-910_1_3 |
-| **ADR-910_2_1** | L1 | ArchitectureTests 验证 ADR 引用规范性 | §ADR-910_2_1 |
-| **ADR-910_2_2** | L2 | Code Review 人工审查变更合规性 | §ADR-910_2_2 |
+| **ADR-910.1.1** | L1 | ArchitectureTests 验证 README 功能边界 | §ADR-910.1.1 |
+| **ADR-910.1.2** | L1 | ArchitectureTests 检测裁决性语言 | §ADR-910.1.2 |
+| **ADR-910.1.3** | L1 | ArchitectureTests 验证无裁决力声明存在 | §ADR-910.1.3 |
+| **ADR-910.2.1** | L1 | ArchitectureTests 验证 ADR 引用规范性 | §ADR-910.2.1 |
+| **ADR-910.2.2** | L2 | Code Review 人工审查变更合规性 | §ADR-910.2.2 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

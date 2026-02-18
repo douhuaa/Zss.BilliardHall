@@ -62,15 +62,15 @@ superseded_by: null
 
 ---
 
-### ADR-902_1：ADR 结构完整性（Rule）
+### ADR-902.1：ADR 结构完整性（Rule）
 
-#### ADR-902_1_1 规则条目必须独立编号
+#### ADR-902.1.1 规则条目必须独立编号
 
 - 每条规则必须作为独立三级标题存在。
 - 避免合并多条规则，确保 CI 能精确扫描。
 - 标题格式严格遵守：`### ADR-902_X_Y <规则标题>（中文别名可选）`
 
-#### ADR-902_1_2 统一模板结构
+#### ADR-902.1.2 统一模板结构
 
 - 所有 ADR 文档 **必须**符合本 ADR 定义的：
   - Front Matter 字段规范
@@ -84,7 +84,7 @@ superseded_by: null
 
 ---
 
-#### ADR-902_1_3 标准 Front Matter
+#### ADR-902.1.3 标准 Front Matter
 
 每个 ADR 文件 **必须**以 YAML Front Matter 开头，并至少包含以下字段：
 
@@ -110,7 +110,7 @@ superseded_by: ADR-xxx | null
 
 ---
 
-#### ADR-902_1_4 包含完整章节集合
+#### ADR-902.1.4 包含完整章节集合
 
 - 每个 ADR **必须**包含以下章节，**英文名称为裁决关键字（Canonical Name）**，中文名称仅作显示别名（Alias）：
 
@@ -134,9 +134,9 @@ superseded_by: ADR-xxx | null
 
 ---
 
-### ADR-902_2：语义职责边界（Rule）
+### ADR-902.2：语义职责边界（Rule）
 
-#### ADR-902_2_1 Decision 严格隔离
+#### ADR-902.2.1 Decision 严格隔离
 
 - 所有 约束性规则只能出现在 ## Decision。
 - 非 Decision 章节不得出现 MUST / 禁止 / 不允许 等裁决语义。
@@ -144,7 +144,7 @@ superseded_by: ADR-xxx | null
 
 ---
 
-#### ADR-902_2_2 ADR 模板不承担语义裁决职责
+#### ADR-902.2.2 ADR 模板不承担语义裁决职责
 
 - 不定义 Warning / Constraint / Notice。
 - 不定义规则执行级别（L1/L2/L3）。
@@ -152,7 +152,7 @@ superseded_by: ADR-xxx | null
 
 ---
 
-#### ADR-902_2_3 Relationships 章节仅承担结构接口职责
+#### ADR-902.2.3 Relationships 章节仅承担结构接口职责
 
 - ADR-902 仅裁决 `Relationships` 章节是否存在、名称是否合法、顺序是否正确。
 - `Relationships` 章节中出现的任何关系类型、依赖合法性、双向一致性、循环依赖、替代规则等 **语义性约束**：
@@ -172,13 +172,13 @@ superseded_by: ADR-xxx | null
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-902_1_1** | L1 | CI 扫描三级标题独立性 | §ADR-902_1_1 |
-| **ADR-902_1_2** | L1 | CI 模板完整性校验 | §ADR-902_1_2 |
-| **ADR-902_1_3** | L1 | Front Matter 字段 + 格式校验 | §ADR-902_1_3 |
-| **ADR-902_1_4** | L1 | 章节存在性与顺序检查 | §ADR-902_1_4 |
-| **ADR-902_2_1** | L2 | Decision 语义扫描 + 人工 Review | §ADR-902_2_1 |
-| **ADR-902_2_2** | L1 | 模板不承担语义裁决验证 | §ADR-902_2_2 |
-| **ADR-902_2_3** | L1 | Relationships 章节结构验证 | §ADR-902_2_3 |
+| **ADR-902.1.1** | L1 | CI 扫描三级标题独立性 | §ADR-902.1.1 |
+| **ADR-902.1.2** | L1 | CI 模板完整性校验 | §ADR-902.1.2 |
+| **ADR-902.1.3** | L1 | Front Matter 字段 + 格式校验 | §ADR-902.1.3 |
+| **ADR-902.1.4** | L1 | 章节存在性与顺序检查 | §ADR-902.1.4 |
+| **ADR-902.2.1** | L2 | Decision 语义扫描 + 人工 Review | §ADR-902.2.1 |
+| **ADR-902.2.2** | L1 | 模板不承担语义裁决验证 | §ADR-902.2.2 |
+| **ADR-902.2.3** | L1 | Relationships 章节结构验证 | §ADR-902.2.3 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

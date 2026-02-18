@@ -64,9 +64,9 @@ enforceable: false
 
 ---
 
-### ADR-901_1：风险表达语义模型（Rule）
+### ADR-901.1：风险表达语义模型（Rule）
 
-#### ADR-901_1_1 风险表达必须使用三态语义模型
+#### ADR-901.1.1 风险表达必须使用三态语义模型
 
 所有风险与提示 **必须** 明确归类为以下三种之一：
 
@@ -81,7 +81,7 @@ enforceable: false
 - Soft Rule
 - Best Practice（若具约束性）
 
-#### ADR-901_1_2 Constraint 的合法性条件
+#### ADR-901.1.2 Constraint 的合法性条件
 
 只有同时满足以下条件，才允许声明为 Constraint：
 
@@ -93,7 +93,7 @@ enforceable: false
 
 否则 **必须降级**。
 
-#### ADR-901_1_3 Warning 的边界
+#### ADR-901.1.3 Warning 的边界
 
 Warning **必须**：
 - 明确风险后果
@@ -107,7 +107,7 @@ Warning **必须**：
 - “最好”
 - 暗含强制但不声明的表述
 
-#### ADR-901_1_4 Notice 的纯信息性约束
+#### ADR-901.1.4 Notice 的纯信息性约束
 
 Notice **只能**用于：
 - 背景说明
@@ -121,9 +121,9 @@ Notice **只能**用于：
 
 ---
 
-### ADR-901_2：语义执行与判定（Rule）
+### ADR-901.2：语义执行与判定（Rule）
 
-#### ADR-901_2_1 统一语义声明块
+#### ADR-901.2.1 统一语义声明块
 
 所有 Constraint / Warning / Notice  
 **必须** 使用统一结构块，不允许自由文本表达。
@@ -148,7 +148,7 @@ Notice **只能**用于：
 > ……
 ```
 
-#### ADR-901_2_2 不可识别语义等同不存在
+#### ADR-901.2.2 不可识别语义等同不存在
 
 任何风险表达如果：
 - 无统一结构
@@ -157,14 +157,14 @@ Notice **只能**用于：
 
 → **治理系统视为不存在**。
 
-#### ADR-901_2_3 执行级别强制声明
+#### ADR-901.2.3 执行级别强制声明
 
 所有 Constraint / Warning  
 **必须显式声明执行级别**（L1 / L2 / L3）。
 
 执行级别定义 **完全依赖 ADR-####**。
 
-#### ADR-901_2_4 判定输出三态模型
+#### ADR-901.2.4 判定输出三态模型
 
 所有风险表达在治理系统中 **必须被判定为**：
 
@@ -182,14 +182,14 @@ Notice **只能**用于：
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-901_1_1** | L1 | ArchitectureTests 自动化验证语义类型 | §ADR-901_1_1 |
-| **ADR-901_1_2** | L1 | ArchitectureTests 验证 Constraint 合法性 | §ADR-901_1_2 |
-| **ADR-901_1_3** | L1 | ArchitectureTests 验证 Warning 边界 | §ADR-901_1_3 |
-| **ADR-901_1_4** | L1 | ArchitectureTests 验证 Notice 纯信息性 | §ADR-901_1_4 |
-| **ADR-901_2_1** | L1 | ArchitectureTests 验证统一结构块格式 | §ADR-901_2_1 |
-| **ADR-901_2_2** | L1 | ArchitectureTests 检测不可识别语义 | §ADR-901_2_2 |
-| **ADR-901_2_3** | L1 | ArchitectureTests 验证执行级别声明 | §ADR-901_2_3 |
-| **ADR-901_2_4** | L1 | CI 系统三态判定输出 | §ADR-901_2_4 |
+| **ADR-901.1.1** | L1 | ArchitectureTests 自动化验证语义类型 | §ADR-901.1.1 |
+| **ADR-901.1.2** | L1 | ArchitectureTests 验证 Constraint 合法性 | §ADR-901.1.2 |
+| **ADR-901.1.3** | L1 | ArchitectureTests 验证 Warning 边界 | §ADR-901.1.3 |
+| **ADR-901.1.4** | L1 | ArchitectureTests 验证 Notice 纯信息性 | §ADR-901.1.4 |
+| **ADR-901.2.1** | L1 | ArchitectureTests 验证统一结构块格式 | §ADR-901.2.1 |
+| **ADR-901.2.2** | L1 | ArchitectureTests 检测不可识别语义 | §ADR-901.2.2 |
+| **ADR-901.2.3** | L1 | ArchitectureTests 验证执行级别声明 | §ADR-901.2.3 |
+| **ADR-901.2.4** | L1 | CI 系统三态判定输出 | §ADR-901.2.4 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

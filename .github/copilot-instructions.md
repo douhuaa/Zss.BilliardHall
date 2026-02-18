@@ -40,14 +40,14 @@
 
 ## 委托原则
 
-根据 **ADR-007_1**（Agent 职责分离原则），本系统采用以下委托原则：
+根据 **ADR-007.1**（Agent 职责分离原则），本系统采用以下委托原则：
 
 * **所有任务**必须通过 `run_subagent` 调用对应 Agent 执行。
-* Guardian **仅协调与汇总**，禁止直接做最终裁决（参见 **ADR-007_2_1**）。
+* Guardian **仅协调与汇总**，禁止直接做最终裁决（参见 **ADR-007.2.1**）。
 * 未明确职责的操作必须标记为 `Uncertain` 并引导人工确认。
 * 所有 Agent 输出必须符合**三态判定规则**（见下节）。
 
-### 三态输出规则（基于 ADR-007_2）
+### 三态输出规则（基于 ADR-007.2）
 
 所有 Specialist 和 Guardian Agent 必须使用以下三态输出之一：
 
@@ -57,7 +57,7 @@
 | ⚠️ **Blocked** | ADR 正文明确禁止或导致测试失败 | 存在架构违规 | 阻止合并，需修复 |
 | ❓ **Uncertain** | ADR 正文未明确，默认禁止 | 需要人工裁决的情况 | 升级至 Architecture Board |
 
-**禁止行为**（ADR-007_3_2）：
+**禁止行为**（ADR-007.3.2）：
 - ❌ 禁止使用"可能"、"建议"、"推荐"等模糊判定
 - ❌ 禁止在无 ADR 支持的情况下做出 Blocked 判定
 - ❌ 禁止 Guardian 直接推翻 ADR 正文的明确规定
@@ -115,7 +115,7 @@ ci_pipeline:
 
 > ⚠️ **语言要求**：所有 FailureObject 字段内容必须使用中文。
 
-根据 **ADR-007_4**（失败反馈机制），当 Agent 判定为 **Blocked** 或 **Uncertain** 时，必须生成规范的 FailureObject：
+根据 **ADR-007.4**（失败反馈机制），当 Agent 判定为 **Blocked** 或 **Uncertain** 时，必须生成规范的 FailureObject：
 
 ```json
 {
@@ -146,13 +146,13 @@ ci_pipeline:
 }
 ```
 
-**FailureObject 必需字段**（ADR-007_4_1）：
+**FailureObject 必需字段**（ADR-007.4.1）：
 - `decision`：必须是 Blocked 或 Uncertain
 - `rule_id`：违反的具体 RuleId（格式：`ADR-XXX_Y_Z`）
 - `evidence`：至少一条可验证的证据
 - `remediation`：明确的修复建议
 
-**禁止行为**（ADR-007_4_2）：
+**禁止行为**（ADR-007.4.2）：
 - ❌ 禁止生成无 RuleId 引用的 FailureObject
 - ❌ 禁止生成无修复建议的 FailureObject
 - ❌ 禁止使用模糊的证据（如"感觉不对"、"可能有问题"）
@@ -163,7 +163,7 @@ ci_pipeline:
 
 > ⚠️ **语言要求**：所有反馈、报告、进度更新必须使用中文，包括任务完成时的最终回复。
 
-根据 **ADR-900_4**（破例治理机制）和 **ADR-907_3**（失败处理流程），建立以下反馈闭环：
+根据 **ADR-900.4**（破例治理机制）和 **ADR-907.3**（失败处理流程），建立以下反馈闭环：
 
 ```yaml
 feedback_loop:
@@ -185,12 +185,12 @@ feedback_loop:
    - 执行三态判定（✅ Allowed / ⚠️ Blocked / ❓ Uncertain）
    - 生成 FailureObject（如需要）
 
-2. **失败分类**（ADR-907_3_1）：
+2. **失败分类**（ADR-907.3.1）：
    - **L1 失败**：架构测试失败 → 自动阻断 CI
    - **L2 失败**：Analyzer 告警 → 需人工 Code Review
    - **L3 失败**：需要架构师人工裁决
 
-3. **治理产物生成**（ADR-900_3_2）：
+3. **治理产物生成**（ADR-900.3.2）：
    - 任何失败或异常必须产生治理产物
    - 禁止仅修改 Prompt 而不更新 ADR/测试
    - 所有破例必须通过 Issue 记录并关联 ADR
@@ -211,7 +211,7 @@ ADR-XXX_<Rule>_<Clause>
 ```
 
 **示例**：
-- ✅ 正确：`ADR-900_1_1`、`ADR-001_2_3`、`ADR-907_4_2`
+- ✅ 正确：`ADR-900.1.1`、`ADR-001.2.3`、`ADR-907.4.2`
 - ❌ 错误：`ADR-900.1:L1`、`ADR-900.1.1`、`ADR-900-1-1`
 
 **适用场景**：

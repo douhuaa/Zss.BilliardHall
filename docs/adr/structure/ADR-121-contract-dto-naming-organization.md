@@ -58,9 +58,9 @@ superseded_by: null
 
 ---
 
-### ADR-121_1：契约类型命名规范（Rule）
+### ADR-121.1：契约类型命名规范（Rule）
 
-#### ADR-121_1_1 契约类型命名模式
+#### ADR-121.1.1 契约类型命名模式
 
 所有跨模块契约必须遵循以下命名模式：
 
@@ -95,7 +95,7 @@ public record MemberData(Guid MemberId);        // ❌ 模糊名称
 public record MemberEntity(Guid MemberId);      // ❌ Entity 保留给领域模型
 ```
 
-#### ADR-121_1_2 属性命名规范
+#### ADR-121.1.2 属性命名规范
 
 - 主键属性：`{AggregateRoot}Id`（如 `MemberId`、`OrderId`）
 - 避免通用名称（`Id`、`Data`、`Value`），使用明确业务语义
@@ -105,9 +105,9 @@ public record MemberEntity(Guid MemberId);      // ❌ Entity 保留给领域模
 
 ---
 
-### ADR-121_2：目录与命名空间组织（Rule）
+### ADR-121.2：目录与命名空间组织（Rule）
 
-#### ADR-121_2_1 契约目录结构规范
+#### ADR-121.2.1 契约目录结构规范
 
 契约组织支持三种方式：
 
@@ -133,7 +133,7 @@ src/Contracts/
   Members/MemberInfoDto.cs
 ```
 
-#### ADR-121_2_2 命名空间映射规范
+#### ADR-121.2.2 命名空间映射规范
 
 契约命名空间必须与物理目录一致：
 
@@ -151,9 +151,9 @@ public record MemberInfoDto(...);
 
 ---
 
-### ADR-121_3：契约内容约束（Rule）
+### ADR-121.3：契约内容约束（Rule）
 
-#### ADR-121_3_1 不可变性约束
+#### ADR-121.3.1 不可变性约束
 
 所有契约必须是只读的：
 
@@ -177,7 +177,7 @@ public class MemberInfoDto
 
 ---
 
-#### ADR-121_3_2 无业务逻辑约束
+#### ADR-121.3.2 无业务逻辑约束
 
 契约不得包含业务方法：
 
@@ -200,7 +200,7 @@ public record MemberInfoDto(Guid MemberId, decimal Balance)
 
 ---
 
-#### ADR-121_3_3 不包含领域模型约束
+#### ADR-121.3.3 不包含领域模型约束
 
 契约只能包含原始类型和其他 DTO：
 
@@ -221,7 +221,7 @@ public record OrderDetailContract(
 
 ### 版本管理
 
-#### ADR-121_4_1 版本命名规范
+#### ADR-121.4.1 版本命名规范
 
 破坏性变更必须创建新版本（V2、V3）：
 
@@ -238,7 +238,7 @@ public record MemberInfoDtoV2(Guid MemberId, string UserName, string Email);
 
 ---
 
-#### ADR-121_4_2 版本废弃策略
+#### ADR-121.4.2 版本废弃策略
 
 使用 `[Obsolete]` 标记旧版本，采用渐进式流程：
 
@@ -248,7 +248,7 @@ public record MemberInfoDtoV2(Guid MemberId, string UserName, string Email);
 
 ---
 
-#### ADR-121_4_3 嵌套DTO版本演进
+#### ADR-121.4.3 嵌套DTO版本演进
 
 嵌套 DTO 独立版本管理：
 
@@ -271,9 +271,9 @@ public record OrderItemDtoV2(
 
 ---
 
-### ADR-121_4：标记接口规范（Rule）
+### ADR-121.4：标记接口规范（Rule）
 
-#### ADR-121_4_1 IContract接口使用规范（可选）
+#### ADR-121.4.1 IContract接口使用规范（可选）
 
 为支持工具和文档生成，契约可实现 `IContract`：
 
@@ -304,17 +304,17 @@ public record MemberInfoDto(Guid MemberId, string UserName) : IContract
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-121_1_1** | L1 | ArchitectureTests 验证契约命名模式 | §ADR-121_1_1 |
-| **ADR-121_1_2** | L1 | ArchitectureTests 验证属性命名规范 | §ADR-121_1_2 |
-| **ADR-121_2_1** | L1 | ArchitectureTests 验证契约目录结构 | §ADR-121_2_1 |
-| **ADR-121_2_2** | L1 | ArchitectureTests 验证命名空间映射 | §ADR-121_2_2 |
-| **ADR-121_3_1** | L1 | ArchitectureTests 验证不可变性 | §ADR-121_3_1 |
-| **ADR-121_3_2** | L1 | ArchitectureTests 验证无业务逻辑 | §ADR-121_3_2 |
-| **ADR-121_3_3** | L1 | ArchitectureTests 验证不包含领域模型 | §ADR-121_3_3 |
-| **ADR-121_4_1** | L1 | ArchitectureTests 验证版本命名规范 | §ADR-121_4_1 |
-| **ADR-121_4_2** | L2 | Code Review 检查版本废弃流程 | §ADR-121_4_2 |
-| **ADR-121_4_3** | L2 | Code Review 检查嵌套DTO版本一致性 | §ADR-121_4_3 |
-| **ADR-121_4_1** | L3 | 文档审查 | §ADR-121_4_1 |
+| **ADR-121.1.1** | L1 | ArchitectureTests 验证契约命名模式 | §ADR-121.1.1 |
+| **ADR-121.1.2** | L1 | ArchitectureTests 验证属性命名规范 | §ADR-121.1.2 |
+| **ADR-121.2.1** | L1 | ArchitectureTests 验证契约目录结构 | §ADR-121.2.1 |
+| **ADR-121.2.2** | L1 | ArchitectureTests 验证命名空间映射 | §ADR-121.2.2 |
+| **ADR-121.3.1** | L1 | ArchitectureTests 验证不可变性 | §ADR-121.3.1 |
+| **ADR-121.3.2** | L1 | ArchitectureTests 验证无业务逻辑 | §ADR-121.3.2 |
+| **ADR-121.3.3** | L1 | ArchitectureTests 验证不包含领域模型 | §ADR-121.3.3 |
+| **ADR-121.4.1** | L1 | ArchitectureTests 验证版本命名规范 | §ADR-121.4.1 |
+| **ADR-121.4.2** | L2 | Code Review 检查版本废弃流程 | §ADR-121.4.2 |
+| **ADR-121.4.3** | L2 | Code Review 检查嵌套DTO版本一致性 | §ADR-121.4.3 |
+| **ADR-121.4.1** | L3 | 文档审查 | §ADR-121.4.1 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

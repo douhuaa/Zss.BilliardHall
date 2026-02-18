@@ -475,7 +475,7 @@ gh issue create \
 ### Rule 1: 模块隔离约束
 
 #### Clause 1.1: 模块不相互引用
-- **RuleId**: \`ADR-001_1_1\`
+- **RuleId**: \`ADR-001.1.1\`
 - **执行类型**: Convention
 - **约束**: 模块之间不得直接引用
 - **测试**: \`Module_ShouldNotReferenceOtherModules\`

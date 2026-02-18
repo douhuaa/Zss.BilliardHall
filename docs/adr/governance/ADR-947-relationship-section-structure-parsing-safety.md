@@ -55,9 +55,9 @@ superseded_by: null
 
 ---
 
-### ADR-947_1：唯一顶级关系区原则（Rule）
+### ADR-947.1：唯一顶级关系区原则（Rule）
 
-#### ADR-947_1_1 唯一顶级关系区
+#### ADR-947.1.1 唯一顶级关系区
 
 - 每个 ADR **必须且仅能**包含一个 `## Relationships` 章节（中文标题为 `##` 级别的关系声明章节）
 - 禁止：
@@ -71,9 +71,9 @@ superseded_by: null
 
 ---
 
-### ADR-947_2：关系区边界即标题边界（Rule）
+### ADR-947.2：关系区边界即标题边界（Rule）
 
-#### ADR-947_2_1 边界限制
+#### ADR-947.2.1 边界限制
 
 - "关系声明"区内容仅存在于从 `## Relationships` 到下一个同级 `##` 标题 或 `#`
 - 禁止：
@@ -87,9 +87,9 @@ superseded_by: null
 
 ---
 
-### ADR-947_3：禁止显式循环声明（Rule）
+### ADR-947.3：禁止显式循环声明（Rule）
 
-#### ADR-947_3_1 循环检测
+#### ADR-947.3.1 循环检测
 
 - 禁止在关系声明区出现 A→B 且 B→A
 - 历史闭环：
@@ -103,9 +103,9 @@ superseded_by: null
 
 | 规则编号        | 执行级 | 执法方式                           | Decision 映射  |
 |-------------|-----|--------------------------------|--------------|
-| ADR-947_1_1 | L1  | ArchitectureTest 自动验证唯一顶级关系区   | §ADR-947_1_1 |
-| ADR-947_2_1 | L1  | ArchitectureTest 验证关系区边界       | §ADR-947_2_1 |
-| ADR-947_3_1 | L1  | ArchitectureTest 检测显式循环声明      | §ADR-947_3_1 |
+| ADR-947.1.1 | L1  | ArchitectureTest 自动验证唯一顶级关系区   | §ADR-947.1.1 |
+| ADR-947.2.1 | L1  | ArchitectureTest 验证关系区边界       | §ADR-947.2.1 |
+| ADR-947.3.1 | L1  | ArchitectureTest 检测显式循环声明      | §ADR-947.3.1 |
 
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止 PR 合并
 - 测试类建议：`ADR_947_Architecture_Tests.cs`

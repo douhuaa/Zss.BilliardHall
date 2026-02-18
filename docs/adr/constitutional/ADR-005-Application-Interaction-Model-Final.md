@@ -58,9 +58,9 @@ superseded_by: null
 
 ---
 
-### ADR-005_1：Use Case 执行与裁决权（Rule）
+### ADR-005.1：Use Case 执行与裁决权（Rule）
 
-#### ADR-005_1_1 每个业务用例必须唯一 Handler
+#### ADR-005.1.1 每个业务用例必须唯一 Handler
 
 - 每个业务用例必须唯一 Handler，且该 Handler 拥有全部业务决策权
 - 一个用例不允许多个 Handler 处理同一业务逻辑
@@ -69,7 +69,7 @@ superseded_by: null
 - ❌ 多个 Handler 处理同一用例
 - ✅ 每个用例只有一个 Handler
 
-#### ADR-005_1_2 Endpoint 仅做请求适配
+#### ADR-005.1.2 Endpoint 仅做请求适配
 
 - Endpoint/Controller 仅允许做请求适配和 Handler 调用
 - Endpoint 禁止承载任何业务规则、决策分支或业务判断
@@ -80,9 +80,9 @@ superseded_by: null
 
 ---
 
-### ADR-005_2：Handler 职责边界（Rule）
+### ADR-005.2：Handler 职责边界（Rule）
 
-#### ADR-005_2_1 Handler 不得持有业务状态
+#### ADR-005.2.1 Handler 不得持有业务状态
 
 - Handler 不得持有跨调用生命周期的业务状态
 - Handler 禁止使用实例字段存储业务数据（除依赖注入的服务外）
@@ -91,7 +91,7 @@ superseded_by: null
 - ❌ Handler 使用实例字段存储业务状态
 - ✅ Handler 无状态，仅通过依赖注入获取服务
 
-#### ADR-005_2_2 Handler 禁止作为跨模块粘合层
+#### ADR-005.2.2 Handler 禁止作为跨模块粘合层
 
 - Handler 禁止作为同步跨模块"粘合层"
 - Handler 禁止同步调用多个其他模块的 Handler 并聚合结果
@@ -100,7 +100,7 @@ superseded_by: null
 - ❌ Handler 同步调用多个模块并聚合
 - ✅ Handler 通过事件异步协调
 
-#### ADR-005_2_3 Handler 不允许返回领域实体
+#### ADR-005.2.3 Handler 不允许返回领域实体
 
 - Handler 不允许返回或暴露领域实体作为出参
 - Handler 禁止将 Entity、Aggregate、ValueObject 直接作为返回值
@@ -111,9 +111,9 @@ superseded_by: null
 
 ---
 
-### ADR-005_3：模块通信及同步/异步边界（Rule）
+### ADR-005.3：模块通信及同步/异步边界（Rule）
 
-#### ADR-005_3_1 模块内允许同步调用
+#### ADR-005.3.1 模块内允许同步调用
 
 - 模块内：允许同步方法调用
 - 模块内组件可直接依赖和调用
@@ -121,7 +121,7 @@ superseded_by: null
 **判定**：
 - ✅ 模块内同步调用
 
-#### ADR-005_3_2 模块间默认异步通信
+#### ADR-005.3.2 模块间默认异步通信
 
 - 模块间：**默认只能异步通信（领域事件/集成事件）**
 - 未经审批，禁止任何跨模块同步调用（如直接方法、同步仓储、接口依赖等）
@@ -132,9 +132,9 @@ superseded_by: null
 
 ---
 
-### ADR-005_4：通信契约与领域模型隔离（Rule）
+### ADR-005.4：通信契约与领域模型隔离（Rule）
 
-#### ADR-005_4_1 模块间仅通过契约通信
+#### ADR-005.4.1 模块间仅通过契约通信
 
 - 模块间仅通过协定 DTO/事件通信
 - 禁止直接引用/传递 Entity/Aggregate/VO
@@ -143,7 +143,7 @@ superseded_by: null
 - ❌ 跨模块传递领域实体
 - ✅ 仅传递契约 DTO
 
-#### ADR-005_4_2 契约不承载业务决策
+#### ADR-005.4.2 契约不承载业务决策
 
 - 合约（Contract）只允许传递数据
 - 不承载业务决策/行为
@@ -154,9 +154,9 @@ superseded_by: null
 
 ---
 
-### ADR-005_5：CQRS 与 Handler 唯一性（Rule）
+### ADR-005.5：CQRS 与 Handler 唯一性（Rule）
 
-#### ADR-005_5_1 Command Handler 只执行业务逻辑
+#### ADR-005.5.1 Command Handler 只执行业务逻辑
 
 - Command Handler 只允许执行业务逻辑并返回 void 或唯一标识
 - Command Handler 只能返回 `void`、`Task`、`Unit` 或唯一标识符（Guid/Id）
@@ -165,7 +165,7 @@ superseded_by: null
 - ❌ Command Handler 返回业务数据
 - ✅ Command Handler 返回 void 或 Id
 
-#### ADR-005_5_2 Query Handler 只读返回
+#### ADR-005.5.2 Query Handler 只读返回
 
 - Query Handler 只允许只读 DTO/投影返回
 - Query Handler 禁止调用 Repository 的 Add/Update/Delete 方法
@@ -174,7 +174,7 @@ superseded_by: null
 - ❌ Query Handler 执行写操作
 - ✅ Query Handler 仅读取数据
 
-#### ADR-005_5_3 Command/Query 必须分离
+#### ADR-005.5.3 Command/Query 必须分离
 
 - Command/Query Handler 必须职责分离
 - 不允许合并、混用
@@ -200,18 +200,18 @@ superseded_by: null
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-005_1_1** | L1 | ArchitectureTests 验证 Handler 唯一性 | §ADR-005_1_1 |
-| **ADR-005_1_2** | L1 | ArchitectureTests 检测 Endpoint 业务逻辑 | §ADR-005_1_2 |
-| **ADR-005_2_1** | L1 | ArchitectureTests 验证 Handler 无状态 | §ADR-005_2_1 |
-| **ADR-005_2_2** | L2 | ArchitectureTests 检测跨模块同步调用 | §ADR-005_2_2 |
-| **ADR-005_2_3** | L1 | ArchitectureTests 验证返回值类型 | §ADR-005_2_3 |
-| **ADR-005_3_1** | L2 | ArchitectureTests 验证模块内依赖 | §ADR-005_3_1 |
-| **ADR-005_3_2** | L1 | ArchitectureTests 检测跨模块同步 | §ADR-005_3_2 |
-| **ADR-005_4_1** | L1 | ArchitectureTests 验证契约类型 | §ADR-005_4_1 |
-| **ADR-005_4_2** | L2 | ArchitectureTests 分析契约成员 | §ADR-005_4_2 |
-| **ADR-005_5_1** | L1 | ArchitectureTests 验证 Command 返回值 | §ADR-005_5_1 |
-| **ADR-005_5_2** | L1 | ArchitectureTests 检测 Query 写操作 | §ADR-005_5_2 |
-| **ADR-005_5_3** | L1 | ArchitectureTests 验证 CQRS 分离 | §ADR-005_5_3 |
+| **ADR-005.1.1** | L1 | ArchitectureTests 验证 Handler 唯一性 | §ADR-005.1.1 |
+| **ADR-005.1.2** | L1 | ArchitectureTests 检测 Endpoint 业务逻辑 | §ADR-005.1.2 |
+| **ADR-005.2.1** | L1 | ArchitectureTests 验证 Handler 无状态 | §ADR-005.2.1 |
+| **ADR-005.2.2** | L2 | ArchitectureTests 检测跨模块同步调用 | §ADR-005.2.2 |
+| **ADR-005.2.3** | L1 | ArchitectureTests 验证返回值类型 | §ADR-005.2.3 |
+| **ADR-005.3.1** | L2 | ArchitectureTests 验证模块内依赖 | §ADR-005.3.1 |
+| **ADR-005.3.2** | L1 | ArchitectureTests 检测跨模块同步 | §ADR-005.3.2 |
+| **ADR-005.4.1** | L1 | ArchitectureTests 验证契约类型 | §ADR-005.4.1 |
+| **ADR-005.4.2** | L2 | ArchitectureTests 分析契约成员 | §ADR-005.4.2 |
+| **ADR-005.5.1** | L1 | ArchitectureTests 验证 Command 返回值 | §ADR-005.5.1 |
+| **ADR-005.5.2** | L1 | ArchitectureTests 检测 Query 写操作 | §ADR-005.5.2 |
+| **ADR-005.5.3** | L1 | ArchitectureTests 验证 CQRS 分离 | §ADR-005.5.3 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

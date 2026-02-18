@@ -58,9 +58,9 @@ superseded_by: null
 
 ---
 
-### ADR-340_1：Platform 层日志基础设施（Rule）
+### ADR-340.1：Platform 层日志基础设施（Rule）
 
-#### ADR-340_1_1 Platform 层必须引用日志基础设施包【必须架构测试覆盖】
+#### ADR-340.1.1 Platform 层必须引用日志基础设施包【必须架构测试覆盖】
 
 Platform 层**必须**引用结构化日志和监控的核心包。
 
@@ -80,7 +80,7 @@ Platform 层**必须**引用结构化日志和监控的核心包。
 
 ---
 
-#### ADR-340_1_2 PlatformBootstrapper 必须包含日志配置【必须架构测试覆盖】
+#### ADR-340.1.2 PlatformBootstrapper 必须包含日志配置【必须架构测试覆盖】
 
 `PlatformBootstrapper.cs` 文件**必须**包含 Serilog 和 OpenTelemetry 配置代码。
 
@@ -100,9 +100,9 @@ Platform 层**必须**引用结构化日志和监控的核心包。
 
 ---
 
-### ADR-340_2：业务层日志约束（Rule）
+### ADR-340.2：业务层日志约束（Rule）
 
-#### ADR-340_2_1 Handler 禁止使用控制台输出【必须架构测试覆盖】
+#### ADR-340.2.1 Handler 禁止使用控制台输出【必须架构测试覆盖】
 
 所有 Handler（Command/Query/Event）**禁止**使用控制台输出。
 
@@ -120,7 +120,7 @@ Platform 层**必须**引用结构化日志和监控的核心包。
 
 ---
 
-#### ADR-340_2_2 日志调用禁止字符串插值【必须架构测试覆盖】
+#### ADR-340.2.2 日志调用禁止字符串插值【必须架构测试覆盖】
 
 日志记录方法**禁止**使用字符串插值。
 
@@ -138,7 +138,7 @@ Platform 层**必须**引用结构化日志和监控的核心包。
 
 ---
 
-#### ADR-340_2_3 禁止业务层配置日志实现【必须架构测试覆盖】
+#### ADR-340.2.3 禁止业务层配置日志实现【必须架构测试覆盖】
 
 Application 层和 Modules 层**禁止**配置日志框架或 OpenTelemetry。
 
@@ -166,11 +166,11 @@ Application 层和 Modules 层**禁止**配置日志框架或 OpenTelemetry。
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-340_1_1** | L1 | ArchitectureTests 验证 Platform 包引用 | §ADR-340_1_1 |
-| **ADR-340_1_2** | L1 | ArchitectureTests 验证配置代码存在 | §ADR-340_1_2 |
-| **ADR-340_2_1** | L2 | Code Review 检查控制台输出 | §ADR-340_2_1 |
-| **ADR-340_2_2** | L2 | Code Review 检查字符串插值 | §ADR-340_2_2 |
-| **ADR-340_2_3** | L1 | ArchitectureTests 验证层级隔离 | §ADR-340_2_3 |
+| **ADR-340.1.1** | L1 | ArchitectureTests 验证 Platform 包引用 | §ADR-340.1.1 |
+| **ADR-340.1.2** | L1 | ArchitectureTests 验证配置代码存在 | §ADR-340.1.2 |
+| **ADR-340.2.1** | L2 | Code Review 检查控制台输出 | §ADR-340.2.1 |
+| **ADR-340.2.2** | L2 | Code Review 检查字符串插值 | §ADR-340.2.2 |
+| **ADR-340.2.3** | L1 | ArchitectureTests 验证层级隔离 | §ADR-340.2.3 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

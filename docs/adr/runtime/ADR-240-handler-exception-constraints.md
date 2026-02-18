@@ -61,9 +61,9 @@ superseded_by: null
 
 ---
 
-### ADR-240_1：结构化异常要求（Rule）
+### ADR-240.1：结构化异常要求（Rule）
 
-#### ADR-240_1_1 禁止抛出通用异常
+#### ADR-240.1.1 禁止抛出通用异常
 
 **规则**：
 - Handler 禁止抛出 `System.Exception`
@@ -84,9 +84,9 @@ superseded_by: null
 
 ---
 
-### ADR-240_2：可重试标记约束（Rule）
+### ADR-240.2：可重试标记约束（Rule）
 
-#### ADR-240_2_1 IRetryable 接口使用约束
+#### ADR-240.2.1 IRetryable 接口使用约束
 
 **规则**：
 - 实现 `IRetryable` 接口的异常必须继承自 `InfrastructureException`
@@ -105,9 +105,9 @@ superseded_by: null
 
 ---
 
-### ADR-240_3：异常传播约束（Rule）
+### ADR-240.3：异常传播约束（Rule）
 
-#### ADR-240_3_1 禁止吞噬异常
+#### ADR-240.3.1 禁止吞噬异常
 
 **规则**：
 - Handler 禁止捕获异常后不重新抛出
@@ -125,9 +125,9 @@ superseded_by: null
 
 ---
 
-### ADR-240_4：异常命名空间约束（Rule）
+### ADR-240.4：异常命名空间约束（Rule）
 
-#### ADR-240_4_1 异常命名空间组织规范
+#### ADR-240.4.1 异常命名空间组织规范
 
 **规则**：
 - 所有自定义异常必须位于 `*.Exceptions` 命名空间
@@ -146,9 +146,9 @@ superseded_by: null
 
 ---
 
-### ADR-240_5：跨模块事件异常隔离（Rule）
+### ADR-240.5：跨模块事件异常隔离（Rule）
 
-#### ADR-240_5_1 事件异常隔离要求
+#### ADR-240.5.1 事件异常隔离要求
 
 **规则**：
 - Event Handler 异常禁止同步传播到事件发布者
@@ -173,11 +173,11 @@ superseded_by: null
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-240_1_1** | L1 | Roslyn Analyzer + ArchitectureTests | §ADR-240_1_1 禁止抛出通用异常 |
-| **ADR-240_2_1** | L1 | ArchitectureTests 自动化验证 | §ADR-240_2_1 IRetryable 接口使用约束 |
-| **ADR-240_3_1** | L1 | Roslyn Analyzer + 人工审查 | §ADR-240_3_1 禁止吞噬异常 |
-| **ADR-240_4_1** | L1 | ArchitectureTests 自动化验证 | §ADR-240_4_1 异常命名空间组织规范 |
-| **ADR-240_5_1** | L1 | ArchitectureTests 自动化验证 | §ADR-240_5_1 事件异常隔离要求 |
+| **ADR-240.1.1** | L1 | Roslyn Analyzer + ArchitectureTests | §ADR-240.1.1 禁止抛出通用异常 |
+| **ADR-240.2.1** | L1 | ArchitectureTests 自动化验证 | §ADR-240.2.1 IRetryable 接口使用约束 |
+| **ADR-240.3.1** | L1 | Roslyn Analyzer + 人工审查 | §ADR-240.3.1 禁止吞噬异常 |
+| **ADR-240.4.1** | L1 | ArchitectureTests 自动化验证 | §ADR-240.4.1 异常命名空间组织规范 |
+| **ADR-240.5.1** | L1 | ArchitectureTests 自动化验证 | §ADR-240.5.1 事件异常隔离要求 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署

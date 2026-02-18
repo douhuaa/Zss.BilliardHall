@@ -21,7 +21,7 @@
 ```csharp
 // ❌ 旧方式：手动拼接字符串，容易出错且不一致
 result.IsSuccessful.Should().BeTrue(
-    $"❌ ADR-002_1_1 违规: Platform 层不应依赖 Application 层\n\n" +
+    $"❌ ADR-002.1.1 违规: Platform 层不应依赖 Application 层\n\n" +
     $"违规类型:\n{string.Join("\n", result.FailingTypes?.Select(t => $"  - {t.FullName}") ?? Array.Empty<string>())}\n\n" +
     $"修复建议：\n" +
     $"1. 移除 Platform 对 Application 的引用\n" +
@@ -90,7 +90,7 @@ public static string BuildFromArchTestResult(
 
 **使用示例**：
 ```csharp
-[Fact(DisplayName = "ADR-002_1_1: Platform 不应依赖 Application")]
+[Fact(DisplayName = "ADR-002.1.1: Platform 不应依赖 Application")]
 public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
 {
     // ✅ 使用 RuleSetRegistry 获取规则信息（v3.0 推荐）
@@ -122,7 +122,7 @@ public void ADR_002_1_1_Platform_Should_Not_Depend_On_Application()
 
 **生成的消息格式**：
 ```
-❌ ADR-002_1_1 违规：Platform 层不应依赖 Application 层
+❌ ADR-002.1.1 违规：Platform 层不应依赖 Application 层
 
 当前状态：违规类型：
   - Zss.BilliardHall.Platform.SomeType
@@ -153,7 +153,7 @@ public static string BuildSimple(
 
 **使用示例**：
 ```csharp
-[Fact(DisplayName = "ADR-004_1_1: CPM 配置文件必须存在")]
+[Fact(DisplayName = "ADR-004.1.1: CPM 配置文件必须存在")]
 public void ADR_004_1_1_Central_Package_Management_File_Must_Exist()
 {
     // 从 RuleSetRegistry 获取规则信息
@@ -176,7 +176,7 @@ public void ADR_004_1_1_Central_Package_Management_File_Must_Exist()
 
 **生成的消息格式**：
 ```
-❌ ADR-004_1_1 违规：仓库根目录必须存在 Directory.Packages.props 文件
+❌ ADR-004.1.1 违规：仓库根目录必须存在 Directory.Packages.props 文件
 
 当前状态：文件不存在：/path/to/Directory.Packages.props
 
@@ -205,7 +205,7 @@ public static string Build(
 
 **使用示例**：
 ```csharp
-[Fact(DisplayName = "ADR-001_1_1: 模块不应相互引用")]
+[Fact(DisplayName = "ADR-001.1.1: 模块不应相互引用")]
 public void ADR_001_1_1_Modules_Should_Not_Reference_Other_Modules()
 {
     // 从 RuleSetRegistry 获取规则信息
@@ -225,7 +225,7 @@ public void ADR_001_1_1_Modules_Should_Not_Reference_Other_Modules()
             "传递原始类型（Guid、string）而非领域对象"
         },
         adrReference: "docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md",
-        includeClauseReference: true);  // 包含 §ADR-001_1_1 引用
+        includeClauseReference: true);  // 包含 §ADR-001.1.1 引用
 
     result.IsSuccessful.Should().BeTrue(message);
 }
@@ -251,7 +251,7 @@ public static string BuildWithAnalysis(
 
 **使用示例**：
 ```csharp
-[Fact(DisplayName = "ADR-120_1_2: 事件名称必须使用动词过去式")]
+[Fact(DisplayName = "ADR-120.1.2: 事件名称必须使用动词过去式")]
 public void Event_Names_Should_Use_Past_Tense_Verbs()
 {
     // 从 RuleSetRegistry 获取规则信息
@@ -282,7 +282,7 @@ public void Event_Names_Should_Use_Past_Tense_Verbs()
 
 **生成的消息格式**：
 ```
-❌ ADR-120_1_2 违规：事件名称未使用动词过去式
+❌ ADR-120.1.2 违规：事件名称未使用动词过去式
 
 当前状态：违规事件：Zss.BilliardHall.Orders.Events.OrderCreatingEvent
 
@@ -295,7 +295,7 @@ public void Event_Names_Should_Use_Past_Tense_Verbs()
 2. 确保命名遵循模式：{AggregateRoot}{Action}Event
 3. 示例：OrderCreatedEvent, MemberUpgradedEvent
 
-参考：docs/adr/structure/ADR-120-domain-event-naming-convention.md §ADR-120_1_2
+参考：docs/adr/structure/ADR-120-domain-event-naming-convention.md §ADR-120.1.2
 ```
 
 ---
@@ -317,7 +317,7 @@ public static string BuildWithViolations(
 
 **使用示例**：
 ```csharp
-[Fact(DisplayName = "ADR-003_2_1: 模块不应直接访问其他模块的数据库")]
+[Fact(DisplayName = "ADR-003.2.1: 模块不应直接访问其他模块的数据库")]
 public void Modules_Should_Not_Access_Other_Module_Database()
 {
     // 从 RuleSetRegistry 获取规则信息
@@ -426,7 +426,7 @@ adrReference: "docs\\adr\\constitutional\\ADR-002-platform-application-host-boot
 ```csharp
 // 旧代码（硬编码 ruleId 和 summary）
 var message = AssertionMessageBuilder.BuildFromArchTestResult(
-    ruleId: "ADR-002_1_1",                        // ❌ 硬编码
+    ruleId: "ADR-002.1.1",                        // ❌ 硬编码
     summary: "Platform 层不应依赖 Application 层", // ❌ 硬编码
     failingTypeNames: result.FailingTypes?.Select(t => t.FullName),
     remediationSteps: new[]
@@ -443,7 +443,7 @@ result.IsSuccessful.Should().BeTrue(message);
 **步骤 2**：从 RuleSetRegistry 获取规则信息
 ```csharp
 // 识别 ADR 编号和规则位置
-// ADR-002_1_1 表示：ADR-002, Rule 1, Clause 1
+// ADR-002.1.1 表示：ADR-002, Rule 1, Clause 1
 
 var ruleSet = RuleSetRegistry.GetStrict(2);    // 获取 ADR-002
 var clause = ruleSet.GetClause(1, 1);          // 获取 Rule 1, Clause 1

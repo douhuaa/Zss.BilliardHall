@@ -55,9 +55,9 @@ superseded_by: null
 
 ---
 
-### ADR-120_1：事件类型命名规范（Rule）
+### ADR-120.1：事件类型命名规范（Rule）
 
-#### ADR-120_1_1 事件命名模式强制要求
+#### ADR-120.1.1 事件命名模式强制要求
 
 **命名模式**：`{AggregateRoot}{Action}Event[{Version}]`
 
@@ -81,7 +81,7 @@ public record OrderCreateEvent(Guid OrderId);  // 动词原形
 
 ---
 
-#### ADR-120_1_2 事件命名空间组织规范
+#### ADR-120.1.2 事件命名空间组织规范
 
 **命名空间规则**：`Zss.BilliardHall.Modules.{ModuleName}.Events[.{SubNamespace}]`
 
@@ -104,9 +104,9 @@ src/Modules/{ModuleName}/
 
 ---
 
-### ADR-120_2：事件处理器命名规范（Rule）
+### ADR-120.2：事件处理器命名规范（Rule）
 
-#### ADR-120_2_1 事件处理器命名模式
+#### ADR-120.2.1 事件处理器命名模式
 
 **命名模式**：
 - 基础：`{EventName}Handler`
@@ -135,9 +135,9 @@ public class OrderPaidEventHandler1 { }  // Purpose 不清晰
 
 ---
 
-### ADR-120_3：事件内容约束（Rule）
+### ADR-120.3：事件内容约束（Rule）
 
-#### ADR-120_3_1 事件内容类型约束
+#### ADR-120.3.1 事件内容类型约束
 
 **允许**：
 - 原始类型（Guid、int、string、DateTime）
@@ -167,7 +167,7 @@ public record OrderCreatedEvent(Order Order, Member Member);  // 领域实体
 
 ---
 
-#### ADR-120_3_2 事件行为约束
+#### ADR-120.3.2 事件行为约束
 
 **禁止在事件中包含业务方法**：
 
@@ -186,9 +186,9 @@ public record OrderCreatedEvent(Guid OrderId, DateTime CreatedAt);
 
 ---
 
-### ADR-120_4：事件版本演进规范（Rule）
+### ADR-120.4：事件版本演进规范（Rule）
 
-#### ADR-120_4_1 版本命名规范
+#### ADR-120.4.1 版本命名规范
 
 **版本标识**：`V{N}`（N 从 2 开始）
 
@@ -228,12 +228,12 @@ public class OrderCreatedEventAdapter
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-120_1_1** | L1 | ArchitectureTests 验证事件命名模式 | §ADR-120_1_1 |
-| **ADR-120_1_2** | L1 | ArchitectureTests 验证事件命名空间 | §ADR-120_1_2 |
-| **ADR-120_2_1** | L1 | ArchitectureTests 验证事件处理器命名 | §ADR-120_2_1 |
-| **ADR-120_3_1** | L1 | ArchitectureTests 验证事件内容类型 | §ADR-120_3_1 |
-| **ADR-120_3_2** | L1 | ArchitectureTests 验证事件行为约束 | §ADR-120_3_2 |
-| **ADR-120_4_1** | L1 | ArchitectureTests 验证版本命名规范 | §ADR-120_4_1 |
+| **ADR-120.1.1** | L1 | ArchitectureTests 验证事件命名模式 | §ADR-120.1.1 |
+| **ADR-120.1.2** | L1 | ArchitectureTests 验证事件命名空间 | §ADR-120.1.2 |
+| **ADR-120.2.1** | L1 | ArchitectureTests 验证事件处理器命名 | §ADR-120.2.1 |
+| **ADR-120.3.1** | L1 | ArchitectureTests 验证事件内容类型 | §ADR-120.3.1 |
+| **ADR-120.3.2** | L1 | ArchitectureTests 验证事件行为约束 | §ADR-120.3.2 |
+| **ADR-120.4.1** | L1 | ArchitectureTests 验证版本命名规范 | §ADR-120.4.1 |
 
 ### 执行级别说明
 - **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
