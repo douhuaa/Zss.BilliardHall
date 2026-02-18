@@ -49,7 +49,7 @@ public sealed class RuleSetQueryServiceTests
         var formatted = _service.FormatRuleId(ruleId);
 
         // Assert
-        formatted.Should().Be("ADR-907_3");
+        formatted.Should().Be("ADR-907.3");
     }
 
     [Fact]

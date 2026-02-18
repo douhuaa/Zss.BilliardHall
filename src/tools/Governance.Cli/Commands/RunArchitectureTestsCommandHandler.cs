@@ -47,12 +47,13 @@ public sealed class RunArchitectureTestsCommandHandler
                 Console.WriteLine("📋 运行所有架构测试");
             }
 
-            // 构建dotnet test命令
-            var testCommand = BuildTestCommand(adrNumber, verbose, noBuild);
-            Console.WriteLine($"🔧 执行命令: {testCommand}");
+            // 构建dotnet test参数
+            var testArguments = BuildTestArguments(adrNumber, verbose, noBuild);
+            Console.WriteLine("🔧 执行命令:");
+            Console.WriteLine($"dotnet {testArguments}");
 
             // 执行测试
-            var (exitCode, output) = await RunDotnetTestAsync(testCommand);
+            var (exitCode, output) = await RunDotnetTestAsync(testArguments);
 
             // 分析结果
             if (exitCode == 0)
@@ -65,7 +66,7 @@ public sealed class RunArchitectureTestsCommandHandler
                 Console.WriteLine("❌ 测试失败");
                 Console.WriteLine();
                 Console.WriteLine("📊 失败信息分析:");
-                Console.WriteLine("测试输出中应包含 RuleId（格式如 ADR-001_2_1），用于追溯到具体的架构规则条款。");
+                Console.WriteLine("测试输出中应包含 RuleId（格式如 ADR-001.2.1），用于追溯到具体的架构规则条款。");
                 Console.WriteLine();
                 
                 // 提取可能的RuleId引用
@@ -88,16 +89,14 @@ public sealed class RunArchitectureTestsCommandHandler
         }
     }
 
-    private string BuildTestCommand(int? adrNumber, bool verbose, bool noBuild)
+    private string BuildTestArguments(int? adrNumber, bool verbose, bool noBuild)
     {
-        var baseCommand = "dotnet test src/tests/ArchitectureTests/";
-        var args = new List<string>();
+        var args = new List<string> { "test", "src/tests/ArchitectureTests/" };
 
         // 添加过滤器
         if (adrNumber.HasValue)
         {
             // 按ADR编号过滤，使用标准的三位数字格式
-            // dotnet test filter语法：使用|作为OR运算符（无空格）
             args.Add($"--filter \"FullyQualifiedName~Adr{adrNumber.Value:000}\"");
         }
         else
@@ -116,20 +115,18 @@ public sealed class RunArchitectureTestsCommandHandler
             args.Add("--no-build");
         }
 
-        return args.Count > 0 ? $"{baseCommand} {string.Join(" ", args)}" : baseCommand;
+        return string.Join(" ", args);
     }
 
-    private async Task<(int exitCode, string output)> RunDotnetTestAsync(string command)
+    private async Task<(int exitCode, string output)> RunDotnetTestAsync(string arguments)
     {
-        // 简化实现：直接调用dotnet test
-        // 在真实实现中，应该使用Process类执行命令并捕获输出
-        
+        // 使用Process执行dotnet test命令
         var process = new System.Diagnostics.Process
         {
             StartInfo = new System.Diagnostics.ProcessStartInfo
             {
                 FileName = "dotnet",
-                Arguments = command.Replace("dotnet ", ""),
+                Arguments = arguments,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -168,10 +165,11 @@ public sealed class RunArchitectureTestsCommandHandler
 
     private void ExtractRuleIdReferences(string output)
     {
-        // 提取可能的RuleId引用（格式: ADR-XXX_Y 或 ADR-XXX_Y_Z）
+        // 提取可能的RuleId引用（格式: ADR-XXX.Y 或 ADR-XXX.Y.Z）
         // 使用严格的三位数字格式匹配标准ADR编号
+        // 同时兼容历史下划线格式，但输出时统一转换为点号
         var ruleIdPattern = new System.Text.RegularExpressions.Regex(
-            @"ADR[-_](\d{3})_(\d+)(?:_(\d+))?",
+            @"ADR-(\d{3})(?:[._](\d+))(?:[._](\d+))?",
             System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
         var matches = ruleIdPattern.Matches(output);
@@ -182,7 +180,9 @@ public sealed class RunArchitectureTestsCommandHandler
             
             foreach (System.Text.RegularExpressions.Match match in matches)
             {
-                uniqueRuleIds.Add(match.Value);
+                // 统一转换为点号格式
+                var normalized = match.Value.Replace('_', '.');
+                uniqueRuleIds.Add(normalized);
             }
 
             foreach (var ruleId in uniqueRuleIds.OrderBy(x => x))
@@ -193,7 +193,7 @@ public sealed class RunArchitectureTestsCommandHandler
         else
         {
             Console.WriteLine("⚠️  未在输出中检测到 RuleId 引用");
-            Console.WriteLine("   建议在架构测试的断言消息中包含 RuleId");
+            Console.WriteLine("   建议在架构测试的断言消息中包含 RuleId（格式如 ADR-001.2.1）");
         }
     }
 }
