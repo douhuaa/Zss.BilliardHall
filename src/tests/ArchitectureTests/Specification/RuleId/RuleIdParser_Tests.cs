@@ -63,8 +63,8 @@ public sealed class RuleIdParser_Tests
     }
 
     [Theory(DisplayName = "TryParse 应该正确解析下划线格式的 Rule ID（兼容旧格式）")]
-    [InlineData("ADR-001_1", 1, 1, null)]
-    [InlineData("ADR-907_3", 907, 3, null)]
+    [InlineData("ADR-001.1", 1, 1, null)]
+    [InlineData("ADR-907.3", 907, 3, null)]
     [InlineData("001_1", 1, 1, null)]
     [InlineData("907_3", 907, 3, null)]
     public void TryParse_Should_Parse_Underscore_Rule_Format(
@@ -77,8 +77,8 @@ public sealed class RuleIdParser_Tests
     }
 
     [Theory(DisplayName = "TryParse 应该正确解析下划线格式的 Clause ID（兼容旧格式）")]
-    [InlineData("ADR-001_1_1", 1, 1, 1)]
-    [InlineData("ADR-907_3_2", 907, 3, 2)]
+    [InlineData("ADR-001.1.1", 1, 1, 1)]
+    [InlineData("ADR-907.3.2", 907, 3, 2)]
     [InlineData("001_1_1", 1, 1, 1)]
     [InlineData("907_3_2", 907, 3, 2)]
     public void TryParse_Should_Parse_Underscore_Clause_Format(
@@ -116,8 +116,8 @@ public sealed class RuleIdParser_Tests
     [InlineData("ADR-907.3.2", 907, 3, 2)]
     [InlineData("001.1", 1, 1, null)]
     [InlineData("907.3.2", 907, 3, 2)]
-    [InlineData("ADR-001_1", 1, 1, null)]
-    [InlineData("ADR-907_3_2", 907, 3, 2)]
+    [InlineData("ADR-001.1", 1, 1, null)]
+    [InlineData("ADR-907.3.2", 907, 3, 2)]
     public void ParseStrict_Should_Parse_Valid_RuleId(
         string input,
         int expectedAdr,
@@ -164,8 +164,8 @@ public sealed class RuleIdParser_Tests
     [InlineData("ADR-907.3.2")]
     [InlineData("001.1")]
     [InlineData("907.3.2")]
-    [InlineData("ADR-001_1")]
-    [InlineData("ADR-907_3_2")]
+    [InlineData("ADR-001.1")]
+    [InlineData("ADR-907.3.2")]
     public void IsValidRuleId_Should_Return_True_For_Valid_RuleId(string input)
     {
         RuleIdParser.IsValidRuleId(input).Should().BeTrue();
@@ -186,8 +186,8 @@ public sealed class RuleIdParser_Tests
     [InlineData("ADR-907.3.2")]
     [InlineData("ADR-001.1")]
     [InlineData("907.3.2")]
-    [InlineData("ADR-907_3_2")]
-    [InlineData("ADR-001_1")]
+    [InlineData("ADR-907.3.2")]
+    [InlineData("ADR-001.1")]
     public void TryParse_And_ParseStrict_Should_Return_Same_Result(string input)
     {
         var tryParseSuccess = RuleIdParser.TryParse(input, out var tryParseResult);
@@ -203,8 +203,8 @@ public sealed class RuleIdParser_Tests
     [InlineData("ADR-001.1.1", false, true)]
     [InlineData("907.3", true, false)]
     [InlineData("907.3.2", false, true)]
-    [InlineData("ADR-001_1", true, false)]
-    [InlineData("ADR-001_1_1", false, true)]
+    [InlineData("ADR-001.1", true, false)]
+    [InlineData("ADR-001.1.1", false, true)]
     public void Parsed_Result_Should_Correctly_Identify_IsRule_And_IsClause(
         string input, bool expectedIsRule, bool expectedIsClause)
     {
@@ -218,8 +218,8 @@ public sealed class RuleIdParser_Tests
     #region 向后兼容性测试
 
     [Theory(DisplayName = "输入下划线格式应输出点号格式（向后兼容）")]
-    [InlineData("ADR-001_1", "ADR-001.1")]
-    [InlineData("ADR-907_3_2", "ADR-907.3.2")]
+    [InlineData("ADR-001.1", "ADR-001.1")]
+    [InlineData("ADR-907.3.2", "ADR-907.3.2")]
     [InlineData("001_1", "ADR-001.1")]
     [InlineData("907_3_2", "ADR-907.3.2")]
     public void Parsed_Underscore_Format_Should_Output_Dot_Format(string input, string expectedOutput)

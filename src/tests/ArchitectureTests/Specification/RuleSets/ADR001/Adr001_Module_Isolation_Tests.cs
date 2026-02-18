@@ -27,10 +27,10 @@ public sealed class Adr001_Module_Isolation_Tests
     #region Rule 1: 模块物理隔离
 
     /// <summary>
-    /// ADR-001_1_1: 模块按业务能力独立划分
+    /// ADR-001.1.1: 模块按业务能力独立划分
     /// 验证：模块不相互引用，通过 NetArchTest 检查程序集依赖
     /// </summary>
-    [Theory(DisplayName = "ADR-001_1_1: 模块不相互引用")]
+    [Theory(DisplayName = "ADR-001.1.1: 模块不相互引用")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Rule1_Clause1_Modules_Should_Not_Reference_Each_Other(Assembly moduleAssembly)
     {
@@ -62,10 +62,10 @@ public sealed class Adr001_Module_Isolation_Tests
     }
 
     /// <summary>
-    /// ADR-001_1_3: 命名空间匹配模块边界
+    /// ADR-001.1.3: 命名空间匹配模块边界
     /// 验证：类型命名空间与模块名称一致
     /// </summary>
-    [Theory(DisplayName = "ADR-001_1_3: 命名空间匹配模块边界")]
+    [Theory(DisplayName = "ADR-001.1.3: 命名空间匹配模块边界")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Rule1_Clause3_Namespace_Should_Match_Module_Boundary(Assembly moduleAssembly)
     {
@@ -90,10 +90,10 @@ public sealed class Adr001_Module_Isolation_Tests
     #region Rule 2: 垂直切片组织
 
     /// <summary>
-    /// ADR-001_2_2: 禁止跨模块水平分层
+    /// ADR-001.2.2: 禁止跨模块水平分层
     /// 验证：无跨模块的 Domain/Application 层依赖
     /// </summary>
-    [Theory(DisplayName = "ADR-001_2_2: 禁止跨模块水平分层")]
+    [Theory(DisplayName = "ADR-001.2.2: 禁止跨模块水平分层")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Rule2_Clause2_No_Cross_Module_Layer_Dependencies(Assembly moduleAssembly)
     {
@@ -141,13 +141,13 @@ public sealed class Adr001_Module_Isolation_Tests
     #region Rule 3: 模块通信机制
 
     /// <summary>
-    /// ADR-001_3_1: 模块间仅通过领域事件异步通信
+    /// ADR-001.3.1: 模块间仅通过领域事件异步通信
     /// 验证：无直接方法调用，仅事件发布/订阅
     /// 
     /// 注：这是一个示例测试，实际实现需要更复杂的分析
     /// 当前版本仅验证模块不直接依赖其他模块的公共API类
     /// </summary>
-    [Theory(DisplayName = "ADR-001_3_1: 模块间仅通过领域事件通信")]
+    [Theory(DisplayName = "ADR-001.3.1: 模块间仅通过领域事件通信")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Rule3_Clause1_Modules_Communicate_Via_Events_Only(Assembly moduleAssembly)
     {
@@ -194,13 +194,13 @@ public sealed class Adr001_Module_Isolation_Tests
     }
 
     /// <summary>
-    /// ADR-001_3_2: 模块间查询仅通过数据契约
+    /// ADR-001.3.2: 模块间查询仅通过数据契约
     /// 验证：查询使用只读 DTO，无领域对象传递
     /// 
     /// 注：这是一个高级测试，需要检查返回类型
     /// 当前版本仅验证不直接返回 Domain 层对象
     /// </summary>
-    [Theory(DisplayName = "ADR-001_3_2: 查询使用数据契约")]
+    [Theory(DisplayName = "ADR-001.3.2: 查询使用数据契约")]
     [ClassData(typeof(ModuleAssemblyData))]
     public void Rule3_Clause2_Queries_Use_Data_Contracts(Assembly moduleAssembly)
     {

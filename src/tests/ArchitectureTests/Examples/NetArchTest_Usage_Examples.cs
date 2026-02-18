@@ -43,7 +43,7 @@ public sealed class NetArchTest_Usage_Examples
 
         var clause = ruleSet.GetClause(1, 1);
         clause.Should().NotBeNull();
-        clause.Id.ToString().Should().Be("ADR-001_1_1");
+        clause.Id.ToString().Should().Be("ADR-001.1.1");
 
         // 在实际测试中使用规则元数据
         var ruleId = clause.Id.ToString();

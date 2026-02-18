@@ -56,12 +56,12 @@ public sealed class AdrDecisionGenerator_GoldenTests
         // Assert - 验证关键结构元素
         generated.Should().Contain("## Decision（裁决）");
         generated.Should().Contain("> ⚠️ **本节为唯一裁决来源，所有条款具备执行级别。**");
-        generated.Should().Contain("### ADR-907_1：ArchitectureTests 的法律地位（Rule）");
-        generated.Should().Contain("### ADR-907_2：命名与组织规范（Rule）");
-        generated.Should().Contain("#### ADR-907_1_1 唯一自动化执法形式");
-        generated.Should().Contain("#### ADR-907_1_2 可执法性要求");
-        generated.Should().Contain("#### ADR-907_2_1 独立测试项目要求");
-        generated.Should().Contain("#### ADR-907_2_2 ADR 编号目录分组");
+        generated.Should().Contain("### ADR-907.1：ArchitectureTests 的法律地位（Rule）");
+        generated.Should().Contain("### ADR-907.2：命名与组织规范（Rule）");
+        generated.Should().Contain("#### ADR-907.1.1 唯一自动化执法形式");
+        generated.Should().Contain("#### ADR-907.1.2 可执法性要求");
+        generated.Should().Contain("#### ADR-907.2.1 独立测试项目要求");
+        generated.Should().Contain("#### ADR-907.2.2 ADR 编号目录分组");
     }
 
     [Fact]

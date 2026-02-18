@@ -108,9 +108,9 @@ public sealed class AdrDecisionGenerator_RefactoredMethodsTests
         var options = new DecisionGenerationOptions { IncludeSectionHeader = false };
         var result = _generator.GenerateDecisionSection(ruleSet, options);
 
-        var idx1 = result.IndexOf("ADR-907_1", StringComparison.Ordinal);
-        var idx2 = result.IndexOf("ADR-907_2", StringComparison.Ordinal);
-        var idx3 = result.IndexOf("ADR-907_3", StringComparison.Ordinal);
+        var idx1 = result.IndexOf("ADR-907.1", StringComparison.Ordinal);
+        var idx2 = result.IndexOf("ADR-907.2", StringComparison.Ordinal);
+        var idx3 = result.IndexOf("ADR-907.3", StringComparison.Ordinal);
 
         idx1.Should().BeGreaterThanOrEqualTo(0);
         idx2.Should().BeGreaterThan(idx1);
@@ -143,7 +143,7 @@ public sealed class AdrDecisionGenerator_RefactoredMethodsTests
         // 规则之间应该有一个空行
         var lines = result.Split('\n');
         var rule1EndIndex = Array.FindIndex(lines, l => l.Contains("执行1.1"));
-        var rule2StartIndex = Array.FindIndex(lines, l => l.Contains("ADR-907_2"));
+        var rule2StartIndex = Array.FindIndex(lines, l => l.Contains("ADR-907.2"));
 
         rule1EndIndex.Should().BeGreaterThanOrEqualTo(0);
         rule2StartIndex.Should().BeGreaterThan(rule1EndIndex);
@@ -171,7 +171,7 @@ public sealed class AdrDecisionGenerator_RefactoredMethodsTests
 
         var result = _generator.GenerateDecisionSection(ruleSet, options);
 
-        result.Should().Contain($"{expectedPrefix} ADR-{AdrNumber}_1：测试规则（Rule）");
+        result.Should().Contain($"{expectedPrefix} ADR-{AdrNumber}.1：测试规则（Rule）");
     }
 
     [Theory]
@@ -197,7 +197,7 @@ public sealed class AdrDecisionGenerator_RefactoredMethodsTests
 
         var result = _generator.GenerateDecisionSection(ruleSet, options);
 
-        result.Should().Contain($"ADR-{AdrNumber}_1：{expectedSummary}（Rule）");
+        result.Should().Contain($"ADR-{AdrNumber}.1：{expectedSummary}（Rule）");
     }
 
     #endregion
@@ -221,7 +221,7 @@ public sealed class AdrDecisionGenerator_RefactoredMethodsTests
 
         var result = _generator.GenerateDecisionSection(ruleSet, options);
 
-        result.Should().Contain($"{expectedPrefix} ADR-{AdrNumber}_1_1 测试条件");
+        result.Should().Contain($"{expectedPrefix} ADR-{AdrNumber}.1.1 测试条件");
     }
 
     [Theory]
@@ -270,8 +270,8 @@ public sealed class AdrDecisionGenerator_RefactoredMethodsTests
         var result = _generator.GenerateDecisionSection(ruleSet, options);
         var lines = result.Split('\n').Select(l => l.Trim()).ToList();
 
-        var idx1 = lines.FindIndex(l => l.StartsWith($"#### ADR-{AdrNumber}_1_1"));
-        var idx2 = lines.FindIndex(l => l.StartsWith($"#### ADR-{AdrNumber}_1_2"));
+        var idx1 = lines.FindIndex(l => l.StartsWith($"#### ADR-{AdrNumber}.1.1"));
+        var idx2 = lines.FindIndex(l => l.StartsWith($"#### ADR-{AdrNumber}.1.2"));
 
         idx1.Should().BeGreaterThanOrEqualTo(0);
         idx2.Should().BeGreaterThan(idx1);
@@ -459,8 +459,8 @@ public sealed class AdrDecisionGenerator_RefactoredMethodsTests
         // 生成应该在合理时间内完成（例如 1 秒）
         stopwatch.ElapsedMilliseconds.Should().BeLessThan(1000);
         result.Should().NotBeEmpty();
-        result.Should().Contain("ADR-907_1");
-        result.Should().Contain("ADR-907_50");
+        result.Should().Contain("ADR-907.1");
+        result.Should().Contain("ADR-907.50");
     }
 
     [Fact]

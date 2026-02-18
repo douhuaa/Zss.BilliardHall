@@ -12,8 +12,8 @@
 public sealed class ArchitectureRuleIdParsingInvariants_Tests
 {
     [Theory(DisplayName = "不变量：合法字符串必须可被解析")]
-    [InlineData("ADR-907_3")]
-    [InlineData("ADR-907_3_1")]
+    [InlineData("ADR-907.3")]
+    [InlineData("ADR-907.3.1")]
     [InlineData("907_3")]
     [InlineData("907_3_1")]
     public void Parse_Should_Accept_Valid_Formats(string input)
@@ -30,7 +30,7 @@ public sealed class ArchitectureRuleIdParsingInvariants_Tests
     [InlineData("ADR-")]
     [InlineData("ADR-907")]
     [InlineData("ADR-907__3")]
-    [InlineData("ADR-907_3_")]
+    [InlineData("ADR-907.3_")]
     [InlineData("ADR--3")]
     public void Parse_Should_Reject_Invalid_Formats(string input)
     {

@@ -81,8 +81,8 @@ public sealed class AdrDecisionGenerator_IntegrationTests
 
         AssertNotEmptyAndHasDecisionHeader(result);
         result.Should().Contain("⚠️");
-        result.Should().Contain("### ADR-907_");
-        result.Should().Contain("#### ADR-907_");
+        result.Should().Contain("### ADR-907.");
+        result.Should().Contain("#### ADR-907.");
     }
 
     [Theory]
@@ -155,8 +155,8 @@ public sealed class AdrDecisionGenerator_IntegrationTests
         var lines = result.Split('\n').Select(l => l.Trim()).ToArray();
 
         lines.Should().Contain(l => l.StartsWith("## Decision"));
-        lines.Should().Contain(l => l.StartsWith("### ADR-907_"));
-        lines.Should().Contain(l => l.StartsWith("#### ADR-907_"));
+        lines.Should().Contain(l => l.StartsWith("### ADR-907."));
+        lines.Should().Contain(l => l.StartsWith("#### ADR-907."));
         lines.Should().Contain(l => l.StartsWith("- "));
     }
 
