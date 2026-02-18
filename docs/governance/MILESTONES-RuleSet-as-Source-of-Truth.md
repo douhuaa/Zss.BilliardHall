@@ -45,36 +45,36 @@
 - [x] 创建 Milestones 和 Project
 - [x] PR #365 标记 Ready
 
-#### 阶段 1: 构建生成工具（4-5天）
-- [ ] 实现 ADR Decision 生成器
-  - [ ] 设计接口 `IAdrDecisionGenerator`
-  - [ ] 实现 Markdown 格式化器
-  - [ ] 实现 RuleId 映射逻辑
-  - [ ] 保留 Context/Consequences
-  - [ ] 单元测试（覆盖率 > 80%）
-- [ ] 实现测试生成器
-  - [ ] 设计接口 `IArchitectureTestGenerator`
-  - [ ] 实现 xUnit 测试模板
-  - [ ] 实现 NetArchTest 断言生成
-  - [ ] 生成测试命名逻辑
-  - [ ] 单元测试（覆盖率 > 80%）
-- [ ] 实现 Agent 指令生成器
-  - [ ] 设计接口 `IAgentInstructionGenerator`
-  - [ ] 实现 YAML 格式化器
-  - [ ] 生成 RuleSet API 查询示例
-  - [ ] 生成约束检查逻辑
-  - [ ] 单元测试（覆盖率 > 80%）
+#### 阶段 1: 构建生成工具（4-5天）✅
+- [x] 实现 ADR Decision 生成器 (Issue #369 closed)
+  - [x] 设计接口 `IAdrDecisionGenerator`
+  - [x] 实现 Markdown 格式化器
+  - [x] 实现 RuleId 映射逻辑
+  - [x] 保留 Context/Consequences
+  - [x] 单元测试（覆盖率 > 80%）
+- [x] 实现测试生成器 (Issue #370 closed)
+  - [x] 设计接口 `IArchitectureTestGenerator`
+  - [x] 实现 xUnit 测试模板
+  - [x] 实现 NetArchTest 断言生成
+  - [x] 生成测试命名逻辑
+  - [x] 单元测试（覆盖率 > 80%）
+- [x] 实现 Agent 指令生成器 (Issue #371 closed)
+  - [x] 设计接口 `IAgentInstructionGenerator`
+  - [x] 实现 YAML 格式化器
+  - [x] 生成 RuleSet API 查询示例
+  - [x] 生成约束检查逻辑
+  - [x] 单元测试（覆盖率 > 80%）
 
-#### 阶段 2: Agent/Skills 集成 RuleSet API（3-4天）
-- [ ] 更新 9 个 Agent 使用 RuleSetRegistry API
-  - [ ] Architecture Guardian
-  - [ ] ADR Reviewer
-  - [ ] Test Generator
-  - [ ] Module Boundary Checker
-  - [ ] Handler Pattern Enforcer
-  - [ ] Documentation Maintainer
-  - [ ] Expert Dotnet Engineer
-- [ ] 更新 9 个 Skills 使用 RuleSetRegistry API
+#### 阶段 2: Agent/Skills 集成 RuleSet API（3-4天）🚧
+- [x] 更新 9 个 Agent 使用 RuleSetRegistry API (Issue #372 进行中)
+  - [x] Architecture Guardian
+  - [x] ADR Reviewer
+  - [x] Test Generator
+  - [x] Module Boundary Checker
+  - [x] Handler Pattern Enforcer
+  - [x] Documentation Maintainer
+  - [x] Expert Dotnet Engineer
+- [ ] 更新 9 个 Skills 使用 RuleSetRegistry API (Issue #373 进行中)
   - [ ] generate-test
   - [ ] generate-adr
   - [ ] generate-handler
@@ -119,8 +119,8 @@
 
 ### 进度跟踪
 - **计划**: 7-9 天
-- **实际**: 进行中
-- **完成度**: 0% (0/2 阶段)
+- **实际**: 第 8 天（2026-02-18）
+- **完成度**: 50% (1/2 阶段完成，阶段 2 进行中)
 
 ---
 
@@ -292,11 +292,11 @@
 
 ### 总体进度
 ```
-总进度: 14% (1/7 阶段完成)
+总进度: 28% (2/7 阶段完成)
 
 阶段 0: ██████████ 100% (6/6 任务) ✅
-阶段 1: ░░░░░░░░░░  0% (0/3 生成器)
-阶段 2: ░░░░░░░░░░  0% (0/18 更新)
+阶段 1: ██████████ 100% (3/3 生成器) ✅
+阶段 2: ████████░░  78% (7/9 Agent完成, 0/9 Skills)
 阶段 3: ░░░░░░░░░░  0% (0/38 RuleSet)
 阶段 4: ░░░░░░░░░░  0% (0/43 ADR)
 阶段 5: ░░░░░░░░░░  0% (0/2 检查器)
@@ -306,7 +306,7 @@
 ### 里程碑进度
 | 里程碑 | 计划 | 实际 | 状态 | 完成度 |
 |--------|------|------|------|--------|
-| Milestone 1 | 2026-02-11 → 02-19 | 2026-02-11 开始 | 🚧 进行中 | 0% (前置完成) |
+| Milestone 1 | 2026-02-11 → 02-19 | 2026-02-11 开始 | 🚧 进行中 | 64% (阶段 1 完成, 阶段 2 进行中) |
 | Milestone 2 | 2026-02-20 → 02-26 | TBD | 📋 待开始 | 0% |
 | Milestone 3 | 2026-02-27 → 03-05 | TBD | 📋 待开始 | 0% |
 
@@ -414,5 +414,5 @@
 ---
 
 **文档状态**: ✅ 已批准  
-**最后更新**: 2026-02-18（同步 GitHub 实际状态）  
-**文档版本**: 1.1
+**最后更新**: 2026-02-18（同步 GitHub 实际状态 - Milestone 1 详细进度）  
+**文档版本**: 1.2
