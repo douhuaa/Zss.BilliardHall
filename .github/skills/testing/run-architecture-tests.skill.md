@@ -137,6 +137,73 @@ dotnet test src/tests/ArchitectureTests/ \
 
 ---
 
+## RuleSet API 集成
+
+### 使用 RuleSetRegistry 查询测试规则
+
+运行架构测试时，应使用 RuleSetRegistry 查询规则信息：
+
+```csharp
+using Zss.BilliardHall.Specification.Index;
+using Zss.BilliardHall.Specification.Services;
+
+// 通过服务查询规则集
+var ruleSetService = new RuleSetQueryService();
+
+// 如果指定了ADR编号，验证其存在
+if (adrNumber.HasValue)
+{
+    var ruleSet = ruleSetService.GetRuleSet(adrNumber.Value);
+    if (ruleSet == null)
+    {
+        Console.WriteLine($"❌ ADR-{adrNumber:000} 规则集不存在");
+        return 1;
+    }
+    
+    var summary = ruleSetService.CreateSummary(ruleSet);
+    Console.WriteLine($"📋 运行 {summary} 的测试");
+}
+```
+
+### RuleId 报告机制
+
+测试失败时，应自动提取和报告 RuleId：
+
+```csharp
+// 从测试输出中提取 RuleId 引用
+var ruleIdPattern = @"ADR-(\d{3})\.(\d+)\.(\d+)";
+var matches = Regex.Matches(output, ruleIdPattern);
+
+foreach (Match match in matches)
+{
+    var adrNum = int.Parse(match.Groups[1].Value);
+    var ruleNum = int.Parse(match.Groups[2].Value);
+    var clauseNum = int.Parse(match.Groups[3].Value);
+    
+    // 查询 RuleSet 获取详细信息
+    var ruleSet = RuleSetRegistry.Get(adrNum);
+    if (ruleSet != null)
+    {
+        var clause = ruleSet.GetClause(ruleNum, clauseNum);
+        if (clause != null)
+        {
+            Console.WriteLine($"📌 {match.Value}:");
+            Console.WriteLine($"   条款: {clause.Condition}");
+            Console.WriteLine($"   要求: {clause.Execution}");
+        }
+    }
+}
+```
+
+### 参考实现
+
+参见 `src/tools/Governance.Cli/Commands/RunArchitectureTestsCommandHandler.cs`：
+- 使用 IRuleSetQueryService 查询规则集
+- 提取测试输出中的 RuleId 引用
+- 生成详细的失败报告
+
+---
+
 ## 失败分析
 
 ### 关联 ADR 正文
@@ -273,6 +340,9 @@ dotnet test src/tests/ArchitectureTests/ \
 
 ## 参考资料
 
+- **RuleSetRegistry API**：`src/tools/Specification/Index/RuleSetRegistry.cs`
+- **IRuleSetQueryService**：`src/tools/Specification/Services/IRuleSetQueryService.cs`
+- **RunArchitectureTestsCommandHandler**：`src/tools/Governance.Cli/Commands/RunArchitectureTestsCommandHandler.cs`
 - [ADR-900：架构测试与 CI 治理](../../../docs/adr/governance/ADR-900-architecture-tests.md)
 - [ADR-907：架构测试执法治理体系](../../../docs/adr/governance/ADR-907-architecture-tests-enforcement-governance.md)
 - [ARCHITECTURE-TEST-GUIDELINES.md](../../../docs/guidelines/ARCHITECTURE-TEST-GUIDELINES.md) - 架构测试编写指南
@@ -334,5 +404,6 @@ dotnet test src/tests/ArchitectureTests/ \
 
 **维护者**：架构委员会  
 **状态**：✅ Active  
-**版本**：1.1  
-**最后更新**：2026-02-06
+**版本**：1.2  
+**最后更新**：2026-02-20  
+**变更**：集成 RuleSetRegistry API 和 IRuleSetQueryService，强化 RuleId 报告机制

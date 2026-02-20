@@ -281,8 +281,53 @@ public class {ClassName}Tests
 
 ---
 
+## RuleSet API 集成
+
+### 使用 RuleSetRegistry 获取测试规范
+
+生成测试代码时，应从 RuleSetRegistry 获取相关规则，而非硬编码约束：
+
+```csharp
+using Zss.BilliardHall.Specification.Index;
+
+// 获取架构测试规则
+var adr900 = RuleSetRegistry.GetStrict(900);
+Console.WriteLine($"📋 基于 ADR-{adr900.AdrNumber:D3} 生成测试");
+Console.WriteLine($"   规则数: {adr900.RuleCount}");
+
+// 获取测试组织规则
+var adr122 = RuleSetRegistry.GetStrict(122);
+// 使用规则生成符合规范的测试结构
+```
+
+### RuleId 引用格式
+
+断言消息必须包含 RuleId（格式：`ADR-XXX.Y.Z`），可通过 RuleSetRegistry 获取：
+
+```csharp
+// 从 RuleSet 获取 RuleId
+var rule = adr900.GetRule(1);
+var clause = adr900.GetClause(1, 1);
+var ruleId = new ArchitectureRuleId(900, 1, 1);
+var ruleIdStr = ruleId.ToString(); // "ADR-900.1.1"
+
+// 在断言消息中使用
+var message = $"违反 {ruleIdStr}：架构测试必须使用 NetArchTest";
+```
+
+### 参考实现
+
+参见 `src/tools/Governance.Cli/Commands/GenerateTestCommandHandler.cs`，了解如何：
+- 使用 RuleSetRegistry 查询规则
+- 生成符合规范的测试代码
+- 验证测试结构完整性
+
+---
+
 ## 参考资料
 
+- **RuleSetRegistry API**：`src/tools/Specification/Index/RuleSetRegistry.cs`
+- **IRuleSetQueryService**：`src/tools/Specification/Services/IRuleSetQueryService.cs`
 - [ADR-900：架构测试](../../../docs/adr/governance/ADR-900-architecture-tests.md)
 - [ADR-122：测试组织](../../../docs/adr/structure/ADR-122-test-organization-naming.md)
 - [ARCHITECTURE-TEST-GUIDELINES.md](../../../docs/guidelines/ARCHITECTURE-TEST-GUIDELINES.md) - 架构测试编写指南
@@ -309,5 +354,6 @@ public class {ClassName}Tests
 
 **维护者**：架构委员会  
 **状态**：✅ Active  
-**版本**：1.1  
-**最后更新**：2026-02-06
+**版本**：1.2  
+**最后更新**：2026-02-20  
+**变更**：集成 RuleSetRegistry API，移除硬编码规则引用

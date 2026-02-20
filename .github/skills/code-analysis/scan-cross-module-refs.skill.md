@@ -132,6 +132,71 @@ post_execution:
 
 ---
 
+## RuleSet API 集成
+
+### 使用 RuleSetRegistry 判定跨模块引用规则
+
+扫描工具提取引用事实后，应使用 RuleSetRegistry 进行判定：
+
+```csharp
+using Zss.BilliardHall.Specification.Index;
+
+// 获取 ADR-001 规则集（模块边界规则）
+var adr001 = RuleSetRegistry.GetStrict(1);
+Console.WriteLine($"📋 基于 ADR-{adr001.AdrNumber:D3} 判定跨模块引用");
+
+// 获取模块边界规则
+var moduleBoundaryRule = adr001.GetRule(2); // 模块物理隔离规则
+var domainIsolationClause = adr001.GetClause(2, 1); // Domain 层隔离条款
+
+// 判定引用是否违规
+foreach (var reference in references)
+{
+    if (reference.TargetArea == "Domain")
+    {
+        var ruleId = new ArchitectureRuleId(1, 2, 1);
+        Console.WriteLine($"❌ 违反 {ruleId}：禁止跨模块引用 Domain 层");
+        Console.WriteLine($"   文件: {reference.FilePath}");
+        Console.WriteLine($"   目标: {reference.TargetNamespace}");
+    }
+    else if (reference.TargetArea == "Contracts")
+    {
+        // Contracts 引用可能合法，需进一步检查
+        var contractsClause = adr001.GetClause(3, 1); // Contracts 使用条款
+        Console.WriteLine($"⚠️  检查 Contracts 引用是否符合 {new ArchitectureRuleId(1, 3, 1)}");
+    }
+}
+```
+
+### 动态严重性推导（基于 RuleSet）
+
+使用 RuleSet 动态推导严重性，而非硬编码：
+
+```csharp
+// 从 RuleSet 获取规则严重程度
+var rule = adr001.GetRule(2);
+var severity = rule.Severity; // RuleSeverity.Constitutional
+
+// 根据严重程度判定
+if (severity == RuleSeverity.Constitutional)
+{
+    Console.WriteLine("🔴 严重违规：违反宪法级规则，必须修复");
+}
+else if (severity == RuleSeverity.Governance)
+{
+    Console.WriteLine("🟡 警告：违反治理规则，需要审查");
+}
+```
+
+### 参考实现
+
+参见 `src/tools/Governance.Cli/Commands/ScanCrossModuleReferencesCommandHandler.cs`：
+- 提取跨模块引用事实
+- 不硬编码严重性判定
+- 输出建议时引用 ADR 条款
+
+---
+
 ## 严重性推导规则（Informational）
 
 > ⚠️ **重要声明**：以下严重性推导基于 ADR-001.2（当前版本），仅供 Agent 参考。
@@ -202,13 +267,20 @@ post_execution:
 
 | 版本  | 日期         | 变更说明 |
 |-----|------------|------|
+| 1.2 | 2026-02-20 | 集成 RuleSetRegistry API，使用动态规则判定 |
 | 1.1 | 2026-01-25 | 重构：严重性改为推导值，移除人类文档化内容 |
 | 1.0 | 2026-01-25 | 初始版本 |
 
 ---
 
 **维护者**：架构委员会  
-**状态**：✅ Active
+**状态**：✅ Active  
+**版本**：1.2  
+**最后更新**：2026-02-20  
+**变更**：集成 RuleSetRegistry API，使用动态规则判定替代硬编码严重性  
+**版本**：1.2  
+**最后更新**：2026-02-20  
+**变更**：集成 RuleSetRegistry API，使用动态规则判定替代硬编码严重性
 
 ---
 

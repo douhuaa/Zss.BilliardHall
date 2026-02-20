@@ -301,12 +301,68 @@ public class GetOrderByIdEndpoint : IEndpoint
 
 ---
 
+## RuleSet API 集成
+
+### 使用 RuleSetRegistry 查询 Endpoint 规范
+
+生成 Endpoint 代码时，应从 RuleSetRegistry 获取薄适配器约束：
+
+```csharp
+using Zss.BilliardHall.Specification.Index;
+
+// 获取 ADR-005 规则集（应用内交互模型 - Endpoint 规范）
+var adr005 = RuleSetRegistry.GetStrict(5);
+Console.WriteLine($"📋 基于 ADR-{adr005.AdrNumber:D3} 生成 Endpoint");
+
+// 检查 Endpoint 薄适配器规则
+var endpointRule = adr005.GetRule(4); // Endpoint 规则（假设）
+if (endpointRule != null)
+{
+    Console.WriteLine($"   规则: {endpointRule.Title}");
+}
+```
+
+### Endpoint 规则验证
+
+根据 RuleSet 验证 Endpoint 是否为薄适配器：
+
+```csharp
+// 验证 Endpoint 不包含业务逻辑（基于 ADR-005）
+var thinAdapterClause = adr005.GetClause(4, 1); // Endpoint 薄适配器条款
+if (endpointContainsBusinessLogic)
+{
+    var ruleId = new ArchitectureRuleId(5, 4, 1);
+    Console.WriteLine($"❌ 违反 {ruleId}：Endpoint 不能包含业务逻辑");
+}
+
+// 验证 HTTP 状态码规范
+var statusCodeClause = adr005.GetClause(4, 2); // HTTP 状态码条款
+if (httpMethod == "POST" && statusCode != 201)
+{
+    var ruleId = new ArchitectureRuleId(5, 4, 2);
+    Console.WriteLine($"⚠️  建议使用 201 Created（{ruleId}）");
+}
+```
+
+### 参考实现
+
+当前没有专用的 GenerateEndpointCommandHandler，但可以参考：
+- `GenerateTestCommandHandler.cs` - 使用 RuleSetRegistry 的模式
+- `RunArchitectureTestsCommandHandler.cs` - RuleId 验证模式
+
+---
+
 ## 参考资料
 
+- **RuleSetRegistry API**：`src/tools/Specification/Index/RuleSetRegistry.cs`
+- **IRuleSetQueryService**：`src/tools/Specification/Services/IRuleSetQueryService.cs`
 - [ADR-005：应用内交互模型](../../../docs/adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
 - [后端开发指令](../../instructions/backend.instructions.md)
 
 ---
 
 **维护者**：架构委员会  
-**状态**：✅ Active
+**状态**：✅ Active  
+**版本**：1.1  
+**最后更新**：2026-02-20  
+**变更**：集成 RuleSetRegistry API，移除硬编码规则引用

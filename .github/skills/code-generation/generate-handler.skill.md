@@ -268,6 +268,66 @@ public class {UseCase}Handler : IQueryHandler<{UseCase}, {ReturnType}>
 
 ---
 
+## RuleSet API 集成
+
+### 使用 RuleSetRegistry 查询 Handler 约束
+
+生成 Handler 代码时，应从 RuleSetRegistry 获取 CQRS 和垂直切片规则：
+
+```csharp
+using Zss.BilliardHall.Specification.Index;
+
+// 获取 ADR-005 规则集（应用内交互模型 - Handler 规范）
+var adr005 = RuleSetRegistry.GetStrict(5);
+Console.WriteLine($"📋 基于 ADR-{adr005.AdrNumber:D3} 生成 Handler");
+Console.WriteLine($"   CQRS 规则数: {adr005.RuleCount}");
+
+// 获取 ADR-001 规则集（垂直切片架构）
+var adr001 = RuleSetRegistry.GetStrict(1);
+// 使用规则验证 Handler 位置和边界
+```
+
+### Handler 规则验证
+
+根据 RuleSet 验证 Handler 是否符合规范：
+
+```csharp
+// 验证 Command Handler 返回类型（基于 ADR-005）
+var commandRule = adr005.GetRule(2); // Command Handler 规则
+if (handlerType == "Command")
+{
+    // 检查返回类型必须是 void/Task/ID
+    var validReturnTypes = new[] { "void", "Task", "Guid", "int", "long" };
+    if (!validReturnTypes.Contains(returnType))
+    {
+        // 违反规则
+        var ruleId = new ArchitectureRuleId(5, 2, 1);
+        Console.WriteLine($"❌ 违反 {ruleId}：Command Handler 不能返回 DTO");
+    }
+}
+
+// 验证 Query Handler 返回类型（基于 ADR-005）
+var queryRule = adr005.GetRule(3); // Query Handler 规则
+if (handlerType == "Query")
+{
+    // 检查返回类型必须是 DTO
+    if (returnType.EndsWith("Command") || returnType == "void")
+    {
+        var ruleId = new ArchitectureRuleId(5, 3, 1);
+        Console.WriteLine($"❌ 违反 {ruleId}：Query Handler 必须返回 DTO");
+    }
+}
+```
+
+### 参考实现
+
+当前没有专用的 GenerateHandlerCommandHandler，但可以参考：
+- `GenerateTestCommandHandler.cs` - 使用 RuleSetRegistry 的模式
+- `RunArchitectureTestsCommandHandler.cs` - RuleId 验证模式
+- `IRuleSetQueryService` - 统一查询接口
+
+---
+
 ## 审计日志
 
 ```json
@@ -291,6 +351,8 @@ public class {UseCase}Handler : IQueryHandler<{UseCase}, {ReturnType}>
 
 ## 参考资料
 
+- **RuleSetRegistry API**：`src/tools/Specification/Index/RuleSetRegistry.cs`
+- **IRuleSetQueryService**：`src/tools/Specification/Services/IRuleSetQueryService.cs`
 - [ADR-005：应用内交互模型](../../../docs/adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
 - [ADR-001：垂直切片架构](../../../docs/adr/constitutional/ADR-001-modular-monolith-vertical-slice-architecture.md)
 - [后端开发指令](../../instructions/backend.instructions.md)
@@ -298,4 +360,7 @@ public class {UseCase}Handler : IQueryHandler<{UseCase}, {ReturnType}>
 ---
 
 **维护者**：架构委员会  
-**状态**：✅ Active
+**状态**：✅ Active  
+**版本**：1.1  
+**最后更新**：2026-02-20  
+**变更**：集成 RuleSetRegistry API，移除硬编码规则引用

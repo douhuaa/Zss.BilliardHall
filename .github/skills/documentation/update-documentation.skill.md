@@ -290,12 +290,98 @@ graph LR
 
 ---
 
+## RuleSet API 集成
+
+### 同步 RuleSet 变更到文档
+
+更新文档时，应检查 RuleSetRegistry 中的规则变更：
+
+```csharp
+using Zss.BilliardHall.Specification.Index;
+
+// 获取所有 ADR 规则集
+var allRuleSets = RuleSetRegistry.GetAllRuleSets();
+Console.WriteLine($"📊 检测到 {allRuleSets.Count()} 个 ADR 规则集");
+
+// 检查每个 ADR 是否有对应的文档
+foreach (var ruleSet in allRuleSets)
+{
+    var adrPath = $"docs/adr/.../ADR-{ruleSet.AdrNumber:D3}-....md";
+    if (!File.Exists(adrPath))
+    {
+        Console.WriteLine($"⚠️  ADR-{ruleSet.AdrNumber:D3} 缺少文档");
+    }
+}
+```
+
+### 验证文档中的 RuleId 引用
+
+检查文档中引用的 RuleId 是否存在于 RuleSet 中：
+
+```csharp
+// 提取文档中的 RuleId 引用
+var ruleIdPattern = @"ADR-(\d{3})\.(\d+)\.(\d+)";
+var matches = Regex.Matches(docContent, ruleIdPattern);
+
+foreach (Match match in matches)
+{
+    var adrNum = int.Parse(match.Groups[1].Value);
+    var ruleNum = int.Parse(match.Groups[2].Value);
+    var clauseNum = int.Parse(match.Groups[3].Value);
+    
+    // 验证 RuleId 是否存在
+    var ruleSet = RuleSetRegistry.Get(adrNum);
+    if (ruleSet != null)
+    {
+        var clause = ruleSet.GetClause(ruleNum, clauseNum);
+        if (clause == null)
+        {
+            Console.WriteLine($"⚠️  无效引用: {match.Value}");
+        }
+    }
+    else
+    {
+        Console.WriteLine($"⚠️  规则集不存在: ADR-{adrNum:D3}");
+    }
+}
+```
+
+### 更新索引时同步规则数量
+
+更新文档索引时，显示每个 ADR 的规则统计：
+
+```csharp
+// 生成索引条目
+var ruleSet = RuleSetRegistry.Get(adrNumber);
+if (ruleSet != null)
+{
+    var indexEntry = $"| [ADR-{ruleSet.AdrNumber:D3}](...) | {title} | " +
+                    $"{ruleSet.RuleCount} Rules, {ruleSet.ClauseCount} Clauses | ✅ |";
+    // 添加到索引
+}
+```
+
+### 参考实现
+
+参见 `src/tools/Governance.Cli/Commands/UpdateDocumentationCommandHandler.cs`：
+- 使用 RuleSetRegistry 获取规则集列表
+- 验证文档与规则集的一致性
+- 生成索引时同步规则统计
+
+---
+
 ## 参考资料
 
+- **RuleSetRegistry API**：`src/tools/Specification/Index/RuleSetRegistry.cs`
+- **IRuleSetQueryService**：`src/tools/Specification/Services/IRuleSetQueryService.cs`
+- **UpdateDocumentationCommandHandler**：`src/tools/Governance.Cli/Commands/UpdateDocumentationCommandHandler.cs`
 - [ADR-008：文档编写规范](../../../docs/adr/constitutional/ADR-008-documentation-writing-maintenance-constitution.md)
 - [文档编写指令](../../instructions/documentation.instructions.md)
 
 ---
 
 **维护者**：架构委员会  
-**状态**：✅ Active
+**状态**：✅ Active  
+**版本**：1.1  
+**最后更新**：2026-02-20  
+**变更**：集成 RuleSetRegistry API，同步规则集变更到文档索引

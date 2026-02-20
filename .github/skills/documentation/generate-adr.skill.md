@@ -308,8 +308,60 @@ primary_enforcement: L2
 
 ---
 
+## RuleSet API 集成
+
+### 使用 RuleSetRegistry 验证 ADR 结构
+
+生成 ADR 文档时，应使用 RuleSetRegistry 验证结构完整性：
+
+```csharp
+using Zss.BilliardHall.Specification.Index;
+
+// 获取 ADR-902 规则集（ADR 标准模板）
+var adr902 = RuleSetRegistry.GetStrict(902);
+Console.WriteLine($"📋 使用 {adr902.AdrNumber:D3} 标准模板");
+Console.WriteLine($"   必需章节数: {adr902.RuleCount}");
+
+// 获取 ADR-907 规则集（Rule/Clause 编号体系）
+var adr907 = RuleSetRegistry.GetStrict(907);
+// 使用规则验证 Decision 章节格式
+```
+
+### 自动生成 Decision 章节
+
+使用 `IAdrDecisionGenerator` 自动生成符合规范的 Decision 章节：
+
+```csharp
+using Zss.BilliardHall.Generators;
+
+// 从 RuleSetRegistry 获取规则集
+var ruleSet = RuleSetRegistry.GetStrict(adrNumber);
+
+// 生成 Decision 章节
+var generator = new AdrDecisionGenerator();
+var options = new DecisionGenerationOptions
+{
+    IncludeSectionHeader = true,
+    IncludeWarningNote = true,
+    EscapeMarkdown = true
+};
+var decisionContent = generator.GenerateDecisionSection(ruleSet, options);
+```
+
+### 参考实现
+
+参见 `src/tools/Governance.Cli/Commands/GenerateAdrCommandHandler.cs`，了解如何：
+- 使用 RuleSetRegistry 查询规则集
+- 使用 IAdrDecisionGenerator 生成 Decision 章节
+- 使用 IAdrDocumentMerger 合并到现有文档
+
+---
+
 ## 参考资料
 
+- **RuleSetRegistry API**：`src/tools/Specification/Index/RuleSetRegistry.cs`
+- **IAdrDecisionGenerator**：`src/tools/Generators/IAdrDecisionGenerator.cs`
+- **IAdrDocumentMerger**：`src/tools/Generators/IAdrDocumentMerger.cs`
 - [ADR-902：ADR 标准模板与结构契约](../../../docs/adr/governance/ADR-902-adr-template-structure-contract.md)
 - [ADR-907：ADR 对齐执行标准](../../../docs/ADR-907-ALIGNMENT-GUIDE.md)
 - [ADR-008：文档编写与维护宪法](../../../docs/adr/constitutional/ADR-008-documentation-governance-constitution.md)
@@ -318,5 +370,7 @@ primary_enforcement: L2
 ---
 
 **维护者**：Architecture Board  
-**最后更新**：2026-02-03  
-**状态**：✅ Active
+**最后更新**：2026-02-20  
+**状态**：✅ Active  
+**版本**：1.1  
+**变更**：集成 RuleSetRegistry API 和生成器，移除硬编码规则
