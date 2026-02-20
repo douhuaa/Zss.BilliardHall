@@ -277,9 +277,6 @@ else if (severity == RuleSeverity.Governance)
 **状态**：✅ Active  
 **版本**：1.2  
 **最后更新**：2026-02-20  
-**变更**：集成 RuleSetRegistry API，使用动态规则判定替代硬编码严重性  
-**版本**：1.2  
-**最后更新**：2026-02-20  
 **变更**：集成 RuleSetRegistry API，使用动态规则判定替代硬编码严重性
 
 ---
