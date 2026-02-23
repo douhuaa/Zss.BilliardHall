@@ -92,6 +92,7 @@ post_execution:
 2. **查询 RuleSet 变更**
   - 通过 RuleSetRegistry / IRuleSetQueryService 获取最新 ADR 与 RuleId 清单
   - 以 RuleSet 结果作为索引更新的唯一规则来源
+  - 当 operation=add/update/remove 且 docType=adr 时，先比对 RuleSet 变更再更新索引与交叉引用
 
 3. **确定需要更新的索引**
   - 主索引（README.md）

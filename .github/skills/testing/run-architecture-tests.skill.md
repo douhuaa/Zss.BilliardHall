@@ -66,6 +66,8 @@ post_execution:
 }
 ```
 
+其中 `{Number}` 表示 ADR 编号（如 001、005）。
+
 ---
 
 ## 前置条件
@@ -95,9 +97,9 @@ post_execution:
   - 收集测试结果
 
 3. **分析结果**
-   - 提取失败测试
-   - 关联到 RuleSetRegistry 中的 ADR 条款
-   - 提取违规详情
+  - 提取失败测试
+  - 关联到 RuleSetRegistry 中的 ADR 条款
+  - 提取违规详情
 
 4. **生成报告**
   - 汇总统计信息

@@ -81,8 +81,8 @@ post_execution:
   - 验证路由格式
 
 2. **查询 RuleSet 约束**
-  - 通过 RuleSetRegistry / IRuleSetQueryService 查询 API/Endpoint 约束
-  - 基于 RuleSet 决定映射规则与响应规范
+   - 通过 RuleSetRegistry / IRuleSetQueryService 查询 API/Endpoint 约束
+   - 基于 RuleSet 决定映射规则与响应规范
 
 3. **生成 Endpoint 代码**
   - 使用薄适配器模板

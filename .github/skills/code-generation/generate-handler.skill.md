@@ -86,8 +86,8 @@ post_execution:
   - 验证 returnType 符合 RuleSet 约束
 
 2. **查询 RuleSet 约束**
-  - 通过 RuleSetRegistry / IRuleSetQueryService 查询 Handler 相关条款
-  - 依据 RuleSet 进行 Command/Query 约束校验
+   - 通过 RuleSetRegistry / IRuleSetQueryService 查询 Handler 相关条款
+   - 依据 RuleSet 进行 Command/Query 约束校验
 
 3. **检查文件冲突**
   - 检查 Handler 文件是否已存在

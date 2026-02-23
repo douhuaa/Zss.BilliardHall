@@ -154,10 +154,11 @@ primary_enforcement: L2
 > 
 > 🔒 **统一铁律**：
 > 
-> ADR-{Number} 中，所有可执法条款必须具备稳定 RuleId，格式应与 RuleSetRegistry 输出一致：
+> ADR-{Number} 中，所有可执法条款必须具备稳定 RuleId，格式应与 RuleSetRegistry 输出一致（已标准化为点号格式）：
 > ```
-> ADR-{Number}.<Rule>.<Clause>
+> ADR-{Number}.{Rule}.{Clause}
 > ```
+> 其中 `{Number}` 表示 ADR 编号，`{Rule}` 表示规则号，`{Clause}` 表示条款号。
 
 ---
 
@@ -189,6 +190,8 @@ primary_enforcement: L2
 | **ADR-{Number}.1.1** | {ExecutionLevel} | <!-- 执法方式 --> | §ADR-{Number}.1.1 |
 | **ADR-{Number}.1.2** | {ExecutionLevel} | <!-- 执法方式 --> | §ADR-{Number}.1.2 |
 | **ADR-{Number}.2.1** | {ExecutionLevel} | <!-- 执法方式 --> | §ADR-{Number}.2.1 |
+
+`{ExecutionLevel}` 由 RuleSetRegistry 返回（如 L1/L2/L3），禁止在 Skill 内写死。
 
 ### 执行级别说明
 - 执行级别由 RuleSetRegistry / ADR-907 的最新规则集定义，不在 Skill 内硬编码。

@@ -77,19 +77,19 @@ post_execution:
 ## 执行步骤
 
 1. **分析目标代码**
-   - 解析类结构
-   - 识别方法签名
-   - 提取依赖项
+  - 解析类结构
+  - 识别方法签名
+  - 提取依赖项
 
 2. **查询 RuleSet 约束**
-   - 通过 RuleSetRegistry / IRuleSetQueryService 获取当前 ADR 对应规则
-   - 基于 RuleSet 生成测试场景与断言要点
+  - 通过 RuleSetRegistry / IRuleSetQueryService 获取当前 ADR 对应规则
+  - 基于 RuleSet 生成测试场景与断言要点
 
 3. **确定测试场景**
-   - 正常流程
-   - 边界情况
-   - 异常处理
-   - 特殊业务规则
+  - 正常流程
+  - 边界情况
+  - 异常处理
+  - 特殊业务规则
 
 4. **生成测试代码**
   - 选择合适模板
@@ -302,7 +302,7 @@ public class {ClassName}Tests
 - [ ] 使用 `TestEnvironment.RepositoryRoot` 而非 `FindRepositoryRoot()`
 - [ ] 使用 `FileSystemTestHelper` 进行文件操作
 - [ ] 使用 `AssertionMessageBuilder` 构建断言消息
-- [ ] 断言消息包含 ADR 条款引用（格式：ADR-XXX.Y.Z）
+- [ ] 断言消息包含 ADR 条款引用（格式：ADR-{Number}.{Rule}.{Clause}）
 - [ ] 测试方法命名遵循 `Method_Scenario_ExpectedResult` 格式
 - [ ] 使用 Arrange-Act-Assert 模式
 - [ ] 每个测试只验证一个行为
