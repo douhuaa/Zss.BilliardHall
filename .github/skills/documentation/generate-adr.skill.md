@@ -89,22 +89,26 @@ post_execution:
    - 验证级别有效（映射到 ADR-902 枚举）
    - 验证类别目录存在
 
-2. **生成文件名**
+2. **查询 RuleSet**
+   - 通过 RuleSetRegistry / IRuleSetQueryService 获取 ADR 对应规则集
+   - 使用规则集生成 Rule/Clause 内容，避免手工硬编码条款
+
+3. **生成文件名**
    - 格式：`ADR-{Number}-{kebab-case-title}.md`
    - 确定目标路径
 
-3. **生成文档内容**
+4. **生成文档内容**
    - 使用 ADR-902 标准模板
    - 填充 Front Matter（符合 ADR-902.1.3）
    - 添加所有必需章节（ADR-902.1.4）
    - 插入 Rule/Clause 结构占位符（ADR-907）
    - 插入占位符
 
-4. **创建文件**
+5. **创建文件**
    - 写入目标路径
    - 设置文件权限
 
-5. **记录日志**
+6. **记录日志**
 
 ---
 
@@ -150,9 +154,9 @@ primary_enforcement: L2
 > 
 > 🔒 **统一铁律**：
 > 
-> ADR-{Number} 中，所有可执法条款必须具备稳定 RuleId，格式为：
+> ADR-{Number} 中，所有可执法条款必须具备稳定 RuleId，格式应与 RuleSetRegistry 输出一致：
 > ```
-> ADR-{Number}_<Rule>_<Clause>
+> ADR-{Number}.<Rule>.<Clause>
 > ```
 
 ---
@@ -182,14 +186,12 @@ primary_enforcement: L2
 
 | 规则编号 | 执行级 | 执法方式 | Decision 映射 |
 |---------|--------|---------|--------------|
-| **ADR-{Number}_1_1** | L1 | <!-- 执法方式 --> | §ADR-{Number}_1_1 |
-| **ADR-{Number}_1_2** | L1 | <!-- 执法方式 --> | §ADR-{Number}_1_2 |
-| **ADR-{Number}_2_1** | L2 | <!-- 执法方式 --> | §ADR-{Number}_2_1 |
+| **ADR-{Number}.1.1** | {ExecutionLevel} | <!-- 执法方式 --> | §ADR-{Number}.1.1 |
+| **ADR-{Number}.1.2** | {ExecutionLevel} | <!-- 执法方式 --> | §ADR-{Number}.1.2 |
+| **ADR-{Number}.2.1** | {ExecutionLevel} | <!-- 执法方式 --> | §ADR-{Number}.2.1 |
 
 ### 执行级别说明
-- **L1（阻断级）**：违规直接导致 CI 失败、阻止合并/部署
-- **L2（警告级）**：违规记录告警，需人工 Code Review 裁决
-- **L3（人工级）**：需要架构师人工裁决
+- 执行级别由 RuleSetRegistry / ADR-907 的最新规则集定义，不在 Skill 内硬编码。
 
 ### 执行时机
 

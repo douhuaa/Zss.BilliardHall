@@ -45,8 +45,8 @@ post_execution:
       "targetType": "Zss.BilliardHall.Modules.Members.Domain.Member",
       "targetNamespace": "Zss.BilliardHall.Modules.Members.Domain",
       "targetLayer": "Domain",
-      "derivedSeverity": "High",
-      "severitySource": "ADR-001.2"
+      "derivedSeverity": "{FromRuleSet}",
+      "severitySource": "{RuleId}"
     }
   ],
   "summary": {
@@ -67,7 +67,7 @@ post_execution:
 ```
 
 **关键说明**：
-- `derivedSeverity`：基于当前 ADR（如 ADR-001.2）推导的严重性，**不是 Skill 固化的真理**
+- `derivedSeverity`：基于 RuleSetRegistry 当前规则集推导的严重性，**不是 Skill 固化的真理**
 - `severitySource`：严重性判定依据的 ADR 条款，便于追溯
 - 最终判定由 Agent 根据最新 ADR 执行
 
@@ -106,8 +106,8 @@ post_execution:
   - 目标层级（Domain / UseCases / Infrastructure / Contracts）
 
 4. **推导严重性（Informational）**
-  - 基于当前 ADR-001.2 推导严重性
-  - 标注推导依据（ADR 条款）
+  - 通过 RuleSetRegistry / IRuleSetQueryService 查询模块边界规则后推导严重性
+  - 标注推导依据（RuleId）
   - **注意**：此推导仅供参考，Agent 可根据最新 ADR 重新判定
 
 5. **生成报告**
@@ -134,28 +134,9 @@ post_execution:
 
 ## 严重性推导规则（Informational）
 
-> ⚠️ **重要声明**：以下严重性推导基于 ADR-001.2（当前版本），仅供 Agent 参考。
+> ⚠️ **重要声明**：严重性推导必须基于 RuleSetRegistry 的当前规则集动态计算。
 > 
-> Agent 应根据**最新 ADR 正文**进行最终裁决，而非依赖此推导结果。
-
-### 推导逻辑（基于 ADR-001.2）
-
-- **High**：直接引用 Domain 层（`*.Domain.*`）
-  - 依据：ADR-001.2 明确禁止跨模块 Domain 引用
-  
-- **Medium**：引用非 Contracts 的其他层（`*.UseCases.*`, `*.Infrastructure.*`）
-  - 依据：ADR-001.2 要求模块内部实现隐藏
-  
-- **Low**：引用 Contracts 层（`*.Contracts.*`）
-  - 依据：ADR-001.3 允许 Contracts 跨模块使用，但需验证使用方式
-
-### 例外情况（需 Agent 二次判断）
-
-- Application 层编排多个模块的 Contracts
-- 测试代码引用（`tests/**/*.cs`）
-- Platform 层引用（允许）
-
-**如果 ADR-001 修订，此推导逻辑可能过时，Agent 不应盲目信任。**
+> Agent 应根据最新 RuleSet / ADR 正文进行最终裁决，禁止依赖 Skill 内固定映射表。
 
 ---
 
@@ -226,9 +207,6 @@ post_execution:
 
 ### 修复建议来源
 
-修复建议应由 Agent 根据 ADR 生成，常见方案包括：
-- 使用领域事件异步通信（ADR-001.4）
-- 使用契约查询传递数据（ADR-001.3）
-- 使用原始类型传递标识（ADR-001.3）
+修复建议应由 Agent 根据 RuleSetRegistry 返回的 RuleId 与条款内容动态生成。
 
 详见：`docs/copilot/adr-001.prompts.md`

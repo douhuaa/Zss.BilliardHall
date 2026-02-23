@@ -80,17 +80,21 @@ post_execution:
   - 验证 HTTP 方法有效
   - 验证路由格式
 
-2. **生成 Endpoint 代码**
+2. **查询 RuleSet 约束**
+  - 通过 RuleSetRegistry / IRuleSetQueryService 查询 API/Endpoint 约束
+  - 基于 RuleSet 决定映射规则与响应规范
+
+3. **生成 Endpoint 代码**
   - 使用薄适配器模板
   - 只做请求映射
   - 委托给 Handler
   - 返回标准 HTTP 响应
 
-3. **验证生成结果**
+4. **验证生成结果**
   - 检查无业务逻辑
   - 验证符合规范
 
-4. **记录日志**
+5. **记录日志**
 
 ---
 
@@ -187,13 +191,7 @@ public class {UseCase}Endpoint : IEndpoint
 
 ### HTTP 状态码规范
 
-| 操作 | 成功状态码 | 示例 |
-|-----|----------|------|
-| POST（创建） | 201 Created | `Results.Created()` |
-| GET（查询） | 200 OK | `Results.Ok()` |
-| PUT（更新） | 200 OK | `Results.Ok()` |
-| DELETE（删除） | 204 No Content | `Results.NoContent()` |
-| PATCH（部分更新） | 200 OK | `Results.Ok()` |
+- [ ] 成功状态码映射来自 RuleSetRegistry / HTTP 规范，不在 Skill 中硬编码固定映射表
 
 ---
 

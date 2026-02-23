@@ -83,28 +83,32 @@ post_execution:
 1. **验证输入参数**
   - 检查模块存在
   - 验证 handlerType 有效
-  - 验证 returnType 符合 CQRS 规则
+  - 验证 returnType 符合 RuleSet 约束
 
-2. **检查文件冲突**
+2. **查询 RuleSet 约束**
+  - 通过 RuleSetRegistry / IRuleSetQueryService 查询 Handler 相关条款
+  - 依据 RuleSet 进行 Command/Query 约束校验
+
+3. **检查文件冲突**
   - 检查 Handler 文件是否已存在
   - 如存在，询问是否覆盖
 
-3. **生成 Handler 代码**
+4. **生成 Handler 代码**
   - 根据 handlerType 选择模板
   - 注入依赖项
   - 设置返回类型
   - 添加标准注释
 
-4. **生成目录结构**
+5. **生成目录结构**
   - 确保垂直切片目录存在
   - 创建 Handler 文件
 
-5. **验证生成结果**
+6. **验证生成结果**
   - 检查语法正确性
   - 验证符合架构规范
   - 运行架构测试
 
-6. **记录日志**
+7. **记录日志**
   - 记录生成参数
   - 记录生成时间
   - 记录验证结果
@@ -183,15 +187,8 @@ public class {UseCase}Handler : IQueryHandler<{UseCase}, {ReturnType}>
 
 ### CQRS 验证
 
-**Command Handler 必须**：
-- [ ] 返回 void/Task/ID 类型
-- [ ] 不返回 DTO
-- [ ] 可以发布事件
-
-**Query Handler 必须**：
-- [ ] 返回 DTO
-- [ ] 不修改状态
-- [ ] 不发布事件
+- [ ] Command/Query 约束来自 RuleSetRegistry，禁止在 Skill 内硬编码
+- [ ] 生成后根据 RuleSet 条款执行校验并输出 RuleId
 
 ### 垂直切片验证
 
