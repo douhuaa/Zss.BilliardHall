@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <UserSecretsId>3d291366-1663-4426-ae92-06f9b5daeb5a</UserSecretsId>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Application\Application.csproj"/>
     <ProjectReference Include="..\..\Composition\Composition.csproj"/>
