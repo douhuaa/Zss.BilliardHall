@@ -2,7 +2,7 @@ namespace Zss.BilliardHall.Host.Web;
 
 /// <summary>
 /// 全局异常处理中间件，统一将所有未处理异常转换为 application/problem+json 响应。
-/// 替代旧的 ValidationExceptionMiddleware，覆盖 Domain / Infrastructure / Unknown 异常。
+/// 覆盖 Domain / Infrastructure / Unknown 异常，取代已移除的 ValidationExceptionMiddleware。
 /// </summary>
 public sealed class GlobalExceptionMiddleware
 {
