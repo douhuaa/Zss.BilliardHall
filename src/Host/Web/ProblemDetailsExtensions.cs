@@ -14,7 +14,7 @@ internal static class ProblemDetailsExtensions
     /// </summary>
     public static void AddTraceInfo(this ProblemDetails problem, HttpContext context)
     {
-        problem.Extensions["traceId"] = Activity.Current?.Id ?? context.TraceIdentifier;
+        problem.Extensions["traceId"] = Activity.Current?.TraceId.ToString() ?? context.TraceIdentifier;
         problem.Extensions["requestId"] = context.TraceIdentifier;
     }
 }

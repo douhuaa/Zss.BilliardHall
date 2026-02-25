@@ -33,12 +33,7 @@ public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapp
         };
 
     private static ValidationProblemDetails MapValidation(PlatformValidationException ex, string? requestPath)
-    {
-        var errors = ex.Errors.Count > 0
-            ? ex.Errors.ToDictionary(kv => kv.Key, kv => kv.Value)
-            : new Dictionary<string, string[]> { ["_"] = [ex.Message] };
-
-        return new ValidationProblemDetails(errors)
+        => new(BuildValidationErrors(ex))
         {
             Type = ProblemType.Validation,
             Title = "验证失败",
@@ -46,7 +41,11 @@ public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapp
             Detail = "一个或多个验证错误发生。",
             Instance = requestPath
         };
-    }
+
+    private static Dictionary<string, string[]> BuildValidationErrors(PlatformValidationException ex)
+        => ex.Errors.Count > 0
+            ? ex.Errors.ToDictionary(kv => kv.Key, kv => kv.Value)
+            : new Dictionary<string, string[]> { ["_"] = [ex.Message] };
 
     private static ProblemDetails MapDomain(DomainException ex, string? requestPath)
     {
@@ -58,6 +57,7 @@ public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapp
             Detail = ex.Message,
             Instance = requestPath
         };
+
         problem.Extensions["errorCode"] = ex.ErrorCode;
         return problem;
     }
@@ -65,6 +65,7 @@ public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapp
     private static ProblemDetails MapInfrastructure(InfrastructureException ex, string? requestPath)
     {
         var status = ex.HttpStatusCode ?? StatusCodes.Status503ServiceUnavailable;
+
         return new ProblemDetails
         {
             Type = ProblemType.FromStatusCode(status),
@@ -76,8 +77,7 @@ public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapp
     }
 
     private static ProblemDetails MapUnknown(Exception ex, string? requestPath, bool includeExceptionDetail)
-    {
-        return new ProblemDetails
+        => new()
         {
             Type = ProblemType.FromStatusCode(StatusCodes.Status500InternalServerError),
             Title = "服务器内部错误",
@@ -85,5 +85,4 @@ public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapp
             Detail = includeExceptionDetail ? ex.ToString() : "发生未处理异常，请联系管理员。",
             Instance = requestPath
         };
-    }
 }
