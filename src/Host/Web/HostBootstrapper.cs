@@ -47,10 +47,6 @@ public static class HostBootstrapper
     {
         ArgumentNullException.ThrowIfNull(app);
 
-        // Wolverine HTTP 异常处理中间件（必须在 MapWolverineEndpoints 前）
-        // 这个中间件捕获 Wolverine 端点的异常
-        app.UseMiddleware<WolverineHttpExceptionMiddleware>();
-
         // 全局异常处理中间件（统一将所有未处理异常转换为 ProblemDetails）
         // 这个中间件是后备，处理其他可能漏掉的异常
         app.UseMiddleware<GlobalExceptionMiddleware>();

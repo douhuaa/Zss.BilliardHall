@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Zss.BilliardHall.Platform.Contracts;
 
 namespace Zss.BilliardHall.Host.Web;
@@ -36,43 +37,50 @@ public sealed class GlobalExceptionMiddleware
         {
             await _next(context);
         }
+        catch (Exception ex) when (!context.Response.HasStarted)
+        {
+            await HandleExceptionAsync(context, ex);
+        }
         catch (Exception ex)
         {
-            if (context.Response.HasStarted)
-            {
-                _logger.LogWarning(ex, "响应已开始，无法修改响应。异常类型：{ExceptionType}", ex.GetType().Name);
-                throw;
-            }
-
-            await HandleExceptionAsync(context, ex);
+            _logger.LogWarning(ex, "响应已开始，无法修改响应。异常类型：{ExceptionType}", ex.GetType().Name);
+            throw;
         }
     }
 
     private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
-        var translated = TranslateException(ex);
-        var includeDetail = _environment.IsDevelopment();
-        var problem = _mapper.Map(translated, context.Request.Path, includeDetail);
-        problem.AddTraceInfo(context);
+        var effective = TranslateException(ex);
 
+        var problem = BuildProblemDetails(context, effective);
         var status = problem.Status ?? StatusCodes.Status500InternalServerError;
-        LogException(ex, translated, status);
 
-        context.Response.StatusCode = status;
-        context.Response.ContentType = ProblemJsonContentType;
-        // 必须使用运行时类型序列化，否则 ValidationProblemDetails.Errors 字段会丢失
-        await context.Response.WriteAsJsonAsync(problem, problem.GetType(), options: null, contentType: ProblemJsonContentType);
+        LogException(ex, effective, status);
+
+        await WriteProblemDetailsAsync(context, problem, status);
     }
 
-    private void LogException(Exception original, Exception effective, int status)
+    private ProblemDetails BuildProblemDetails(HttpContext context, Exception ex)
     {
-        if (status >= 500)
-        {
-            _logger.LogError(original, "服务器错误：{ExceptionType} - {Message}", effective.GetType().Name, effective.Message);
-            return;
-        }
+        var includeDetail = _environment.IsDevelopment();
 
-        _logger.LogWarning(original, "客户端错误：{ExceptionType} - {Message}", effective.GetType().Name, effective.Message);
+        var problem = _mapper.Map(ex, context.Request.Path, includeDetail);
+        problem.AddTraceInfo(context);
+
+        return problem;
+    }
+
+    private static Task WriteProblemDetailsAsync(HttpContext context, ProblemDetails problem, int status)
+    {
+        context.Response.StatusCode = status;
+        context.Response.ContentType = ProblemJsonContentType;
+
+        // 必须使用运行时类型序列化，否则 ValidationProblemDetails.Errors 字段会丢失
+        return context.Response.WriteAsJsonAsync(
+            problem,
+            problem.GetType(),
+            options: null,
+            contentType: ProblemJsonContentType);
     }
 
     private Exception TranslateException(Exception ex)
@@ -84,6 +92,17 @@ public sealed class GlobalExceptionMiddleware
         }
 
         return ex;
+    }
+
+    private void LogException(Exception original, Exception effective, int status)
+    {
+        if (status >= 500)
+        {
+            _logger.LogError(original, "服务器错误：{ExceptionType} - {Message}", effective.GetType().Name, effective.Message);
+            return;
+        }
+
+        _logger.LogWarning(original, "客户端错误：{ExceptionType} - {Message}", effective.GetType().Name, effective.Message);
     }
 }
 

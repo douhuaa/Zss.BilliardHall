@@ -17,30 +17,52 @@ public sealed class MemberEmailUniqueViolationTranslator : IExceptionTranslator
     private const string EmailConstraintName = "mt_doc_member_uidx_email";
     private const string UniqueViolationSqlState = "23505";
 
-    /// <inheritdoc />
-    public Exception? Translate(Exception ex) =>
-        IsEmailUniqueViolation(ex) ? new MemberEmailAlreadyExistsException() : null;
+    private readonly Func<Exception, (string? SqlState, string? ConstraintName)> _extract;
 
-    /// <summary>
-    /// 核心判定逻辑（可单测）：是否为会员邮箱唯一约束冲突
-    /// </summary>
-    public static bool IsEmailUniqueViolation(Exception ex)
+    public MemberEmailUniqueViolationTranslator()
+        : this(ExtractFromException)
     {
-        var pgEx = FindPostgresException(ex);
-        return IsEmailUniqueViolation(pgEx?.SqlState, pgEx?.ConstraintName);
     }
 
-    /// <summary>
-    /// 根据结构化字段判定（用于单元测试，无需构造 PostgresException）
-    /// </summary>
+    public MemberEmailUniqueViolationTranslator(
+        Func<Exception, (string? SqlState, string? ConstraintName)> extract)
+    {
+        _extract = extract ?? throw new ArgumentNullException(nameof(extract));
+    }
+
+    public Exception? Translate(Exception ex)
+    {
+        ArgumentNullException.ThrowIfNull(ex);
+
+        var (sqlState, constraintName) = _extract(ex);
+        return IsEmailUniqueViolation(sqlState, constraintName)
+            ? new MemberEmailAlreadyExistsException()
+            : null;
+    }
+
     public static bool IsEmailUniqueViolation(string? sqlState, string? constraintName) =>
         sqlState == UniqueViolationSqlState && constraintName == EmailConstraintName;
 
-    private static PostgresException? FindPostgresException(Exception ex) =>
-        ex switch
+    public static bool IsEmailUniqueViolation(Exception ex)
+    {
+        ArgumentNullException.ThrowIfNull(ex);
+        var (sqlState, constraintName) = ExtractFromException(ex);
+        return IsEmailUniqueViolation(sqlState, constraintName);
+    }
+
+    private static (string? SqlState, string? ConstraintName) ExtractFromException(Exception ex)
+    {
+        var pg = FindPostgresException(ex);
+        return (pg?.SqlState, pg?.ConstraintName);
+    }
+
+    private static PostgresException? FindPostgresException(Exception? ex)
+    {
+        for (var current = ex; current is not null; current = current.InnerException)
         {
-            PostgresException pg => pg,
-            _ when ex.InnerException != null => FindPostgresException(ex.InnerException),
-            _ => null
-        };
+            if (current is PostgresException pg) return pg;
+        }
+
+        return null;
+    }
 }
