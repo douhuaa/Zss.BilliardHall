@@ -30,6 +30,12 @@ public class InfrastructureException : Exception, IRetryable
     /// </summary>
     public int? SuggestedRetryDelayMs { get; }
 
+    /// <summary>
+    /// HTTP 状态码覆盖（可选）。若指定，则映射时使用该状态码；否则默认 503。
+    /// Optional HTTP status code override. If specified, this code is used during mapping; otherwise defaults to 503.
+    /// </summary>
+    public int? HttpStatusCode { get; init; }
+
     public InfrastructureException(
         string componentType,
         string message,
