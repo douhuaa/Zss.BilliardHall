@@ -1,3 +1,5 @@
+using Zss.BilliardHall.Platform.Contracts;
+
 namespace Zss.BilliardHall.Host.Web;
 
 /// <summary>
@@ -10,17 +12,20 @@ public sealed class GlobalExceptionMiddleware
     private readonly ILogger<GlobalExceptionMiddleware> _logger;
     private readonly IWebHostEnvironment _environment;
     private readonly IExceptionProblemDetailsMapper _mapper;
+    private readonly IEnumerable<IExceptionTranslator> _translators;
 
     public GlobalExceptionMiddleware(
         RequestDelegate next,
         ILogger<GlobalExceptionMiddleware> logger,
         IWebHostEnvironment environment,
-        IExceptionProblemDetailsMapper mapper)
+        IExceptionProblemDetailsMapper mapper,
+        IEnumerable<IExceptionTranslator> translators)
     {
         _next = next;
         _logger = logger;
         _environment = environment;
         _mapper = mapper;
+        _translators = translators;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -43,8 +48,9 @@ public sealed class GlobalExceptionMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
+        var effectiveEx = TranslateException(ex);
         var includeDetail = _environment.IsDevelopment();
-        var problem = _mapper.Map(ex, context.Request.Path, includeDetail);
+        var problem = _mapper.Map(effectiveEx, context.Request.Path, includeDetail);
         problem.AddTraceInfo(context);
 
         var status = problem.Status ?? StatusCodes.Status500InternalServerError;
@@ -52,10 +58,20 @@ public sealed class GlobalExceptionMiddleware
         if (status >= 500)
             _logger.LogError(ex, "服务器错误：{ExceptionType} - {Message}", ex.GetType().Name, ex.Message);
         else
-            _logger.LogWarning(ex, "客户端错误：{ExceptionType} - {Message}", ex.GetType().Name, ex.Message);
+            _logger.LogWarning(ex, "客户端错误：{ExceptionType} - {Message}", ex.GetType().Name, effectiveEx.Message);
 
         context.Response.StatusCode = status;
         context.Response.ContentType = "application/problem+json";
-        await context.Response.WriteAsJsonAsync(problem);
+        await context.Response.WriteAsJsonAsync(problem, (System.Text.Json.JsonSerializerOptions?)null, "application/problem+json");
+    }
+
+    private Exception TranslateException(Exception ex)
+    {
+        foreach (var translator in _translators)
+        {
+            var translated = translator.Translate(ex);
+            if (translated is not null) return translated;
+        }
+        return ex;
     }
 }
