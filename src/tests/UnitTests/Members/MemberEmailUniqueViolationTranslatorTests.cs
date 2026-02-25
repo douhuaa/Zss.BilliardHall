@@ -1,5 +1,5 @@
 using Zss.BilliardHall.Modules.Members.Domain;
-using Zss.BilliardHall.Modules.Members.Domain.Exceptions;
+using Zss.BilliardHall.Modules.Members.Exceptions;
 using Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTranslators;
 
 namespace Zss.BilliardHall.Tests.UnitTests.Members;

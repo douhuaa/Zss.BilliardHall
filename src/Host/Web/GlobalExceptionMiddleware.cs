@@ -1,10 +1,9 @@
-using Zss.BilliardHall.Platform.Contracts;
-
 namespace Zss.BilliardHall.Host.Web;
 
 /// <summary>
 /// 全局异常处理中间件，统一将所有未处理异常转换为 application/problem+json 响应。
 /// 覆盖 Domain / Infrastructure / Unknown 异常，取代已移除的 ValidationExceptionMiddleware。
+/// 异常翻译（技术异常 → 领域异常）由 Wolverine pipeline 在上游负责。
 /// </summary>
 public sealed class GlobalExceptionMiddleware
 {
@@ -14,20 +13,17 @@ public sealed class GlobalExceptionMiddleware
     private readonly ILogger<GlobalExceptionMiddleware> _logger;
     private readonly IWebHostEnvironment _environment;
     private readonly IExceptionProblemDetailsMapper _mapper;
-    private readonly IEnumerable<IExceptionTranslator> _translators;
 
     public GlobalExceptionMiddleware(
         RequestDelegate next,
         ILogger<GlobalExceptionMiddleware> logger,
         IWebHostEnvironment environment,
-        IExceptionProblemDetailsMapper mapper,
-        IEnumerable<IExceptionTranslator> translators)
+        IExceptionProblemDetailsMapper mapper)
     {
         _next = next;
         _logger = logger;
         _environment = environment;
         _mapper = mapper;
-        _translators = translators;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -50,39 +46,27 @@ public sealed class GlobalExceptionMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
-        var translated = TranslateException(ex);
         var includeDetail = _environment.IsDevelopment();
-        var problem = _mapper.Map(translated, context.Request.Path, includeDetail);
+        var problem = _mapper.Map(ex, context.Request.Path, includeDetail);
         problem.AddTraceInfo(context);
 
         var status = problem.Status ?? StatusCodes.Status500InternalServerError;
-        LogException(ex, translated, status);
+        LogException(ex, status);
 
         context.Response.StatusCode = status;
         context.Response.ContentType = ProblemJsonContentType;
         await context.Response.WriteAsJsonAsync(problem, options: null, contentType: ProblemJsonContentType);
     }
 
-    private void LogException(Exception original, Exception effective, int status)
+    private void LogException(Exception ex, int status)
     {
         if (status >= 500)
         {
-            _logger.LogError(original, "服务器错误：{ExceptionType} - {Message}", effective.GetType().Name, effective.Message);
+            _logger.LogError(ex, "服务器错误：{ExceptionType} - {Message}", ex.GetType().Name, ex.Message);
             return;
         }
 
-        _logger.LogWarning(original, "客户端错误：{ExceptionType} - {Message}", effective.GetType().Name, effective.Message);
-    }
-
-    private Exception TranslateException(Exception ex)
-    {
-        foreach (var translator in _translators)
-        {
-            var translated = translator.Translate(ex);
-            if (translated is not null) return translated;
-        }
-
-        return ex;
+        _logger.LogWarning(ex, "客户端错误：{ExceptionType} - {Message}", ex.GetType().Name, ex.Message);
     }
 }
 

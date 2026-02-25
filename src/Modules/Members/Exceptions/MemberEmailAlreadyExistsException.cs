@@ -1,6 +1,7 @@
+using Zss.BilliardHall.Modules.Members.Domain;
 using Zss.BilliardHall.Platform.Exceptions;
 
-namespace Zss.BilliardHall.Modules.Members.Domain.Exceptions;
+namespace Zss.BilliardHall.Modules.Members.Exceptions;
 
 /// <summary>
 /// 会员邮箱已存在异常

@@ -1,5 +1,5 @@
 using Npgsql;
-using Zss.BilliardHall.Modules.Members.Domain.Exceptions;
+using Zss.BilliardHall.Modules.Members.Exceptions;
 using Zss.BilliardHall.Platform.Contracts;
 
 namespace Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTranslators;
