@@ -76,6 +76,8 @@ public class ExceptionProblemDetailsMapperTests
         result.Should().BeOfType<ValidationProblemDetails>();
         result.Status.Should().Be(StatusCodes.Status400BadRequest);
         result.Type.Should().Be(ProblemType.Validation);
+        result.Title.Should().Be("验证失败");
+        result.Detail.Should().Be("一个或多个验证错误发生。");
         var vpd = (ValidationProblemDetails)result;
         vpd.Errors.Should().ContainKey("Name");
         vpd.Errors.Should().ContainKey("Phone");

@@ -9,16 +9,18 @@ public sealed class GlobalExceptionMiddleware
     private readonly RequestDelegate _next;
     private readonly ILogger<GlobalExceptionMiddleware> _logger;
     private readonly IWebHostEnvironment _environment;
-    private readonly ExceptionProblemDetailsMapper _mapper = new();
+    private readonly IExceptionProblemDetailsMapper _mapper;
 
     public GlobalExceptionMiddleware(
         RequestDelegate next,
         ILogger<GlobalExceptionMiddleware> logger,
-        IWebHostEnvironment environment)
+        IWebHostEnvironment environment,
+        IExceptionProblemDetailsMapper mapper)
     {
         _next = next;
         _logger = logger;
         _environment = environment;
+        _mapper = mapper;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -53,6 +55,7 @@ public sealed class GlobalExceptionMiddleware
             _logger.LogWarning(ex, "客户端错误：{ExceptionType} - {Message}", ex.GetType().Name, ex.Message);
 
         context.Response.StatusCode = status;
+        context.Response.ContentType = "application/problem+json";
         await context.Response.WriteAsJsonAsync(problem);
     }
 }

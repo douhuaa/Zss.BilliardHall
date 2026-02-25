@@ -5,9 +5,9 @@ using PlatformValidationException = Zss.BilliardHall.Platform.Exceptions.Validat
 namespace Zss.BilliardHall.Host.Web;
 
 /// <summary>
-/// 将异常映射为 ProblemDetails，纯映射逻辑，不依赖 HttpContext
+/// 将异常映射为 ProblemDetails 的抽象契约
 /// </summary>
-public sealed class ExceptionProblemDetailsMapper
+public interface IExceptionProblemDetailsMapper
 {
     /// <summary>
     /// 将异常映射为对应的 ProblemDetails
@@ -15,6 +15,14 @@ public sealed class ExceptionProblemDetailsMapper
     /// <param name="ex">待映射的异常</param>
     /// <param name="requestPath">请求路径（用于 Instance 字段）</param>
     /// <param name="includeExceptionDetail">是否在 Detail 中包含完整异常信息（仅 Development 环境传 true）</param>
+    ProblemDetails Map(Exception ex, string? requestPath, bool includeExceptionDetail);
+}
+
+/// <summary>
+/// 将异常映射为 ProblemDetails，纯映射逻辑，不依赖 HttpContext
+/// </summary>
+public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapper
+{
     public ProblemDetails Map(Exception ex, string? requestPath, bool includeExceptionDetail) =>
         ex switch
         {

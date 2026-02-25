@@ -31,6 +31,9 @@ public static class HostBootstrapper
             builder.Configuration,
             builder.Environment,
             modules);
+
+        // 4. Host 层服务（异常映射器等）
+        builder.Services.AddSingleton<IExceptionProblemDetailsMapper, ExceptionProblemDetailsMapper>();
     }
 
     /// <summary>
