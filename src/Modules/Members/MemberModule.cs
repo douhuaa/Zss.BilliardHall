@@ -1,4 +1,4 @@
-﻿using Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTransforms;
+﻿using Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTranslators;
 
 namespace Zss.BilliardHall.Modules.Members;
 
@@ -14,7 +14,7 @@ public class MemberModule : IModule, IMartenModule
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
         // 注册会员模块的异常翻译器（PostgreSQL 唯一约束 → DomainException）
-        services.AddSingleton<IExceptionTranslator, MemberEmailUniqueViolationTransform>();
+        services.AddSingleton<IExceptionTranslator, MemberEmailUniqueViolationTranslator>();
     }
 
     public void ConfigureMarten(StoreOptions options)

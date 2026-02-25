@@ -8,6 +8,8 @@ namespace Zss.BilliardHall.Host.Web;
 /// </summary>
 public sealed class GlobalExceptionMiddleware
 {
+    private const string ProblemJsonContentType = "application/problem+json";
+
     private readonly RequestDelegate _next;
     private readonly ILogger<GlobalExceptionMiddleware> _logger;
     private readonly IWebHostEnvironment _environment;
@@ -48,30 +50,39 @@ public sealed class GlobalExceptionMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
-        var effectiveEx = Translate(ex);
+        var translated = TranslateException(ex);
         var includeDetail = _environment.IsDevelopment();
-        var problem = _mapper.Map(effectiveEx, context.Request.Path, includeDetail);
+        var problem = _mapper.Map(translated, context.Request.Path, includeDetail);
         problem.AddTraceInfo(context);
 
         var status = problem.Status ?? StatusCodes.Status500InternalServerError;
-
-        if (status >= 500)
-            _logger.LogError(ex, "服务器错误：{ExceptionType} - {Message}", ex.GetType().Name, ex.Message);
-        else
-            _logger.LogWarning(ex, "客户端错误：{ExceptionType} - {Message}", ex.GetType().Name, effectiveEx.Message);
+        LogException(ex, translated, status);
 
         context.Response.StatusCode = status;
-        context.Response.ContentType = "application/problem+json";
-        await context.Response.WriteAsJsonAsync(problem, (System.Text.Json.JsonSerializerOptions?)null, "application/problem+json");
+        context.Response.ContentType = ProblemJsonContentType;
+        await context.Response.WriteAsJsonAsync(problem, options: null, contentType: ProblemJsonContentType);
     }
 
-    private Exception Translate(Exception ex)
+    private void LogException(Exception original, Exception effective, int status)
+    {
+        if (status >= 500)
+        {
+            _logger.LogError(original, "服务器错误：{ExceptionType} - {Message}", effective.GetType().Name, effective.Message);
+            return;
+        }
+
+        _logger.LogWarning(original, "客户端错误：{ExceptionType} - {Message}", effective.GetType().Name, effective.Message);
+    }
+
+    private Exception TranslateException(Exception ex)
     {
         foreach (var translator in _translators)
         {
             var translated = translator.Translate(ex);
             if (translated is not null) return translated;
         }
+
         return ex;
     }
 }
+

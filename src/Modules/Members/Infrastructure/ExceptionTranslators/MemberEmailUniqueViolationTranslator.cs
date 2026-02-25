@@ -2,7 +2,7 @@ using Npgsql;
 using Zss.BilliardHall.Modules.Members.Domain.Exceptions;
 using Zss.BilliardHall.Platform.Contracts;
 
-namespace Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTransforms;
+namespace Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTranslators;
 
 /// <summary>
 /// 将 PostgreSQL 唯一约束冲突（会员邮箱）翻译为 DomainException
@@ -12,10 +12,10 @@ namespace Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTransforms;
 /// 由 GlobalExceptionMiddleware 在映射前调用。
 /// Web 层映射器无需感知 Marten/Npgsql 异常类型。
 /// </remarks>
-public sealed class MemberEmailUniqueViolationTransform : IExceptionTranslator
+public sealed class MemberEmailUniqueViolationTranslator : IExceptionTranslator
 {
-    internal const string EmailConstraintName = "mt_doc_member_uidx_email";
-    internal const string UniqueViolationSqlState = "23505";
+    private const string EmailConstraintName = "mt_doc_member_uidx_email";
+    private const string UniqueViolationSqlState = "23505";
 
     /// <inheritdoc />
     public Exception? Translate(Exception ex) =>

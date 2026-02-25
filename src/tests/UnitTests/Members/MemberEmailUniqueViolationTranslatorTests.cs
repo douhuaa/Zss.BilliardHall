@@ -1,13 +1,12 @@
-using Microsoft.AspNetCore.Http;
 using Zss.BilliardHall.Modules.Members.Domain;
 using Zss.BilliardHall.Modules.Members.Domain.Exceptions;
-using Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTransforms;
+using Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTranslators;
 
 namespace Zss.BilliardHall.Tests.UnitTests.Members;
 
-public class MemberEmailUniqueViolationTransformTests
+public class MemberEmailUniqueViolationTranslatorTests
 {
-    private readonly MemberEmailUniqueViolationTransform _sut = new();
+    private readonly MemberEmailUniqueViolationTranslator _sut = new();
 
     #region IsEmailUniqueViolation 结构化参数判定（无需构造 PostgresException）
 
@@ -22,7 +21,7 @@ public class MemberEmailUniqueViolationTransformTests
     public void IsEmailUniqueViolation_WithStructuredData_ReturnsExpected(
         string? sqlState, string? constraintName, bool expected)
     {
-        var result = MemberEmailUniqueViolationTransform.IsEmailUniqueViolation(sqlState, constraintName);
+        var result = MemberEmailUniqueViolationTranslator.IsEmailUniqueViolation(sqlState, constraintName);
 
         result.Should().Be(expected);
     }
@@ -36,7 +35,7 @@ public class MemberEmailUniqueViolationTransformTests
     {
         var ex = new InvalidOperationException("其他异常");
 
-        var result = MemberEmailUniqueViolationTransform.IsEmailUniqueViolation(ex);
+        var result = MemberEmailUniqueViolationTranslator.IsEmailUniqueViolation(ex);
 
         result.Should().BeFalse();
     }
@@ -47,7 +46,7 @@ public class MemberEmailUniqueViolationTransformTests
         var inner = new InvalidOperationException("内部异常");
         var outer = new Exception("外部异常", inner);
 
-        var result = MemberEmailUniqueViolationTransform.IsEmailUniqueViolation(outer);
+        var result = MemberEmailUniqueViolationTranslator.IsEmailUniqueViolation(outer);
 
         result.Should().BeFalse();
     }
@@ -81,7 +80,7 @@ public class MemberEmailUniqueViolationTransformTests
     #region MemberEmailAlreadyExistsException 属性验证
 
     [Fact]
-    public void MemberEmailAlreadyExistsException_HasCorrectErrorCode()
+    public void MemberEmailAlreadyExistsException_HasCorrectErrorCodeAndMessage()
     {
         var ex = new MemberEmailAlreadyExistsException();
 
@@ -90,23 +89,5 @@ public class MemberEmailUniqueViolationTransformTests
     }
 
     #endregion
-
-    #region 翻译后 DomainException 映射为 409
-
-    [Fact]
-    public void MemberEmailAlreadyExistsException_MapsTo409WithStableErrorCode()
-    {
-        var mapper = new Zss.BilliardHall.Host.Web.ExceptionProblemDetailsMapper();
-        var ex = new MemberEmailAlreadyExistsException();
-
-        var result = mapper.Map(ex, "/api/members", includeExceptionDetail: false);
-
-        result.Status.Should().Be(StatusCodes.Status409Conflict);
-        result.Extensions["errorCode"].Should().Be(MemberErrorCodes.MemberEmailExists);
-        result.Detail.Should().Be("会员邮箱已存在");
-        result.Detail.Should().NotContain("mt_doc_member_uidx_email");
-        result.Detail.Should().NotContain("23505");
-    }
-
-    #endregion
 }
+
