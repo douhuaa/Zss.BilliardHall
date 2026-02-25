@@ -48,7 +48,7 @@ public sealed class GlobalExceptionMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
-        var effectiveEx = TranslateException(ex);
+        var effectiveEx = Translate(ex);
         var includeDetail = _environment.IsDevelopment();
         var problem = _mapper.Map(effectiveEx, context.Request.Path, includeDetail);
         problem.AddTraceInfo(context);
@@ -65,7 +65,7 @@ public sealed class GlobalExceptionMiddleware
         await context.Response.WriteAsJsonAsync(problem, (System.Text.Json.JsonSerializerOptions?)null, "application/problem+json");
     }
 
-    private Exception TranslateException(Exception ex)
+    private Exception Translate(Exception ex)
     {
         foreach (var translator in _translators)
         {
