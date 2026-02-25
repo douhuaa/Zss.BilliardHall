@@ -60,7 +60,8 @@ public sealed class GlobalExceptionMiddleware
 
         context.Response.StatusCode = status;
         context.Response.ContentType = ProblemJsonContentType;
-        await context.Response.WriteAsJsonAsync(problem, options: null, contentType: ProblemJsonContentType);
+        // 必须使用运行时类型序列化，否则 ValidationProblemDetails.Errors 字段会丢失
+        await context.Response.WriteAsJsonAsync(problem, problem.GetType(), options: null, contentType: ProblemJsonContentType);
     }
 
     private void LogException(Exception original, Exception effective, int status)
