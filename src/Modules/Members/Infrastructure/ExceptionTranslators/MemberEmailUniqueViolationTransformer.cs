@@ -1,48 +1,40 @@
 using Npgsql;
 using Zss.BilliardHall.Modules.Members.Exceptions;
-using Zss.BilliardHall.Platform.Contracts;
+using Zss.BilliardHall.Platform.Exceptions;
+using Zss.BilliardHall.Platform.Infrastructure;
 
 namespace Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTranslators;
 
 /// <summary>
-/// 将 PostgreSQL 唯一约束冲突（会员邮箱）翻译为 DomainException
+/// 会员邮箱唯一约束冲突转换器
 /// </summary>
 /// <remarks>
-/// 在 MemberModule.ConfigureServices 中注册为 IExceptionTranslator，
-/// 由 GlobalExceptionMiddleware 在映射前调用。
-/// Web 层映射器无需感知 Marten/Npgsql 异常类型。
+/// 职责：检测 PostgreSQL 唯一约束冲突（会员邮箱）并转换为 DomainException
+/// 
+/// 实现 IPostgresExceptionTransformer 接口，由 ExceptionTransformMiddleware 调用。
+/// 确保 PostgresException 在到达 Web 层之前被转换为语义异常。
 /// </remarks>
-public sealed class MemberEmailUniqueViolationTranslator : IExceptionTranslator
+public sealed class MemberEmailUniqueViolationTransformer : IPostgresExceptionTransformer
 {
     private const string EmailConstraintName = "mt_doc_member_uidx_email";
     private const string UniqueViolationSqlState = "23505";
 
-    private readonly Func<Exception, (string? SqlState, string? ConstraintName)> _extract;
-
-    public MemberEmailUniqueViolationTranslator()
-        : this(ExtractFromException)
-    {
-    }
-
-    public MemberEmailUniqueViolationTranslator(
-        Func<Exception, (string? SqlState, string? ConstraintName)> extract)
-    {
-        _extract = extract ?? throw new ArgumentNullException(nameof(extract));
-    }
-
-    public Exception? Translate(Exception ex)
+    /// <inheritdoc />
+    public DomainException? TryTransform(Exception ex)
     {
         ArgumentNullException.ThrowIfNull(ex);
-
-        var (sqlState, constraintName) = _extract(ex);
-        return IsEmailUniqueViolation(sqlState, constraintName)
-            ? new MemberEmailAlreadyExistsException()
-            : null;
+        return IsEmailUniqueViolation(ex) ? new MemberEmailAlreadyExistsException() : null;
     }
 
+    /// <summary>
+    /// 检查是否为会员邮箱唯一约束冲突
+    /// </summary>
     public static bool IsEmailUniqueViolation(string? sqlState, string? constraintName) =>
         sqlState == UniqueViolationSqlState && constraintName == EmailConstraintName;
 
+    /// <summary>
+    /// 从异常中检测是否为会员邮箱唯一约束冲突
+    /// </summary>
     public static bool IsEmailUniqueViolation(Exception ex)
     {
         ArgumentNullException.ThrowIfNull(ex);

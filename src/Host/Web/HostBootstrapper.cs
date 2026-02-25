@@ -2,7 +2,7 @@
 using Zss.BilliardHall.Application;
 using Zss.BilliardHall.Composition;
 using Zss.BilliardHall.Platform;
-using Zss.BilliardHall.Platform.Contracts;
+using Zss.BilliardHall.Platform.Infrastructure;
 
 namespace Zss.BilliardHall.Host.Web;
 
@@ -33,11 +33,9 @@ public static class HostBootstrapper
             builder.Environment,
             modules);
 
-        // 4. Host 层服务（异常映射器等）
+        // 4. Host 层服务（异常映射器）
+        // 注意：异常转换已前移到 Platform 层中间件，Web 只做 HTTP 映射
         builder.Services.AddSingleton<IExceptionProblemDetailsMapper, ExceptionProblemDetailsMapper>();
-
-        // 注册异常转换器链（将技术层异常转换为领域异常）
-        builder.Services.AddSingleton<IExceptionTranslator, FluentValidationExceptionTranslator>();
     }
 
     /// <summary>
@@ -46,6 +44,10 @@ public static class HostBootstrapper
     public static void ConfigureApplication(WebApplication app)
     {
         ArgumentNullException.ThrowIfNull(app);
+
+        // 异常转换中间件（将 PostgresException 等技术异常转换为语义异常）
+        // 必须在 GlobalExceptionMiddleware 之前注册
+        app.UseMiddleware<ExceptionTransformMiddleware>();
 
         // 全局异常处理中间件（统一将所有未处理异常转换为 ProblemDetails）
         // 这个中间件是后备，处理其他可能漏掉的异常

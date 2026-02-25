@@ -5,7 +5,7 @@ using Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTranslators;
 
 namespace Zss.BilliardHall.Tests.UnitTests.Members;
 
-public sealed class MemberEmailUniqueViolationTranslatorTests
+public sealed class MemberEmailUniqueViolationTransformerTests
 {
     #region IsEmailUniqueViolation（结构化数据）
 
@@ -22,7 +22,7 @@ public sealed class MemberEmailUniqueViolationTranslatorTests
         string? constraintName,
         bool expected)
     {
-        MemberEmailUniqueViolationTranslator
+        MemberEmailUniqueViolationTransformer
             .IsEmailUniqueViolation(sqlState, constraintName)
             .Should()
             .Be(expected);
@@ -44,7 +44,7 @@ public sealed class MemberEmailUniqueViolationTranslatorTests
             _ => throw new ArgumentOutOfRangeException(nameof(variant), variant, null)
         };
 
-        MemberEmailUniqueViolationTranslator
+        MemberEmailUniqueViolationTransformer
             .IsEmailUniqueViolation(ex)
             .Should()
             .BeFalse();
@@ -52,39 +52,16 @@ public sealed class MemberEmailUniqueViolationTranslatorTests
 
     #endregion
 
-    #region Translate（命中/不命中）
-
-    [Theory]
-    [InlineData("23505", "mt_doc_member_uidx_email", typeof(MemberEmailAlreadyExistsException))]
-    [InlineData("23505", "other_constraint", null)]
-    [InlineData("23000", "mt_doc_member_uidx_email", null)]
-    [InlineData(null, null, null)]
-    public void Translate_WithStructuredExtractor_ReturnsExpected(
-        string? sqlState,
-        string? constraintName,
-        Type? expectedExceptionType)
-    {
-        var sut = new MemberEmailUniqueViolationTranslator(_ => (sqlState, constraintName));
-
-        var result = sut.Translate(new Exception("any"));
-
-        if (expectedExceptionType is null)
-        {
-            result.Should().BeNull();
-            return;
-        }
-
-        result.Should().BeOfType(expectedExceptionType);
-    }
+    #region TryTransform（命中/不命中）
 
     [Fact]
-    public void Translate_WithNonMatchingException_ReturnsNull()
+    public void TryTransform_WithNonMatchingException_ReturnsNull()
     {
-        var sut = new MemberEmailUniqueViolationTranslator();
-
-        sut.Translate(new InvalidOperationException("无关异常"))
-            .Should()
-            .BeNull();
+        var sut = new MemberEmailUniqueViolationTransformer();
+        
+        var result = sut.TryTransform(new InvalidOperationException("无关异常"));
+        
+        result.Should().BeNull();
     }
 
     #endregion
