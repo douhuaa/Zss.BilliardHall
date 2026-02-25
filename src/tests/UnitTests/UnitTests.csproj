@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
@@ -22,6 +26,7 @@
     <ProjectReference Include="..\..\Application\Application.csproj" />
     <ProjectReference Include="..\..\Modules\Members\Members.csproj" />
     <ProjectReference Include="..\..\Modules\Orders\Orders.csproj" />
+    <ProjectReference Include="..\..\Host\Web\Web.csproj" />
     <ProjectReference Include="..\SharedTestHelpers\SharedTestHelpers.csproj" />
   </ItemGroup>
 

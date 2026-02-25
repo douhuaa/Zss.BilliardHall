@@ -1,4 +1,6 @@
-﻿namespace Zss.BilliardHall.Modules.Members;
+﻿using Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTranslators;
+
+namespace Zss.BilliardHall.Modules.Members;
 
 /// <summary>
 /// Members 模块启动器
@@ -11,9 +13,8 @@ public class MemberModule : IModule, IMartenModule
 
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
-        // Members 模块特定的服务注册
-        // 例如：Validators, Policies, Custom Services 等
-        // Wolverine 会自动发现此程序集中的 Handlers 和 Endpoints
+        // 注册会员模块的异常翻译器（PostgreSQL 唯一约束 → DomainException）
+        services.AddSingleton<IExceptionTranslator, MemberEmailUniqueViolationTranslator>();
     }
 
     public void ConfigureMarten(StoreOptions options)

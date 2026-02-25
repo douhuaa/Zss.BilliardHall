@@ -2,6 +2,7 @@
 using Zss.BilliardHall.Application;
 using Zss.BilliardHall.Composition;
 using Zss.BilliardHall.Platform;
+using Zss.BilliardHall.Platform.Contracts;
 
 namespace Zss.BilliardHall.Host.Web;
 
@@ -31,6 +32,12 @@ public static class HostBootstrapper
             builder.Configuration,
             builder.Environment,
             modules);
+
+        // 4. Host 层服务（异常映射器等）
+        builder.Services.AddSingleton<IExceptionProblemDetailsMapper, ExceptionProblemDetailsMapper>();
+
+        // 注册异常转换器链（将技术层异常转换为领域异常）
+        builder.Services.AddSingleton<IExceptionTranslator, FluentValidationExceptionTranslator>();
     }
 
     /// <summary>
@@ -40,8 +47,9 @@ public static class HostBootstrapper
     {
         ArgumentNullException.ThrowIfNull(app);
 
-        // 添加验证异常处理中间件（将 FluentValidation 错误转换为 ProblemDetails）
-        app.UseMiddleware<ValidationExceptionMiddleware>();
+        // 全局异常处理中间件（统一将所有未处理异常转换为 ProblemDetails）
+        // 这个中间件是后备，处理其他可能漏掉的异常
+        app.UseMiddleware<GlobalExceptionMiddleware>();
 
         // 映射 Wolverine HTTP 端点
         app.MapWolverineEndpoints();
