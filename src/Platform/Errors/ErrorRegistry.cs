@@ -37,4 +37,26 @@ public static class ErrorRegistry
     public static IReadOnlyCollection<ErrorDescriptor> All => _errors.Values.ToList().AsReadOnly();
 
     public static void Freeze() => _frozen = true;
+
+    /// <summary>仅供测试使用：当前是否已冻结。</summary>
+    internal static bool IsFrozen => _frozen;
+
+    /// <summary>
+    /// 仅供测试使用：重置注册表状态，清除所有已注册的错误码并解除冻结。
+    /// </summary>
+    internal static void ResetForTesting()
+    {
+        _errors.Clear();
+        _frozen = false;
+    }
+
+    /// <summary>
+    /// 仅供测试使用：移除指定的错误码并（可选地）恢复冻结状态。
+    /// </summary>
+    internal static void RestoreForTesting(IEnumerable<string> codesToRemove, bool freeze)
+    {
+        foreach (var code in codesToRemove)
+            _errors.TryRemove(code, out _);
+        _frozen = freeze;
+    }
 }

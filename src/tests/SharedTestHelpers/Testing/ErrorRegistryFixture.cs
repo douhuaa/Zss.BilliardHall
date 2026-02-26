@@ -1,46 +1,51 @@
-using System.Collections.Concurrent;
-using System.Reflection;
 using Zss.BilliardHall.Platform.Errors;
 
 namespace Zss.BilliardHall.Tests.SharedTestHelpers;
 
 /// <summary>
 /// 测试用 ErrorRegistry 初始化辅助器。
-/// 由于 ErrorRegistry 是静态单例，通过反射访问内部状态，实现测试间的隔离。
-/// 使用方式：在 xUnit 测试类上实现 <c>IClassFixture&lt;ErrorRegistryFixture&gt;</c>，
-/// 并在测试构造函数中调用 <see cref="TryRegister"/> 注册测试所需的错误码。
+/// 提供针对 xUnit <c>IClassFixture&lt;ErrorRegistryFixture&gt;</c> 的生命周期管理，
+/// 在构建时解冻并允许注册，在 Dispose 时移除本次添加的错误码并恢复原始冻结状态。
 /// </summary>
+/// <remarks>
+/// <para>
+/// <b>并发限制</b>：xUnit 默认在同一测试类内串行执行，但跨测试类可能并行运行。
+/// 如需避免与其他使用 ErrorRegistryFixture 的测试类发生干扰，
+/// 请将相关测试类置于同一 xUnit 测试集合（<c>[Collection]</c>）中，强制串行执行。
+/// </para>
+/// </remarks>
 public sealed class ErrorRegistryFixture : IDisposable
 {
-    private static readonly FieldInfo ErrorsField =
-        typeof(ErrorRegistry).GetField("_errors", BindingFlags.NonPublic | BindingFlags.Static)!;
-    private static readonly FieldInfo FrozenField =
-        typeof(ErrorRegistry).GetField("_frozen", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    private readonly ConcurrentDictionary<string, ErrorDescriptor> _dict;
     private readonly bool _wasFrozen;
     private readonly List<string> _addedCodes = new();
 
     public ErrorRegistryFixture()
     {
-        _dict = (ConcurrentDictionary<string, ErrorDescriptor>)ErrorsField.GetValue(null)!;
-        _wasFrozen = (bool)FrozenField.GetValue(null)!;
-        FrozenField.SetValue(null, false);
+        _wasFrozen = ErrorRegistry.IsFrozen;
+        // 确保 Registry 处于可注册状态
+        if (_wasFrozen)
+            ErrorRegistry.RestoreForTesting([], freeze: false);
     }
 
     /// <summary>
-    /// 注册单个错误描述符（仅当该错误码尚未注册时生效，避免测试干扰）。
+    /// 注册单个错误描述符（仅当该错误码尚未注册时生效，避免测试间干扰）。
     /// </summary>
     public void TryRegister(ErrorDescriptor descriptor)
     {
-        if (_dict.TryAdd(descriptor.Code, descriptor))
+        try
+        {
+            ErrorRegistry.Register(descriptor);
             _addedCodes.Add(descriptor.Code);
+        }
+        catch (InvalidOperationException)
+        {
+            // 已注册（来自其他测试或并发），忽略
+        }
     }
 
     public void Dispose()
     {
-        foreach (var code in _addedCodes)
-            _dict.TryRemove(code, out _);
-        FrozenField.SetValue(null, _wasFrozen);
+        // 清理本 Fixture 注册的错误码，还原冻结状态
+        ErrorRegistry.RestoreForTesting(_addedCodes, _wasFrozen);
     }
 }
