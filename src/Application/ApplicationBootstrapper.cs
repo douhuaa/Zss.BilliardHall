@@ -8,6 +8,7 @@ using Wolverine.FluentValidation;
 using Wolverine.Http;
 using Wolverine.Marten;
 using Zss.BilliardHall.Platform.Contracts;
+using Zss.BilliardHall.Platform.Infrastructure;
 
 namespace Zss.BilliardHall.Application;
 
@@ -97,10 +98,20 @@ public static class ApplicationBootstrapper
                 w.Discovery.IncludeAssembly(assembly);
             }
 
-            // 官方推荐：使用 Wolverine.FluentValidation 提供的验证集成
+            // Wolverine 中间件执行顺序遵循"洋葱模型"，后注册的中间件包裹先注册的中间件。
+
+            // 1. FluentValidation 验证集成（官方推荐，使用 Wolverine.FluentValidation 扩展）
+            //    验证失败通过 Wolverine 自带的 FluentValidation 集成处理，
+            //    验证异常最终由 GlobalExceptionMiddleware 中的 FluentValidationExceptionTranslator 转换为 ProblemDetails。
             w.UseFluentValidation();
 
-            // 自动事务：所有 Handler 都在 Marten 事务上下文运行
+            // 2. PostgresException → DomainException 转换中间件（位于验证中间件"外层"）
+            //    只拦截 Wolverine handler 业务逻辑及 Marten 事务中的数据库异常，
+            //    不处理 FluentValidation 验证失败（由验证层自身处理）。
+            //    模块通过注册 IPostgresExceptionTransformer 扩展转换规则（垂直切片）。
+            w.Policies.AddMiddleware<ExceptionTransformMiddleware>();
+
+            // 3. 自动事务：所有 Handler 都在 Marten 事务上下文运行
             w.Policies.AutoApplyTransactions();
 
         });
