@@ -7,10 +7,25 @@ namespace Zss.BilliardHall.Tests.UnitTests.Members;
 public sealed class MemberEmailUniqueViolationTransformerTests
 {
     private static PostgresException CreatePostgresException(string? sqlState, string? constraintName)
-        => new(
-            "test", "ERROR", "ERROR", sqlState ?? "00000",
-            null, null, 0, 0, null, null, null, null, null, null,
-            constraintName, null, null, null);
+        => new PostgresException(
+            messageText: "test",
+            severity: "ERROR",
+            invariantSeverity: "ERROR",
+            sqlState: sqlState ?? "00000",
+            detail: null,
+            hint: null,
+            position: 0,
+            internalPosition: 0,
+            internalQuery: null,
+            where: null,
+            schemaName: null,
+            tableName: null,
+            columnName: null,
+            dataTypeName: null,
+            constraintName: constraintName,
+            file: null,
+            line: null,
+            routine: null);
 
     private readonly MemberEmailUniqueViolationTransformer _sut = new();
 

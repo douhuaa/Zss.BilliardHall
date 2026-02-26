@@ -9,9 +9,18 @@ public sealed class ExceptionTransformMiddlewareTests
     private sealed class TestDomainException(Exception inner)
         : DomainException("TEST_ERROR", "测试领域异常", inner);
 
-    private sealed class AlwaysMatchTransformer(DomainException result) : IPostgresExceptionTransformer
+    private sealed class AnotherDomainException(Exception inner)
+        : DomainException("ANOTHER_ERROR", "另一个领域异常", inner);
+
+    // 每次调用都创建新实例（与真实 transformer 行为一致）
+    private sealed class AlwaysMatchTransformer : IPostgresExceptionTransformer
     {
-        public DomainException? TryTransform(PostgresException ex) => result;
+        public DomainException? TryTransform(PostgresException ex) => new TestDomainException(ex);
+    }
+
+    private sealed class AnotherAlwaysMatchTransformer : IPostgresExceptionTransformer
+    {
+        public DomainException? TryTransform(PostgresException ex) => new AnotherDomainException(ex);
     }
 
     private sealed class NeverMatchTransformer : IPostgresExceptionTransformer
@@ -19,12 +28,26 @@ public sealed class ExceptionTransformMiddlewareTests
         public DomainException? TryTransform(PostgresException ex) => null;
     }
 
-    // PostgresException 的公共构造函数：(messageText, severity, invariantSeverity, sqlState, ..., constraintName, ...)
     private static PostgresException CreatePostgresException(string sqlState = "23505", string constraintName = "test_constraint")
-        => new(
-            "test", "ERROR", "ERROR", sqlState,
-            null, null, 0, 0, null, null, null, null, null, null,
-            constraintName, null, null, null);
+        => new PostgresException(
+            messageText: "test",
+            severity: "ERROR",
+            invariantSeverity: "ERROR",
+            sqlState: sqlState,
+            detail: null,
+            hint: null,
+            position: 0,
+            internalPosition: 0,
+            internalQuery: null,
+            where: null,
+            schemaName: null,
+            tableName: null,
+            columnName: null,
+            dataTypeName: null,
+            constraintName: constraintName,
+            file: null,
+            line: null,
+            routine: null);
 
     #region 无 PostgresException 时不转换
 
@@ -48,13 +71,12 @@ public sealed class ExceptionTransformMiddlewareTests
     public async Task InvokeAsync_WhenDirectPostgresException_TransformsAndThrowsDomain()
     {
         var pg = CreatePostgresException();
-        var expected = new TestDomainException(pg);
-        var sut = new ExceptionTransformMiddleware([new AlwaysMatchTransformer(expected)]);
+        var sut = new ExceptionTransformMiddleware([new AlwaysMatchTransformer()]);
 
         var act = async () => await sut.InvokeAsync(() => throw pg);
 
         var thrown = await act.Should().ThrowAsync<TestDomainException>();
-        thrown.Which.Should().BeSameAs(expected);
+        thrown.Which.InnerException.Should().BeSameAs(pg);
     }
 
     #endregion
@@ -66,13 +88,13 @@ public sealed class ExceptionTransformMiddlewareTests
     {
         var pg = CreatePostgresException();
         var wrapper = new Exception("外部包装异常", pg);
-        var expected = new TestDomainException(pg);
-        var sut = new ExceptionTransformMiddleware([new AlwaysMatchTransformer(expected)]);
+        var sut = new ExceptionTransformMiddleware([new AlwaysMatchTransformer()]);
 
         var act = async () => await sut.InvokeAsync(() => throw wrapper);
 
+        // Transformer 接收到的是内层 pg，生成的 DomainException.InnerException 应为 pg
         var thrown = await act.Should().ThrowAsync<TestDomainException>();
-        thrown.Which.Should().BeSameAs(expected);
+        thrown.Which.InnerException.Should().BeSameAs(pg);
     }
 
     #endregion
@@ -99,8 +121,7 @@ public sealed class ExceptionTransformMiddlewareTests
     public async Task InvokeAsync_WhenTransformed_DomainExceptionInnerIsOriginalPostgres()
     {
         var pg = CreatePostgresException();
-        var domainEx = new TestDomainException(pg);
-        var sut = new ExceptionTransformMiddleware([new AlwaysMatchTransformer(domainEx)]);
+        var sut = new ExceptionTransformMiddleware([new AlwaysMatchTransformer()]);
 
         var act = async () => await sut.InvokeAsync(() => throw pg);
 
@@ -121,6 +142,26 @@ public sealed class ExceptionTransformMiddlewareTests
         var act = async () => await sut.InvokeAsync(() => throw pg);
 
         await act.Should().ThrowAsync<PostgresException>();
+    }
+
+    #endregion
+
+    #region 多个 transformer 时使用第一个匹配结果（短路）
+
+    [Fact]
+    public async Task InvokeAsync_WithMultipleTransformers_UsesFirstMatch()
+    {
+        var pg = CreatePostgresException();
+        var sut = new ExceptionTransformMiddleware([
+            new AlwaysMatchTransformer(),
+            new AnotherAlwaysMatchTransformer()  // 不应被执行
+        ]);
+
+        var act = async () => await sut.InvokeAsync(() => throw pg);
+
+        // 只有第一个 transformer 的结果（TestDomainException）会被抛出
+        var thrown = await act.Should().ThrowAsync<TestDomainException>();
+        thrown.Which.InnerException.Should().BeSameAs(pg);
     }
 
     #endregion
