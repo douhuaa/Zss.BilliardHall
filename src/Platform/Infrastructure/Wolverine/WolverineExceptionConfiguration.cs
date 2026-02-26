@@ -4,7 +4,7 @@ using Wolverine;
 using Wolverine.ErrorHandling;
 using Wolverine.FluentValidation;
 
-namespace Zss.BilliardHall.Platform.Infrastructure;
+namespace Zss.BilliardHall.Platform.Infrastructure.Wolverine;
 
 /// <summary>
 /// Wolverine pipeline 层异常处理扩展方法

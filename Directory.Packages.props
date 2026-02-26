@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup Label="Wolverine Framework">
     <PackageVersion Include="WolverineFx.Http" Version="5.16.2" />
+    <PackageVersion Include="WolverineFx.FluentValidation" Version="5.16.2" />
     <PackageVersion Include="WolverineFx.Http.FluentValidation" Version="5.16.2" />
     <PackageVersion Include="WolverineFx.Marten" Version="5.16.2" />
   </ItemGroup>

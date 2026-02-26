@@ -3,7 +3,7 @@ using Wolverine.FluentValidation;
 using Zss.BilliardHall.Platform.Errors;
 using PlatformValidationException = Zss.BilliardHall.Platform.Exceptions.ValidationException;
 
-namespace Zss.BilliardHall.Platform.Infrastructure;
+namespace Zss.BilliardHall.Platform.Infrastructure.Wolverine;
 
 /// <summary>
 /// 自定义 FluentValidation 失败处理器，替代 Wolverine.FluentValidation 默认实现。

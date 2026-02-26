@@ -11,6 +11,6 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.Http"/>
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime"/>
     <PackageReference Include="Marten"/>
-    <PackageReference Include="WolverineFx.Http.FluentValidation"/>
+    <PackageReference Include="WolverineFx.FluentValidation"/>
   </ItemGroup>
 </Project>

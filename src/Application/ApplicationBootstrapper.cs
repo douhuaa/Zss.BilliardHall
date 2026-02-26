@@ -9,6 +9,7 @@ using Wolverine.Http;
 using Wolverine.Marten;
 using Zss.BilliardHall.Platform.Contracts;
 using Zss.BilliardHall.Platform.Infrastructure;
+using Zss.BilliardHall.Platform.Infrastructure.Wolverine;
 
 namespace Zss.BilliardHall.Application;
 

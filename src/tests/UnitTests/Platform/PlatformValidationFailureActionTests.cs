@@ -1,6 +1,6 @@
 using FluentValidation.Results;
 using Zss.BilliardHall.Platform.Errors;
-using Zss.BilliardHall.Platform.Infrastructure;
+using Zss.BilliardHall.Platform.Infrastructure.Wolverine;
 using PlatformValidationException = Zss.BilliardHall.Platform.Exceptions.ValidationException;
 
 namespace Zss.BilliardHall.Tests.UnitTests.Platform;
