@@ -2,7 +2,6 @@
 using Zss.BilliardHall.Application;
 using Zss.BilliardHall.Composition;
 using Zss.BilliardHall.Platform;
-using Zss.BilliardHall.Platform.Contracts;
 
 namespace Zss.BilliardHall.Host.Web;
 
@@ -35,9 +34,6 @@ public static class HostBootstrapper
 
         // 4. Host 层服务（异常映射器等）
         builder.Services.AddSingleton<IExceptionProblemDetailsMapper, ExceptionProblemDetailsMapper>();
-
-        // 注册异常转换器链（将技术层异常转换为领域异常）
-        builder.Services.AddSingleton<IExceptionTranslator, FluentValidationExceptionTranslator>();
     }
 
     /// <summary>

@@ -8,6 +8,8 @@ using Wolverine.FluentValidation;
 using Wolverine.Http;
 using Wolverine.Marten;
 using Zss.BilliardHall.Platform.Contracts;
+using Zss.BilliardHall.Platform.Infrastructure;
+using Zss.BilliardHall.Platform.Infrastructure.Wolverine;
 
 namespace Zss.BilliardHall.Application;
 
@@ -99,6 +101,9 @@ public static class ApplicationBootstrapper
 
             // 官方推荐：使用 Wolverine.FluentValidation 提供的验证集成
             w.UseFluentValidation();
+
+            // 配置异常转换：将技术异常转换为语义异常（Wolverine pipeline 层完成）
+            w.ConfigureExceptionTransforms();
 
             // 自动事务：所有 Handler 都在 Marten 事务上下文运行
             w.Policies.AutoApplyTransactions();
