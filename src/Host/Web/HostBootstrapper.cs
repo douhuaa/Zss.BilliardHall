@@ -41,9 +41,9 @@ public static class HostBootstrapper
         // 注册异常转换器链（将技术层异常转换为领域异常）
         builder.Services.AddSingleton<IExceptionTranslator, FluentValidationExceptionTranslator>();
 
-        // 5. 自动注册错误模块 (IErrorModule)
+        // 自动注册错误模块 (IErrorModule)
         builder.Services.Scan(scan => scan
-            .FromApplicationDependencies()
+            .FromApplicationDependencies(a => a.FullName?.StartsWith("Zss.BilliardHall") == true)
             .AddClasses(c => c.AssignableTo<IErrorModule>())
             .AsImplementedInterfaces()
             .WithSingletonLifetime());
@@ -56,16 +56,13 @@ public static class HostBootstrapper
     {
         ArgumentNullException.ThrowIfNull(app);
 
-        // 初始化错误注册 (ErrorRegistry)
-        using (var scope = app.Services.CreateScope())
+        // IErrorModule 以 Singleton 方式注册，在应用启动时解析并调用 Register，无需创建额外的 scope。
+        var modules = app.Services.GetServices<IErrorModule>();
+        foreach (var module in modules)
         {
-            var modules = scope.ServiceProvider.GetServices<IErrorModule>();
-            foreach (var module in modules)
-            {
-                module.Register();
-            }
-            ErrorRegistry.Freeze();
+            module.Register();
         }
+        ErrorRegistry.Freeze();
 
         // 全局异常处理中间件（统一将所有未处理异常转换为 ProblemDetails）
         // 这个中间件是后备，处理其他可能漏掉的异常

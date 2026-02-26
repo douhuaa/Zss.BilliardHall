@@ -1,12 +1,21 @@
 ﻿using System.Collections.Concurrent;
-using Microsoft.Extensions.Logging;
 
 namespace Zss.BilliardHall.Platform.Errors;
 
+/// <summary>
+/// 全局错误码注册表（静态单例）。
+/// 在应用启动阶段，通过 <see cref="IErrorModule"/> 实现类将各模块错误码注册到此表中，
+/// 调用 <see cref="Freeze"/> 后不允许再注册新的错误码。
+/// </summary>
+/// <remarks>
+/// <para>生命周期：应用启动时由各 <c>IErrorModule</c> 注册，<see cref="Freeze"/> 后只读。</para>
+/// <para>线程安全：写操作基于 <see cref="ConcurrentDictionary"/>，<c>_frozen</c> 声明为 <c>volatile</c> 以保证可见性。</para>
+/// <para>测试注意：静态状态在测试之间共享，架构测试应基于类型反射而非运行时注册状态。</para>
+/// </remarks>
 public static class ErrorRegistry
 {
     private static readonly ConcurrentDictionary<string, ErrorDescriptor> _errors = new();
-    private static bool _frozen;
+    private static volatile bool _frozen;
 
     public static void Register(ErrorDescriptor descriptor)
     {
@@ -25,8 +34,7 @@ public static class ErrorRegistry
         return descriptor;
     }
 
-    public static IReadOnlyCollection<ErrorDescriptor> All => (IReadOnlyCollection<ErrorDescriptor>)_errors.Values;
+    public static IReadOnlyCollection<ErrorDescriptor> All => _errors.Values.ToList().AsReadOnly();
 
     public static void Freeze() => _frozen = true;
 }
-
