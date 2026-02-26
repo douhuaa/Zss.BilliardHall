@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Zss.BilliardHall.Platform.Contracts;
+using Zss.BilliardHall.Platform.Errors;
 
 namespace Zss.BilliardHall.Host.Web;
 
@@ -16,19 +17,22 @@ public sealed class GlobalExceptionMiddleware
     private readonly IWebHostEnvironment _environment;
     private readonly IExceptionProblemDetailsMapper _mapper;
     private readonly IEnumerable<IExceptionTranslator> _translators;
+    private readonly IErrorRegistry _errorRegistry;
 
     public GlobalExceptionMiddleware(
         RequestDelegate next,
         ILogger<GlobalExceptionMiddleware> logger,
         IWebHostEnvironment environment,
         IExceptionProblemDetailsMapper mapper,
-        IEnumerable<IExceptionTranslator> translators)
+        IEnumerable<IExceptionTranslator> translators,
+        IErrorRegistry errorRegistry)
     {
         _next = next;
         _logger = logger;
         _environment = environment;
         _mapper = mapper;
         _translators = translators;
+        _errorRegistry = errorRegistry;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -55,7 +59,7 @@ public sealed class GlobalExceptionMiddleware
         var problem = BuildProblemDetails(context, effective);
         var status = problem.Status ?? StatusCodes.Status500InternalServerError;
 
-        LogException(ex, effective, status);
+        LogException(ex, effective, problem);
 
         await WriteProblemDetailsAsync(context, problem, status);
     }
@@ -94,15 +98,17 @@ public sealed class GlobalExceptionMiddleware
         return ex;
     }
 
-    private void LogException(Exception original, Exception effective, int status)
+    private void LogException(Exception original, Exception effective, ProblemDetails problem)
     {
-        if (status >= 500)
-        {
-            _logger.LogError(original, "服务器错误：{ExceptionType} - {Message}", effective.GetType().Name, effective.Message);
-            return;
-        }
+        var errorCode = problem.Extensions.TryGetValue("errorCode", out var ec) && ec is string code
+            ? code
+            : CommonErrorCodes.UnknownError;
 
-        _logger.LogWarning(original, "客户端错误：{ExceptionType} - {Message}", effective.GetType().Name, effective.Message);
+        var descriptor = _errorRegistry.GetOrFallback(errorCode);
+        var logLevel = descriptor.LogLevel;
+
+        _logger.Log(logLevel, original, "异常 [{ErrorCode}]：{ExceptionType} - {Message}",
+            errorCode, effective.GetType().Name, effective.Message);
     }
 }
 

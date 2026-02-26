@@ -1,4 +1,6 @@
-﻿namespace Zss.BilliardHall.Platform.Exceptions;
+﻿using Zss.BilliardHall.Platform.Errors;
+
+namespace Zss.BilliardHall.Platform.Exceptions;
 
 /// <summary>
 /// ADR-240: 领域异常基类，表示业务规则违反
@@ -10,7 +12,7 @@
 /// - 必须在领域模型中抛出
 /// - 应包含业务语义的错误代码和消息
 /// </remarks>
-public abstract class DomainException : Exception
+public abstract class DomainException : Exception, IHasErrorCode
 {
     /// <summary>
     /// 业务错误代码

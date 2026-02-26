@@ -1,4 +1,6 @@
-﻿namespace Zss.BilliardHall.Platform.Exceptions;
+using Zss.BilliardHall.Platform.Errors;
+
+namespace Zss.BilliardHall.Platform.Exceptions;
 
 /// <summary>
 /// ADR-240: 基础设施异常，表示技术依赖失败
@@ -10,7 +12,7 @@
 /// - 必须在基础设施层抛出
 /// - 应封装底层技术异常
 /// </remarks>
-public class InfrastructureException : Exception, IRetryable
+public class InfrastructureException : Exception, IRetryable, IHasErrorCode
 {
     /// <summary>
     /// 基础设施组件类型（如 Database, Network, ExternalService）
@@ -41,6 +43,12 @@ public class InfrastructureException : Exception, IRetryable
     /// Do NOT use to map business errors — those belong to DomainException or ValidationException.
     /// </remarks>
     public int? HttpStatusCode { get; init; }
+
+    /// <summary>
+    /// 稳定的错误码（可选）。若未指定，默认使用 COMMON_UNKNOWN_ERROR。
+    /// Stable error code. Defaults to COMMON_UNKNOWN_ERROR if not specified.
+    /// </summary>
+    public string ErrorCode { get; init; } = CommonErrorCodes.UnknownError;
 
     public InfrastructureException(
         string componentType,

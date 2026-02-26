@@ -1,4 +1,6 @@
-﻿namespace Zss.BilliardHall.Platform.Exceptions;
+﻿using Zss.BilliardHall.Platform.Errors;
+
+namespace Zss.BilliardHall.Platform.Exceptions;
 
 /// <summary>
 /// ADR-240: 验证异常，表示输入数据不符合契约或约束
@@ -10,8 +12,10 @@
 /// - 必须在 Handler 入口处抛出
 /// - 应包含具体的验证失败详情
 /// </remarks>
-public class ValidationException : Exception
+public class ValidationException : Exception, IHasErrorCode
 {
+    /// <summary>稳定错误码，始终为 COMMON_VALIDATION_FAILED</summary>
+    public string ErrorCode => CommonErrorCodes.ValidationFailed;
     /// <summary>
     /// 验证失败的字段和错误消息集合
     /// Collection of field names and their validation error messages
