@@ -3,9 +3,11 @@ using Npgsql;
 namespace Zss.BilliardHall.Platform.Infrastructure;
 
 /// <summary>
-/// Wolverine 中间件：拦截包含 PostgresException 的异常并转换为 DomainException
+/// Wolverine message pipeline 中间件：拦截包含 PostgresException 的异常并转换为 DomainException
 /// </summary>
 /// <remarks>
+/// ⚠️ 这是 Wolverine pipeline 中间件（不是 ASP.NET Core 中间件），
+/// 只作用于 Wolverine message handler 的执行链，不影响其他 HTTP 请求处理。
 /// 从异常链中提取真正的 PostgresException，遍历已注册的转换器。
 /// 命中则抛出对应 DomainException（携带原始 PG 异常作为 InnerException），
 /// 未命中则重新抛出原始异常。

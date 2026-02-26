@@ -1,7 +1,6 @@
 using Npgsql;
-using Zss.BilliardHall.Modules.Members.Domain;
 using Zss.BilliardHall.Modules.Members.Exceptions;
-using Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTranslators;
+using Zss.BilliardHall.Modules.Members.Infrastructure.ExceptionTransformers;
 
 namespace Zss.BilliardHall.Tests.UnitTests.Members;
 
