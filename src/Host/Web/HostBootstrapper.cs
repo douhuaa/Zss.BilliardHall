@@ -67,6 +67,7 @@ public static class HostBootstrapper
         app.Logger.LogInformation("Host 管道配置完成");
     }
 
+    /// <summary>执行所有已注册的 IErrorRegistrar，将错误码描述符加载到注册中心（发生在请求处理前）</summary>
     private static void InitializeErrorRegistry(IServiceProvider services)
     {
         var registry = services.GetRequiredService<IErrorRegistry>();
