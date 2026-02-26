@@ -1,4 +1,6 @@
-﻿namespace Zss.BilliardHall.Modules.Members.Features.CreateMember;
+﻿using Zss.BilliardHall.Modules.Members.Exceptions;
+
+namespace Zss.BilliardHall.Modules.Members.Features.CreateMember;
 
 /// <summary>
 /// 创建会员命令处理器
@@ -7,8 +9,23 @@
 /// </summary>
 public class CreateMemberCommandHandler(IDocumentSession session) : ICommandHandler<CreateMemberCommand, Guid>
 {
-    public Task<Guid> Handle(CreateMemberCommand command)
+    public async Task<Guid> Handle(CreateMemberCommand command)
     {
+        // 创建前检查邮箱是否重复
+        var emailExists = await session.Query<Member>()
+            .AnyAsync(x => x.Email == command.Email);
+        if (emailExists)
+            throw new MemberEmailAlreadyExistsException();
+
+        // 创建前检查手机号是否重复（手机号为可选字段，仅在提供时检查）
+        if (!string.IsNullOrWhiteSpace(command.PhoneNumber))
+        {
+            var phoneExists = await session.Query<Member>()
+                .AnyAsync(x => x.PhoneNumber == command.PhoneNumber);
+            if (phoneExists)
+                throw new MemberPhoneNumberAlreadyExistsException();
+        }
+
         var member = new Member
         {
             Id = Guid.CreateVersion7(),
@@ -22,6 +39,6 @@ public class CreateMemberCommandHandler(IDocumentSession session) : ICommandHand
 
         // ✅ IntegrateWithWolverine() + AutoApplyTransactions() 会在消息 pipeline 的事务上下文里自动提交
 
-        return Task.FromResult(member.Id);
+        return member.Id;
     }
 }
