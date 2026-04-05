@@ -67,11 +67,7 @@ public sealed class ScanCrossModuleReferencesCommandHandler
 
             Console.WriteLine("💡 说明:");
             Console.WriteLine("  - 此工具仅提取引用事实，不做严重性判定");
-            Console.WriteLine("  - 请根据 ADR-001（模块边界规则）判定这些引用是否合规");
-            Console.WriteLine("  - 合规的跨模块通信方式：");
-            Console.WriteLine("    1. 使用 Contracts 命名空间");
-            Console.WriteLine("    2. 使用领域事件（异步）");
-            Console.WriteLine("    3. 使用原始类型（ID）传递");
+            Console.WriteLine("  - 请通过 RuleSetRegistry / IRuleSetQueryService 查询最新模块边界规则后再判定合规性");
 
             return 0;  // 命令成功执行，返回0（发现引用不等于失败）
         }

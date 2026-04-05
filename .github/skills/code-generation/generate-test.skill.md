@@ -65,7 +65,7 @@ post_execution:
 
 - [ ] 目标源文件存在
 - [ ] 项目可编译
-- [ ] 测试框架已配置（xUnit + FluentAssertions + NSubstitute）
+- [ ] 测试框架已配置（以 RuleSetRegistry / 测试规范为准）
 
 ### 必须的 Agent 授权
 
@@ -81,27 +81,31 @@ post_execution:
   - 识别方法签名
   - 提取依赖项
 
-2. **确定测试场景**
+2. **查询 RuleSet 约束**
+  - 通过 RuleSetRegistry / IRuleSetQueryService 获取当前 ADR 对应规则
+  - 基于 RuleSet 生成测试场景与断言要点
+
+3. **确定测试场景**
   - 正常流程
   - 边界情况
   - 异常处理
   - 特殊业务规则
 
-3. **生成测试代码**
+4. **生成测试代码**
   - 选择合适模板
   - 生成 Arrange-Act-Assert 结构
   - 添加 Mock/Stub
 
-4. **创建测试文件**
+5. **创建测试文件**
   - 确保测试目录镜像源代码结构
   - 生成测试类文件
 
-5. **验证生成结果**
+6. **验证生成结果**
   - 检查测试可编译
   - 运行生成的测试
   - 验证测试覆盖率
 
-6. **记录日志**
+7. **记录日志**
 
 ---
 
@@ -298,7 +302,7 @@ public class {ClassName}Tests
 - [ ] 使用 `TestEnvironment.RepositoryRoot` 而非 `FindRepositoryRoot()`
 - [ ] 使用 `FileSystemTestHelper` 进行文件操作
 - [ ] 使用 `AssertionMessageBuilder` 构建断言消息
-- [ ] 断言消息包含 ADR 条款引用（格式：ADR-XXX_Y_Z）
+- [ ] 断言消息包含 ADR 条款引用（格式：ADR-{Number}.{Rule}.{Clause}）
 - [ ] 测试方法命名遵循 `Method_Scenario_ExpectedResult` 格式
 - [ ] 使用 Arrange-Act-Assert 模式
 - [ ] 每个测试只验证一个行为
