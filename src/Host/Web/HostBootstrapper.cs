@@ -1,8 +1,10 @@
-﻿using Wolverine.Http;
+﻿using JasperFx.Core.IoC;
+using Wolverine.Http;
 using Zss.BilliardHall.Application;
 using Zss.BilliardHall.Composition;
 using Zss.BilliardHall.Platform;
 using Zss.BilliardHall.Platform.Contracts;
+using Zss.BilliardHall.Platform.Errors;
 
 namespace Zss.BilliardHall.Host.Web;
 
@@ -38,6 +40,13 @@ public static class HostBootstrapper
 
         // 注册异常转换器链（将技术层异常转换为领域异常）
         builder.Services.AddSingleton<IExceptionTranslator, FluentValidationExceptionTranslator>();
+
+        // 自动注册错误模块 (IErrorModule)
+        builder.Services.Scan(scan => scan
+            .FromApplicationDependencies(a => a.FullName?.StartsWith("Zss.BilliardHall") == true)
+            .AddClasses(c => c.AssignableTo<IErrorModule>())
+            .AsImplementedInterfaces()
+            .WithSingletonLifetime());
     }
 
     /// <summary>
@@ -46,6 +55,14 @@ public static class HostBootstrapper
     public static void ConfigureApplication(WebApplication app)
     {
         ArgumentNullException.ThrowIfNull(app);
+
+        // IErrorModule 以 Singleton 方式注册，在应用启动时解析并调用 Register，无需创建额外的 scope。
+        var modules = app.Services.GetServices<IErrorModule>();
+        foreach (var module in modules)
+        {
+            module.Register();
+        }
+        ErrorRegistry.Freeze();
 
         // 全局异常处理中间件（统一将所有未处理异常转换为 ProblemDetails）
         // 这个中间件是后备，处理其他可能漏掉的异常

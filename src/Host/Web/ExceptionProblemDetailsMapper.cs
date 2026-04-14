@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Zss.BilliardHall.Platform.Errors;
 using Zss.BilliardHall.Platform.Exceptions;
 using PlatformValidationException = Zss.BilliardHall.Platform.Exceptions.ValidationException;
 
@@ -23,49 +24,66 @@ public interface IExceptionProblemDetailsMapper
 /// </summary>
 public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapper
 {
-    public ProblemDetails Map(Exception ex, string? requestPath, bool includeExceptionDetail) =>
-        ex switch
-        {
-            PlatformValidationException ve => MapValidation(ve, requestPath),
-            DomainException de => MapDomain(de, requestPath),
-            InfrastructureException ie => MapInfrastructure(ie, requestPath),
-            _ => MapUnknown(ex, requestPath, includeExceptionDetail)
-        };
-
-    private static ValidationProblemDetails MapValidation(PlatformValidationException ex, string? requestPath)
-        => new(BuildValidationErrors(ex))
-        {
-            Type = ProblemType.Validation,
-            Title = "验证失败",
-            Status = StatusCodes.Status400BadRequest,
-            Detail = "一个或多个验证错误发生。",
-            Instance = requestPath
-        };
-
-    private static Dictionary<string, string[]> BuildValidationErrors(PlatformValidationException ex)
-        => ex.Errors.Count > 0
-            ? ex.Errors.ToDictionary(kv => kv.Key, kv => kv.Value)
-            : new Dictionary<string, string[]> { ["_"] = [ex.Message] };
-
-    private static ProblemDetails MapDomain(DomainException ex, string? requestPath)
+    public ProblemDetails Map(Exception ex, string? requestPath, bool includeExceptionDetail)
     {
-        var problem = new ProblemDetails
+        // 验证异常：从 ErrorRegistry 获取描述
+        if (ex is PlatformValidationException ve)
+            return MapValidation(ve, requestPath);
+
+        // InfrastructureException：技术异常，直接使用其携带的 HttpStatusCode 映射
+        if (ex is InfrastructureException ie)
+            return MapInfrastructure(ie, requestPath);
+
+        // 获取错误码
+        var code = ex switch
         {
-            Type = ProblemType.Domain,
-            Title = "业务规则违反",
-            Status = StatusCodes.Status409Conflict,
-            Detail = ex.Message,
-            Instance = requestPath
+            DomainError d => d.Code,
+            DomainException de => de.ErrorCode,
+            _ => CommonErrorCodes.Unknown
         };
 
-        problem.Extensions["errorCode"] = ex.ErrorCode;
-        return problem;
+        ErrorDescriptor descriptor;
+        try
+        {
+            descriptor = ErrorRegistry.Get(code);
+        }
+        catch (KeyNotFoundException)
+        {
+            // DomainException 或 DomainError 的 ErrorCode 未在 ErrorRegistry 中注册，
+            // 降级为 Unknown 以保证生产环境稳健性。
+            // 若需在开发阶段及早发现，可在启动时验证所有已知异常子类的错误码均已注册。
+            descriptor = ErrorRegistry.Get(CommonErrorCodes.Unknown);
+        }
+
+        return new ProblemDetails
+        {
+            Type = descriptor.ProblemType,
+            Title = descriptor.Title,
+            Status = descriptor.HttpStatus,
+            Detail = BuildDetail(ex, descriptor, includeExceptionDetail),
+            Instance = requestPath,
+            Extensions =
+            {
+                ["errorCode"] = descriptor.Code
+            }
+        };
+    }
+
+    private static string? BuildDetail(Exception ex, ErrorDescriptor descriptor, bool includeExceptionDetail)
+    {
+        if (includeExceptionDetail)
+            return ex.ToString();
+
+        // 对于未知/降级的错误，不暴露原始异常消息（安全性）
+        if (descriptor.Code == CommonErrorCodes.Unknown)
+            return "发生未处理异常，请联系管理员。";
+
+        return ex.Message != descriptor.Title ? ex.Message : null;
     }
 
     private static ProblemDetails MapInfrastructure(InfrastructureException ex, string? requestPath)
     {
         var status = ex.HttpStatusCode ?? StatusCodes.Status503ServiceUnavailable;
-
         return new ProblemDetails
         {
             Type = ProblemType.FromStatusCode(status),
@@ -76,13 +94,22 @@ public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapp
         };
     }
 
-    private static ProblemDetails MapUnknown(Exception ex, string? requestPath, bool includeExceptionDetail)
-        => new()
+    private static ValidationProblemDetails MapValidation(PlatformValidationException ex, string? requestPath)
+    {
+        var descriptor = ErrorRegistry.Get(CommonErrorCodes.Validation);
+        return new ValidationProblemDetails(BuildValidationErrors(ex))
         {
-            Type = ProblemType.FromStatusCode(StatusCodes.Status500InternalServerError),
-            Title = "服务器内部错误",
-            Status = StatusCodes.Status500InternalServerError,
-            Detail = includeExceptionDetail ? ex.ToString() : "发生未处理异常，请联系管理员。",
-            Instance = requestPath
+            Type = descriptor.ProblemType,
+            Title = descriptor.Title,
+            Status = descriptor.HttpStatus,
+            Detail = "一个或多个验证错误发生。",
+            Instance = requestPath,
+            Extensions = { ["errorCode"] = CommonErrorCodes.Validation }
         };
+    }
+
+    private static Dictionary<string, string[]> BuildValidationErrors(PlatformValidationException ex)
+        => ex.Errors.Count > 0
+            ? ex.Errors.ToDictionary(kv => kv.Key, kv => kv.Value)
+            : new Dictionary<string, string[]> { ["_"] = [ex.Message] };
 }
