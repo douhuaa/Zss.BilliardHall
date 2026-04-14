@@ -26,23 +26,22 @@ public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapp
 {
     public ProblemDetails Map(Exception ex, string? requestPath, bool includeExceptionDetail)
     {
-        // 如果是验证异常，保持原有的 special handling
+        // 验证异常：从 ErrorRegistry 获取描述
         if (ex is PlatformValidationException ve)
-        {
             return MapValidation(ve, requestPath);
-        }
+
+        // InfrastructureException：技术异常，直接使用其携带的 HttpStatusCode 映射
+        if (ex is InfrastructureException ie)
+            return MapInfrastructure(ie, requestPath);
 
         // 获取错误码
         var code = ex switch
         {
             DomainError d => d.Code,
-            DomainException de => de.ErrorCode, // 兼容旧代码，如果旧代码 ErrorCode 未注册会报错，这是预期的架构测试行为
+            DomainException de => de.ErrorCode,
             _ => CommonErrorCodes.Unknown
         };
 
-        // 从注册中心获取描述
-        // 如果未注册，这会抛出 KeyNotFoundException，这在生产环境可能不好，但在开发阶段能强制注册
-        // 为了稳健性，这里可以 fallback
         ErrorDescriptor descriptor;
         try
         {
@@ -50,8 +49,9 @@ public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapp
         }
         catch (KeyNotFoundException)
         {
-            // 如果是未知异常导致的 Common.Unknown，应该已注册。
-            // 如果是 DomainException 的 ErrorCode 未注册，这里降级为 Unknown
+            // DomainException 或 DomainError 的 ErrorCode 未在 ErrorRegistry 中注册，
+            // 降级为 Unknown 以保证生产环境稳健性。
+            // 若需在开发阶段及早发现，可在启动时验证所有已知异常子类的错误码均已注册。
             descriptor = ErrorRegistry.Get(CommonErrorCodes.Unknown);
         }
 
@@ -60,7 +60,7 @@ public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapp
             Type = descriptor.ProblemType,
             Title = descriptor.Title,
             Status = descriptor.HttpStatus,
-            Detail = includeExceptionDetail ? ex.ToString() : (ex.Message != descriptor.Title ? ex.Message : null),
+            Detail = BuildDetail(ex, descriptor, includeExceptionDetail),
             Instance = requestPath,
             Extensions =
             {
@@ -69,16 +69,44 @@ public sealed class ExceptionProblemDetailsMapper : IExceptionProblemDetailsMapp
         };
     }
 
-    private static ValidationProblemDetails MapValidation(PlatformValidationException ex, string? requestPath)
-        => new(BuildValidationErrors(ex))
+    private static string? BuildDetail(Exception ex, ErrorDescriptor descriptor, bool includeExceptionDetail)
+    {
+        if (includeExceptionDetail)
+            return ex.ToString();
+
+        // 对于未知/降级的错误，不暴露原始异常消息（安全性）
+        if (descriptor.Code == CommonErrorCodes.Unknown)
+            return "发生未处理异常，请联系管理员。";
+
+        return ex.Message != descriptor.Title ? ex.Message : null;
+    }
+
+    private static ProblemDetails MapInfrastructure(InfrastructureException ex, string? requestPath)
+    {
+        var status = ex.HttpStatusCode ?? StatusCodes.Status503ServiceUnavailable;
+        return new ProblemDetails
         {
-            Type = "https://api.zss.com/problems/common/validation", // Hardcoded or from registry? keeping simple
-            Title = "验证失败",
-            Status = StatusCodes.Status400BadRequest,
+            Type = ProblemType.FromStatusCode(status),
+            Title = "服务暂时不可用",
+            Status = status,
+            Detail = ex.Message,
+            Instance = requestPath
+        };
+    }
+
+    private static ValidationProblemDetails MapValidation(PlatformValidationException ex, string? requestPath)
+    {
+        var descriptor = ErrorRegistry.Get(CommonErrorCodes.Validation);
+        return new ValidationProblemDetails(BuildValidationErrors(ex))
+        {
+            Type = descriptor.ProblemType,
+            Title = descriptor.Title,
+            Status = descriptor.HttpStatus,
             Detail = "一个或多个验证错误发生。",
             Instance = requestPath,
             Extensions = { ["errorCode"] = CommonErrorCodes.Validation }
         };
+    }
 
     private static Dictionary<string, string[]> BuildValidationErrors(PlatformValidationException ex)
         => ex.Errors.Count > 0

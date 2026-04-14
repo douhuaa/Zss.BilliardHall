@@ -3,34 +3,19 @@ using Xunit;
 using Zss.BilliardHall.Modules.Orders;
 using Zss.BilliardHall.Platform.Errors;
 using System.Reflection;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests;
 
 public class ErrorHandlingTests
 {
+    /// <summary>
+    /// 验证 OrdersErrorCodes 中声明的所有常量均在 OrdersErrorModule 中被注册。
+    /// 使用 ErrorRegistry.ResetForTesting() 实现测试隔离，避免静态状态干扰。
+    /// </summary>
     [Fact]
     public void Orders_ErrorCodes_Must_Be_Registered()
     {
-        // Assemble
-        // Ensure registry is populated (simulate startup)
-        var module = new OrdersErrorModule();
-        // We need a clean registry or just adding to it.
-        // Since ErrorRegistry is static, tests might interfere.
-        // Architecture tests usually inspect structure provided by types, not runtime state.
-        // BUT the user's test `Assert.NotNull(ErrorRegistry.Get(code))` REQUIRES registration.
-
-        // Setup:
-        try
-        {
-             module.Register();
-        }
-        catch (InvalidOperationException)
-        {
-            // Already registered in another test or context, fine.
-        }
-
+        // Arrange: 获取 OrdersErrorCodes 中所有公共常量字符串
         var codes = typeof(OrdersErrorCodes)
             .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
             .Where(f => f.IsLiteral && !f.IsInitOnly)
@@ -39,22 +24,29 @@ public class ErrorHandlingTests
             .Cast<string>()
             .ToList();
 
-        // Act & Assert
-        foreach (var code in codes)
+        // 重置为干净状态，确保测试隔离
+        ErrorRegistry.ResetForTesting();
+        try
         {
-            // If checking runtime registration:
-            var error = ErrorRegistry.Get(code);
-            Assert.NotNull(error);
-            Assert.Equal(code, error.Code);
+            new OrdersErrorModule().Register();
+
+            // Assert: 所有 OrdersErrorCodes 常量均已在 OrdersErrorModule 中注册
+            foreach (var code in codes)
+            {
+                var descriptor = ErrorRegistry.Get(code);
+                Assert.NotNull(descriptor);
+                Assert.Equal(code, descriptor.Code);
+            }
+        }
+        finally
+        {
+            ErrorRegistry.ResetForTesting();
         }
     }
 
     [Fact]
-    public void Orders_Must_Not_Depend_On_Other_Modules_ErrorCodes()
+    public void Orders_Must_Not_Depend_On_Members_Module()
     {
-        // Ensure Orders does not depend on Members (if it exists) or others.
-        // Currently we only have Orders and Members.
-
         var result = Types.InAssembly(typeof(OrdersErrorCodes).Assembly)
             .ShouldNot()
             .HaveDependencyOn("Zss.BilliardHall.Modules.Members")
@@ -63,4 +55,6 @@ public class ErrorHandlingTests
         Assert.True(result.IsSuccessful, "Orders module should not depend on Members module.");
     }
 }
+
+
 
