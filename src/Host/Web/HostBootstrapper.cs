@@ -90,18 +90,7 @@ public static class HostBootstrapper
             .Distinct()
             .SelectMany(GetErrorCodeConstants)
             .Distinct(StringComparer.Ordinal)
-            .Where(code =>
-            {
-                try
-                {
-                    ErrorRegistry.Get(code);
-                    return false;
-                }
-                catch (KeyNotFoundException)
-                {
-                    return true;
-                }
-            })
+            .Where(code => !ErrorRegistry.Contains(code))
             .ToArray();
 
         if (missingCodes.Length == 0)

@@ -46,15 +46,5 @@ public sealed class ErrorRegistryFixture : IDisposable
     }
 
     private static bool IsRegistered(string code)
-    {
-        try
-        {
-            _ = ErrorRegistry.Get(code);
-            return true;
-        }
-        catch (KeyNotFoundException)
-        {
-            return false;
-        }
-    }
+        => ErrorRegistry.Contains(code);
 }
