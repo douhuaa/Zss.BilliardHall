@@ -36,6 +36,8 @@ public static class ErrorRegistry
 
     public static IReadOnlyCollection<ErrorDescriptor> All => _errors.Values.ToList().AsReadOnly();
 
+    public static bool Contains(string code) => _errors.ContainsKey(code);
+
     public static void Freeze() => _frozen = true;
 
     /// <summary>仅供测试使用：当前是否已冻结。</summary>

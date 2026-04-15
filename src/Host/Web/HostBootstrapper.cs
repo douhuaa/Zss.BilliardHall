@@ -1,10 +1,11 @@
-﻿using JasperFx.Core.IoC;
+using JasperFx.Core.IoC;
 using Wolverine.Http;
 using Zss.BilliardHall.Application;
 using Zss.BilliardHall.Composition;
 using Zss.BilliardHall.Platform;
 using Zss.BilliardHall.Platform.Contracts;
 using Zss.BilliardHall.Platform.Errors;
+using System.Reflection;
 
 namespace Zss.BilliardHall.Host.Web;
 
@@ -41,9 +42,15 @@ public static class HostBootstrapper
         // 注册异常转换器链（将技术层异常转换为领域异常）
         builder.Services.AddSingleton<IExceptionTranslator, FluentValidationExceptionTranslator>();
 
+        var errorModuleAssemblies = modules
+            .Select(m => m.GetType().Assembly)
+            .Append(typeof(PlatformErrorModule).Assembly)
+            .Distinct()
+            .ToArray();
+
         // 自动注册错误模块 (IErrorModule)
         builder.Services.Scan(scan => scan
-            .FromApplicationDependencies(a => a.FullName?.StartsWith("Zss.BilliardHall") == true)
+            .FromAssemblies(errorModuleAssemblies)
             .AddClasses(c => c.AssignableTo<IErrorModule>())
             .AsImplementedInterfaces()
             .WithSingletonLifetime());
@@ -62,6 +69,8 @@ public static class HostBootstrapper
         {
             module.Register();
         }
+
+        ValidateErrorCodeRegistrationCompleteness(modules);
         ErrorRegistry.Freeze();
 
         // 全局异常处理中间件（统一将所有未处理异常转换为 ProblemDetails）
@@ -72,5 +81,34 @@ public static class HostBootstrapper
         app.MapWolverineEndpoints();
 
         app.Logger.LogInformation("Host 管道配置完成");
+    }
+
+    private static void ValidateErrorCodeRegistrationCompleteness(IEnumerable<IErrorModule> modules)
+    {
+        var missingCodes = modules
+            .Select(m => m.GetType().Assembly)
+            .Distinct()
+            .SelectMany(GetErrorCodeConstants)
+            .Distinct(StringComparer.Ordinal)
+            .Where(code => !ErrorRegistry.Contains(code))
+            .ToArray();
+
+        if (missingCodes.Length == 0)
+            return;
+
+        throw new InvalidOperationException($"存在未注册的错误码：{string.Join(", ", missingCodes)}");
+    }
+
+    private static IEnumerable<string> GetErrorCodeConstants(Assembly assembly)
+    {
+        return assembly
+            .GetTypes()
+            .Where(t => t is { IsClass: true, IsAbstract: true, IsSealed: true } &&
+                        t.Name.EndsWith("ErrorCodes", StringComparison.Ordinal))
+            .SelectMany(t => t.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy))
+            .Where(f => f is { IsLiteral: true, IsInitOnly: false } && f.FieldType == typeof(string))
+            .Select(f => f.GetRawConstantValue() as string)
+            .Where(code => !string.IsNullOrWhiteSpace(code))
+            .Select(code => code!);
     }
 }

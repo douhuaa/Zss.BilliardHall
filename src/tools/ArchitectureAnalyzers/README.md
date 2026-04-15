@@ -3,7 +3,7 @@
 ⚠️ 本文档不具备裁决力。所有架构决策以对应 ADR 正文为准。
 
 This package contains Roslyn analyzers that enforce architectural constraints defined in ADR-005 (Application
-Interaction Model & Execution Boundaries).
+Interaction Model & Execution Boundaries) and ADR-240 (Handler exception constraints).
 
 ## Purpose
 
@@ -58,6 +58,19 @@ checked through static dependency analysis alone but require understanding of co
 
 **Fix**: Define and use domain-specific exception types (e.g., `DomainException`, `ValidationException`) instead of
 generic `System.Exception`.
+
+### ADR0240_12: Domain Error Code Magic String Analyzer
+
+**Rule**: Domain 异常错误码禁止魔法字符串，必须引用 `*ErrorCodes` 常量（ADR-240.1.2）
+
+**Detection**:
+
+- Detects `new DomainError("...")`
+- Detects `: base("...", "...")` when deriving from `DomainException`
+
+**Severity**: Warning
+
+**Fix**: Replace string literal with module-owned constants (e.g., `OrdersErrorCodes.NotFound`).
 
 ## Usage
 
@@ -133,19 +146,19 @@ dotnet build
 
 ### Testing the Analyzers
 
-Create test projects in `src/tests/ArchitectureAnalyzers.Tests/` with positive and negative test cases.
+`src/tools/ArchitectureAnalyzers.Tests/` contains analyzer unit tests.
 
 ### Adding New Analyzers
 
 1. Create a new analyzer class implementing `DiagnosticAnalyzer`
-2. Assign a unique diagnostic ID following the pattern `ADR0005_XX`
+2. Assign a unique diagnostic ID following the pattern `ADRXXXX_YY`
 3. Update this README with analyzer documentation
 4. Add tests for the new analyzer
 
 ## Related Documentation
 
 - [ADR-005: Application Interaction Model](../../docs/adr/constitutional/ADR-005-Application-Interaction-Model-Final.md)
-- [ADR-005 Enforcement Levels](../../docs/adr/constitutional/ADR-005-Enforcement-Levels.md)
+- [ADR-240: Handler 异常约束](../../docs/adr/runtime/ADR-240-handler-exception-constraints.md)
 - [ADR-900: Architecture Tests](../../docs/adr/governance/ADR-900-architecture-tests.md)
 
 ## Support

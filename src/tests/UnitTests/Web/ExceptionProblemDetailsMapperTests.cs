@@ -7,6 +7,7 @@ using Zss.BilliardHall.Tests.SharedTestHelpers;
 
 namespace Zss.BilliardHall.Tests.UnitTests.Web;
 
+[Collection(ErrorRegistryCollection.Name)]
 public class ExceptionProblemDetailsMapperTests : IClassFixture<ErrorRegistryFixture>
 {
     private readonly ExceptionProblemDetailsMapper _sut = new();

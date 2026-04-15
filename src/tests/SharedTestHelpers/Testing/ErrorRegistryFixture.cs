@@ -32,15 +32,11 @@ public sealed class ErrorRegistryFixture : IDisposable
     /// </summary>
     public void TryRegister(ErrorDescriptor descriptor)
     {
-        try
-        {
-            ErrorRegistry.Register(descriptor);
-            _addedCodes.Add(descriptor.Code);
-        }
-        catch (InvalidOperationException)
-        {
-            // 已注册（来自其他测试或并发），忽略
-        }
+        if (IsRegistered(descriptor.Code))
+            return;
+
+        ErrorRegistry.Register(descriptor);
+        _addedCodes.Add(descriptor.Code);
     }
 
     public void Dispose()
@@ -48,4 +44,7 @@ public sealed class ErrorRegistryFixture : IDisposable
         // 清理本 Fixture 注册的错误码，还原冻结状态
         ErrorRegistry.RestoreForTesting(_addedCodes, _wasFrozen);
     }
+
+    private static bool IsRegistered(string code)
+        => ErrorRegistry.Contains(code);
 }

@@ -1,47 +1,60 @@
 ﻿using NetArchTest.Rules;
 using Xunit;
+using Zss.BilliardHall.Composition;
+using Zss.BilliardHall.Modules.Members;
+using Zss.BilliardHall.Modules.Members.Domain;
 using Zss.BilliardHall.Modules.Orders;
 using Zss.BilliardHall.Platform.Errors;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
 
 namespace Zss.BilliardHall.Tests.ArchitectureTests;
 
+[Collection(ErrorRegistryCollection.Name)]
 public class ErrorHandlingTests
 {
-    /// <summary>
-    /// 验证 OrdersErrorCodes 中声明的所有常量均在 OrdersErrorModule 中被注册。
-    /// 使用 ErrorRegistry.ResetForTesting() 实现测试隔离，避免静态状态干扰。
-    /// </summary>
     [Fact]
-    public void Orders_ErrorCodes_Must_Be_Registered()
+    public void All_Discovered_ErrorCodes_Must_Be_Registered_By_ErrorModules()
     {
-        // Arrange: 获取 OrdersErrorCodes 中所有公共常量字符串
-        var codes = typeof(OrdersErrorCodes)
-            .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
-            .Where(f => f.IsLiteral && !f.IsInitOnly)
-            .Select(f => f.GetValue(null)?.ToString())
-            .Where(c => c != null)
-            .Cast<string>()
-            .ToList();
-
-        // 重置为干净状态，确保测试隔离
-        ErrorRegistry.ResetForTesting();
-        try
+        RunWithIsolatedErrorRegistry(() =>
         {
-            new OrdersErrorModule().Register();
+            RegisterAllErrorModules();
 
-            // Assert: 所有 OrdersErrorCodes 常量均已在 OrdersErrorModule 中注册
-            foreach (var code in codes)
-            {
-                var descriptor = ErrorRegistry.Get(code);
-                Assert.NotNull(descriptor);
-                Assert.Equal(code, descriptor.Code);
-            }
-        }
-        finally
+            var errorCodeTypes = GetErrorCodeTypesFromDiscoveredAssemblies();
+            var allCodes = errorCodeTypes.SelectMany(GetErrorCodes).Distinct(StringComparer.Ordinal).ToArray();
+            var missingCodes = allCodes.Where(code => !ErrorRegistry.Contains(code)).ToArray();
+
+            Assert.True(
+                missingCodes.Length == 0,
+                $"存在未注册错误码：{string.Join(", ", missingCodes)}");
+        });
+    }
+
+    [Fact]
+    public void Discovered_ErrorModules_Registration_Must_Not_Conflict()
+    {
+        RunWithIsolatedErrorRegistry(() =>
         {
-            ErrorRegistry.ResetForTesting();
-        }
+            var ex = Record.Exception(RegisterAllErrorModules);
+
+            Assert.Null(ex);
+
+            var descriptors = ErrorRegistry.All.ToArray();
+            var uniqueCodes = descriptors.Select(d => d.Code).Distinct(StringComparer.Ordinal).Count();
+            Assert.Equal(uniqueCodes, descriptors.Length);
+        });
+    }
+
+    [Fact]
+    public void HostBootstrapper_Must_Use_GlobalExceptionMiddleware()
+    {
+        var repositoryRoot = FindRepositoryRoot();
+        var hostBootstrapperPath = Path.Combine(repositoryRoot, "src", "Host", "Web", "HostBootstrapper.cs");
+
+        Assert.True(File.Exists(hostBootstrapperPath), $"未找到文件：{hostBootstrapperPath}");
+
+        var source = File.ReadAllText(hostBootstrapperPath);
+        Assert.Contains("UseMiddleware<GlobalExceptionMiddleware>()", source, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -54,7 +67,80 @@ public class ErrorHandlingTests
 
         Assert.True(result.IsSuccessful, "Orders module should not depend on Members module.");
     }
+
+    private static void RegisterAllErrorModules()
+    {
+        var moduleTypes = GetRelevantAssemblies()
+            .SelectMany(a => a.GetTypes())
+            .Where(t => t is { IsClass: true, IsAbstract: false } && typeof(IErrorModule).IsAssignableFrom(t))
+            .ToArray();
+
+        Assert.NotEmpty(moduleTypes);
+
+        foreach (var moduleType in moduleTypes)
+        {
+            var module = Activator.CreateInstance(moduleType) as IErrorModule;
+            Assert.NotNull(module);
+            module!.Register();
+        }
+    }
+
+    private static IEnumerable<Type> GetErrorCodeTypesFromDiscoveredAssemblies()
+    {
+        return GetRelevantAssemblies()
+            .SelectMany(a => a.GetTypes())
+            .Where(t => t is { IsClass: true, IsAbstract: true, IsSealed: true } &&
+                        t.Name.EndsWith("ErrorCodes", StringComparison.Ordinal));
+    }
+
+    private static IEnumerable<Assembly> GetRelevantAssemblies()
+    {
+        var configuration = new ConfigurationBuilder().Build();
+        var moduleAssemblies = ModuleComposition.GetEnabledModules(configuration)
+            .Select(m => m.GetType().Assembly);
+
+        return moduleAssemblies
+            .Append(typeof(PlatformErrorModule).Assembly)
+            .Distinct();
+    }
+
+    private static IReadOnlyList<string> GetErrorCodes(Type errorCodeType)
+    {
+        return errorCodeType
+            .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+            .Where(f => f is { IsLiteral: true, IsInitOnly: false } && f.FieldType == typeof(string))
+            .Select(f => f.GetValue(null)?.ToString())
+            .Where(c => !string.IsNullOrWhiteSpace(c))
+            .Cast<string>()
+            .ToList();
+    }
+
+    private static void RunWithIsolatedErrorRegistry(Action testAction)
+    {
+        ErrorRegistry.ResetForTesting();
+        try
+        {
+            testAction();
+        }
+        finally
+        {
+            ErrorRegistry.ResetForTesting();
+        }
+    }
+
+    private static string FindRepositoryRoot()
+    {
+        var current = new DirectoryInfo(AppContext.BaseDirectory);
+
+        while (current is not null)
+        {
+            var solution = Path.Combine(current.FullName, "Zss.BilliardHall.slnx");
+            if (File.Exists(solution))
+                return current.FullName;
+
+            current = current.Parent;
+        }
+
+        throw new DirectoryNotFoundException("未找到仓库根目录（包含 Zss.BilliardHall.slnx）。");
+    }
 }
-
-
-
