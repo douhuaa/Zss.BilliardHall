@@ -6,6 +6,8 @@
 /// <remarks>
 /// 与 <c>DomainException</c> 的区别：<c>DomainException</c> 是已有的抽象基类，适用于需要自定义子类的场景；
 /// <c>DomainError</c> 是轻量级的具体类，可直接实例化用于快速抛出带错误码的领域异常，无需定义额外的子类。
+/// 使用边界：轻量、一次性的业务拒绝可直接抛出 <c>DomainError</c>；
+/// 需要附加上下文信息或需要清晰领域语义类型时，优先继续使用 <c>DomainException</c> 子类。
 /// </remarks>
 public class DomainError(string code) : Exception(code)
 {
