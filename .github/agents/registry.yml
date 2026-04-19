@@ -1,7 +1,7 @@
 ---
 registry_version: "1"
 description: "Agent 体系权威索引与配置管理"
-last_updated: "2026-02-17"
+last_updated: "2026-04-19"
 
 # 全局默认策略
 defaults:
@@ -123,8 +123,50 @@ schema:
     - prohibitions
     - evidence_contract
   conventions:
-    - "所有 agent 文件使用 .agent 扩展名"
+    - "所有治理 agent 文件使用 .agent 扩展名（YAML 格式）"
+    - "VS Code Copilot 聊天 agent 文件使用 .agent.md 扩展名（Markdown 格式）"
     - "delegation_to 必须为数组，无委托使用 []"
     - "status: frozen 的 agent 必须 triggers: []"
     - "triggers 使用 snake_case 风格"
     - "所有 YAML 必须可被 yaml.safe_load() 解析"
+
+# VS Code Copilot 聊天 Agents（来自 Awesome Copilot Plugin）
+# 注意：以下 agents 为 .agent.md 格式，供 VS Code Copilot Chat 使用
+# 与上方 YAML 格式的治理 agents 相互补充，不相互冲突
+# 来源：https://github.com/github/awesome-copilot
+vscode_copilot_agents:
+  - name: CSharpExpert
+    file: CSharpExpert.agent.md
+    source: awesome-copilot
+    description: "C#/.NET 专家助手，提供最佳实践、代码审查和设计建议"
+    relevance: "项目使用 .NET 10 + C#，此 Agent 直接相关"
+
+  - name: csharp-dotnet-janitor
+    file: csharp-dotnet-janitor.agent.md
+    source: awesome-copilot
+    description: "C#/.NET 代码清理与现代化，消除技术债务"
+    relevance: "维护代码质量，升级到最新 C# 语言特性"
+
+  - name: postgresql-dba
+    file: postgresql-dba.agent.md
+    source: awesome-copilot
+    description: "PostgreSQL 数据库管理，查询优化，性能分析"
+    relevance: "项目使用 PostgreSQL + Marten，此 Agent 直接相关"
+
+  - name: github-actions-expert
+    file: github-actions-expert.agent.md
+    source: awesome-copilot
+    description: "GitHub Actions CI/CD 专家，安全流水线设计"
+    relevance: "项目有多个 GitHub Actions 工作流，此 Agent 直接相关"
+
+  - name: debug
+    file: debug.agent.md
+    source: awesome-copilot
+    description: "系统化调试模式，定位和修复 Bug"
+    relevance: "通用调试助手，适用于所有场景"
+
+  - name: meta-agentic-project-scaffold
+    file: meta-agentic-project-scaffold.agent.md
+    source: awesome-copilot-plugin
+    description: "从 awesome-copilot 仓库发现并安装相关工具"
+    relevance: "Awesome Copilot Plugin 核心 Agent，用于工具管理"
